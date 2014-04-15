@@ -1,0 +1,34 @@
+#ifndef KINGRATSPRITE_H
+#define KINGRATSPRITE_H
+
+#include "EnnemyEntity.h"
+#include "PlayerEntity.h"
+
+class KingRatEntity : public EnnemyEntity
+{
+  public:
+    KingRatEntity(float x, float y, GameMap* map, PlayerEntity* player);
+    virtual void animate(float delay);
+    virtual void render(sf::RenderWindow* app);
+    virtual void calculateBB();
+  protected:
+    virtual void collideMapRight();
+    virtual void collideMapLeft();
+    virtual void collideMapTop();
+    virtual void collideMapBottom();
+    void afterWallCollide();
+    virtual void hurt(int damages);
+
+    void generateGreenRats();
+
+	  //virtual void readCollidingEntity(CollidingSpriteEntity* entity);
+	  virtual void dying();
+  private:
+    float timer;
+    float berserkDelay;
+    int state;
+    bool hasBeenBerserk;
+    PlayerEntity* player;
+};
+
+#endif // KINGRATSPRITE_H
