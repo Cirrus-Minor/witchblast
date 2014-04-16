@@ -589,7 +589,7 @@ void WitchBlastGame::onRender()
       }
       else if (specialState == SpecialStateFadeOut)
       {
-        // fade in
+        // fade out
         rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - timer) / FADE_IN_DELAY) * 255));
         rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
         rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
@@ -801,7 +801,6 @@ void WitchBlastGame::generateStandardMap()
     findPlaceMonsters(MONSTER_RAT,3);
     findPlaceMonsters(MONSTER_BAT,3);
   }
-  //currentMap->setCleared(true);
 }
 
 int WitchBlastGame::getRandomEquipItem(bool toSale = false)
@@ -833,11 +832,9 @@ void WitchBlastGame::verifyDoorUnlocking()
   {
     int xt = (player->getX() - OFFSET_X) / TILE_WIDTH;
     int yt = (player->getY() - OFFSET_Y) / TILE_HEIGHT;
-    //std::cout << "VERIFY: " << xt << ", " << yt << std::endl;
 
     if (yt <= 1 && xt >= MAP_WIDTH / 2 - 1 && xt <= MAP_WIDTH / 2 + 1 && currentMap->hasNeighbourUp() == 2)
     {
-      //std::cout << "touché !";
       doorEntity[0]->openDoor();
       currentMap->setTile(MAP_WIDTH / 2, 0, 0);
       SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
@@ -846,7 +843,6 @@ void WitchBlastGame::verifyDoorUnlocking()
     }
     if (yt >= MAP_HEIGHT - 2 && xt >= MAP_WIDTH / 2 - 1 &&xt <= MAP_WIDTH / 2 + 1 && currentMap->hasNeighbourDown() == 2)
     {
-      //std::cout << "touché !";
       doorEntity[2]->openDoor();
       currentMap->setTile(MAP_WIDTH / 2, MAP_HEIGHT - 1, 0);
       SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
@@ -855,7 +851,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     }
     if (xt <= 1 && yt >= MAP_HEIGHT / 2 - 1 && yt <= MAP_HEIGHT / 2 + 1 && currentMap->hasNeighbourLeft() == 2)
     {
-      //std::cout << "touché !";
+
       doorEntity[1]->openDoor();
       currentMap->setTile(0, MAP_HEIGHT / 2, 0);
       SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
@@ -864,7 +860,6 @@ void WitchBlastGame::verifyDoorUnlocking()
     }
     if (xt >= MAP_WIDTH - 2 && yt >= MAP_HEIGHT / 2 - 1 && yt <= MAP_HEIGHT / 2 + 1 && currentMap->hasNeighbourRight() == 2)
     {
-      //std::cout << "touché !";
       doorEntity[3]->openDoor();
       currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, 0);
       SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
