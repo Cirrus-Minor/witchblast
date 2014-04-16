@@ -23,6 +23,8 @@
 WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
   app->setTitle(APP_NAME + " V" + APP_VERSION);
+
+  // loading resources
   ImageManager::getImageManager()->addImage((char*)"media/sprite.png");
   ImageManager::getImageManager()->addImage((char*)"media/bolt.png");
   ImageManager::getImageManager()->addImage((char*)"media/tiles.png");
@@ -64,16 +66,18 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/king_rat_cry_2.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/king_rat_die.ogg");
 
-
   music.openFromFile("media/sound/track00.ogg");
   music.setVolume(75);
   music.setLoop(true);
 
-  if (!font.loadFromFile("media/DejaVuSans-Bold.ttf"))
+  if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
-      // erreur...
+    myText.setFont(font);
   }
-  myText.setFont(font); // font est un sf::Font
+
+  miniMap = NULL;
+  currentMap = NULL;
+  currentFloor = NULL;
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -85,6 +89,10 @@ void WitchBlastGame::startNewGame()
 {
   // cleaning all entities
   EntityManager::getEntityManager()->clean();
+
+  // cleaning data
+  if (miniMap != NULL) delete (miniMap);
+  if (currentFloor != NULL) delete (currentFloor);
 
   gameState = gameStateInit;
 

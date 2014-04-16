@@ -7,13 +7,22 @@
 GameFloor::GameFloor(int level)
 {
   this->level = level;
+
+  // Init maps
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+      maps[i][j] = NULL;
+
   srand(time(NULL));
   createFloor();
 }
 
 GameFloor::~GameFloor()
 {
-  //dtor
+  // Free maps
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+      if (maps[i][j] != NULL) delete (maps[i][j]);
 }
 
 int GameFloor::getRoom(int x, int y)

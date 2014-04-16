@@ -33,6 +33,9 @@ class WitchBlastGame : public Game
 
     PlayerEntity* player;
     EnnemyEntity* boss;
+    // the doors graphics
+    DoorEntity* doorEntity[4];
+
     GameMap* miniMap;
     DungeonMap* currentMap;
     GameFloor* currentFloor;
@@ -68,10 +71,6 @@ class WitchBlastGame : public Game
 
     // use to remember if a case has a monster in monster spawn
     bool monsterArray[MAP_WIDTH][MAP_HEIGHT];
-
-    // the doors graphics
-    //SpriteEntity* doorSprite[4];
-    DoorEntity* doorEntity[4];
 };
 
 #endif // MAGICGAME_H
