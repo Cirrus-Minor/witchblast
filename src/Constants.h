@@ -22,7 +22,7 @@
 //#define _68X68
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.0.4";
+const std::string APP_VERSION =   "0.0.5";
 
 const int SCREEN_WIDTH = 970; //1024;
 const int SCREEN_HEIGHT = 720; //768;
@@ -49,6 +49,9 @@ const int BB_LEFT    = 22;
 const int BB_RIGHT   = 22;
 const int BB_TOP     = 4;
 const int BB_BOTTOM  = 31;
+
+const float FADE_IN_DELAY = 1.0f;
+const float FADE_OUT_DELAY = 1.0f;
 
 enum item_images {
   IMAGE_PLAYER,
@@ -142,9 +145,7 @@ enum item_equip {
 
   EQUIP_FAIRY
   };
-//const int ITEM_ENCHANTER_HAT = 0,
- //     itemLeatherBoots,
-  //    itemBookDualShots
+
 enum chest_type_enum {
   CHEST_BASIC,
   CHEST_FAIRY
@@ -183,10 +184,6 @@ const float GREEN_RAT_SPEED = 170.0f;
 const int GREEN_RAT_HP = 10;
 const int GREEN_RAT_DAMAGES = 5;
 const float GREEN_RAT_FADE = 1.0f;
-/*const int RAT_BB_LEFT = 14;
-const int RAT_BB_WIDTH_DIFF = 28;
-const int RAT_BB_TOP = 22;
-const int RAT_BB_HEIGHT_DIFF = 22;*/
 
 // Bat
 const float BAT_SPEED = 250.0f;
@@ -215,16 +212,6 @@ const float KING_RAT_RUNNING_SPEED = 600.0f;
 const float KING_RAT_BERSERK_SPEED = 250.0f;
 const int KING_RAT_HP = 400;
 const int KING_RAT_DAMAGES = 8;
-
-// TILES
-const int TILE_FIRE_IN  = 1;
-
-// MEDIAMANAGERS
-//IMAGES
-const int IMAGE_PLAYER1     = 0;
-
-//SOUND
-const int SOUND_COLLISION_WITH_JOUSTER  = 0;
 
 // EFFECTS
 const float HURTING_DELAY = 0.4f;

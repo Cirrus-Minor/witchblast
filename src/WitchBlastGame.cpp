@@ -78,11 +78,31 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   miniMap = NULL;
   currentMap = NULL;
   currentFloor = NULL;
+  specialState = SpecialStateNone;
 }
 
 WitchBlastGame::~WitchBlastGame()
 {
   //dtor
+}
+
+void WitchBlastGame::onUpdate()
+{
+  float delta = getAbsolutTime() - lastTime;
+  lastTime = getAbsolutTime();
+  EntityManager::getEntityManager()->animate(delta);
+
+  if (specialState != SpecialStateNone)
+  {
+    timer -= delta;
+    if (timer <= 0.0f)
+    {
+      if (specialState == SpecialStateFadeOut)
+        startNewGame();
+      else
+        specialState = SpecialStateNone;
+    }
+  }
 }
 
 void WitchBlastGame::startNewGame()
@@ -151,6 +171,10 @@ void WitchBlastGame::startNewGame()
   lastTime = getAbsolutTime();
   gameState = gameStatePlaying;
   music.play();
+
+  // fade in
+  specialState = SpecialStateFadeIn;
+  timer = FADE_IN_DELAY;
 }
 
 void WitchBlastGame::startGame()
@@ -209,8 +233,11 @@ void WitchBlastGame::startGame()
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
           player->fire(2);
 
-        if (player->isDead() && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-          startNewGame();
+        if (player->isDead() && specialState == SpecialStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+        {
+          specialState = SpecialStateFadeOut;
+          timer = FADE_OUT_DELAY;
+        }
 
         onUpdate();
         EntityManager::getEntityManager()->sortByZ();
@@ -550,6 +577,23 @@ void WitchBlastGame::onRender()
         myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the boss !\nSee you soon for new adventures !");
         myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
         app->draw(myText);
+      }
+
+      if (specialState == SpecialStateFadeIn)
+      {
+        // fade in
+        rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - timer) / FADE_IN_DELAY) * 255));
+        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+      }
+      else if (specialState == SpecialStateFadeOut)
+      {
+        // fade in
+        rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - timer) / FADE_IN_DELAY) * 255));
+        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
       }
     }
 

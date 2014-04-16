@@ -27,6 +27,7 @@ class WitchBlastGame : public Game
 
   protected:
     virtual void onRender();
+    virtual void onUpdate();
 
   private:
     bool isFiring;
@@ -46,8 +47,16 @@ class WitchBlastGame : public Game
     sf::Music music;
 
     TileMapEntity* currentTileMap;
-
     int floorX, floorY;
+
+    enum specialStateEnum
+    {
+      SpecialStateNone,
+      SpecialStateFadeIn,
+      SpecialStateFadeOut
+    };
+    specialStateEnum specialState;
+    float timer;
 
     void startNewGame();
 
