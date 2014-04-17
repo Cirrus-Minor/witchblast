@@ -96,6 +96,6 @@ void PnjEntity::render(sf::RenderWindow* app)
 
   if (isSpeaking)
   {
-    StaticTextEntity::Write(app, speech, 20, x0, y0 - 72.0f, ALIGN_CENTER);
+    StaticTextEntity::Write(app, speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255));
   }
 }

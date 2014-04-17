@@ -106,6 +106,6 @@ void ArtefactDescriptionEntity::render(sf::RenderWindow* app)
 
     app->draw(sprite);
 
-    StaticTextEntity::Write(app, artefactName, 22, 315.0f, ARTEFACT_POS_Y + 15.0f, ALIGN_LEFT);
-    StaticTextEntity::Write(app, artefactDescription, 20, 315.0f, ARTEFACT_POS_Y + 55.0f, ALIGN_LEFT);
+    StaticTextEntity::Write(app, artefactName, 22, 315.0f, ARTEFACT_POS_Y + 15.0f, ALIGN_LEFT, sf::Color(255, 255, 255));
+    StaticTextEntity::Write(app, artefactDescription, 20, 315.0f, ARTEFACT_POS_Y + 55.0f, ALIGN_LEFT, sf::Color(255, 255, 255));
 }

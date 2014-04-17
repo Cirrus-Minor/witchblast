@@ -11,7 +11,7 @@ class StaticTextEntity
 {
   public:
 
-    static void Write(sf::RenderWindow* app, std::string str, int size, float x, float y, int align);
+    static void Write(sf::RenderWindow* app, std::string str, int size, float x, float y, int align, sf::Color color);
 
   protected:
   private:

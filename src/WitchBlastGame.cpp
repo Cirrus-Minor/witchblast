@@ -16,6 +16,7 @@
 #include "ArtefactDescriptionEntity.h"
 #include "StaticTextEntity.h"
 #include "PnjEntity.h"
+#include "TextEntity.h"
 
 #include <iostream>
 #include <sstream>
@@ -175,6 +176,16 @@ void WitchBlastGame::startNewGame()
   // fade in
   specialState = SpecialStateFadeIn;
   timer = FADE_IN_DELAY;
+
+  float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH; // - TILE_WIDTH * 0.5f;
+  float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f; // - TILE_HEIGHT * 0.5f;
+
+  TextEntity* text = new TextEntity("Level 1", 30, x0, y0);
+  text->setAlignment(ALIGN_CENTER);
+  text->setLifetime(2.5f);
+  text->setWeight(-36.0f);
+  text->setZ(1000);
+  text->setColor(TextEntity::COLOR_FADING_WHITE);
 }
 
 void WitchBlastGame::startGame()

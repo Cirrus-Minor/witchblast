@@ -11,7 +11,7 @@ StaticTextEntity::StaticTextEntity()
   static sf::font font;
 }*/
 
-void StaticTextEntity::Write(sf::RenderWindow* app, std::string str, int size, float x, float y, int align)
+void StaticTextEntity::Write(sf::RenderWindow* app, std::string str, int size, float x, float y, int align, sf::Color color)
 {
   static bool fontDefined = false;
   static sf::Font statFont;
@@ -30,6 +30,7 @@ void StaticTextEntity::Write(sf::RenderWindow* app, std::string str, int size, f
 
   statText.setString(str);
   statText.setCharacterSize(size);
+  statText.setColor(color);
   if (align == ALIGN_CENTER)
     statText.setPosition(x - statText.getLocalBounds().width / 2, y);
   else

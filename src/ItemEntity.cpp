@@ -74,7 +74,7 @@ void ItemEntity::render(sf::RenderWindow* app)
   {
     std::ostringstream oss;
     oss << getPrice() << " $";
-    StaticTextEntity::Write(app, oss.str(), 16, x, y + 18.0f, ALIGN_CENTER);
+    StaticTextEntity::Write(app, oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, sf::Color(255, 255, 255));
   }
 
   CollidingSpriteEntity::render(app);
