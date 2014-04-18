@@ -54,9 +54,6 @@ void GreenRatEntity::animate(float delay)
     sprite.setColor(sf::Color(255,255,255,255 * (1.0 + age)));
   }
 
-
-
-  testSpriteCollisions();
   EnnemyEntity::animate(delay);
 }
 

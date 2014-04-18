@@ -25,7 +25,6 @@ void RatEntity::animate(float delay)
   if (age > 0.0f)
     frame = ((int)(age * 5.0f)) % 2;
 
-  testSpriteCollisions();
   EnnemyEntity::animate(delay);
 }
 

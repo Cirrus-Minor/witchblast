@@ -210,7 +210,6 @@ void KingRatEntity::animate(float delay)
     else if (r == 3) frame = 2;
   }
 
-  testSpriteCollisions();
   EnnemyEntity::animate(delay);
 }
 

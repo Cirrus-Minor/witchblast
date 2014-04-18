@@ -33,7 +33,6 @@ void EvilFlowerEntity::animate(float delay)
   else if (fireDelay < 1.4f) setSpin(120.0f);
   else setSpin(50.0f);
 
-  testSpriteCollisions();
   EnnemyEntity::animate(delay);
   angle += spin * delay;
 
