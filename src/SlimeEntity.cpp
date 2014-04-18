@@ -25,8 +25,7 @@ SlimeEntity::SlimeEntity(float x, float y, GameMap* map, PlayerEntity* player)
 
   viscosity = 0.98f;
   frame = 0;
-
-  age = -2.0f + (rand() % 19) * 0.1f;
+  jumpingDelay = 0.6f + 0.1f * (rand() % 20);
 }
 
 void SlimeEntity::animate(float delay)
@@ -58,7 +57,7 @@ void SlimeEntity::animate(float delay)
   }
   else
   {
-    if (age > 0.0f) jumpingDelay -= delay;
+    jumpingDelay -= delay;
     if (jumpingDelay < 0.0f)
     {
       SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);
