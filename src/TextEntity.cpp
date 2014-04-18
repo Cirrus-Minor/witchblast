@@ -42,7 +42,12 @@ void TextEntity::animate(float delay)
 
   // TODO : other colorType
   if (colorType == COLOR_FADING_WHITE)
-    color = sf::Color(255, 255, 255, 255 * (lifetime - age) / lifetime );
+  {
+    int alpha = 255 * (lifetime - age) / lifetime;
+    if (alpha > 255) alpha = 255;
+    else if (alpha < 0) alpha = 0;
+    color = sf::Color(255, 255, 255, alpha );
+  }
 }
 
 
