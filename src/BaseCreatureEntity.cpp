@@ -4,6 +4,9 @@
 
 #include "WitchBlastGame.h"
 
+// uncomment to show bounding box in the app
+// #define SHOW_BOUNDING_BOX
+
 BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f, int spriteWidth = -1, int spriteHeight = -1)
   : CollidingSpriteEntity (image, x, y, spriteWidth, spriteHeight)
 {
@@ -63,6 +66,22 @@ void BaseCreatureEntity::render(sf::RenderWindow* app)
     app->draw(sprite);
   }
   CollidingSpriteEntity::render(app);
+
+  #ifdef SHOW_BOUNDING_BOX
+  sf::Vertex line[] =
+  {
+      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top)),
+      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
+      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
+      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
+      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
+      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
+      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
+      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top))
+  };
+
+  app->draw(line, 8, sf::Lines);
+  #endif
 }
 
 void BaseCreatureEntity::calculateBB()
