@@ -65,6 +65,7 @@ enum item_images {
   IMAGE_CHEST,
   IMAGE_BAT,
   IMAGE_FLOWER,
+  IMAGE_SLIME,
 
   IMAGE_KING_RAT,
 
@@ -205,8 +206,15 @@ const int EVIL_FLOWER_BB_HEIGHT_DIFF = 22;
 const float EVIL_FLOWER_FIRE_DELAY = 2.7f;
 const float EVIL_FLOWER_FIRE_VELOCITY = 220.0f;
 
+// Slime
+const int SLIME_HP = 15;
+const int SLIME_DAMAGES = 5;
+const int SLIME_BB_LEFT = 13;
+const int SLIME_BB_WIDTH_DIFF = 26;
+const int SLIMET_BB_TOP = 22;
+const int SLIME_BB_HEIGHT_DIFF = 12;
 
-// Rat
+// KingRat
 const float KING_RAT_SPEED = 200.0f;
 const float KING_RAT_RUNNING_SPEED = 600.0f;
 const float KING_RAT_BERSERK_SPEED = 250.0f;
