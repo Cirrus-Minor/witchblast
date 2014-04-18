@@ -21,7 +21,7 @@ EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y, GameMap* map)
 
 void EnnemyEntity::animate(float delay)
 {
-  testSpriteCollisions();
+  if (canCollide()) testSpriteCollisions();
   if (age > 0.0f)
     BaseCreatureEntity::animate(delay);
   else
@@ -58,10 +58,8 @@ void EnnemyEntity::collideMapBottom()
 
 void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
-
     PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
     BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
-    //if (playerEntity == NULL && boltEntity) return;
 
     if (collideWithEntity(entity))
     {
@@ -105,4 +103,9 @@ void EnnemyEntity::drop()
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
   }
+}
+
+bool EnnemyEntity::canCollide()
+{
+  return true;
 }

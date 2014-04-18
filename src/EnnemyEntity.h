@@ -19,6 +19,8 @@ class EnnemyEntity : public BaseCreatureEntity
 	  virtual void dying();
 	  virtual void drop();
 
+	  virtual bool canCollide();
+
     int meleeDamages;
   private:
 
