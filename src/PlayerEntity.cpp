@@ -12,13 +12,10 @@
 
 PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f) : BaseCreatureEntity (image, x, y, 64, 96)
 {
-  fireDelay = INITIAL_PLAYER_FIRE_DELAY;
-  fireVelocity = INITIAL_BOLT_VELOCITY;
   currentFireDelay = -1.0f;
   canFirePlayer = true;
   type = 1;
 
-  creatureSpeed = INITIAL_PLAYER_SPEED;
   imagesProLine = 8;
   playerStatus = playerStatusPlaying;
   hp = INITIAL_PLAYER_HP;
@@ -32,6 +29,8 @@ PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f) :
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equip[i] = false;
   colliding = 0;
+
+  computePlayer();
 
   // TEST
   //equip[EQUIP_BOSS_KEY] = true;
