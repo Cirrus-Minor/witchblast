@@ -10,6 +10,7 @@
 #include "GreenRatEntity.h"
 #include "KingRatEntity.h"
 #include "BatEntity.h"
+#include "SlimeEntity.h"
 #include "ChestEntity.h"
 #include "EvilFlowerEntity.h"
 #include "ItemEntity.h"
@@ -67,6 +68,9 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/king_rat_cry_1.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/king_rat_cry_2.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/king_rat_die.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_jump.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact_weak.ogg");
 
   music.openFromFile("media/sound/track00.ogg");
   music.setVolume(75);
@@ -289,9 +293,6 @@ void WitchBlastGame::closeDoors()
       if (currentMap->getTile(MAP_WIDTH - 1, i) < 4) currentMap->setTile(MAP_WIDTH - 1, i, MAP_DOOR);
     }
     roomClosed = true;
-    /*SoundManager::getSoundManager()->playSound(SOUND_DOOR_CLOSING);
-    for (int i=0; i<4; i++)
-      doorEntity[i]->closeDoor();*/
   }
 }
 
@@ -728,6 +729,7 @@ void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float y
     case MONSTER_RAT: new RatEntity(xm, ym - 2, currentMap); break;
     case MONSTER_BAT: new BatEntity(xm, ym, currentMap); break;
     case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym, currentMap, player); break;
+    case MONSTER_SLIME: new SlimeEntity(xm, ym, currentMap, player); break;
 
     case MONSTER_KING_RAT: new KingRatEntity(xm, ym, currentMap, player); break;
   }
@@ -785,33 +787,38 @@ void WitchBlastGame::generateStandardMap()
 
   int random = rand() % 100;
 
-  if (random < 20)
+  if (random < 16)
   {
     currentMap->generateRoom(rand()%3);
     findPlaceMonsters(MONSTER_RAT,4);
   }
-  else if (random < 40)
+  else if (random < 32)
   {
     currentMap->generateRoom(rand()%4);
     findPlaceMonsters(MONSTER_BAT,4);
   }
-  else if (random < 60)
+  else if (random < 48)
   {
     currentMap->generateRoom(rand()%4);
     findPlaceMonsters(MONSTER_EVIL_FLOWER,4);
   }
-  else if (random < 80)
+  else if (random < 64)
   {
     Vector2D v = currentMap->generateBonusRoom();
     ChestEntity* chest = new ChestEntity(v.x, v.y, CHEST_BASIC, false);
     chest->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     currentMap->setCleared(true);
   }
-  else
+  else if (random < 80)
   {
     currentMap->generateRoom(rand()%3);
     findPlaceMonsters(MONSTER_RAT,3);
     findPlaceMonsters(MONSTER_BAT,3);
+  }
+  else
+  {
+    currentMap->generateRoom(rand()%3);
+    findPlaceMonsters(MONSTER_SLIME,8 + rand() % 5);
   }
 }
 

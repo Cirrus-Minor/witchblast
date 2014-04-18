@@ -17,6 +17,9 @@
 #ifndef CONSTANTS_H_INCLUDED
 #define CONSTANTS_H_INCLUDED
 
+// uncomment to show bounding box in the app
+// #define SHOW_BOUNDING_BOX
+
 #include <string>
 
 //#define _68X68
@@ -99,7 +102,10 @@ enum sound_resources {
   SOUND_BIG_WALL_IMPACT,
   SOUND_KING_RAT_1,
   SOUND_KING_RAT_2,
-  SOUND_KING_RAT_DIE
+  SOUND_KING_RAT_DIE,
+  SOUND_SLIME_JUMP,
+  SOUND_SLIME_IMAPCT,
+  SOUND_SLIME_IMAPCT_WEAK
 };
 
 const int TYPE_BLOOD    = 11;
@@ -112,6 +118,7 @@ enum corpses_ressources{
   FRAME_CORPSE_BAT,
   FRAME_CORPSE_FLOWER,
   FRAME_CORPSE_GREEN_RAT,
+  FRAME_CORPSE_SLIME,
 
   FRAME_CORPSE_KING_RAT
 };
@@ -164,6 +171,7 @@ enum monster_type_enum
   MONSTER_RAT,
   MONSTER_BAT,
   MONSTER_EVIL_FLOWER,
+  MONSTER_SLIME,
 
   MONSTER_KING_RAT
 };
@@ -207,12 +215,12 @@ const float EVIL_FLOWER_FIRE_DELAY = 2.7f;
 const float EVIL_FLOWER_FIRE_VELOCITY = 220.0f;
 
 // Slime
-const int SLIME_HP = 15;
+const int SLIME_HP = 10;
 const int SLIME_DAMAGES = 5;
 const int SLIME_BB_LEFT = 13;
 const int SLIME_BB_WIDTH_DIFF = 26;
-const int SLIMET_BB_TOP = 22;
-const int SLIME_BB_HEIGHT_DIFF = 12;
+const int SLIME_BB_TOP = 38;
+const int SLIME_BB_HEIGHT_DIFF = 40;
 
 // KingRat
 const float KING_RAT_SPEED = 200.0f;
