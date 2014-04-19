@@ -1,4 +1,4 @@
-/**  This file is part of Ostrich Riders.
+/**  This file is part of Witch Blast.
   *
   *  FreeTumble is free software: you can redistribute it and/or modify
   *  it under the terms of the GNU General Public License as published by
@@ -22,17 +22,18 @@
 
 #include <string>
 
-//#define _68X68
-
 const std::string APP_NAME =      "Witch Blast";
 const std::string APP_VERSION =   "0.0.5";
 
-const int SCREEN_WIDTH = 970; //1024;
-const int SCREEN_HEIGHT = 720; //768;
+// Client size
+const int SCREEN_WIDTH = 970;
+const int SCREEN_HEIGHT = 720;
 
+// Tile set
 const int TILE_WIDTH = 64;
 const int TILE_HEIGHT = 64;
 
+// Tile map offset
 const int OFFSET_X = 5;
 const int OFFSET_Y = 5;
 
@@ -126,13 +127,13 @@ const float ACQUIRE_DELAY = 2.8f;
 const float UNLOCK_DELAY = 1.0f;
 
 const float INITIAL_BOLT_LIFE = 0.4f;
-const int INITIAL_BOLT_DAMAGES = 5;
+const int INITIAL_BOLT_DAMAGES = 8;
 const float INITIAL_BOLT_VELOCITY = 700.0f;
 
 const float FAIRY_SPEED = 180.0f; //400.0f;
 const float FAIRY_FIRE_DELAY = 0.8f;
 const float FAIRY_BOLT_LIFE = 0.4f;
-const int FAIRY_BOLT_DAMAGES = 5;
+const int FAIRY_BOLT_DAMAGES = 8;
 const float FAIRY_BOLT_VELOCITY = 700.0f;
 
 // Items
@@ -193,7 +194,7 @@ const float DOOR_CLOSE_TIME = 1.0f;
 
 // Rat
 const float RAT_SPEED = 160.0f;
-const int RAT_HP = 15;
+const int RAT_HP = 24;
 const int RAT_DAMAGES = 5;
 const int RAT_BB_LEFT = 14;
 const int RAT_BB_WIDTH_DIFF = 28;
@@ -202,13 +203,13 @@ const int RAT_BB_HEIGHT_DIFF = 22;
 
 // Green Rat
 const float GREEN_RAT_SPEED = 170.0f;
-const int GREEN_RAT_HP = 10;
+const int GREEN_RAT_HP = 16;
 const int GREEN_RAT_DAMAGES = 5;
 const float GREEN_RAT_FADE = 1.0f;
 
 // Bat
 const float BAT_SPEED = 250.0f;
-const int BAT_HP = 5;
+const int BAT_HP = 8;
 const int BAT_DAMAGES = 5;
 const int BAT_BB_LEFT = 5;
 const int BAT_BB_WIDTH_DIFF = 10;
@@ -216,7 +217,7 @@ const int BAT_BB_TOP = 2;
 const int BAT_BB_HEIGHT_DIFF = 32;
 
 // Evl Flower
-const int EVIL_FLOWER_HP = 10;
+const int EVIL_FLOWER_HP = 16;
 const int EVIL_FLOWER_MELEE_DAMAGES = 8;
 const int EVIL_FLOWER_MISSILE_DAMAGES = 5;
 const int EVIL_FLOWER_BB_LEFT = 14;
@@ -227,7 +228,7 @@ const float EVIL_FLOWER_FIRE_DELAY = 2.7f;
 const float EVIL_FLOWER_FIRE_VELOCITY = 220.0f;
 
 // Slime
-const int SLIME_HP = 10;
+const int SLIME_HP = 16;
 const int SLIME_DAMAGES = 5;
 const int SLIME_BB_LEFT = 13;
 const int SLIME_BB_WIDTH_DIFF = 26;
@@ -238,7 +239,7 @@ const int SLIME_BB_HEIGHT_DIFF = 40;
 const float KING_RAT_SPEED = 200.0f;
 const float KING_RAT_RUNNING_SPEED = 600.0f;
 const float KING_RAT_BERSERK_SPEED = 250.0f;
-const int KING_RAT_HP = 400;
+const int KING_RAT_HP = 600;
 const int KING_RAT_DAMAGES = 8;
 
 // EFFECTS
