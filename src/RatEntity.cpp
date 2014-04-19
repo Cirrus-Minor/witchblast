@@ -15,7 +15,7 @@ RatEntity::RatEntity(float x, float y, GameMap* map)
   hp = RAT_HP;
   meleeDamages = RAT_DAMAGES;
 
-  type = 21;
+  type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
   shadowFrame = 3;
 }
@@ -63,7 +63,7 @@ void RatEntity::dying()
   SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadRat->setZ(OFFSET_Y);
   deadRat->setFrame(FRAME_CORPSE_RAT);
-  deadRat->setType(TYPE_CORPSE);
+  deadRat->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
   drop();

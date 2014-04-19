@@ -29,7 +29,7 @@ const int itemCost[12] =
 ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= itemMagicianHat ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
-  type = TYPE_ITEM;
+  type = ENTITY_ITEM;
   this->itemType = itemType;
   frame = itemType;
   if (itemType >= itemMagicianHat) frame = itemType - itemMagicianHat;

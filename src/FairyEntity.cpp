@@ -13,7 +13,7 @@ FairyEntity::FairyEntity(float x, float y, PlayerEntity* parentEntity) : SpriteE
   this->setFrame(0);
   this->parentEntity = parentEntity;
 
-  type = 2;
+  type = ENTITY_FAMILIAR;
   //viscosity = 0.99f;
 
   fireDelay = -1.0f;

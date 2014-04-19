@@ -7,7 +7,7 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime)
 {
   lifetime = boltLifeTime;
   damages = INITIAL_BOLT_DAMAGES;
-  type = 15;
+  type = ENTITY_BOLT;
   viscosity = 0.97f;
   frame = 0;
 }

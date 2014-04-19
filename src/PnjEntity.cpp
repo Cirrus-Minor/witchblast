@@ -21,7 +21,7 @@ PnjEntity::PnjEntity(float x, float y, int pnjType) : SpriteEntity (ImageManager
   speechTimer = 2.5f + 0.1f * (rand() % 50);
   headFrame = 2;
 
-  type = 17;
+  type = ENTITY_PNJ;
 }
 
 

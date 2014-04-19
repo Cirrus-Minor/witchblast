@@ -8,7 +8,7 @@
 ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CHEST), x, y, 48, 48)
 {
-  type = 19;
+  type = ENTITY_CHEST;
   imagesProLine = 2;
   this->isOpen = isOpen;
   this->chestType = chestType;

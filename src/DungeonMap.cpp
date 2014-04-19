@@ -394,7 +394,7 @@ void DungeonMap::restoreItems()
   {
     itemListElement ilm = *it;
     it++;
-    
+
     ItemEntity* itemEntity = new ItemEntity((ItemEntity::enumItemType)(ilm.type), ilm.x, ilm.y);
     itemEntity->setMap(this, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     itemEntity->setMerchandise(ilm.merch);
@@ -405,24 +405,24 @@ void DungeonMap::restoreItems()
 void DungeonMap::restoreSprites()
 {
 	SpriteList::iterator it;
-  
+
   for (it = spriteList.begin (); it != spriteList.end ();)
   {
     spriteListElement ilm = *it;
     it++;
-    
-    if (ilm.type == TYPE_BLOOD)
+
+    if (ilm.type == ENTITY_BLOOD)
     {
       SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), ilm.x, ilm.y, 16, 16, 6);
       blood->setZ(OFFSET_Y - 1);
       blood->setFrame(ilm.frame);
-      blood->setType(TYPE_BLOOD);
+      blood->setType(ENTITY_BLOOD);
       blood->setScale(ilm.scale, ilm.scale);
     }
-    else if (ilm.type == TYPE_CORPSE)
+    else if (ilm.type == ENTITY_CORPSE)
     {
       SpriteEntity* corpse;
-      
+
       if (ilm.frame >= FRAME_CORPSE_KING_RAT)
       {
         corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), ilm.x, ilm.y, 128, 128);
@@ -433,9 +433,9 @@ void DungeonMap::restoreSprites()
         corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), ilm.x, ilm.y, 64, 64);
         corpse->setFrame(ilm.frame);
       }
-      
+
       corpse->setZ(OFFSET_Y);
-      corpse->setType(TYPE_CORPSE);
+      corpse->setType(ENTITY_CORPSE);
     }
   }
 	spriteList.clear();
@@ -444,12 +444,12 @@ void DungeonMap::restoreSprites()
 void DungeonMap::restoreChests()
 {
   ChestList::iterator it;
-  
+
   for (it = chestList.begin (); it != chestList.end ();)
   {
     chestListElement clm = *it;
     it++;
-    
+
     ChestEntity* chestEntity = new ChestEntity(clm.x, clm.y, clm.type, clm.state);
     chestEntity->setMap(this, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 	}

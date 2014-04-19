@@ -13,6 +13,7 @@ MagnetEntity::MagnetEntity(float x, float y, PlayerEntity* parentEntity, ItemEnt
   this->setWeight(800.0f);
   this->setFrame(itemType);
   this->parentEntity = parentEntity;
+  type = ENTITY_EFFECT;
 }
 
 

@@ -483,7 +483,7 @@ void WitchBlastGame::saveMapItems()
 		else
     {
       SpriteEntity* spriteEntity = dynamic_cast<SpriteEntity*>(e);
-      if (spriteEntity != NULL && (e->getType() == TYPE_BLOOD || e->getType() == TYPE_CORPSE ) )
+      if (spriteEntity != NULL && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE ) )
       {
         int spriteFrame = spriteEntity->getFrame();
         if (spriteEntity->getWidth() == 128) spriteFrame += FRAME_CORPSE_KING_RAT;
@@ -621,7 +621,7 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
   int b0 = 0;
   if (bloodColor == BaseCreatureEntity::bloodGreen) b0 += 6;
   blood->setFrame(b0 + rand()%6);
-  blood->setType(TYPE_BLOOD);
+  blood->setType(ENTITY_BLOOD);
   blood->setVelocity(Vector2D(rand()%250));
   blood->setViscosity(0.95f);
 

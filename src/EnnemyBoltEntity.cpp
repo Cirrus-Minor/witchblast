@@ -4,10 +4,8 @@
 
 EnnemyBoltEntity::EnnemyBoltEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f) : CollidingSpriteEntity (image, x, y, BOLT_WIDTH, BOLT_HEIGHT)
 {
-  //lifetime = INITIAL_BOLT_LIFE;
   damages = INITIAL_BOLT_DAMAGES;
-  type = 19;
-  //viscosity = 0.97f;
+  type = ENTITY_ENNEMY_BOLT;
   frame = 1;
 }
 

@@ -14,7 +14,7 @@ PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f) :
 {
   currentFireDelay = -1.0f;
   canFirePlayer = true;
-  type = 1;
+  type = ENTITY_PLAYER;
 
   imagesProLine = 8;
   playerStatus = playerStatusPlaying;
@@ -418,7 +418,7 @@ void PlayerEntity::loseItem(ItemEntity::enumItemType itemType, bool isEquip)
   itemSprite->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   itemSprite->setZ(OFFSET_Y - 1);
   itemSprite->setFrame(itemType);
-  itemSprite->setType(TYPE_BLOOD);
+  itemSprite->setType(ENTITY_BLOOD);
   itemSprite->setVelocity(Vector2D(rand()%450));
   itemSprite->setViscosity(0.95f);
   itemSprite->setSpin( (rand() % 700) - 350.0f);
@@ -445,7 +445,7 @@ void PlayerEntity::dying()
   itemSprite->setZ(OFFSET_Y - 1);
   itemSprite->setImagesProLine(10);
   itemSprite->setFrame(/*11*/1);
-  itemSprite->setType(TYPE_BLOOD);
+  itemSprite->setType(ENTITY_BLOOD);
   itemSprite->setVelocity(Vector2D(rand()%450));
   itemSprite->setViscosity(0.95f);
   itemSprite->setSpin( (rand() % 700) - 350.0f);

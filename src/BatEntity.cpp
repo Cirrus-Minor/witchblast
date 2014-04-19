@@ -14,7 +14,7 @@ BatEntity::BatEntity(float x, float y, GameMap* map)
   hp = BAT_HP;
   meleeDamages = BAT_DAMAGES;
 
-  type = 22;
+  type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
   changingDelay = -0.5f;
   shadowFrame = 3;
@@ -115,7 +115,7 @@ void BatEntity::dying()
   SpriteEntity* deadBat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadBat->setZ(OFFSET_Y);
   deadBat->setFrame(FRAME_CORPSE_BAT);
-  deadBat->setType(TYPE_CORPSE);
+  deadBat->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
 

@@ -16,7 +16,7 @@ GreenRatEntity::GreenRatEntity(float x, float y, GameMap* map, PlayerEntity* pla
   hp = GREEN_RAT_HP;
   meleeDamages = GREEN_RAT_DAMAGES;
 
-  type = 21;
+  type = ENTITY_ENNEMY_INVOCATED;
   bloodColor = bloodRed;
   shadowFrame = 3;
 
@@ -92,7 +92,7 @@ void GreenRatEntity::dying()
   SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadRat->setZ(OFFSET_Y);
   deadRat->setFrame(FRAME_CORPSE_GREEN_RAT);
-  deadRat->setType(TYPE_CORPSE);
+  deadRat->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
   //drop();

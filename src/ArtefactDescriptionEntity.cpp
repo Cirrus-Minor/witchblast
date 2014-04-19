@@ -12,7 +12,7 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(ItemEntity::enumItemType it
   this->setLifetime(6.0f);
 
   this->setFrame(itemType - ItemEntity::itemMagicianHat);
-  this->setType(9);
+  this->setType(ENTITY_ARTIFACT_DESCRIPTION);
 
   float x0 = OFFSET_X + MAP_WIDTH * TILE_WIDTH * 0.5f - ARTEFACT_RECT_WIDTH * 0.5f;
 

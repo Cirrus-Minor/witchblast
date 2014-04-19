@@ -108,11 +108,6 @@ enum sound_resources {
   SOUND_SLIME_IMAPCT_WEAK
 };
 
-const int TYPE_BLOOD    = 11;
-const int TYPE_CORPSE   = 12;
-
-const int TYPE_ITEM     = 19;
-
 enum corpses_ressources{
   FRAME_CORPSE_RAT,
   FRAME_CORPSE_BAT,
@@ -164,6 +159,23 @@ const float ARTEFACT_RECT_HEIGHT = 100.0f;
 const float ARTEFACT_POS_Y = 450.0f;
 const float ARTEFACT_BORDER = 8.0f;
 const float ARTEFACT_ZOOM_TIME = 0.5f;
+
+// entity type
+const int ENTITY_PLAYER = 1;
+const int ENTITY_FAMILIAR = 2;
+const int ENTITY_DOOR = 3;
+const int ENTITY_ARTIFACT_DESCRIPTION = 9;
+const int ENTITY_BLOOD    = 11;
+const int ENTITY_CORPSE   = 12;
+const int ENTITY_EFFECT   = 13;
+const int ENTITY_BOLT = 15;
+const int ENTITY_ENNEMY_BOLT = 16;
+const int ENTITY_PNJ = 17;
+const int ENTITY_CHEST = 18;
+const int ENTITY_ITEM = 19;
+const int ENTITY_ENNEMY = 21;
+const int ENTITY_ENNEMY_INVOCATED = 22;
+const int ENTITY_ENNEMY_BOSS = 23;
 
 // monster type
 enum monster_type_enum

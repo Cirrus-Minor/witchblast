@@ -23,7 +23,7 @@ KingRatEntity::KingRatEntity(float x, float y, GameMap* map, PlayerEntity* playe
   hpMax = KING_RAT_HP;
   meleeDamages = KING_RAT_DAMAGES;
 
-  type = 21;
+  type = ENTITY_ENNEMY_BOSS;
   bloodColor = bloodRed;
   shadowFrame = 4;
   frame = 0;
@@ -286,7 +286,7 @@ void KingRatEntity::dying()
   SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
   deadRat->setZ(OFFSET_Y);
   deadRat->setFrame(FRAME_CORPSE_KING_RAT - FRAME_CORPSE_KING_RAT);
-  deadRat->setType(TYPE_CORPSE);
+  deadRat->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 10; i++) parentGame->generateBlood(x, y, bloodColor);
 

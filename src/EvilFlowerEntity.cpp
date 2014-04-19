@@ -61,7 +61,7 @@ void EvilFlowerEntity::dying()
   SpriteEntity* deadFlower = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadFlower->setZ(OFFSET_Y);
   deadFlower->setFrame(FRAME_CORPSE_FLOWER);
-  deadFlower->setType(TYPE_CORPSE);
+  deadFlower->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
   drop();

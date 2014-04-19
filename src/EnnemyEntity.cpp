@@ -11,7 +11,7 @@
 EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y, GameMap* map)
     : BaseCreatureEntity (image, x, y, 64, 64)
 {
-  type = 21;
+  type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
   setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
@@ -58,30 +58,31 @@ void EnnemyEntity::collideMapBottom()
 
 void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
+  if (collideWithEntity(entity) &&
+      (entity->getType() == ENTITY_PLAYER || entity->getType() == ENTITY_BOLT ))
+  {
     PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
     BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
 
-    if (collideWithEntity(entity))
+    if (playerEntity != NULL && !playerEntity->isDead())
+      playerEntity->hurt(meleeDamages);
+    else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
     {
-      if (playerEntity != NULL && !playerEntity->isDead())
-        playerEntity->hurt(meleeDamages);
-      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
-      {
-        boltEntity->collide();
-        hurt(boltEntity->getDamages());
-        parentGame->generateBlood(x, y, bloodColor);
-        SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
+      boltEntity->collide();
+      hurt(boltEntity->getDamages());
+      parentGame->generateBlood(x, y, bloodColor);
+      SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 
-        float xs = (x + boltEntity->getX()) / 2;
-        float ys = (y + boltEntity->getY()) / 2;
-        SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
-        star->setFading(true);
-        star->setZ(y+ 100);
-        star->setLifetime(0.7f);
-        star->setType(16);
-        star->setSpin(400.0f);
-      }
+      float xs = (x + boltEntity->getX()) / 2;
+      float ys = (y + boltEntity->getY()) / 2;
+      SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+      star->setFading(true);
+      star->setZ(y+ 100);
+      star->setLifetime(0.7f);
+      star->setType(16);
+      star->setSpin(400.0f);
     }
+  }
 }
 
 void EnnemyEntity::dying()

@@ -15,7 +15,7 @@ SlimeEntity::SlimeEntity(float x, float y, GameMap* map, PlayerEntity* player)
   meleeDamages = SLIME_DAMAGES;
   this->player = player;
 
-  type = 22;
+  type = ENTITY_ENNEMY;
   bloodColor = bloodGreen;
   jumpingDelay = 2.0f;
   shadowFrame = 3;
@@ -197,7 +197,7 @@ void SlimeEntity::dying()
   SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadSlime->setZ(OFFSET_Y);
   deadSlime->setFrame(FRAME_CORPSE_SLIME);
-  deadSlime->setType(TYPE_CORPSE);
+  deadSlime->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
 
