@@ -22,13 +22,14 @@ class GameFloor;
 
 enum roomTypeEnum
 {
-  roomTypeStarting,
+  roomTypeNULL,
   roomTypeStandard,
   roomTypeBoss,
   roomTypeMerchant,
   roomTypeKey,
   roomTypeBonus,
-  roomTypeExit
+  roomTypeExit,
+  roomTypeStarting
 };
 
 class DungeonMap : public GameMap

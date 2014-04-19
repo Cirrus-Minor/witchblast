@@ -64,6 +64,7 @@ void GameFloor::displayToConsole()
         case 4: printf("!"); break;
         case 5: printf("*"); break;
         case 6: printf("X"); break;
+        case 7: printf("0"); break;
       }
     }
     printf("\n");
@@ -171,10 +172,8 @@ void GameFloor::createFloor()
         {
           maps[i][j] = new DungeonMap(this, i, j);
           if (i == x0 && j == y0)
-            //maps[i][j]->randomize(0);
             maps[i][j]->setRoomType(roomTypeStarting);
           else
-            //maps[i][j]->randomize(floor[i][j]);
             maps[i][j]->setRoomType((roomTypeEnum)(floor[i][j]));
         }
 
@@ -199,7 +198,7 @@ void GameFloor::generate()
   // First room
   int x0 = FLOOR_WIDTH / 2;
   int y0 = FLOOR_HEIGHT / 2;
-  floor[x0][y0] = 1;
+  floor[x0][y0] = roomTypeStarting;
   nbRooms = 1;
 
   // neighboor
