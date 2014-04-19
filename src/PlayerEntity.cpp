@@ -192,6 +192,13 @@ void PlayerEntity::render(sf::RenderWindow* app)
       sprite.setTextureRect(sf::IntRect(frame * width, height, width, height));
       app->draw(sprite);
 
+      // belt
+      if (equip[EQUIP_LEATHER_BELT])
+      {
+        sprite.setTextureRect(sf::IntRect(frame * width, 6 *height, width, height));
+        app->draw(sprite);
+      }
+
       // head
       if (playerStatus != playerStatusAcquire && playerStatus != playerStatusUnlocking)
       {
@@ -470,21 +477,29 @@ void PlayerEntity::acquireItem(ItemEntity::enumItemType type)
 
 void PlayerEntity::computePlayer()
 {
-  fireDelay = INITIAL_PLAYER_FIRE_DELAY;
-  creatureSpeed = INITIAL_PLAYER_SPEED;
-  fireVelocity = INITIAL_BOLT_VELOCITY;
-  fireDamages = INITIAL_BOLT_DAMAGES;
+  float boltLifeTimeBonus = 1.0f;
+  float fireDelayBonus = 1.0f;
+  float creatureSpeedBonus = 1.0f;
+  float fireVelocityBonus = 1.0f;
+  float fireDamagesBonus = 1.0f;
 
-  if (equip[EQUIP_VIBRATION_GLOVES]) fireDelay *= 0.90f;
-  if (equip[EQUIP_ENCHANTER_HAT]) fireDelay *= 0.75f;
-  if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeed += 50.0f;
-  if (equip[EQUIP_BOOK_DUAL]) fireDelay *= 1.6f;
-  if (equip[EQUIP_CONCENTRATION_AMULET]) boltLifeTime *= 1.5f;
+  if (equip[EQUIP_VIBRATION_GLOVES]) fireDelayBonus -= 0.10f;
+  if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
+  if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
+  if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.25f;
+  if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.6f;
+  if (equip[EQUIP_CONCENTRATION_AMULET]) boltLifeTimeBonus += 0.5f;
   if (equip[EQUIP_MAHONAGY_STAFF])
   {
-    fireVelocity *= 1.15f;
-    fireDamages *= 1.5f;
+    fireVelocityBonus += 0.15f;
+    fireDamagesBonus += 0.5f;
   }
+
+  fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
+  creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;
+  fireVelocity = INITIAL_BOLT_VELOCITY * fireVelocityBonus;
+  fireDamages = INITIAL_BOLT_DAMAGES * fireDamagesBonus;
+  boltLifeTime = INITIAL_BOLT_LIFE * boltLifeTimeBonus;
 }
 
 void PlayerEntity::acquireStance(ItemEntity::enumItemType type)

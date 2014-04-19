@@ -51,6 +51,8 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(ItemEntity::enumItemType it
       artefactName = "Mahogany Staff"; artefactDescription = "Increases bolt's speed and damages"; break;
     case (ItemEntity::itemFairy):
       artefactName = "Fairy"; artefactDescription = "Help you in the dungeon"; break;
+    case (ItemEntity::itemLeatherBelt):
+      artefactName = "Leather Belt"; artefactDescription = "Increases fire rate"; break;
     default: break;
   }
 }

@@ -22,7 +22,8 @@ class ItemEntity : public CollidingSpriteEntity
       itemBossKey,
       itemVibrationGloves,
       itemMahoganyStaff,
-      itemFairy
+      itemFairy,
+      itemLeatherBelt
     };
 
 
