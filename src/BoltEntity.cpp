@@ -6,7 +6,7 @@
 BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime) : CollidingSpriteEntity (image, x, y, BOLT_WIDTH, BOLT_HEIGHT)
 {
   lifetime = boltLifeTime;
-  damages = INITIAL_BOLT_DAMAGES;
+  setDamages(INITIAL_BOLT_DAMAGES);
   type = ENTITY_BOLT;
   viscosity = 0.97f;
   frame = 0;
@@ -20,6 +20,17 @@ int BoltEntity::getDamages()
 void BoltEntity::setDamages(int damages)
 {
   this->damages = damages;
+
+  if (damages <= 4)  renderScale = 0.8f;
+  else if (damages <= 8)  renderScale = 0.85f;
+  else if (damages <= 12) renderScale = 0.9f;
+  else if (damages <= 16) renderScale = 1.0f;
+  else if (damages <= 20) renderScale = 1.1f;
+  else if (damages <= 24) renderScale = 1.2f;
+  else if (damages <= 30) renderScale = 1.3f;
+  else renderScale = 1.4f;
+
+  sprite.scale(renderScale, renderScale);
 }
 
 void BoltEntity::animate(float delay)
@@ -28,7 +39,7 @@ void BoltEntity::animate(float delay)
   trace->setFading(true);
   trace->setZ(y);
   trace->setLifetime(0.2f);
-  trace->setShrinking(true);
+  trace->setShrinking(true, renderScale, renderScale);
   trace->setType(16);
 
   z = y + height;

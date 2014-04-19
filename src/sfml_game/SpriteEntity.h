@@ -32,6 +32,7 @@ public:
 
   void setFading(bool isFading);
   void setShrinking(bool isShrinking);
+  void setShrinking(bool isShrinking, float initialScaleX, float initialScaleY);
   void setVisible(bool isVisible);
   void setFrame(int frame);
   void setImagesProLine(int n);
@@ -49,6 +50,9 @@ protected:
     int height;
     int frame;
     int imagesProLine;
+
+    // for shrinking
+    float initialScaleX, initialScaleY;
 
     bool isFading;
     bool isShrinking;

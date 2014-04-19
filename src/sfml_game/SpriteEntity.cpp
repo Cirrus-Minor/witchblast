@@ -47,7 +47,15 @@ void SpriteEntity::setFading(bool isFading)
 
 void SpriteEntity::setShrinking(bool isShrinking)
 {
-    this->isShrinking = isShrinking;
+  //this->isShrinking = isShrinking;
+  setShrinking(isShrinking, 1.0f, 1.0f);
+}
+
+void SpriteEntity::setShrinking(bool isShrinking, float initialScaleX, float initialScaleY)
+{
+  this->isShrinking = isShrinking;
+  this->initialScaleX = initialScaleX;
+  this->initialScaleY = initialScaleY;
 }
 
 void SpriteEntity::setVisible(bool isVisible)
@@ -97,7 +105,8 @@ void SpriteEntity::render(sf::RenderWindow* app)
 
     if (isShrinking)
     {
-        sprite.setScale(getFade(), getFade());
+        sprite.setScale(initialScaleX * getFade(),
+                        initialScaleY * getFade());
     }
 
     app->draw(sprite);
