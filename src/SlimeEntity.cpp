@@ -38,18 +38,23 @@ void SlimeEntity::animate(float delay)
 
     if (h <= 0.0f)
     {
-      h = 0.0f;
-      if (isFirstJumping)
-      {
-        isFirstJumping = false;
-        hVelocity = 160.0f;
-        SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT);
-      }
+      if (hp <= 0)
+        dying();
       else
       {
-        jumpingDelay = 0.8f + 0.1f * (rand() % 20);
-        isJumping = false;
-        SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT_WEAK);
+        h = 0.0f;
+        if (isFirstJumping)
+        {
+          isFirstJumping = false;
+          hVelocity = 160.0f;
+          SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT);
+        }
+        else
+        {
+          jumpingDelay = 0.4f + 0.1f * (rand() % 20);
+          isJumping = false;
+          SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT_WEAK);
+        }
       }
     }
     if (hVelocity > 0.0f) frame = 2;
@@ -61,7 +66,7 @@ void SlimeEntity::animate(float delay)
     if (jumpingDelay < 0.0f)
     {
       SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);
-      hVelocity = 500.0f + rand() % 150;
+      hVelocity = 350.0f + rand() % 300;
       isJumping = true;
       isFirstJumping = true;
 
@@ -208,4 +213,18 @@ void SlimeEntity::dying()
 bool SlimeEntity::canCollide()
 {
   return h <= 70.0f;
+}
+
+void SlimeEntity::hurt(int damages)
+{
+  hurting = true;
+  hurtingDelay = HURTING_DELAY;
+
+  hp -= damages;
+  if (hp <= 0)
+  {
+    hp = 0;
+    if (!isJumping)
+      dying();
+  }
 }

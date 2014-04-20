@@ -20,6 +20,7 @@ class SlimeEntity : public EnnemyEntity
 
 	  virtual void dying();
 	  virtual bool canCollide();
+	  virtual void hurt(int damages);
   private:
     float jumpingDelay;
     float h;
