@@ -72,10 +72,6 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact_weak.ogg");
 
-  music.openFromFile("media/sound/track00.ogg");
-  music.setVolume(75);
-  music.setLoop(true);
-
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
     myText.setFont(font);
@@ -107,6 +103,15 @@ void WitchBlastGame::onUpdate()
         startNewGame();
       else
         specialState = SpecialStateNone;
+    }
+  }
+
+  if (isPlayerAlive)
+  {
+    if (player->getHp() <= 0)
+    {
+      isPlayerAlive = false;
+      playMusic(MusicEnding);
     }
   }
 }
@@ -163,6 +168,7 @@ void WitchBlastGame::startNewGame()
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
   player->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   player->setParent(this);
+  isPlayerAlive = true;
 
   // generate the map
   refreshMap();
@@ -176,7 +182,8 @@ void WitchBlastGame::startNewGame()
   // game time counter an state
   lastTime = getAbsolutTime();
   gameState = gameStatePlaying;
-  music.play();
+
+  playMusic(MusicDonjon);
 
   // fade in
   specialState = SpecialStateFadeIn;
@@ -886,4 +893,26 @@ void WitchBlastGame::verifyDoorUnlocking()
       bossRoomOpened = true;
     }
   }
+}
+
+void WitchBlastGame::playMusic(musicEnum musicChoice)
+{
+  music.stop();
+  music.setLoop(true);
+  bool ok = false;
+  switch (musicChoice)
+  {
+  case MusicDonjon:
+    ok = music.openFromFile("media/sound/track00.ogg");
+    music.setVolume(75);
+    break;
+
+  case MusicEnding:
+    ok = music.openFromFile("media/sound/track_ending.ogg");
+    music.setVolume(35);
+    break;
+  }
+
+  if (ok)
+    music.play();
 }

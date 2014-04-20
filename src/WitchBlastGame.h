@@ -49,6 +49,12 @@ class WitchBlastGame : public Game
     TileMapEntity* currentTileMap;
     int floorX, floorY;
 
+    enum musicEnum
+    {
+      MusicDonjon,
+      MusicEnding
+    };
+
     enum specialStateEnum
     {
       SpecialStateNone,
@@ -72,6 +78,7 @@ class WitchBlastGame : public Game
     void findPlaceMonsters(monster_type_enum monsterType, int amount);
     int getRandomEquipItem(bool toSale);
     void verifyDoorUnlocking();
+    void playMusic(musicEnum musicChoice);
 
     bool roomClosed;
     bool bossRoomOpened;
@@ -80,6 +87,8 @@ class WitchBlastGame : public Game
 
     // use to remember if a case has a monster in monster spawn
     bool monsterArray[MAP_WIDTH][MAP_HEIGHT];
+
+    bool isPlayerAlive;
 };
 
 #endif // MAGICGAME_H
