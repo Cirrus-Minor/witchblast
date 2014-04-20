@@ -1,7 +1,7 @@
 #ifndef GAMEFLOOR_H
 #define GAMEFLOOR_H
 
-#include "constants.h"
+#include "Constants.h"
 #include "DungeonMap.h"
 
 class GameFloor
