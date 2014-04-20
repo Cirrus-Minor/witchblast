@@ -25,7 +25,7 @@ class PlayerEntity : public BaseCreatureEntity
     void setEntering();
     bool canMove();
     virtual void dying();
-    virtual void hurt(int damages);
+    virtual bool hurt(int damages); // return true if hurted
     bool isDead();
     float getPercentFireDelay();
     void acquireItem(ItemEntity::enumItemType type);

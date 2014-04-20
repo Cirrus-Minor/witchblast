@@ -407,7 +407,7 @@ bool PlayerEntity::canMove()
   return (playerStatus == playerStatusPlaying);
 }
 
-void PlayerEntity::hurt(int damages)
+bool PlayerEntity::hurt(int damages)
 {
   if (!hurting)
   {
@@ -415,7 +415,9 @@ void PlayerEntity::hurt(int damages)
     BaseCreatureEntity::hurt(damages);
     parentGame->generateBlood(x, y, bloodColor);
     parentGame->generateBlood(x, y, bloodColor);
+    return true;
   }
+  return false;
 }
 
 void PlayerEntity::loseItem(ItemEntity::enumItemType itemType, bool isEquip)

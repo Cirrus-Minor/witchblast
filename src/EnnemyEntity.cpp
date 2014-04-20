@@ -65,7 +65,20 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
 
     if (playerEntity != NULL && !playerEntity->isDead())
-      playerEntity->hurt(meleeDamages);
+    {
+      if (playerEntity->hurt(meleeDamages))
+      {
+        float xs = (x + playerEntity->getX()) / 2;
+        float ys = (y + playerEntity->getY()) / 2;
+        SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+        star->setFading(true);
+        star->setZ(y+ 100);
+        star->setLifetime(0.7f);
+        star->setType(16);
+        star->setSpin(400.0f);
+      }
+    }
+
     else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
     {
       boltEntity->collide();

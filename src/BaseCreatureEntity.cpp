@@ -84,7 +84,7 @@ void BaseCreatureEntity::calculateBB()
 {
 }
 
-void BaseCreatureEntity::hurt(int damages)
+bool BaseCreatureEntity::hurt(int damages)
 {
   hurting = true;
   hurtingDelay = HURTING_DELAY;
@@ -95,6 +95,8 @@ void BaseCreatureEntity::hurt(int damages)
     hp = 0;
     dying();
   }
+
+  return true;
 }
 
 void BaseCreatureEntity::dying()
