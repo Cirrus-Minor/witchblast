@@ -213,7 +213,7 @@ void KingRatEntity::animate(float delay)
   EnnemyEntity::animate(delay);
 }
 
-void KingRatEntity::hurt(int damages)
+bool KingRatEntity::hurt(int damages)
 {
   hurting = true;
   hurtingDelay = HURTING_DELAY;
@@ -228,6 +228,7 @@ void KingRatEntity::hurt(int damages)
     hp = 0;
     dying();
   }
+   return true;
 }
 
 void KingRatEntity::calculateBB()

@@ -15,7 +15,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
-    bool hurt(int damages);
+    virtual bool hurt(int damages);
     virtual void dying();
     void setParent(WitchBlastGame* parent);
     enum enumBloodColor { bloodRed, bloodGreen};

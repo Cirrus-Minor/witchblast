@@ -215,7 +215,7 @@ bool SlimeEntity::canCollide()
   return h <= 70.0f;
 }
 
-void SlimeEntity::hurt(int damages)
+bool SlimeEntity::hurt(int damages)
 {
   hurting = true;
   hurtingDelay = HURTING_DELAY;
@@ -227,4 +227,6 @@ void SlimeEntity::hurt(int damages)
     if (!isJumping)
       dying();
   }
+
+  return true;
 }

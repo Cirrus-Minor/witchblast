@@ -17,7 +17,7 @@ class KingRatEntity : public EnnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
     void afterWallCollide();
-    virtual void hurt(int damages);
+    virtual bool hurt(int damages);
 
     void generateGreenRats();
 
