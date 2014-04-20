@@ -77,7 +77,7 @@ void PlayerEntity::pay(int price)
 {
   gold -= price;
   if (gold < 0) gold = 0;
-  SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
+  SoundManager::getSoundManager()->playSound(SOUND_PAY);
 }
 
 void PlayerEntity::animate(float delay)
