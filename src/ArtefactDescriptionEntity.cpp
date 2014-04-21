@@ -53,6 +53,8 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(ItemEntity::enumItemType it
       artefactName = "Fairy"; artefactDescription = "Help you in the dungeon"; break;
     case (ItemEntity::itemLeatherBelt):
       artefactName = "Leather Belt"; artefactDescription = "Increases fire rate"; break;
+    case (ItemEntity::itemBloodSnake):
+      artefactName = "Blood Snake"; artefactDescription = "Increases damages"; break;
     default: break;
   }
 }

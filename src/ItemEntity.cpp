@@ -8,7 +8,7 @@
 #include <iostream>
 #include <sstream>
 
-const int itemCost[12] =
+const int itemCost[14] =
 {
   1,    // copper coin
   5,    // silver
@@ -22,6 +22,8 @@ const int itemCost[12] =
   100,  // boss key
   20,   // gloves
   20,   // staff
+  20,   // belt
+  20,   // serpent
 
   30,   // fairy
 };

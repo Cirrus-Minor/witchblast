@@ -226,6 +226,13 @@ void PlayerEntity::render(sf::RenderWindow* app)
         sprite.setTextureRect(sf::IntRect(frame * width + 4, 4 * height, width, height));
       app->draw(sprite);
 
+      // snake
+      if (equip[EQUIP_BLOOD_SNAKE])
+      {
+        sprite.setTextureRect(sf::IntRect(frame * width + 4, 7 *height, width, height));
+        app->draw(sprite);
+      }
+
       // hands
       if( equip[EQUIP_VIBRATION_GLOVES])
         sprite.setTextureRect(sf::IntRect((frame + 4) * width, 3 * height, width, height));
@@ -249,6 +256,13 @@ void PlayerEntity::render(sf::RenderWindow* app)
         // staff
         sprite.setTextureRect(sf::IntRect(width * 1, 4 * height, width, height));
         app->draw(sprite);
+
+        // snake
+        if (equip[EQUIP_BLOOD_SNAKE])
+        {
+          sprite.setTextureRect(sf::IntRect(1 * width, 7 *height, width, height));
+          app->draw(sprite);
+        }
       }
 
       // necklace
@@ -496,6 +510,7 @@ void PlayerEntity::computePlayer()
     fireVelocityBonus += 0.15f;
     fireDamagesBonus += 0.5f;
   }
+  if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 1.0f;
 
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;

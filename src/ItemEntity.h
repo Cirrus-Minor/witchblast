@@ -23,7 +23,8 @@ class ItemEntity : public CollidingSpriteEntity
       itemVibrationGloves,
       itemMahoganyStaff,
       itemFairy,
-      itemLeatherBelt
+      itemLeatherBelt,
+      itemBloodSnake
     };
 
 

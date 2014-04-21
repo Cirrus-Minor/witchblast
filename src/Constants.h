@@ -137,7 +137,7 @@ const int FAIRY_BOLT_DAMAGES = 8;
 const float FAIRY_BOLT_VELOCITY = 700.0f;
 
 // Items
-const int NUMBER_EQUIP_ITEMS = 9;
+const int NUMBER_EQUIP_ITEMS = 10;
 enum item_equip {
   EQUIP_ENCHANTER_HAT,
   EQUIP_LEATHER_BOOTS,
@@ -147,7 +147,8 @@ enum item_equip {
   EQUIP_VIBRATION_GLOVES,
   EQUIP_MAHONAGY_STAFF,
   EQUIP_FAIRY,
-  EQUIP_LEATHER_BELT
+  EQUIP_LEATHER_BELT,
+  EQUIP_BLOOD_SNAKE
   };
 
 enum chest_type_enum {
