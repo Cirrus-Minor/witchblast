@@ -73,7 +73,7 @@ void PnjEntity::animate(float delay)
     frame = 0 + (int)(4 * age) % 2;
     headFrame = 2;
   }
-  z = y + height;
+  z = y + height / 2;
 
   SpriteEntity::animate(delay);
 }
