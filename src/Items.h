@@ -9,7 +9,7 @@ enum enumItemType
   itemGoldCoin,
   itemHealth,
 
-  itemMagicianHat,
+  itemMagicianHat,    // first equip item
   itemLeatherBoots,
   itemBookDualShots,
   itemRageAmulet,
@@ -30,9 +30,8 @@ struct itemStuct
   bool equip;
 };
 
-
-const int NB_ITEMS = 14;
-const itemStuct items[NB_ITEMS] =
+const int NUMBER_ITEMS = 14;
+const itemStuct items[NUMBER_ITEMS] =
 {
   {
     itemCopperCoin, "Copper coin", "A copper coin (value 1)", 1, false
@@ -77,5 +76,20 @@ const itemStuct items[NB_ITEMS] =
     itemBloodSnake, "Blood Snake", "Increases damages", 20, true
   }
 };
+
+// Equip items
+const int NUMBER_EQUIP_ITEMS = 10;
+enum item_equip {
+  EQUIP_ENCHANTER_HAT,
+  EQUIP_LEATHER_BOOTS,
+  EQUIP_BOOK_DUAL,
+  EQUIP_CONCENTRATION_AMULET,
+  EQUIP_BOSS_KEY,
+  EQUIP_VIBRATION_GLOVES,
+  EQUIP_MAHOGANY_STAFF,
+  EQUIP_FAIRY,
+  EQUIP_LEATHER_BELT,
+  EQUIP_BLOOD_SNAKE
+  };
 
 #endif
