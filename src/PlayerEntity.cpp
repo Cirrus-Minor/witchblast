@@ -220,7 +220,7 @@ void PlayerEntity::render(sf::RenderWindow* app)
       app->draw(sprite);
 
       // staff
-      if ( equip[EQUIP_MAHONAGY_STAFF])
+      if ( equip[EQUIP_MAHOGANY_STAFF])
         sprite.setTextureRect(sf::IntRect((frame + 4) * width + 4, 4 * height, width, height));
       else
         sprite.setTextureRect(sf::IntRect(frame * width + 4, 4 * height, width, height));
@@ -257,7 +257,7 @@ void PlayerEntity::render(sf::RenderWindow* app)
         //sprite.setTextureRect(sf::IntRect(width * 1, 4 * height, width, height));
         //app->draw(sprite);
 
-        if ( equip[EQUIP_MAHONAGY_STAFF])
+        if ( equip[EQUIP_MAHOGANY_STAFF])
           sprite.setTextureRect(sf::IntRect(5 * width + 4, 4 * height, width, height));
         else
           sprite.setTextureRect(sf::IntRect(width + 4, 4 * height, width, height));
@@ -511,7 +511,7 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.25f;
   if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.6f;
   if (equip[EQUIP_CONCENTRATION_AMULET]) boltLifeTimeBonus += 0.5f;
-  if (equip[EQUIP_MAHONAGY_STAFF])
+  if (equip[EQUIP_MAHOGANY_STAFF])
   {
     fireVelocityBonus += 0.15f;
     fireDamagesBonus += 0.5f;
