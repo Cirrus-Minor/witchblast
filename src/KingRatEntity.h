@@ -7,7 +7,7 @@
 class KingRatEntity : public EnnemyEntity
 {
   public:
-    KingRatEntity(float x, float y, GameMap* map, PlayerEntity* player);
+    KingRatEntity(float x, float y, WitchBlastGame* parent);
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
@@ -28,7 +28,6 @@ class KingRatEntity : public EnnemyEntity
     float berserkDelay;
     int state;
     bool hasBeenBerserk;
-    PlayerEntity* player;
 };
 
 #endif // KINGRATSPRITE_H

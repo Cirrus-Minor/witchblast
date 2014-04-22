@@ -6,14 +6,13 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-SlimeEntity::SlimeEntity(float x, float y, GameMap* map, PlayerEntity* player)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), x, y, map)
+SlimeEntity::SlimeEntity(float x, float y, WitchBlastGame* parent)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), parent, x, y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
   hp = SLIME_HP;
   meleeDamages = SLIME_DAMAGES;
-  this->player = player;
 
   type = ENTITY_ENNEMY;
   bloodColor = bloodGreen;
@@ -74,10 +73,10 @@ void SlimeEntity::animate(float delay)
 
       if (rand() % 2 == 0)
       {
-        float tan = (player->getX() - x) / (player->getY() - y);
+        float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
         float angle = atan(tan);
 
-        if (player->getY() > y)
+        if (parentGame->getPlayer()->getY() > y)
           setVelocity(Vector2D(sin(angle) * randVel,
                                      cos(angle) * randVel));
         else

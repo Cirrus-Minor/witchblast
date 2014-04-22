@@ -7,7 +7,7 @@
 class GreenRatEntity : public EnnemyEntity
 {
   public:
-    GreenRatEntity(float x, float y, GameMap* map, PlayerEntity* player);
+    GreenRatEntity(float x, float y, WitchBlastGame* parent);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -16,11 +16,9 @@ class GreenRatEntity : public EnnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
-	  //virtual void readCollidingEntity(CollidingSpriteEntity* entity);
 	  virtual void dying();
   private:
     float timer;
-    PlayerEntity* player;
 };
 
 #endif // GREENRATSPRITE_H

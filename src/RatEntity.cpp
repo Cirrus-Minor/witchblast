@@ -7,8 +7,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-RatEntity::RatEntity(float x, float y, GameMap* map)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y, map)
+RatEntity::RatEntity(float x, float y, WitchBlastGame* parent)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), parent, x, y)
 {
   creatureSpeed = RAT_SPEED;
   velocity = Vector2D(creatureSpeed);

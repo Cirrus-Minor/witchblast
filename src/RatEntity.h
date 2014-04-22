@@ -6,7 +6,7 @@
 class RatEntity : public EnnemyEntity
 {
   public:
-    RatEntity(float x, float y, GameMap* map);
+    RatEntity(float x, float y, WitchBlastGame* parent);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -15,7 +15,6 @@ class RatEntity : public EnnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
-	  //virtual void readCollidingEntity(CollidingSpriteEntity* entity);
 	  virtual void dying();
   private:
 

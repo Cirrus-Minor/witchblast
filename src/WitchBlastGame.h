@@ -19,7 +19,9 @@ class WitchBlastGame : public Game
     void moveToOtherMap(int direction);
     void closeDoors();
     void openDoors();
-    int GetEnnemyCount();
+    int getEnnemyCount();
+    DungeonMap* getCurrentMap();
+    PlayerEntity* getPlayer();
     void generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
     void showArtefactDescription(enumItemType itemType);
 

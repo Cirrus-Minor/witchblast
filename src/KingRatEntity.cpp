@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-KingRatEntity::KingRatEntity(float x, float y, GameMap* map, PlayerEntity* player)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_KING_RAT), x, y, map)
+KingRatEntity::KingRatEntity(float x, float y, WitchBlastGame* parent)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_KING_RAT), parent, x, y)
 {
   width = 128;
   height = 128;
@@ -28,7 +28,6 @@ KingRatEntity::KingRatEntity(float x, float y, GameMap* map, PlayerEntity* playe
   shadowFrame = 4;
   frame = 0;
   sprite.setOrigin(64.0f, 64.0f);
-  this->player = player;
 
   state = 0;
   timer = 2.0f + (rand() % 40) / 10.0f;
@@ -122,10 +121,10 @@ void KingRatEntity::animate(float delay)
       // rush
       timer = 12.0f;
 
-      float tan = (player->getX() - x) / (player->getY() - y);
+      float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
       float angle = atan(tan);
 
-      if (player->getY() > y)
+      if (parentGame->getPlayer()->getY() > y)
         setVelocity(Vector2D(sin(angle) * KING_RAT_RUNNING_SPEED,
                                        cos(angle) * KING_RAT_RUNNING_SPEED));
       else
@@ -168,10 +167,10 @@ void KingRatEntity::animate(float delay)
       berserkDelay = 0.8f + (rand()%10) / 10.0f;
       SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_2);
 
-      float tan = (player->getX() - x) / (player->getY() - y);
+      float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
       float angle = atan(tan);
 
-      if (player->getY() > y)
+      if (parentGame->getPlayer()->getY() > y)
         setVelocity(Vector2D(sin(angle) * KING_RAT_BERSERK_SPEED,
                                        cos(angle) * KING_RAT_BERSERK_SPEED));
       else
@@ -304,7 +303,7 @@ void KingRatEntity::generateGreenRats()
     if (xr > OFFSET_X + TILE_WIDTH * 1.5f && xr < OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2)
         && yr > OFFSET_Y + TILE_HEIGHT * 1.5f && yr < OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2))
     {
-      new GreenRatEntity(xr, yr, map, player);
+      new GreenRatEntity(xr, yr, parentGame);
     }
     else
       i--;

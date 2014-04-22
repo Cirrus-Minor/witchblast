@@ -10,7 +10,8 @@
 
 #include <iostream>
 
-PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f) : BaseCreatureEntity (image, x, y, 64, 96)
+PlayerEntity::PlayerEntity(sf::Texture* image, WitchBlastGame* parent, float x = 0.0f, float y = 0.0f)
+      : BaseCreatureEntity (image, parent, x, y, 64, 96)
 {
   currentFireDelay = -1.0f;
   canFirePlayer = true;

@@ -8,7 +8,7 @@ class WitchBlastGame;
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
   public:
-    BaseCreatureEntity(sf::Texture* image, float x, float y, int spriteWidth, int spriteHeight);
+    BaseCreatureEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y, int spriteWidth, int spriteHeight);
     int getHp();
     int getHpMax();
     int getHpDisplay();
@@ -17,7 +17,6 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void calculateBB();
     virtual bool hurt(int damages);
     virtual void dying();
-    void setParent(WitchBlastGame* parent);
     enum enumBloodColor { bloodRed, bloodGreen};
   protected:
     int hp;

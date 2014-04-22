@@ -88,6 +88,16 @@ WitchBlastGame::~WitchBlastGame()
   //dtor
 }
 
+DungeonMap* WitchBlastGame::getCurrentMap()
+{
+  return currentMap;
+}
+
+PlayerEntity* WitchBlastGame::getPlayer()
+{
+  return player;
+}
+
 void WitchBlastGame::onUpdate()
 {
   float delta = getAbsolutTime() - lastTime;
@@ -164,10 +174,9 @@ void WitchBlastGame::startNewGame()
 
   // the player
   player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
+                              this,
                               OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
-  player->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
-  player->setParent(this);
   isPlayerAlive = true;
 
   // generate the map
@@ -270,7 +279,7 @@ void WitchBlastGame::startGame()
 
         if (roomClosed)
         {
-          if (GetEnnemyCount() == 0)
+          if (getEnnemyCount() == 0)
           {
             currentMap->setCleared(true);
             openDoors();
@@ -333,7 +342,7 @@ void WitchBlastGame::openDoors()
     doorEntity[3]->openDoor();
 }
 
-int WitchBlastGame::GetEnnemyCount()
+int WitchBlastGame::getEnnemyCount()
 {
   int n=0;
 
@@ -706,7 +715,7 @@ void WitchBlastGame::generateMap()
 
     boss = new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2,
-                      currentMap, player);
+                      this);
   }
   else if (currentMap->getRoomType() == roomTypeStarting)
   {
@@ -733,12 +742,12 @@ void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float y
 {
   switch (monsterType)
   {
-    case MONSTER_RAT: new RatEntity(xm, ym - 2, currentMap); break;
-    case MONSTER_BAT: new BatEntity(xm, ym, currentMap); break;
-    case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym, currentMap, player); break;
-    case MONSTER_SLIME: new SlimeEntity(xm, ym, currentMap, player); break;
+    case MONSTER_RAT: new RatEntity(xm, ym - 2, this); break;
+    case MONSTER_BAT: new BatEntity(xm, ym, this); break;
+    case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym, this); break;
+    case MONSTER_SLIME: new SlimeEntity(xm, ym, this); break;
 
-    case MONSTER_KING_RAT: new KingRatEntity(xm, ym, currentMap, player); break;
+    case MONSTER_KING_RAT: new KingRatEntity(xm, ym, this); break;
   }
 }
 

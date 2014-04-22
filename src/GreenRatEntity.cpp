@@ -7,8 +7,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-GreenRatEntity::GreenRatEntity(float x, float y, GameMap* map, PlayerEntity* player)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y, map)
+GreenRatEntity::GreenRatEntity(float x, float y, WitchBlastGame* parent)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), parent, x, y)
 {
   imagesProLine = 4;
   creatureSpeed = GREEN_RAT_SPEED;
@@ -23,7 +23,6 @@ GreenRatEntity::GreenRatEntity(float x, float y, GameMap* map, PlayerEntity* pla
   timer = (rand() % 50) / 10.0f;
   age = -GREEN_RAT_FADE;
   frame = 4;
-  this->player = player;
 }
 
 void GreenRatEntity::animate(float delay)
@@ -38,10 +37,10 @@ void GreenRatEntity::animate(float delay)
         if (timer <= 0.0f)
         {
           timer = (rand() % 50) / 10.0f;
-          float tan = (player->getX() - x) / (player->getY() - y);
+          float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
           float angle = atan(tan);
 
-          if (player->getY() > y)
+          if (parentGame->getPlayer()->getY() > y)
             setVelocity(Vector2D(sin(angle) * RAT_SPEED,
                                        cos(angle) * RAT_SPEED));
           else

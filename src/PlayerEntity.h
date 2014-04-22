@@ -10,7 +10,7 @@ class FairyEntity;
 class PlayerEntity : public BaseCreatureEntity
 {
   public:
-    PlayerEntity(sf::Texture* image, float x, float y);
+    PlayerEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y);
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
 
@@ -56,8 +56,6 @@ class PlayerEntity : public BaseCreatureEntity
     virtual void collideMapBottom();
 
   private:
-    //int hp;
-    //int hpMax;
     int fireDamages;
     float fireVelocity;
     float fireDelay;
@@ -65,11 +63,7 @@ class PlayerEntity : public BaseCreatureEntity
     float boltLifeTime;
     int gold;
 
- //   float hurtingDelay;
- //   float currentHurtingDelay;
-
     bool canFirePlayer;
-    //float playerSpeed;
     playerStatusEnum playerStatus;
     float acquireDelay;
     enumItemType acquiredItem;

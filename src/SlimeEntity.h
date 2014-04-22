@@ -7,7 +7,7 @@
 class SlimeEntity : public EnnemyEntity
 {
   public:
-    SlimeEntity(float x, float y, GameMap* map, PlayerEntity* player);
+    SlimeEntity(float x, float y, WitchBlastGame* parent);
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
@@ -28,7 +28,6 @@ class SlimeEntity : public EnnemyEntity
 
     bool isJumping;
     bool isFirstJumping;
-    PlayerEntity* player;
 };
 
 #endif // SLIMESPRITE_H

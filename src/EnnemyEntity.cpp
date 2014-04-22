@@ -8,12 +8,11 @@
 #include <iostream>
 #include "WitchBlastGame.h"
 
-EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y, GameMap* map)
-    : BaseCreatureEntity (image, x, y, 64, 64)
+EnnemyEntity::EnnemyEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y)
+    : BaseCreatureEntity (image, parent, x, y, 64, 64)
 {
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
-  setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
   z = y;
   age = -0.001f * (rand()%800) - 0.4f;

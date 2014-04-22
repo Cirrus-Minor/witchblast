@@ -9,8 +9,8 @@
 #include "WitchBlastGame.h"
 #include <math.h>
 
-EvilFlowerEntity::EvilFlowerEntity(float x, float y, GameMap* map, PlayerEntity* player)
-    : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_FLOWER), x, y, map)
+EvilFlowerEntity::EvilFlowerEntity(float x, float y, WitchBlastGame* parent)
+    : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_FLOWER), parent, x, y)
 {
   hp = EVIL_FLOWER_HP;
   meleeDamages = EVIL_FLOWER_MELEE_DAMAGES;
@@ -23,7 +23,6 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, GameMap* map, PlayerEntity*
   //shadowFrame = 2;
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;
-  this->player = player;
   age = -1.0f + (rand() % 2500) * 0.001f;
 }
 
@@ -78,10 +77,10 @@ void EvilFlowerEntity::fire()
 
     bolt->setVelocity(Vector2D(200.0f, 0.0f));
 
-    float tan = (player->getX() - x) / (player->getY() - y);
+    float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
     float angle = atan(tan);
 
-    if (player->getY() > y)
+    if (parentGame->getPlayer()->getY() > y)
       bolt->setVelocity(Vector2D(sin(angle) * EVIL_FLOWER_FIRE_VELOCITY,
                                  cos(angle) * EVIL_FLOWER_FIRE_VELOCITY));
     else

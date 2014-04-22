@@ -6,8 +6,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-BatEntity::BatEntity(float x, float y, GameMap* map)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), x, y, map)
+BatEntity::BatEntity(float x, float y, WitchBlastGame* parent)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), parent, x, y)
 {
   creatureSpeed = BAT_SPEED;
   velocity = Vector2D(creatureSpeed);
