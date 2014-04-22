@@ -221,7 +221,7 @@ void PlayerEntity::render(sf::RenderWindow* app)
 
       // staff
       if ( equip[EQUIP_MAHONAGY_STAFF])
-        sprite.setTextureRect(sf::IntRect(frame * width + 4, 4 * height, width, height));
+        sprite.setTextureRect(sf::IntRect((frame + 4) * width + 4, 4 * height, width, height));
       else
         sprite.setTextureRect(sf::IntRect(frame * width + 4, 4 * height, width, height));
       app->draw(sprite);
@@ -254,7 +254,13 @@ void PlayerEntity::render(sf::RenderWindow* app)
         }
 
         // staff
-        sprite.setTextureRect(sf::IntRect(width * 1, 4 * height, width, height));
+        //sprite.setTextureRect(sf::IntRect(width * 1, 4 * height, width, height));
+        //app->draw(sprite);
+
+        if ( equip[EQUIP_MAHONAGY_STAFF])
+          sprite.setTextureRect(sf::IntRect(5 * width + 4, 4 * height, width, height));
+        else
+          sprite.setTextureRect(sf::IntRect(width + 4, 4 * height, width, height));
         app->draw(sprite);
 
         // snake
