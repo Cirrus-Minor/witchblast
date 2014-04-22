@@ -9,7 +9,7 @@ class WitchBlastGame;
 class ArtefactDescriptionEntity : public SpriteEntity
 {
   public:
-    ArtefactDescriptionEntity(ItemEntity::enumItemType, WitchBlastGame* parent);
+    ArtefactDescriptionEntity(enumItemType, WitchBlastGame* parent);
     ~ArtefactDescriptionEntity();
 
     virtual void animate(float delay);

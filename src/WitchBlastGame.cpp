@@ -386,7 +386,7 @@ void WitchBlastGame::refreshMap()
     book->setMerchandise(true);*/
 
     int bonusType = getRandomEquipItem(true);
-    ItemEntity* boots = new ItemEntity((ItemEntity::enumItemType)(ItemEntity::itemMagicianHat + bonusType), player->getX(), player->getY()+ 180);
+    ItemEntity* boots = new ItemEntity((enumItemType)(itemMagicianHat + bonusType), player->getX(), player->getY()+ 180);
     boots->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
     //ChestEntity* chest = new ChestEntity(player->getX() + 100, player->getY()+ 150, CHEST_FAIRY, false);
@@ -636,7 +636,7 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
   blood->setScale(bloodScale, bloodScale);
 }
 
-void WitchBlastGame::showArtefactDescription(ItemEntity::enumItemType itemType)
+void WitchBlastGame::showArtefactDescription(enumItemType itemType)
 {
   new ArtefactDescriptionEntity(itemType, this); //, &font);
 }
@@ -658,7 +658,7 @@ void WitchBlastGame::generateMap()
     else
     {
       ItemEntity* newItem
-        = new ItemEntity( (ItemEntity::enumItemType)(ItemEntity::itemMagicianHat + bonusType), v.x ,v.y);
+        = new ItemEntity( (enumItemType)(itemMagicianHat + bonusType), v.x ,v.y);
       newItem->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     }
   }
@@ -666,7 +666,7 @@ void WitchBlastGame::generateMap()
   {
     Vector2D v = currentMap->generateKeyRoom();
     ItemEntity* newItem
-      = new ItemEntity( (ItemEntity::enumItemType)(ItemEntity::itemBossKey), v.x ,v.y);
+      = new ItemEntity( (enumItemType)(itemBossKey), v.x ,v.y);
     newItem->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     initMonsterArray();
     int x0 = MAP_WIDTH / 2;
@@ -680,7 +680,7 @@ void WitchBlastGame::generateMap()
     currentMap->generateMerchantRoom();
 
     ItemEntity* item1 = new ItemEntity(
-      ItemEntity::itemHealth,
+      itemHealth,
       OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item1->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
@@ -688,7 +688,7 @@ void WitchBlastGame::generateMap()
 
     int bonusType = getRandomEquipItem(true);
     ItemEntity* item2 = new ItemEntity(
-      (ItemEntity::enumItemType)(ItemEntity::itemMagicianHat + bonusType),
+      (enumItemType)(itemMagicianHat + bonusType),
       OFFSET_X + (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item2->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);

@@ -8,25 +8,7 @@
 #include <iostream>
 #include <sstream>
 
-const int itemCost[14] =
-{
-  1,    // copper coin
-  5,    // silver
-  20,   // gold
-  8,   // health
 
-  20,   // hat
-  20,   // boots
-  20,   // dual
-  20,   // amulet
-  100,  // boss key
-  20,   // gloves
-  20,   // staff
-  20,   // belt
-  20,   // serpent
-
-  30,   // fairy
-};
 
 ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= itemMagicianHat ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
@@ -49,7 +31,7 @@ bool ItemEntity::getMerchandise()
 
 int ItemEntity::getPrice()
 {
-  return (itemCost[(int)(itemType)]);
+  return (items[itemType].price);
 }
 
 void ItemEntity::setParent(WitchBlastGame* parent)

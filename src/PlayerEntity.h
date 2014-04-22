@@ -28,9 +28,9 @@ class PlayerEntity : public BaseCreatureEntity
     virtual bool hurt(int damages); // return true if hurted
     bool isDead();
     float getPercentFireDelay();
-    void acquireItem(ItemEntity::enumItemType type);
-    void loseItem(ItemEntity::enumItemType itemType, bool isEquip);
-    void acquireStance(ItemEntity::enumItemType type);
+    void acquireItem(enumItemType type);
+    void loseItem(enumItemType itemType, bool isEquip);
+    void acquireStance(enumItemType type);
     void useBossKey();
 
     int getGold() {return gold; }
@@ -72,7 +72,7 @@ class PlayerEntity : public BaseCreatureEntity
     //float playerSpeed;
     playerStatusEnum playerStatus;
     float acquireDelay;
-    ItemEntity::enumItemType acquiredItem;
+    enumItemType acquiredItem;
 
     bool equip[NUMBER_EQUIP_ITEMS];
 

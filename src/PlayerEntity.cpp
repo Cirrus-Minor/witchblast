@@ -440,7 +440,7 @@ bool PlayerEntity::hurt(int damages)
   return false;
 }
 
-void PlayerEntity::loseItem(ItemEntity::enumItemType itemType, bool isEquip)
+void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
 {
   CollidingSpriteEntity* itemSprite
     = new CollidingSpriteEntity(ImageManager::getImageManager()->getImage(isEquip ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, 32, 32);
@@ -461,10 +461,10 @@ void PlayerEntity::dying()
   setVelocity(Vector2D(0.0f, 0.0f));
 
   int i;
-  for (i = 0; i < gold; i++) loseItem(ItemEntity::itemCopperCoin, false);
+  for (i = 0; i < gold; i++) loseItem(itemCopperCoin, false);
 
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
-    if (equip[i]) loseItem(ItemEntity::enumItemType(i), true);
+    if (equip[i]) loseItem(enumItemType(i), true);
 
   for (i = 0; i < 8; i++) parentGame->generateBlood(x, y, bloodColor);
 
@@ -480,17 +480,17 @@ void PlayerEntity::dying()
   itemSprite->setSpin( (rand() % 700) - 350.0f);
 }
 
-void PlayerEntity::acquireItem(ItemEntity::enumItemType type)
+void PlayerEntity::acquireItem(enumItemType type)
 {
-  if (type >= ItemEntity::itemMagicianHat) acquireStance(type);
+  if (type >= itemMagicianHat) acquireStance(type);
   else switch (type)
   {
-    case ItemEntity::itemCopperCoin: gold++;
+    case itemCopperCoin: gold++;
     SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
     break;
-    case ItemEntity::itemSilverCoin: gold = gold + 5; break;
-    case ItemEntity::itemGoldCoin: gold = gold + 10; break;
-    case ItemEntity::itemHealth: hp += 15;
+    case itemSilverCoin: gold = gold + 5; break;
+    case itemGoldCoin: gold = gold + 10; break;
+    case itemHealth: hp += 15;
       SoundManager::getSoundManager()->playSound(SOUND_DRINK);
       if (hp > hpMax) hp = hpMax;  break;
     default: break;
@@ -525,13 +525,13 @@ void PlayerEntity::computePlayer()
   boltLifeTime = INITIAL_BOLT_LIFE * boltLifeTimeBonus;
 }
 
-void PlayerEntity::acquireStance(ItemEntity::enumItemType type)
+void PlayerEntity::acquireStance(enumItemType type)
 {
   velocity.x = 0.0f;
   velocity.y = 0.0f;
   playerStatus = playerStatusAcquire;
   acquireDelay = ACQUIRE_DELAY;
-  acquiredItem = (ItemEntity::enumItemType)(type - ItemEntity::itemMagicianHat);
+  acquiredItem = (enumItemType)(type - itemMagicianHat);
   SoundManager::getSoundManager()->playSound(SOUND_BONUS);
 }
 
@@ -561,7 +561,7 @@ void PlayerEntity::useBossKey()
   velocity.y = 0.0f;
   playerStatus = playerStatusUnlocking;
   acquireDelay = UNLOCK_DELAY;
-  acquiredItem = (ItemEntity::enumItemType)(type - ItemEntity::itemMagicianHat);
+  acquiredItem = (enumItemType)(type - itemMagicianHat);
   SoundManager::getSoundManager()->playSound(SOUND_BONUS);
   equip[EQUIP_BOSS_KEY] = false;
 

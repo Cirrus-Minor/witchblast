@@ -2,38 +2,18 @@
 #define ITEMENTITY_H
 
 #include "sfml_game/CollidingSpriteEntity.h"
+#include "Items.h"
 
 class WitchBlastGame;
 
 class ItemEntity : public CollidingSpriteEntity
 {
   public:
-    enum enumItemType
-    {
-      itemCopperCoin,
-      itemSilverCoin,
-      itemGoldCoin,
-      itemHealth,
-
-      itemMagicianHat,
-      itemLeatherBoots,
-      itemBookDualShots,
-      itemConcentrationAmulet,
-      itemBossKey,
-      itemVibrationGloves,
-      itemMahoganyStaff,
-      itemFairy,
-      itemLeatherBelt,
-      itemBloodSnake
-    };
-
-
-
+    ItemEntity(enumItemType itemType, float x, float y);
     void setMerchandise(bool isMerchandise);
     bool getMerchandise();
     int getPrice();
-    /*ItemEntity(sf::Texture* image, float x, float y, int itemType, int spriteWidth, int spriteHeight);*/
-    ItemEntity(enumItemType itemType, float x, float y);
+
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();

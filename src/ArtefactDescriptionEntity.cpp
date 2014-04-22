@@ -3,15 +3,14 @@
 #include "sfml_game/ImageManager.h"
 #include "WitchBlastGame.h"
 #include "StaticTextEntity.h"
+#include "Items.h"
 
-ArtefactDescriptionEntity::ArtefactDescriptionEntity(ItemEntity::enumItemType itemType, WitchBlastGame* parent/*, sf::Font* my_font*/)
+ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType, WitchBlastGame* parent)
       : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP), 0, 0, ITEM_WIDTH, ITEM_HEIGHT)
 {
-  //font = my_font;
-
   this->setLifetime(6.0f);
 
-  this->setFrame(itemType - ItemEntity::itemMagicianHat);
+  this->setFrame(itemType - itemMagicianHat);
   this->setType(ENTITY_ARTIFACT_DESCRIPTION);
 
   float x0 = OFFSET_X + MAP_WIDTH * TILE_WIDTH * 0.5f - ARTEFACT_RECT_WIDTH * 0.5f;
@@ -33,7 +32,7 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(ItemEntity::enumItemType it
 
   z = 5000.0f;
 
-  switch (itemType)
+  /*switch (itemType)
   {
     case (ItemEntity::itemMagicianHat):
       artefactName = "Enchanter Hat"; artefactDescription = "Increases fire rate"; break;
@@ -56,6 +55,17 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(ItemEntity::enumItemType it
     case (ItemEntity::itemBloodSnake):
       artefactName = "Blood Snake"; artefactDescription = "Increases damages"; break;
     default: break;
+  }*/
+
+  if (items[itemType].type == itemType)
+  {
+    artefactName = items[itemType].name;
+    artefactDescription = items[itemType].description;
+  }
+  else
+  {
+    artefactName = "Unknown";
+    artefactDescription = "Report to developper";
   }
 }
 

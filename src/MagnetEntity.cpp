@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "sfml_game/ImageManager.h"
 
-MagnetEntity::MagnetEntity(float x, float y, PlayerEntity* parentEntity, ItemEntity::enumItemType itemType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
+MagnetEntity::MagnetEntity(float x, float y, PlayerEntity* parentEntity, enumItemType itemType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
   this->x = x;
   this->y = y;

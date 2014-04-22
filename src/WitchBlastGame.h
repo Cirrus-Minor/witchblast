@@ -21,7 +21,7 @@ class WitchBlastGame : public Game
     void openDoors();
     int GetEnnemyCount();
     void generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
-    void showArtefactDescription(ItemEntity::enumItemType itemType);
+    void showArtefactDescription(enumItemType itemType);
 
     void write(std::string test_str, int size, float x, float y);
 

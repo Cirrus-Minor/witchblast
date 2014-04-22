@@ -395,7 +395,7 @@ void DungeonMap::restoreItems()
     itemListElement ilm = *it;
     it++;
 
-    ItemEntity* itemEntity = new ItemEntity((ItemEntity::enumItemType)(ilm.type), ilm.x, ilm.y);
+    ItemEntity* itemEntity = new ItemEntity((enumItemType)(ilm.type), ilm.x, ilm.y);
     itemEntity->setMap(this, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     itemEntity->setMerchandise(ilm.merch);
 	}

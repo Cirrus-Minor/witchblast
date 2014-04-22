@@ -7,7 +7,7 @@
 class MagnetEntity : public SpriteEntity
 {
   public:
-    MagnetEntity(float x, float y, PlayerEntity* parentEntity, ItemEntity::enumItemType );
+    MagnetEntity(float x, float y, PlayerEntity* parentEntity, enumItemType );
     virtual void animate(float delay);
 
   protected:
