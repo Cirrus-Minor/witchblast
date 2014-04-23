@@ -631,18 +631,26 @@ void WitchBlastGame::onRender()
 
 void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
 {
-  SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
-  //deadRat->setZ(y + height);
-  blood->setZ(OFFSET_Y - 1);
-  int b0 = 0;
-  if (bloodColor == BaseCreatureEntity::bloodGreen) b0 += 6;
-  blood->setFrame(b0 + rand()%6);
-  blood->setType(ENTITY_BLOOD);
-  blood->setVelocity(Vector2D(rand()%250));
-  blood->setViscosity(0.95f);
+  int nbIt;
+  if (player->isEquiped(EQUIP_BLOOD_SNAKE))
+    nbIt = 2;
+  else
+    nbIt = 1;
 
-  float bloodScale = 1.0f + (rand() % 10) * 0.1f;
-  blood->setScale(bloodScale, bloodScale);
+  for (int i=0; i < nbIt; i++)
+  {
+    SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
+    blood->setZ(OFFSET_Y - 1);
+    int b0 = 0;
+    if (bloodColor == BaseCreatureEntity::bloodGreen) b0 += 6;
+    blood->setFrame(b0 + rand()%6);
+    blood->setType(ENTITY_BLOOD);
+    blood->setVelocity(Vector2D(rand()%250));
+    blood->setViscosity(0.95f);
+
+    float bloodScale = 1.0f + (rand() % 10) * 0.1f;
+    blood->setScale(bloodScale, bloodScale);
+  }
 }
 
 void WitchBlastGame::showArtefactDescription(enumItemType itemType)
