@@ -21,17 +21,19 @@
 
 GameMap::GameMap(int width, int height)
 {
-    this->width = width;
-    this->height = height;
+  hasChanged = true;
 
-    map = new int* [width];
-    int i = 0;
-    for ( i = 0 ; i < width ; i++)
-        map[i] = new int [height];
+  this->width = width;
+  this->height = height;
 
-    for ( i = 0 ; i < width ; i++)
-        for ( int j = 0 ; j < height ; j++)
-            map[i][j] = 0;
+  map = new int* [width];
+  int i = 0;
+  for ( i = 0 ; i < width ; i++)
+      map[i] = new int [height];
+
+  for ( i = 0 ; i < width ; i++)
+    for ( int j = 0 ; j < height ; j++)
+      map[i][j] = 0;
 }
 
 GameMap::~GameMap()
@@ -50,48 +52,57 @@ int GameMap::getTile(int x, int y)
     return map[x][y];
 }
 
+bool GameMap::getChanged()
+{
+  bool result = hasChanged;
+  hasChanged = false;
+  return result;
+}
+
 bool GameMap::inMap(int x, int y)
 {
-    if (x < 0) return false;
-    if (y < 0) return false;
-    if (x >= width) return false;
-    if (y >= height) return false;
-    return true;
+  if (x < 0) return false;
+  if (y < 0) return false;
+  if (x >= width) return false;
+  if (y >= height) return false;
+  return true;
 }
 
 bool GameMap::isDownBlocking(int x, int y)
 {
-    if (!inMap(x, y)) return false;
-    return (map[x][y] > 0);
+  if (!inMap(x, y)) return false;
+  return (map[x][y] > 0);
 }
 
 bool GameMap::isUpBlocking(int x, int y)
 {
-    if (y < 0) return true;
-    if (!inMap(x, y)) return false;
-    return (map[x][y] > 0);
+  if (y < 0) return true;
+  if (!inMap(x, y)) return false;
+  return (map[x][y] > 0);
 }
 
 bool GameMap::isLeftBlocking(int x, int y)
 {
-    if (!inMap(x, y)) return false;
-    return (map[x][y] > 0);
+  if (!inMap(x, y)) return false;
+  return (map[x][y] > 0);
 }
 
 bool GameMap::isRightBlocking(int x, int y)
 {
-    if (!inMap(x, y)) return false;
-    return (map[x][y] > 0);
+  if (!inMap(x, y)) return false;
+  return (map[x][y] > 0);
 }
 
 void GameMap::setTile(int x, int y, int n)
 {
-    if (!inMap(x, y)) return;
-    map[x][y] = n;
+  if (!inMap(x, y)) return;
+  map[x][y] = n;
+  hasChanged = true;
 }
 
 void GameMap::randomize(int n)
 {
+  hasChanged = true;
     for ( int i = 0 ; i < width ; i++)
         for ( int j = 0 ; j < height ; j++)
             map[i][j] = (int) (((float) rand() / (float)RAND_MAX * ((float)n)));
@@ -100,11 +111,12 @@ void GameMap::randomize(int n)
 
 void GameMap::loadFromFile(const char* fileName)
 {
-    ifstream f(fileName);
-    if (!f.is_open()) return;
+  hasChanged = true;
+  ifstream f(fileName);
+  if (!f.is_open()) return;
 
-    int n;
-    int i;
+  int n;
+  int i;
 
 	// dimensions
 	f >> n;
@@ -112,14 +124,14 @@ void GameMap::loadFromFile(const char* fileName)
 	f >> n;
 	if (n != height) return;
 
-    for (int j = 0; j < height; j++)
+  for (int j = 0; j < height; j++)
+  {
+    for (i = 0; i < width; i++)
     {
-        for (i = 0; i < width; i++)
-        {
-            f >> n;
-            map[i][j] = n;
-        }
+      f >> n;
+      map[i][j] = n;
     }
+  }
 
-    f.close();
+  f.close();
 }

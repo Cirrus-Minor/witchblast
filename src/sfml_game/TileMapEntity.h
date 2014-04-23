@@ -24,25 +24,31 @@
 class TileMapEntity : public GameEntity
 {
 public:
-    // create a sprite with the entire image
-    TileMapEntity(sf::Texture* image, GameMap* gameMap, int tileWidth, int tileHeight, int tilesProLine);
-    ~TileMapEntity();
+  TileMapEntity(sf::Texture* image, GameMap* gameMap, int tileWidth, int tileHeight, int tilesProLine);
+  ~TileMapEntity();
 
-    int getTilesProLine();
-    void setMap(GameMap* gameMap);
+  int getTilesProLine();
+  void setMap(GameMap* gameMap);
 
-    virtual void render(sf::RenderWindow* app);
+  virtual void render(sf::RenderWindow* app);
 	virtual void animate(float delay);
+	virtual void computeVertices();
 
 protected:
-    int width;
-    int height;
-    int tileWidth;
-    int tileHeight;
-    int tilesProLine;
+  int width;
+  int height;
+  int tileWidth;
+  int tileHeight;
+  int tilesProLine;
 
-    sf::Texture* image;
-    GameMap* gameMap;
+  sf::Texture* image;
+  GameMap* gameMap;
+
+  sf::VertexArray vertices;
+  sf::RenderStates renderStates;
+  bool hasChanged;
+
+  bool getChanged();
 };
 
 #endif // TILEMAPENTITY_H_INCLUDED

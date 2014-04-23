@@ -29,6 +29,7 @@ public:
     int getWidth();
     int getHeight();
     int getTile(int x, int y);
+    bool getChanged();
 
     virtual bool isDownBlocking(int x, int y);
     virtual bool isUpBlocking(int x, int y);
@@ -45,6 +46,7 @@ protected:
     int width;
     int height;
     int** map;
+    bool hasChanged;
 };
 
 #endif // GAMEMAP_H_INCLUDED
