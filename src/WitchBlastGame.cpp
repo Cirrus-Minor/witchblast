@@ -286,7 +286,6 @@ void WitchBlastGame::startGame()
           else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
           {
             sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
-            //std::cout << localPosition.x << "," << localPosition.y << std::endl;
             int xm = mousePosition.x - player->getX();
             int ym = mousePosition.y - player->getY();
 
