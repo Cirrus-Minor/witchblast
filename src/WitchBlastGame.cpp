@@ -283,6 +283,24 @@ void WitchBlastGame::startGame()
             player->fire(8);
           else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
             player->fire(2);
+          else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+          {
+            sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
+            //std::cout << localPosition.x << "," << localPosition.y << std::endl;
+            int xm = mousePosition.x - player->getX();
+            int ym = mousePosition.y - player->getY();
+
+            if (abs(xm) >= abs(ym))
+            {
+              if (xm > 0) player->fire(6);
+              else player->fire(4);
+            }
+            else
+            {
+              if (ym > 0) player->fire(2);
+              else player->fire(8);
+            }
+          }
 
           if (player->isDead() && specialState == SpecialStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
           {
