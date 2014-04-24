@@ -86,6 +86,7 @@ class WitchBlastGame : public Game
     bool bossRoomOpened;
     enum gameStateEnum { gameStateInit, gameStatePlaying};
     gameStateEnum gameState;
+    bool isPausing;
 
     // use to remember if a case has a monster in monster spawn
     bool monsterArray[MAP_WIDTH][MAP_HEIGHT];

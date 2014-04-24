@@ -81,6 +81,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   currentMap = NULL;
   currentFloor = NULL;
   specialState = SpecialStateNone;
+  isPausing = false;
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -102,26 +103,31 @@ void WitchBlastGame::onUpdate()
 {
   float delta = getAbsolutTime() - lastTime;
   lastTime = getAbsolutTime();
-  EntityManager::getEntityManager()->animate(delta);
 
-  if (specialState != SpecialStateNone)
+  if (!isPausing)
   {
-    timer -= delta;
-    if (timer <= 0.0f)
+
+    EntityManager::getEntityManager()->animate(delta);
+
+    if (specialState != SpecialStateNone)
     {
-      if (specialState == SpecialStateFadeOut)
-        startNewGame();
-      else
-        specialState = SpecialStateNone;
+      timer -= delta;
+      if (timer <= 0.0f)
+      {
+        if (specialState == SpecialStateFadeOut)
+          startNewGame();
+        else
+          specialState = SpecialStateNone;
+      }
     }
-  }
 
-  if (isPlayerAlive)
-  {
-    if (player->getHp() <= 0)
+    if (isPlayerAlive)
     {
-      isPlayerAlive = false;
-      playMusic(MusicEnding);
+      if (player->getHp() <= 0)
+      {
+        isPlayerAlive = false;
+        playMusic(MusicEnding);
+      }
     }
   }
 }
@@ -224,51 +230,65 @@ void WitchBlastGame::startGame()
             // Close window : exit
             if (event.type == sf::Event::Closed)
                 app->close();
+
+            if (event.type == sf::Event::KeyPressed)
+            {
+              if (event.key.code == sf::Keyboard::Escape)
+              {
+                if (gameState == gameStatePlaying && !isPausing) isPausing = true;
+                else if (gameState == gameStatePlaying && isPausing) isPausing = false;
+              }
+            }
+
+            if (event.type == sf::Event::LostFocus)
+              isPausing = true;
         }
 
-        if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        if (gameState == gameStatePlaying && !isPausing)
         {
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-            player->move(7);
+          if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
+
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+          {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+              player->move(7);
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+              player->move(1);
+            else
+              player->move(4);
+          }
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+          {
+            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+              player->move(9);
+            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+              player->move(3);
+            else
+              player->move(6);
+          }
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+          {
+            player->move(8);
+          }
           else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            player->move(1);
-          else
-            player->move(4);
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-        {
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-            player->move(9);
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-            player->move(3);
-          else
-            player->move(6);
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-        {
-          player->move(8);
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-        {
-          player->move(2);
-        }
+          {
+            player->move(2);
+          }
 
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+            player->fire(4);
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+            player->fire(6);
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+            player->fire(8);
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+            player->fire(2);
 
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-          player->fire(4);
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-          player->fire(6);
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
-          player->fire(8);
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-          player->fire(2);
-
-        if (player->isDead() && specialState == SpecialStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-        {
-          specialState = SpecialStateFadeOut;
-          timer = FADE_OUT_DELAY;
+          if (player->isDead() && specialState == SpecialStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+          {
+            specialState = SpecialStateFadeOut;
+            timer = FADE_OUT_DELAY;
+          }
         }
 
         onUpdate();
@@ -580,6 +600,22 @@ void WitchBlastGame::onRender()
 
       // drawing the key on the interface
       if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
+
+      if (isPausing)
+      {
+        rectangle.setFillColor(sf::Color(0, 0, 0, 160));
+        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+
+        float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+        int fade = 50 + 205 * (1.0f + cos(3.0f * getAbsolutTime())) * 0.5f;
+        myText.setColor(sf::Color(255, 255, 255, fade));
+        myText.setCharacterSize(40);
+        myText.setString("PAUSE");
+        myText.setPosition(x0 - myText.getLocalBounds().width / 2, 300);
+        app->draw(myText);
+      }
 
       if (player->isDead())
       {
