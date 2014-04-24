@@ -492,9 +492,21 @@ void WitchBlastGame::refreshMinimap()
     {
       int n = currentFloor->getRoom(i, j);
       if (n > 0 && currentFloor->getMap(i, j)->isVisited())
-        miniMap->setTile(i, j, currentFloor->getRoom(i, j));
+      {
+        if (currentFloor->getRoom(i, j) == roomTypeStarting
+            || currentFloor->getRoom(i, j) == roomTypeBonus
+            || currentFloor->getRoom(i, j) == roomTypeKey)
+          miniMap->setTile(i, j, roomTypeStandard);
+        else
+          miniMap->setTile(i, j, currentFloor->getRoom(i, j));
+      }
       else if (n > 0 && currentFloor->getMap(i, j)->isKnown())
-        miniMap->setTile(i, j, 9);
+      {
+        if (currentFloor->getRoom(i, j) == roomTypeBoss)
+          miniMap->setTile(i, j, 7);
+        else
+          miniMap->setTile(i, j, 9);
+      }
       else
         miniMap->setTile(i, j, 0);
     }
