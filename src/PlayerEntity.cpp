@@ -402,7 +402,7 @@ bool PlayerEntity::isEquiped(int eq)
 void PlayerEntity::setEquiped(int item, bool eq)
 {
   equip[item] = eq;
-  if (item == (int)EQUIP_FAIRY)
+  if (eq && item == (int)EQUIP_FAIRY)
   {
     fairy = new FairyEntity(x, y - 50.0f, this);
   }
