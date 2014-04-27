@@ -86,6 +86,10 @@ class DungeonMap : public GameMap
     struct chestListElement { int type; bool state; float x; float y;};
     typedef std::list<chestListElement> ChestList;
 
+    std::list<itemListElement> getItemList();
+    std::list<chestListElement> getChestList();
+    std::list<spriteListElement> getSpriteList();
+
   protected:
   private:
     GameFloor* gameFloor;

@@ -67,6 +67,22 @@ void DungeonMap::setRoomType(roomTypeEnum roomType)
   this->roomType = roomType;
 }
 
+std::list<DungeonMap::itemListElement> DungeonMap::getItemList()
+{
+  return (itemList);
+}
+
+std::list<DungeonMap::chestListElement> DungeonMap::getChestList()
+{
+  return (chestList);
+}
+
+std::list<DungeonMap::spriteListElement> DungeonMap::getSpriteList()
+{
+  return (spriteList);
+}
+
+
 void DungeonMap::displayToConsole()
 {
   for (int j=0; j < MAP_HEIGHT; j++)

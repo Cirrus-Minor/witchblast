@@ -23,6 +23,16 @@ int BaseCreatureEntity::getHpMax()
   return hpMax;
 }
 
+void BaseCreatureEntity::setHp(int hp)
+{
+  this->hp = hp;
+}
+
+void BaseCreatureEntity::setHpMax(int hpMax)
+{
+  this->hpMax = hpMax;
+}
+
 int BaseCreatureEntity::getHpDisplay()
 {
   return hpDisplay;

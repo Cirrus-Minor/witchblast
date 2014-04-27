@@ -7,12 +7,15 @@
 class GameFloor
 {
   public:
+    GameFloor();
     GameFloor(int level);
     virtual ~GameFloor();
     void createFloor();
     void displayToConsole();
     int getRoom(int x, int y);
+    void setRoom(int x, int y, int roomType);
     DungeonMap* getMap(int x, int y);
+    void setMap(int x, int y, DungeonMap* map);
     DungeonMap* getAndVisitMap(int x, int y);
   protected:
   private:

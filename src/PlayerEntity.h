@@ -22,6 +22,7 @@ class PlayerEntity : public BaseCreatureEntity
     bool canFire();
     bool isMoving();
     bool isEquiped(int eq);
+    void setEquiped(int item, bool eq);
     void setEntering();
     bool canMove();
     virtual void dying();
@@ -34,6 +35,7 @@ class PlayerEntity : public BaseCreatureEntity
     void useBossKey();
 
     int getGold() {return gold; }
+    void setGold(int gold) { this->gold = gold; }
     void pay(int price);
     int getColliding();
 
@@ -71,6 +73,9 @@ class PlayerEntity : public BaseCreatureEntity
     bool equip[NUMBER_EQUIP_ITEMS];
 
     int colliding;
+
+    int facingDirection;
+    int firingDirection;
 
     FairyEntity* fairy;
 };

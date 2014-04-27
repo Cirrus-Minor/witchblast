@@ -4,15 +4,23 @@
 #include <stdio.h>
 #include <iostream>
 
+GameFloor::GameFloor()
+{
+  this->level = 0;
+  // Init maps
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+      maps[i][j] = NULL;
+}
+
 GameFloor::GameFloor(int level)
 {
-  this->level = level;
-
   // Init maps
   for (int i=0; i < FLOOR_WIDTH; i++)
     for (int j=0; j < FLOOR_HEIGHT; j++)
       maps[i][j] = NULL;
 
+  this->level = level;
   srand(time(NULL));
   createFloor();
 }
@@ -31,10 +39,20 @@ int GameFloor::getRoom(int x, int y)
   return floor[x][y];
 }
 
+void GameFloor::setRoom(int x, int y, int roomType)
+{
+  floor[x][y] = roomType;
+}
+
 DungeonMap* GameFloor::getMap(int x, int y)
 {
   if (x < 0 || y < 0 || x >= FLOOR_WIDTH || y >= FLOOR_HEIGHT) return NULL;
   return maps[x][y];
+}
+
+void GameFloor::setMap(int x, int y, DungeonMap* map)
+{
+  maps[x][y] = map;
 }
 
 DungeonMap* GameFloor::getAndVisitMap(int x, int y)

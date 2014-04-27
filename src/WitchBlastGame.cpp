@@ -21,6 +21,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
 WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
@@ -115,7 +116,7 @@ void WitchBlastGame::onUpdate()
       if (timer <= 0.0f)
       {
         if (specialState == SpecialStateFadeOut)
-          startNewGame();
+          startNewGame(false);
         else
           specialState = SpecialStateNone;
       }
@@ -132,8 +133,10 @@ void WitchBlastGame::onUpdate()
   }
 }
 
-void WitchBlastGame::startNewGame()
+void WitchBlastGame::startNewGame(bool fromSaveFile)
 {
+  gameState = gameStateInit;
+
   // cleaning all entities
   EntityManager::getEntityManager()->clean();
 
@@ -141,11 +144,30 @@ void WitchBlastGame::startNewGame()
   if (miniMap != NULL) delete (miniMap);
   if (currentFloor != NULL) delete (currentFloor);
 
-  gameState = gameStateInit;
+  if (fromSaveFile)
+  {
+    if (!loadGame()) fromSaveFile = false;
+  }
+  if (!fromSaveFile)
+  {
+    currentFloor = new GameFloor(1);
+    floorX = FLOOR_WIDTH / 2;
+    floorY = FLOOR_HEIGHT / 2;
 
-  currentFloor = new GameFloor(1);
-  floorX = FLOOR_WIDTH / 2;
-  floorY = FLOOR_HEIGHT / 2;
+    // the player
+    player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
+                              this,
+                              OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+
+    // the boss room is closed
+    bossRoomOpened = false;
+  }
+
+  // current map (tiles)
+  currentTileMap = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_TILES), currentMap, 64, 64, 10);
+  currentTileMap->setX(OFFSET_X);
+  currentTileMap->setY(OFFSET_Y);
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   refreshMinimap();
@@ -167,32 +189,21 @@ void WitchBlastGame::startNewGame()
   miniMapEntity->setY(607);
   miniMapEntity->setZ(10001.0f);
 
-  // current map (tiles)
-  currentTileMap = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_TILES), currentMap, 64, 64, 10);
-  currentTileMap->setX(OFFSET_X);
-  currentTileMap->setY(OFFSET_Y);
-
   // doors
   doorEntity[0] = new DoorEntity(8);
   doorEntity[1] = new DoorEntity(4);
   doorEntity[2] = new DoorEntity(2);
   doorEntity[3] = new DoorEntity(6);
 
-  // the player
-  player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
-                              this,
-                              OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
   isPlayerAlive = true;
 
   // generate the map
   refreshMap();
+  // items from save
+  currentMap->restoreMapObjects();
 
   // first map is open
   roomClosed = false;
-
-  // and the boss room is closed
-  bossRoomOpened = false;
 
   // game time counter an state
   lastTime = getAbsolutTime();
@@ -204,8 +215,8 @@ void WitchBlastGame::startNewGame()
   specialState = SpecialStateFadeIn;
   timer = FADE_IN_DELAY;
 
-  float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH; // - TILE_WIDTH * 0.5f;
-  float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f; // - TILE_HEIGHT * 0.5f;
+  float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
+  float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
 
   TextEntity* text = new TextEntity("Level 1", 30, x0, y0);
   text->setAlignment(ALIGN_CENTER);
@@ -217,7 +228,7 @@ void WitchBlastGame::startNewGame()
 
 void WitchBlastGame::startGame()
 {
-    startNewGame();
+    startNewGame(true);
 
     // Start game loop
     while (app->isOpen())
@@ -229,7 +240,10 @@ void WitchBlastGame::startGame()
         {
             // Close window : exit
             if (event.type == sf::Event::Closed)
-                app->close();
+            {
+              if (gameState == gameStatePlaying && !player->isDead() && currentMap->isCleared()) saveGame();
+              app->close();
+            }
 
             if (event.type == sf::Event::KeyPressed)
             {
@@ -431,9 +445,9 @@ void WitchBlastGame::refreshMap()
     book->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     book->setMerchandise(true);*/
 
-    int bonusType = getRandomEquipItem(true);
+    /*int bonusType = getRandomEquipItem(true);
     ItemEntity* boots = new ItemEntity((enumItemType)(itemMagicianHat + bonusType), player->getX(), player->getY()+ 180);
-    boots->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    boots->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);*/
 
     //ChestEntity* chest = new ChestEntity(player->getX() + 100, player->getY()+ 150, CHEST_FAIRY, false);
     //chest->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
@@ -526,7 +540,7 @@ void WitchBlastGame::checkEntering()
 
 void WitchBlastGame::saveMapItems()
 {
-  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList = EntityManager::getEntityManager()->getList();
   EntityManager::EntityList::iterator it;
 
 	for (it = entityList->begin (); it != entityList->end ();)
@@ -794,6 +808,22 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoom(0);
     currentMap->setCleared(true);
+    int bonusType = getRandomEquipItem(false);
+    if (bonusType == EQUIP_FAIRY)
+    {
+      ChestEntity* chest = new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                                           OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                                           CHEST_FAIRY, false);
+      chest->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    }
+    else
+    {
+      ItemEntity* newItem
+        = new ItemEntity( (enumItemType)(itemMagicianHat + bonusType),
+                          OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                          OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+      newItem->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    }
   }
   else if (currentMap->getRoomType() == roomTypeExit)
   {
@@ -997,4 +1027,230 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   if (ok)
     music.play();
+}
+
+void WitchBlastGame::saveGame()
+{
+  ofstream file("game.sav", ios::out | ios::trunc);
+
+  int i, j, k, l;
+
+  if (file)
+  {
+    // floor
+    int nbRooms = 0;
+    for (j = 0; j < FLOOR_HEIGHT; j++)
+    {
+      for (i = 0; i < FLOOR_WIDTH; i++)
+      {
+        file << currentFloor->getRoom(i,j) << " ";
+        if (currentFloor->getRoom(i,j) > 0) nbRooms++;
+      }
+      file << std::endl;
+    }
+
+    // maps
+    saveMapItems();
+
+    file << nbRooms << std::endl;
+    for (j = 0; j < FLOOR_HEIGHT; j++)
+    {
+      for (i = 0; i < FLOOR_WIDTH; i++)
+      {
+        if (currentFloor->getRoom(i,j) > 0)
+        {
+          file << i << " " << j << " "
+          << currentFloor->getMap(i, j)->getRoomType() << " "
+          << currentFloor->getMap(i, j)->isKnown() << " "
+          << currentFloor->getMap(i, j)->isVisited() << " "
+          << currentFloor->getMap(i, j)->isCleared() << std::endl;
+          if (currentFloor->getMap(i, j)->isVisited())
+          {
+            for (l = 0; l < MAP_HEIGHT; l++)
+            {
+              for (k = 0; k < MAP_WIDTH; k++)
+              {
+                file << currentFloor->getMap(i, j)->getTile(k, l) << " ";
+              }
+              file << std::endl;
+            }
+            // items, etc...
+            std::list<DungeonMap::itemListElement> itemList = currentFloor->getMap(i, j)->getItemList();
+            file << itemList.size() << std::endl;
+            std::list<DungeonMap::itemListElement>::iterator it;
+            for (it = itemList.begin (); it != itemList.end ();)
+            {
+              DungeonMap::itemListElement ilm = *it;
+              it++;
+
+              file << ilm.type << " " << ilm.x << " " << ilm.y << " " << ilm.merch << std::endl;
+            }
+
+            // chests
+            std::list<DungeonMap::chestListElement> chestList = currentFloor->getMap(i, j)->getChestList();
+            file << chestList.size() << std::endl;
+            std::list<DungeonMap::chestListElement>::iterator itc;
+            for (itc = chestList.begin (); itc != chestList.end ();)
+            {
+              DungeonMap::chestListElement ilm = *itc;
+              itc++;
+
+              file << ilm.type << " " << ilm.x << " " << ilm.y << " " << ilm.state << std::endl;
+            }
+
+            // sprites
+            std::list<DungeonMap::spriteListElement> spriteList = currentFloor->getMap(i, j)->getSpriteList();
+            file << spriteList.size() << std::endl;
+            std::list<DungeonMap::spriteListElement>::iterator its;
+            for (its = spriteList.begin (); its != spriteList.end ();)
+            {
+              DungeonMap::spriteListElement ilm = *its;
+              its++;
+
+              file << ilm.type << " " << ilm.frame << " " << ilm.x << " " << ilm.y << " " << ilm.scale << std::endl;
+            }
+          }
+        }
+      }
+      file << std::endl;
+    }
+
+    // game
+    file << floorX << " " << floorY << std::endl;
+    file << bossRoomOpened << std::endl;
+    // boss door !
+
+    // player
+    file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << std::endl;
+    for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) file << player->isEquiped(i) << " ";
+    file << std::endl;
+    file << player->getX() << " " << player->getY() << std::endl;
+
+    file.close();
+  }
+  else
+  {
+    cerr << "[ERROR] Saving the game..." << endl;
+  }
+}
+
+bool WitchBlastGame::loadGame()
+{
+  ifstream file("game.sav", ios::in);
+
+  if (file)
+  {
+    int i, j, k, n;
+
+    // floor
+    currentFloor = new GameFloor();
+    for (j = 0; j < FLOOR_HEIGHT; j++)
+    {
+      for (i = 0; i < FLOOR_WIDTH; i++)
+      {
+        int n;
+        file >> n;
+        currentFloor->setRoom(i, j, n);
+      }
+    }
+
+    // maps
+    int nbRooms;
+    file >> nbRooms;
+
+    for (k = 0; k < nbRooms; k++)
+    {
+      file >> i;
+      file >> j;
+      file >> n;
+      DungeonMap* iMap = new DungeonMap(currentFloor, i, j);
+      currentFloor->setMap(i, j, iMap);
+      iMap->setRoomType((roomTypeEnum)n);
+      bool flag;
+      file >> flag;
+      iMap->setKnown(flag);
+      file >> flag;
+      iMap->setVisited(flag);
+      file >> flag;
+      iMap->setCleared(flag);
+
+      if (iMap->isVisited())
+      {
+        for (j = 0; j < MAP_HEIGHT; j++)
+        {
+          for (i = 0; i < MAP_WIDTH; i++)
+          {
+            file >> n;
+            iMap->setTile(i, j, n);
+          }
+        }
+        // items int the map
+        file >> n;
+        for (i = 0; i < n; i++)
+        {
+          int t;
+          float x, y;
+          bool merc;
+          file >> t >> x >> y >> merc;
+          iMap->addItem(t, x, y, merc);
+        }
+        // chests in the map
+        file >> n;
+        for (i = 0; i < n; i++)
+        {
+          int t;
+          float x, y;
+          bool state;
+          file >> t >> x >> y >> state;
+          iMap->addChest(t, state, x, y);
+        }
+        // sprites in the map
+        file >> n;
+        for (i = 0; i < n; i++)
+        {
+          int t, f;
+          float x, y, scale;
+          file >> t >> f >> x >> y >> scale;
+          iMap->addSprite(t, f, x, y, scale);
+        }
+      }
+    }
+
+    //currentFloor->displayToConsole();
+
+    // game
+    file >> floorX >> floorY;
+    currentMap = currentFloor->getMap(floorX, floorY);
+    file >> bossRoomOpened;
+
+    // player
+    int hp, hpMax, gold;
+    file >> hp >> hpMax >> gold;
+    player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
+                              this,
+                              OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+    player->setHp(hp);
+    player->setHpMax(hpMax);
+    player->setGold(gold);
+    for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
+    {
+      bool eq;
+      file >> eq;
+      player->setEquiped(i, eq);
+    }
+    float x, y;
+    file >> x >> y;
+
+    player->moveTo(x, y);
+
+    file.close();
+    remove("game.sav");
+  }
+  else
+  {
+    return false;
+  }
+
+  return true;
 }

@@ -11,6 +11,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     BaseCreatureEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y, int spriteWidth, int spriteHeight);
     int getHp();
     int getHpMax();
+    void setHp(int hp);
+    void setHpMax(int hpMax);
     int getHpDisplay();
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);

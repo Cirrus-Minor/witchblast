@@ -25,7 +25,8 @@ class WitchBlastGame : public Game
     void generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
     void showArtefactDescription(enumItemType itemType);
 
-    void write(std::string test_str, int size, float x, float y);
+    void saveGame();
+    bool loadGame();  // return false if no file
 
   protected:
     virtual void onRender();
@@ -66,7 +67,7 @@ class WitchBlastGame : public Game
     specialStateEnum specialState;
     float timer;
 
-    void startNewGame();
+    void startNewGame(bool fromSaveFile);
 
     void createFloor();
     void refreshMap();

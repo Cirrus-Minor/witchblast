@@ -33,6 +33,9 @@ PlayerEntity::PlayerEntity(sf::Texture* image, WitchBlastGame* parent, float x =
 
   computePlayer();
 
+  firingDirection = 5;
+  facingDirection = 2;
+
   // TEST
   //equip[EQUIP_BOSS_KEY] = true;
 }
@@ -118,11 +121,15 @@ void PlayerEntity::animate(float delay)
   colliding = 0;
   BaseCreatureEntity::animate(delay);
 
+  if (firingDirection != 5)
+    facingDirection = firingDirection;
+  firingDirection = 5;
+
   if (isMoving())
   {
     frame = ((int)(age * 5.0f)) % 4;
-    if (frame == 2) frame = 0;
     if (frame == 3) frame = 2;
+    //if (frame == 3) frame = 1;
     SoundManager::getSoundManager()->playSound(SOUND_STEP);
   }
   else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
@@ -130,7 +137,7 @@ void PlayerEntity::animate(float delay)
   else if (playerStatus == playerStatusDead)
     frame = 0;
   else
-    frame = 0;
+    frame = 0; //1;
 
   if (x < OFFSET_X)
     parentGame->moveToOtherMap(4);
@@ -163,7 +170,34 @@ void PlayerEntity::animate(float delay)
 void PlayerEntity::render(sf::RenderWindow* app)
 {
 
-    sprite.setPosition(x, y);
+  sprite.setPosition(x, y);
+
+/*
+  int spriteDx = 0;
+  if (facingDirection == 8) spriteDx = 3;
+  if (facingDirection == 4) spriteDx = 6;
+  if (facingDirection == 6) spriteDx = 9;
+
+  // body
+  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
+  app->draw(sprite);
+
+  // head
+  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, 0, width, height));
+  app->draw(sprite);
+
+  // feet
+  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
+  app->draw(sprite);
+
+  // staff
+  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 4, width, height));
+  app->draw(sprite);
+
+  // hands
+  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
+  app->draw(sprite);
+*/
 
     if (playerStatus == playerStatusDead)
     {
@@ -331,6 +365,25 @@ void PlayerEntity::move(int direction)
     else if (direction == 7 || direction == 8 || direction == 9)
       speedy = - creatureSpeed;
     setVelocity(Vector2D(speedx, speedy));
+
+    //if (firingDirection != 5)
+    //  facingDirection = firingDirection;
+    //else
+    {
+      switch (direction)
+      {
+      case 8:  facingDirection = 8; break;
+      case 2:  facingDirection = 2; break;
+      case 4:  facingDirection = 4; break;
+      case 6:  facingDirection = 6; break;
+      case 7:  if (facingDirection != 4 && facingDirection != 8) facingDirection = 4; break;
+      case 1:  if (facingDirection != 4 && facingDirection != 2) facingDirection = 4; break;
+      case 9:  if (facingDirection != 6 && facingDirection != 8) facingDirection = 6; break;
+      case 3:  if (facingDirection != 6 && facingDirection != 2) facingDirection = 6; break;
+      }
+    }
+
+    //firingDirection = 5;
   }
 }
 
@@ -346,6 +399,16 @@ bool PlayerEntity::isEquiped(int eq)
   return equip[eq];
 }
 
+void PlayerEntity::setEquiped(int item, bool eq)
+{
+  equip[item] = eq;
+  if (item == (int)EQUIP_FAIRY)
+  {
+    fairy = new FairyEntity(x, y - 50.0f, this);
+  }
+   computePlayer();
+}
+
 void PlayerEntity::generateBolt(float velx, float vely)
 {
   BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 20, boltLifeTime);
@@ -356,6 +419,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
 
 void PlayerEntity::fire(int direction)
 {
+  firingDirection = direction;
   if (equip[EQUIP_FAIRY] && playerStatus != playerStatusDead)
     fairy->fire(direction, map);
 
