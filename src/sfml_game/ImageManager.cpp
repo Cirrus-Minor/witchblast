@@ -15,7 +15,7 @@
   */
 
 #include "ImageManager.h"
-#include <stdio.h>
+#include <iostream>
 
 ImageManager::ImageManager()
 {
@@ -23,12 +23,13 @@ ImageManager::ImageManager()
 
 ImageManager::~ImageManager()
 {
-    printf("Releasing video memory...\n");
+    std::cout << "Releasing video memory... ";
     for (unsigned int i = 0; i < imageArray.size(); i++)
     {
         delete(imageArray[i]);
     }
     imageArray.clear();
+    std::cout << "OK" << std::endl;
 }
 
  ImageManager* ImageManager::getImageManager()

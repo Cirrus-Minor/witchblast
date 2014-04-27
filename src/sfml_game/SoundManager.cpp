@@ -24,7 +24,7 @@ SoundManager::SoundManager()
 
 SoundManager::~SoundManager()
 {
-    std::cout << "Releasing audio memory...\n";
+    std::cout << "Releasing audio memory... ";
     for (unsigned int i = 0; i < soundBufferArray.size(); i++)
     {
         soundArray[i]->stop();
@@ -33,6 +33,7 @@ SoundManager::~SoundManager()
     }
     soundArray.clear();
     soundBufferArray.clear();
+    std::cout << "OK" << std::endl;
 }
 
  SoundManager* SoundManager::getSoundManager()
