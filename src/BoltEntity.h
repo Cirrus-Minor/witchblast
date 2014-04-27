@@ -2,11 +2,18 @@
 #define BOLTENTITY_H
 
 #include "sfml_game/CollidingSpriteEntity.h"
+#include "Constants.h"
 
+/*! \class BoltEntity
+ * \brief bolt thrown by the player
+ *
+ *  BoltEntity are the missile weapons thrown by the player.
+ *  The can collide with an enemy (to hurt him) or with the walls.
+ */
 class BoltEntity : public CollidingSpriteEntity
 {
   public:
-    BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime);
+    BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime, enumBoltType boltType);
     virtual void animate(float delay);
     void collide();
     void generateParticule(Vector2D vel);
@@ -22,6 +29,7 @@ class BoltEntity : public CollidingSpriteEntity
 
     int damages;
     float renderScale;
+    enumBoltType boltType;
   private:
 };
 

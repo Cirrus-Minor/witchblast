@@ -71,7 +71,7 @@ void FairyEntity::fire(int dir, GameMap* map)
     if (dir == 2) vely = + FAIRY_BOLT_VELOCITY;
     if (dir == 8) vely = - FAIRY_BOLT_VELOCITY;
 
-    BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, FAIRY_BOLT_LIFE);
+    BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, FAIRY_BOLT_LIFE, BoltStandard);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     bolt->setDamages(FAIRY_BOLT_DAMAGES);
     bolt->setVelocity(Vector2D(velx, vely));

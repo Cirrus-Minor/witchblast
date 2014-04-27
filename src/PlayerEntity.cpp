@@ -425,7 +425,7 @@ void PlayerEntity::setEquiped(int item, bool eq)
 
 void PlayerEntity::generateBolt(float velx, float vely)
 {
-  BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 20, boltLifeTime);
+  BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 20, boltLifeTime, boltType);
   bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   bolt->setDamages(fireDamages);
   bolt->setVelocity(Vector2D(velx, vely));
@@ -584,6 +584,7 @@ void PlayerEntity::computePlayer()
   float creatureSpeedBonus = 1.0f;
   float fireVelocityBonus = 1.0f;
   float fireDamagesBonus = 1.0f;
+  boltType = BoltStandard;
 
   if (equip[EQUIP_VIBRATION_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
@@ -597,6 +598,7 @@ void PlayerEntity::computePlayer()
     fireDamagesBonus += 0.5f;
   }
   if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 1.0f;
+  if (equip[EQUIP_ICE_GEM]) boltType = BoltIce;
 
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;

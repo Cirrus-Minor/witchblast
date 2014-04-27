@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.0.5";
+const std::string APP_VERSION =   "0.0.6";
 
 // Client size
 const int SCREEN_WIDTH = 970;
@@ -146,6 +146,13 @@ const float ARTEFACT_RECT_HEIGHT = 100.0f;
 const float ARTEFACT_POS_Y = 450.0f;
 const float ARTEFACT_BORDER = 8.0f;
 const float ARTEFACT_ZOOM_TIME = 0.5f;
+
+// bolts
+enum enumBoltType
+{
+  BoltStandard,
+  BoltIce
+};
 
 // entity type
 const int ENTITY_PLAYER = 1;

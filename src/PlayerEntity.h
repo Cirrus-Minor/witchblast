@@ -71,6 +71,7 @@ class PlayerEntity : public BaseCreatureEntity
     enumItemType acquiredItem;
 
     bool equip[NUMBER_EQUIP_ITEMS];
+    enumBoltType boltType;
 
     int colliding;
 
