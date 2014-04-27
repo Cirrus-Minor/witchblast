@@ -39,8 +39,8 @@ GameMap::GameMap(int width, int height)
 GameMap::~GameMap()
 {
     for ( int i = 0 ; i < width ; i++)
-        delete map [i];
-    delete map;
+        delete[] map [i];
+    delete[] map;
 }
 
 int GameMap::getWidth() { return width; }

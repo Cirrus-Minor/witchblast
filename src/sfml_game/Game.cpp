@@ -36,7 +36,7 @@ Game::Game(int screenWidth, int screenHeight, std::string windowsTitle, bool ful
 Game::~Game()
 {
     printf("Deleting the game...\n");
-    //delete(app);
+    delete(app);
 }
 
 float Game::getAbsolutTime()

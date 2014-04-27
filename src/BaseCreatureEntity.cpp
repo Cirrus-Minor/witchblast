@@ -11,6 +11,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, WitchBlastGame* paren
   shadowFrame = -1;
   parentGame = parent;
   setMap(parent->getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  hpDisplay = 0;
 }
 
 int BaseCreatureEntity::getHp()

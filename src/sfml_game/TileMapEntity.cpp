@@ -27,7 +27,6 @@ TileMapEntity::TileMapEntity(sf::Texture* image, GameMap* gameMap, int tileWidth
     this->z = -1.0f;
 
     type = 0;
-    renderStates.texture = image;
     hasChanged = true;
 }
 
@@ -80,7 +79,7 @@ void TileMapEntity::computeVertices()
 
 void TileMapEntity::render(sf::RenderWindow* app)
 {
-  app->draw(vertices, renderStates);
+  app->draw(vertices, image);
 }
 
 void TileMapEntity::animate(float delay)

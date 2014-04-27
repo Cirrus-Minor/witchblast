@@ -87,7 +87,12 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 WitchBlastGame::~WitchBlastGame()
 {
-  //dtor
+  // cleaning all entities
+  EntityManager::getEntityManager()->clean();
+
+  // cleaning data
+  if (miniMap != NULL) delete (miniMap);
+  if (currentFloor != NULL) delete (currentFloor);
 }
 
 DungeonMap* WitchBlastGame::getCurrentMap()

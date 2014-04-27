@@ -177,6 +177,16 @@ void GameFloor::createFloor()
   bool ok=false;
   while (!ok)
   {
+    int i, j;
+
+    // Free maps
+    for (i=0; i < FLOOR_WIDTH; i++)
+      for (j=0; j < FLOOR_HEIGHT; j++)
+        if (maps[i][j] != NULL)
+        {
+          delete (maps[i][j]);
+          maps[i][j] = NULL;
+        }
     generate();
     ok = finalize();
 
@@ -184,8 +194,8 @@ void GameFloor::createFloor()
     int y0 = FLOOR_HEIGHT / 2;
 
     // Maps
-    for (int i=0; i < FLOOR_WIDTH; i++)
-      for (int j=0; j < FLOOR_HEIGHT; j++)
+    for (i=0; i < FLOOR_WIDTH; i++)
+      for (j=0; j < FLOOR_HEIGHT; j++)
         if (floor[i][j] > 0)
         {
           maps[i][j] = new DungeonMap(this, i, j);

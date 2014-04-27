@@ -45,7 +45,6 @@ protected:
   GameMap* gameMap;
 
   sf::VertexArray vertices;
-  sf::RenderStates renderStates;
   bool hasChanged;
 
   bool getChanged();
