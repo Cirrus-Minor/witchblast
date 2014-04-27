@@ -18,6 +18,7 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   frame = itemType;
   if (itemType >= itemMagicianHat) frame = itemType - itemMagicianHat;
   isMerchandise = false;
+  imagesProLine = 10;
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)
@@ -102,6 +103,7 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
                             image,
                             playerEntity->getX(), playerEntity->getY() - 60.0f, ITEM_WIDTH, ITEM_HEIGHT);
             spriteItem->setFrame(frame);
+            spriteItem->setImagesProLine(10);
             spriteItem->setZ(z);
             spriteItem->setLifetime(ACQUIRE_DELAY);
 

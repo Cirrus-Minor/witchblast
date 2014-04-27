@@ -257,6 +257,11 @@ void WitchBlastGame::startGame()
                 if (gameState == gameStatePlaying && !isPausing) isPausing = true;
                 else if (gameState == gameStatePlaying && isPausing) isPausing = false;
               }
+
+              if (event.key.code == sf::Keyboard::X)
+              {
+                startNewGame(false);
+              }
             }
 
             if (event.type == sf::Event::LostFocus)

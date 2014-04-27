@@ -18,7 +18,8 @@ enum enumItemType
   itemMahoganyStaff,
   itemFairy,
   itemLeatherBelt,
-  itemBloodSnake
+  itemBloodSnake,
+  itemIceGem
 };
 
 struct itemStuct
@@ -30,7 +31,7 @@ struct itemStuct
   bool equip;
 };
 
-const int NUMBER_ITEMS = 14;
+const int NUMBER_ITEMS = 15;
 const itemStuct items[NUMBER_ITEMS] =
 {
   {
@@ -73,12 +74,15 @@ const itemStuct items[NUMBER_ITEMS] =
     itemLeatherBelt, "Leather Belt", "Increases fire rate", 20, true
   },
   {
-    itemBloodSnake, "Blood Snake", "Increases damages", 20, true
+    itemBloodSnake, "Blood Snake", "Increases damages", 25, true
+  },
+  {
+    itemIceGem, "Ice Gem", "Ice attack", 25, true
   }
 };
 
 // Equip items
-const int NUMBER_EQUIP_ITEMS = 10;
+const int NUMBER_EQUIP_ITEMS = 11;
 enum item_equip {
   EQUIP_ENCHANTER_HAT,
   EQUIP_LEATHER_BOOTS,
@@ -89,7 +93,8 @@ enum item_equip {
   EQUIP_MAHOGANY_STAFF,
   EQUIP_FAIRY,
   EQUIP_LEATHER_BELT,
-  EQUIP_BLOOD_SNAKE
+  EQUIP_BLOOD_SNAKE,
+  EQUIP_ICE_GEM
   };
 
 #endif

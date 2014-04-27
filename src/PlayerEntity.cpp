@@ -268,6 +268,13 @@ void PlayerEntity::render(sf::RenderWindow* app)
         app->draw(sprite);
       }
 
+      // ice gem
+      if (equip[EQUIP_ICE_GEM])
+      {
+        sprite.setTextureRect(sf::IntRect(frame * width + 4, 8 *height, width, height));
+        app->draw(sprite);
+      }
+
       // hands
       if( equip[EQUIP_VIBRATION_GLOVES])
         sprite.setTextureRect(sf::IntRect((frame + 4) * width, 3 * height, width, height));
@@ -304,6 +311,13 @@ void PlayerEntity::render(sf::RenderWindow* app)
           sprite.setTextureRect(sf::IntRect(1 * width, 7 *height, width, height));
           app->draw(sprite);
         }
+
+        // ice gem
+      if (equip[EQUIP_ICE_GEM])
+      {
+        sprite.setTextureRect(sf::IntRect(1 * width, 8 *height, width, height));
+        app->draw(sprite);
+      }
       }
 
       // necklace
@@ -512,6 +526,7 @@ void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
   itemSprite->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   itemSprite->setZ(OFFSET_Y - 1);
   itemSprite->setFrame(itemType);
+  itemSprite->setImagesProLine(10);
   itemSprite->setType(ENTITY_BLOOD);
   itemSprite->setVelocity(Vector2D(rand()%450));
   itemSprite->setViscosity(0.95f);
