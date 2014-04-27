@@ -296,9 +296,6 @@ void PlayerEntity::render(sf::RenderWindow* app)
         }
 
         // staff
-        //sprite.setTextureRect(sf::IntRect(width * 1, 4 * height, width, height));
-        //app->draw(sprite);
-
         if ( equip[EQUIP_MAHOGANY_STAFF])
           sprite.setTextureRect(sf::IntRect(5 * width + 4, 4 * height, width, height));
         else
@@ -308,16 +305,16 @@ void PlayerEntity::render(sf::RenderWindow* app)
         // snake
         if (equip[EQUIP_BLOOD_SNAKE])
         {
-          sprite.setTextureRect(sf::IntRect(1 * width, 7 *height, width, height));
+          sprite.setTextureRect(sf::IntRect(1 * width + 4, 7 *height, width, height));
           app->draw(sprite);
         }
 
-        // ice gem
-      if (equip[EQUIP_ICE_GEM])
-      {
-        sprite.setTextureRect(sf::IntRect(1 * width, 8 *height, width, height));
-        app->draw(sprite);
-      }
+          // ice gem
+        if (equip[EQUIP_ICE_GEM])
+        {
+          sprite.setTextureRect(sf::IntRect(1 * width + 4, 8 *height, width, height));
+          app->draw(sprite);
+        }
       }
 
       // necklace
@@ -511,7 +508,7 @@ bool PlayerEntity::hurt(int damages)
   if (!hurting)
   {
     SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
-    BaseCreatureEntity::hurt(damages);
+    BaseCreatureEntity::hurt(damages, BoltStandard);
     parentGame->generateBlood(x, y, bloodColor);
     parentGame->generateBlood(x, y, bloodColor);
     return true;

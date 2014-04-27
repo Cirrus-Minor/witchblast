@@ -2,6 +2,7 @@
 #define BASECREATUREENTITY_H
 
 #include "sfml_game/CollidingSpriteEntity.h"
+#include "Constants.h"
 
 class WitchBlastGame;
 
@@ -17,7 +18,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
-    virtual bool hurt(int damages);
+    virtual bool hurt(int damages, enumBoltType hurtingType);
     virtual void dying();
     enum enumBloodColor { bloodRed, bloodGreen};
   protected:
@@ -29,6 +30,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
 
     bool hurting;
     float hurtingDelay;
+    enumBoltType hurtingType;
     WitchBlastGame* parentGame;
     enumBloodColor bloodColor;
   private:

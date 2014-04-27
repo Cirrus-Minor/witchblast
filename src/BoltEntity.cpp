@@ -35,6 +35,11 @@ void BoltEntity::setDamages(int damages)
   sprite.scale(renderScale, renderScale);
 }
 
+enumBoltType BoltEntity::getBoltType()
+{
+  return boltType;
+}
+
 void BoltEntity::animate(float delay)
 {
   SpriteEntity* trace = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);

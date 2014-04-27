@@ -8,6 +8,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, WitchBlastGame* paren
   : CollidingSpriteEntity (image, x, y, spriteWidth, spriteHeight )
 {
   hurting = false;
+  hurtingType = BoltStandard;
   shadowFrame = -1;
   parentGame = parent;
   setMap(parent->getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
@@ -51,7 +52,10 @@ void BaseCreatureEntity::animate(float delay)
     if (hurtingDelay > 0.0f)
     {
       int fadeColor = (sf::Uint8)((HURTING_DELAY - hurtingDelay) * 255);
-       sprite.setColor(sf::Color(255, fadeColor, fadeColor, 255 ));
+      if (hurtingType == BoltIce)
+        sprite.setColor(sf::Color(fadeColor, fadeColor, 255, 255 ));
+      else
+        sprite.setColor(sf::Color(255, fadeColor, fadeColor, 255 ));
     }
     else
     {
@@ -92,10 +96,11 @@ void BaseCreatureEntity::calculateBB()
 {
 }
 
-bool BaseCreatureEntity::hurt(int damages)
+bool BaseCreatureEntity::hurt(int damages, enumBoltType hurtingType)
 {
   hurting = true;
   hurtingDelay = HURTING_DELAY;
+  this->hurtingType = hurtingType;
 
   hp -= damages;
   if (hp <= 0)

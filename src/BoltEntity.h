@@ -20,6 +20,7 @@ class BoltEntity : public CollidingSpriteEntity
 
     int getDamages();
     void setDamages(int damages);
+    enumBoltType getBoltType();
 
   protected:
     virtual void collideMapRight();

@@ -81,7 +81,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
     {
       boltEntity->collide();
-      hurt(boltEntity->getDamages());
+      hurt(boltEntity->getDamages(), boltEntity->getBoltType());
       parentGame->generateBlood(x, y, bloodColor);
       SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 
