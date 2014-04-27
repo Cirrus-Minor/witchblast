@@ -29,11 +29,14 @@ SlimeEntity::SlimeEntity(float x, float y, WitchBlastGame* parent)
 
 void SlimeEntity::animate(float delay)
 {
+  float slimeDelay = delay;
+  if (specialState[SpecialStateIce].active) slimeDelay = delay * STATUS_FROZEN_MULT;
+
   if (isJumping)
   {
-    hVelocity -= 700.0f * delay;
+    hVelocity -= 700.0f * slimeDelay;
 
-    h += hVelocity * delay;
+    h += hVelocity * slimeDelay;
 
     if (h <= 0.0f)
     {
@@ -61,7 +64,7 @@ void SlimeEntity::animate(float delay)
   }
   else
   {
-    jumpingDelay -= delay;
+    jumpingDelay -= slimeDelay;
     if (jumpingDelay < 0.0f)
     {
       SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);

@@ -6,6 +6,8 @@
 
 class WitchBlastGame;
 
+const int NB_SPECIAL_STATES = 1;
+
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
   public:
@@ -21,6 +23,20 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual bool hurt(int damages, enumBoltType hurtingType);
     virtual void dying();
     enum enumBloodColor { bloodRed, bloodGreen};
+    enum enumSpecialState
+    {
+      SpecialStateIce // = 0
+    };
+    enum enumStateResistance { ResistanceImmune, ResistanceResistant, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
+    struct itemStuct
+    {
+      enumSpecialState type;
+      enumStateResistance resistance;
+      bool active;
+      float timer;
+    };
+    itemStuct specialState[NB_SPECIAL_STATES];
+
   protected:
     int hp;
     int hpMax;

@@ -28,16 +28,19 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, WitchBlastGame* parent)
 
 void EvilFlowerEntity::animate(float delay)
 {
+  float flowerDelay = delay;
+  if (specialState[SpecialStateIce].active) flowerDelay = delay * STATUS_FROZEN_MULT;
+
   if (fireDelay < 0.7f) setSpin(500.0f);
   else if (fireDelay < 1.4f) setSpin(120.0f);
   else setSpin(50.0f);
 
   EnnemyEntity::animate(delay);
-  angle += spin * delay;
+  angle += spin * flowerDelay;
 
   if (age > 0.0f)
   {
-    fireDelay -= delay;
+    fireDelay -= flowerDelay;
     if (fireDelay <= 0.0f)
     {
       fireDelay = EVIL_FLOWER_FIRE_DELAY;
@@ -75,17 +78,18 @@ void EvilFlowerEntity::fire()
     bolt->setFrame(1);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
-    bolt->setVelocity(Vector2D(200.0f, 0.0f));
-
     float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
     float angle = atan(tan);
 
+    float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
+    if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
+
     if (parentGame->getPlayer()->getY() > y)
-      bolt->setVelocity(Vector2D(sin(angle) * EVIL_FLOWER_FIRE_VELOCITY,
-                                 cos(angle) * EVIL_FLOWER_FIRE_VELOCITY));
+      bolt->setVelocity(Vector2D(sin(angle) * flowerFireVelocity,
+                                 cos(angle) * flowerFireVelocity));
     else
-      bolt->setVelocity(Vector2D(-sin(angle) * EVIL_FLOWER_FIRE_VELOCITY,
-                                 -cos(angle) * EVIL_FLOWER_FIRE_VELOCITY));
+      bolt->setVelocity(Vector2D(-sin(angle) * flowerFireVelocity,
+                                 -cos(angle) * flowerFireVelocity));
 }
 
 void EvilFlowerEntity::render(sf::RenderWindow* app)

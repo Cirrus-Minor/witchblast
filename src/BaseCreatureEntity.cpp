@@ -13,6 +13,13 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, WitchBlastGame* paren
   parentGame = parent;
   setMap(parent->getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   hpDisplay = 0;
+  for (int i = 0; i < NB_SPECIAL_STATES; i++)
+  {
+    specialState[i].type = (enumSpecialState)i;
+    specialState[i].resistance = ResistanceStandard;
+    specialState[i].active = false;
+    specialState[i].timer = 0.0f;
+  }
 }
 
 int BaseCreatureEntity::getHp()
@@ -45,7 +52,19 @@ void BaseCreatureEntity::animate(float delay)
   if (hpDisplay > hp) hpDisplay--;
   else if (hpDisplay < hp) hpDisplay++;
 
+  for (int i = 0; i < NB_SPECIAL_STATES; i++)
+  {
+    if (specialState[i].active)
+    {
+      specialState[i].timer -= delay;
+      if (specialState[i].timer <= 0.0f) specialState[i].active = false;
+    }
+  }
+
+  if (specialState[SpecialStateIce].active) delay *= STATUS_FROZEN_MULT;
+
   z = y + height/2;
+  sprite.setColor(sf::Color(255, 255, 255, 255 ));
   if (hurting)
   {
     hurtingDelay -= delay;
@@ -64,6 +83,8 @@ void BaseCreatureEntity::animate(float delay)
     }
   }
   CollidingSpriteEntity::animate(delay);
+
+  if (specialState[SpecialStateIce].active) sprite.setColor(sf::Color(100, 100, 255, 255 ));
 }
 
 void BaseCreatureEntity::render(sf::RenderWindow* app)
@@ -107,6 +128,17 @@ bool BaseCreatureEntity::hurt(int damages, enumBoltType hurtingType)
   {
     hp = 0;
     dying();
+  }
+  else
+  {
+    if (hurtingType == BoltIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
+    {
+      if (rand() % 100 < STATUS_FROZEN_CHANCE)
+      {
+        specialState[SpecialStateIce].active = true;
+        specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY;
+      }
+    }
   }
 
   return true;

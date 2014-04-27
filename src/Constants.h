@@ -154,6 +154,11 @@ enum enumBoltType
   BoltIce
 };
 
+// status
+const float STATUS_FROZEN_DELAY = 5.0f;   // how long the freeze occurs
+const float STATUS_FROZEN_MULT = 0.33f;   // speed multiplier (= 3 times slower)
+const int STATUS_FROZEN_CHANCE = 33;      // % of changes to freeze
+
 // entity type
 const int ENTITY_PLAYER = 1;
 const int ENTITY_FAMILIAR = 2;

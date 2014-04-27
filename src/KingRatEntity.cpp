@@ -36,6 +36,8 @@ KingRatEntity::KingRatEntity(float x, float y, WitchBlastGame* parent)
   berserkDelay = 1.0f + rand()%5 * 0.1f;
 
   hasBeenBerserk = false;
+
+  specialState[SpecialStateIce].resistance = ResistanceImmune;
 }
 
 void KingRatEntity::animate(float delay)
