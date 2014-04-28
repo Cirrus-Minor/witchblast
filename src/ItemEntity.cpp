@@ -10,7 +10,7 @@
 
 
 
-ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
+ItemEntity::ItemEntity(enumItemType itemType, float x, float y, WitchBlastGame* parent)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= itemMagicianHat ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
   type = ENTITY_ITEM;
@@ -19,6 +19,8 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   if (itemType >= itemMagicianHat) frame = itemType - itemMagicianHat;
   isMerchandise = false;
   imagesProLine = 10;
+  this->parentGame = parent;
+  setMap(parent->getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)

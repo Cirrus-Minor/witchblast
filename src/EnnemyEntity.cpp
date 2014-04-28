@@ -111,7 +111,7 @@ void EnnemyEntity::drop()
 {
   if (rand() % 5 == 0)
   {
-    ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y);
+    ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y, parentGame);
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);

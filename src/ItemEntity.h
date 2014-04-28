@@ -9,7 +9,7 @@ class WitchBlastGame;
 class ItemEntity : public CollidingSpriteEntity
 {
   public:
-    ItemEntity(enumItemType itemType, float x, float y);
+    ItemEntity(enumItemType itemType, float x, float y, WitchBlastGame* parent);
     void setMerchandise(bool isMerchandise);
     bool getMerchandise();
     int getPrice();

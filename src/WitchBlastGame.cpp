@@ -205,7 +205,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   // generate the map
   refreshMap();
   // items from save
-  currentMap->restoreMapObjects();
+  currentMap->restoreMapObjects(this);
 
   // first map is open
   roomClosed = false;
@@ -595,7 +595,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
   }
   refreshMap();
   checkEntering();
-  currentMap->restoreMapObjects();
+  currentMap->restoreMapObjects(this);
 }
 
 void WitchBlastGame::onRender()
@@ -758,22 +758,17 @@ void WitchBlastGame::generateMap()
     int bonusType = getRandomEquipItem(false);
     if (bonusType == EQUIP_FAIRY)
     {
-      ChestEntity* chest = new ChestEntity(v.x, v.y, CHEST_FAIRY, false);
-      chest->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+      new ChestEntity(v.x, v.y, CHEST_FAIRY, false, this);
     }
     else
     {
-      ItemEntity* newItem
-        = new ItemEntity( (enumItemType)(itemMagicianHat + bonusType), v.x ,v.y);
-      newItem->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+      new ItemEntity( (enumItemType)(itemMagicianHat + bonusType), v.x ,v.y, this);
     }
   }
   else if (currentMap->getRoomType() == roomTypeKey)
   {
     Vector2D v = currentMap->generateKeyRoom();
-    ItemEntity* newItem
-      = new ItemEntity( (enumItemType)(itemBossKey), v.x ,v.y);
-    newItem->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    new ItemEntity( (enumItemType)(itemBossKey), v.x ,v.y, this);
     initMonsterArray();
     int x0 = MAP_WIDTH / 2;
     int y0 = MAP_HEIGHT / 2;
@@ -788,16 +783,16 @@ void WitchBlastGame::generateMap()
     ItemEntity* item1 = new ItemEntity(
       itemHealth,
       OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
-      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
-    item1->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT,
+      this);
     item1->setMerchandise(true);
 
     int bonusType = getRandomEquipItem(true);
     ItemEntity* item2 = new ItemEntity(
       (enumItemType)(itemMagicianHat + bonusType),
       OFFSET_X + (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
-      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
-    item2->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT,
+      this);
     item2->setMerchandise(true);
 
     new PnjEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
@@ -821,18 +816,16 @@ void WitchBlastGame::generateMap()
     int bonusType = getRandomEquipItem(false);
     if (bonusType == EQUIP_FAIRY)
     {
-      ChestEntity* chest = new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+      new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                                            OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                                           CHEST_FAIRY, false);
-      chest->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+                                           CHEST_FAIRY, false, this);
     }
     else
     {
-      ItemEntity* newItem
-        = new ItemEntity( (enumItemType)(itemMagicianHat + bonusType),
+      new ItemEntity( (enumItemType)(itemMagicianHat + bonusType),
                           OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                          OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
-      newItem->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+                          OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                          this);
     }
   }
   else if (currentMap->getRoomType() == roomTypeExit)
@@ -934,8 +927,7 @@ void WitchBlastGame::generateStandardMap()
   else if (random < 64)
   {
     Vector2D v = currentMap->generateBonusRoom();
-    ChestEntity* chest = new ChestEntity(v.x, v.y, CHEST_BASIC, false);
-    chest->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    new ChestEntity(v.x, v.y, CHEST_BASIC, false, this);
     currentMap->setCleared(true);
   }
   else if (random < 80)
