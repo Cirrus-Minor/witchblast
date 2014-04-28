@@ -403,7 +403,7 @@ void DungeonMap::addChest(int chestType, bool state,  float x, float y)
   chestList.push_back(clm);
 }
 
-void DungeonMap::restoreItems(WitchBlastGame* parent)
+void DungeonMap::restoreItems()
 {
   ItemList::iterator it;
   for (it = itemList.begin (); it != itemList.end ();)
@@ -411,7 +411,7 @@ void DungeonMap::restoreItems(WitchBlastGame* parent)
     itemListElement ilm = *it;
     it++;
 
-    ItemEntity* itemEntity = new ItemEntity((enumItemType)(ilm.type), ilm.x, ilm.y, parent);
+    ItemEntity* itemEntity = new ItemEntity((enumItemType)(ilm.type), ilm.x, ilm.y);
     itemEntity->setMerchandise(ilm.merch);
 	}
 	itemList.clear();
@@ -456,7 +456,7 @@ void DungeonMap::restoreSprites()
 	spriteList.clear();
 }
 
-void DungeonMap::restoreChests(WitchBlastGame* parent)
+void DungeonMap::restoreChests()
 {
   ChestList::iterator it;
 
@@ -465,14 +465,14 @@ void DungeonMap::restoreChests(WitchBlastGame* parent)
     chestListElement clm = *it;
     it++;
 
-    ChestEntity* chestEntity = new ChestEntity(clm.x, clm.y, clm.type, clm.state, parent);
+    ChestEntity* chestEntity = new ChestEntity(clm.x, clm.y, clm.type, clm.state);
 	}
 	chestList.clear();
 }
 
-void DungeonMap::restoreMapObjects(WitchBlastGame* parent)
+void DungeonMap::restoreMapObjects()
 {
-  restoreItems(parent);
+  restoreItems();
   restoreSprites();
-  restoreChests(parent);
+  restoreChests();
 }

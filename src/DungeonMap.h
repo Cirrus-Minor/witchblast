@@ -19,7 +19,6 @@ const int MAP_WALL_3        =   59;
 
 
 class GameFloor;
-class WitchBlastGame;
 
 enum roomTypeEnum
 {
@@ -70,10 +69,10 @@ class DungeonMap : public GameMap
     void addItem(int itemType, float x, float y, bool merch);
     void addSprite(int spriteType, int frame,  float x, float y, float scale);
     void addChest(int chestType, bool state,  float x, float y);
-    void restoreItems(WitchBlastGame* parent);
+    void restoreItems();
     void restoreSprites();
-    void restoreChests(WitchBlastGame* parent);
-    void restoreMapObjects(WitchBlastGame* parent);
+    void restoreChests();
+    void restoreMapObjects();
 
     roomTypeEnum getRoomType();
     void setRoomType(roomTypeEnum roomType);

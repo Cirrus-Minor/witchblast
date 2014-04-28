@@ -7,7 +7,7 @@
 class KingRatEntity : public EnnemyEntity
 {
   public:
-    KingRatEntity(float x, float y, WitchBlastGame* parent);
+    KingRatEntity(float x, float y);
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();

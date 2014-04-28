@@ -7,7 +7,7 @@
 class GreenRatEntity : public EnnemyEntity
 {
   public:
-    GreenRatEntity(float x, float y, WitchBlastGame* parent);
+    GreenRatEntity(float x, float y);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:

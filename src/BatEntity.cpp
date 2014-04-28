@@ -6,8 +6,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-BatEntity::BatEntity(float x, float y, WitchBlastGame* parent)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), parent, x, y)
+BatEntity::BatEntity(float x, float y)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), x, y)
 {
   creatureSpeed = BAT_SPEED;
   velocity = Vector2D(creatureSpeed);
@@ -117,7 +117,7 @@ void BatEntity::dying()
   deadBat->setFrame(FRAME_CORPSE_BAT);
   deadBat->setType(ENTITY_CORPSE);
 
-  for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
+  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
 
   drop();
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);

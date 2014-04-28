@@ -6,7 +6,7 @@
 #include "sfml_game/SpriteEntity.h"
 #include "Constants.h"
 
-ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen, WitchBlastGame* parent)
+ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CHEST), x, y, 48, 48)
 {
   type = ENTITY_CHEST;
@@ -14,8 +14,7 @@ ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen, WitchBlas
   this->isOpen = isOpen;
   this->chestType = chestType;
   frame = chestType * 2 + (isOpen ? 1 : 0);
-  parentGame = parent;
-  setMap(parent->getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 }
 
 bool ChestEntity::getOpened()
@@ -67,14 +66,14 @@ void ChestEntity::open()
   {
     for (int i = 0; i < 5; i++)
     {
-      ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y, parentGame);
+      ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y);
       newItem->setVelocity(Vector2D(50.0f + rand()% 150));
       newItem->setViscosity(0.96f);
     }
   }
   else if (chestType == CHEST_FAIRY)
   {
-    ItemEntity* newItem = new ItemEntity(itemFairy, x, y, parentGame);
+    ItemEntity* newItem = new ItemEntity(itemFairy, x, y);
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     newItem->setVelocity(Vector2D(50.0f + rand()% 150));
     newItem->setViscosity(0.96f);

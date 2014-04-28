@@ -9,8 +9,8 @@
 #include "WitchBlastGame.h"
 #include <math.h>
 
-EvilFlowerEntity::EvilFlowerEntity(float x, float y, WitchBlastGame* parent)
-    : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_FLOWER), parent, x, y)
+EvilFlowerEntity::EvilFlowerEntity(float x, float y)
+    : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_FLOWER), x, y)
 {
   hp = EVIL_FLOWER_HP;
   meleeDamages = EVIL_FLOWER_MELEE_DAMAGES;
@@ -65,7 +65,7 @@ void EvilFlowerEntity::dying()
   deadFlower->setFrame(FRAME_CORPSE_FLOWER);
   deadFlower->setType(ENTITY_CORPSE);
 
-  for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
+  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }
@@ -78,13 +78,13 @@ void EvilFlowerEntity::fire()
     bolt->setFrame(1);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
-    float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
+    float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
     float angle = atan(tan);
 
     float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
     if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
 
-    if (parentGame->getPlayer()->getY() > y)
+    if (game().getPlayer()->getY() > y)
       bolt->setVelocity(Vector2D(sin(angle) * flowerFireVelocity,
                                  cos(angle) * flowerFireVelocity));
     else

@@ -3,12 +3,10 @@
 
 #include "sfml_game/CollidingSpriteEntity.h"
 
-class WitchBlastGame;
-
 class ChestEntity : public CollidingSpriteEntity
 {
   public:
-    ChestEntity(float x, float y, int chestType, bool isOpen, WitchBlastGame* parent);
+    ChestEntity(float x, float y, int chestType, bool isOpen);
     virtual void animate(float delay);
     virtual void calculateBB();
 
@@ -23,7 +21,6 @@ class ChestEntity : public CollidingSpriteEntity
   private:
     bool isOpen;
     int chestType;
-    WitchBlastGame* parentGame;
 };
 
 #endif // CHESTENTITY_H

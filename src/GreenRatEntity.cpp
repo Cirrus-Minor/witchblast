@@ -7,8 +7,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-GreenRatEntity::GreenRatEntity(float x, float y, WitchBlastGame* parent)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), parent, x, y)
+GreenRatEntity::GreenRatEntity(float x, float y)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
 {
   imagesProLine = 4;
   creatureSpeed = GREEN_RAT_SPEED;
@@ -37,10 +37,10 @@ void GreenRatEntity::animate(float delay)
         if (timer <= 0.0f)
         {
           timer = (rand() % 50) / 10.0f;
-          float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
+          float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
           float angle = atan(tan);
 
-          if (parentGame->getPlayer()->getY() > y)
+          if (game().getPlayer()->getY() > y)
             setVelocity(Vector2D(sin(angle) * RAT_SPEED,
                                        cos(angle) * RAT_SPEED));
           else
@@ -93,7 +93,7 @@ void GreenRatEntity::dying()
   deadRat->setFrame(FRAME_CORPSE_GREEN_RAT);
   deadRat->setType(ENTITY_CORPSE);
 
-  for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
+  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   //drop();
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }

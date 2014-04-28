@@ -6,7 +6,7 @@
 class EnnemyEntity : public BaseCreatureEntity
 {
   public:
-    EnnemyEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y);
+    EnnemyEntity(sf::Texture* image, float x, float y);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:

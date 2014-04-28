@@ -10,7 +10,7 @@ class FairyEntity;
 class PlayerEntity : public BaseCreatureEntity
 {
   public:
-    PlayerEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y);
+    PlayerEntity(sf::Texture* image, float x, float y);
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
 

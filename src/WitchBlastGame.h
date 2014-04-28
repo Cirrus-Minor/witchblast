@@ -95,4 +95,6 @@ class WitchBlastGame : public Game
     bool isPlayerAlive;
 };
 
+WitchBlastGame& game();
+
 #endif // MAGICGAME_H

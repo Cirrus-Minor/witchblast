@@ -5,7 +5,7 @@
 #include "StaticTextEntity.h"
 #include "Items.h"
 
-ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType, WitchBlastGame* parent)
+ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
       : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP), 0, 0, ITEM_WIDTH, ITEM_HEIGHT)
 {
   this->setLifetime(6.0f);
@@ -23,8 +23,6 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType, Witc
                                       ARTEFACT_RECT_HEIGHT + ARTEFACT_BORDER * 2.0f));
   rectangleBorder.setPosition(sf::Vector2f(x0 - ARTEFACT_BORDER, ARTEFACT_POS_Y - ARTEFACT_BORDER));
   rectangleBorder.setFillColor(sf::Color(255, 255, 255, 180));
-
-  this->parent = parent;
 
   this->x = x0 + 50.0f;
   this->y = 500.0f;
