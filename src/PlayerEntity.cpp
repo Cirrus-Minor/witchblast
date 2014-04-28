@@ -10,8 +10,8 @@
 
 #include <iostream>
 
-PlayerEntity::PlayerEntity(sf::Texture* image, WitchBlastGame* parent, float x = 0.0f, float y = 0.0f)
-      : BaseCreatureEntity (image, parent, x, y, 64, 96)
+PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f)
+      : BaseCreatureEntity (image, x, y, 64, 96)
 {
   currentFireDelay = -1.0f;
   canFirePlayer = true;
@@ -140,13 +140,13 @@ void PlayerEntity::animate(float delay)
     frame = 0; //1;
 
   if (x < OFFSET_X)
-    parentGame->moveToOtherMap(4);
+    game().moveToOtherMap(4);
   else if (x > OFFSET_X + MAP_WIDTH * TILE_WIDTH)
-    parentGame->moveToOtherMap(6);
+    game().moveToOtherMap(6);
   else if (y < OFFSET_Y)
-    parentGame->moveToOtherMap(8);
+    game().moveToOtherMap(8);
   else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 5)
-    parentGame->moveToOtherMap(2);
+    game().moveToOtherMap(2);
 
   if (playerStatus == playerStatusEntering)
   {
@@ -156,7 +156,7 @@ void PlayerEntity::animate(float delay)
         && (boundingBox.top + boundingBox.height) < OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1))
     {
       playerStatus = playerStatusPlaying;
-      parentGame->closeDoors();
+      game().closeDoors();
     }
   }
 
@@ -357,7 +357,7 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       {
         boltEntity->collide();
         hurt(boltEntity->getDamages());
-        parentGame->generateBlood(x, y, bloodColor);
+        game().generateBlood(x, y, bloodColor);
       }
     }
 }
@@ -509,8 +509,8 @@ bool PlayerEntity::hurt(int damages)
   {
     SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
     BaseCreatureEntity::hurt(damages, BoltStandard);
-    parentGame->generateBlood(x, y, bloodColor);
-    parentGame->generateBlood(x, y, bloodColor);
+    game().generateBlood(x, y, bloodColor);
+    game().generateBlood(x, y, bloodColor);
     return true;
   }
   return false;
@@ -543,7 +543,7 @@ void PlayerEntity::dying()
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
     if (equip[i]) loseItem(enumItemType(i), true);
 
-  for (i = 0; i < 8; i++) parentGame->generateBlood(x, y, bloodColor);
+  for (i = 0; i < 8; i++) game().generateBlood(x, y, bloodColor);
 
   CollidingSpriteEntity* itemSprite
     = new CollidingSpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_PLAYER), x, y, 64, 64);

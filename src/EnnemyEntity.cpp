@@ -8,8 +8,8 @@
 #include <iostream>
 #include "WitchBlastGame.h"
 
-EnnemyEntity::EnnemyEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y)
-    : BaseCreatureEntity (image, parent, x, y, 64, 64)
+EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y)
+    : BaseCreatureEntity (image, x, y, 64, 64)
 {
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
@@ -82,7 +82,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     {
       boltEntity->collide();
       hurt(boltEntity->getDamages(), boltEntity->getBoltType());
-      parentGame->generateBlood(x, y, bloodColor);
+      game().generateBlood(x, y, bloodColor);
       SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 
       float xs = (x + boltEntity->getX()) / 2;
@@ -111,7 +111,7 @@ void EnnemyEntity::drop()
 {
   if (rand() % 5 == 0)
   {
-    ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y, parentGame);
+    ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y);
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);

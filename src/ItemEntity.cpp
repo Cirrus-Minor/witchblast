@@ -10,7 +10,7 @@
 
 
 
-ItemEntity::ItemEntity(enumItemType itemType, float x, float y, WitchBlastGame* parent)
+ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= itemMagicianHat ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
   type = ENTITY_ITEM;
@@ -19,8 +19,7 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y, WitchBlastGame* 
   if (itemType >= itemMagicianHat) frame = itemType - itemMagicianHat;
   isMerchandise = false;
   imagesProLine = 10;
-  this->parentGame = parent;
-  setMap(parent->getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)
@@ -36,12 +35,6 @@ int ItemEntity::getPrice()
 {
   return (items[itemType].price);
 }
-
-void ItemEntity::setParent(WitchBlastGame* parent)
-{
-  parentGame = parent;
-}
-
 
 void ItemEntity::animate(float delay)
 {
@@ -100,7 +93,7 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           if (itemType >= itemMagicianHat)
           {
 
-            parentGame->showArtefactDescription(itemType);
+            game().showArtefactDescription(itemType);
             SpriteEntity* spriteItem = new SpriteEntity(
                             image,
                             playerEntity->getX(), playerEntity->getY() - 60.0f, ITEM_WIDTH, ITEM_HEIGHT);

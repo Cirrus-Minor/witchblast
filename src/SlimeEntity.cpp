@@ -6,8 +6,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-SlimeEntity::SlimeEntity(float x, float y, WitchBlastGame* parent)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), parent, x, y)
+SlimeEntity::SlimeEntity(float x, float y)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), x, y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
@@ -76,10 +76,10 @@ void SlimeEntity::animate(float delay)
 
       if (rand() % 2 == 0)
       {
-        float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
+        float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
         float angle = atan(tan);
 
-        if (parentGame->getPlayer()->getY() > y)
+        if (game().getPlayer()->getY() > y)
           setVelocity(Vector2D(sin(angle) * randVel,
                                      cos(angle) * randVel));
         else
@@ -206,7 +206,7 @@ void SlimeEntity::dying()
   deadSlime->setFrame(FRAME_CORPSE_SLIME);
   deadSlime->setType(ENTITY_CORPSE);
 
-  for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
+  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
 
   drop();
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);

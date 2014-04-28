@@ -4,12 +4,10 @@
 #include "sfml_game/CollidingSpriteEntity.h"
 #include "Items.h"
 
-class WitchBlastGame;
-
 class ItemEntity : public CollidingSpriteEntity
 {
   public:
-    ItemEntity(enumItemType itemType, float x, float y, WitchBlastGame* parent);
+    ItemEntity(enumItemType itemType, float x, float y);
     void setMerchandise(bool isMerchandise);
     bool getMerchandise();
     int getPrice();
@@ -18,11 +16,9 @@ class ItemEntity : public CollidingSpriteEntity
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
     virtual void dying();
-    void setParent(WitchBlastGame* parent);
     enumItemType getItemType() { return itemType; };
 
   protected:
-    WitchBlastGame* parentGame;
     enumItemType itemType;
 
     bool isMerchandise;

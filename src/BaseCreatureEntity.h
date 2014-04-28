@@ -4,14 +4,12 @@
 #include "sfml_game/CollidingSpriteEntity.h"
 #include "Constants.h"
 
-class WitchBlastGame;
-
 const int NB_SPECIAL_STATES = 1;
 
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
   public:
-    BaseCreatureEntity(sf::Texture* image, WitchBlastGame* parent, float x, float y, int spriteWidth, int spriteHeight);
+    BaseCreatureEntity(sf::Texture* image, float x, float y, int spriteWidth, int spriteHeight);
     int getHp();
     int getHpMax();
     void setHp(int hp);
@@ -47,7 +45,6 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     bool hurting;
     float hurtingDelay;
     enumBoltType hurtingType;
-    WitchBlastGame* parentGame;
     enumBloodColor bloodColor;
   private:
 };

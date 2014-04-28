@@ -7,7 +7,7 @@
 class EvilFlowerEntity : public EnnemyEntity
 {
   public:
-    EvilFlowerEntity(float x, float y, WitchBlastGame* parent);
+    EvilFlowerEntity(float x, float y);
     virtual void animate(float delay);
     virtual void calculateBB();
     virtual void render(sf::RenderWindow* app);

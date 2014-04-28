@@ -23,8 +23,13 @@
 #include <sstream>
 #include <fstream>
 
+namespace {
+WitchBlastGame* gameptr;
+}
+
 WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
 {
+  gameptr = this;
   app->setTitle(APP_NAME + " V" + APP_VERSION);
 
   // loading resources
@@ -161,7 +166,6 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
     // the player
     player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
-                              this,
                               OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
 
@@ -205,7 +209,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   // generate the map
   refreshMap();
   // items from save
-  currentMap->restoreMapObjects(this);
+  currentMap->restoreMapObjects();
 
   // first map is open
   roomClosed = false;
@@ -595,7 +599,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
   }
   refreshMap();
   checkEntering();
-  currentMap->restoreMapObjects(this);
+  currentMap->restoreMapObjects();
 }
 
 void WitchBlastGame::onRender()
@@ -744,7 +748,7 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
 
 void WitchBlastGame::showArtefactDescription(enumItemType itemType)
 {
-  new ArtefactDescriptionEntity(itemType, this); //, &font);
+  new ArtefactDescriptionEntity(itemType); //, &font);
 }
 
 void WitchBlastGame::generateMap()
@@ -758,17 +762,17 @@ void WitchBlastGame::generateMap()
     int bonusType = getRandomEquipItem(false);
     if (bonusType == EQUIP_FAIRY)
     {
-      new ChestEntity(v.x, v.y, CHEST_FAIRY, false, this);
+      new ChestEntity(v.x, v.y, CHEST_FAIRY, false);
     }
     else
     {
-      new ItemEntity( (enumItemType)(itemMagicianHat + bonusType), v.x ,v.y, this);
+      new ItemEntity( (enumItemType)(itemMagicianHat + bonusType), v.x ,v.y);
     }
   }
   else if (currentMap->getRoomType() == roomTypeKey)
   {
     Vector2D v = currentMap->generateKeyRoom();
-    new ItemEntity( (enumItemType)(itemBossKey), v.x ,v.y, this);
+    new ItemEntity( (enumItemType)(itemBossKey), v.x ,v.y);
     initMonsterArray();
     int x0 = MAP_WIDTH / 2;
     int y0 = MAP_HEIGHT / 2;
@@ -783,16 +787,14 @@ void WitchBlastGame::generateMap()
     ItemEntity* item1 = new ItemEntity(
       itemHealth,
       OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
-      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT,
-      this);
+      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item1->setMerchandise(true);
 
     int bonusType = getRandomEquipItem(true);
     ItemEntity* item2 = new ItemEntity(
       (enumItemType)(itemMagicianHat + bonusType),
       OFFSET_X + (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
-      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT,
-      this);
+      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item2->setMerchandise(true);
 
     new PnjEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
@@ -806,8 +808,7 @@ void WitchBlastGame::generateMap()
     currentMap->generateRoom(0);
 
     boss = new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2,
-                      this);
+                      OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
   }
   else if (currentMap->getRoomType() == roomTypeStarting)
   {
@@ -818,14 +819,13 @@ void WitchBlastGame::generateMap()
     {
       new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                                            OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                                           CHEST_FAIRY, false, this);
+                                           CHEST_FAIRY, false);
     }
     else
     {
       new ItemEntity( (enumItemType)(itemMagicianHat + bonusType),
                           OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                          OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                          this);
+                          OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     }
   }
   else if (currentMap->getRoomType() == roomTypeExit)
@@ -848,12 +848,12 @@ void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float y
 {
   switch (monsterType)
   {
-    case MONSTER_RAT: new RatEntity(xm, ym - 2, this); break;
-    case MONSTER_BAT: new BatEntity(xm, ym, this); break;
-    case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym, this); break;
-    case MONSTER_SLIME: new SlimeEntity(xm, ym, this); break;
+    case MONSTER_RAT: new RatEntity(xm, ym - 2); break;
+    case MONSTER_BAT: new BatEntity(xm, ym); break;
+    case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym); break;
+    case MONSTER_SLIME: new SlimeEntity(xm, ym); break;
 
-    case MONSTER_KING_RAT: new KingRatEntity(xm, ym, this); break;
+    case MONSTER_KING_RAT: new KingRatEntity(xm, ym); break;
   }
 }
 
@@ -927,7 +927,7 @@ void WitchBlastGame::generateStandardMap()
   else if (random < 64)
   {
     Vector2D v = currentMap->generateBonusRoom();
-    new ChestEntity(v.x, v.y, CHEST_BASIC, false, this);
+    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
     currentMap->setCleared(true);
   }
   else if (random < 80)
@@ -1229,7 +1229,6 @@ bool WitchBlastGame::loadGame()
     int hp, hpMax, gold;
     file >> hp >> hpMax >> gold;
     player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
-                              this,
                               OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     player->setHp(hp);
@@ -1255,4 +1254,10 @@ bool WitchBlastGame::loadGame()
   }
 
   return true;
+}
+
+
+WitchBlastGame &game()
+{
+    return *gameptr;
 }

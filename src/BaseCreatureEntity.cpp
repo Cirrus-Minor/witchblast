@@ -4,14 +4,13 @@
 
 #include "WitchBlastGame.h"
 
-BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, WitchBlastGame* parent, float x = 0.0f, float y = 0.0f, int spriteWidth = -1, int spriteHeight = -1)
+BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f, int spriteWidth = -1, int spriteHeight = -1)
   : CollidingSpriteEntity (image, x, y, spriteWidth, spriteHeight )
 {
   hurting = false;
   hurtingType = BoltStandard;
   shadowFrame = -1;
-  parentGame = parent;
-  setMap(parent->getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   hpDisplay = 0;
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
   {

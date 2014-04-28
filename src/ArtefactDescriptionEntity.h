@@ -4,12 +4,10 @@
 #include "sfml_game/SpriteEntity.h"
 #include "ItemEntity.h"
 
-class WitchBlastGame;
-
 class ArtefactDescriptionEntity : public SpriteEntity
 {
   public:
-    ArtefactDescriptionEntity(enumItemType, WitchBlastGame* parent);
+    ArtefactDescriptionEntity(enumItemType);
     ~ArtefactDescriptionEntity();
 
     virtual void animate(float delay);
@@ -17,7 +15,6 @@ class ArtefactDescriptionEntity : public SpriteEntity
   private:
     sf::RectangleShape rectangle;
     sf::RectangleShape rectangleBorder;
-    WitchBlastGame* parent;
 
     std::string artefactName;
     std::string artefactDescription;

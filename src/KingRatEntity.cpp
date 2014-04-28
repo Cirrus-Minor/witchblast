@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-KingRatEntity::KingRatEntity(float x, float y, WitchBlastGame* parent)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_KING_RAT), parent, x, y)
+KingRatEntity::KingRatEntity(float x, float y)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_KING_RAT), x, y)
 {
   width = 128;
   height = 128;
@@ -123,10 +123,10 @@ void KingRatEntity::animate(float delay)
       // rush
       timer = 12.0f;
 
-      float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
+      float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
       float angle = atan(tan);
 
-      if (parentGame->getPlayer()->getY() > y)
+      if (game().getPlayer()->getY() > y)
         setVelocity(Vector2D(sin(angle) * KING_RAT_RUNNING_SPEED,
                                        cos(angle) * KING_RAT_RUNNING_SPEED));
       else
@@ -169,10 +169,10 @@ void KingRatEntity::animate(float delay)
       berserkDelay = 0.8f + (rand()%10) / 10.0f;
       SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_2);
 
-      float tan = (parentGame->getPlayer()->getX() - x) / (parentGame->getPlayer()->getY() - y);
+      float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
       float angle = atan(tan);
 
-      if (parentGame->getPlayer()->getY() > y)
+      if (game().getPlayer()->getY() > y)
         setVelocity(Vector2D(sin(angle) * KING_RAT_BERSERK_SPEED,
                                        cos(angle) * KING_RAT_BERSERK_SPEED));
       else
@@ -290,7 +290,7 @@ void KingRatEntity::dying()
   deadRat->setFrame(FRAME_CORPSE_KING_RAT - FRAME_CORPSE_KING_RAT);
   deadRat->setType(ENTITY_CORPSE);
 
-  for (int i = 0; i < 10; i++) parentGame->generateBlood(x, y, bloodColor);
+  for (int i = 0; i < 10; i++) game().generateBlood(x, y, bloodColor);
 
   SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_DIE);
 }
@@ -305,7 +305,7 @@ void KingRatEntity::generateGreenRats()
     if (xr > OFFSET_X + TILE_WIDTH * 1.5f && xr < OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2)
         && yr > OFFSET_Y + TILE_HEIGHT * 1.5f && yr < OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2))
     {
-      new GreenRatEntity(xr, yr, parentGame);
+      new GreenRatEntity(xr, yr);
     }
     else
       i--;

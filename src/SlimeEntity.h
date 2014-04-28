@@ -7,7 +7,7 @@
 class SlimeEntity : public EnnemyEntity
 {
   public:
-    SlimeEntity(float x, float y, WitchBlastGame* parent);
+    SlimeEntity(float x, float y);
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();

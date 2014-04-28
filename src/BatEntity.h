@@ -6,7 +6,7 @@
 class BatEntity : public EnnemyEntity
 {
   public:
-    BatEntity(float x, float y, WitchBlastGame* parent);
+    BatEntity(float x, float y);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:

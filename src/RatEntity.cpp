@@ -7,8 +7,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-RatEntity::RatEntity(float x, float y, WitchBlastGame* parent)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), parent, x, y)
+RatEntity::RatEntity(float x, float y)
+  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
 {
   creatureSpeed = RAT_SPEED;
   velocity = Vector2D(creatureSpeed);
@@ -65,7 +65,7 @@ void RatEntity::dying()
   deadRat->setFrame(FRAME_CORPSE_RAT);
   deadRat->setType(ENTITY_CORPSE);
 
-  for (int i = 0; i < 4; i++) parentGame->generateBlood(x, y, bloodColor);
+  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }
