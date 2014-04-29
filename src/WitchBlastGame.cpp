@@ -77,6 +77,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_jump.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact_weak.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/ice_charge.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {

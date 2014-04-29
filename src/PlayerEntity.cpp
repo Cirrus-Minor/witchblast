@@ -83,7 +83,14 @@ void PlayerEntity::pay(int price)
 
 void PlayerEntity::animate(float delay)
 {
-  if (specialBoltTimer >= 0.0f) specialBoltTimer -= delay;
+  if (specialBoltTimer >= 0.0f)
+  {
+    specialBoltTimer -= delay;
+    if (specialBoltTimer <= 0.0f)
+    {
+      if (equip[EQUIP_ICE_GEM]) SoundManager::getSoundManager()->playSound(SOUND_ICE_CHARGE);
+    }
+  }
   // rate of fire
   if (!canFirePlayer)
   {

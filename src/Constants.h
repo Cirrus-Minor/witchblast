@@ -106,7 +106,8 @@ enum sound_resources {
   SOUND_KING_RAT_DIE,
   SOUND_SLIME_JUMP,
   SOUND_SLIME_IMAPCT,
-  SOUND_SLIME_IMAPCT_WEAK
+  SOUND_SLIME_IMAPCT_WEAK,
+  SOUND_ICE_CHARGE
 };
 
 enum corpses_ressources{
