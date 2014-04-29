@@ -36,3 +36,22 @@ Features
 - chest and keys,
 - merchant,
 - candy eye effects.
+
+Changes
+-------
+Next version
+- ADD New ennemy
+- ADD 3 new items
+- ADD Show player's impact when he's hurt
+- ADD New music when the player dies
+- ADD Mouse support - Player can fire with left click
+- ADD Pause
+- ADD Save / restore game
+- ADD Slowing (creature state)
+- MOD Damages inflicetd by the player have been modified
+- MOD The player's bolt size depend of the damages
+- MOD Only usefull data displayed on the minimap
+- FIX Fade in / fade out text bugs
+- FIX Merchant z-ordering bug
+- FIX It was possible to begin at the exit
+
