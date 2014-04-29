@@ -19,8 +19,9 @@ class SlimeEntity : public EnnemyEntity
     virtual void collideMapBottom();
 
 	  virtual void dying();
+	  virtual void prepareDying();
 	  virtual bool canCollide();
-	  virtual bool hurt(int damages);
+
   private:
     float jumpingDelay;
     float h;

@@ -19,6 +19,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
     virtual bool hurt(int damages, enumBoltType hurtingType);
+    virtual void prepareDying();
     virtual void dying();
     enum enumBloodColor { bloodRed, bloodGreen};
     enum enumSpecialState

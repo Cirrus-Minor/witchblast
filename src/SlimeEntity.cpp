@@ -212,23 +212,13 @@ void SlimeEntity::dying()
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }
 
+void SlimeEntity::prepareDying()
+{
+    if (!isJumping)
+      dying();
+}
+
 bool SlimeEntity::canCollide()
 {
   return h <= 70.0f;
-}
-
-bool SlimeEntity::hurt(int damages)
-{
-  hurting = true;
-  hurtingDelay = HURTING_DELAY;
-
-  hp -= damages;
-  if (hp <= 0)
-  {
-    hp = 0;
-    if (!isJumping)
-      dying();
-  }
-
-  return true;
 }

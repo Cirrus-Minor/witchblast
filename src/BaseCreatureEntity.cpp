@@ -122,22 +122,25 @@ bool BaseCreatureEntity::hurt(int damages, enumBoltType hurtingType)
   hurtingDelay = HURTING_DELAY;
   this->hurtingType = hurtingType;
 
+  if (hurtingType == BoltIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
+  {
+    specialState[SpecialStateIce].active = true;
+    specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY;
+  }
+
   hp -= damages;
   if (hp <= 0)
   {
     hp = 0;
-    dying();
-  }
-  else
-  {
-    if (hurtingType == BoltIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
-    {
-      specialState[SpecialStateIce].active = true;
-      specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY;
-    }
+    prepareDying();
   }
 
   return true;
+}
+
+void BaseCreatureEntity::prepareDying()
+{
+  dying();
 }
 
 void BaseCreatureEntity::dying()
