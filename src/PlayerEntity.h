@@ -72,6 +72,7 @@ class PlayerEntity : public BaseCreatureEntity
 
     bool equip[NUMBER_EQUIP_ITEMS];
     enumBoltType boltType;
+    float specialBoltTimer;
 
     int colliding;
 

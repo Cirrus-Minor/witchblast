@@ -132,11 +132,8 @@ bool BaseCreatureEntity::hurt(int damages, enumBoltType hurtingType)
   {
     if (hurtingType == BoltIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
     {
-      if (rand() % 100 < STATUS_FROZEN_CHANCE)
-      {
-        specialState[SpecialStateIce].active = true;
-        specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY;
-      }
+      specialState[SpecialStateIce].active = true;
+      specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY;
     }
   }
 

@@ -25,7 +25,7 @@ PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f)
   gold = 0;
 
   boltLifeTime = INITIAL_BOLT_LIFE;
-
+  specialBoltTimer = -1.0f;
   bloodColor = bloodRed;
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equip[i] = false;
@@ -35,9 +35,6 @@ PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f)
 
   firingDirection = 5;
   facingDirection = 2;
-
-  // TEST
-  //equip[EQUIP_BOSS_KEY] = true;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -86,6 +83,7 @@ void PlayerEntity::pay(int price)
 
 void PlayerEntity::animate(float delay)
 {
+  if (specialBoltTimer >= 0.0f) specialBoltTimer -= delay;
   // rate of fire
   if (!canFirePlayer)
   {
@@ -108,6 +106,7 @@ void PlayerEntity::animate(float delay)
       }
     }
   }
+  // unlocking animation
   else if (playerStatus == playerStatusUnlocking)
   {
     acquireDelay -= delay;
@@ -129,7 +128,7 @@ void PlayerEntity::animate(float delay)
   {
     frame = ((int)(age * 5.0f)) % 4;
     if (frame == 3) frame = 2;
-    //if (frame == 3) frame = 1;
+    else if (frame == 2) frame = 0;
     SoundManager::getSoundManager()->playSound(SOUND_STEP);
   }
   else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
@@ -273,6 +272,27 @@ void PlayerEntity::render(sf::RenderWindow* app)
       {
         sprite.setTextureRect(sf::IntRect(frame * width + 4, 8 *height, width, height));
         app->draw(sprite);
+
+        int fade;
+        if (specialBoltTimer <= 0.0f) fade = 255;
+        else fade = ((STATUS_FROZEN_BOLT_DELAY - specialBoltTimer) / STATUS_FROZEN_BOLT_DELAY) * 128;
+
+        sprite.setTextureRect(sf::IntRect(256, 0, 20, 20));
+        sprite.setColor(sf::Color(255, 255, 255, fade));
+
+        if (frame == 1)
+          sprite.setPosition(x + 5, y + 3);
+        else if (frame == 2)
+          sprite.setPosition(x + 16, y + 3);
+        else
+          sprite.setPosition(x + 3, y + 1);
+
+        sf::RenderStates r;
+        r.blendMode = sf::BlendAdd;
+        app->draw(sprite, r);
+
+        sprite.setPosition(x, y);
+        sprite.setColor(sf::Color(255, 255, 255, 255));
       }
 
       // hands
@@ -422,6 +442,13 @@ void PlayerEntity::setEquiped(int item, bool eq)
 
 void PlayerEntity::generateBolt(float velx, float vely)
 {
+  if (equip[EQUIP_ICE_GEM] && specialBoltTimer <= 0.0f)
+  {
+    boltType = BoltIce;
+    specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
+  }
+  else
+    boltType = BoltStandard;
   BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 20, boltLifeTime, boltType);
   bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   bolt->setDamages(fireDamages);
