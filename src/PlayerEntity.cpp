@@ -52,6 +52,11 @@ void PlayerEntity::moveTo(float newX, float newY)
   }
 }
 
+int PlayerEntity::getFacingDirection()
+{
+  return facingDirection;
+}
+
 float PlayerEntity::getPercentFireDelay()
 {
   if (canFirePlayer) return 1.0f;

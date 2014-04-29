@@ -15,6 +15,7 @@ class PlayerEntity : public BaseCreatureEntity
     virtual void render(sf::RenderWindow* app);
 
     void moveTo(float newX, float newY);
+    int getFacingDirection();
 
     virtual void calculateBB();
     void move(int direction);

@@ -263,6 +263,11 @@ void WitchBlastGame::startGame()
                 else if (gameState == gameStatePlaying && isPausing) isPausing = false;
               }
 
+              if (event.key.code == sf::Keyboard::Space)
+              {
+                if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
+              }
+
               if (event.key.code == sf::Keyboard::X)
               {
                 startNewGame(false);
@@ -304,6 +309,7 @@ void WitchBlastGame::startGame()
             player->move(2);
           }
 
+          // normal 4 directions gameplay
           if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
             player->fire(4);
           else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -312,6 +318,12 @@ void WitchBlastGame::startGame()
             player->fire(8);
           else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
             player->fire(2);
+          // alternative "one button" gameplay
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+          {
+            player->fire(firingDirection);
+          }
+          // alternative "firing with the mouse" gameplay
           else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
           {
             sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);

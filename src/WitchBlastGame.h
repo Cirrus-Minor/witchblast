@@ -34,6 +34,7 @@ class WitchBlastGame : public Game
 
   private:
     bool isFiring;
+    int firingDirection;  // save the firing direction - for the "one button" gameplay
 
     PlayerEntity* player;
     EnnemyEntity* boss;
