@@ -15,7 +15,6 @@
 #include "EvilFlowerEntity.h"
 #include "ItemEntity.h"
 #include "ArtefactDescriptionEntity.h"
-#include "StaticTextEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
 
@@ -851,6 +850,20 @@ void WitchBlastGame::generateMap()
     currentMap->randomize(currentMap->getRoomType());
 }
 
+void WitchBlastGame::Write(std::string str, int size, float x, float y, int align, sf::Color color)
+{
+  myText.setString(str);
+  myText.setCharacterSize(size);
+  myText.setColor(color);
+
+  if (align == ALIGN_CENTER)
+    myText.setPosition(x - myText.getLocalBounds().width / 2, y);
+  else
+    myText.setPosition(x, y);
+
+  app->draw(myText);
+}
+
 void WitchBlastGame::initMonsterArray()
 {
   for (int i = 0; i < MAP_WIDTH; i++)
@@ -1269,7 +1282,6 @@ bool WitchBlastGame::loadGame()
 
   return true;
 }
-
 
 WitchBlastGame &game()
 {

@@ -8,6 +8,10 @@
 #include "DoorEntity.h"
 #include "GameFloor.h"
 
+const int ALIGN_LEFT    = 0;
+const int ALIGN_RIGHT   = 1;
+const int ALIGN_CENTER  = 2;
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -114,6 +118,8 @@ class WitchBlastGame : public Game
      *  \param itemType : item identifier
      */
     void showArtefactDescription(enumItemType itemType);
+
+    void Write(std::string str, int size, float x, float y, int align, sf::Color color);
 
     /*!
      *  \brief Save the game

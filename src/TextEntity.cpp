@@ -16,9 +16,8 @@
 
 #include <sstream>
 #include <iostream>
-
 #include "TextEntity.h"
-#include "StaticTextEntity.h"
+#include "WitchBlastGame.h"
 
 TextEntity::TextEntity(std::string text, int size, float x, float y) : GameEntity(x, y)
 {
@@ -32,8 +31,7 @@ TextEntity::TextEntity(std::string text, int size, float x, float y) : GameEntit
 
 void TextEntity::render(sf::RenderWindow* app)
 {
-    // determine the color
-    StaticTextEntity::Write(app, text, size, x, y, alignment, color);
+    game().Write(text, size, x, y, alignment, color);
 }
 
 void TextEntity::animate(float delay)

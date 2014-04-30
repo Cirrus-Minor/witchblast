@@ -1,6 +1,7 @@
 #include "PnjEntity.h"
 #include "Constants.h"
-#include "StaticTextEntity.h"
+//#include "StaticTextEntity.h"
+#include "WitchBlastGame.h"
 #include "sfml_game/ImageManager.h"
 
 PnjEntity::PnjEntity(float x, float y, int pnjType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_PNJ), x, y, 64, 96)
@@ -96,6 +97,6 @@ void PnjEntity::render(sf::RenderWindow* app)
 
   if (isSpeaking)
   {
-    StaticTextEntity::Write(app, speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255));
+    game().Write(speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255));
   }
 }
