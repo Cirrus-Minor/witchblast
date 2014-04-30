@@ -83,7 +83,7 @@ const itemStuct items[NUMBER_ITEMS] =
 
 // Equip items
 const int NUMBER_EQUIP_ITEMS = 11;
-enum item_equip {
+enum item_equip_enum {
   EQUIP_ENCHANTER_HAT,
   EQUIP_LEATHER_BOOTS,
   EQUIP_BOOK_DUAL,

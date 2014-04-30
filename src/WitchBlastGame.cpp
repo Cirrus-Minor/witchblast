@@ -87,7 +87,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   miniMap = NULL;
   currentMap = NULL;
   currentFloor = NULL;
-  specialState = SpecialStateNone;
+  xGameState = xGameStateNone;
   isPausing = false;
 }
 
@@ -121,15 +121,15 @@ void WitchBlastGame::onUpdate()
 
     EntityManager::getEntityManager()->animate(delta);
 
-    if (specialState != SpecialStateNone)
+    if (xGameState != xGameStateNone)
     {
-      timer -= delta;
-      if (timer <= 0.0f)
+      xGameTimer -= delta;
+      if (xGameTimer <= 0.0f)
       {
-        if (specialState == SpecialStateFadeOut)
+        if (xGameState == xGameStateFadeOut)
           startNewGame(false);
         else
-          specialState = SpecialStateNone;
+          xGameState = xGameStateNone;
       }
     }
 
@@ -219,11 +219,11 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   lastTime = getAbsolutTime();
   gameState = gameStatePlaying;
 
-  playMusic(MusicDonjon);
+  playMusic(MusicDungeon);
 
   // fade in
-  specialState = SpecialStateFadeIn;
-  timer = FADE_IN_DELAY;
+  xGameState = xGameStateFadeIn;
+  xGameTimer = FADE_IN_DELAY;
 
   float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
   float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
@@ -342,10 +342,10 @@ void WitchBlastGame::startGame()
             }
           }
 
-          if (player->isDead() && specialState == SpecialStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+          if (player->isDead() && xGameState == xGameStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
           {
-            specialState = SpecialStateFadeOut;
-            timer = FADE_OUT_DELAY;
+            xGameState = xGameStateFadeOut;
+            xGameTimer = FADE_OUT_DELAY;
           }
         }
 
@@ -369,6 +369,7 @@ void WitchBlastGame::startGame()
 
 void WitchBlastGame::createFloor()
 {
+  // TODO : extracts from createNewGame
 }
 
 void WitchBlastGame::closeDoors()
@@ -714,18 +715,18 @@ void WitchBlastGame::onRender()
         app->draw(myText);
       }
 
-      if (specialState == SpecialStateFadeIn)
+      if (xGameState == xGameStateFadeIn)
       {
         // fade in
-        rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - timer) / FADE_IN_DELAY) * 255));
+        rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
         rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
         rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
         app->draw(rectangle);
       }
-      else if (specialState == SpecialStateFadeOut)
+      else if (xGameState == xGameStateFadeOut)
       {
         // fade out
-        rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - timer) / FADE_IN_DELAY) * 255));
+        rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
         rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
         rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
         app->draw(rectangle);
@@ -820,7 +821,7 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoom(0);
 
-    boss = new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+    new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
   }
   else if (currentMap->getRoomType() == roomTypeStarting)
@@ -956,7 +957,7 @@ void WitchBlastGame::generateStandardMap()
   }
 }
 
-int WitchBlastGame::getRandomEquipItem(bool toSale = false)
+item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
 {
   std::vector<int> bonusSet;
   int setSize = 0;
@@ -974,7 +975,7 @@ int WitchBlastGame::getRandomEquipItem(bool toSale = false)
   int bonusType = 0;
   if (setSize > 0) bonusType = bonusSet[rand() % setSize];
 
-  return bonusType;
+  return (item_equip_enum) bonusType;
 }
 
 void WitchBlastGame::verifyDoorUnlocking()
@@ -1029,7 +1030,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
   bool ok = false;
   switch (musicChoice)
   {
-  case MusicDonjon:
+  case MusicDungeon:
     ok = music.openFromFile("media/sound/track00.ogg");
     music.setVolume(75);
     break;
