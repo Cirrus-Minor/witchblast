@@ -254,12 +254,22 @@ void WitchBlastGame::startGame()
               app->close();
             }
 
+            if (event.type == sf::Event::MouseWheelMoved)
+            {
+              if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
+            }
+
             if (event.type == sf::Event::KeyPressed)
             {
               if (event.key.code == sf::Keyboard::Escape)
               {
                 if (gameState == gameStatePlaying && !isPausing) isPausing = true;
                 else if (gameState == gameStatePlaying && isPausing) isPausing = false;
+              }
+
+              if (event.key.code == sf::Keyboard::Tab)
+              {
+                if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
               }
 
               if (event.key.code == sf::Keyboard::Space)

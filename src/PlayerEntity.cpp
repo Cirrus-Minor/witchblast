@@ -760,3 +760,18 @@ void PlayerEntity::registerSpecialShot(int item)
     specialShotIndex = index;
   }
 }
+
+void PlayerEntity::selectNextShotType()
+{
+  int index = specialShotIndex + 1;
+  bool found = false;
+  while (index < SPECIAL_SHOT_SLOTS && !found)
+  {
+    if (specialShots[index] == ShotTypeStandard) index++;
+    else found = true;
+  }
+  if (found)
+    specialShotIndex = index;
+  else
+    specialShotIndex = 0;
+}

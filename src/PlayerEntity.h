@@ -307,6 +307,13 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void setShotType(int slot, enumShotType shotType);
 
+    /*!
+     *  \brief select the next shot type
+     *
+     *  Select the next shot type.
+     */
+    void selectNextShotType();
+
     /** Player status enum
      *  The different player states.
      */
