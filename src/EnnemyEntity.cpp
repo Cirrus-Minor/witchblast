@@ -65,7 +65,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
     if (playerEntity != NULL && !playerEntity->isDead())
     {
-      if (playerEntity->hurt(meleeDamages, BoltStandard))
+      if (playerEntity->hurt(meleeDamages, ShotTypeStandard))
       {
         float xs = (x + playerEntity->getX()) / 2;
         float ys = (y + playerEntity->getY()) / 2;

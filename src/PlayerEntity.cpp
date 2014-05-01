@@ -28,8 +28,13 @@ PlayerEntity::PlayerEntity(float x = 0.0f, float y = 0.0f)
   specialBoltTimer = -1.0f;
   bloodColor = bloodRed;
 
+  // init the equipment (to empty)
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equip[i] = false;
   collidingDirection = 0;
+
+  // init the shots (to none)
+  for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++) specialShots[i] = ShotTypeStandard;
+  specialShotIndex = 0;
 
   computePlayer();
 
@@ -93,7 +98,7 @@ void PlayerEntity::animate(float delay)
     specialBoltTimer -= delay;
     if (specialBoltTimer <= 0.0f)
     {
-      if (equip[EQUIP_ICE_GEM]) SoundManager::getSoundManager()->playSound(SOUND_ICE_CHARGE);
+      if (getShotType() == ShotTypeIce) SoundManager::getSoundManager()->playSound(SOUND_ICE_CHARGE);
     }
   }
   // rate of fire
@@ -112,10 +117,13 @@ void PlayerEntity::animate(float delay)
       computePlayer();
       playerStatus = playerStatusPlaying;
 
+      int itemID = acquiredItem + FirstEquipItem;
+
       if (acquiredItem == (int)EQUIP_FAIRY)
-      {
         fairy = new FairyEntity(x, y - 50.0f, this);
-      }
+
+      if (items[itemID].specialShot != (ShotTypeStandard))
+        registerSpecialShot(itemID);
     }
   }
   // unlocking animation
@@ -175,6 +183,31 @@ void PlayerEntity::animate(float delay)
   {
     z = OFFSET_Y - 2;
   }
+}
+
+void PlayerEntity::renderHead(sf::RenderWindow* app)
+{
+
+}
+
+void PlayerEntity::renderBody(sf::RenderWindow* app)
+{
+
+}
+
+void PlayerEntity::renderArms(sf::RenderWindow* app)
+{
+
+}
+
+void PlayerEntity::renderFeet(sf::RenderWindow* app)
+{
+
+}
+
+void PlayerEntity::renderStaff(sf::RenderWindow* app)
+{
+
 }
 
 
@@ -280,7 +313,7 @@ void PlayerEntity::render(sf::RenderWindow* app)
       }
 
       // ice gem
-      if (equip[EQUIP_ICE_GEM])
+      if (getShotType() == ShotTypeIce)
       {
         sprite.setTextureRect(sf::IntRect(frame * width + 4, 8 *height, width, height));
         app->draw(sprite);
@@ -342,7 +375,7 @@ void PlayerEntity::render(sf::RenderWindow* app)
         }
 
           // ice gem
-        if (equip[EQUIP_ICE_GEM])
+        if (getShotType() == ShotTypeIce)
         {
           sprite.setTextureRect(sf::IntRect(1 * width + 4, 8 *height, width, height));
           app->draw(sprite);
@@ -388,7 +421,7 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       if (boltEntity != NULL && !boltEntity->getDying())
       {
         boltEntity->collide();
-        hurt(boltEntity->getDamages(), BoltStandard);
+        hurt(boltEntity->getDamages(), ShotTypeStandard);
         game().generateBlood(x, y, bloodColor);
       }
     }
@@ -454,13 +487,14 @@ void PlayerEntity::setEquiped(int item, bool eq)
 
 void PlayerEntity::generateBolt(float velx, float vely)
 {
-  if (equip[EQUIP_ICE_GEM] && specialBoltTimer <= 0.0f)
+  enumShotType boltType;
+  if (getShotType() == ShotTypeIce && specialBoltTimer <= 0.0f)
   {
-    boltType = BoltIce;
+    boltType = ShotTypeIce;
     specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
   }
   else
-    boltType = BoltStandard;
+    boltType = ShotTypeStandard;
   BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 20, boltLifeTime, boltType);
   bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   bolt->setDamages(fireDamages);
@@ -537,12 +571,12 @@ bool PlayerEntity::canMove()
   return (playerStatus == playerStatusPlaying);
 }
 
-bool PlayerEntity::hurt(int damages, enumBoltType hurtingType)
+bool PlayerEntity::hurt(int damages, enumShotType hurtingType)
 {
   if (!hurting)
   {
     SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
-    BaseCreatureEntity::hurt(damages, BoltStandard);
+    BaseCreatureEntity::hurt(damages, ShotTypeStandard);
     game().generateBlood(x, y, bloodColor);
     game().generateBlood(x, y, bloodColor);
     return true;
@@ -615,7 +649,6 @@ void PlayerEntity::computePlayer()
   float creatureSpeedBonus = 1.0f;
   float fireVelocityBonus = 1.0f;
   float fireDamagesBonus = 1.0f;
-  boltType = BoltStandard;
 
   if (equip[EQUIP_VIBRATION_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
@@ -629,7 +662,7 @@ void PlayerEntity::computePlayer()
     fireDamagesBonus += 0.5f;
   }
   if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 1.0f;
-  if (equip[EQUIP_ICE_GEM]) boltType = BoltIce;
+  //if (getShotType()) boltType = BoltIce;
 
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;
@@ -682,7 +715,48 @@ void PlayerEntity::useBossKey()
   SpriteEntity* spriteItem = new SpriteEntity(
                           ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP),
                           x, y - 60.0f, ITEM_WIDTH, ITEM_HEIGHT);
-          spriteItem->setFrame(EQUIP_BOSS_KEY);
-          spriteItem->setZ(z);
-          spriteItem->setLifetime(UNLOCK_DELAY);
+  spriteItem->setFrame(EQUIP_BOSS_KEY);
+  spriteItem->setZ(z);
+  spriteItem->setLifetime(UNLOCK_DELAY);
+}
+
+enumShotType PlayerEntity::getShotType()
+{
+  return specialShots[specialShotIndex];
+}
+
+int PlayerEntity::getShotIndex()
+{
+  return specialShotIndex;
+}
+
+void PlayerEntity::setShotIndex(int index)
+{
+  specialShotIndex = index;
+}
+
+enumShotType PlayerEntity::getShotType(int slot)
+{
+  return specialShots[slot];
+}
+
+void PlayerEntity::setShotType(int slot, enumShotType shotType)
+{
+  specialShots[slot] = shotType;
+}
+
+void PlayerEntity::registerSpecialShot(int item)
+{
+  bool found = false;
+  int index = 1;
+  while (index < SPECIAL_SHOT_SLOTS && !found)
+  {
+    found = specialShots[index] == ShotTypeStandard;
+    if (!found) index++;
+  }
+  if (found)
+  {
+    this->specialShots[index] = items[item].specialShot;
+    specialShotIndex = index;
+  }
 }

@@ -155,7 +155,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  \param hurtingType : damages type
      *  \return : True if the player has been hurt
      */
-    virtual bool hurt(int damages, enumBoltType hurtingType);
+    virtual bool hurt(int damages, enumShotType hurtingType);
 
     /*!
      *  \brief returns if the player is dead or not
@@ -251,6 +251,62 @@ class PlayerEntity : public BaseCreatureEntity
      */
     int getCollidingDirection();
 
+    /*!
+     *  \brief register a new special shot and select it
+     *
+     *  Register a new special shot and select it.
+     *
+     *  \param item : Item which provides the shot
+     */
+    void registerSpecialShot(int item);
+
+    /*!
+     *  \brief accessor on current shot type
+     *
+     *  Accessor on the current shot type.
+     *
+     *  \return : the current shot type
+     */
+    enumShotType getShotType();
+
+    /*!
+     *  \brief accessor on current shot index
+     *
+     *  Accessor on the current shot index.
+     *
+     *  \return : the current shot index
+     */
+    int getShotIndex();
+
+    /*!
+     *  \brief mutator on the shot index
+     *
+     *  Mutator on the shot index.
+     *
+     *  \param index : the new shot index
+     */
+    void setShotIndex(int index);
+
+    /*!
+     *  \brief accessor on current shot type of a slot
+     *
+     *  Accessor on the current shot type of a slot.
+     *
+     *  \param slot : The slot number
+     *  \return : the current shot type
+     */
+    enumShotType getShotType(int slot);
+
+    /*!
+     *  \brief mutator on a shot slot
+     *
+     *  Mutator on a shot slot.
+     *
+     *  \param index : the shot index
+     *  \param shotType : the shot type to set
+     */
+    void setShotType(int slot, enumShotType shotType);
+
     /** Player status enum
      *  The different player states.
      */
@@ -286,8 +342,10 @@ class PlayerEntity : public BaseCreatureEntity
     enumItemType acquiredItem;
 
     bool equip[NUMBER_EQUIP_ITEMS];
-    enumBoltType boltType;
+    //enumBoltType boltType;
     float specialBoltTimer;
+    enumShotType specialShots[SPECIAL_SHOT_SLOTS];
+    int specialShotIndex;
 
     int collidingDirection;           /*!< Colliding direction (4, 8, 6, 2) to detect collision with closed doors */
 
@@ -295,6 +353,12 @@ class PlayerEntity : public BaseCreatureEntity
     int firingDirection;
 
     FairyEntity* fairy;
+
+    void renderHead(sf::RenderWindow* app);
+    void renderBody(sf::RenderWindow* app);
+    void renderArms(sf::RenderWindow* app);
+    void renderFeet(sf::RenderWindow* app);
+    void renderStaff(sf::RenderWindow* app);
 };
 
 #endif // PLAYERSPRITE_H

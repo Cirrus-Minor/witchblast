@@ -828,7 +828,7 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoom(0);
     currentMap->setCleared(true);
-    int bonusType = getRandomEquipItem(false);
+    int bonusType = EQUIP_GEM_ICE; //getRandomEquipItem(false);
     if (bonusType == EQUIP_FAIRY)
     {
       new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
@@ -1155,6 +1155,8 @@ void WitchBlastGame::saveGame()
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) file << player->isEquiped(i) << " ";
     file << std::endl;
     file << player->getX() << " " << player->getY() << std::endl;
+    file << player->getShotIndex();
+    for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i);
 
     file.close();
   }
@@ -1269,6 +1271,16 @@ bool WitchBlastGame::loadGame()
     file >> x >> y;
 
     player->moveTo(x, y);
+
+
+    file >> n;
+    player->setShotIndex(n);
+
+    for (i = 0; i < SPECIAL_SHOT_SLOTS; i++)
+    {
+      file >> n;
+      player->setShotType(i, (enumShotType)n);
+    }
 
     file.close();
     remove("game.sav");

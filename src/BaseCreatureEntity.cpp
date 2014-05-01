@@ -8,7 +8,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   : CollidingSpriteEntity (image, x, y, spriteWidth, spriteHeight )
 {
   hurting = false;
-  hurtingType = BoltStandard;
+  hurtingType = ShotTypeStandard;
   shadowFrame = -1;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   hpDisplay = 0;
@@ -70,7 +70,7 @@ void BaseCreatureEntity::animate(float delay)
     if (hurtingDelay > 0.0f)
     {
       int fadeColor = (sf::Uint8)((HURTING_DELAY - hurtingDelay) * 255);
-      if (hurtingType == BoltIce)
+      if (hurtingType == ShotTypeIce)
         sprite.setColor(sf::Color(fadeColor, fadeColor, 255, 255 ));
       else
         sprite.setColor(sf::Color(255, fadeColor, fadeColor, 255 ));
@@ -116,13 +116,13 @@ void BaseCreatureEntity::calculateBB()
 {
 }
 
-bool BaseCreatureEntity::hurt(int damages, enumBoltType hurtingType)
+bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType)
 {
   hurting = true;
   hurtingDelay = HURTING_DELAY;
   this->hurtingType = hurtingType;
 
-  if (hurtingType == BoltIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
+  if (hurtingType == ShotTypeIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
   {
     specialState[SpecialStateIce].active = true;
     specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY;

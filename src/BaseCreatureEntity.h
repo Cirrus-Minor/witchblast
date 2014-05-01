@@ -18,7 +18,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
-    virtual bool hurt(int damages, enumBoltType hurtingType);
+    virtual bool hurt(int damages, enumShotType hurtingType);
     virtual void prepareDying();
     virtual void dying();
     enum enumBloodColor { bloodRed, bloodGreen};
@@ -45,7 +45,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
 
     bool hurting;
     float hurtingDelay;
-    enumBoltType hurtingType;
+    enumShotType hurtingType;
     enumBloodColor bloodColor;
   private:
 };

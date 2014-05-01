@@ -148,12 +148,11 @@ const float ARTEFACT_POS_Y = 450.0f;
 const float ARTEFACT_BORDER = 8.0f;
 const float ARTEFACT_ZOOM_TIME = 0.5f;
 
-// bolts
-enum enumBoltType
-{
-  BoltStandard,
-  BoltIce
-};
+// shot types
+enum enumShotType {
+  ShotTypeStandard,
+  ShotTypeIce
+  };
 
 // status
 const float STATUS_FROZEN_DELAY = 5.0f;   // how long the freeze occurs
