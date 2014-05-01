@@ -66,14 +66,14 @@ void ChestEntity::open()
   {
     for (int i = 0; i < 5; i++)
     {
-      ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y);
+      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
       newItem->setVelocity(Vector2D(50.0f + rand()% 150));
       newItem->setViscosity(0.96f);
     }
   }
   else if (chestType == CHEST_FAIRY)
   {
-    ItemEntity* newItem = new ItemEntity(itemFairy, x, y);
+    ItemEntity* newItem = new ItemEntity(ItemFairy, x, y);
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     newItem->setVelocity(Vector2D(50.0f + rand()% 150));
     newItem->setViscosity(0.96f);

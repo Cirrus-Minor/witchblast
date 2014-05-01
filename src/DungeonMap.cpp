@@ -465,7 +465,7 @@ void DungeonMap::restoreChests()
     chestListElement clm = *it;
     it++;
 
-    ChestEntity* chestEntity = new ChestEntity(clm.x, clm.y, clm.type, clm.state);
+    new ChestEntity(clm.x, clm.y, clm.type, clm.state);
 	}
 	chestList.clear();
 }

@@ -65,7 +65,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
     if (playerEntity != NULL && !playerEntity->isDead())
     {
-      if (playerEntity->hurt(meleeDamages))
+      if (playerEntity->hurt(meleeDamages, BoltStandard))
       {
         float xs = (x + playerEntity->getX()) / 2;
         float ys = (y + playerEntity->getY()) / 2;
@@ -111,7 +111,7 @@ void EnnemyEntity::drop()
 {
   if (rand() % 5 == 0)
   {
-    ItemEntity* newItem = new ItemEntity(itemCopperCoin, x, y);
+    ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);

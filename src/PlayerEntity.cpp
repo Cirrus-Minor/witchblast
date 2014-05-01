@@ -10,8 +10,8 @@
 
 #include <iostream>
 
-PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f)
-      : BaseCreatureEntity (image, x, y, 64, 96)
+PlayerEntity::PlayerEntity(float x = 0.0f, float y = 0.0f)
+      : BaseCreatureEntity (ImageManager::getImageManager()->getImage(IMAGE_PLAYER), x, y, 64, 96)
 {
   currentFireDelay = -1.0f;
   canFirePlayer = true;
@@ -29,7 +29,7 @@ PlayerEntity::PlayerEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f)
   bloodColor = bloodRed;
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equip[i] = false;
-  colliding = 0;
+  collidingDirection = 0;
 
   computePlayer();
 
@@ -64,9 +64,9 @@ float PlayerEntity::getPercentFireDelay()
   else return (1.0f - currentFireDelay / fireDelay);
 }
 
-int PlayerEntity::getColliding()
+int PlayerEntity::getCollidingDirection()
 {
-  return colliding;
+  return collidingDirection;
 }
 
 bool PlayerEntity::isDead()
@@ -129,7 +129,7 @@ void PlayerEntity::animate(float delay)
   }
   //z = y;
   if (playerStatus != playerStatusDead) testSpriteCollisions();
-  colliding = 0;
+  collidingDirection = 0;
   BaseCreatureEntity::animate(delay);
 
   if (firingDirection != 5)
@@ -388,7 +388,7 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       if (boltEntity != NULL && !boltEntity->getDying())
       {
         boltEntity->collide();
-        hurt(boltEntity->getDamages());
+        hurt(boltEntity->getDamages(), BoltStandard);
         game().generateBlood(x, y, bloodColor);
       }
     }
@@ -532,17 +532,12 @@ void PlayerEntity::fire(int direction)
   }
 }
 
-bool PlayerEntity::canFire()
-{
-  return canFirePlayer;
-}
-
 bool PlayerEntity::canMove()
 {
   return (playerStatus == playerStatusPlaying);
 }
 
-bool PlayerEntity::hurt(int damages)
+bool PlayerEntity::hurt(int damages, enumBoltType hurtingType)
 {
   if (!hurting)
   {
@@ -577,7 +572,7 @@ void PlayerEntity::dying()
   setVelocity(Vector2D(0.0f, 0.0f));
 
   int i;
-  for (i = 0; i < gold; i++) loseItem(itemCopperCoin, false);
+  for (i = 0; i < gold; i++) loseItem(ItemCopperCoin, false);
 
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
     if (equip[i]) loseItem(enumItemType(i), true);
@@ -598,14 +593,14 @@ void PlayerEntity::dying()
 
 void PlayerEntity::acquireItem(enumItemType type)
 {
-  if (type >= itemMagicianHat) acquireStance(type);
+  if (type >= FirstEquipItem) acquireStance(type);
   else switch (type)
   {
-    case itemCopperCoin: gold++;
+    case ItemCopperCoin: gold++;
     SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
     break;
-    case itemSilverCoin: gold = gold + 5; break;
-    case itemGoldCoin: gold = gold + 10; break;
+    case ItemSilverCoin: gold = gold + 5; break;
+    case ItemGoldCoin: gold = gold + 10; break;
     case itemHealth: hp += 15;
       SoundManager::getSoundManager()->playSound(SOUND_DRINK);
       if (hp > hpMax) hp = hpMax;  break;
@@ -649,28 +644,28 @@ void PlayerEntity::acquireStance(enumItemType type)
   velocity.y = 0.0f;
   playerStatus = playerStatusAcquire;
   acquireDelay = ACQUIRE_DELAY;
-  acquiredItem = (enumItemType)(type - itemMagicianHat);
+  acquiredItem = (enumItemType)(type - FirstEquipItem);
   SoundManager::getSoundManager()->playSound(SOUND_BONUS);
 }
 
 void PlayerEntity::collideMapRight()
 {
-  colliding = 6;
+  collidingDirection = 6;
 }
 
 void PlayerEntity::collideMapLeft()
 {
-  colliding = 4;
+  collidingDirection = 4;
 }
 
 void PlayerEntity::collideMapTop()
 {
-  colliding = 8;
+  collidingDirection = 8;
 }
 
 void PlayerEntity::collideMapBottom()
 {
-  colliding = 2;
+  collidingDirection = 2;
 }
 
 void PlayerEntity::useBossKey()
@@ -679,7 +674,7 @@ void PlayerEntity::useBossKey()
   velocity.y = 0.0f;
   playerStatus = playerStatusUnlocking;
   acquireDelay = UNLOCK_DELAY;
-  acquiredItem = (enumItemType)(type - itemMagicianHat);
+  acquiredItem = (enumItemType)(type - FirstEquipItem);
   SoundManager::getSoundManager()->playSound(SOUND_BONUS);
   equip[EQUIP_BOSS_KEY] = false;
 

@@ -8,9 +8,9 @@
 #include "DoorEntity.h"
 #include "GameFloor.h"
 
-const int ALIGN_LEFT    = 0;
-const int ALIGN_RIGHT   = 1;
-const int ALIGN_CENTER  = 2;
+const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
+const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
+const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
 
 /*! \class WitchBlastGame
 * \brief Main class of the game
@@ -24,14 +24,14 @@ class WitchBlastGame : public Game
     /*!
      *  \brief Constructor
      *
-     *  Constructor of the WitchBlastGame class
+     *  Constructor of the WitchBlastGame class.
      */
     WitchBlastGame();
 
     /*!
      *  \brief Destructor
      *
-     *  Destructor of the WitchBlastGame class
+     *  Destructor of the WitchBlastGame class.
      */
     virtual ~WitchBlastGame();
 

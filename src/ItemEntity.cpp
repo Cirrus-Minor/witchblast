@@ -10,12 +10,12 @@
 
 
 ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
-    : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= itemMagicianHat ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
+    : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
   type = ENTITY_ITEM;
   this->itemType = itemType;
   frame = itemType;
-  if (itemType >= itemMagicianHat) frame = itemType - itemMagicianHat;
+  if (itemType >= FirstEquipItem) frame = itemType - FirstEquipItem;
   isMerchandise = false;
   imagesProLine = 10;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
@@ -89,7 +89,7 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           //isDying = true;
           dying();
 
-          if (itemType >= itemMagicianHat)
+          if (itemType >= FirstEquipItem)
           {
 
             game().showArtefactDescription(itemType);

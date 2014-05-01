@@ -165,8 +165,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
     floorY = FLOOR_HEIGHT / 2;
 
     // the player
-    player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
-                              OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+    player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
 
     // the boss room is closed
@@ -737,6 +736,7 @@ void WitchBlastGame::onRender()
 
 void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
 {
+  // double blood if the "Blood Snake3 object is equipped
   int nbIt;
   if (player->isEquiped(EQUIP_BLOOD_SNAKE))
     nbIt = 2;
@@ -779,13 +779,13 @@ void WitchBlastGame::generateMap()
     }
     else
     {
-      new ItemEntity( (enumItemType)(itemMagicianHat + bonusType), v.x ,v.y);
+      new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), v.x ,v.y);
     }
   }
   else if (currentMap->getRoomType() == roomTypeKey)
   {
     Vector2D v = currentMap->generateKeyRoom();
-    new ItemEntity( (enumItemType)(itemBossKey), v.x ,v.y);
+    new ItemEntity( (enumItemType)(ItemBossKey), v.x ,v.y);
     initMonsterArray();
     int x0 = MAP_WIDTH / 2;
     int y0 = MAP_HEIGHT / 2;
@@ -805,7 +805,7 @@ void WitchBlastGame::generateMap()
 
     int bonusType = getRandomEquipItem(true);
     ItemEntity* item2 = new ItemEntity(
-      (enumItemType)(itemMagicianHat + bonusType),
+      (enumItemType)(FirstEquipItem + bonusType),
       OFFSET_X + (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item2->setMerchandise(true);
@@ -836,7 +836,7 @@ void WitchBlastGame::generateMap()
     }
     else
     {
-      new ItemEntity( (enumItemType)(itemMagicianHat + bonusType),
+      new ItemEntity( (enumItemType)(FirstEquipItem + bonusType),
                           OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                           OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     }
@@ -993,9 +993,9 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
 
 void WitchBlastGame::verifyDoorUnlocking()
 {
-  int colliding = (player->getColliding());
+  int collidingDirection = (player->getCollidingDirection());
 
-  if (colliding > 0 && currentMap->isCleared() && !bossRoomOpened && player->isEquiped(EQUIP_BOSS_KEY))
+  if (collidingDirection > 0 && currentMap->isCleared() && !bossRoomOpened && player->isEquiped(EQUIP_BOSS_KEY))
   {
     int xt = (player->getX() - OFFSET_X) / TILE_WIDTH;
     int yt = (player->getY() - OFFSET_Y) / TILE_HEIGHT;
@@ -1245,8 +1245,6 @@ bool WitchBlastGame::loadGame()
       }
     }
 
-    //currentFloor->displayToConsole();
-
     // game
     file >> floorX >> floorY;
     currentMap = currentFloor->getMap(floorX, floorY);
@@ -1255,8 +1253,7 @@ bool WitchBlastGame::loadGame()
     // player
     int hp, hpMax, gold;
     file >> hp >> hpMax >> gold;
-    player = new PlayerEntity(ImageManager::getImageManager()->getImage(0),
-                              OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+    player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     player->setHp(hp);
     player->setHpMax(hpMax);
