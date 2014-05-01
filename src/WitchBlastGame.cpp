@@ -838,7 +838,7 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoom(0);
     currentMap->setCleared(true);
-    int bonusType = EQUIP_GEM_ICE; //getRandomEquipItem(false);
+    int bonusType = getRandomEquipItem(false);
     if (bonusType == EQUIP_FAIRY)
     {
       new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),

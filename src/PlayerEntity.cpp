@@ -491,7 +491,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
   if (getShotType() == ShotTypeIce && specialBoltTimer <= 0.0f)
   {
     boltType = ShotTypeIce;
-    specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
+    initShotType();
   }
   else
     boltType = ShotTypeStandard;
@@ -758,6 +758,7 @@ void PlayerEntity::registerSpecialShot(int item)
   {
     this->specialShots[index] = items[item].specialShot;
     specialShotIndex = index;
+    initShotType();
   }
 }
 
@@ -771,7 +772,15 @@ void PlayerEntity::selectNextShotType()
     else found = true;
   }
   if (found)
+  {
     specialShotIndex = index;
+    initShotType();
+  }
   else
     specialShotIndex = 0;
+}
+
+void PlayerEntity::initShotType()
+{
+  specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
 }

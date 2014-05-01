@@ -366,6 +366,14 @@ class PlayerEntity : public BaseCreatureEntity
     void renderArms(sf::RenderWindow* app);
     void renderFeet(sf::RenderWindow* app);
     void renderStaff(sf::RenderWindow* app);
+
+    /*!
+     *  \brief init the current shot type.
+     *
+     *  Init the current shot type.
+     *  Called when the player get a new shot, or after a switch.
+     */
+    void initShotType();
 };
 
 #endif // PLAYERSPRITE_H
