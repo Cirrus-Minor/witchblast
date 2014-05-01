@@ -22,6 +22,8 @@ TileMapEntity::TileMapEntity(sf::Texture* image, GameMap* gameMap, int tileWidth
     this->image = image;
     this->tileWidth = tileWidth;
     this->tileHeight = tileHeight;
+    tileBoxWidth = tileWidth;
+    tileBoxHeight = tileHeight;
     this->tilesProLine = tilesProLine;
     this->gameMap = gameMap;
     this->z = -1.0f;
@@ -38,6 +40,12 @@ void TileMapEntity::setMap(GameMap* gameMap)
 {
   this->gameMap = gameMap;
   hasChanged = true;
+}
+
+void TileMapEntity::setTileBox(int tileBoxWidth, int tileBoxHeight)
+{
+  this->tileBoxWidth = tileBoxWidth;
+  this->tileBoxHeight = tileBoxHeight;
 }
 
 int TileMapEntity::getTilesProLine()
@@ -66,14 +74,14 @@ void TileMapEntity::computeVertices()
       sf::Vertex* quad = &vertices[(i + j * gameMap->getWidth()) * 4];
 
       quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
-      quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth, y + j * tileHeight);
-      quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth, y + (j + 1) * tileHeight);
-      quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight);
+      quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+      quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+      quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
 
-      quad[0].texCoords = sf::Vector2f(nx * tileWidth, ny * tileHeight);
-      quad[1].texCoords = sf::Vector2f((nx + 1) * tileWidth, ny * tileHeight);
-      quad[2].texCoords = sf::Vector2f((nx + 1) * tileWidth, (ny + 1) * tileHeight);
-      quad[3].texCoords = sf::Vector2f(nx * tileWidth, (ny + 1) * tileHeight);
+      quad[0].texCoords = sf::Vector2f(nx * tileBoxWidth, ny * tileBoxHeight);
+      quad[1].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, ny * tileBoxHeight);
+      quad[2].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, (ny + 1) * tileBoxHeight);
+      quad[3].texCoords = sf::Vector2f(nx * tileBoxWidth, (ny + 1) * tileBoxHeight);
     }
 }
 

@@ -28,6 +28,7 @@ public:
   ~TileMapEntity();
 
   int getTilesProLine();
+  void setTileBox(int tileBoxWidth, int tileBoxHeight);
   void setMap(GameMap* gameMap);
 
   virtual void render(sf::RenderWindow* app);
@@ -39,6 +40,8 @@ protected:
   int height;
   int tileWidth;
   int tileHeight;
+  int tileBoxWidth;
+  int tileBoxHeight;
   int tilesProLine;
 
   sf::Texture* image;

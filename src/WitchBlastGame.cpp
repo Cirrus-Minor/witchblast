@@ -192,9 +192,10 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   keySprite.setPosition(326, 616);
 
   // minimap on the interface
-  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(4), miniMap, 16, 12, 10);
-  miniMapEntity->setX(400);
-  miniMapEntity->setY(607);
+  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(4), miniMap, 15, 11, 10);
+  miniMapEntity->setTileBox(16, 12);
+  miniMapEntity->setX(407);
+  miniMapEntity->setY(614);
   miniMapEntity->setZ(10001.0f);
 
   // doors
