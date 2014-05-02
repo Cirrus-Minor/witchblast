@@ -154,6 +154,16 @@ class WitchBlastGame : public Game
      */
     virtual void onUpdate();
 
+    /*!
+     *  \brief render the HUD for shot types
+     *
+     *  Render the HUD for shot types.
+     *  Display the available shot types and highlight the current one.
+     *
+     *  \param app : Rendering target
+     */
+    void renderHudShots(sf::RenderWindow* app);
+
   private:
     // game logic / data
     GameMap* miniMap;           /*!< Pointer to the logical minimap */
@@ -177,6 +187,7 @@ class WitchBlastGame : public Game
     // displaying objects
     DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */
     sf::Sprite keySprite;       /*!< A simple sprite with the boss key (displayed on the HUD) */
+    sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
     sf::Font font;              /*!< The font used for displaying text */
     sf::Text myText;            /*!< The text to be displayed */
 

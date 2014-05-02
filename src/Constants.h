@@ -59,6 +59,8 @@ const float FADE_OUT_DELAY = 1.0f;
 
 enum item_images {
   IMAGE_PLAYER,
+  IMAGE_PLAYER_BASE,
+  IMAGE_PLAYER_COLLAR,
   IMAGE_BOLT,
   IMAGE_TILES,
   IMAGE_RAT,
@@ -79,6 +81,7 @@ enum item_images {
   IMAGE_STAR,
   IMAGE_STAR_2,
   IMAGE_INTERFACE,
+  IMAGE_HUD_SHOTS,
 
   IMAGE_PNJ,
   IMAGE_FAIRY

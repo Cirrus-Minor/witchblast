@@ -33,6 +33,8 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
 
   // loading resources
   ImageManager::getImageManager()->addImage((char*)"media/sprite.png");
+  ImageManager::getImageManager()->addImage((char*)"media/player_base.png");
+  ImageManager::getImageManager()->addImage((char*)"media/player_collar.png");
   ImageManager::getImageManager()->addImage((char*)"media/bolt.png");
   ImageManager::getImageManager()->addImage((char*)"media/tiles.png");
   ImageManager::getImageManager()->addImage((char*)"media/rat.png");
@@ -51,6 +53,8 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage((char*)"media/star.png");
   ImageManager::getImageManager()->addImage((char*)"media/star2.png");
   ImageManager::getImageManager()->addImage((char*)"media/interface.png");
+  ImageManager::getImageManager()->addImage((char*)"media/hud_shots.png");
+
   ImageManager::getImageManager()->addImage((char*)"media/pnj.png");
   ImageManager::getImageManager()->addImage((char*)"media/fairy.png");
 
@@ -88,6 +92,8 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   currentFloor = NULL;
   xGameState = xGameStateNone;
   isPausing = false;
+
+  shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -192,7 +198,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   keySprite.setPosition(326, 616);
 
   // minimap on the interface
-  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(4), miniMap, 15, 11, 10);
+  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_MINIMAP), miniMap, 15, 11, 10);
   miniMapEntity->setTileBox(16, 12);
   miniMapEntity->setX(407);
   miniMapEntity->setY(614);
@@ -634,10 +640,6 @@ void WitchBlastGame::onRender()
     EntityManager::getEntityManager()->render(app);
 
     myText.setColor(sf::Color(255, 255, 255, 255));
-    myText.setCharacterSize(17);
-    myText.setString("WASD or ZQSD to move\nArrows to shoot");
-    myText.setPosition(650, 650);
-    app->draw(myText);
 
     myText.setCharacterSize(18);
     std::ostringstream oss;
@@ -680,6 +682,9 @@ void WitchBlastGame::onRender()
 
       // drawing the key on the interface
       if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
+
+      // render the shots
+      renderHudShots(app);
 
       if (isPausing)
       {
@@ -743,6 +748,30 @@ void WitchBlastGame::onRender()
     }
 
     app->display();
+}
+
+void WitchBlastGame::renderHudShots(sf::RenderWindow* app)
+{
+  int xHud = 640;
+  int yHud = 650;
+  int index = 0;
+
+  for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++)
+  {
+    if (i == 0 || player->getShotType(i) != ShotTypeStandard)
+    {
+      int type_shot = player->getShotType(i);
+      shotsSprite.setPosition(xHud + 48 * index, yHud);
+      if (index == player->getShotIndex())
+      {
+        shotsSprite.setTextureRect(sf::IntRect(0, 0,  48, 48));
+        app->draw(shotsSprite);
+      }
+      shotsSprite.setTextureRect(sf::IntRect(48 * ( 1 + player->getShotType(i)), 0,  48, 48));
+      app->draw(shotsSprite);
+      index++;
+    }
+  }
 }
 
 void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
