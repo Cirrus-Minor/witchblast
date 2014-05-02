@@ -18,6 +18,7 @@ BatEntity::BatEntity(float x, float y)
   bloodColor = bloodRed;
   changingDelay = -0.5f;
   shadowFrame = 3;
+  movingStyle = movFlying;
 }
 
 void BatEntity::animate(float delay)
@@ -47,66 +48,22 @@ void BatEntity::calculateBB()
 
 void BatEntity::collideMapRight()
 {
- // if (x > OFFSET_X + MAP_WIDTH * TILE_WIDTH)
     velocity.x = -velocity.x;
 }
 
 void BatEntity::collideMapLeft()
 {
- // if (x < OFFSET_X + MAP_WIDTH )
     velocity.x = -velocity.x;
 }
 
 void BatEntity::collideMapTop()
 {
-//  if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT)
     velocity.y = -velocity.y;
 }
 
 void BatEntity::collideMapBottom()
 {
- // if (y < OFFSET_Y + MAP_HEIGHT )
     velocity.y = -velocity.y;
-}
-
-bool BatEntity::collideWithMap(int direction)
-{
-    calculateBB();
-
-    int xTile0 = (boundingBox.left - offsetX) / tileWidth;
-    int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
-    int yTile0 = (boundingBox.top - offsetY) / tileHeight;
-    int yTilef = (boundingBox.top + boundingBox.height - offsetY) / tileHeight;
-
-    if (boundingBox.top < 0) yTile0 = -1;
-
-    for (int xTile = xTile0; xTile <= xTilef; xTile++)
-        for (int yTile = yTile0; yTile <= yTilef; yTile++)
-        {
-          if (xTile == 0 || xTile == MAP_WIDTH - 1 || yTile == 0 || yTile == MAP_HEIGHT - 1)
-          {
-            switch (direction)
-            {
-            case DIRECTION_LEFT:
-                if (map->isLeftBlocking(xTile, yTile)) return true;
-                break;
-
-            case DIRECTION_RIGHT:
-                if (map->isRightBlocking(xTile, yTile)) return true;
-                break;
-
-            case DIRECTION_TOP:
-                if (map->isUpBlocking(xTile, yTile)) return true;
-                break;
-
-            case DIRECTION_BOTTOM:
-                if (map->isDownBlocking(xTile, yTile)) return true;
-                break;
-            }
-          }
-        }
-
-    return false;
 }
 
 void BatEntity::dying()

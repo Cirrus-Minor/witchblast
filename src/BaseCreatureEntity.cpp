@@ -12,6 +12,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   shadowFrame = -1;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   hpDisplay = 0;
+  movingStyle = movWalking;
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
   {
     specialState[i].type = (enumSpecialState)i;
@@ -114,6 +115,33 @@ void BaseCreatureEntity::render(sf::RenderWindow* app)
 
 void BaseCreatureEntity::calculateBB()
 {
+}
+
+bool BaseCreatureEntity::collideWithMap(int direction)
+{
+  calculateBB();
+
+  int xTile0 = (boundingBox.left - offsetX) / tileWidth;
+  int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
+  int yTile0 = (boundingBox.top - offsetY) / tileHeight;
+  int yTilef = (boundingBox.top + boundingBox.height - offsetY) / tileHeight;
+
+  if (boundingBox.top < 0) yTile0 = -1;
+
+  for (int xTile = xTile0; xTile <= xTilef; xTile++)
+    for (int yTile = yTile0; yTile <= yTilef; yTile++)
+    {
+      if (movingStyle == movWalking)
+      {
+        if ( dynamic_cast<DungeonMap*>(map)->isWalkable(xTile, yTile) == false ) return true;
+      }
+      else if (movingStyle == movFlying)
+      {
+        if ( dynamic_cast<DungeonMap*>(map)->isFlyable(xTile, yTile) == false ) return true;
+      }
+    }
+
+    return false;
 }
 
 bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType)

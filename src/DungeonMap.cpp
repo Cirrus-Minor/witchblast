@@ -126,6 +126,22 @@ bool DungeonMap::isRightBlocking(int x, int y)
 
 bool DungeonMap::isWalkable(int x, int y)
 {
+  if (!inMap(x, y)) return true;
+  return (map[x][y] < MAP_WALL);
+}
+
+bool DungeonMap::isFlyable(int x, int y)
+{
+  if (x <= 0) return false;
+  if (x >= MAP_WIDTH - 1) return false;
+  if (y <= 0) return false;
+  if (y >= MAP_HEIGHT - 1) return false;
+  return true;
+}
+
+bool DungeonMap::isShootable(int x, int y)
+{
+  if (!inMap(x, y)) return true;
   return (map[x][y] < MAP_WALL);
 }
 

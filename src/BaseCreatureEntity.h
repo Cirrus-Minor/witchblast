@@ -18,9 +18,11 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
+    virtual bool collideWithMap(int direction);
     virtual bool hurt(int damages, enumShotType hurtingType);
     virtual void prepareDying();
     virtual void dying();
+    enum enumMovingStyle { movWalking, movFlying};
     enum enumBloodColor { bloodRed, bloodGreen};
     enum enumSpecialState
     {
@@ -47,6 +49,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     float hurtingDelay;
     enumShotType hurtingType;
     enumBloodColor bloodColor;
+    enumMovingStyle movingStyle;
   private:
 };
 

@@ -46,6 +46,8 @@ class DungeonMap : public GameMap
     bool isCleared();
     void setCleared(bool b);
     bool isWalkable(int x, int y);
+    bool isFlyable(int x, int y);
+    bool isShootable(int x, int y);
 
     // 0 == no, 1 == yes, 2 == boss
     int hasNeighbourLeft();
