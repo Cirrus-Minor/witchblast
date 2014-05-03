@@ -36,7 +36,8 @@ enum enumItemType
   ItemFairy,
   ItemLeatherBelt,
   ItemBloodSnake,
-  ItemIceGem
+  ItemGemIce,
+  ItemGemIllusion
 };
 
 const int FirstEquipItem = (int) ItemMagicianHat; /*!< Used as an offset when creating items */
@@ -60,7 +61,7 @@ struct itemStuct
   enumShotType specialShot;     /**< Special shot */
 };
 
-const int NUMBER_ITEMS = 15;  /*!< Total number of items */
+const int NUMBER_ITEMS = 16;  /*!< Total number of items */
 /** Array with all the items and data */
 const itemStuct items[NUMBER_ITEMS] =
 {
@@ -121,12 +122,16 @@ const itemStuct items[NUMBER_ITEMS] =
     25, true, true, 1, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemIceGem, "Ice Gem", "Ice attack",
+    ItemGemIce, "Ice Gem", "Ice attack",
     25, true, true, 1, AlignmentNone, -1, ShotTypeIce
+  },
+  {
+    ItemGemIllusion, "Illusion Gem", "Illusion attack",
+    25, true, true, 1, AlignmentNone, -1, ShotTypeIllusion
   }
 };
 
-const int NUMBER_EQUIP_ITEMS = 11;  /*!< Number of equip items */
+const int NUMBER_EQUIP_ITEMS = 12;  /*!< Number of equip items */
 /** Item equipment type enum
  *  All the equipments.
  */
@@ -141,7 +146,8 @@ enum item_equip_enum {
   EQUIP_FAIRY,
   EQUIP_LEATHER_BELT,
   EQUIP_BLOOD_SNAKE,
-  EQUIP_GEM_ICE
+  EQUIP_GEM_ICE,
+  EQUIP_GEM_ILLUSION
   };
 
 #endif

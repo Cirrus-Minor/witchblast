@@ -60,6 +60,7 @@ const float FADE_OUT_DELAY = 1.0f;
 enum item_images {
   IMAGE_PLAYER,
   IMAGE_PLAYER_BASE,
+  IMAGE_PLAYER_EQUIP,
   IMAGE_PLAYER_COLLAR,
   IMAGE_BOLT,
   IMAGE_TILES,
@@ -154,7 +155,8 @@ const float ARTEFACT_ZOOM_TIME = 0.5f;
 // shot types
 enum enumShotType {
   ShotTypeStandard,
-  ShotTypeIce
+  ShotTypeIce,
+  ShotTypeIllusion
   };
 
 // status

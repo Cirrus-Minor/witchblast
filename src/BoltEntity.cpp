@@ -1,5 +1,6 @@
 #include "BoltEntity.h"
 #include "Constants.h"
+#include "DungeonMap.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 
@@ -12,6 +13,7 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
   frame = 0;
   this->boltType = boltType;
   if (boltType == ShotTypeIce) frame = 2;
+  if (boltType == ShotTypeIllusion) frame = 3;
 }
 
 int BoltEntity::getDamages()
@@ -87,6 +89,29 @@ void BoltEntity::generateParticule(Vector2D vel)
   trace->setViscosity(0.97f);
   trace->setType(16);
   trace->setFrame(frame);
+}
+
+bool BoltEntity::collideWithMap(int direction)
+{
+    calculateBB();
+
+    int xTile0 = (boundingBox.left - offsetX) / tileWidth;
+    int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
+    int yTile0 = (boundingBox.top - offsetY) / tileHeight;
+    int yTilef = (boundingBox.top + boundingBox.height - offsetY) / tileHeight;
+
+    if (boundingBox.top < 0) yTile0 = -1;
+
+    for (int xTile = xTile0; xTile <= xTilef; xTile++)
+        for (int yTile = yTile0; yTile <= yTilef; yTile++)
+        {
+          if (boltType != ShotTypeIllusion)
+          {
+            if ( dynamic_cast<DungeonMap*>(map)->isShootable(xTile, yTile) == false ) return true;
+          }
+        }
+
+    return false;
 }
 
 void BoltEntity::collideMapRight()

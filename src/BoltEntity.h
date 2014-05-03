@@ -27,6 +27,7 @@ class BoltEntity : public CollidingSpriteEntity
     virtual void collideMapLeft();
     virtual void collideMapTop();
     virtual void collideMapBottom();
+    virtual bool collideWithMap(int direction);
 
     int damages;
     float renderScale;
