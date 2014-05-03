@@ -32,8 +32,8 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   app->setTitle(APP_NAME + " V" + APP_VERSION);
 
   // loading resources
-  ImageManager::getImageManager()->addImage((char*)"media/sprite.png");
   ImageManager::getImageManager()->addImage((char*)"media/player_base.png");
+  ImageManager::getImageManager()->addImage((char*)"media/player_equip.png");
   ImageManager::getImageManager()->addImage((char*)"media/player_collar.png");
   ImageManager::getImageManager()->addImage((char*)"media/bolt.png");
   ImageManager::getImageManager()->addImage((char*)"media/tiles.png");

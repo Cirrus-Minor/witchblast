@@ -58,7 +58,6 @@ const float FADE_IN_DELAY = 1.0f;
 const float FADE_OUT_DELAY = 1.0f;
 
 enum item_images {
-  IMAGE_PLAYER,
   IMAGE_PLAYER_BASE,
   IMAGE_PLAYER_EQUIP,
   IMAGE_PLAYER_COLLAR,

@@ -361,9 +361,10 @@ class PlayerEntity : public BaseCreatureEntity
 
     FairyEntity* fairy;
 
+    int spriteDx;
     void renderHead(sf::RenderWindow* app);
     void renderBody(sf::RenderWindow* app);
-    void renderArms(sf::RenderWindow* app);
+    void renderHands(sf::RenderWindow* app);
     void renderFeet(sf::RenderWindow* app);
     void renderStaff(sf::RenderWindow* app);
 
