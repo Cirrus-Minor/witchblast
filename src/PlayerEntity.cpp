@@ -198,7 +198,10 @@ void PlayerEntity::renderHead(sf::RenderWindow* app)
     if (equip[EQUIP_ENCHANTER_HAT])
     {
       sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
-      sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
+      if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
+        sprite.setTextureRect(sf::IntRect( 0, 0, width, height));
+      else
+        sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
       app->draw(sprite);
       sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
     }
@@ -213,7 +216,11 @@ void PlayerEntity::renderBody(sf::RenderWindow* app)
   if (equip[EQUIP_CONCENTRATION_AMULET])
   {
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_COLLAR));
-    sprite.setTextureRect(sf::IntRect( (spriteDx / 3) * width, 0, width, height));
+    if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
+      sprite.setTextureRect(sf::IntRect( 0, 0, width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (spriteDx / 3) * width, 0, width, height));
+
     app->draw(sprite);
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
   }
@@ -379,7 +386,6 @@ void PlayerEntity::calculateBB()
     boundingBox.top = (int)y - height / 2;
     boundingBox.height =  height;
 
-    float fPrez = 10.0f;
     boundingBox.left += 25;
     boundingBox.width -= 50;
     boundingBox.top += 80.0f;
@@ -457,7 +463,7 @@ void PlayerEntity::setEquiped(int item, bool eq)
 
 void PlayerEntity::generateBolt(float velx, float vely)
 {
-  enumShotType boltType;
+  enumShotType boltType = ShotTypeStandard;
 
   switch (getShotType())
   {
@@ -636,7 +642,7 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_VIBRATION_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
-  if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.25f;
+  if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.6f;
   if (equip[EQUIP_CONCENTRATION_AMULET]) boltLifeTimeBonus += 0.5f;
   if (equip[EQUIP_MAHOGANY_STAFF])
