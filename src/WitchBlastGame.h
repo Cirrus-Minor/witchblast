@@ -199,7 +199,8 @@ class WitchBlastGame : public Game
     enum musicEnum
     {
       MusicDungeon,   /**< Main game music - played when playing the game */
-      MusicEnding     /**< Ending music - played when the player has died */
+      MusicEnding,    /**< Ending music - played when the player has died */
+      MusicBoss       /**< Boss music - for epic fights ! */
     };
 
     /** Game states enum
