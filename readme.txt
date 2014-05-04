@@ -1,7 +1,14 @@
     WITCH BLAST
 ============================
-Author: Seby (code, art and music)
+Author / code: Seby
 Email: sebygames@gmail.com
+
+Art: Sideous
+Email: bianchi.jonathan94@gmail.com
+and Seby
+
+Music: Seby
+
 2014
 ============================
 
@@ -24,7 +31,23 @@ Commands
 --------
 
 WASD (US, DE) or QSDZ (FR) to move in 8 directions
-Arrows to shoot in 4 directions.
+---
+Arrows to shoot in 4 directions,
+or
+[Space] (can be hold) to shoot in the facing direction.
+or
+Mouse left-click
+---
+[Tab] to change shoot type (if you've found any).
+or 
+Mouse Wheel
+
+
+Saving
+--------
+
+Game saves automatically when leaving the game in a cleared area.
+Leaving the game during a fight destroys the current game.
 
 
 Features
@@ -40,18 +63,20 @@ Features
 Changes
 -------
 Next version
-- ADD New ennemy
+- ADD New enemy
 - ADD 3 new items
 - ADD Show player's impact when he's hurt
 - ADD New music when the player dies
-- ADD Mouse support - Player can fire with left click
+- ADD Mouse support - Player can fire with left click, switch shot types with the wheel
 - ADD Pause
 - ADD Save / restore game
 - ADD Slowing (creature state)
-- MOD Damages inflicetd by the player have been modified
+- ADD HUD for shot types
+- MOD Damages inflicted by the player have been modified
 - MOD The player's bolt size depend of the damages
-- MOD Only usefull data displayed on the minimap
+- MOD Only useful data displayed on the minimap
 - FIX Fade in / fade out text bugs
 - FIX Merchant z-ordering bug
 - FIX It was possible to begin at the exit
+- FIX Various bad references crashes
 
