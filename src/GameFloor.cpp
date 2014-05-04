@@ -116,12 +116,6 @@ bool GameFloor::isSuperIsolated(int x, int y)
       floor[x][y] = roomTypeExit;
       return true;
     }
-    else if (y > 0 && floor[x][y-1]==1 &&  neighboorCount(x, y-1) == 2)
-    {
-      floor[x][y-1] = roomTypeBoss;
-      floor[x][y] = roomTypeExit;
-      return true;
-    }
     else if (y < FLOOR_HEIGHT - 1 && floor[x][y+1]==1 &&  neighboorCount(x, y+1) == 2)
     {
       floor[x][y+1] = roomTypeBoss;
