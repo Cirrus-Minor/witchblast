@@ -9,7 +9,7 @@ DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getImageMana
   removeCenter();
   width = TILE_WIDTH;
   height = TILE_HEIGHT;
-  z = OFFSET_Y;
+  z = -0.5f;
   type = ENTITY_DOOR;
   doorType = 0;
 
