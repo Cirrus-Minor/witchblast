@@ -129,6 +129,14 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void setEntering();
 
+    /*!
+     *  \brief updates the status of the player to going up
+     *
+     *  Updates the status of the player to going up.
+     *  Used when the player is leaving a level.
+     */
+    void setLeavingLevel();
+
      /*!
      *  \brief returns if the player can move or not
      *
@@ -242,6 +250,37 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void pay(int price);
 
+    /** Player status enum
+     *  The different player states.
+     */
+    enum playerStatusEnum
+    {
+      playerStatusPlaying,    /**< Player is playing "normally" */
+      playerStatusEntering,   /**< Player is entering a not yet cleared room (walking is forced) */
+      playerStatusAcquire,    /**< Player is under acquiring stance */
+      playerStatusUnlocking,  /**< Player is under unlocking stance */
+      playerStatusGoingUp,    /**< Player goes to next level */
+      playerStatusDead        /**< Player RIP */
+    };
+
+    /*!
+     *  \brief accessor on the player status
+     *
+     *  Accessor on the player status.
+     *
+     *  \return : the player status
+     */
+    playerStatusEnum getPlayerStatus();
+
+     /*!
+     *  \brief mutator on the player status
+     *
+     *  Mutator on the player status.
+     *
+     *  \param player status : the new player status value
+     */
+    void setPlayerStatus(playerStatusEnum playerStatus);
+
     /*!
      *  \brief accessor on the colliding direction
      *
@@ -314,17 +353,6 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void selectNextShotType();
 
-    /** Player status enum
-     *  The different player states.
-     */
-    enum playerStatusEnum
-    {
-      playerStatusPlaying,    /**< Player is playing "normally" */
-      playerStatusEntering,   /**< Player is entering a not yet cleared room (walking is forced) */
-      playerStatusAcquire,    /**< Player is under acquiring stance */
-      playerStatusUnlocking,  /**< Player is under unlocking stance */
-      playerStatusDead        /**< Player RIP */
-    };
   protected:
     void computePlayer();
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);

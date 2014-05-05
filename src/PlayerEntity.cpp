@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-PlayerEntity::PlayerEntity(float x = 0.0f, float y = 0.0f)
+PlayerEntity::PlayerEntity(float x, float y)
       : BaseCreatureEntity (ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
 {
   currentFireDelay = -1.0f;
@@ -75,6 +75,16 @@ int PlayerEntity::getCollidingDirection()
   return collidingDirection;
 }
 
+PlayerEntity::playerStatusEnum PlayerEntity::getPlayerStatus()
+{
+  return playerStatus;
+}
+
+void PlayerEntity::setPlayerStatus(PlayerEntity::playerStatusEnum playerStatus)
+{
+  this->playerStatus = playerStatus;
+}
+
 bool PlayerEntity::isDead()
 {
   return playerStatus==playerStatusDead;
@@ -83,6 +93,11 @@ bool PlayerEntity::isDead()
 void PlayerEntity::setEntering()
 {
   playerStatus = playerStatusEntering;
+}
+
+void PlayerEntity::setLeavingLevel()
+{
+  playerStatus = playerStatusGoingUp;
 }
 
 void PlayerEntity::pay(int price)

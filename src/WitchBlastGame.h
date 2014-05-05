@@ -171,6 +171,7 @@ class WitchBlastGame : public Game
     GameFloor* currentFloor;    /*!< Pointer to the logical floor (level) */
 
     // game play
+    int level;                  /*!< Level (floor) */
     int floorX;                 /*!< X position of the room in the level */
     int floorY;                 /*!< Y position of the room in the level */
     bool roomClosed;            /*!< True if the room is closed */
@@ -233,6 +234,22 @@ class WitchBlastGame : public Game
      *  \param fromSaveFile : true if we want to try to load the game from a file
      */
     void startNewGame(bool fromSaveFile);
+
+    /*!
+     *  \brief Starts a new level
+     *
+     *  Start a new level.
+     *  Called for each level of the game.
+     */
+    void startNewLevel();
+
+    /*!
+     *  \brief Starts the level
+     *
+     *  Starts the level.
+     *  Called after loading the game or creating a new level.
+     */
+    void playLevel();
 
     /*!
      *  \brief Creates a level

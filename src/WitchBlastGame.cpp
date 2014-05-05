@@ -132,7 +132,16 @@ void WitchBlastGame::onUpdate()
       if (xGameTimer <= 0.0f)
       {
         if (xGameState == xGameStateFadeOut)
-          startNewGame(false);
+        {
+          if (player->getPlayerStatus() == PlayerEntity::playerStatusGoingUp)
+          {
+            level++;
+            startNewLevel();
+          }
+          else
+            startNewGame(false);
+        }
+
         else
           xGameState = xGameStateNone;
       }
@@ -152,6 +161,7 @@ void WitchBlastGame::onUpdate()
 void WitchBlastGame::startNewGame(bool fromSaveFile)
 {
   gameState = gameStateInit;
+  level = 1;
 
   // cleaning all entities
   EntityManager::getEntityManager()->clean();
@@ -159,32 +169,13 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   // cleaning data
   if (miniMap != NULL) delete (miniMap);
   if (currentFloor != NULL) delete (currentFloor);
-
-  if (fromSaveFile)
-  {
-    if (!loadGame()) fromSaveFile = false;
-  }
-  if (!fromSaveFile)
-  {
-    currentFloor = new GameFloor(1);
-    floorX = FLOOR_WIDTH / 2;
-    floorY = FLOOR_HEIGHT / 2;
-
-    // the player
-    player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
-
-    // the boss room is closed
-    bossRoomOpened = false;
-  }
+  miniMap = NULL;
+  currentFloor = NULL;
 
   // current map (tiles)
   currentTileMap = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_TILES), currentMap, 64, 64, 10);
   currentTileMap->setX(OFFSET_X);
   currentTileMap->setY(OFFSET_Y);
-
-  miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
-  refreshMinimap();
 
   // the interface
   SpriteEntity* interface = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_INTERFACE));
@@ -197,6 +188,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
   keySprite.setPosition(326, 616);
 
+  miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
   TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_MINIMAP), miniMap, 15, 11, 10);
   miniMapEntity->setTileBox(16, 12);
@@ -210,7 +202,45 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   doorEntity[2] = new DoorEntity(2);
   doorEntity[3] = new DoorEntity(6);
 
+  if (fromSaveFile)
+  {
+    if (!loadGame()) fromSaveFile = false;
+    else playLevel();
+  }
+  if (!fromSaveFile)
+  {
+    // the player
+    player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+
+    startNewLevel();
+  }
+}
+
+void WitchBlastGame::startNewLevel()
+{
+  // create the new level
+  if (currentFloor != NULL) delete currentFloor;
+  currentFloor = new GameFloor(level);
+
+  // center it
+  floorX = FLOOR_WIDTH / 2;
+  floorY = FLOOR_HEIGHT / 2;
+
+  // move the player
+  /*if (player != NULL) */player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+
+  // the boss room is closed
+  bossRoomOpened = false;
+  playLevel();
+}
+
+void WitchBlastGame::playLevel()
+{
   isPlayerAlive = true;
+  player->setVelocity(Vector2D(0.0f, 0.0f));
+  player->setPlayerStatus(PlayerEntity::playerStatusPlaying);
 
   // generate the map
   refreshMap();
@@ -233,7 +263,10 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
   float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
 
-  TextEntity* text = new TextEntity("Level 1", 30, x0, y0);
+  std::ostringstream oss;
+  oss << "Level " << level;
+
+  TextEntity* text = new TextEntity(oss.str(), 30, x0, y0);
   text->setAlignment(ALIGN_CENTER);
   text->setLifetime(2.5f);
   text->setWeight(-36.0f);
@@ -286,6 +319,10 @@ void WitchBlastGame::startGame()
               if (event.key.code == sf::Keyboard::X)
               {
                 startNewGame(false);
+              }
+              if (event.key.code == sf::Keyboard::C)
+              {
+                startNewLevel();
               }
             }
 
@@ -620,17 +657,32 @@ void WitchBlastGame::saveMapItems()
 
 void WitchBlastGame::moveToOtherMap(int direction)
 {
-  saveMapItems();
-  switch (direction)
+  // stairs to next level
+  if (direction == 8 && currentMap->getRoomType() == roomTypeExit)
   {
-    case (4): floorX--;  player->moveTo((OFFSET_X + MAP_WIDTH * TILE_WIDTH), player->getY()); player->move(4);  break;
-    case (6): floorX++;  player->moveTo(OFFSET_X, player->getY()); player->move(6); break;
-    case (8): floorY--;  player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 10); player->move(8); break;
-    case (2): floorY++;  player->moveTo(player->getX(), OFFSET_Y);  break;
+    if (player->getPlayerStatus() != PlayerEntity::playerStatusGoingUp)
+    {
+      player->setLeavingLevel();
+      xGameState = xGameStateFadeOut;
+      xGameTimer = FADE_OUT_DELAY;
+      player->setVelocity(Vector2D(0.0f, - INITIAL_PLAYER_SPEED / 2));
+    }
   }
-  refreshMap();
-  checkEntering();
-  currentMap->restoreMapObjects();
+  // go to another room
+  else
+  {
+    saveMapItems();
+    switch (direction)
+    {
+      case (4): floorX--;  player->moveTo((OFFSET_X + MAP_WIDTH * TILE_WIDTH), player->getY()); player->move(4);  break;
+      case (6): floorX++;  player->moveTo(OFFSET_X, player->getY()); player->move(6); break;
+      case (8): floorY--;  player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 10); player->move(8); break;
+      case (2): floorY++;  player->moveTo(player->getX(), OFFSET_Y);  break;
+    }
+    refreshMap();
+    checkEntering();
+    currentMap->restoreMapObjects();
+  }
 }
 
 void WitchBlastGame::onRender()
@@ -652,7 +704,10 @@ void WitchBlastGame::onRender()
 
     myText.setColor(sf::Color(0, 0, 0, 255));
     myText.setCharacterSize(16);
-    myText.setString("Level 1");
+
+    oss.str("");
+    oss << "Level " << level;
+    myText.setString(oss.str());
     myText.setPosition(410, 692);
     app->draw(myText);
 
@@ -887,7 +942,7 @@ void WitchBlastGame::generateMap()
   }
   else if (currentMap->getRoomType() == roomTypeExit)
   {
-    currentMap->generateRoom(0);
+    currentMap->generateExitRoom();
     currentMap->setCleared(true);
   }
   else
@@ -1099,7 +1154,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
     break;
 
   case MusicBoss:
-    ok = music.openFromFile("media/sound/track01.ogg");
+    ok = music.openFromFile("media/sound/track_boss.ogg");
     music.setVolume(80);
     break;
   }
