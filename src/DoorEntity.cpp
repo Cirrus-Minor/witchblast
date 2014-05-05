@@ -12,18 +12,13 @@ DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getImageMana
   z = -0.5f;
   type = ENTITY_DOOR;
   doorType = 0;
-
-  //isOpen = false;
-  //timer = DOOR_CLOSE_TIME;
 }
 
 
 void DoorEntity::animate(float delay)
 {
   age += delay;
-
   if (timer > 0.0f) timer -= delay;
-  //SpriteEntity::animate(delay);
 }
 
 void DoorEntity::setOpen(bool open)

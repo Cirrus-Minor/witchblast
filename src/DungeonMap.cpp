@@ -359,6 +359,15 @@ Vector2D DungeonMap::generateKeyRoom()
   return (Vector2D(OFFSET_X + x0 * TILE_WIDTH + TILE_WIDTH / 2, OFFSET_Y + y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
 
+void DungeonMap::generateExitRoom()
+{
+  initRoom();
+  int x0 = MAP_WIDTH / 2;
+  map[x0][0] = MAP_STAIRS_UP;
+  map[x0 - 1][0] = 40;
+  map[x0 + 1][0] = 41;
+}
+
 void DungeonMap::generateRoom(int type)
 {
   initRoom();

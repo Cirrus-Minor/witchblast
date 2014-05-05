@@ -6,6 +6,7 @@
 #include <list>
 
 const int MAP_NORMAL_FLOOR  =   3;
+const int MAP_STAIRS_UP     =   39;
 const int MAP_WALL          =   50;
 const int MAP_DOOR          =   51;
 const int MAP_WALL_7        =   52;
@@ -64,6 +65,7 @@ class DungeonMap : public GameMap
     void initRoom();
     void generateCarpet(int x0, int y0, int w, int h, int n);
     void generateRoom(int type);
+    void generateExitRoom();
     Vector2D generateBonusRoom();
     Vector2D generateMerchantRoom();
     Vector2D generateKeyRoom();
