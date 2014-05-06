@@ -116,6 +116,11 @@ PlayerEntity* WitchBlastGame::getPlayer()
   return player;
 }
 
+int WitchBlastGame::getLevel()
+{
+  return level;
+}
+
 void WitchBlastGame::onUpdate()
 {
   float delta = getAbsolutTime() - lastTime;
@@ -228,8 +233,12 @@ void WitchBlastGame::startNewLevel()
   floorY = FLOOR_HEIGHT / 2;
 
   // move the player
-  /*if (player != NULL) */player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+  if (level == 1)
+    player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+  else
+    player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT - 3 * TILE_HEIGHT));
 
   // the boss room is closed
   bossRoomOpened = false;
@@ -676,7 +685,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
     {
       case (4): floorX--;  player->moveTo((OFFSET_X + MAP_WIDTH * TILE_WIDTH), player->getY()); player->move(4);  break;
       case (6): floorX++;  player->moveTo(OFFSET_X, player->getY()); player->move(6); break;
-      case (8): floorY--;  player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 10); player->move(8); break;
+      case (8): floorY--;  player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 20); player->move(8); break;
       case (2): floorY++;  player->moveTo(player->getX(), OFFSET_Y);  break;
     }
     refreshMap();
@@ -927,17 +936,20 @@ void WitchBlastGame::generateMap()
     currentMap->generateRoom(0);
     currentMap->setCleared(true);
     int bonusType = getRandomEquipItem(false);
-    if (bonusType == EQUIP_FAIRY)
+    if (level == 1)
     {
-      new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                                           OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                                           CHEST_FAIRY, false);
-    }
-    else
-    {
-      new ItemEntity( (enumItemType)(FirstEquipItem + bonusType),
-                          OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                          OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+      if (bonusType == EQUIP_FAIRY)
+      {
+        new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                                             OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                                             CHEST_FAIRY, false);
+      }
+      else
+      {
+        new ItemEntity( (enumItemType)(FirstEquipItem + bonusType),
+                            OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                            OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+      }
     }
   }
   else if (currentMap->getRoomType() == roomTypeExit)
@@ -1172,6 +1184,8 @@ void WitchBlastGame::saveGame()
   if (file)
   {
     // floor
+    file << level << std::endl;
+
     int nbRooms = 0;
     for (j = 0; j < FLOOR_HEIGHT; j++)
     {
@@ -1279,7 +1293,8 @@ bool WitchBlastGame::loadGame()
     int i, j, k, n;
 
     // floor
-    currentFloor = new GameFloor();
+    file >> level;
+    currentFloor = new GameFloor(level);
     for (j = 0; j < FLOOR_HEIGHT; j++)
     {
       for (i = 0; i < FLOOR_WIDTH; i++)

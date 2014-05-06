@@ -182,7 +182,7 @@ void PlayerEntity::animate(float delay)
     game().moveToOtherMap(6);
   else if (y < OFFSET_Y)
     game().moveToOtherMap(8);
-  else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 5)
+  else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 20)
     game().moveToOtherMap(2);
 
   if (playerStatus == playerStatusEntering)

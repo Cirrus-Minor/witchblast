@@ -54,6 +54,15 @@ class WitchBlastGame : public Game
     PlayerEntity* getPlayer();
 
     /*!
+     *  \brief accessor on the level
+     *
+     *  Accessor on the level.
+     *
+     *  \return : the level
+     */
+    int getLevel();
+
+    /*!
      *  \brief Start the game and the game loop
      *
      *  This method starts the game and the game loop.

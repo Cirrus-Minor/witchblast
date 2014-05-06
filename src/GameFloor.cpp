@@ -213,9 +213,7 @@ void GameFloor::generate()
     for (j=0; j < FLOOR_HEIGHT; j++)
     {
       floor[i][j] = 0;
-      //if (maps[i][j] != NULL) delete maps[i][j];
     }
-
 
   // First room
   int x0 = FLOOR_WIDTH / 2;
@@ -241,10 +239,13 @@ void GameFloor::generate()
       floor[x0][y0-1] = 1;
       nbRooms++;
     }
-    if (rand() % 3 == 0)
+    if (level == 1)
     {
-      floor[x0][y0+1] = 1;
-      nbRooms++;
+      if (rand() % 3 == 0)
+      {
+        floor[x0][y0+1] = 1;
+        nbRooms++;
+      }
     }
   }
 
@@ -254,7 +255,7 @@ void GameFloor::generate()
     {
       i = rand() % FLOOR_WIDTH;
       j = rand() % FLOOR_HEIGHT;
-      if (floor[i][j] == 0)
+      if (floor[i][j] == 0 && ( (level == 1) || (i != x0 || j != y0 + 1) ))
       {
         int n = neighboorCount(i, j);
         switch (n)

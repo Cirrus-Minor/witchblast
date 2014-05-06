@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <stdio.h>
 #include <iostream>
+#include "WitchBlastGame.h"
 
 DungeonMap::DungeonMap(int width, int height) : GameMap(width, height)
 {
@@ -364,8 +365,8 @@ void DungeonMap::generateExitRoom()
   initRoom();
   int x0 = MAP_WIDTH / 2;
   map[x0][0] = MAP_STAIRS_UP;
-  map[x0 - 1][0] = 40;
-  map[x0 + 1][0] = 41;
+  map[x0 - 1][0] = 60;
+  map[x0 + 1][0] = 61;
 }
 
 void DungeonMap::generateRoom(int type)
@@ -378,7 +379,16 @@ void DungeonMap::generateRoom(int type)
   if (type == 0)
   {
     if (roomType == roomTypeStarting)
+    {
       generateCarpet(5, 3, 5, 3, 30);
+
+      if (game().getLevel() > 1)
+      {
+        map[x0 - 1][MAP_HEIGHT - 1] = 62;
+        map[x0][MAP_HEIGHT - 1]     = 63;
+        map[x0 + 1][MAP_HEIGHT - 1] = 64;
+      }
+    }
   }
   if (type == 1)
   {
