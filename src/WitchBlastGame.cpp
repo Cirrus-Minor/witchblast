@@ -209,8 +209,10 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
   if (fromSaveFile)
   {
-    if (!loadGame()) fromSaveFile = false;
-    else playLevel();
+    if (!loadGame())
+      fromSaveFile = false;
+    else
+      playLevel();
   }
   if (!fromSaveFile)
   {
@@ -227,6 +229,7 @@ void WitchBlastGame::startNewLevel()
   // create the new level
   if (currentFloor != NULL) delete currentFloor;
   currentFloor = new GameFloor(level);
+  currentFloor->createFloor();
 
   // center it
   floorX = FLOOR_WIDTH / 2;

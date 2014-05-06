@@ -21,8 +21,6 @@ GameFloor::GameFloor(int level)
       maps[i][j] = NULL;
 
   this->level = level;
-  srand(time(NULL));
-  createFloor();
 }
 
 GameFloor::~GameFloor()
@@ -168,6 +166,7 @@ bool GameFloor::finalize()
 
 void GameFloor::createFloor()
 {
+  srand(time(NULL));
   bool ok=false;
   while (!ok)
   {
