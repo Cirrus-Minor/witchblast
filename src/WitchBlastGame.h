@@ -54,6 +54,15 @@ class WitchBlastGame : public Game
     PlayerEntity* getPlayer();
 
     /*!
+     *  \brief Accessor on the player's position
+     *
+     *  Accessor on the player's position.
+     *
+     *  \return a Vector2D of the player's position
+     */
+    Vector2D getPlayerPosition();
+
+    /*!
      *  \brief accessor on the level
      *
      *  Accessor on the level.
