@@ -41,7 +41,7 @@ public:
 	    return ( (vector.x - x) * (vector.x - x) + (vector.y - y) * (vector.y - y) );
 	}
 
-    float distance2(Vector2D vector, float repeatZone)
+  float distance2(Vector2D vector, float repeatZone)
 	{
 	    float result = (vector.x - x) * (vector.x - x) + (vector.y - y) * (vector.y - y);
 
@@ -52,6 +52,32 @@ public:
 	    if (d2 < result) result = d2;
 
 	    return result;
+	}
+
+	float angleTo(Vector2D vector)
+	{
+      float tan = (vector.x - x) / (vector.y - y);
+      float angle = atan(tan);
+      return angle;
+	}
+
+	Vector2D vectorTo(Vector2D vector, float amplitude)
+	{
+	  float angle = angleTo(vector);
+	  Vector2D result;
+
+	  if (vector.y > y)
+	  {
+	    result.x = sin(angle) * amplitude;
+	    result.y = cos(angle) * amplitude;
+	  }
+	  else
+	  {
+	    result.x = -sin(angle) * amplitude;
+	    result.y = -cos(angle) * amplitude;
+	  }
+
+	  return result;
 	}
 };
 
