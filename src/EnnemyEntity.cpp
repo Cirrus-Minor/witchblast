@@ -76,6 +76,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         star->setType(16);
         star->setSpin(400.0f);
       }
+      inflictsRecoilTo(playerEntity);
     }
 
     else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
@@ -93,6 +94,10 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       star->setLifetime(0.7f);
       star->setType(16);
       star->setSpin(400.0f);
+
+      // TEST
+      //Vector2D recoilVector = Vector2D(boltEntity->getX(), boltEntity->getY()).vectorTo(Vector2D(x, y), 250 );
+      //giveRecoil(false, recoilVector, 1.5f);
     }
   }
 }

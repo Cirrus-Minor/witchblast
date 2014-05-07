@@ -109,6 +109,7 @@ void PlayerEntity::pay(int price)
 
 void PlayerEntity::animate(float delay)
 {
+  // shot timer
   if (specialBoltTimer >= 0.0f)
   {
     specialBoltTimer -= delay;
@@ -152,8 +153,11 @@ void PlayerEntity::animate(float delay)
       playerStatus = playerStatusPlaying;
     }
   }
-  //z = y;
-  if (playerStatus != playerStatusDead) testSpriteCollisions();
+  if (playerStatus == playerStatusDead)
+    velocity = Vector2D(0.0f, 0.0f);
+  else
+    testSpriteCollisions();
+
   collidingDirection = 0;
   BaseCreatureEntity::animate(delay);
 

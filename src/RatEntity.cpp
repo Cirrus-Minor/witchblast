@@ -39,21 +39,25 @@ void RatEntity::calculateBB()
 void RatEntity::collideMapRight()
 {
     velocity.x = -velocity.x;
+    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
 }
 
 void RatEntity::collideMapLeft()
 {
     velocity.x = -velocity.x;
+    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
 }
 
 void RatEntity::collideMapTop()
 {
     velocity.y = -velocity.y;
+    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
 }
 
 void RatEntity::collideMapBottom()
 {
     velocity.y = -velocity.y;
+    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
 }
 
 

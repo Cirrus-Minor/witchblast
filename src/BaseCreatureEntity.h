@@ -16,6 +16,10 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     void setHpMax(int hpMax);
     int getHpDisplay();
     virtual void animate(float delay);
+    virtual float animateStates(float delay);
+    virtual void animateColors(float delay);
+    virtual void animateRecoil(float delay);
+    virtual void animatePhysics(float delay);
     virtual void render(sf::RenderWindow* app);
     virtual void calculateBB();
     virtual bool collideWithMap(int direction);
@@ -37,6 +41,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       float timer;
     };
     itemStuct specialState[NB_SPECIAL_STATES];
+    virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
+    virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
 
   protected:
     int hp;
@@ -50,6 +56,14 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     enumShotType hurtingType;
     enumBloodColor bloodColor;
     enumMovingStyle movingStyle;
+
+    struct  recoilStruct
+    {
+      bool active;
+      Vector2D velocity;
+      bool stun;
+      float timer;
+    } recoil;
   private:
 };
 

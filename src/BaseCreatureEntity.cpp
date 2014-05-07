@@ -20,6 +20,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
     specialState[i].active = false;
     specialState[i].timer = 0.0f;
   }
+  recoil.active = false;
 }
 
 int BaseCreatureEntity::getHp()
@@ -47,11 +48,8 @@ int BaseCreatureEntity::getHpDisplay()
   return hpDisplay;
 }
 
-void BaseCreatureEntity::animate(float delay)
+float BaseCreatureEntity::animateStates(float delay)
 {
-  if (hpDisplay > hp) hpDisplay--;
-  else if (hpDisplay < hp) hpDisplay++;
-
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
   {
     if (specialState[i].active)
@@ -60,21 +58,25 @@ void BaseCreatureEntity::animate(float delay)
       if (specialState[i].timer <= 0.0f) specialState[i].active = false;
     }
   }
-
   if (specialState[SpecialStateIce].active) delay *= STATUS_FROZEN_MULT;
+  return delay;
+}
 
-  z = y + height/2;
+void BaseCreatureEntity::animateColors(float delay)
+{
+  // no color
   sprite.setColor(sf::Color(255, 255, 255, 255 ));
-  if (hurting)
+
+  if (hurting and hp > 0)
   {
     hurtingDelay -= delay;
     if (hurtingDelay > 0.0f)
     {
       int fadeColor = (sf::Uint8)((HURTING_DELAY - hurtingDelay) * 255);
       if (hurtingType == ShotTypeIce)
-        sprite.setColor(sf::Color(fadeColor, fadeColor, 255, 255 ));
+        sprite.setColor(sf::Color(fadeColor, fadeColor, 255, 255 )); // blue
       else
-        sprite.setColor(sf::Color(255, fadeColor, fadeColor, 255 ));
+        sprite.setColor(sf::Color(255, fadeColor, fadeColor, 255 )); // red
     }
     else
     {
@@ -82,9 +84,123 @@ void BaseCreatureEntity::animate(float delay)
       sprite.setColor(sf::Color(255, 255, 255, 255 ));
     }
   }
-  CollidingSpriteEntity::animate(delay);
-
   if (specialState[SpecialStateIce].active) sprite.setColor(sf::Color(100, 100, 255, 255 ));
+}
+
+void BaseCreatureEntity::animateRecoil(float delay)
+{
+  // recoil
+  if (recoil.active)
+  {
+    recoil.velocity.x *= 0.97f;
+    recoil.velocity.y *= 0.97f;
+
+    recoil.timer -= delay;
+    if (recoil.timer <= 0.0f) recoil.active = false;
+  }
+}
+
+void BaseCreatureEntity::animatePhysics(float delay)
+{
+	velocity.x *= viscosity;
+	velocity.y *= viscosity;
+
+	float velx = velocity.x;
+	float vely = velocity.y;
+
+	if (recoil.active)
+  {
+    if (recoil.stun)
+    {
+      velx = 0.0f;
+      vely = 0.0f;
+    }
+    velx += recoil.velocity.x;
+    vely += recoil.velocity.y;
+  }
+
+  spin *= viscosity;
+	angle += spin * delay;
+
+    if ((int)velx > 0)
+    {
+        x += velx * delay;
+
+        if (collideWithMap(DIRECTION_LEFT))
+        {
+            x = (float)((int)x);
+            while (collideWithMap(DIRECTION_LEFT))
+                x--;
+            collideMapRight();
+        }
+        else if (x > map->getWidth() * tileWidth + offsetX)
+        {
+            exitMap(DIRECTION_RIGHT);
+        }
+    }
+    else if ((int)velx < 0)
+    {
+        x += velx * delay;
+
+        if (collideWithMap(DIRECTION_RIGHT))
+        {
+            x = (float)((int)x);
+            while (collideWithMap(DIRECTION_RIGHT))
+                x++;
+            collideMapLeft();
+        }
+        else if (x < offsetX)
+        {
+            exitMap(DIRECTION_LEFT);
+        }
+    }
+
+    vely += weight * delay;
+    if ( vely > maxY) vely = maxY;
+
+    if ((int)vely > 0)
+    {
+        y += vely * delay;
+
+        if (collideWithMap(DIRECTION_BOTTOM))
+        {
+            y = (float)((int)y);
+            while (collideWithMap(DIRECTION_BOTTOM))
+                y--;
+            collideMapBottom();
+        }
+    }
+    else if ((int)vely < 0)
+    {
+        y += vely * delay;
+
+        if (collideWithMap(DIRECTION_TOP))
+        {
+            y = (float)((int)y);
+            while (collideWithMap(DIRECTION_TOP))
+                y++;
+            collideMapTop();
+        }
+    }
+
+    if (lifetime > 0)
+    {
+        if (age >= lifetime) isDying = true;
+    }
+    age += delay;
+}
+
+void BaseCreatureEntity::animate(float delay)
+{
+  if (hpDisplay > hp) hpDisplay--;
+  else if (hpDisplay < hp) hpDisplay++;
+
+  delay = animateStates(delay);
+  animateColors(delay);
+  animateRecoil(delay);
+  animatePhysics(delay);
+
+  z = y + height/2;
 }
 
 void BaseCreatureEntity::render(sf::RenderWindow* app)
@@ -174,4 +290,16 @@ void BaseCreatureEntity::prepareDying()
 void BaseCreatureEntity::dying()
 {
   isDying = true;
+}
+
+void BaseCreatureEntity::giveRecoil(bool stun, Vector2D velocity, float timer)
+{
+  recoil.active = true;
+  recoil.stun = stun;
+  recoil.velocity = velocity;
+  recoil.timer = timer;
+}
+
+void BaseCreatureEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+{
 }

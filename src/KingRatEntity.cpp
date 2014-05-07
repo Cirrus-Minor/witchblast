@@ -168,15 +168,7 @@ void KingRatEntity::animate(float delay)
       berserkDelay = 0.8f + (rand()%10) / 10.0f;
       SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_2);
 
-      float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
-      float angle = atan(tan);
-
-      if (game().getPlayer()->getY() > y)
-        setVelocity(Vector2D(sin(angle) * KING_RAT_BERSERK_SPEED,
-                                       cos(angle) * KING_RAT_BERSERK_SPEED));
-      else
-        setVelocity(Vector2D(-sin(angle) * KING_RAT_BERSERK_SPEED,
-                                       -cos(angle) * KING_RAT_BERSERK_SPEED));
+      setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(),KING_RAT_BERSERK_SPEED ));
     }
   }
 
@@ -347,4 +339,13 @@ void KingRatEntity::render(sf::RenderWindow* app)
                             OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255));
+}
+
+void KingRatEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+{
+  if (state == 4)
+  {
+    Vector2D recoilVector = Vector2D(x, y).vectorTo(game().getPlayerPosition(), 800 );
+    targetEntity->giveRecoil(false, recoilVector, 1.0f);
+  }
 }
