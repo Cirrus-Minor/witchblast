@@ -377,10 +377,12 @@ class PlayerEntity : public BaseCreatureEntity
     enumItemType acquiredItem;
 
     bool equip[NUMBER_EQUIP_ITEMS];
-    //enumBoltType boltType;
+
+
     float specialBoltTimer;
     enumShotType specialShots[SPECIAL_SHOT_SLOTS];
     int specialShotIndex;
+    bool needInitShotType;
 
     int collidingDirection;           /*!< Colliding direction (4, 8, 6, 2) to detect collision with closed doors */
 

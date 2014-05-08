@@ -35,6 +35,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   // init the shots (to none)
   for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++) specialShots[i] = ShotTypeStandard;
   specialShotIndex = 0;
+  needInitShotType = false;
 
   computePlayer();
 
@@ -492,7 +493,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
         if (specialBoltTimer <= 0.0f)
         {
           boltType = ShotTypeIce;
-          initShotType();
+          needInitShotType = true;
         }
         else boltType = ShotTypeStandard;
       }
@@ -571,6 +572,7 @@ void PlayerEntity::fire(int direction)
 
     canFirePlayer = false;
     currentFireDelay = fireDelay;
+    if (needInitShotType) initShotType();
   }
 }
 
@@ -796,4 +798,5 @@ void PlayerEntity::selectNextShotType()
 void PlayerEntity::initShotType()
 {
   specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
+  needInitShotType = false;
 }

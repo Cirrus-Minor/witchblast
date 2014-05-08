@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.0.6";
+const std::string APP_VERSION =   "0.0.7";
 
 // Client size
 const int SCREEN_WIDTH = 970;
@@ -134,7 +134,7 @@ const float INITIAL_BOLT_LIFE = 0.4f;
 const int INITIAL_BOLT_DAMAGES = 8;
 const float INITIAL_BOLT_VELOCITY = 700.0f;
 
-const float FAIRY_SPEED = 180.0f; //400.0f;
+const float FAIRY_SPEED = 180.0f;
 const float FAIRY_FIRE_DELAY = 0.8f;
 const float FAIRY_BOLT_LIFE = 0.4f;
 const int FAIRY_BOLT_DAMAGES = 8;
