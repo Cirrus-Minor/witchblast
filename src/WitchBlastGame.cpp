@@ -94,6 +94,15 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   isPausing = false;
 
   shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
+
+  input[KeyUp]    = sf::Keyboard::Z;
+  input[KeyDown]  = sf::Keyboard::S;
+  input[KeyLeft]  = sf::Keyboard::Q;
+  input[KeyRight] = sf::Keyboard::D;
+  input[KeyFireUp]    = sf::Keyboard::Up;
+  input[KeyFireDown]  = sf::Keyboard::Down;
+  input[KeyFireLeft]  = sf::Keyboard::Left;
+  input[KeyFireRight] = sf::Keyboard::Right;
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -1057,17 +1066,17 @@ void WitchBlastGame::generateStandardMap()
 
   if (random < 16)
   {
-    currentMap->generateRoom(rand()%3);
+    currentMap->generateRoom(rand()%4);
     findPlaceMonsters(MONSTER_RAT,4);
   }
   else if (random < 32)
   {
-    currentMap->generateRoom(rand()%4);
+    currentMap->generateRoom(rand()%5);
     findPlaceMonsters(MONSTER_BAT,4);
   }
   else if (random < 48)
   {
-    currentMap->generateRoom(rand()%4);
+    currentMap->generateRoom(rand()%5);
     findPlaceMonsters(MONSTER_EVIL_FLOWER,4);
   }
   else if (random < 64)
@@ -1078,13 +1087,13 @@ void WitchBlastGame::generateStandardMap()
   }
   else if (random < 80)
   {
-    currentMap->generateRoom(rand()%3);
+    currentMap->generateRoom(rand()%4);
     findPlaceMonsters(MONSTER_RAT,3);
     findPlaceMonsters(MONSTER_BAT,3);
   }
   else
   {
-    currentMap->generateRoom(rand()%3);
+    currentMap->generateRoom(rand()%4);
     findPlaceMonsters(MONSTER_SLIME,8 + rand() % 5);
   }
 }

@@ -400,9 +400,30 @@ void DungeonMap::generateRoom(int type)
   }
   if (type == 2)
   {
+    // blocks in the middle
     r = 1 + rand() % 3;
     for (i = x0 - r; i <= x0 + r; i++)
       for (j = y0 - 1; j <= y0 + 1; j++)
+        map[i][j] = MAP_WALL;
+  }
+  if (type == 3)
+  {
+    // blocks in the corners
+    for (i = 2; i <= 3; i++)
+      for (j = 2; j <= 3; j++)
+      {
+        map[i][MAP_HEIGHT - 1 - j] = MAP_WALL;
+        map[i][j] = MAP_WALL;
+        map[MAP_WIDTH - 1 - i][MAP_HEIGHT - 1 - j] = MAP_WALL;
+        map[MAP_WIDTH - 1 - i][j] = MAP_WALL;
+      }
+
+  }
+  if (type == 4)
+  {
+    // "checker"
+    for (i = 2; i < MAP_WIDTH - 2; i = i + 2)
+      for (j = 2; j < MAP_HEIGHT - 2; j = j + 2)
         map[i][j] = MAP_WALL;
   }
 }
