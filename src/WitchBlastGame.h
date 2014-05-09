@@ -228,7 +228,8 @@ class WitchBlastGame : public Game
     enum gameStateEnum
     {
       gameStateInit,      /**< Game initialization */
-      gameStatePlaying    /**< Playing */
+      gameStatePlaying,   /**< Playing */
+      gameStateKeyConfig  /**< Key config */
     };
     gameStateEnum gameState;  /*!< Store the game state */
 
@@ -243,6 +244,22 @@ class WitchBlastGame : public Game
     };
     xGameStateEnum xGameState; /*!< Store the effect game state */
     float xGameTimer;          /*!< Effect game timer */
+
+    /** Input Keys enum
+     *  Used for the input binding
+     */
+    enum inputKeyEnum
+    {
+      KeyUp,
+      KeyDown,
+      KeyLeft,
+      KeyRight,
+      KeyFireUp,
+      KeyFireDown,
+      KeyFireLeft,
+      KeyFireRight
+    };
+    sf::Keyboard::Key input[8];  /*!< Input key aray */
 
     /*!
      *  \brief Starts the game
