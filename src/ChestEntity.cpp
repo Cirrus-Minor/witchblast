@@ -64,7 +64,8 @@ void ChestEntity::open()
 
   if (chestType == CHEST_BASIC)
   {
-    for (int i = 0; i < 5; i++)
+    int r = 2 + rand() % 6;
+    for (int i = 0; i < r; i++)
     {
       ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
       newItem->setVelocity(Vector2D(50.0f + rand()% 150));
