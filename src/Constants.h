@@ -155,7 +155,8 @@ const float ARTEFACT_ZOOM_TIME = 0.5f;
 enum enumShotType {
   ShotTypeStandard,
   ShotTypeIce,
-  ShotTypeIllusion
+  ShotTypeIllusion,
+  ShotTypeStone
   };
 
 // status
