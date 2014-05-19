@@ -8,7 +8,7 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
       : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP), 0, 0, ITEM_WIDTH, ITEM_HEIGHT)
 {
   this->setLifetime(6.0f);
-
+  imagesProLine = 10;
   this->setFrame(itemType - FirstEquipItem);
   this->setType(ENTITY_ARTIFACT_DESCRIPTION);
 
@@ -28,31 +28,6 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
   sprite.setScale(3.5f, 3.5f);
 
   z = 5000.0f;
-
-  /*switch (itemType)
-  {
-    case (ItemEntity::itemMagicianHat):
-      artefactName = "Enchanter Hat"; artefactDescription = "Increases fire rate"; break;
-    case (ItemEntity::itemLeatherBoots):
-      artefactName = "Leather Boots"; artefactDescription = "Increases speed"; break;
-    case (ItemEntity::itemBookDualShots):
-      artefactName = "Spell : Dual Bolts"; artefactDescription = "Shoots two bolts"; break;
-    case (ItemEntity::itemConcentrationAmulet):
-      artefactName = "Concentration Amulet"; artefactDescription = "Increases fire range"; break;
-    case (ItemEntity::itemBossKey):
-      artefactName = "Boss Key"; artefactDescription = "Open the boss gate"; break;
-    case (ItemEntity::itemVibrationGloves):
-      artefactName = "Vibration Gloves"; artefactDescription = "Vibrations + slighty increases fire rate"; break;
-    case (ItemEntity::itemMahoganyStaff):
-      artefactName = "Mahogany Staff"; artefactDescription = "Increases bolt's speed and damages"; break;
-    case (ItemEntity::itemFairy):
-      artefactName = "Fairy"; artefactDescription = "Help you in the dungeon"; break;
-    case (ItemEntity::itemLeatherBelt):
-      artefactName = "Leather Belt"; artefactDescription = "Increases fire rate"; break;
-    case (ItemEntity::itemBloodSnake):
-      artefactName = "Blood Snake"; artefactDescription = "Increases damages"; break;
-    default: break;
-  }*/
 
   if (items[itemType].type == itemType)
   {
