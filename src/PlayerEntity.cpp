@@ -500,6 +500,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
       break;
   case ShotTypeStandard:
   case ShotTypeIllusion:
+  case ShotTypeStone:
     boltType = getShotType(); break;
   }
 

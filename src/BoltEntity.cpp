@@ -12,8 +12,13 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
   viscosity = 0.97f;
   frame = 0;
   this->boltType = boltType;
-  if (boltType == ShotTypeIce) frame = 2;
-  if (boltType == ShotTypeIllusion) frame = 3;
+  switch (boltType)
+  {
+    case ShotTypeStandard:  frame = 0; break;
+    case ShotTypeIce:       frame = 2; break;
+    case ShotTypeStone:     frame = 4; break;
+    case ShotTypeIllusion:  frame = 3; break;
+  }
 }
 
 int BoltEntity::getDamages()
