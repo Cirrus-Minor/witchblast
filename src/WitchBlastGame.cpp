@@ -1005,7 +1005,7 @@ void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float y
   {
     case MONSTER_RAT: new RatEntity(xm, ym - 2); break;
     case MONSTER_BAT: new BatEntity(xm, ym); break;
-    case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym); break;
+    case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym - 2); break;
     case MONSTER_SLIME: new SlimeEntity(xm, ym); break;
 
     case MONSTER_KING_RAT: new KingRatEntity(xm, ym); break;
