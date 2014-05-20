@@ -10,6 +10,7 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
   setDamages(INITIAL_BOLT_DAMAGES);
   type = ENTITY_BOLT;
   viscosity = 0.97f;
+  if (boltType == ShotTypeLightning) viscosity = 0.98f;
   frame = 0;
   this->boltType = boltType;
   switch (boltType)
@@ -17,6 +18,7 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
     case ShotTypeStandard:  frame = 0; break;
     case ShotTypeIce:       frame = 2; break;
     case ShotTypeStone:     frame = 4; break;
+    case ShotTypeLightning: frame = 5; break;
     case ShotTypeIllusion:  frame = 3; break;
   }
 }
@@ -121,6 +123,12 @@ bool BoltEntity::collideWithMap(int direction)
 
 void BoltEntity::collideMapRight()
 {
+  if (boltType == ShotTypeLightning)
+  {
+    velocity.x = -velocity.x;
+  }
+  else
+  {
     velocity.x = 0.0f;
     isDying = true;
 
@@ -131,10 +139,17 @@ void BoltEntity::collideMapRight()
       if (vel.x > 0.0f) vel.x = - vel.x;
       generateParticule(vel);
     }
+  }
 }
 
 void BoltEntity::collideMapLeft()
 {
+  if (boltType == ShotTypeLightning)
+  {
+    velocity.x = -velocity.x;
+  }
+  else
+  {
     velocity.x = 0.0f;
     isDying = true;
 
@@ -145,10 +160,17 @@ void BoltEntity::collideMapLeft()
       if (vel.x < 0.0f) vel.x = - vel.x;
       generateParticule(vel);
     }
+  }
 }
 
 void BoltEntity::collideMapTop()
 {
+  if (boltType == ShotTypeLightning)
+  {
+    velocity.y = -velocity.y;
+  }
+  else
+  {
     velocity.y = 0.0f;
     isDying = true;
 
@@ -159,10 +181,17 @@ void BoltEntity::collideMapTop()
       if (vel.y < 0.0f) vel.y = - vel.y;
       generateParticule(vel);
     }
+  }
 }
 
 void BoltEntity::collideMapBottom()
 {
+  if (boltType == ShotTypeLightning)
+  {
+    velocity.y = -velocity.y;
+  }
+  else
+  {
     velocity.y = 0.0f;
     isDying = true;
 
@@ -173,4 +202,5 @@ void BoltEntity::collideMapBottom()
       if (vel.y > 0.0f) vel.y = - vel.y;
       generateParticule(vel);
     }
+  }
 }

@@ -156,7 +156,8 @@ enum enumShotType {
   ShotTypeStandard,
   ShotTypeIce,
   ShotTypeIllusion,
-  ShotTypeStone
+  ShotTypeStone,
+  ShotTypeLightning
   };
 
 // status
