@@ -439,8 +439,8 @@ void WitchBlastGame::startGame()
           {
             currentMap->setCleared(true);
             openDoors();
-            //if (currentMap->getRoomType() == roomTypeBoss)
-            //  playMusic(MusicDungeon);
+            if (currentMap->getRoomType() == roomTypeBoss)
+              playMusic(MusicDungeon);
           }
         }
     }
@@ -946,7 +946,7 @@ void WitchBlastGame::generateMap()
     new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
 
-    //playMusic(MusicBoss);
+    playMusic(MusicBoss);
   }
   else if (currentMap->getRoomType() == roomTypeStarting)
   {
@@ -1184,7 +1184,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   case MusicBoss:
     ok = music.openFromFile("media/sound/track_boss.ogg");
-    music.setVolume(80);
+    music.setVolume(90);
     break;
   }
 

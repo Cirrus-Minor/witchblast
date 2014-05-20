@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.0.7";
+const std::string APP_VERSION =   "0.0.8";
 
 // Client size
 const int SCREEN_WIDTH = 970;
