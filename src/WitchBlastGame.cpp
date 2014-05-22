@@ -81,6 +81,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact_weak.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/ice_charge.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/select.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -1115,10 +1116,6 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
     if (itemOk && items[eq].requirement >= FirstEquipItem
         && !player->isEquiped(i)) itemOk = false;
 
-    /*if (itemOk)
-    {
-      std::cout << items[eq].name << " " << items[eq].specialShot
-    }*/
     if (itemOk && player->getShotType(SPECIAL_SHOT_SLOTS_STANDARD) != ShotTypeStandard
         && (items[eq].specialShot != ShotTypeStandard && items[eq].level < 4))
           itemOk = false;

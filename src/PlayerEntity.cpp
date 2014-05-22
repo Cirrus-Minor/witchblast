@@ -794,6 +794,7 @@ void PlayerEntity::selectNextShotType()
   else
     specialShotIndex = 0;
 
+  SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
   computePlayer();
 }
 

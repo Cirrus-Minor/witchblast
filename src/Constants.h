@@ -110,7 +110,8 @@ enum sound_resources {
   SOUND_SLIME_JUMP,
   SOUND_SLIME_IMAPCT,
   SOUND_SLIME_IMAPCT_WEAK,
-  SOUND_ICE_CHARGE
+  SOUND_ICE_CHARGE,
+  SOUND_SHOT_SELECT
 };
 
 enum corpses_ressources{
