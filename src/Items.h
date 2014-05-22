@@ -102,7 +102,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBossKey, "Boss Key", "Open the Boss gate",
-    200, true, false, true, 1, AlignmentNone, -1, ShotTypeStandard
+    200, true, false, false, 1, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemVibrationGloves, "Vibration Gloves", "Increases bolt's speed and damages",

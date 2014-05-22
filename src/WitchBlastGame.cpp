@@ -1104,13 +1104,29 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
   int setSize = 0;
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
-    if (!player->isEquiped(i) && i != EQUIP_BOSS_KEY)
+    bool itemOk = true;
+    int eq = i + FirstEquipItem;
+
+    if (player->isEquiped(i)) itemOk = false;
+    // TODO item already in floor
+    if (itemOk && toSale && !items[eq].canBeSold) itemOk = false;
+    if (itemOk && !toSale && !items[eq].canBeFound) itemOk = false;
+    if (itemOk && items[eq].level > level) itemOk = false;
+    if (itemOk && items[eq].requirement >= FirstEquipItem
+        && !player->isEquiped(i)) itemOk = false;
+
+    /*if (itemOk)
     {
-      if (!toSale || i!= EQUIP_FAIRY)
-      {
-        bonusSet.push_back(i);
-        setSize++;
-      }
+      std::cout << items[eq].name << " " << items[eq].specialShot
+    }*/
+    if (itemOk && player->getShotType(SPECIAL_SHOT_SLOTS_STANDARD) != ShotTypeStandard
+        && (items[eq].specialShot != ShotTypeStandard && items[eq].level < 4))
+          itemOk = false;
+
+    if (itemOk)
+    {
+      bonusSet.push_back(i);
+      setSize++;
     }
   }
   int bonusType = 0;
