@@ -64,14 +64,19 @@ Changes
 -------
 Next version
 - ADD New enemy
-- ADD 3 new items
+- ADD New items
 - ADD Show player's impact when he's hurt
 - ADD New music when the player dies
+- ADD New music for bos fight
 - ADD Mouse support - Player can fire with left click, switch shot types with the wheel
 - ADD Pause
 - ADD Save / restore game
 - ADD Slowing (creature state)
 - ADD HUD for shot types
+- ADD 4 shot types
+- ADD Recoil
+- ADD New room templates
+- ADD Exit stairs
 - MOD Damages inflicted by the player have been modified
 - MOD The player's bolt size depend of the damages
 - MOD Only useful data displayed on the minimap
@@ -79,4 +84,3 @@ Next version
 - FIX Merchant z-ordering bug
 - FIX It was possible to begin at the exit
 - FIX Various bad references crashes
-
