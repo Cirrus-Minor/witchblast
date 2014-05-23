@@ -102,6 +102,18 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       }
     }
   }
+  else // collision with other enemy ?
+  {
+    if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
+    {
+      collideWithEnnemy(entity);
+    }
+  }
+}
+
+void EnnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
+{
+  // To implement the behaviour when colliding with another ennemy
 }
 
 void EnnemyEntity::dying()

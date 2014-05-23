@@ -183,6 +183,8 @@ const int ENTITY_ENNEMY = 21;
 const int ENTITY_ENNEMY_INVOCATED = 22;
 const int ENTITY_ENNEMY_BOSS = 23;
 
+const int ENTITY_ENNEMY_MAX = 23;
+
 // monster type
 enum monster_type_enum
 {

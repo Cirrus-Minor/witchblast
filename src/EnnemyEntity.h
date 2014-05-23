@@ -18,6 +18,7 @@ class EnnemyEntity : public BaseCreatureEntity
 	  virtual void readCollidingEntity(CollidingSpriteEntity* entity);
 	  virtual void dying();
 	  virtual void drop();
+	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
 
 	  virtual bool canCollide();
 
