@@ -57,6 +57,7 @@ protected:
     bool isFading;
     bool isShrinking;
     bool isVisible;
+    bool isMirroring;
 };
 
 #endif // SPRITEENTITY_H_INCLUDED

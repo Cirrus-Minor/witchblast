@@ -22,6 +22,7 @@ SpriteEntity::SpriteEntity(sf::Texture* image, float x, float y, int width, int 
     isFading = false;
     isShrinking = false;
     isVisible = true;
+    isMirroring = false;
     this->image = image;
     sprite.setTexture(*image);
     this->width  = width  <= 0 ? image->getSize().x  : width;
@@ -93,7 +94,10 @@ void SpriteEntity::render(sf::RenderWindow* app)
         ny = frame / imagesProLine;
     }
 
-    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, /*(nx + 1) **/ width, /*(ny + 1) */ height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect((nx + 1) * width, ny * height, -width, height));
+    else
+     sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
 
     sprite.setPosition(x, y);
     sprite.setRotation(angle);
