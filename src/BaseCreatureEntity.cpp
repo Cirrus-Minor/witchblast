@@ -49,6 +49,11 @@ int BaseCreatureEntity::getHpDisplay()
   return hpDisplay;
 }
 
+BaseCreatureEntity::enumMovingStyle BaseCreatureEntity::getMovingStyle()
+{
+  return movingStyle;
+}
+
 float BaseCreatureEntity::animateStates(float delay)
 {
   for (int i = 0; i < NB_SPECIAL_STATES; i++)

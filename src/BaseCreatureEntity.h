@@ -15,6 +15,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     void setHp(int hp);
     void setHpMax(int hpMax);
     int getHpDisplay();
+
     virtual void animate(float delay);
     virtual float animateStates(float delay);
     virtual void animateColors(float delay);
@@ -27,6 +28,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void prepareDying();
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};
+    enumMovingStyle getMovingStyle();
     enum enumBloodColor { bloodRed, bloodGreen};
     enum enumSpecialState
     {
