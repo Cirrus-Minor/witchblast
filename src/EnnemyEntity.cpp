@@ -57,56 +57,59 @@ void EnnemyEntity::collideMapBottom()
 
 void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
-  if (collideWithEntity(entity) &&
-      (entity->getType() == ENTITY_PLAYER || entity->getType() == ENTITY_BOLT ))
+  if (collideWithEntity(entity))
   {
-    PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
-    BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
-
-    if (playerEntity != NULL && !playerEntity->isDead())
+    if (entity->getType() == ENTITY_PLAYER || entity->getType() == ENTITY_BOLT )
     {
-      if (playerEntity->hurt(meleeDamages, ShotTypeStandard))
+      PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
+      BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
+
+      if (playerEntity != NULL && !playerEntity->isDead())
       {
-        float xs = (x + playerEntity->getX()) / 2;
-        float ys = (y + playerEntity->getY()) / 2;
+        if (playerEntity->hurt(meleeDamages, ShotTypeStandard))
+        {
+          float xs = (x + playerEntity->getX()) / 2;
+          float ys = (y + playerEntity->getY()) / 2;
+          SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+          star->setFading(true);
+          star->setZ(y+ 100);
+          star->setLifetime(0.7f);
+          star->setType(16);
+          star->setSpin(400.0f);
+        }
+        inflictsRecoilTo(playerEntity);
+      }
+
+      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
+      {
+        boltEntity->collide();
+        hurt(boltEntity->getDamages(), boltEntity->getBoltType());
+        game().generateBlood(x, y, bloodColor);
+        SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
+
+        float xs = (x + boltEntity->getX()) / 2;
+        float ys = (y + boltEntity->getY()) / 2;
         SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
         star->setFading(true);
         star->setZ(y+ 100);
         star->setLifetime(0.7f);
         star->setType(16);
         star->setSpin(400.0f);
+
+        if (boltEntity->getBoltType() == ShotTypeStone)
+        {
+          Vector2D recoilVector = Vector2D(boltEntity->getX(), boltEntity->getY()).vectorTo(Vector2D(x, y), 110 );
+          giveRecoil(true, recoilVector, 0.15f);
+        }
       }
-      inflictsRecoilTo(playerEntity);
     }
-
-    else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
+    else // collision with other enemy ?
     {
-      boltEntity->collide();
-      hurt(boltEntity->getDamages(), boltEntity->getBoltType());
-      game().generateBlood(x, y, bloodColor);
-      SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
-
-      float xs = (x + boltEntity->getX()) / 2;
-      float ys = (y + boltEntity->getY()) / 2;
-      SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
-      star->setFading(true);
-      star->setZ(y+ 100);
-      star->setLifetime(0.7f);
-      star->setType(16);
-      star->setSpin(400.0f);
-
-      if (boltEntity->getBoltType() == ShotTypeStone)
+      if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
       {
-        Vector2D recoilVector = Vector2D(boltEntity->getX(), boltEntity->getY()).vectorTo(Vector2D(x, y), 110 );
-        giveRecoil(true, recoilVector, 0.15f);
+        if (this != entity)
+          collideWithEnnemy(entity);
       }
-    }
-  }
-  else // collision with other enemy ?
-  {
-    if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
-    {
-      collideWithEnnemy(entity);
     }
   }
 }
