@@ -66,6 +66,15 @@ void BatEntity::collideMapBottom()
     velocity.y = -velocity.y;
 }
 
+void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+{
+  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  if (entity->getMovingStyle() == movFlying)
+  {
+    setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), BAT_SPEED ));
+  }
+}
+
 void BatEntity::dying()
 {
   isDying = true;
