@@ -21,6 +21,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
     specialState[i].timer = 0.0f;
   }
   recoil.active = false;
+  facingDirection = 2;
 }
 
 int BaseCreatureEntity::getHp()
@@ -96,7 +97,12 @@ void BaseCreatureEntity::animateRecoil(float delay)
     recoil.velocity.y *= 0.97f;
 
     recoil.timer -= delay;
-    if (recoil.timer <= 0.0f) recoil.active = false;
+    if (recoil.timer <= 0.0f)
+    {
+      recoil.active = false;
+      computeFacingDirection();
+      // TODO ?
+    }
   }
 }
 
@@ -290,6 +296,23 @@ void BaseCreatureEntity::prepareDying()
 void BaseCreatureEntity::dying()
 {
   isDying = true;
+}
+
+void BaseCreatureEntity::computeFacingDirection()
+{
+  if (abs((int)velocity.x) > 0 && abs((int)velocity.y) > 0)
+  {
+    if (abs((int)velocity.x) > abs((int)velocity.y))
+    {
+      if (velocity.x > 0.0f) facingDirection = 6;
+      else facingDirection = 4;
+    }
+    else
+    {
+      if (velocity.y > 0.0f) facingDirection = 2;
+      else facingDirection = 8;
+    }
+  }
 }
 
 void BaseCreatureEntity::giveRecoil(bool stun, Vector2D velocity, float timer)

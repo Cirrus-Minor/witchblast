@@ -43,6 +43,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     itemStuct specialState[NB_SPECIAL_STATES];
     virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+    virtual void computeFacingDirection();
 
   protected:
     int hp;
@@ -50,6 +51,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     int hpDisplay;
     float creatureSpeed;
     int shadowFrame;
+    int facingDirection;
 
     bool hurting;
     float hurtingDelay;

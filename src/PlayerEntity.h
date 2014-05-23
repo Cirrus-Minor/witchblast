@@ -386,7 +386,6 @@ class PlayerEntity : public BaseCreatureEntity
 
     int collidingDirection;           /*!< Colliding direction (4, 8, 6, 2) to detect collision with closed doors */
 
-    int facingDirection;
     int firingDirection;
 
     FairyEntity* fairy;
