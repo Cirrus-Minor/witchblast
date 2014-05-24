@@ -49,6 +49,13 @@ int BaseCreatureEntity::getHpDisplay()
   return hpDisplay;
 }
 
+IntCoord BaseCreatureEntity::getCurrentTile()
+{
+  int xMap = (x - OFFSET_X) / TILE_WIDTH;
+  int yMap = (y - OFFSET_Y) / TILE_HEIGHT;
+  return (IntCoord(xMap, yMap));
+}
+
 BaseCreatureEntity::enumMovingStyle BaseCreatureEntity::getMovingStyle()
 {
   return movingStyle;

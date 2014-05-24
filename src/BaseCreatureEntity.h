@@ -16,6 +16,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     void setHpMax(int hpMax);
     int getHpDisplay();
 
+    IntCoord getCurrentTile();
+
     virtual void animate(float delay);
     virtual float animateStates(float delay);
     virtual void animateColors(float delay);
