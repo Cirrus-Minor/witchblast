@@ -246,6 +246,7 @@ const int SLIME_BB_HEIGHT_DIFF = 40;
 const float KING_RAT_SPEED = 200.0f;
 const float KING_RAT_RUNNING_SPEED = 600.0f;
 const float KING_RAT_BERSERK_SPEED = 250.0f;
+const float KING_RAT_RUNNING_RECOIL = 750.0f;
 const int KING_RAT_HP = 600;
 const int KING_RAT_DAMAGES = 8;
 

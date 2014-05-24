@@ -354,7 +354,7 @@ void KingRatEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
 {
   if (state == 4 || state == 6)
   {
-    Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 800 );
-    targetEntity->giveRecoil(false, recoilVector, 1.0f);
+    Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), KING_RAT_RUNNING_RECOIL );
+    targetEntity->giveRecoil(true, recoilVector, 1.0f);
   }
 }
