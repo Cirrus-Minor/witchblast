@@ -18,9 +18,13 @@ class SlimeEntity : public EnnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
+    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+
 	  virtual void dying();
 	  virtual void prepareDying();
 	  virtual bool canCollide();
+
+	  virtual enumMovingStyle getMovingStyle();
 
   private:
     float jumpingDelay;

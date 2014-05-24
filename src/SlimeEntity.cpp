@@ -158,6 +158,20 @@ void SlimeEntity::collideMapBottom()
     velocity.y = -velocity.y * 0.8f;
 }
 
+void SlimeEntity::collideWithEnnemy(GameEntity* collidingEntity)
+{
+  if (recoil.active && recoil.stun) return;
+
+  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  if (entity->getMovingStyle() == movWalking)
+  {
+    Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );
+    giveRecoil(false, vel, 0.3f);
+
+    computeFacingDirection();
+  }
+}
+
 bool SlimeEntity::collideWithMap(int direction)
 {
     calculateBB();
@@ -221,4 +235,12 @@ void SlimeEntity::prepareDying()
 bool SlimeEntity::canCollide()
 {
   return h <= 70.0f;
+}
+
+BaseCreatureEntity::enumMovingStyle SlimeEntity::getMovingStyle()
+{
+  if (h <= 70.0f)
+    return movWalking;
+  else
+    return movFlying;
 }
