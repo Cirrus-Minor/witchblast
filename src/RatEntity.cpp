@@ -12,18 +12,24 @@ RatEntity::RatEntity(float x, float y)
 {
   creatureSpeed = RAT_SPEED;
   velocity = Vector2D(creatureSpeed);
+  computeFacingDirection();
   hp = RAT_HP;
   meleeDamages = RAT_DAMAGES;
 
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
-  shadowFrame = 3;
+  shadowFrame = 6;
 }
 
 void RatEntity::animate(float delay)
 {
   if (age > 0.0f)
+  {
     frame = ((int)(age * 5.0f)) % 2;
+    if (facingDirection == 4 || facingDirection == 6) frame += 2;
+    isMirroring = (facingDirection == 4 );
+    if (facingDirection == 8) frame += 0; // TODO
+  }
 
   EnnemyEntity::animate(delay);
 }
@@ -40,26 +46,39 @@ void RatEntity::collideMapRight()
 {
     velocity.x = -velocity.x;
     if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    else computeFacingDirection();
 }
 
 void RatEntity::collideMapLeft()
 {
     velocity.x = -velocity.x;
     if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    else computeFacingDirection();
 }
 
 void RatEntity::collideMapTop()
 {
     velocity.y = -velocity.y;
     if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    else computeFacingDirection();
 }
 
 void RatEntity::collideMapBottom()
 {
     velocity.y = -velocity.y;
     if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    else computeFacingDirection();
 }
 
+void RatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+{
+  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  if (entity->getMovingStyle() == movWalking)
+  {
+    setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
+    computeFacingDirection();
+  }
+}
 
 void RatEntity::dying()
 {

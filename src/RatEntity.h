@@ -15,6 +15,8 @@ class RatEntity : public EnnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
+    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+
 	  virtual void dying();
   private:
 

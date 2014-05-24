@@ -13,12 +13,13 @@ GreenRatEntity::GreenRatEntity(float x, float y)
   imagesProLine = 4;
   creatureSpeed = GREEN_RAT_SPEED;
   velocity = Vector2D(creatureSpeed);
+  computeFacingDirection();
   hp = GREEN_RAT_HP;
   meleeDamages = GREEN_RAT_DAMAGES;
 
   type = ENTITY_ENNEMY_INVOCATED;
   bloodColor = bloodRed;
-  shadowFrame = 3;
+  shadowFrame = 6;
 
   timer = (rand() % 50) / 10.0f;
   age = -GREEN_RAT_FADE;
@@ -32,21 +33,20 @@ void GreenRatEntity::animate(float delay)
   if (age > 0.0f)
   {
     sprite.setColor(sf::Color(255,255,255,255));
-        frame = 4 + ((int)(age * 5.0f)) % 2;
-        timer = timer - delay;
-        if (timer <= 0.0f)
-        {
-          timer = (rand() % 50) / 10.0f;
-          float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
-          float angle = atan(tan);
 
-          if (game().getPlayer()->getY() > y)
-            setVelocity(Vector2D(sin(angle) * RAT_SPEED,
-                                       cos(angle) * RAT_SPEED));
-          else
-            setVelocity(Vector2D(-sin(angle) * RAT_SPEED,
-                                       -cos(angle) * RAT_SPEED));
-        }
+    timer = timer - delay;
+    if (timer <= 0.0f)
+    {
+      timer = (rand() % 50) / 10.0f;
+
+      setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), GREEN_RAT_SPEED ));
+      computeFacingDirection();
+    }
+
+    frame = 4 + ((int)(age * 5.0f)) % 2;
+    if (facingDirection == 4 || facingDirection == 6) frame += 2;
+    isMirroring = (facingDirection == 4 );
+    if (facingDirection == 8) frame += 0; // TODO
   }
   else
   {
@@ -67,23 +67,44 @@ void GreenRatEntity::calculateBB()
 void GreenRatEntity::collideMapRight()
 {
     velocity.x = -velocity.x;
+    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    computeFacingDirection();
 }
 
 void GreenRatEntity::collideMapLeft()
 {
     velocity.x = -velocity.x;
+    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    computeFacingDirection();
 }
 
 void GreenRatEntity::collideMapTop()
 {
     velocity.y = -velocity.y;
+    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    computeFacingDirection();
 }
 
 void GreenRatEntity::collideMapBottom()
 {
     velocity.y = -velocity.y;
+    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    computeFacingDirection();
 }
 
+void GreenRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+{
+  if (recoil.active && recoil.stun) return;
+
+  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  if (entity->getMovingStyle() == movWalking )
+  {
+    Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );
+    giveRecoil(false, vel, 0.3f);
+
+    computeFacingDirection();
+  }
+}
 
 void GreenRatEntity::dying()
 {
@@ -94,6 +115,6 @@ void GreenRatEntity::dying()
   deadRat->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-  //drop();
+
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }
