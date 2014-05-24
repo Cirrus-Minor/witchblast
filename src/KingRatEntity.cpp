@@ -240,7 +240,7 @@ void KingRatEntity::afterWallCollide()
       timer = 1.4f;
       velocity.x *= 0.75f;
       velocity.y *= 0.75f;
-      //velocity = Vector2D(creatureSpeed);
+
       SoundManager::getSoundManager()->playSound(SOUND_BIG_WALL_IMPACT);
     }
 }
@@ -341,11 +341,20 @@ void KingRatEntity::render(sf::RenderWindow* app)
                             sf::Color(255, 255, 255));
 }
 
+void KingRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+{
+  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  if (entity->getMovingStyle() == movWalking)
+  {
+    inflictsRecoilTo(entity);
+  }
+}
+
 void KingRatEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
 {
-  if (state == 4)
+  if (state == 4 || state == 6)
   {
-    Vector2D recoilVector = Vector2D(x, y).vectorTo(game().getPlayerPosition(), 800 );
+    Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 800 );
     targetEntity->giveRecoil(false, recoilVector, 1.0f);
   }
 }
