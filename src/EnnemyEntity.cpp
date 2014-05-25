@@ -80,7 +80,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         inflictsRecoilTo(playerEntity);
       }
 
-      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
+      else if (boltEntity != NULL && !boltEntity->getDying() && !isDying && boltEntity->getAge() > 0.05f)
       {
         boltEntity->collide();
         hurt(boltEntity->getDamages(), boltEntity->getBoltType());

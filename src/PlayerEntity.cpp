@@ -414,18 +414,19 @@ void PlayerEntity::calculateBB()
 
 void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
+  if (playerStatus == playerStatusDead) return;
 
-    EnnemyBoltEntity* boltEntity = dynamic_cast<EnnemyBoltEntity*>(entity);
+  EnnemyBoltEntity* boltEntity = dynamic_cast<EnnemyBoltEntity*>(entity);
 
-    if (collideWithEntity(entity))
+  if (collideWithEntity(entity))
+  {
+    if (boltEntity != NULL && !boltEntity->getDying())
     {
-      if (boltEntity != NULL && !boltEntity->getDying())
-      {
-        boltEntity->collide();
-        hurt(boltEntity->getDamages(), ShotTypeStandard);
-        game().generateBlood(x, y, bloodColor);
-      }
+      boltEntity->collide();
+      hurt(boltEntity->getDamages(), ShotTypeStandard);
+      game().generateBlood(x, y, bloodColor);
     }
+  }
 }
 
 void PlayerEntity::move(int direction)
