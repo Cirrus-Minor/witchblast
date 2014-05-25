@@ -7,6 +7,7 @@
 #include "sfml_game/EntityManager.h"
 #include "Constants.h"
 #include "RatEntity.h"
+#include "BlackRatEntity.h"
 #include "GreenRatEntity.h"
 #include "KingRatEntity.h"
 #include "BatEntity.h"
@@ -1005,6 +1006,7 @@ void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float y
   switch (monsterType)
   {
     case MONSTER_RAT: new RatEntity(xm, ym - 2); break;
+    case MONSTER_BLACK_RAT: new BlackRatEntity(xm, ym - 5); break;
     case MONSTER_BAT: new BatEntity(xm, ym); break;
     case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym - 2); break;
     case MONSTER_SLIME: new SlimeEntity(xm, ym); break;
@@ -1063,7 +1065,7 @@ void WitchBlastGame::generateStandardMap()
 {
   initMonsterArray();
 
-  int random = rand() % 100;
+  int random = rand() % (level == 1 ? 95 : 110);
 
   if (random < 16)
   {
@@ -1091,6 +1093,11 @@ void WitchBlastGame::generateStandardMap()
     currentMap->generateRoom(rand()%4);
     findPlaceMonsters(MONSTER_RAT,3);
     findPlaceMonsters(MONSTER_BAT,3);
+  }
+  else if (random < 95)
+  {
+    currentMap->generateRoom(4);
+    findPlaceMonsters(MONSTER_BLACK_RAT,6);
   }
   else
   {
