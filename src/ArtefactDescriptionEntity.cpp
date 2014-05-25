@@ -5,11 +5,15 @@
 #include "Items.h"
 
 ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
-      : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP), 0, 0, ITEM_WIDTH, ITEM_HEIGHT)
+      : SpriteEntity (ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS ),
+                      0, 0, ITEM_WIDTH, ITEM_HEIGHT)
 {
   this->setLifetime(6.0f);
   imagesProLine = 10;
-  this->setFrame(itemType - FirstEquipItem);
+  if (itemType >= FirstEquipItem)
+    this->setFrame(itemType - FirstEquipItem);
+  else
+    this->setFrame(itemType);
   this->setType(ENTITY_ARTIFACT_DESCRIPTION);
 
   float x0 = OFFSET_X + MAP_WIDTH * TILE_WIDTH * 0.5f - ARTEFACT_RECT_WIDTH * 0.5f;

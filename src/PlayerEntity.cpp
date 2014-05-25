@@ -7,8 +7,10 @@
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
 #include "WitchBlastGame.h"
+#include "TextEntity.h"
 
 #include <iostream>
+#include <sstream>
 
 PlayerEntity::PlayerEntity(float x, float y)
       : BaseCreatureEntity (ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
@@ -131,18 +133,36 @@ void PlayerEntity::animate(float delay)
     acquireDelay -= delay;
     if (acquireDelay <= 0.0f)
     {
-      equip[acquiredItem] = true;
+      if (acquiredItem >= FirstEquipItem)
+      {
+        equip[acquiredItem - FirstEquipItem] = true;
+
+        if (acquiredItem == ItemFairy) //(int)EQUIP_FAIRY)
+          fairy = new FairyEntity(x, y - 50.0f, this);
+
+        if (items[acquiredItem].specialShot != (ShotTypeStandard))
+          registerSpecialShot(acquiredItem);
+
+        computePlayer();
+      }
+      else
+      {
+        if (acquiredItem == itemBossHeart)
+        {
+          int hpBonus = 2 + rand() % 4;
+          hpMax += hpBonus;
+          hp += hpBonus;
+          hpDisplay += hpBonus;
+
+          std::ostringstream oss;
+          oss << "HP Max +" << hpBonus;
+          TextEntity* text = new TextEntity(oss.str(), 14, x, y - 50.0f);
+          text->setColor(TextEntity::COLOR_GREEN);
+          text->setLifetime(2.0f);
+          text->setWeight(-100.0f);
+        }
+      }
       playerStatus = playerStatusPlaying;
-
-      int itemID = acquiredItem + FirstEquipItem;
-
-      if (acquiredItem == (int)EQUIP_FAIRY)
-        fairy = new FairyEntity(x, y - 50.0f, this);
-
-      if (items[itemID].specialShot != (ShotTypeStandard))
-        registerSpecialShot(itemID);
-
-      computePlayer();
     }
   }
   // unlocking animation
@@ -640,7 +660,7 @@ void PlayerEntity::dying()
 
 void PlayerEntity::acquireItem(enumItemType type)
 {
-  if (type >= FirstEquipItem) acquireStance(type);
+  if (items[type].generatesStance) acquireStance(type);
   else switch (type)
   {
     case ItemCopperCoin: gold++;
@@ -693,7 +713,7 @@ void PlayerEntity::acquireStance(enumItemType type)
   velocity.y = 0.0f;
   playerStatus = playerStatusAcquire;
   acquireDelay = ACQUIRE_DELAY;
-  acquiredItem = (enumItemType)(type - FirstEquipItem);
+  acquiredItem = (enumItemType)(type);
   SoundManager::getSoundManager()->playSound(SOUND_BONUS);
 }
 

@@ -86,10 +86,9 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
           if (isMerchandise) playerEntity->pay(getPrice());
 
-          //isDying = true;
           dying();
 
-          if (itemType >= FirstEquipItem)
+          if (items[itemType].generatesStance)
           {
 
             game().showArtefactDescription(itemType);

@@ -284,6 +284,11 @@ void KingRatEntity::dying()
   for (int i = 0; i < 10; i++) game().generateBlood(x, y, bloodColor);
 
   SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_DIE);
+
+  ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
+  //newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  newItem->setViscosity(0.96f);
 }
 
 void KingRatEntity::generateGreenRats()
