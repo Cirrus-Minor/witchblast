@@ -95,7 +95,7 @@ const itemStuct items[NUMBER_ITEMS] =
     20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemLeatherBoots, "Leather Boots", "Increases Boots",
+    ItemLeatherBoots, "Velvet Boots", "Increases speed",
     20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
   },
   {
