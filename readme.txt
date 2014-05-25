@@ -60,10 +60,14 @@ Features
 - merchant,
 - candy eye effects.
 
+Thanks
+--------
+Thanks to Billx (who suggest me the title "Witch Blast") and Mika Attila (for his contribution concerning the Linux version)
+
 Changes
 -------
 Next version
-- ADD New enemy
+- ADD New enemies (slime and black rat)
 - ADD New items
 - ADD Show player's impact when he's hurt
 - ADD New music when the player dies
@@ -77,6 +81,7 @@ Next version
 - ADD Recoil
 - ADD New room templates
 - ADD Exit stairs
+- ADD Collisions between monsters
 - MOD Damages inflicted by the player have been modified
 - MOD The player's bolt size depend of the damages
 - MOD Only useful data displayed on the minimap
@@ -84,3 +89,4 @@ Next version
 - FIX Merchant z-ordering bug
 - FIX It was possible to begin at the exit
 - FIX Various bad references crashes
+- FIX Double shot used to double drop
