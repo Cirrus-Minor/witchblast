@@ -61,6 +61,8 @@ void TextEntity::setColor(int colorType)
 
   if (colorType == COLOR_WHITE || colorType == COLOR_FADING_WHITE)
     color = sf::Color(255, 255, 255);
+  else if (colorType == COLOR_GREEN)
+    color = sf::Color(0, 255, 0);
 }
 
 void TextEntity::setAlignment(int alignment)
