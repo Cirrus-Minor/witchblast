@@ -154,6 +154,8 @@ void PlayerEntity::animate(float delay)
           hp += hpBonus;
           hpDisplay += hpBonus;
 
+          SoundManager::getSoundManager()->playSound(SOUND_EAT);
+
           std::ostringstream oss;
           oss << "HP Max +" << hpBonus;
           TextEntity* text = new TextEntity(oss.str(), 14, x, y - 50.0f);

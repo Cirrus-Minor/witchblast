@@ -1,5 +1,6 @@
 #include "ItemEntity.h"
 #include "sfml_game/ImageManager.h"
+#include "sfml_game/SoundManager.h"
 #include "sfml_game/SpriteEntity.h"
 #include "Constants.h"
 #include "MagnetEntity.h"
@@ -19,6 +20,7 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   isMerchandise = false;
   imagesProLine = 10;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  isBeating = false;
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)
@@ -40,6 +42,30 @@ void ItemEntity::animate(float delay)
   z = y + height;
   CollidingSpriteEntity::animate(delay);
   if (age > 0.7f) testSpriteCollisions();
+
+  if (isBeating)
+  {
+    timer -= delay;
+    if (timer <= 0.0f)
+    {
+      timer = HEART_BEAT_DELAY;
+      SoundManager::getSoundManager()->playSound(SOUND_HEART);
+    }
+    float sc;
+    if (timer > HEART_BEAT_DELAY - 0.25f)
+    {
+      sc = timer - HEART_BEAT_DELAY + 1.25f;
+    }
+    else
+      sc = 1.0f;
+    sprite.setScale(sc, sc);
+  }
+  if (itemType == itemBossHeart && !isBeating && game().getCurrentMap()->isCleared())
+  {
+    // start beating
+    isBeating = true;
+    timer = HEART_BEAT_DELAY;
+  }
 }
 
 void ItemEntity::render(sf::RenderWindow* app)
@@ -74,6 +100,7 @@ void ItemEntity::dying()
 
 void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
+  if (itemType == itemBossHeart && !game().getCurrentMap()->isCleared()) return;
     PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
 
     if (collideWithEntity(entity))

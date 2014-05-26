@@ -31,6 +31,8 @@ class ItemEntity : public CollidingSpriteEntity
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
 
   private:
+    float timer;
+    bool isBeating;
 };
 
 #endif // ITEMENTITY_H

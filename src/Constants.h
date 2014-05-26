@@ -97,6 +97,7 @@ enum sound_resources {
   SOUND_IMPACT,
   SOUND_BONUS,
   SOUND_DRINK,
+  SOUND_EAT,
   SOUND_PLAYER_HIT,
   SOUND_PLAYER_DIE,
   SOUND_ENNEMY_DYING,
@@ -111,7 +112,8 @@ enum sound_resources {
   SOUND_SLIME_IMAPCT,
   SOUND_SLIME_IMAPCT_WEAK,
   SOUND_ICE_CHARGE,
-  SOUND_SHOT_SELECT
+  SOUND_SHOT_SELECT,
+  SOUND_HEART
 };
 
 enum corpses_ressources{
@@ -258,5 +260,6 @@ const int KING_RAT_DAMAGES = 8;
 
 // EFFECTS
 const float HURTING_DELAY = 0.4f;
+const float HEART_BEAT_DELAY = 1.2f;
 
 #endif // CONSTANTS_H_INCLUDED

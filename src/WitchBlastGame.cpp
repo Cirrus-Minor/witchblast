@@ -68,6 +68,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/impact.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/bonus.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/drink.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/eat.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/player_hit.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/player_die.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/ennemy_dying.ogg");
@@ -83,6 +84,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact_weak.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/ice_charge.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/select.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/heart.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
