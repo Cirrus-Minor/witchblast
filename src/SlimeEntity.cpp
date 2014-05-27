@@ -97,7 +97,7 @@ void SlimeEntity::animate(float delay)
   EnnemyEntity::animate(delay);
 }
 
-void SlimeEntity::render(sf::RenderWindow* app)
+void SlimeEntity::render(sf::RenderTarget* app)
 {
   if (!isDying && shadowFrame > -1)
   {

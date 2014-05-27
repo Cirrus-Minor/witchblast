@@ -81,7 +81,7 @@ void SpriteEntity::removeCenter()
   sprite.setOrigin(0.0f, 0.0f);
 }
 
-void SpriteEntity::render(sf::RenderWindow* app)
+void SpriteEntity::render(sf::RenderTarget* app)
 {
   if (isVisible)
   {

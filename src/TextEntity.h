@@ -25,7 +25,7 @@ class TextEntity : public GameEntity
 public:
   TextEntity(std::string text, int size, float x = 0.0f, float y = 0.0f);
 
-  virtual void render(sf::RenderWindow* app);
+  virtual void render(sf::RenderTarget* app);
 	virtual void animate(float delay);
 
 	virtual void setText(std::string text);

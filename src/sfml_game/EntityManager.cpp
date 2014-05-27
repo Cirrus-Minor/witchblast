@@ -81,18 +81,52 @@ void EntityManager::animate (float delay)
 	}
 }
 
-void EntityManager::render(sf::RenderWindow* app)
+void EntityManager::render(sf::RenderTarget* app)
 {
 	if (!isEmpty())
 	{
 		EntityList::iterator it;
 		EntityList::iterator oldit = entityList.begin ();
-		//bool isBegin = false;
+
 		for (it = entityList.begin (); it != entityList.end () && !isEmpty();)
 		{
 			GameEntity* e = *it;
 			oldit = it;
 			e->render(app);
+			it++;
+		} // end for
+	}
+}
+
+void EntityManager::renderUnder(sf::RenderTarget* app, int n)
+{
+	if (!isEmpty())
+	{
+		EntityList::iterator it;
+		EntityList::iterator oldit = entityList.begin ();
+
+		for (it = entityList.begin (); it != entityList.end () && !isEmpty();)
+		{
+			GameEntity* e = *it;
+			oldit = it;
+			if (e->getZ() < n) e->render(app);
+			it++;
+		} // end for
+	}
+}
+
+void EntityManager::renderAfter(sf::RenderTarget* app, int n)
+{
+	if (!isEmpty())
+	{
+		EntityList::iterator it;
+		EntityList::iterator oldit = entityList.begin ();
+
+		for (it = entityList.begin (); it != entityList.end () && !isEmpty();)
+		{
+			GameEntity* e = *it;
+			oldit = it;
+			if (e->getZ() >= n) e->render(app);
 			it++;
 		} // end for
 	}

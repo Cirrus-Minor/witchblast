@@ -64,7 +64,7 @@ void ArtefactDescriptionEntity::animate(float delay)
   SpriteEntity::animate(delay);
 }
 
-void ArtefactDescriptionEntity::render(sf::RenderWindow* app)
+void ArtefactDescriptionEntity::render(sf::RenderTarget* app)
 {
     int nx = frame;
     int ny = 0;
@@ -96,6 +96,6 @@ void ArtefactDescriptionEntity::render(sf::RenderWindow* app)
 
     app->draw(sprite);
 
-    game().Write(artefactName, 22, 315.0f, ARTEFACT_POS_Y + 15.0f, ALIGN_LEFT, sf::Color(255, 255, 255));
-    game().Write(artefactDescription, 20, 315.0f, ARTEFACT_POS_Y + 55.0f, ALIGN_LEFT, sf::Color(255, 255, 255));
+    game().Write(artefactName, 22, 315.0f, ARTEFACT_POS_Y + 15.0f, ALIGN_LEFT, sf::Color(255, 255, 255), app);
+    game().Write(artefactDescription, 20, 315.0f, ARTEFACT_POS_Y + 55.0f, ALIGN_LEFT, sf::Color(255, 255, 255), app);
 }

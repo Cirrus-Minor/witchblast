@@ -44,7 +44,7 @@ void DoorEntity::openDoor()
   timer = DOOR_OPEN_TIME;
 }
 
-void DoorEntity::render(sf::RenderWindow* app)
+void DoorEntity::render(sf::RenderTarget* app)
 {
   if (!isVisible) return;
     float xl, yl, xr, yr;

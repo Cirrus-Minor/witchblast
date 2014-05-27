@@ -25,7 +25,7 @@ bool GuiEntity::getActive() { return isActive; }
 
 void GuiEntity::setActive(bool active) { isActive = active; }
 
-void GuiEntity::render(sf::RenderWindow* app)
+void GuiEntity::render(sf::RenderTarget* app)
 {
     if (app == NULL) return;
 }

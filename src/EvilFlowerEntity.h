@@ -10,7 +10,7 @@ class EvilFlowerEntity : public EnnemyEntity
     EvilFlowerEntity(float x, float y);
     virtual void animate(float delay);
     virtual void calculateBB();
-    virtual void render(sf::RenderWindow* app);
+    virtual void render(sf::RenderTarget* app);
     void fire();
   protected:
 	  virtual void dying();

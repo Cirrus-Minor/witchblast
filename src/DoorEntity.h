@@ -8,7 +8,7 @@ class DoorEntity : public SpriteEntity
   public:
     DoorEntity(int direction);
     virtual void animate(float delay);
-    void render(sf::RenderWindow* app);
+    void render(sf::RenderTarget* app);
 
     void setOpen(bool open);
     void setDoorType(int doorType);

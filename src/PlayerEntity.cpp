@@ -230,7 +230,7 @@ void PlayerEntity::animate(float delay)
   }
 }
 
-void PlayerEntity::renderHead(sf::RenderWindow* app)
+void PlayerEntity::renderHead(sf::RenderTarget* app)
 {
   if (playerStatus != playerStatusDead)
   {
@@ -250,7 +250,7 @@ void PlayerEntity::renderHead(sf::RenderWindow* app)
   }
 }
 
-void PlayerEntity::renderBody(sf::RenderWindow* app)
+void PlayerEntity::renderBody(sf::RenderTarget* app)
 {
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
   app->draw(sprite);
@@ -276,7 +276,7 @@ void PlayerEntity::renderBody(sf::RenderWindow* app)
   }
 }
 
-void PlayerEntity::renderHands(sf::RenderWindow* app)
+void PlayerEntity::renderHands(sf::RenderTarget* app)
 {
   if (equip[EQUIP_VIBRATION_GLOVES]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
 
@@ -286,7 +286,7 @@ void PlayerEntity::renderHands(sf::RenderWindow* app)
   sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
 }
 
-void PlayerEntity::renderFeet(sf::RenderWindow* app)
+void PlayerEntity::renderFeet(sf::RenderTarget* app)
 {
   if (equip[EQUIP_LEATHER_BOOTS]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
 
@@ -296,7 +296,7 @@ void PlayerEntity::renderFeet(sf::RenderWindow* app)
   sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
 }
 
-void PlayerEntity::renderStaff(sf::RenderWindow* app)
+void PlayerEntity::renderStaff(sf::RenderTarget* app)
 {
   if (equip[EQUIP_MAHOGANY_STAFF]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
   int xSnake, ySnake;
@@ -333,7 +333,7 @@ void PlayerEntity::renderStaff(sf::RenderWindow* app)
 }
 
 
-void PlayerEntity::render(sf::RenderWindow* app)
+void PlayerEntity::render(sf::RenderTarget* app)
 {
   sprite.setPosition(x, y);
 

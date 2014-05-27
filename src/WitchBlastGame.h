@@ -137,7 +137,13 @@ class WitchBlastGame : public Game
      */
     void showArtefactDescription(enumItemType itemType);
 
-    void Write(std::string str, int size, float x, float y, int align, sf::Color color);
+    /*!
+     *  \brief Make a "shake" effet
+     *  \param duration : duration of the effect
+     */
+    void makeShake(float duration);
+
+    void Write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app);
 
     /*!
      *  \brief Save the game
@@ -180,7 +186,7 @@ class WitchBlastGame : public Game
      *
      *  \param app : Rendering target
      */
-    void renderHudShots(sf::RenderWindow* app);
+    void renderHudShots(sf::RenderTarget* app);
 
   private:
     // game logic / data
@@ -209,6 +215,8 @@ class WitchBlastGame : public Game
     sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
     sf::Font font;              /*!< The font used for displaying text */
     sf::Text myText;            /*!< The text to be displayed */
+    sf::RenderTexture mainTexture;  /*!< The main game in a texture */
+    sf::Sprite mainSprite;  /*!< The main game in a sprite */
 
     sf::Music music;            /*!< Current game music */
 
@@ -240,7 +248,8 @@ class WitchBlastGame : public Game
     {
       xGameStateNone,     /**< No effect */
       xGameStateFadeIn,   /**< Fade in effect - usually when starting a level */
-      xGameStateFadeOut   /**< Fade out effect - usually when leaving a level */
+      xGameStateFadeOut,  /**< Fade out effect - usually when leaving a level */
+      xGameStateShake     /**< Shake effect */
     };
     xGameStateEnum xGameState; /*!< Store the effect game state */
     float xGameTimer;          /*!< Effect game timer */

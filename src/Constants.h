@@ -40,6 +40,9 @@ const int OFFSET_Y = 5;
 const int MAP_WIDTH = 15;
 const int MAP_HEIGHT = 9;
 
+const int GAME_WIDTH = MAP_WIDTH * TILE_WIDTH;
+const int GAME_HEIGHT = MAP_HEIGHT * TILE_HEIGHT;
+
 const int FLOOR_WIDTH = 13;
 const int FLOOR_HEIGHT = 7;
 

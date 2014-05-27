@@ -100,7 +100,7 @@ void GameEntity::animate(float delay)
 	}
 }
 
-void GameEntity::render(sf::RenderWindow* app)
+void GameEntity::render(sf::RenderTarget* app)
 {
     if (app == NULL) return;
 }

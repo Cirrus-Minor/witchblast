@@ -11,7 +11,7 @@ class ArtefactDescriptionEntity : public SpriteEntity
     ~ArtefactDescriptionEntity();
 
     virtual void animate(float delay);
-    virtual void render(sf::RenderWindow* app);
+    virtual void render(sf::RenderTarget* app);
   private:
     sf::RectangleShape rectangle;
     sf::RectangleShape rectangleBorder;

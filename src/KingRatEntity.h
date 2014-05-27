@@ -9,7 +9,7 @@ class KingRatEntity : public EnnemyEntity
   public:
     KingRatEntity(float x, float y);
     virtual void animate(float delay);
-    virtual void render(sf::RenderWindow* app);
+    virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
   protected:

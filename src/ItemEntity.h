@@ -13,7 +13,7 @@ class ItemEntity : public CollidingSpriteEntity
     int getPrice();
 
     virtual void animate(float delay);
-    virtual void render(sf::RenderWindow* app);
+    virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual void dying();
     enumItemType getItemType() { return itemType; };

@@ -43,7 +43,7 @@ class PlayerEntity : public BaseCreatureEntity
      *
      *  \param app : Rendering target
      */
-    virtual void render(sf::RenderWindow* app);
+    virtual void render(sf::RenderTarget* app);
 
     /*!
      *  \brief Moves the player to another place
@@ -391,11 +391,11 @@ class PlayerEntity : public BaseCreatureEntity
     FairyEntity* fairy;
 
     int spriteDx;
-    void renderHead(sf::RenderWindow* app);
-    void renderBody(sf::RenderWindow* app);
-    void renderHands(sf::RenderWindow* app);
-    void renderFeet(sf::RenderWindow* app);
-    void renderStaff(sf::RenderWindow* app);
+    void renderHead(sf::RenderTarget* app);
+    void renderBody(sf::RenderTarget* app);
+    void renderHands(sf::RenderTarget* app);
+    void renderFeet(sf::RenderTarget* app);
+    void renderStaff(sf::RenderTarget* app);
 
     /*!
      *  \brief init the current shot type.

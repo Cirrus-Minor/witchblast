@@ -92,7 +92,7 @@ void EvilFlowerEntity::fire()
                                  -cos(angle) * flowerFireVelocity));
 }
 
-void EvilFlowerEntity::render(sf::RenderWindow* app)
+void EvilFlowerEntity::render(sf::RenderTarget* app)
 {
     sprite.setPosition(x, y);
     float savedAngle = sprite.getRotation();

@@ -68,7 +68,7 @@ void ItemEntity::animate(float delay)
   }
 }
 
-void ItemEntity::render(sf::RenderWindow* app)
+void ItemEntity::render(sf::RenderTarget* app)
 {
   // shadow
   sprite.setTextureRect(sf::IntRect(9 * width, height, width, height));
@@ -79,7 +79,7 @@ void ItemEntity::render(sf::RenderWindow* app)
   {
     std::ostringstream oss;
     oss << getPrice() << " $";
-    game().Write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, sf::Color(255, 255, 255));
+    game().Write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app);
   }
 
   CollidingSpriteEntity::render(app);

@@ -242,6 +242,7 @@ void KingRatEntity::afterWallCollide()
       velocity.y *= 0.75f;
 
       SoundManager::getSoundManager()->playSound(SOUND_BIG_WALL_IMPACT);
+      game().makeShake(0.5f);
     }
 }
 void KingRatEntity::collideMapRight()
@@ -308,7 +309,7 @@ void KingRatEntity::generateGreenRats()
   }
 }
 
-void KingRatEntity::render(sf::RenderWindow* app)
+void KingRatEntity::render(sf::RenderTarget* app)
 {
     EnnemyEntity::render(app);
 
@@ -343,7 +344,8 @@ void KingRatEntity::render(sf::RenderWindow* app)
                             OFFSET_X + TILE_WIDTH / 2 + 10.0f,
                             OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
                             ALIGN_LEFT,
-                            sf::Color(255, 255, 255));
+                            sf::Color(255, 255, 255),
+                            app);
 }
 
 void KingRatEntity::collideWithEnnemy(GameEntity* collidingEntity)

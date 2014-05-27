@@ -79,7 +79,7 @@ void PnjEntity::animate(float delay)
   SpriteEntity::animate(delay);
 }
 
-void PnjEntity::render(sf::RenderWindow* app)
+void PnjEntity::render(sf::RenderTarget* app)
 {
   sprite.setPosition(x, y);
 
@@ -97,6 +97,6 @@ void PnjEntity::render(sf::RenderWindow* app)
 
   if (isSpeaking)
   {
-    game().Write(speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255));
+    game().Write(speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app);
   }
 }

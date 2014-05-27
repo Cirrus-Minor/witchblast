@@ -221,7 +221,7 @@ void BaseCreatureEntity::animate(float delay)
   z = y + height/2;
 }
 
-void BaseCreatureEntity::render(sf::RenderWindow* app)
+void BaseCreatureEntity::render(sf::RenderTarget* app)
 {
   if (!isDying && shadowFrame > -1)
   {

@@ -23,7 +23,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void animateColors(float delay);
     virtual void animateRecoil(float delay);
     virtual void animatePhysics(float delay);
-    virtual void render(sf::RenderWindow* app);
+    virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual bool collideWithMap(int direction);
     virtual bool hurt(int damages, enumShotType hurtingType);

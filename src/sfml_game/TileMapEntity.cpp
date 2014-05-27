@@ -85,7 +85,7 @@ void TileMapEntity::computeVertices()
     }
 }
 
-void TileMapEntity::render(sf::RenderWindow* app)
+void TileMapEntity::render(sf::RenderTarget* app)
 {
   app->draw(vertices, image);
 }

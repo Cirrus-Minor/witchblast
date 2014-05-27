@@ -97,6 +97,14 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   xGameState = xGameStateNone;
   isPausing = false;
 
+  if (!mainTexture.create(GAME_WIDTH + OFFSET_X, GAME_HEIGHT + OFFSET_Y) )
+  {
+    // error
+  }
+
+  mainSprite.setTexture(mainTexture.getTexture());
+  mainSprite.setTextureRect(sf::IntRect(0, GAME_HEIGHT + OFFSET_Y, GAME_WIDTH + OFFSET_X, -GAME_HEIGHT - OFFSET_Y));
+
   shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
 
   input[KeyUp]    = sf::Keyboard::Z;
@@ -720,8 +728,19 @@ void WitchBlastGame::onRender()
     // clear the view
     app->clear(sf::Color(32, 32, 32));
 
-    // render the game objects
-    EntityManager::getEntityManager()->render(app);
+    if (xGameState == xGameStateShake)
+    {
+      mainTexture.clear();
+      EntityManager::getEntityManager()->renderUnder(&mainTexture, 5000);
+      mainSprite.setPosition(-3 + rand() % 7, -3 + rand() % 7);
+      app->draw(mainSprite);
+      EntityManager::getEntityManager()->renderAfter(app, 5000);
+    }
+    else
+    {
+      // render the game objects
+      EntityManager::getEntityManager()->render(app);
+    }
 
     myText.setColor(sf::Color(255, 255, 255, 255));
 
@@ -837,7 +856,7 @@ void WitchBlastGame::onRender()
     app->display();
 }
 
-void WitchBlastGame::renderHudShots(sf::RenderWindow* app)
+void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
 {
   int xHud = 640;
   int yHud = 650;
@@ -982,7 +1001,7 @@ void WitchBlastGame::generateMap()
     currentMap->randomize(currentMap->getRoomType());
 }
 
-void WitchBlastGame::Write(std::string str, int size, float x, float y, int align, sf::Color color)
+void WitchBlastGame::Write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app)
 {
   myText.setString(str);
   myText.setCharacterSize(size);
@@ -1212,6 +1231,12 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   if (ok)
     music.play();
+}
+
+void WitchBlastGame::makeShake(float duration)
+{
+  xGameState = xGameStateShake;
+  xGameTimer = duration;
 }
 
 void WitchBlastGame::saveGame()

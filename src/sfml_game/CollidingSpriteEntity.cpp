@@ -45,7 +45,7 @@ void CollidingSpriteEntity::setTileDimensions(int width, int height)
     tileHeight = height;
 }
 
-void CollidingSpriteEntity::render(sf::RenderWindow* app)
+void CollidingSpriteEntity::render(sf::RenderTarget* app)
 {
     SpriteEntity::render(app);
 }
