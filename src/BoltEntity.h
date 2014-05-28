@@ -23,6 +23,7 @@ class BoltEntity : public CollidingSpriteEntity
     enumShotType getBoltType();
 
   protected:
+    virtual void calculateBB();
     virtual void collideMapRight();
     virtual void collideMapLeft();
     virtual void collideMapTop();

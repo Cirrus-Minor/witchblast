@@ -75,6 +75,14 @@ void BoltEntity::animate(float delay)
   if (((velocity.x)*(velocity.x) + (velocity.y)*(velocity.y)) < 1500.0f) isDying = true;
 }
 
+void BoltEntity::calculateBB()
+{
+    boundingBox.left = x - 2;
+    boundingBox.width = 4;
+    boundingBox.top = y - 2;
+    boundingBox.height =  4;
+}
+
 void BoltEntity::collide()
 {
   isDying = true;
