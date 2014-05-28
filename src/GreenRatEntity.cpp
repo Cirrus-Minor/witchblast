@@ -10,7 +10,7 @@
 GreenRatEntity::GreenRatEntity(float x, float y)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
 {
-  imagesProLine = 4;
+  imagesProLine = 6;
   creatureSpeed = GREEN_RAT_SPEED;
   velocity = Vector2D(creatureSpeed);
   computeFacingDirection();
@@ -23,7 +23,7 @@ GreenRatEntity::GreenRatEntity(float x, float y)
 
   timer = (rand() % 50) / 10.0f;
   age = -GREEN_RAT_FADE;
-  frame = 4;
+  frame = 6;
 }
 
 void GreenRatEntity::animate(float delay)
@@ -43,10 +43,10 @@ void GreenRatEntity::animate(float delay)
       computeFacingDirection();
     }
 
-    frame = 4 + ((int)(age * 5.0f)) % 2;
+    frame = 6 + ((int)(age * 5.0f)) % 2;
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
     isMirroring = (facingDirection == 4 );
-    if (facingDirection == 8) frame += 0; // TODO
+    if (facingDirection == 8) frame += 4;
   }
   else
   {

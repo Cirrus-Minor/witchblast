@@ -28,7 +28,7 @@ void RatEntity::animate(float delay)
     frame = ((int)(age * 5.0f)) % 2;
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
     isMirroring = (facingDirection == 4 );
-    if (facingDirection == 8) frame += 0; // TODO
+    if (facingDirection == 8) frame += 4;
   }
 
   EnnemyEntity::animate(delay);

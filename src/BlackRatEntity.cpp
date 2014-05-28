@@ -14,7 +14,7 @@ BlackRatEntity::BlackRatEntity(float x, float y)
   currentTile(0, 0),
   targetTile(0, 0)
 {
-  imagesProLine = 4;
+  imagesProLine = 6;
   creatureSpeed = BLACK_RAT_SPEED;
   hp = BLACK_RAT_HP;
   meleeDamages = BLACK_RAT_DAMAGES;
@@ -22,7 +22,7 @@ BlackRatEntity::BlackRatEntity(float x, float y)
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
   shadowFrame = 6;
-  frame = 8;
+  frame = 12;
 
   currentDirection = 0;
 
@@ -39,10 +39,10 @@ void BlackRatEntity::animate(float delay)
 
   if (age > 0.0f)
   {
-    frame = 8 + ((int)(age * 5.0f)) % 2;
+    frame = 12 + ((int)(age * 5.0f)) % 2;
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
     isMirroring = (facingDirection == 4 );
-    if (facingDirection == 8) frame += 0; // TODO
+    if (facingDirection == 8) frame += 4;
   }
 
   EnnemyEntity::animate(delay);
@@ -118,7 +118,7 @@ void BlackRatEntity::dying()
   isDying = true;
   SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadRat->setZ(OFFSET_Y);
-  deadRat->setFrame(FRAME_CORPSE_RAT);
+  deadRat->setFrame(FRAME_CORPSE_BLACK_RAT);
   deadRat->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
