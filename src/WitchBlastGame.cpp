@@ -732,7 +732,7 @@ void WitchBlastGame::onRender()
     {
       mainTexture.clear();
       EntityManager::getEntityManager()->renderUnder(&mainTexture, 5000);
-      mainSprite.setPosition(-3 + rand() % 7, -3 + rand() % 7);
+      mainSprite.setPosition(-4 + rand() % 9, -4 + rand() % 9);
       app->draw(mainSprite);
       EntityManager::getEntityManager()->renderAfter(app, 5000);
     }

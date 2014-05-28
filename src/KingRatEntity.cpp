@@ -242,7 +242,7 @@ void KingRatEntity::afterWallCollide()
       velocity.y *= 0.75f;
 
       SoundManager::getSoundManager()->playSound(SOUND_BIG_WALL_IMPACT);
-      game().makeShake(0.5f);
+      game().makeShake(0.75f);
     }
 }
 void KingRatEntity::collideMapRight()
