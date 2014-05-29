@@ -130,7 +130,7 @@ void BlackRatEntity::findNextGoal()
 {
   currentTile = getCurrentTile();
 
-  int backDirection;
+  int backDirection = 0;
   switch (currentDirection)
   {
     case 4: backDirection = 6; break;
