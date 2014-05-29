@@ -563,21 +563,6 @@ void WitchBlastGame::refreshMap()
                   0);
   }
 
-  // for testing purpose (new stuff)
-  if (player->getAge() <2.0f)
-  {
-    /*ItemEntity* book = new ItemEntity(ItemEntity::itemHealth, player->getX(), player->getY()- 180);
-    book->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
-    book->setMerchandise(true);*/
-
-    /*int bonusType = getRandomEquipItem(true);
-    ItemEntity* boots = new ItemEntity((enumItemType)(itemMagicianHat + bonusType), player->getX(), player->getY()+ 180);
-    boots->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);*/
-
-    //ChestEntity* chest = new ChestEntity(player->getX() + 100, player->getY()+ 150, CHEST_FAIRY, false);
-    //chest->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
-  }
-
   // check doors
   doorEntity[0]->setVisible(currentMap->hasNeighbourUp() > 0);
   if (currentMap->hasNeighbourUp() == 1) doorEntity[0]->setDoorType(0);
@@ -1155,7 +1140,14 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
 
     if (itemOk)
     {
-      bonusSet.push_back(i);
+      int n = 0;
+      switch (items[eq].rarity)
+      {
+        case RarityCommon:  n = 4; break;
+        case RarityUnommon: n = 2; break;
+        case RarityRare:    n = 1; break;
+      }
+      for (int j = 0; j < n; j++) bonusSet.push_back(i);
       setSize++;
     }
   }
