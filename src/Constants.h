@@ -25,6 +25,8 @@
 const std::string APP_NAME =      "Witch Blast";
 const std::string APP_VERSION =   "0.0.8";
 
+const std::string CONFIG_FILE =   "config.dat";
+
 // Client size
 const int SCREEN_WIDTH = 970;
 const int SCREEN_HEIGHT = 720;

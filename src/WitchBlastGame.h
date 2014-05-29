@@ -1,3 +1,19 @@
+/**  This file is part of Witch Blast.
+  *
+  *  Witch Blast is free software: you can redistribute it and/or modify
+  *  it under the terms of the GNU General Public License as published by
+  *  the Free Software Foundation, either version 3 of the License, or
+  *  (at your option) any later version.
+  *
+  *  Witch Blast is distributed in the hope that it will be useful,
+  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  *  GNU General Public License for more details.
+  *
+  *  You should have received a copy of the GNU General Public License
+  *  along with Witch Blast.  If not, see <http://www.gnu.org/licenses/>.
+  */
+
 #ifndef WITCH_BLAST_GAME_H
 #define WITCH_BLAST_GAME_H
 
@@ -7,6 +23,7 @@
 #include "EnnemyEntity.h"
 #include "DoorEntity.h"
 #include "GameFloor.h"
+#include "Config.h"
 
 const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
@@ -189,6 +206,7 @@ class WitchBlastGame : public Game
     void renderHudShots(sf::RenderTarget* app);
 
   private:
+    Config config;
     // game logic / data
     GameMap* miniMap;           /*!< Pointer to the logical minimap */
     DungeonMap* currentMap;     /*!< Pointer to the logical current map */
@@ -266,9 +284,11 @@ class WitchBlastGame : public Game
       KeyFireUp,
       KeyFireDown,
       KeyFireLeft,
-      KeyFireRight
+      KeyFireRight,
+      KeyFire
     };
-    sf::Keyboard::Key input[8];  /*!< Input key aray */
+    sf::Keyboard::Key input[8];     /*!< Input key array */
+    sf::Keyboard::Key inputAlt[8];  /*!< Input key array (alternative) */
 
     /*!
      *  \brief Starts the game
@@ -404,6 +424,13 @@ class WitchBlastGame : public Game
      *  \param musicChoice : music track ID
      */
     void playMusic(musicEnum musicChoice);
+
+    void addKey(int logicInput, std::string key, bool alt);
+
+    /*!
+     *  \brief Configure with data from "config.dat"
+     */
+    void configureFromFile();
 };
 
 /*!

@@ -107,14 +107,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
 
   shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
 
-  input[KeyUp]    = sf::Keyboard::Z;
-  input[KeyDown]  = sf::Keyboard::S;
-  input[KeyLeft]  = sf::Keyboard::Q;
-  input[KeyRight] = sf::Keyboard::D;
-  input[KeyFireUp]    = sf::Keyboard::Up;
-  input[KeyFireDown]  = sf::Keyboard::Down;
-  input[KeyFireLeft]  = sf::Keyboard::Left;
-  input[KeyFireRight] = sf::Keyboard::Right;
+  configureFromFile();
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -349,7 +342,7 @@ void WitchBlastGame::startGame()
                 if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
               }
 
-              if (event.key.code == sf::Keyboard::Space)
+              if (event.key.code == input[KeyFire] || event.key.code == inputAlt[KeyFire])
               {
                 if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
               }
@@ -372,44 +365,44 @@ void WitchBlastGame::startGame()
         {
           if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
 
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q) || sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+          if (sf::Keyboard::isKeyPressed(input[KeyLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyLeft]))
           {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
               player->move(7);
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
               player->move(1);
             else
               player->move(4);
           }
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+          else if (sf::Keyboard::isKeyPressed(input[KeyRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyRight]))
           {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+            if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
               player->move(9);
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+            else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
               player->move(3);
             else
               player->move(6);
           }
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z) || sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+          else if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
           {
             player->move(8);
           }
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+          else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
           {
             player->move(2);
           }
 
           // normal 4 directions gameplay
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+          if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireLeft]))
             player->fire(4);
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+          else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireRight]))
             player->fire(6);
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+          else if (sf::Keyboard::isKeyPressed(input[KeyFireUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireUp]))
             player->fire(8);
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+          else if (sf::Keyboard::isKeyPressed(input[KeyFireDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireDown]))
             player->fire(2);
           // alternative "one button" gameplay
-          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+          else if (sf::Keyboard::isKeyPressed(input[KeyFire]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFire]))
           {
             player->fire(firingDirection);
           }
@@ -1474,6 +1467,63 @@ bool WitchBlastGame::loadGame()
   }
 
   return true;
+}
+
+void WitchBlastGame::addKey(int logicInput, std::string key, bool alt = false)
+{
+  int iKey = config.findInt(key);
+  if (iKey >= 0)
+  {
+
+    sf::Keyboard::Key k = (sf::Keyboard::Key)iKey;
+    if (alt)
+      inputAlt[logicInput] = k;
+    else
+      input[logicInput] = k;
+  }
+}
+
+void WitchBlastGame::configureFromFile()
+{
+  // default
+  input[KeyUp]    = sf::Keyboard::Z;
+  input[KeyDown]  = sf::Keyboard::S;
+  input[KeyLeft]  = sf::Keyboard::Q;
+  input[KeyRight] = sf::Keyboard::D;
+  input[KeyFireUp]    = sf::Keyboard::Up;
+  input[KeyFireDown]  = sf::Keyboard::Down;
+  input[KeyFireLeft]  = sf::Keyboard::Left;
+  input[KeyFireRight] = sf::Keyboard::Right;
+
+  inputAlt[KeyUp]    = sf::Keyboard::W;
+  inputAlt[KeyDown]  = sf::Keyboard::S;
+  inputAlt[KeyLeft]  = sf::Keyboard::A;
+  inputAlt[KeyRight] = sf::Keyboard::D;
+  inputAlt[KeyFireUp]    = sf::Keyboard::Up;
+  inputAlt[KeyFireDown]  = sf::Keyboard::Down;
+  inputAlt[KeyFireLeft]  = sf::Keyboard::Left;
+  inputAlt[KeyFireRight] = sf::Keyboard::Right;
+
+  // from file
+  addKey(KeyUp, "keyboard_move_up");
+  addKey(KeyDown, "keyboard_move_down");
+  addKey(KeyLeft, "keyboard_move_left");
+  addKey(KeyRight, "keyboard_move_right");
+  addKey(KeyFireUp, "keyboard_fire_up");
+  addKey(KeyFireDown, "keyboard_fire_down");
+  addKey(KeyFireLeft, "keyboard_fire_left");
+  addKey(KeyFireRight, "keyboard_fire_right");
+  addKey(KeyFire, "keyboard_fire");
+
+  addKey(KeyUp, "keyboard_move_up_alt", true);
+  addKey(KeyDown, "keyboard_move_down_alt", true);
+  addKey(KeyLeft, "keyboard_move_left_alt", true);
+  addKey(KeyRight, "keyboard_move_right_alt", true);
+  addKey(KeyFireUp, "keyboard_fire_up_alt", true);
+  addKey(KeyFireDown, "keyboard_fire_down_alt", true);
+  addKey(KeyFireLeft, "keyboard_fire_left_alt", true);
+  addKey(KeyFireRight, "keyboard_fire_right_alt", true);
+  addKey(KeyFire, "keyboard_fire_alt", true);
 }
 
 WitchBlastGame &game()
