@@ -62,16 +62,20 @@ Features
 
 Thanks
 --------
-Thanks to Billx (who suggest me the title "Witch Blast") and Mika Attila (for his contribution concerning the Linux version)
+Thanks to
+Billx (who suggest me the title "Witch Blast")
+and
+Mika Attila (for his contribution concerning the Linux version)
 
 Changes
 -------
 Next version
 - ADD New enemies (slime and black rat)
 - ADD New items
+- ADD Item's rarity
 - ADD Show player's impact when he's hurt
 - ADD New music when the player dies
-- ADD New music for bos fight
+- ADD New music for boss' fight
 - ADD Mouse support - Player can fire with left click, switch shot types with the wheel
 - ADD Pause
 - ADD Save / restore game
@@ -82,9 +86,13 @@ Next version
 - ADD New room templates
 - ADD Exit stairs
 - ADD Collisions between monsters
+- ADD Screen's shaking effect
+- ADD Configuration file
 - MOD Damages inflicted by the player have been modified
 - MOD The player's bolt size depend of the damages
 - MOD Only useful data displayed on the minimap
+- MOD Reduced bounding box for the player's bolt
+- MOD Vertical Synchronisation
 - FIX Fade in / fade out text bugs
 - FIX Merchant z-ordering bug
 - FIX It was possible to begin at the exit
