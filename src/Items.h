@@ -16,6 +16,16 @@ const int SPECIAL_SHOT_SLOTS_STANDARD = 2;
 const int SPECIAL_SHOT_SLOTS_ADVANCED = 2;
 const int SPECIAL_SHOT_SLOTS = 1 + SPECIAL_SHOT_SLOTS_STANDARD + SPECIAL_SHOT_SLOTS_ADVANCED;
 
+/** Rarity enum
+ *  Rarity of the equipment.
+ */
+enum enumRarity
+{
+  RarityCommon,  /**< Common */
+  RarityUnommon, /**< Uncommon */
+  RarityRare     /**< Rare */
+};
+
 /** Item type enum
  *  All the items and equipments.
  */
@@ -61,6 +71,7 @@ struct itemStuct
   bool canBeFound;              /**< True if the item is can be found */
   bool generatesStance;         /**< True if picking the item generates an acquiring stance*/
   int level;                    /**< Minimal level where the item can be found */
+  enumRarity rarity;            /**< Item rarity */
   enumAlignment alignment;      /**< Item alignment */
   int requirement;              /**< Pre-requisite item */
   enumShotType specialShot;     /**< Special shot */
@@ -72,79 +83,79 @@ const itemStuct items[NUMBER_ITEMS] =
 {
   {
     ItemCopperCoin, "Copper coin", "A copper coin (value 1)",
-    1, false, false, false, false, 1, AlignmentNone, -1, ShotTypeStandard
+    1, false, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemSilverCoin, "Silver coin", "A silver coin (value 5)",
-    5, false, false, false, false, 1, AlignmentNone, -1, ShotTypeStandard
+    5, false, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemGoldCoin, "Gold coin", "A gold coin (value 20)",
-    20, false, false, false, false, 1, AlignmentNone, -1, ShotTypeStandard
+    20, false, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     itemHealth, "Health potion", "A health potion",
-    8, false, true, false, false, 1, AlignmentNone, -1, ShotTypeStandard
+    8, false, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     itemBossHeart, "Titan's Heart", "Increases Max HP",
-    250, false, false, false, true, 1, AlignmentNone, -1, ShotTypeStandard
+    250, false, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemMagicianHat, "Enchanter Hat", "Increases fire rate",
-    20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemLeatherBoots, "Velvet Boots", "Increases speed",
-    20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemBookDualShots, "Spell : Dual Bolts", "Shoots two bolts",
-    20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemRageAmulet, "Rage Amulet", "Increases fire range",
-    20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemBossKey, "Boss Key", "Open the Boss gate",
-    200, true, false, false, true, 1, AlignmentNone, -1, ShotTypeStandard
+    200, true, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemVibrationGloves, "Vibration Gloves", "Increases bolt's speed and damages",
-    20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemMahoganyStaff, "Mahogany Staff", "Increases bolt's speed and damages",
-    20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemFairy, "Fairy", "Help you in the dungeon",
-    20, true, false, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemLeatherBelt, "Leather Belt", "Increases fire rate",
-    20, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    20, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemBloodSnake, "Blood Snake", "Increases damages",
-    25, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStandard
+    25, true, true, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemGemIce, "Ice Gem", "Ice attack (freeze)",
-    25, true, true, true, true, 1, AlignmentNone, -1, ShotTypeIce
+    25, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeIce
   },
   {
     ItemGemIllusion, "Illusion Gem", "Illusion attack (ignore walls)",
-    25, true, true, true, true, 4, AlignmentDark, -1, ShotTypeIllusion
+    25, true, true, true, true, 4, RarityUnommon, AlignmentDark, -1, ShotTypeIllusion
   },
   {
     ItemGemStone, "Stone Gem", "Stone attack (repulse)",
-    25, true, true, true, true, 1, AlignmentNone, -1, ShotTypeStone
+    25, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStone
   },
   {
     ItemGemLightning, "Lighting Gem", "Lightning attack (bouncing)",
-    25, true, true, true, true, 1, AlignmentNone, -1, ShotTypeLightning
+    25, true, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeLightning
   }
 };
 
