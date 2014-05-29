@@ -285,10 +285,11 @@ class WitchBlastGame : public Game
       KeyFireDown,
       KeyFireLeft,
       KeyFireRight,
-      KeyFire
+      KeyFire,
+      KeyFireSelect
     };
-    sf::Keyboard::Key input[8];     /*!< Input key array */
-    sf::Keyboard::Key inputAlt[8];  /*!< Input key array (alternative) */
+    sf::Keyboard::Key input[10];     /*!< Input key array */
+    sf::Keyboard::Key inputAlt[10];  /*!< Input key array (alternative) */
 
     /*!
      *  \brief Starts the game

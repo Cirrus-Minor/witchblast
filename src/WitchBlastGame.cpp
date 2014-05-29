@@ -1,3 +1,19 @@
+/**  This file is part of Witch Blast.
+  *
+  *  Witch Blast is free software: you can redistribute it and/or modify
+  *  it under the terms of the GNU General Public License as published by
+  *  the Free Software Foundation, either version 3 of the License, or
+  *  (at your option) any later version.
+  *
+  *  Witch Blast is distributed in the hope that it will be useful,
+  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  *  GNU General Public License for more details.
+  *
+  *  You should have received a copy of the GNU General Public License
+  *  along with Witch Blast.  If not, see <http://www.gnu.org/licenses/>.
+  */
+
 #include "WitchBlastGame.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/TileMapEntity.h"
@@ -337,7 +353,7 @@ void WitchBlastGame::startGame()
                 else if (gameState == gameStatePlaying && isPausing) isPausing = false;
               }
 
-              if (event.key.code == sf::Keyboard::Tab)
+              if (event.key.code == input[KeyFireSelect] || event.key.code == inputAlt[KeyFireSelect])
               {
                 if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
               }
@@ -350,10 +366,6 @@ void WitchBlastGame::startGame()
               if (event.key.code == sf::Keyboard::X)
               {
                 startNewGame(false);
-              }
-              if (event.key.code == sf::Keyboard::C)
-              {
-                startNewLevel();
               }
             }
 
@@ -1494,6 +1506,8 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireDown]  = sf::Keyboard::Down;
   input[KeyFireLeft]  = sf::Keyboard::Left;
   input[KeyFireRight] = sf::Keyboard::Right;
+  input[KeyFire] = sf::Keyboard::Space;
+  input[KeyFireSelect] = sf::Keyboard::Tab;
 
   inputAlt[KeyUp]    = sf::Keyboard::W;
   inputAlt[KeyDown]  = sf::Keyboard::S;
@@ -1503,6 +1517,8 @@ void WitchBlastGame::configureFromFile()
   inputAlt[KeyFireDown]  = sf::Keyboard::Down;
   inputAlt[KeyFireLeft]  = sf::Keyboard::Left;
   inputAlt[KeyFireRight] = sf::Keyboard::Right;
+  inputAlt[KeyFire] = sf::Keyboard::Space;
+  inputAlt[KeyFireSelect] = sf::Keyboard::Tab;
 
   // from file
   addKey(KeyUp, "keyboard_move_up");
@@ -1514,6 +1530,7 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireLeft, "keyboard_fire_left");
   addKey(KeyFireRight, "keyboard_fire_right");
   addKey(KeyFire, "keyboard_fire");
+  addKey(KeyFireSelect, "keyboard_fire_select");
 
   addKey(KeyUp, "keyboard_move_up_alt", true);
   addKey(KeyDown, "keyboard_move_down_alt", true);
@@ -1524,6 +1541,7 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireLeft, "keyboard_fire_left_alt", true);
   addKey(KeyFireRight, "keyboard_fire_right_alt", true);
   addKey(KeyFire, "keyboard_fire_alt", true);
+  addKey(KeyFireSelect, "keyboard_fire_select_alt", true);
 }
 
 WitchBlastGame &game()
