@@ -30,7 +30,7 @@ Game::Game(int screenWidth, int screenHeight, std::string windowsTitle, bool ful
         app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle, sf::Style::Fullscreen);
     else
         app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle); // , sf::Style::Close);
-    app->setFramerateLimit(60);
+    app->setVerticalSyncEnabled(true);
 }
 
 Game::~Game()
