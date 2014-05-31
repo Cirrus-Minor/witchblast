@@ -78,18 +78,9 @@ void EvilFlowerEntity::fire()
     bolt->setFrame(1);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
-    float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
-    float angle = atan(tan);
-
     float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
     if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
-
-    if (game().getPlayer()->getY() > y)
-      bolt->setVelocity(Vector2D(sin(angle) * flowerFireVelocity,
-                                 cos(angle) * flowerFireVelocity));
-    else
-      bolt->setVelocity(Vector2D(-sin(angle) * flowerFireVelocity,
-                                 -cos(angle) * flowerFireVelocity));
+    bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), flowerFireVelocity ));
 }
 
 void EvilFlowerEntity::render(sf::RenderTarget* app)
