@@ -6,7 +6,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-SlimeEntity::SlimeEntity(float x, float y)
+SlimeEntity::SlimeEntity(float x, float y, bool invocated)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), x, y)
 {
   creatureSpeed = 0.0f;
@@ -14,17 +14,27 @@ SlimeEntity::SlimeEntity(float x, float y)
   hp = SLIME_HP;
   meleeDamages = SLIME_DAMAGES;
 
-  type = ENTITY_ENNEMY;
+  this->invocated = invocated;
+  if (invocated)
+  {
+    type = ENTITY_ENNEMY_INVOCATED;
+    jumpingDelay = 0.0f;
+    age = 0.0f;
+  }
+  else
+  {
+    type = ENTITY_ENNEMY;
+    jumpingDelay = 0.6f + 0.1f * (rand() % 20);
+  }
+
   bloodColor = bloodGreen;
-  jumpingDelay = 2.0f;
+  frame = 0;
   shadowFrame = 3;
 
   isJumping = false;
   h = 0.0f;
 
   viscosity = 0.98f;
-  frame = 0;
-  jumpingDelay = 0.6f + 0.1f * (rand() % 20);
 }
 
 void SlimeEntity::animate(float delay)
@@ -222,7 +232,7 @@ void SlimeEntity::dying()
 
   for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
 
-  drop();
+  if (!invocated) drop();
   SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }
 

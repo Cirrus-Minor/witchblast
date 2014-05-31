@@ -26,6 +26,7 @@
 #include "BlackRatEntity.h"
 #include "GreenRatEntity.h"
 #include "KingRatEntity.h"
+#include "GiantSlimeEntity.h"
 #include "BatEntity.h"
 #include "SlimeEntity.h"
 #include "ChestEntity.h"
@@ -63,6 +64,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage((char*)"media/bat.png");
   ImageManager::getImageManager()->addImage((char*)"media/evil_flower.png");
   ImageManager::getImageManager()->addImage((char*)"media/slime.png");
+  ImageManager::getImageManager()->addImage((char*)"media/giant_slime.png");
   ImageManager::getImageManager()->addImage((char*)"media/king_rat.png");
   ImageManager::getImageManager()->addImage((char*)"media/blood.png");
   ImageManager::getImageManager()->addImage((char*)"media/corpses.png");
@@ -112,14 +114,6 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   currentFloor = NULL;
   xGameState = xGameStateNone;
   isPausing = false;
-
-  if (!mainTexture.create(GAME_WIDTH + OFFSET_X, GAME_HEIGHT + OFFSET_Y) )
-  {
-    // error
-  }
-
-  mainSprite.setTexture(mainTexture.getTexture());
-  mainSprite.setTextureRect(sf::IntRect(0, GAME_HEIGHT + OFFSET_Y, GAME_WIDTH + OFFSET_X, -GAME_HEIGHT - OFFSET_Y));
 
   shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
 
@@ -533,8 +527,8 @@ int WitchBlastGame::getEnnemyCount()
 		if (e->getType() >= 20)
 		{
 		  n++;
-		} // endif
-	} // end for
+		}
+	}
 
 	return n;
 }
@@ -718,12 +712,17 @@ void WitchBlastGame::onRender()
     // clear the view
     app->clear(sf::Color(32, 32, 32));
 
+
     if (xGameState == xGameStateShake)
     {
-      mainTexture.clear();
-      EntityManager::getEntityManager()->renderUnder(&mainTexture, 5000);
-      mainSprite.setPosition(-4 + rand() % 9, -4 + rand() % 9);
-      app->draw(mainSprite);
+      sf::View view = app->getDefaultView();
+      sf::View viewSave = app->getDefaultView();
+      view.move(-4 + rand() % 9, -4 + rand() % 9);
+      app->setView(view);
+
+      EntityManager::getEntityManager()->renderUnder(app, 5000);
+
+      app->setView(viewSave);
       EntityManager::getEntityManager()->renderAfter(app, 5000);
     }
     else
@@ -956,7 +955,11 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoom(0);
 
-    new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+    if (level == 1)
+      new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                      OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+    else
+      new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
 
     playMusic(MusicBoss);
@@ -1020,7 +1023,7 @@ void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float y
     case MONSTER_BLACK_RAT: new BlackRatEntity(xm, ym - 5); break;
     case MONSTER_BAT: new BatEntity(xm, ym); break;
     case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym - 2); break;
-    case MONSTER_SLIME: new SlimeEntity(xm, ym); break;
+    case MONSTER_SLIME: new SlimeEntity(xm, ym, false); break;
 
     case MONSTER_KING_RAT: new KingRatEntity(xm, ym); break;
   }
@@ -1147,8 +1150,11 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
         case RarityUnommon: n = 2; break;
         case RarityRare:    n = 1; break;
       }
-      for (int j = 0; j < n; j++) bonusSet.push_back(i);
-      setSize++;
+      for (int j = 0; j < n; j++)
+      {
+        bonusSet.push_back(i);
+        setSize++;
+      }
     }
   }
   int bonusType = 0;

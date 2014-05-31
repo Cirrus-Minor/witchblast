@@ -78,6 +78,7 @@ enum item_images {
   IMAGE_FLOWER,
   IMAGE_SLIME,
 
+  IMAGE_GIANT_SLIME,
   IMAGE_KING_RAT,
 
   IMAGE_BLOOD,
@@ -255,6 +256,18 @@ const int SLIME_BB_LEFT = 13;
 const int SLIME_BB_WIDTH_DIFF = 26;
 const int SLIME_BB_TOP = 38;
 const int SLIME_BB_HEIGHT_DIFF = 40;
+
+// Giant Slime
+const int GIANT_SLIME_HP = 600;
+const int GIANT_SLIME_DAMAGES = 8;
+const int GIANT_SLIME_MISSILE_DAMAGES = 6;
+const float GIANT_SLIME_MISSILE_DELAY = 0.33f;
+const float GIANT_SLIME_FIRE_VELOCITY = 200.0f;
+const int GIANT_SLIME_BB_LEFT = 26;
+const int GIANT_SLIME_BB_WIDTH_DIFF = 52;
+const int GIANT_SLIME_BB_TOP = 64;
+const int GIANT_SLIME_BB_HEIGHT_DIFF = 12;
+const int GIANT_SLIME_SPEED = 85.0f;
 
 // KingRat
 const float KING_RAT_SPEED = 200.0f;

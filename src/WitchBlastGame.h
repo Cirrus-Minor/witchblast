@@ -233,8 +233,6 @@ class WitchBlastGame : public Game
     sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
     sf::Font font;              /*!< The font used for displaying text */
     sf::Text myText;            /*!< The text to be displayed */
-    sf::RenderTexture mainTexture;  /*!< The main game in a texture */
-    sf::Sprite mainSprite;  /*!< The main game in a sprite */
 
     sf::Music music;            /*!< Current game music */
 
