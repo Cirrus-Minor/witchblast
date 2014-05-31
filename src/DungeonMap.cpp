@@ -389,6 +389,13 @@ void DungeonMap::generateRoom(int type)
         map[x0 + 1][MAP_HEIGHT - 1] = 64;
       }
     }
+    if (roomType == roomTypeBoss && game().getLevel() == 1) // giant slime
+    {
+    map[1][1] = 29;
+    map[1][MAP_HEIGHT -2] = 29;
+    map[MAP_WIDTH - 2][1] = 29;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = 29;
+    }
   }
   if (type == 1)
   {
