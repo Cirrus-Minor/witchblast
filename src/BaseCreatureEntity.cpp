@@ -329,10 +329,13 @@ void BaseCreatureEntity::computeFacingDirection()
 
 void BaseCreatureEntity::giveRecoil(bool stun, Vector2D velocity, float timer)
 {
-  recoil.active = true;
-  recoil.stun = stun;
-  recoil.velocity = velocity;
-  recoil.timer = timer;
+  if (!(recoil.active && recoil.stun))
+  {
+    recoil.active = true;
+    recoil.stun = stun;
+    recoil.velocity = velocity;
+    recoil.timer = timer;
+  }
 }
 
 void BaseCreatureEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)

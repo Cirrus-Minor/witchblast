@@ -36,6 +36,8 @@ class GiantSlimeEntity : public EnnemyEntity
     float h;
     float hVelocity;
     bool isFirstJumping;
+    bool isFalling;
+    float missileDelay;
 
     void fire();
 };

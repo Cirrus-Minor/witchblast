@@ -130,7 +130,8 @@ enum corpses_ressources{
   FRAME_CORPSE_SLIME,
   FRAME_CORPSE_BLACK_RAT,
 
-  FRAME_CORPSE_KING_RAT
+  FRAME_CORPSE_KING_RAT,
+  FRAME_CORPSE_GIANT_SLIME
 };
 
 // Player game play
@@ -258,7 +259,7 @@ const int SLIME_BB_TOP = 38;
 const int SLIME_BB_HEIGHT_DIFF = 40;
 
 // Giant Slime
-const int GIANT_SLIME_HP = 600;
+const int GIANT_SLIME_HP = 650;
 const int GIANT_SLIME_DAMAGES = 8;
 const int GIANT_SLIME_MISSILE_DAMAGES = 6;
 const float GIANT_SLIME_MISSILE_DELAY = 0.33f;
@@ -274,7 +275,7 @@ const float KING_RAT_SPEED = 200.0f;
 const float KING_RAT_RUNNING_SPEED = 600.0f;
 const float KING_RAT_BERSERK_SPEED = 250.0f;
 const float KING_RAT_RUNNING_RECOIL = 750.0f;
-const int KING_RAT_HP = 600;
+const int KING_RAT_HP = 700;
 const int KING_RAT_DAMAGES = 8;
 
 // EFFECTS
