@@ -77,6 +77,9 @@ public:
 	    result.y = -cos(angle) * amplitude;
 	  }
 
+    if (result.x != result.x)
+      return (Vector2D(amplitude));
+
 	  return result;
 	}
 };
