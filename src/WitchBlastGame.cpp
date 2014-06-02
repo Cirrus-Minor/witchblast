@@ -814,7 +814,7 @@ void WitchBlastGame::onRender()
         myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
         app->draw(myText);
       }
-      else if (currentMap->getRoomType() == roomTypeExit)
+      else if (currentMap->getRoomType() == roomTypeExit && level > 1)
       {
         float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
         myText.setColor(sf::Color(255, 255, 255, 255));
