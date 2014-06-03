@@ -17,6 +17,7 @@ const int MAP_WALL_6        =   56;
 const int MAP_WALL_1        =   57;
 const int MAP_WALL_2        =   58;
 const int MAP_WALL_3        =   59;
+const int MAP_GRID          =   29;
 
 
 class GameFloor;
@@ -69,6 +70,7 @@ class DungeonMap : public GameMap
     Vector2D generateBonusRoom();
     Vector2D generateMerchantRoom();
     Vector2D generateKeyRoom();
+    void addRandomGrids(int n);
 
     void addItem(int itemType, float x, float y, bool merch);
     void addSprite(int spriteType, int frame,  float x, float y, float scale);

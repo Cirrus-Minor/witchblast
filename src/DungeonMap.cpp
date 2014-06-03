@@ -391,10 +391,10 @@ void DungeonMap::generateRoom(int type)
     }
     if (roomType == roomTypeBoss && game().getLevel() == 1) // giant slime
     {
-    map[1][1] = 29;
-    map[1][MAP_HEIGHT -2] = 29;
-    map[MAP_WIDTH - 2][1] = 29;
-    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = 29;
+    map[1][1] = MAP_GRID;
+    map[1][MAP_HEIGHT -2] = MAP_GRID;
+    map[MAP_WIDTH - 2][1] = MAP_GRID;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
     }
   }
   if (type == 1)
@@ -538,4 +538,20 @@ void DungeonMap::restoreMapObjects()
   restoreItems();
   restoreSprites();
   restoreChests();
+}
+
+void DungeonMap::addRandomGrids(int n)
+{
+  int counter = n;
+
+  while (counter > 0)
+  {
+    int rx = 1 + rand() % (MAP_WIDTH - 2);
+    int ry = 1 + rand() % (MAP_HEIGHT - 2);
+    if (map[rx][ry] < 5)
+    {
+      map[rx][ry] = MAP_GRID;
+      counter--;
+    }
+  }
 }

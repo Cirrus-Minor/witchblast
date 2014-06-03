@@ -1116,6 +1116,7 @@ void WitchBlastGame::generateStandardMap()
   else
   {
     currentMap->generateRoom(rand()%4);
+    currentMap->addRandomGrids(4);
     findPlaceMonsters(MONSTER_SLIME,8 + rand() % 5);
   }
 }
