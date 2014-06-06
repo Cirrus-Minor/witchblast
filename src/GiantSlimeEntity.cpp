@@ -128,7 +128,7 @@ void GiantSlimeEntity::animate(float delay)
       case 2: new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, true); break;
       case 3: new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, true); break;
     }
-    slimeTimer = 6.0f;
+    slimeTimer = 7.0f;
     slimeCounter ++;
     if (slimeCounter == 4) slimeCounter = 0;
   }
@@ -359,17 +359,26 @@ void GiantSlimeEntity::dying()
   if (y <= OFFSET_Y + 1.5 * TILE_HEIGHT) y = OFFSET_Y + 1.5 * TILE_HEIGHT + 2;
   else if (y >= OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT) x = OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT -3;
 
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 9; i++)
   {
     game().generateBlood(xSlime, ySlime, bloodColor);
     new SlimeEntity(x, y, true);
   }
 
-  //SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_DIE);
+  SoundManager::getSoundManager()->playSound(SOUND_SLIME_SMASH);
 
   ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
+
+  SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_GIANT_SLIME), x, y, 128, 128, 8);
+  star->setFrame(4);
+  star->setFading(true);
+  star->setZ(y+ 100);
+  star->setAge(-0.4f);
+  star->setLifetime(0.3f);
+  star->setType(16);
+  star->setSpin(400.0f);
 }
 
 void GiantSlimeEntity::render(sf::RenderTarget* app)
