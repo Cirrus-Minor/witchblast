@@ -77,10 +77,10 @@ void BoltEntity::animate(float delay)
 
 void BoltEntity::calculateBB()
 {
-    boundingBox.left = x - 2;
-    boundingBox.width = 4;
-    boundingBox.top = y - 2;
-    boundingBox.height =  4;
+    boundingBox.left = x - 3;
+    boundingBox.width = 6;
+    boundingBox.top = y - 3;
+    boundingBox.height =  6;
 }
 
 void BoltEntity::collide()
