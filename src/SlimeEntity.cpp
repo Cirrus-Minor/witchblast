@@ -18,7 +18,7 @@ SlimeEntity::SlimeEntity(float x, float y, bool invocated)
   if (invocated)
   {
     type = ENTITY_ENNEMY_INVOCATED;
-    jumpingDelay = 0.0f;
+    jumpingDelay = 0.1f;
     age = 0.0f;
   }
   else
