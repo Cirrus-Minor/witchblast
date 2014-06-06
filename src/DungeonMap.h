@@ -5,8 +5,9 @@
 #include "sfml_game/MyTools.h"
 #include <list>
 
-const int MAP_NORMAL_FLOOR  =   3;
+const int MAP_NORMAL_FLOOR  =   7;
 const int MAP_STAIRS_UP     =   39;
+const int MAP_DOOR_OPEN     =   49;
 const int MAP_WALL          =   50;
 const int MAP_DOOR          =   51;
 const int MAP_WALL_7        =   52;

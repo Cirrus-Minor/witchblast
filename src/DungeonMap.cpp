@@ -259,7 +259,7 @@ void DungeonMap::initRoom()
     for ( j = 1 ; j < height - 1 ; j++)
     {
       map[i][j] = 0;
-      if (rand()%8 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+      if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
     }
 
   if (gameFloor != NULL)

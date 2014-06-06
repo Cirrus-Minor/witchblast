@@ -487,7 +487,7 @@ void WitchBlastGame::openDoors()
     int i, j;
     for(i = 0; i < MAP_WIDTH; i++)
       for(j = 0; j < MAP_WIDTH; j++)
-        if (currentMap->getTile(i, j) == MAP_DOOR) currentMap->setTile(i, j, 0);
+        if (currentMap->getTile(i, j) == MAP_DOOR) currentMap->setTile(i, j, MAP_DOOR_OPEN);
   roomClosed = false;
   SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
 
