@@ -825,6 +825,14 @@ void WitchBlastGame::onRender()
         myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
         app->draw(myText);
       }
+      else if (currentMap->getRoomType() == roomTypeStarting && level == 1)
+      {
+        myText.setColor(sf::Color(255, 255, 255, 255));
+        myText.setCharacterSize(21);
+        myText.setString("CONTROLS :\n- WASD or ZQSD to move\n- Arrows to fire (in 4 directions)\n[TAB] to switch shot types");
+        myText.setPosition(80, 80);
+        app->draw(myText);
+      }
 
       if (xGameState == xGameStateFadeIn)
       {
