@@ -829,7 +829,7 @@ void WitchBlastGame::onRender()
       {
         myText.setColor(sf::Color(255, 255, 255, 255));
         myText.setCharacterSize(21);
-        myText.setString("CONTROLS :\n- WASD or ZQSD to move\n- Arrows to fire (in 4 directions)\n[TAB] to switch shot types");
+        myText.setString("CONTROLS :\n- WASD or ZQSD to move\n- Arrows to fire (in 4 directions)\n- [TAB] to switch shot types");
         myText.setPosition(80, 80);
         app->draw(myText);
       }
