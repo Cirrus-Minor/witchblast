@@ -300,6 +300,7 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
 {
   if (equip[EQUIP_MAHOGANY_STAFF]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
   int xSnake, ySnake;
+  int xStone, yStone;
 
   if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
   {
@@ -307,6 +308,8 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
     app->draw(sprite);
     xSnake = 13 * width;
     ySnake = height * 4;
+    xStone = 13 * width;
+    yStone = height * 4;
   }
   else if (isMoving() || firingDirection != 5)
   {
@@ -314,6 +317,8 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
     app->draw(sprite);
     xSnake = (frame / 3 + spriteDx + 1) * width;
     ySnake = height * 4;
+    xStone = (frame / 3 + spriteDx + 1) * width;
+    yStone = height * 4;
   }
   else
   {
@@ -321,6 +326,8 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
     app->draw(sprite);
     xSnake = (spriteDx / 3 + 14) * width;
     ySnake = 0;
+    xStone = (spriteDx / 3 + 14) * width;
+    yStone = height * 2;
   }
 
   if (equip[EQUIP_BLOOD_SNAKE])
@@ -330,6 +337,23 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
     app->draw(sprite);
   }
   sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+  if (getShotType() != ShotTypeStandard)
+  {
+    switch (getShotType())
+    {
+      case ShotTypeIce: sprite.setColor(sf::Color(100, 220, 255, 255)); break;
+      case ShotTypeStone: sprite.setColor(sf::Color(120, 120, 150, 255)); break;
+      case ShotTypeLightning: sprite.setColor(sf::Color(255, 255, 0, 255)); break;
+
+      case ShotTypeIllusion: sprite.setColor(sf::Color(240, 180, 250, 255)); break;
+
+      case ShotTypeStandard: sprite.setColor(sf::Color(255, 255, 255, 0)); break;
+    }
+
+    sprite.setTextureRect(sf::IntRect( xStone, yStone, width, height));
+    app->draw(sprite);
+    sprite.setColor(sf::Color(255, 255, 255, 255));
+  }
 }
 
 
@@ -697,7 +721,6 @@ void PlayerEntity::computePlayer()
     fireDamagesBonus += 0.5f;
   }
   if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 1.0f;
-  //if (getShotType()) boltType = BoltIce;
 
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;
