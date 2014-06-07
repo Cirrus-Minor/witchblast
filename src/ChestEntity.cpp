@@ -6,6 +6,8 @@
 #include "sfml_game/SpriteEntity.h"
 #include "Constants.h"
 
+#include <iostream>
+
 ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CHEST), x, y, 48, 48)
 {
@@ -78,6 +80,43 @@ void ChestEntity::open()
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     newItem->setVelocity(Vector2D(50.0f + rand()% 150));
     newItem->setViscosity(0.96f);
+  }
+  else if (chestType == CHEST_EXIT)
+  {
+    int r = rand() % 3;
+    if (r == 0)
+    {
+      for (int i = 0; i < 5; i++)
+      {
+        ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
+        newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+        newItem->setViscosity(0.96f);
+      }
+    }
+    else if (r == 1)
+    {
+      for (int i = 0; i < 3; i++)
+      {
+        ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
+        newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+        newItem->setViscosity(0.96f);
+      }
+      ItemEntity* newItem = new ItemEntity(itemHealth, x, y);
+      newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+      newItem->setViscosity(0.96f);
+    }
+    else
+    {
+      int bonusType = EQUIP_FAIRY;
+      while (bonusType == EQUIP_FAIRY)
+      {
+        bonusType = game().getRandomEquipItem(false);
+        std::cout << bonusType << std::endl;
+      }
+      ItemEntity* newItem = new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), x ,y);
+      newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+      newItem->setViscosity(0.96f);
+    }
   }
 }
 

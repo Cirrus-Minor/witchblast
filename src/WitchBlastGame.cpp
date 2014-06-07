@@ -119,6 +119,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
 
   configureFromFile();
+  srand(time(NULL));
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -996,6 +997,10 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateExitRoom();
     currentMap->setCleared(true);
+
+    new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                    OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                    CHEST_EXIT, false);
   }
   else
     currentMap->randomize(currentMap->getRoomType());

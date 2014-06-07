@@ -178,6 +178,16 @@ class WitchBlastGame : public Game
      */
     bool loadGame();
 
+    /*!
+     *  \brief Returns a random equip object
+     *
+     * Returns a random equip object (not an object the player already possesses) .
+     *  \param toSale : true if it's an item for sale
+     *
+     *  \return the equipment item ID
+     */
+    item_equip_enum getRandomEquipItem(bool toSale);
+
   protected:
     /*!
      *  \brief Rendering method
@@ -396,16 +406,6 @@ class WitchBlastGame : public Game
      *  \param amount : amount of monsters
      */
     void findPlaceMonsters(monster_type_enum monsterType, int amount);
-
-    /*!
-     *  \brief Returns a random equip object
-     *
-     * Returns a random equip object (not an object the player already possesses) .
-     *  \param toSale : true if it's an item for sale
-     *
-     *  \return the equipment item ID
-     */
-    item_equip_enum getRandomEquipItem(bool toSale);
 
     /*!
      *  \brief Checks if player opens a door

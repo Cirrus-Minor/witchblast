@@ -166,7 +166,6 @@ bool GameFloor::finalize()
 
 void GameFloor::createFloor()
 {
-  srand(time(NULL));
   bool ok=false;
   while (!ok)
   {

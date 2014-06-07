@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.0.8";
+const std::string APP_VERSION =   "0.1.0";
 
 const std::string CONFIG_FILE =   "config.dat";
 
@@ -154,7 +154,8 @@ const float FAIRY_BOLT_VELOCITY = 700.0f;
 
 enum chest_type_enum {
   CHEST_BASIC,
-  CHEST_FAIRY
+  CHEST_FAIRY,
+  CHEST_EXIT
 };
 // Artefact Info
 const float ARTEFACT_RECT_WIDTH = 600.0f;
