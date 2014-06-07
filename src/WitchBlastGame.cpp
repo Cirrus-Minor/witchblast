@@ -935,14 +935,20 @@ void WitchBlastGame::generateMap()
 
     ItemEntity* item1 = new ItemEntity(
       itemHealth,
-      OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+      OFFSET_X + (MAP_WIDTH / 2 - 3) * TILE_WIDTH + TILE_WIDTH / 2,
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item1->setMerchandise(true);
+
+    ItemEntity* item3 = new ItemEntity(
+      itemHealth,
+      OFFSET_X + (MAP_WIDTH / 2 + 3) * TILE_WIDTH + TILE_WIDTH / 2,
+      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
+    item3->setMerchandise(true);
 
     int bonusType = getRandomEquipItem(true);
     ItemEntity* item2 = new ItemEntity(
       (enumItemType)(FirstEquipItem + bonusType),
-      OFFSET_X + (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
+      OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item2->setMerchandise(true);
 
