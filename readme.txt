@@ -69,7 +69,7 @@ Mika Attila (for his contribution concerning the Linux version)
 
 Changes
 -------
-Next version
+v0.1.0
 - ADD New enemies (slime and black rat)
 - ADD New items
 - ADD Item's rarity
@@ -88,11 +88,13 @@ Next version
 - ADD Collisions between monsters
 - ADD Screen's shaking effect
 - ADD Configuration file
+- ADD New tile's graphics
 - MOD Damages inflicted by the player have been modified
 - MOD The player's bolt size depend of the damages
 - MOD Only useful data displayed on the minimap
 - MOD Reduced bounding box for the player's bolt
 - MOD Vertical Synchronisation
+- MOD 2 health potions in shops now
 - FIX Fade in / fade out text bugs
 - FIX Merchant z-ordering bug
 - FIX It was possible to begin at the exit
