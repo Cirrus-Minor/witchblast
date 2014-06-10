@@ -312,7 +312,7 @@ void BaseCreatureEntity::dying()
 
 void BaseCreatureEntity::computeFacingDirection()
 {
-  if (abs((int)velocity.x) > 0 && abs((int)velocity.y) > 0)
+  if (abs((int)velocity.x) > 0 || abs((int)velocity.y) > 0)
   {
     if (abs((int)velocity.x) > abs((int)velocity.y))
     {
