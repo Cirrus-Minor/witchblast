@@ -102,6 +102,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_impact_weak.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/slime_smash.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/ice_charge.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/electric.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/select.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/heart.ogg");
 
@@ -400,6 +401,7 @@ void WitchBlastGame::startGame()
             player->move(2);
           }
 
+          player->resestFireDirection();
           // normal 4 directions gameplay
           if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireLeft]))
             player->fire(4);

@@ -137,7 +137,7 @@ void PlayerEntity::animate(float delay)
       {
         equip[acquiredItem - FirstEquipItem] = true;
 
-        if (acquiredItem == ItemFairy) //(int)EQUIP_FAIRY)
+        if (acquiredItem == ItemFairy)
           fairy = new FairyEntity(x, y - 50.0f, this);
 
         if (items[acquiredItem].specialShot != (ShotTypeStandard))
@@ -186,7 +186,6 @@ void PlayerEntity::animate(float delay)
 
   if (firingDirection != 5)
     facingDirection = firingDirection;
-  firingDirection = 5;
 
   if (isMoving())
   {
@@ -398,17 +397,23 @@ void PlayerEntity::render(sf::RenderTarget* app)
     renderHands(app);
   }
 
-  // ice gem
-  if (getShotType() == ShotTypeIce)
+  // gems
+  if (getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning)
   {
     int fade;
-    if (specialBoltTimer <= 0.0f) fade = 255;
+    if (getShotType() != ShotTypeIce || specialBoltTimer <= 0.0f) fade = 255;
     else fade = ((STATUS_FROZEN_BOLT_DELAY - specialBoltTimer) / STATUS_FROZEN_BOLT_DELAY) * 128;
 
-    sprite.setTextureRect(sf::IntRect(320, 0, 20, 20));
+    if (getShotType() == ShotTypeLightning)
+      fade = 150 + rand() % 105;
+
+    if (getShotType() == ShotTypeIce)
+      sprite.setTextureRect(sf::IntRect(320, 0, 20, 20));
+    else if (getShotType() == ShotTypeLightning)
+      sprite.setTextureRect(sf::IntRect(340, 0, 20, 20));
     sprite.setColor(sf::Color(255, 255, 255, fade));
 
-    if (isMoving())
+    if (isMoving() || firingDirection != 5)
     {
       if (facingDirection == 2 )
         sprite.setPosition(x + 16, y + 36);
@@ -557,6 +562,16 @@ void PlayerEntity::generateBolt(float velx, float vely)
   bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   bolt->setDamages(fireDamages);
   bolt->setVelocity(Vector2D(velx, vely));
+}
+
+void PlayerEntity::resestFireDirection()
+{
+  firingDirection = 5;
+}
+
+int PlayerEntity::getFireDirection()
+{
+  return firingDirection;
 }
 
 void PlayerEntity::fire(int direction)
@@ -846,6 +861,9 @@ void PlayerEntity::selectNextShotType()
 
   SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
   computePlayer();
+
+  if (getShotType() == ShotTypeLightning)
+    SoundManager::getSoundManager()->playSound(SOUND_ELECTRIC_CHARGE);
 }
 
 void PlayerEntity::initShotType()

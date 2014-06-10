@@ -93,6 +93,16 @@ class PlayerEntity : public BaseCreatureEntity
     void fire(int direction);
 
     /*!
+     *  \brief reset the fire direction of the player
+     */
+    void resestFireDirection();
+
+    /*!
+     *  \brief accessor on the fire direction of the player
+     */
+    int getFireDirection();
+
+    /*!
      *  \brief returns if the player is moving or not
      *
      *  Returns if the player is moving or not.

@@ -112,6 +112,33 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       }
     }
   }
+
+/*
+  if (x < OFFSET_X + TILE_WIDTH)
+  {
+    x = OFFSET_X + TILE_WIDTH;
+    if (velocity.x > 1.0f) velocity.x = -velocity.x;
+    else if (velocity.x > -1.0f) velocity.x = -1.0f;
+  }
+  else if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1))
+  {
+    x = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1);
+    if (velocity.x < -1.0f) velocity.x = -velocity.x;
+    else if (velocity.x < 1.0f) velocity.x = 1.0f;
+  }
+
+  if (y < OFFSET_Y + TILE_HEIGHT)
+  {
+    y = OFFSET_Y + TILE_HEIGHT;
+    if (velocity.y > 1.0f) velocity.y = -velocity.y;
+    else if (velocity.y > -1.0f) velocity.y = -1.0f;
+  }
+  else if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1))
+  {
+    y = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1);
+    if (velocity.y < -1.0f) velocity.y = -velocity.y;
+    else if (velocity.y < 1.0f) velocity.y = 1.0f;
+  }*/
 }
 
 void EnnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
@@ -123,7 +150,6 @@ void EnnemyEntity::dying()
 {
   isDying = true;
   SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(3), x, y, 64, 64);
-  //deadRat->setZ(y + height);
   deadRat->setZ(OFFSET_Y);
   deadRat->setFrame(2);
   deadRat->setType(13);
