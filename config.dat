@@ -3,7 +3,7 @@ keyboard_move_up_alt		22
 keyboard_move_down			18
 keyboard_move_down_alt		18
 keyboard_move_left			16
-keyboard_move_left_alt		10
+keyboard_move_left_alt		0
 keyboard_move_right			3
 keyboard_move_right_alt		3
 
