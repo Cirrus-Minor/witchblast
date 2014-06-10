@@ -18,5 +18,8 @@ class FairyEntity : public SpriteEntity
   private:
     PlayerEntity* parentEntity;
     float fireDelay;
+    int facingDirection;
+
+    void computeFacingDirection();
 };
 #endif // MAGNETENTITY_H

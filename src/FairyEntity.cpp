@@ -17,6 +17,7 @@ FairyEntity::FairyEntity(float x, float y, PlayerEntity* parentEntity) : SpriteE
   //viscosity = 0.99f;
 
   fireDelay = -1.0f;
+  facingDirection = 2;
 }
 
 
@@ -25,8 +26,6 @@ void FairyEntity::animate(float delay)
   z = y + height;
 
   if (fireDelay > 0) fireDelay -= delay;
-
-  frame = ((int)(age * 10.0f)) % 2;
 
   float dist2 = (x - parentEntity->getX()) * (x - parentEntity->getX()) + (y - parentEntity->getY()) * (y - parentEntity->getY());
 
@@ -41,17 +40,23 @@ void FairyEntity::animate(float delay)
       setVelocity(Vector2D(-sin(angle) * FAIRY_SPEED, -cos(angle) * FAIRY_SPEED));
 
     viscosity = 1.0f;
-
-    /*velocity.x = 2 * (parentEntity->getX() - x);
-    velocity.y = 2 * (parentEntity->getY() - y);*/
   }
   else if (dist2 < 50000.0f)
   {
     viscosity = 0.96f;
   }
 
- // x = parentEntity->getX() + 50;
- // y = parentEntity->getY() - 20;
+  computeFacingDirection();
+
+  isMirroring = false;
+  frame = ((int)(age * 10.0f)) % 2;
+  if (facingDirection == 8) frame += 2;
+  else if (facingDirection == 4) frame += 4;
+  else if (facingDirection == 6)
+  {
+    frame += 4;
+    isMirroring = true;
+  }
 
   SpriteEntity::animate(delay);
 }
@@ -75,5 +80,26 @@ void FairyEntity::fire(int dir, GameMap* map)
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     bolt->setDamages(FAIRY_BOLT_DAMAGES);
     bolt->setVelocity(Vector2D(velx, vely));
+  }
+}
+
+void FairyEntity::computeFacingDirection()
+{
+  if (parentEntity->getFireDirection() != 5)
+  {
+    facingDirection = parentEntity->getFireDirection();
+  }
+  else if (abs((int)velocity.x) > 0 || abs((int)velocity.y) > 0)
+  {
+    if (abs((int)velocity.x) > abs((int)velocity.y))
+    {
+      if (velocity.x > 0.0f) facingDirection = 6;
+      else facingDirection = 4;
+    }
+    else
+    {
+      if (velocity.y > 0.0f) facingDirection = 2;
+      else facingDirection = 8;
+    }
   }
 }
