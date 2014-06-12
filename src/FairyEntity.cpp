@@ -1,23 +1,31 @@
 #include "FairyEntity.h"
 #include "BoltEntity.h"
 #include "Constants.h"
+#include "WitchBlastGame.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include <iostream>
 
-FairyEntity::FairyEntity(float x, float y, PlayerEntity* parentEntity) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_FAIRY), x, y, 48, 72)
+FairyEntity::FairyEntity(float x, float y, fairy_type_enum fairyType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_FAIRY), x, y, 48, 72)
 {
   this->x = x;
   this->y = y;
 
   this->setFrame(0);
-  this->parentEntity = parentEntity;
+  imagesProLine = 6;
+  this->parentEntity = game().getPlayer();
 
   type = ENTITY_FAMILIAR;
-  //viscosity = 0.99f;
+  this->fairyType = fairyType;
 
   fireDelay = -1.0f;
   facingDirection = 2;
+
+  switch (fairyType)
+  {
+    case FAIRY_STANDARD: shotType = ShotTypeStandard; fairyFireDelay = FAIRY_FIRE_DELAY; break;
+    case FAIRY_ICE: shotType = ShotTypeIce; fairyFireDelay = ICE_FAIRY_FIRE_DELAY; break;
+  }
 }
 
 
@@ -57,7 +65,7 @@ void FairyEntity::animate(float delay)
     frame += 4;
     isMirroring = true;
   }
-
+  frame += (int)(fairyType) * 6;
   SpriteEntity::animate(delay);
 }
 
@@ -66,7 +74,7 @@ void FairyEntity::fire(int dir, GameMap* map)
   if (fireDelay <= 0.0f)
   {
     SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
-    fireDelay = FAIRY_FIRE_DELAY;
+    fireDelay = fairyFireDelay;
 
     float velx = 0.0f;
     float vely = 0.0f;
@@ -76,7 +84,7 @@ void FairyEntity::fire(int dir, GameMap* map)
     if (dir == 2) vely = + FAIRY_BOLT_VELOCITY;
     if (dir == 8) vely = - FAIRY_BOLT_VELOCITY;
 
-    BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, FAIRY_BOLT_LIFE, ShotTypeStandard);
+    BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, FAIRY_BOLT_LIFE, shotType);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     bolt->setDamages(FAIRY_BOLT_DAMAGES);
     bolt->setVelocity(Vector2D(velx, vely));

@@ -149,6 +149,7 @@ const float INITIAL_BOLT_VELOCITY = 700.0f;
 
 const float FAIRY_SPEED = 180.0f;
 const float FAIRY_FIRE_DELAY = 0.8f;
+const float ICE_FAIRY_FIRE_DELAY = 1.3f;
 const float FAIRY_BOLT_LIFE = 0.4f;
 const int FAIRY_BOLT_DAMAGES = 8;
 const float FAIRY_BOLT_VELOCITY = 700.0f;
@@ -208,6 +209,15 @@ enum monster_type_enum
   MONSTER_BLACK_RAT,
 
   MONSTER_KING_RAT
+};
+
+// fairies number
+const int FAIRY_NUMBER = 2;
+// fairy type
+enum fairy_type_enum
+{
+  FAIRY_STANDARD,
+  FAIRY_ICE
 };
 
 const float DOOR_OPEN_TIME = 1.0f;

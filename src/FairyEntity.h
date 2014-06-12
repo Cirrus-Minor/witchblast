@@ -8,7 +8,7 @@
 class FairyEntity : public SpriteEntity
 {
   public:
-    FairyEntity(float x, float y, PlayerEntity* parentEntity);
+    FairyEntity(float x, float y, fairy_type_enum fairyType);
     virtual void animate(float delay);
 
     void fire(int dir, GameMap* map);
@@ -19,6 +19,9 @@ class FairyEntity : public SpriteEntity
     PlayerEntity* parentEntity;
     float fireDelay;
     int facingDirection;
+    fairy_type_enum fairyType;
+    enumShotType shotType;
+    float fairyFireDelay;
 
     void computeFacingDirection();
 };
