@@ -138,7 +138,7 @@ void PlayerEntity::animate(float delay)
         equip[acquiredItem - FirstEquipItem] = true;
 
         if (acquiredItem == ItemFairy)
-          fairy = new FairyEntity(x, y - 50.0f, FAIRY_STANDARD);
+          fairy = new FairyEntity(x, y - 50.0f, FamiliarFairy);
 
         if (items[acquiredItem].specialShot != (ShotTypeStandard))
           registerSpecialShot(acquiredItem);
@@ -528,7 +528,7 @@ void PlayerEntity::setEquiped(int item, bool eq)
   equip[item] = eq;
   if (eq && item == (int)EQUIP_FAIRY)
   {
-    fairy = new FairyEntity(x, y - 50.0f, FAIRY_STANDARD);
+    fairy = new FairyEntity(x, y - 50.0f, FamiliarFairy);
   }
    computePlayer();
 }

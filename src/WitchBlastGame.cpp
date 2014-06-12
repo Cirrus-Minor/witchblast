@@ -920,7 +920,8 @@ void WitchBlastGame::generateMap()
     currentMap->setCleared(true);
     Vector2D v = currentMap->generateBonusRoom();
     int bonusType = getRandomEquipItem(false);
-    if (bonusType == EQUIP_FAIRY)
+    //if (bonusType == EQUIP_FAIRY)
+    if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
     {
       new ChestEntity(v.x, v.y, CHEST_FAIRY, false);
     }

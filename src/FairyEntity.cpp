@@ -6,7 +6,7 @@
 #include "sfml_game/SoundManager.h"
 #include <iostream>
 
-FairyEntity::FairyEntity(float x, float y, fairy_type_enum fairyType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_FAIRY), x, y, 48, 72)
+FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_FAIRY), x, y, 48, 72)
 {
   this->x = x;
   this->y = y;
@@ -23,8 +23,10 @@ FairyEntity::FairyEntity(float x, float y, fairy_type_enum fairyType) : SpriteEn
 
   switch (fairyType)
   {
-    case FAIRY_STANDARD: shotType = ShotTypeStandard; fairyFireDelay = FAIRY_FIRE_DELAY; break;
-    case FAIRY_ICE: shotType = ShotTypeIce; fairyFireDelay = ICE_FAIRY_FIRE_DELAY; break;
+    case FamiliarFairy: shotType = ShotTypeStandard; fairyFireDelay = FAIRY_FIRE_DELAY; break;
+    case FamiliarFairyIce: shotType = ShotTypeIce; fairyFireDelay = ICE_FAIRY_FIRE_DELAY; break;
+
+    case FamiliarNone: break;
   }
 }
 

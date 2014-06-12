@@ -211,15 +211,6 @@ enum monster_type_enum
   MONSTER_KING_RAT
 };
 
-// fairies number
-const int FAIRY_NUMBER = 2;
-// fairy type
-enum fairy_type_enum
-{
-  FAIRY_STANDARD,
-  FAIRY_ICE
-};
-
 const float DOOR_OPEN_TIME = 1.0f;
 const float DOOR_CLOSE_TIME = 1.0f;
 
