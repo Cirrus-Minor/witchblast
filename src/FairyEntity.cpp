@@ -4,6 +4,7 @@
 #include "WitchBlastGame.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
+#include "sfml_game/MyTools.h"
 #include <iostream>
 
 FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_FAIRY), x, y, 48, 72)
@@ -55,6 +56,8 @@ void FairyEntity::animate(float delay)
   {
     viscosity = 0.96f;
   }
+
+  checkCollisions();
 
   computeFacingDirection();
 
@@ -110,6 +113,36 @@ void FairyEntity::computeFacingDirection()
     {
       if (velocity.y > 0.0f) facingDirection = 2;
       else facingDirection = 8;
+    }
+  }
+}
+
+void FairyEntity::checkCollisions()
+{
+  int n = parentEntity->getFairieNumber();
+  if (n > 1)
+  {
+    for (int i = 0; i < n; i++)
+    {
+      FairyEntity* fairy = parentEntity->getFairy(i);
+      if (this != fairy)
+      {
+        bool isColliding = true;
+        int dist = 40;
+
+        if (x > fairy->getX() + dist || x < fairy->getX() - dist
+              || y > fairy->getY() + dist || y < fairy->getY() - dist)
+          isColliding = false;
+
+        if (isColliding)
+        {
+          Vector2D vel = (Vector2D(fairy->getX(), fairy->getY()).vectorTo(Vector2D(x, y), FAIRY_SPEED * 0.5f));
+          velocity.x += vel.x;
+          velocity.y += vel.y;
+
+          fairy->setVelocity(Vector2D(fairy->getVelocity().x - vel.x, fairy->getVelocity().y - vel.y));
+        }
+      }
     }
   }
 }

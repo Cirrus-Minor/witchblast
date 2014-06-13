@@ -24,5 +24,6 @@ class FairyEntity : public SpriteEntity
     float fairyFireDelay;
 
     void computeFacingDirection();
+    void checkCollisions();
 };
 #endif // MAGNETENTITY_H

@@ -529,8 +529,8 @@ void PlayerEntity::setEquiped(int item, bool eq)
   equip[item] = eq;
   if (eq && items[FirstEquipItem + item].familiar > FamiliarNone)
   {
-    FairyEntity* fairy = new FairyEntity(x,
-                                         y - 50.0f,
+    FairyEntity* fairy = new FairyEntity(x - 50.0f + rand() % 100,
+                                         y - 50.0f + rand() % 100,
                                          items[FirstEquipItem + item].familiar);
     fairies.push_back(fairy);
   }
@@ -876,4 +876,17 @@ void PlayerEntity::initShotType()
 {
   specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
   needInitShotType = false;
+}
+
+int PlayerEntity::getFairieNumber()
+{
+  return fairies.size();
+}
+
+FairyEntity* PlayerEntity::getFairy(unsigned int n)
+{
+  if (n < fairies.size())
+    return fairies[n];
+  else
+    return NULL;
 }

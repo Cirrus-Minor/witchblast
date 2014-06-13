@@ -363,6 +363,17 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void selectNextShotType();
 
+    /*!
+     *  \brief accessor on the fairies number
+     */
+    int getFairieNumber();
+
+    /*!
+     *  \brief accessor on a fairy
+     *  \param n : index of the fairy in the vector
+     */
+    FairyEntity* getFairy(unsigned int n);
+
   protected:
     void computePlayer();
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
