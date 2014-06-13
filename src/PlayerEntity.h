@@ -398,7 +398,7 @@ class PlayerEntity : public BaseCreatureEntity
 
     int firingDirection;
 
-    FairyEntity* fairy;
+    std::vector<FairyEntity*> fairies;
 
     int spriteDx;
     void renderHead(sf::RenderTarget* app);

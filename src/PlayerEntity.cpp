@@ -43,7 +43,6 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   firingDirection = 5;
   facingDirection = 2;
-
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -54,10 +53,10 @@ void PlayerEntity::moveTo(float newX, float newY)
   x = newX;
   y = newY;
 
-  if (equip[EQUIP_FAIRY])
+  for(int unsigned i = 0; i < fairies.size(); i++)
   {
-    fairy->setX(fairy->getX() + dx);
-    fairy->setY(fairy->getY() + dy);
+    fairies[i]->setX(fairies[i]->getX() + dx);
+    fairies[i]->setY(fairies[i]->getY() + dy);
   }
 }
 
@@ -137,8 +136,10 @@ void PlayerEntity::animate(float delay)
       {
         equip[acquiredItem - FirstEquipItem] = true;
 
-        if (acquiredItem == ItemFairy)
-          fairy = new FairyEntity(x, y - 50.0f, FamiliarFairy);
+        if (items[acquiredItem].familiar > FamiliarNone)
+        {
+          setEquiped(acquiredItem - FirstEquipItem, true);
+        }
 
         if (items[acquiredItem].specialShot != (ShotTypeStandard))
           registerSpecialShot(acquiredItem);
@@ -526,9 +527,12 @@ bool PlayerEntity::isEquiped(int eq)
 void PlayerEntity::setEquiped(int item, bool eq)
 {
   equip[item] = eq;
-  if (eq && item == (int)EQUIP_FAIRY)
+  if (eq && items[FirstEquipItem + item].familiar > FamiliarNone)
   {
-    fairy = new FairyEntity(x, y - 50.0f, FamiliarFairy);
+    FairyEntity* fairy = new FairyEntity(x,
+                                         y - 50.0f,
+                                         items[FirstEquipItem + item].familiar);
+    fairies.push_back(fairy);
   }
    computePlayer();
 }
@@ -577,8 +581,10 @@ int PlayerEntity::getFireDirection()
 void PlayerEntity::fire(int direction)
 {
   firingDirection = direction;
-  if (equip[EQUIP_FAIRY] && playerStatus != playerStatusDead)
-    fairy->fire(direction, map);
+
+  if (playerStatus != playerStatusDead)
+    for(int unsigned i = 0; i < fairies.size(); i++)
+      fairies[i]->fire(direction, map);
 
   if (canFirePlayer && playerStatus != playerStatusDead)
   {

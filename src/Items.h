@@ -172,11 +172,11 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyIce, "Ice Fairy", "Help you in the dungeon",
-    40, true, FamiliarFairyIce, false, true, true, 1, RarityRare, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyIce, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
 
-const int NUMBER_EQUIP_ITEMS = 14;  /*!< Number of equip items */
+const int NUMBER_EQUIP_ITEMS = 15;  /*!< Number of equip items */
 /** Item equipment type enum
  *  All the equipments.
  */
@@ -194,7 +194,8 @@ enum item_equip_enum {
   EQUIP_GEM_ICE,
   EQUIP_GEM_ILLUSION,
   EQUIP_GEM_STONE,
-  EQUIP_GEM_LIGHTNING
+  EQUIP_GEM_LIGHTNING,
+  EQUIP_FAIRY_ICE
   };
 
 #endif

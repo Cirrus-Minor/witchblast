@@ -908,7 +908,7 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
 
 void WitchBlastGame::showArtefactDescription(enumItemType itemType)
 {
-  new ArtefactDescriptionEntity(itemType); //, &font);
+  new ArtefactDescriptionEntity(itemType);
 }
 
 void WitchBlastGame::generateMap()
@@ -923,7 +923,7 @@ void WitchBlastGame::generateMap()
     //if (bonusType == EQUIP_FAIRY)
     if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
     {
-      new ChestEntity(v.x, v.y, CHEST_FAIRY, false);
+      new ChestEntity(v.x, v.y, CHEST_FAIRY + items[FirstEquipItem + bonusType].familiar, false);
     }
     else
     {
@@ -990,11 +990,11 @@ void WitchBlastGame::generateMap()
     int bonusType = getRandomEquipItem(false);
     if (level == 1)
     {
-      if (bonusType == EQUIP_FAIRY)
+      if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
       {
         new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                                              OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                                             CHEST_FAIRY, false);
+                                             CHEST_FAIRY + items[FirstEquipItem + bonusType].familiar, false);
       }
       else
       {

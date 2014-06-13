@@ -156,8 +156,8 @@ const float FAIRY_BOLT_VELOCITY = 700.0f;
 
 enum chest_type_enum {
   CHEST_BASIC,
-  CHEST_FAIRY,
-  CHEST_EXIT
+  CHEST_EXIT,
+  CHEST_FAIRY
 };
 // Artefact Info
 const float ARTEFACT_RECT_WIDTH = 600.0f;

@@ -15,7 +15,9 @@ ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
   imagesProLine = 2;
   this->isOpen = isOpen;
   this->chestType = chestType;
-  frame = chestType * 2 + (isOpen ? 1 : 0);
+  frame = chestType * 2;
+  if (chestType > CHEST_FAIRY) frame = CHEST_FAIRY * 2;
+  frame += (isOpen ? 1 : 0);
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 }
 
@@ -74,10 +76,16 @@ void ChestEntity::open()
       newItem->setViscosity(0.96f);
     }
   }
-  else if (chestType == CHEST_FAIRY)
+  else if (chestType >= CHEST_FAIRY)
   {
-    ItemEntity* newItem = new ItemEntity(ItemFairy, x, y);
-    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    enumItemType itemType = ItemFairy;
+    switch (chestType - CHEST_FAIRY)
+    {
+      case FamiliarFairy: itemType = ItemFairy; break;
+      case FamiliarFairyIce: itemType = ItemFairyIce; break;
+    }
+
+    ItemEntity* newItem = new ItemEntity(itemType, x, y);
     newItem->setVelocity(Vector2D(50.0f + rand()% 150));
     newItem->setViscosity(0.96f);
   }
