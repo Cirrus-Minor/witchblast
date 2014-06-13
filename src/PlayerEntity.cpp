@@ -867,15 +867,15 @@ void PlayerEntity::selectNextShotType()
 
   SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
   computePlayer();
-
-  if (getShotType() == ShotTypeLightning)
-    SoundManager::getSoundManager()->playSound(SOUND_ELECTRIC_CHARGE);
 }
 
 void PlayerEntity::initShotType()
 {
   specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
   needInitShotType = false;
+
+  if (getShotType() == ShotTypeLightning)
+    SoundManager::getSoundManager()->playSound(SOUND_ELECTRIC_CHARGE);
 }
 
 int PlayerEntity::getFairieNumber()
