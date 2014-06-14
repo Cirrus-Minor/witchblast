@@ -115,12 +115,9 @@ void ChestEntity::open()
     }
     else
     {
-      int bonusType = EQUIP_FAIRY;
-      while (bonusType == EQUIP_FAIRY)
-      {
+      int bonusType = game().getRandomEquipItem(false);
+      while (items[FirstEquipItem + bonusType].familiar != FamiliarNone)
         bonusType = game().getRandomEquipItem(false);
-        std::cout << bonusType << std::endl;
-      }
       ItemEntity* newItem = new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), x ,y);
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
       newItem->setViscosity(0.96f);
