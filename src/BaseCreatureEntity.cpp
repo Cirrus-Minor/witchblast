@@ -86,6 +86,7 @@ void BaseCreatureEntity::animateColors(float delay)
     if (hurtingDelay > 0.0f)
     {
       int fadeColor = (sf::Uint8)((HURTING_DELAY - hurtingDelay) * 255);
+      if (hurtingDelay > HURTING_DELAY) fadeColor = 0;
       if (hurtingType == ShotTypeIce)
         sprite.setColor(sf::Color(fadeColor, fadeColor, 255, 255 )); // blue
       else

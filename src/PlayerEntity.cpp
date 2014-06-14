@@ -657,6 +657,7 @@ bool PlayerEntity::hurt(int damages, enumShotType hurtingType)
   {
     SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
     BaseCreatureEntity::hurt(damages, ShotTypeStandard);
+    hurtingDelay = HURTING_DELAY * 2.0f;
     game().generateBlood(x, y, bloodColor);
     game().generateBlood(x, y, bloodColor);
     return true;
