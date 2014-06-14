@@ -366,7 +366,7 @@ void WitchBlastGame::startGame()
               }
             }
 
-            if (event.type == sf::Event::LostFocus)
+            if (event.type == sf::Event::LostFocus && !player->isDead())
               isPausing = true;
         }
 
