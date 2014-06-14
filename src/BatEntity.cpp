@@ -34,7 +34,6 @@ void BatEntity::animate(float delay)
   else
     frame = ((int)(age * 5.0f)) % 2;
 
-  testSpriteCollisions();
   EnnemyEntity::animate(delay);
 }
 
