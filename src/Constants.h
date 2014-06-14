@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.1.0";
+const std::string APP_VERSION =   "0.1.1";
 
 const std::string CONFIG_FILE =   "config.dat";
 

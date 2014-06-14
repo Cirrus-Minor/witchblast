@@ -69,6 +69,14 @@ Mika Attila (for his contribution concerning the Linux version)
 
 Changes
 -------
+
+Next version
+- ADD New familiar (Ice Fairy)
+- ADD Lightning's shot effect and sound
+- MOD Bolt's bounding box is bigger when testing collision with monsters
+- MOD Player's invincibility delay after being shot increases,
+- FIX Switching windows while player is dead
+
 v0.1.0
 - ADD New enemies (slime and black rat)
 - ADD New items
