@@ -34,6 +34,7 @@ class BoltEntity : public CollidingSpriteEntity
     float renderScale;
     enumShotType boltType;
   private:
+    bool testWallsCollision;
 };
 
 #endif // BOLTENTITY_H

@@ -21,6 +21,7 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
     case ShotTypeLightning: frame = 5; break;
     case ShotTypeIllusion:  frame = 3; break;
   }
+  testWallsCollision = false;
 }
 
 int BoltEntity::getDamages()
@@ -60,9 +61,10 @@ void BoltEntity::animate(float delay)
   trace->setFrame(frame);
 
   z = y + height;
-  //if (viscosity < 1.0f && ((velocity.x)*(velocity.x) + (velocity.y)*(velocity.y)) < 900.0f) viscosity = 1.0f;
 
+  testWallsCollision = true;
   CollidingSpriteEntity::animate(delay);
+  testWallsCollision = false;
 
   if ( (lifetime - age) < 0.2f)
   {
@@ -77,10 +79,12 @@ void BoltEntity::animate(float delay)
 
 void BoltEntity::calculateBB()
 {
-    boundingBox.left = x - 3;
-    boundingBox.width = 6;
-    boundingBox.top = y - 3;
-    boundingBox.height =  6;
+  int colSize = testWallsCollision ? 1 : 10;
+
+  boundingBox.left = x - colSize;
+  boundingBox.width = colSize * 2;
+  boundingBox.top = y - colSize;
+  boundingBox.height =  colSize * 2;
 }
 
 void BoltEntity::collide()
