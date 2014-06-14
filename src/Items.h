@@ -172,7 +172,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyIce, "Ice Fairy", "Help you in the dungeon",
-    40, true, FamiliarFairyIce, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyIce, false, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
 
