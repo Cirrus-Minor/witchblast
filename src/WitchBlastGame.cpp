@@ -318,148 +318,307 @@ void WitchBlastGame::playLevel()
   text->setColor(TextEntity::COLOR_FADING_WHITE);
 }
 
+void WitchBlastGame::updateRunningGame()
+{
+  // Process events
+  sf::Event event;
+  while (app->pollEvent(event))
+  {
+    // Close window : exit
+    if (event.type == sf::Event::Closed)
+    {
+      if (gameState == gameStatePlaying && !player->isDead() && currentMap->isCleared()) saveGame();
+      app->close();
+    }
+
+    if (event.type == sf::Event::MouseWheelMoved)
+    {
+      if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
+    }
+
+    if (event.type == sf::Event::KeyPressed)
+    {
+      if (event.key.code == sf::Keyboard::Escape)
+      {
+        if (gameState == gameStatePlaying && !isPausing) isPausing = true;
+        else if (gameState == gameStatePlaying && isPausing) isPausing = false;
+      }
+
+      if (event.key.code == input[KeyFireSelect] || event.key.code == inputAlt[KeyFireSelect])
+      {
+        if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
+      }
+
+      if (event.key.code == input[KeyFire] || event.key.code == inputAlt[KeyFire])
+      {
+        if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
+      }
+
+      if (event.key.code == sf::Keyboard::X)
+      {
+        startNewGame(false);
+      }
+    }
+
+    if (event.type == sf::Event::LostFocus && !player->isDead())
+      isPausing = true;
+  }
+
+  if (gameState == gameStatePlaying && !isPausing)
+  {
+    if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
+
+    if (sf::Keyboard::isKeyPressed(input[KeyLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyLeft]))
+    {
+      if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
+        player->move(7);
+      else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
+        player->move(1);
+      else
+        player->move(4);
+    }
+    else if (sf::Keyboard::isKeyPressed(input[KeyRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyRight]))
+    {
+      if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
+        player->move(9);
+      else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
+        player->move(3);
+      else
+        player->move(6);
+    }
+    else if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
+    {
+      player->move(8);
+    }
+    else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
+    {
+      player->move(2);
+    }
+
+    player->resestFireDirection();
+    // normal 4 directions gameplay
+    if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireLeft]))
+      player->fire(4);
+    else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireRight]))
+      player->fire(6);
+    else if (sf::Keyboard::isKeyPressed(input[KeyFireUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireUp]))
+      player->fire(8);
+    else if (sf::Keyboard::isKeyPressed(input[KeyFireDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireDown]))
+      player->fire(2);
+    // alternative "one button" gameplay
+    else if (sf::Keyboard::isKeyPressed(input[KeyFire]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFire]))
+    {
+      player->fire(firingDirection);
+    }
+    // alternative "firing with the mouse" gameplay
+    else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+      sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
+      int xm = mousePosition.x - player->getX();
+      int ym = mousePosition.y - player->getY();
+
+      if (abs(xm) >= abs(ym))
+      {
+        if (xm > 0) player->fire(6);
+        else player->fire(4);
+      }
+      else
+      {
+        if (ym > 0) player->fire(2);
+        else player->fire(8);
+      }
+    }
+
+    if (player->isDead() && xGameState == xGameStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+    {
+      xGameState = xGameStateFadeOut;
+      xGameTimer = FADE_OUT_DELAY;
+    }
+  }
+
+  onUpdate();
+
+  verifyDoorUnlocking();
+  if (roomClosed)
+  {
+    if (getEnnemyCount() == 0)
+    {
+      currentMap->setCleared(true);
+      openDoors();
+      if (currentMap->getRoomType() == roomTypeBoss)
+        playMusic(MusicDungeon);
+    }
+  }
+}
+
+void WitchBlastGame::renderRunningGame()
+{
+  EntityManager::getEntityManager()->sortByZ();
+  if (xGameState == xGameStateShake)
+  {
+    sf::View view = app->getDefaultView();
+    sf::View viewSave = app->getDefaultView();
+    view.move(-4 + rand() % 9, -4 + rand() % 9);
+    app->setView(view);
+
+    EntityManager::getEntityManager()->renderUnder(app, 5000);
+
+    app->setView(viewSave);
+    EntityManager::getEntityManager()->renderAfter(app, 5000);
+  }
+  else
+  {
+    // render the game objects
+    EntityManager::getEntityManager()->render(app);
+  }
+
+  myText.setColor(sf::Color(255, 255, 255, 255));
+
+  myText.setCharacterSize(18);
+  std::ostringstream oss;
+  oss << player->getGold();
+  myText.setString(oss.str());
+  myText.setPosition(690, 612);
+  app->draw(myText);
+
+  myText.setColor(sf::Color(0, 0, 0, 255));
+  myText.setCharacterSize(16);
+
+  oss.str("");
+  oss << "Level " << level;
+  myText.setString(oss.str());
+  myText.setPosition(410, 692);
+  app->draw(myText);
+
+  sf::RectangleShape rectangle(sf::Vector2f(200, 25));
+  // life
+
+  if (gameState == gameStatePlaying)
+  {
+    // life and mana
+    rectangle.setFillColor(sf::Color(190, 20, 20));
+    rectangle.setPosition(sf::Vector2f(90, 622));
+    rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 25));
+    app->draw(rectangle);
+
+    rectangle.setFillColor(sf::Color(255, 190, 190));
+    rectangle.setPosition(sf::Vector2f(90, 625));
+    rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 2));
+    app->draw(rectangle);
+
+    rectangle.setFillColor(sf::Color(20, 20, 190));
+    rectangle.setPosition(sf::Vector2f(90, 658));
+    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentFireDelay() , 25));
+    app->draw(rectangle);
+
+    rectangle.setFillColor(sf::Color(190, 190, 255));
+    rectangle.setPosition(sf::Vector2f(90, 661));
+    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentFireDelay() , 2));
+    app->draw(rectangle);
+
+    // drawing the key on the interface
+    if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
+
+    // render the shots
+    renderHudShots(app);
+
+    if (isPausing)
+    {
+      rectangle.setFillColor(sf::Color(0, 0, 0, 160));
+      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
+      app->draw(rectangle);
+
+      float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+      int fade = 50 + 205 * (1.0f + cos(3.0f * getAbsolutTime())) * 0.5f;
+      myText.setColor(sf::Color(255, 255, 255, fade));
+      myText.setCharacterSize(40);
+      myText.setString("PAUSE");
+      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 300);
+      app->draw(myText);
+    }
+
+    if (player->isDead())
+    {
+      float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+      int fade = 255 * (1.0f + cos(2.0f * getAbsolutTime())) * 0.5f;
+
+      myText.setColor(sf::Color(255, 255, 255, 255));
+      myText.setCharacterSize(25);
+      myText.setString("GAME OVER");
+      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 400);
+      app->draw(myText);
+
+      myText.setColor(sf::Color(255, 255, 255, fade));
+      myText.setCharacterSize(20);
+      myText.setString("Press [ENTER] to play again !");
+      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
+      app->draw(myText);
+    }
+    else if (currentMap->getRoomType() == roomTypeExit && level > 1)
+    {
+      float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+      myText.setColor(sf::Color(255, 255, 255, 255));
+      myText.setCharacterSize(25);
+      myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the boss !\nSee you soon for new adventures !");
+      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
+      app->draw(myText);
+    }
+    else if (currentMap->getRoomType() == roomTypeStarting && level == 1)
+    {
+      myText.setColor(sf::Color(255, 255, 255, 255));
+      myText.setCharacterSize(21);
+      myText.setString("CONTROLS :\n- WASD or ZQSD to move\n- Arrows to fire (in 4 directions)\n- [TAB] to switch shot types");
+      myText.setPosition(80, 80);
+      app->draw(myText);
+    }
+
+    if (xGameState == xGameStateFadeIn)
+    {
+      // fade in
+      rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
+      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+      app->draw(rectangle);
+    }
+    else if (xGameState == xGameStateFadeOut)
+    {
+      // fade out
+      rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
+      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+      app->draw(rectangle);
+    }
+  }
+}
+
+void WitchBlastGame::updateMenu()
+{
+
+}
+
+void WitchBlastGame::renderMenu()
+{
+
+}
+
 void WitchBlastGame::startGame()
 {
-    startNewGame(true);
+  startNewGame(true);
 
-    // Start game loop
-    while (app->isOpen())
+  // Start game loop
+  while (app->isOpen())
+  {
+    switch (gameState)
     {
-        // Process events
-        sf::Event event;
-
-        while (app->pollEvent(event))
-        {
-            // Close window : exit
-            if (event.type == sf::Event::Closed)
-            {
-              if (gameState == gameStatePlaying && !player->isDead() && currentMap->isCleared()) saveGame();
-              app->close();
-            }
-
-            if (event.type == sf::Event::MouseWheelMoved)
-            {
-              if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
-            }
-
-            if (event.type == sf::Event::KeyPressed)
-            {
-              if (event.key.code == sf::Keyboard::Escape)
-              {
-                if (gameState == gameStatePlaying && !isPausing) isPausing = true;
-                else if (gameState == gameStatePlaying && isPausing) isPausing = false;
-              }
-
-              if (event.key.code == input[KeyFireSelect] || event.key.code == inputAlt[KeyFireSelect])
-              {
-                if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
-              }
-
-              if (event.key.code == input[KeyFire] || event.key.code == inputAlt[KeyFire])
-              {
-                if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
-              }
-
-              if (event.key.code == sf::Keyboard::X)
-              {
-                startNewGame(false);
-              }
-            }
-
-            if (event.type == sf::Event::LostFocus && !player->isDead())
-              isPausing = true;
-        }
-
-        if (gameState == gameStatePlaying && !isPausing)
-        {
-          if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
-
-          if (sf::Keyboard::isKeyPressed(input[KeyLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyLeft]))
-          {
-            if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
-              player->move(7);
-            else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
-              player->move(1);
-            else
-              player->move(4);
-          }
-          else if (sf::Keyboard::isKeyPressed(input[KeyRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyRight]))
-          {
-            if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
-              player->move(9);
-            else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
-              player->move(3);
-            else
-              player->move(6);
-          }
-          else if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
-          {
-            player->move(8);
-          }
-          else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
-          {
-            player->move(2);
-          }
-
-          player->resestFireDirection();
-          // normal 4 directions gameplay
-          if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireLeft]))
-            player->fire(4);
-          else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireRight]))
-            player->fire(6);
-          else if (sf::Keyboard::isKeyPressed(input[KeyFireUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireUp]))
-            player->fire(8);
-          else if (sf::Keyboard::isKeyPressed(input[KeyFireDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireDown]))
-            player->fire(2);
-          // alternative "one button" gameplay
-          else if (sf::Keyboard::isKeyPressed(input[KeyFire]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFire]))
-          {
-            player->fire(firingDirection);
-          }
-          // alternative "firing with the mouse" gameplay
-          else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-          {
-            sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
-            int xm = mousePosition.x - player->getX();
-            int ym = mousePosition.y - player->getY();
-
-            if (abs(xm) >= abs(ym))
-            {
-              if (xm > 0) player->fire(6);
-              else player->fire(4);
-            }
-            else
-            {
-              if (ym > 0) player->fire(2);
-              else player->fire(8);
-            }
-          }
-
-          if (player->isDead() && xGameState == xGameStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-          {
-            xGameState = xGameStateFadeOut;
-            xGameTimer = FADE_OUT_DELAY;
-          }
-        }
-
-        onUpdate();
-        EntityManager::getEntityManager()->sortByZ();
-        onRender();
-
-        verifyDoorUnlocking();
-
-        if (roomClosed)
-        {
-          if (getEnnemyCount() == 0)
-          {
-            currentMap->setCleared(true);
-            openDoors();
-            if (currentMap->getRoomType() == roomTypeBoss)
-              playMusic(MusicDungeon);
-          }
-        }
+      case gameStateInit:
+      case gameStateKeyConfig:
+      case gameStateMenu: updateMenu(); break;
+      case gameStatePlaying: updateRunningGame(); break;
     }
-    quitGame();
+    onRender();
+  }
+  quitGame();
 }
 
 void WitchBlastGame::createFloor()
@@ -716,142 +875,12 @@ void WitchBlastGame::onRender()
     // clear the view
     app->clear(sf::Color(32, 32, 32));
 
-
-    if (xGameState == xGameStateShake)
+    switch (gameState)
     {
-      sf::View view = app->getDefaultView();
-      sf::View viewSave = app->getDefaultView();
-      view.move(-4 + rand() % 9, -4 + rand() % 9);
-      app->setView(view);
-
-      EntityManager::getEntityManager()->renderUnder(app, 5000);
-
-      app->setView(viewSave);
-      EntityManager::getEntityManager()->renderAfter(app, 5000);
-    }
-    else
-    {
-      // render the game objects
-      EntityManager::getEntityManager()->render(app);
-    }
-
-    myText.setColor(sf::Color(255, 255, 255, 255));
-
-    myText.setCharacterSize(18);
-    std::ostringstream oss;
-    oss << player->getGold();
-    myText.setString(oss.str());
-    myText.setPosition(690, 612);
-    app->draw(myText);
-
-    myText.setColor(sf::Color(0, 0, 0, 255));
-    myText.setCharacterSize(16);
-
-    oss.str("");
-    oss << "Level " << level;
-    myText.setString(oss.str());
-    myText.setPosition(410, 692);
-    app->draw(myText);
-
-    sf::RectangleShape rectangle(sf::Vector2f(200, 25));
-    // life
-
-    if (gameState == gameStatePlaying)
-    {
-      // life and mana
-      rectangle.setFillColor(sf::Color(190, 20, 20));
-      rectangle.setPosition(sf::Vector2f(90, 622));
-      rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 25));
-      app->draw(rectangle);
-
-      rectangle.setFillColor(sf::Color(255, 190, 190));
-      rectangle.setPosition(sf::Vector2f(90, 625));
-      rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 2));
-      app->draw(rectangle);
-
-      rectangle.setFillColor(sf::Color(20, 20, 190));
-      rectangle.setPosition(sf::Vector2f(90, 658));
-      rectangle.setSize(sf::Vector2f(200.0f * player->getPercentFireDelay() , 25));
-      app->draw(rectangle);
-
-      rectangle.setFillColor(sf::Color(190, 190, 255));
-      rectangle.setPosition(sf::Vector2f(90, 661));
-      rectangle.setSize(sf::Vector2f(200.0f * player->getPercentFireDelay() , 2));
-      app->draw(rectangle);
-
-      // drawing the key on the interface
-      if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
-
-      // render the shots
-      renderHudShots(app);
-
-      if (isPausing)
-      {
-        rectangle.setFillColor(sf::Color(0, 0, 0, 160));
-        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
-        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
-        app->draw(rectangle);
-
-        float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-        int fade = 50 + 205 * (1.0f + cos(3.0f * getAbsolutTime())) * 0.5f;
-        myText.setColor(sf::Color(255, 255, 255, fade));
-        myText.setCharacterSize(40);
-        myText.setString("PAUSE");
-        myText.setPosition(x0 - myText.getLocalBounds().width / 2, 300);
-        app->draw(myText);
-      }
-
-      if (player->isDead())
-      {
-        float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-        int fade = 255 * (1.0f + cos(2.0f * getAbsolutTime())) * 0.5f;
-
-        myText.setColor(sf::Color(255, 255, 255, 255));
-        myText.setCharacterSize(25);
-        myText.setString("GAME OVER");
-        myText.setPosition(x0 - myText.getLocalBounds().width / 2, 400);
-        app->draw(myText);
-
-        myText.setColor(sf::Color(255, 255, 255, fade));
-        myText.setCharacterSize(20);
-        myText.setString("Press [ENTER] to play again !");
-        myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
-        app->draw(myText);
-      }
-      else if (currentMap->getRoomType() == roomTypeExit && level > 1)
-      {
-        float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-        myText.setColor(sf::Color(255, 255, 255, 255));
-        myText.setCharacterSize(25);
-        myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the boss !\nSee you soon for new adventures !");
-        myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
-        app->draw(myText);
-      }
-      else if (currentMap->getRoomType() == roomTypeStarting && level == 1)
-      {
-        myText.setColor(sf::Color(255, 255, 255, 255));
-        myText.setCharacterSize(21);
-        myText.setString("CONTROLS :\n- WASD or ZQSD to move\n- Arrows to fire (in 4 directions)\n- [TAB] to switch shot types");
-        myText.setPosition(80, 80);
-        app->draw(myText);
-      }
-
-      if (xGameState == xGameStateFadeIn)
-      {
-        // fade in
-        rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
-        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
-        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-        app->draw(rectangle);
-      }
-      else if (xGameState == xGameStateFadeOut)
-      {
-        // fade out
-        rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
-        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
-        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-        app->draw(rectangle);
-      }
+      case gameStateInit:
+      case gameStateKeyConfig:
+      case gameStateMenu: renderMenu(); break;
+      case gameStatePlaying: renderRunningGame(); break;
     }
 
     app->display();

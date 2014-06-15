@@ -262,6 +262,7 @@ class WitchBlastGame : public Game
     enum gameStateEnum
     {
       gameStateInit,      /**< Game initialization */
+      gameStateMenu,      /**< Menu */
       gameStatePlaying,   /**< Playing */
       gameStateKeyConfig  /**< Key config */
     };
@@ -430,6 +431,26 @@ class WitchBlastGame : public Game
      *  \brief Configure with data from "config.dat"
      */
     void configureFromFile();
+
+    /*!
+     *  \brief Update the game
+     */
+    void updateRunningGame();
+
+    /*!
+     *  \brief Render the game
+     */
+    void renderRunningGame();
+
+    /*!
+     *  \brief Update the menu
+     */
+    void updateMenu();
+
+    /*!
+     *  \brief Render the menu
+     */
+    void renderMenu();
 };
 
 /*!
