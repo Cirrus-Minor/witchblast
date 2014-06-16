@@ -155,17 +155,14 @@ int WitchBlastGame::getLevel()
 
 void WitchBlastGame::onUpdate()
 {
-  float delta = getAbsolutTime() - lastTime;
-  lastTime = getAbsolutTime();
-
   if (!isPausing)
   {
 
-    EntityManager::getEntityManager()->animate(delta);
+    EntityManager::getEntityManager()->animate(deltaTime);
 
     if (xGameState != xGameStateNone)
     {
-      xGameTimer -= delta;
+      xGameTimer -= deltaTime;
       if (xGameTimer <= 0.0f)
       {
         if (xGameState == xGameStateFadeOut)
@@ -592,23 +589,97 @@ void WitchBlastGame::renderRunningGame()
   }
 }
 
+void WitchBlastGame::switchToMenu()
+{
+  EntityManager::getEntityManager()->clean();
+  menuMap = new GameMap(16, 12);
+  for (int i = 0; i < 16; i++)
+    for (int j = 0; j < 12; j++)
+    {
+      if (rand() % 6 == 0)
+        menuMap->setTile(i, j, rand() %7 + 1);
+    }
+  menuTileMap = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_TILES), menuMap, 64, 64, 10);
+  menuTileMap->setX(-30.0f);
+  menuTileMap->setY(-20.0f);
+
+  gameState = gameStateMenu;
+  buildMenu();
+}
+
 void WitchBlastGame::updateMenu()
 {
+  // Process events
+  sf::Event event;
+  while (app->pollEvent(event))
+  {
+    // Close window : exit
+    if (event.type == sf::Event::Closed)
+    {
+       app->close();
+    }
 
+    if (event.type == sf::Event::KeyPressed)
+    {
+      if (event.key.code == sf::Keyboard::Escape)
+      {
+        app->close();
+      }
+      else if (event.key.code == sf::Keyboard::Down)
+      {
+        menu.index++;
+        if (menu.index == menu.items.size()) menu.index = 0;
+        SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+      }
+      else if (event.key.code == sf::Keyboard::Up)
+      {
+        if (menu.index == 0) menu.index = menu.items.size() - 1;
+        else menu.index--;
+
+        SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+      }
+      else if (event.key.code == sf::Keyboard::Return)
+      {
+       switch (menu.items[menu.index].id)
+       {
+         case MenuStart: startNewGame(true); break;
+         case MenuExit: app->close(); break;
+       }
+      }
+    }
+  }
+
+  EntityManager::getEntityManager()->animate(deltaTime);
 }
 
 void WitchBlastGame::renderMenu()
 {
+  // rendering tiles
+  EntityManager::getEntityManager()->render(app);
 
+  // title
+  write("Witch Blast", 70, 485, 120, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
+
+  // menu
+  for (unsigned int i = 0; i < menu.items.size(); i++)
+  {
+    sf::Color itemColor;
+    if (menu.index == i) itemColor = sf::Color(255, 255, 255, 255);
+    else itemColor = sf::Color(180, 180, 180, 255);
+    write(menu.items[i].label, 22, 300, 260 + i * 50, ALIGN_LEFT, itemColor, app, 1, 1);
+  }
 }
 
 void WitchBlastGame::startGame()
 {
-  startNewGame(true);
+  lastTime = getAbsolutTime();
+  switchToMenu();
 
   // Start game loop
   while (app->isOpen())
   {
+    deltaTime = getAbsolutTime() - lastTime;
+    lastTime = getAbsolutTime();
     switch (gameState)
     {
       case gameStateInit:
@@ -1046,17 +1117,25 @@ void WitchBlastGame::generateMap()
     currentMap->randomize(currentMap->getRoomType());
 }
 
-void WitchBlastGame::Write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app)
+void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0)
 {
   myText.setString(str);
   myText.setCharacterSize(size);
-  myText.setColor(color);
+
+  float xFont = x;
 
   if (align == ALIGN_CENTER)
-    myText.setPosition(x - myText.getLocalBounds().width / 2, y);
-  else
-    myText.setPosition(x, y);
+    xFont = x - myText.getLocalBounds().width / 2;
 
+  if (xShadow != 0 && yShadow != 0)
+  {
+    myText.setPosition(xFont + xShadow, y + yShadow);
+    myText.setColor(sf::Color(0, 0, 0, 255));
+    app->draw(myText);
+  }
+
+  myText.setPosition(xFont, y);
+  myText.setColor(color);
   app->draw(myText);
 }
 
@@ -1593,6 +1672,23 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireRight, "keyboard_fire_right_alt", true);
   addKey(KeyFire, "keyboard_fire_alt", true);
   addKey(KeyFireSelect, "keyboard_fire_select_alt", true);
+}
+
+void WitchBlastGame::buildMenu()
+{
+  menu.items.clear();
+
+  menuItemStuct itemStart;
+  itemStart.label = "Start a new game";
+  itemStart.id = MenuStart;
+  menu.items.push_back(itemStart);
+
+  menuItemStuct itemExit;
+  itemExit.label = "Exit game";
+  itemExit.id = MenuExit;
+  menu.items.push_back(itemExit);
+
+  menu.index = 0;
 }
 
 WitchBlastGame &game()

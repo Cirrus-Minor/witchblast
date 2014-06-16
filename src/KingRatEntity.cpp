@@ -339,13 +339,13 @@ void KingRatEntity::render(sf::RenderTarget* app)
     rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
     app->draw(rectangle);
 
-    game().Write(          "Rat King",
+    game().write(          "Rat King",
                             18,
                             OFFSET_X + TILE_WIDTH / 2 + 10.0f,
                             OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
-                            app);
+                            app, 0 , 0);
 }
 
 void KingRatEntity::collideWithEnnemy(GameEntity* collidingEntity)

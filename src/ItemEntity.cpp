@@ -79,7 +79,7 @@ void ItemEntity::render(sf::RenderTarget* app)
   {
     std::ostringstream oss;
     oss << getPrice() << " $";
-    game().Write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app);
+    game().write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app, 0 , 0);
   }
 
   CollidingSpriteEntity::render(app);

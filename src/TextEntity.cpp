@@ -31,7 +31,7 @@ TextEntity::TextEntity(std::string text, int size, float x, float y) : GameEntit
 
 void TextEntity::render(sf::RenderTarget* app)
 {
-    game().Write(text, size, x, y, alignment, color, app);
+    game().write(text, size, x, y, alignment, color, app, 0 , 0);
 }
 
 void TextEntity::animate(float delay)
