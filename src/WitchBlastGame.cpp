@@ -1382,6 +1382,8 @@ void WitchBlastGame::saveGame()
 
   if (file)
   {
+    // version (for compatibility check)
+    file << SAVE_VERSION << std::endl;
     // floor
     file << level << std::endl;
 
@@ -1490,6 +1492,17 @@ bool WitchBlastGame::loadGame()
   if (file)
   {
     int i, j, k, n;
+
+    // version
+    std::string v;
+    file >> v;
+
+    if (v != SAVE_VERSION)
+    {
+      file.close();
+      remove("game.sav");
+      return false;
+    }
 
     // floor
     file >> level;
