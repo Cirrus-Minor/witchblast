@@ -39,6 +39,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <ctime>
 
 namespace {
 WitchBlastGame* gameptr;
@@ -625,13 +626,14 @@ void WitchBlastGame::updateMenu()
       {
         app->close();
       }
-      else if (event.key.code == sf::Keyboard::Down)
+      else if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
       {
         menu.index++;
         if (menu.index == menu.items.size()) menu.index = 0;
         SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
       }
-      else if (event.key.code == sf::Keyboard::Up)
+
+      else if (event.key.code == input[KeyUp] || event.key.code == sf::Keyboard::Up)
       {
         if (menu.index == 0) menu.index = menu.items.size() - 1;
         else menu.index--;
@@ -642,7 +644,8 @@ void WitchBlastGame::updateMenu()
       {
        switch (menu.items[menu.index].id)
        {
-         case MenuStart: startNewGame(true); break;
+         case MenuStartNew: startNewGame(false); remove(SAVE_FILE.c_str()); break;
+         case MenuStartOld: startNewGame(true); break;
          case MenuExit: app->close(); break;
        }
       }
@@ -660,13 +663,21 @@ void WitchBlastGame::renderMenu()
   // title
   write("Witch Blast", 70, 485, 120, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
 
+  // menu background
+  sf::RectangleShape rectangle(sf::Vector2f(470 , 300));
+  rectangle.setFillColor(sf::Color(50, 50, 50, 160));
+  rectangle.setPosition(sf::Vector2f(250, 240));
+  if (menu.items.size() == 2) rectangle.setSize(sf::Vector2f(470 , 220));
+  app->draw(rectangle);
+
   // menu
   for (unsigned int i = 0; i < menu.items.size(); i++)
   {
     sf::Color itemColor;
     if (menu.index == i) itemColor = sf::Color(255, 255, 255, 255);
     else itemColor = sf::Color(180, 180, 180, 255);
-    write(menu.items[i].label, 22, 300, 260 + i * 50, ALIGN_LEFT, itemColor, app, 1, 1);
+    write(menu.items[i].label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
+    write(menu.items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
   }
 }
 
@@ -1376,14 +1387,39 @@ void WitchBlastGame::makeShake(float duration)
 
 void WitchBlastGame::saveGame()
 {
-  ofstream file("game.sav", ios::out | ios::trunc);
+  ofstream file(SAVE_FILE.c_str(), ios::out | ios::trunc);
 
   int i, j, k, l;
+
+
+
+
 
   if (file)
   {
     // version (for compatibility check)
     file << SAVE_VERSION << std::endl;
+
+    time_t t = time(0);   // get time now
+    struct tm * now = localtime( & t );
+    file << (now->tm_year + 1900) << '-';
+
+    if (now->tm_mon < 9) file << "0";
+
+    file << (now->tm_mon + 1) << '-';
+
+    if (now->tm_mday < 9) file << "0";
+
+    file <<  now->tm_mday
+         << endl;
+
+    if (now->tm_hour <= 9) file << "0";
+
+    file << (now->tm_hour) << ':';
+
+    if (now->tm_min <= 9) file << "0";
+    file << (now->tm_min) << endl;
+
     // floor
     file << level << std::endl;
 
@@ -1487,7 +1523,7 @@ void WitchBlastGame::saveGame()
 
 bool WitchBlastGame::loadGame()
 {
-  ifstream file("game.sav", ios::in);
+  ifstream file(SAVE_FILE.c_str(), ios::in);
 
   if (file)
   {
@@ -1500,9 +1536,13 @@ bool WitchBlastGame::loadGame()
     if (v != SAVE_VERSION)
     {
       file.close();
-      remove("game.sav");
+      remove(SAVE_FILE.c_str());
       return false;
     }
+
+    // date an time
+    file >> v;
+    file >> v;
 
     // floor
     file >> level;
@@ -1614,7 +1654,7 @@ bool WitchBlastGame::loadGame()
     }
 
     file.close();
-    remove("game.sav");
+    remove(SAVE_FILE.c_str());
   }
   else
   {
@@ -1622,6 +1662,42 @@ bool WitchBlastGame::loadGame()
   }
 
   return true;
+}
+
+WitchBlastGame::saveHeaderStruct WitchBlastGame::loadGameHeader()
+{
+  saveHeaderStruct saveHeader;
+  saveHeader.ok = true;
+
+  ifstream file(SAVE_FILE.c_str(), ios::in);
+
+  if (file)
+  {
+    // version
+    std::string v;
+    file >> v;
+
+    if (v != SAVE_VERSION)
+    {
+      file.close();
+      remove(SAVE_FILE.c_str());
+      saveHeader.ok = false;
+    }
+    else
+    {
+      // date an time
+      file >> saveHeader.date;
+      file >> saveHeader.time;
+
+      // floor
+      file >> saveHeader.level;
+    }
+  }
+  else
+  {
+    saveHeader.ok = false;
+  }
+  return saveHeader;
 }
 
 void WitchBlastGame::addKey(int logicInput, std::string key, bool alt = false)
@@ -1691,17 +1767,42 @@ void WitchBlastGame::buildMenu()
 {
   menu.items.clear();
 
-  menuItemStuct itemStart;
-  itemStart.label = "Start a new game";
-  itemStart.id = MenuStart;
-  menu.items.push_back(itemStart);
+  WitchBlastGame::saveHeaderStruct saveHeader = loadGameHeader();
+
+  if (saveHeader.ok)
+  {
+    menuItemStuct itemStart;
+    itemStart.label = "Start a new game";
+    itemStart.description = "Old game will be destroyed";
+    itemStart.id = MenuStartNew;
+    menu.items.push_back(itemStart);
+
+    menuItemStuct itemLoad;
+    itemStart.label = "Restore game";
+    std::ostringstream oss;
+    oss << saveHeader.date << " at " << saveHeader.time << " - level " << saveHeader.level;
+    itemStart.description = oss.str();
+    itemStart.id = MenuStartOld;
+    menu.items.push_back(itemStart);
+
+    menu.index = 1;
+  }
+  else
+  {
+    menuItemStuct itemStart;
+    itemStart.label = "Start a new game";
+    itemStart.description = "Begin your journey in a new dungeon";
+    itemStart.id = MenuStartNew;
+    menu.items.push_back(itemStart);
+
+    menu.index = 0;
+  }
 
   menuItemStuct itemExit;
   itemExit.label = "Exit game";
+  itemExit.description = "Return to the desktop";
   itemExit.id = MenuExit;
   menu.items.push_back(itemExit);
-
-  menu.index = 0;
 }
 
 WitchBlastGame &game()

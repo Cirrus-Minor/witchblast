@@ -178,6 +178,19 @@ public:
    */
   bool loadGame();
 
+  struct saveHeaderStruct
+  {
+    bool ok;            /**< Save game OK ? */
+    int level;          /**< Level the save game */
+    std::string date;   /**< Date of the save game */
+    std::string time;   /**< Time of the save game */
+  };
+  /*!
+   *  \brief Load the savegame data
+   *  \return true if succeeded
+   */
+  saveHeaderStruct loadGameHeader();
+
   /*!
    *  \brief Returns a random equip object
    *
@@ -460,7 +473,8 @@ private:
    */
   enum menuItemEnum
   {
-    MenuStart,    /**< When starting the game */
+    MenuStartNew, /**< When starting the game */
+    MenuStartOld, /**< When restoring the game */
     MenuExit      /**< When exiting the game */
   };
 
