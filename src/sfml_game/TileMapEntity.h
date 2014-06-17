@@ -27,6 +27,10 @@ public:
   TileMapEntity(sf::Texture* image, GameMap* gameMap, int tileWidth, int tileHeight, int tilesProLine);
   ~TileMapEntity();
 
+  	// mutators
+	void setX(float x);
+	void setY(float y);
+
   int getTilesProLine();
   void setTileBox(int tileBoxWidth, int tileBoxHeight);
   void setMap(GameMap* gameMap);

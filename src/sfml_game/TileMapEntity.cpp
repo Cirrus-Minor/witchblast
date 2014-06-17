@@ -36,6 +36,19 @@ TileMapEntity::~TileMapEntity()
 {
 }
 
+void TileMapEntity::setX(float x)
+{
+  this->x = x;
+  hasChanged = true;
+
+}
+void TileMapEntity::setY(float y)
+{
+  this->y = y;
+  hasChanged = true;
+
+}
+
 void TileMapEntity::setMap(GameMap* gameMap)
 {
   this->gameMap = gameMap;
