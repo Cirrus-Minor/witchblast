@@ -158,7 +158,6 @@ void WitchBlastGame::onUpdate()
 {
   if (!isPausing)
   {
-
     EntityManager::getEntityManager()->animate(deltaTime);
 
     if (xGameState != xGameStateNone)
@@ -593,9 +592,9 @@ void WitchBlastGame::renderRunningGame()
 void WitchBlastGame::switchToMenu()
 {
   EntityManager::getEntityManager()->clean();
-  menuMap = new GameMap(16, 12);
-  for (int i = 0; i < 16; i++)
-    for (int j = 0; j < 12; j++)
+  menuMap = new GameMap(MENU_MAP_WIDTH, MENU_MAP_HEIGHT);
+  for (int i = 0; i < MENU_MAP_WIDTH; i++)
+    for (int j = 0; j < MENU_MAP_HEIGHT; j++)
     {
       if (rand() % 6 == 0)
         menuMap->setTile(i, j, rand() %7 + 1);
@@ -653,6 +652,24 @@ void WitchBlastGame::updateMenu()
   }
 
   EntityManager::getEntityManager()->animate(deltaTime);
+  float mapY = menuTileMap->getY();
+  mapY -= 30.0f * deltaTime;
+  if (mapY < -64.0f)
+  {
+    mapY += 64.0f;
+    for (int i = 0; i < MENU_MAP_WIDTH; i++)
+    {
+      for (int j = 0; j < MENU_MAP_HEIGHT - 1; j++)
+      {
+         menuMap->setTile(i, j, menuMap->getTile(i, j+1));
+      }
+      if (rand() % 6 == 0)
+        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, rand() %7 + 1);
+      else
+        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 0);
+    }
+  }
+  menuTileMap->setY(mapY);
 }
 
 void WitchBlastGame::renderMenu()
