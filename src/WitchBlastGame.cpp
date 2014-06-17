@@ -696,6 +696,11 @@ void WitchBlastGame::renderMenu()
     write(menu.items[i].label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
     write(menu.items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
   }
+
+  std::ostringstream oss;
+  oss << APP_NAME << " v" << APP_VERSION << " by Seby 2014";
+  write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+
 }
 
 void WitchBlastGame::startGame()
