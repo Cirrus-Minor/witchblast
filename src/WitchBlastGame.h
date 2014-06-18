@@ -269,7 +269,8 @@ private:
   {
     MusicDungeon,   /**< Main game music - played when playing the game */
     MusicEnding,    /**< Ending music - played when the player has died */
-    MusicBoss       /**< Boss music - for epic fights ! */
+    MusicBoss,      /**< Boss music - for epic fights ! */
+    MusicIntro      /**< Main menu music */
   };
 
   /** Game states enum

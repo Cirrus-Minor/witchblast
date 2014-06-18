@@ -605,6 +605,7 @@ void WitchBlastGame::switchToMenu()
 
   gameState = gameStateMenu;
   buildMenu();
+  playMusic(MusicIntro);
 }
 
 void WitchBlastGame::updateMenu()
@@ -1393,6 +1394,11 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   case MusicBoss:
     ok = music.openFromFile("media/sound/track_boss.ogg");
+    music.setVolume(90);
+    break;
+
+  case MusicIntro:
+    ok = music.openFromFile("media/sound/track_intro.ogg");
     music.setVolume(90);
     break;
   }
