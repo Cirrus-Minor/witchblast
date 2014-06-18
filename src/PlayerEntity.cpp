@@ -596,7 +596,7 @@ void PlayerEntity::fire(int direction)
     for(int unsigned i = 0; i < fairies.size(); i++)
       fairies[i]->fire(direction, map);
 
-  if (canFirePlayer && playerStatus != playerStatusDead)
+  if (canFirePlayer && playerStatus != playerStatusDead && playerStatus != playerStatusAcquire)
   {
     SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
 
