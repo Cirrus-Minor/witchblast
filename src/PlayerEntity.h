@@ -127,9 +127,9 @@ class PlayerEntity : public BaseCreatureEntity
      *  Updates the equipment of the player.
      *
      *  \param item : the equip item ID
-     *  \param eq : True if the item has to be equipped
+     *  \param toggleEquipped : True if the item has to be equipped
      */
-    void setEquiped(int item, bool eq);
+    void setEquiped(int item, bool toggleEquipped);
 
     /*!
      *  \brief updates the entering status of the player

@@ -486,14 +486,24 @@ void PlayerEntity::move(int direction)
   if (playerStatus == playerStatusPlaying)
   {
     float speedx = 0.0f, speedy = 0.0f;
-    if (direction == 1 || direction == 4 || direction == 7)
+    if (direction == 4)
       speedx = - creatureSpeed;
-    else if (direction == 3 || direction == 6 || direction == 9)
+    else if (direction == 1 || direction == 7)
+      speedx = - creatureSpeed * 0.7f;
+    else if (direction == 6)
       speedx = creatureSpeed;
-    if (direction == 1 || direction == 2 || direction == 3)
+    else if (direction == 3 || direction == 9)
+      speedx = creatureSpeed * 0.7f;
+
+    if (direction == 2)
       speedy = creatureSpeed;
-    else if (direction == 7 || direction == 8 || direction == 9)
+    else if (direction == 1 || direction == 3)
+      speedy = creatureSpeed * 0.7f;
+    else if (direction == 8)
       speedy = - creatureSpeed;
+    else if (direction == 7 || direction == 9)
+      speedy = - creatureSpeed * 0.7f;
+
     setVelocity(Vector2D(speedx, speedy));
 
     {
@@ -524,10 +534,10 @@ bool PlayerEntity::isEquiped(int eq)
   return equip[eq];
 }
 
-void PlayerEntity::setEquiped(int item, bool eq)
+void PlayerEntity::setEquiped(int item, bool toggleEquipped)
 {
-  equip[item] = eq;
-  if (eq && items[FirstEquipItem + item].familiar > FamiliarNone)
+  equip[item] = toggleEquipped;
+  if (toggleEquipped && items[FirstEquipItem + item].familiar > FamiliarNone)
   {
     FairyEntity* fairy = new FairyEntity(x - 50.0f + rand() % 100,
                                          y - 50.0f + rand() % 100,
