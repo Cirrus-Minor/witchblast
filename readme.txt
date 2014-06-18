@@ -73,9 +73,12 @@ Changes
 Next version
 - ADD New familiar (Ice Fairy)
 - ADD Lightning's shot effect and sound
+- ADD Menu screen
 - MOD Bolt's bounding box is bigger when testing collision with monsters
-- MOD Player's invincibility delay after being shot increases,
+- MOD Player's invincibility delay after being shot increases
+- MOD Player's diagonal velocity decreases
 - FIX Switching windows while player is dead
+- FIX Player can fire while getting an item
 
 v0.1.0
 - ADD New enemies (slime and black rat)
