@@ -341,12 +341,12 @@ void WitchBlastGame::updateRunningGame()
         else if (gameState == gameStatePlaying && isPausing) isPausing = false;
       }
 
-      if (event.key.code == input[KeyFireSelect] || event.key.code == inputAlt[KeyFireSelect])
+      if (event.key.code == input[KeyFireSelect])
       {
         if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
       }
 
-      if (event.key.code == input[KeyFire] || event.key.code == inputAlt[KeyFire])
+      if (event.key.code == input[KeyFire])
       {
         if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
       }
@@ -365,45 +365,45 @@ void WitchBlastGame::updateRunningGame()
   {
     if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
 
-    if (sf::Keyboard::isKeyPressed(input[KeyLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyLeft]))
+    if (sf::Keyboard::isKeyPressed(input[KeyLeft]))
     {
-      if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
+      if (sf::Keyboard::isKeyPressed(input[KeyUp]))
         player->move(7);
-      else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
+      else if (sf::Keyboard::isKeyPressed(input[KeyDown]))
         player->move(1);
       else
         player->move(4);
     }
-    else if (sf::Keyboard::isKeyPressed(input[KeyRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyRight]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyRight]))
     {
-      if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
+      if (sf::Keyboard::isKeyPressed(input[KeyUp]))
         player->move(9);
-      else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
+      else if (sf::Keyboard::isKeyPressed(input[KeyDown]))
         player->move(3);
       else
         player->move(6);
     }
-    else if (sf::Keyboard::isKeyPressed(input[KeyUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyUp]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyUp]))
     {
       player->move(8);
     }
-    else if (sf::Keyboard::isKeyPressed(input[KeyDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyDown]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyDown]))
     {
       player->move(2);
     }
 
     player->resestFireDirection();
     // normal 4 directions gameplay
-    if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireLeft]))
+    if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]))
       player->fire(4);
-    else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireRight]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]))
       player->fire(6);
-    else if (sf::Keyboard::isKeyPressed(input[KeyFireUp]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireUp]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyFireUp]))
       player->fire(8);
-    else if (sf::Keyboard::isKeyPressed(input[KeyFireDown]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFireDown]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyFireDown]))
       player->fire(2);
     // alternative "one button" gameplay
-    else if (sf::Keyboard::isKeyPressed(input[KeyFire]) || sf::Keyboard::isKeyPressed(inputAlt[KeyFire]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyFire]))
     {
       player->fire(firingDirection);
     }
@@ -620,7 +620,24 @@ void WitchBlastGame::updateMenu()
        app->close();
     }
 
-    if (event.type == sf::Event::KeyPressed)
+    if (event.type == sf::Event::KeyPressed && menu.redefineKey)
+    {
+      bool alreadyUsed = false;
+      for (unsigned int i = 0; i < menu.keyIndex; i++)
+        if (input[i] == event.key.code) alreadyUsed = true;
+
+      // TODO more tests
+      if (!alreadyUsed)
+      {
+        input[menu.keyIndex] = event.key.code;
+        menu.keyIndex++;
+        if (menu.keyIndex == NumberKeys)
+        {
+          menu.redefineKey = false;
+        }
+      }
+    }
+    else if (event.type == sf::Event::KeyPressed && !menu.redefineKey)
     {
       if (event.key.code == sf::Keyboard::Escape)
       {
@@ -646,6 +663,7 @@ void WitchBlastGame::updateMenu()
        {
          case MenuStartNew: startNewGame(false); remove(SAVE_FILE.c_str()); break;
          case MenuStartOld: startNewGame(true); break;
+         case MenuKeys: menu.redefineKey = true; menu.keyIndex = 0; break;
          case MenuExit: app->close(); break;
        }
       }
@@ -653,6 +671,7 @@ void WitchBlastGame::updateMenu()
   }
 
   EntityManager::getEntityManager()->animate(deltaTime);
+  menu.age += deltaTime;
   float mapY = menuTileMap->getY();
   mapY -= 30.0f * deltaTime;
   if (mapY < -64.0f)
@@ -681,27 +700,51 @@ void WitchBlastGame::renderMenu()
   // title
   write("Witch Blast", 70, 485, 120, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
 
-  // menu background
-  sf::RectangleShape rectangle(sf::Vector2f(470 , 300));
-  rectangle.setFillColor(sf::Color(50, 50, 50, 160));
-  rectangle.setPosition(sf::Vector2f(250, 240));
-  if (menu.items.size() == 2) rectangle.setSize(sf::Vector2f(470 , 220));
-  app->draw(rectangle);
-
-  // menu
-  for (unsigned int i = 0; i < menu.items.size(); i++)
+  if (menu.redefineKey)
   {
-    sf::Color itemColor;
-    if (menu.index == i) itemColor = sf::Color(255, 255, 255, 255);
-    else itemColor = sf::Color(180, 180, 180, 255);
-    write(menu.items[i].label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
-    write(menu.items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+    // menu background
+    sf::RectangleShape rectangle(sf::Vector2f(470 , 400));
+    rectangle.setFillColor(sf::Color(50, 50, 50, 160));
+    rectangle.setPosition(sf::Vector2f(250, 240));
+    app->draw(rectangle);
+
+    // menu keys
+    write("Press key for", 18, 300, 260, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    for (unsigned int i = 0; i < NumberKeys; i++)
+    {
+      sf::Color itemColor;
+      if (menu.keyIndex == i) itemColor = sf::Color(255, 255, 255, 255);
+      else itemColor = sf::Color(180, 180, 180, 255);
+      std::ostringstream oss;
+      oss << inputKeyString[i] << ": ";
+      if (menu.keyIndex == i && ((int)(menu.age * 1.5f)) % 2 == 0) oss << "_";
+      else if (menu.keyIndex > i) oss << "DONE";
+      write(oss.str(), 16, 300, 300 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
+    }
+  }
+  else
+  {
+    // menu background
+    sf::RectangleShape rectangle(sf::Vector2f(470 , 390));
+    rectangle.setFillColor(sf::Color(50, 50, 50, 160));
+    rectangle.setPosition(sf::Vector2f(250, 240));
+    if (menu.items.size() == 3) rectangle.setSize(sf::Vector2f(470 , 310));
+    app->draw(rectangle);
+
+    // menu
+    for (unsigned int i = 0; i < menu.items.size(); i++)
+    {
+      sf::Color itemColor;
+      if (menu.index == i) itemColor = sf::Color(255, 255, 255, 255);
+      else itemColor = sf::Color(180, 180, 180, 255);
+      write(menu.items[i].label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(menu.items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+    }
   }
 
   std::ostringstream oss;
   oss << APP_NAME << " v" << APP_VERSION << " by Seby 2014";
   write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
-
 }
 
 void WitchBlastGame::startGame()
@@ -1728,17 +1771,13 @@ WitchBlastGame::saveHeaderStruct WitchBlastGame::loadGameHeader()
   return saveHeader;
 }
 
-void WitchBlastGame::addKey(int logicInput, std::string key, bool alt = false)
+void WitchBlastGame::addKey(int logicInput, std::string key)
 {
   int iKey = config.findInt(key);
   if (iKey >= 0)
   {
-
     sf::Keyboard::Key k = (sf::Keyboard::Key)iKey;
-    if (alt)
-      inputAlt[logicInput] = k;
-    else
-      input[logicInput] = k;
+    input[logicInput] = k;
   }
 }
 
@@ -1756,17 +1795,6 @@ void WitchBlastGame::configureFromFile()
   input[KeyFire] = sf::Keyboard::Space;
   input[KeyFireSelect] = sf::Keyboard::Tab;
 
-  inputAlt[KeyUp]    = sf::Keyboard::W;
-  inputAlt[KeyDown]  = sf::Keyboard::S;
-  inputAlt[KeyLeft]  = sf::Keyboard::A;
-  inputAlt[KeyRight] = sf::Keyboard::D;
-  inputAlt[KeyFireUp]    = sf::Keyboard::Up;
-  inputAlt[KeyFireDown]  = sf::Keyboard::Down;
-  inputAlt[KeyFireLeft]  = sf::Keyboard::Left;
-  inputAlt[KeyFireRight] = sf::Keyboard::Right;
-  inputAlt[KeyFire] = sf::Keyboard::Space;
-  inputAlt[KeyFireSelect] = sf::Keyboard::Tab;
-
   // from file
   addKey(KeyUp, "keyboard_move_up");
   addKey(KeyDown, "keyboard_move_down");
@@ -1778,22 +1806,13 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireRight, "keyboard_fire_right");
   addKey(KeyFire, "keyboard_fire");
   addKey(KeyFireSelect, "keyboard_fire_select");
-
-  addKey(KeyUp, "keyboard_move_up_alt", true);
-  addKey(KeyDown, "keyboard_move_down_alt", true);
-  addKey(KeyLeft, "keyboard_move_left_alt", true);
-  addKey(KeyRight, "keyboard_move_right_alt", true);
-  addKey(KeyFireUp, "keyboard_fire_up_alt", true);
-  addKey(KeyFireDown, "keyboard_fire_down_alt", true);
-  addKey(KeyFireLeft, "keyboard_fire_left_alt", true);
-  addKey(KeyFireRight, "keyboard_fire_right_alt", true);
-  addKey(KeyFire, "keyboard_fire_alt", true);
-  addKey(KeyFireSelect, "keyboard_fire_select_alt", true);
 }
 
 void WitchBlastGame::buildMenu()
 {
   menu.items.clear();
+  menu.redefineKey = false;
+  menu.age = 0.0f;
 
   WitchBlastGame::saveHeaderStruct saveHeader = loadGameHeader();
 
@@ -1825,6 +1844,12 @@ void WitchBlastGame::buildMenu()
 
     menu.index = 0;
   }
+
+  menuItemStuct itemKeys;
+  itemKeys.label = "Configure keys";
+  itemKeys.description = "Redefine player's input";
+  itemKeys.id = MenuKeys;
+  menu.items.push_back(itemKeys);
 
   menuItemStuct itemExit;
   itemExit.label = "Exit game";

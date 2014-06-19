@@ -29,6 +29,21 @@ const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
 const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
 
+unsigned const int NumberKeys = 10;
+const std::string inputKeyString[NumberKeys] =
+{
+  "move up",
+  "move down",
+  "move left",
+  "move right",
+  "fire up",
+  "fire down",
+  "fire left",
+  "fire right",
+  "fire select",
+  "fire (one button)"
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -311,11 +326,11 @@ private:
     KeyFireDown,
     KeyFireLeft,
     KeyFireRight,
-    KeyFire,
-    KeyFireSelect
+    KeyFireSelect,
+    KeyFire
   };
-  sf::Keyboard::Key input[10];     /*!< Input key array */
-  sf::Keyboard::Key inputAlt[10];  /*!< Input key array (alternative) */
+
+  sf::Keyboard::Key input[NumberKeys];     /*!< Input key array */
 
   /*!
    *  \brief Starts the game
@@ -442,7 +457,12 @@ private:
    */
   void playMusic(musicEnum musicChoice);
 
-  void addKey(int logicInput, std::string key, bool alt);
+  /*!
+   *  \brief Add a key to the player input map from a string key (from file)
+   *  \param logicInput : input function (move left, fire up, etc...)
+   *  \param key : Key as string
+   */
+  void addKey(int logicInput, std::string key);
 
   /*!
    *  \brief Configure with data from "config.dat"
@@ -476,6 +496,7 @@ private:
   {
     MenuStartNew, /**< When starting the game */
     MenuStartOld, /**< When restoring the game */
+    MenuKeys,     /**< When configuring keys */
     MenuExit      /**< When exiting the game */
   };
 
@@ -496,6 +517,9 @@ private:
   {
     std::vector<menuItemStuct> items; /**< Menu items */
     unsigned int index;               /**< Position int the menu */
+    bool redefineKey;                 /**< true when configuring input */
+    unsigned int keyIndex;            /**< Position int the key configuration */
+    float age;                        /**< Age of the menu */
   };
 
   menuStuct menu;
