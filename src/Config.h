@@ -27,6 +27,7 @@ class Config
 public:
     Config();
     void loadFromFile(string file);
+    void saveToFile(string file, std::map<std::string, std::string> newMap);
     void displayMap();
 
     int findInt(string key);

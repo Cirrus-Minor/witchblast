@@ -15,6 +15,7 @@
   */
 
 #include <cstdlib>
+#include <ostream>
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -43,6 +44,21 @@ Config::Config()
   }
 
   f.close();
+}
+
+void Config::saveToFile(std::string fileName, std::map<std::string, std::string> newMap)
+{
+  std::ofstream file(fileName.c_str(), ios::out | ios::trunc);
+  if (file)
+  {
+    map<std::string, std::string>::iterator it;
+
+    for(it = newMap.begin(); it != newMap.end(); it++)
+    {
+      file << it->first << " " << it->second << std::endl;
+    }
+    file.close();
+  }
 }
 
 void Config::displayMap()
