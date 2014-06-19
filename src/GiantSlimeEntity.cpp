@@ -31,7 +31,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   sprite.setOrigin(64.0f, 64.0f);
   h = 0.0f;
 
-  age = 0.0f;
+  age = -2.0f;
 
   changeToState(0);
   slimeCounter = 0;
@@ -52,7 +52,7 @@ void GiantSlimeEntity::changeToState(int n)
   else if (n == 1 || n == 3 || n == 5 || n == 8) // waiting
   {
     state = n;
-    timer = 1.4f;
+    timer = 1.2f;
     setVelocity(Vector2D(0.0f, 0.0f));
   }
   else if (n == 2) // jumping
@@ -131,6 +131,12 @@ void GiantSlimeEntity::animate(float delay)
     slimeTimer = 7.0f;
     slimeCounter ++;
     if (slimeCounter == 4) slimeCounter = 0;
+  }
+
+  if (age <= 0.0f)
+  {
+    age += delay;
+    return;
   }
 
   timer -= delay;
@@ -241,6 +247,7 @@ void GiantSlimeEntity::animate(float delay)
         {
           SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT_WEAK);
           viscosity = 0.96f;
+          changeToState(0);
         }
       }
     }
@@ -277,7 +284,6 @@ void GiantSlimeEntity::animate(float delay)
       }
     }
   }
-
 
   EnnemyEntity::animate(delay);
 
@@ -365,6 +371,7 @@ void GiantSlimeEntity::dying()
     new SlimeEntity(x, y, true);
   }
 
+  game().makeShake(1.0f);
   SoundManager::getSoundManager()->playSound(SOUND_SLIME_SMASH);
 
   ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
@@ -394,7 +401,7 @@ void GiantSlimeEntity::render(sf::RenderTarget* app)
     sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
     app->draw(sprite);
 
-    float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / KING_RAT_HP;
+    float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / GIANT_SLIME_HP;
 
     sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
     rectangle.setFillColor(sf::Color(0, 0, 0,128));

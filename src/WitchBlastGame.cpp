@@ -1165,8 +1165,8 @@ void WitchBlastGame::generateMap()
     currentMap->generateRoom(0);
 
     if (level == 1)
-      new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2,
+                      OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
