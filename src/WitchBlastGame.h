@@ -465,6 +465,11 @@ private:
   void addKey(int logicInput, std::string key);
 
   /*!
+   *  \brief Save configuration to "config.dat"
+   */
+  void saveConfigurationToFile();
+
+  /*!
    *  \brief Configure with data from "config.dat"
    */
   void configureFromFile();

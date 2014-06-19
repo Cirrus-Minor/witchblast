@@ -41,6 +41,13 @@
 #include <fstream>
 #include <ctime>
 
+static std::string intToString(int n)
+{
+  std::ostringstream oss;
+  oss << n;
+  return oss.str();
+}
+
 namespace {
 WitchBlastGame* gameptr;
 }
@@ -634,6 +641,7 @@ void WitchBlastGame::updateMenu()
         if (menu.keyIndex == NumberKeys)
         {
           menu.redefineKey = false;
+          saveConfigurationToFile();
         }
       }
     }
@@ -1462,10 +1470,6 @@ void WitchBlastGame::saveGame()
 
   int i, j, k, l;
 
-
-
-
-
   if (file)
   {
     // version (for compatibility check)
@@ -1779,6 +1783,25 @@ void WitchBlastGame::addKey(int logicInput, std::string key)
     sf::Keyboard::Key k = (sf::Keyboard::Key)iKey;
     input[logicInput] = k;
   }
+}
+
+void WitchBlastGame::saveConfigurationToFile()
+{
+  std::map<std::string, std::string> newMap;
+
+  // Keys
+  newMap["keyboard_move_up"] = intToString(input[KeyUp]);
+  newMap["keyboard_move_down"] = intToString(input[KeyDown]);
+  newMap["keyboard_move_left"] = intToString(input[KeyLeft]);
+  newMap["keyboard_move_right"] = intToString(input[KeyRight]);
+  newMap["keyboard_fire_up"] = intToString(input[KeyFireUp]);
+  newMap["keyboard_fire_down"] = intToString(input[KeyFireDown]);
+  newMap["keyboard_fire_left"] = intToString(input[KeyFireLeft]);
+  newMap["keyboard_fire_right"] = intToString(input[KeyFireRight]);
+  newMap["keyboard_fire"] = intToString(input[KeyFire]);
+  newMap["keyboard_fire_select"] = intToString(input[KeyFireSelect]);
+
+  config.saveToFile(CONFIG_FILE, newMap);
 }
 
 void WitchBlastGame::configureFromFile()
