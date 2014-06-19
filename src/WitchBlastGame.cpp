@@ -324,6 +324,7 @@ void WitchBlastGame::playLevel()
 
 void WitchBlastGame::updateRunningGame()
 {
+  bool backToMenu = false;
   // Process events
   sf::Event event;
   while (app->pollEvent(event))
@@ -344,7 +345,8 @@ void WitchBlastGame::updateRunningGame()
     {
       if (event.key.code == sf::Keyboard::Escape)
       {
-        if (gameState == gameStatePlaying && !isPausing) isPausing = true;
+        if (player->isDead()) backToMenu = true;
+        else if (gameState == gameStatePlaying && !isPausing) isPausing = true;
         else if (gameState == gameStatePlaying && isPausing) isPausing = false;
       }
 
@@ -453,6 +455,8 @@ void WitchBlastGame::updateRunningGame()
         playMusic(MusicDungeon);
     }
   }
+
+  if (backToMenu) switchToMenu();
 }
 
 void WitchBlastGame::renderRunningGame()
@@ -555,7 +559,7 @@ void WitchBlastGame::renderRunningGame()
 
       myText.setColor(sf::Color(255, 255, 255, fade));
       myText.setCharacterSize(20);
-      myText.setString("Press [ENTER] to play again !");
+      myText.setString("Press [ENTER] to play again / [ESC] to go back to the menu");
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
       app->draw(myText);
     }
@@ -599,6 +603,7 @@ void WitchBlastGame::renderRunningGame()
 void WitchBlastGame::switchToMenu()
 {
   EntityManager::getEntityManager()->clean();
+
   menuMap = new GameMap(MENU_MAP_WIDTH, MENU_MAP_HEIGHT);
   for (int i = 0; i < MENU_MAP_WIDTH; i++)
     for (int j = 0; j < MENU_MAP_HEIGHT; j++)
