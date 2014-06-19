@@ -26,11 +26,12 @@ KingRatEntity::KingRatEntity(float x, float y)
   bloodColor = bloodRed;
   shadowFrame = 4;
   frame = 0;
+  if (game().getPlayerPosition().x > x) sprite.setScale(-1.0f, 1.0f);
   sprite.setOrigin(64.0f, 64.0f);
 
   state = 0;
   timer = 2.0f + (rand() % 40) / 10.0f;
-  age = 0.0f;
+  age = -2.0f;
 
   berserkDelay = 1.0f + rand()%5 * 0.1f;
 
@@ -41,6 +42,12 @@ KingRatEntity::KingRatEntity(float x, float y)
 
 void KingRatEntity::animate(float delay)
 {
+  if (age <= 0.0f)
+  {
+    age += delay;
+    return;
+  }
+
   float timerMult = 1.0f;
   if (hp <= hpMax / 4)
   {
