@@ -635,6 +635,7 @@ void WitchBlastGame::updateMenu()
     if (event.type == sf::Event::KeyPressed && menu.redefineKey)
     {
       bool alreadyUsed = false;
+      if (event.key.code == sf::Keyboard::Escape) alreadyUsed = true;
       for (unsigned int i = 0; i < menu.keyIndex; i++)
         if (input[i] == event.key.code) alreadyUsed = true;
 
