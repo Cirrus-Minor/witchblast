@@ -18,7 +18,6 @@ class GiantSlimeEntity : public EnnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
     void afterWallCollide();
-    virtual bool hurt(int damages);
 
     void changeToState(int n);
 

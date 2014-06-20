@@ -301,24 +301,6 @@ void GiantSlimeEntity::animate(float delay)
     sprite.setColor(sf::Color(255, 255, 255, 0));
 }
 
-bool GiantSlimeEntity::hurt(int damages)
-{
-  hurting = true;
-  hurtingDelay = HURTING_DELAY;
-
-  if (state == 6)
-    hp -= damages / 4;
-  else
-    hp -= damages;
-
-  if (hp <= 0)
-  {
-    hp = 0;
-    dying();
-  }
-   return true;
-}
-
 void GiantSlimeEntity::calculateBB()
 {
     boundingBox.left = (int)x - width / 2 + GIANT_SLIME_BB_LEFT;
