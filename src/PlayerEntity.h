@@ -403,6 +403,7 @@ class PlayerEntity : public BaseCreatureEntity
     float specialBoltTimer;
     enumShotType specialShots[SPECIAL_SHOT_SLOTS];
     int specialShotIndex;
+    int shotLevel;
     bool needInitShotType;
 
     int collidingDirection;           /*!< Colliding direction (4, 8, 6, 2) to detect collision with closed doors */

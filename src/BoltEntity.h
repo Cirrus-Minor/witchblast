@@ -13,12 +13,13 @@
 class BoltEntity : public CollidingSpriteEntity
 {
   public:
-    BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime, enumShotType boltType);
+    BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime, enumShotType boltType, int level);
     virtual void animate(float delay);
     void collide();
     void generateParticule(Vector2D vel);
 
     int getDamages();
+    unsigned int getLevel();
     void setDamages(int damages);
     enumShotType getBoltType();
 
@@ -35,6 +36,7 @@ class BoltEntity : public CollidingSpriteEntity
     enumShotType boltType;
   private:
     bool testWallsCollision;
+    unsigned int level;
 };
 
 #endif // BOLTENTITY_H

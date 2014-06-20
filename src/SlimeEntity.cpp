@@ -40,7 +40,7 @@ SlimeEntity::SlimeEntity(float x, float y, bool invocated)
 void SlimeEntity::animate(float delay)
 {
   float slimeDelay = delay;
-  if (specialState[SpecialStateIce].active) slimeDelay = delay * STATUS_FROZEN_MULT;
+  if (specialState[SpecialStateIce].active) slimeDelay = delay * STATUS_FROZEN_MULT[specialState[SpecialStateIce].level];
 
   if (isJumping)
   {

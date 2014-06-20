@@ -26,7 +26,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual bool collideWithMap(int direction);
-    virtual bool hurt(int damages, enumShotType hurtingType);
+    virtual bool hurt(int damages, enumShotType hurtingType, int level);
     virtual void prepareDying();
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};
@@ -37,14 +37,15 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       SpecialStateIce // = 0
     };
     enum enumStateResistance { ResistanceImmune, ResistanceResistant, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
-    struct itemStuct
+    struct specialStateStuct
     {
       enumSpecialState type;
       enumStateResistance resistance;
       bool active;
       float timer;
+      int level;
     };
-    itemStuct specialState[NB_SPECIAL_STATES];
+    specialStateStuct specialState[NB_SPECIAL_STATES];
     virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
     virtual void computeFacingDirection();

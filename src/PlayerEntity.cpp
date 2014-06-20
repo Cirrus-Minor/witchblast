@@ -38,6 +38,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++) specialShots[i] = ShotTypeStandard;
   specialShotIndex = 0;
   needInitShotType = false;
+  shotLevel = 1; // TODO
 
   computePlayer();
 
@@ -403,7 +404,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
   {
     int fade;
     if (getShotType() != ShotTypeIce || specialBoltTimer <= 0.0f) fade = 255;
-    else fade = ((STATUS_FROZEN_BOLT_DELAY - specialBoltTimer) / STATUS_FROZEN_BOLT_DELAY) * 128;
+    else fade = ((STATUS_FROZEN_BOLT_DELAY[shotLevel] - specialBoltTimer) / STATUS_FROZEN_BOLT_DELAY[shotLevel]) * 128;
 
     if (getShotType() == ShotTypeLightning)
       fade = 150 + rand() % 105;
@@ -550,6 +551,8 @@ void PlayerEntity::setEquiped(int item, bool toggleEquipped)
 void PlayerEntity::generateBolt(float velx, float vely)
 {
   enumShotType boltType = ShotTypeStandard;
+  unsigned int shotLevel = 1;
+  // TODO
 
   switch (getShotType())
   {
@@ -571,8 +574,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
     boltType = getShotType(); break;
   }
 
-
-  BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 30, boltLifeTime, boltType);
+  BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 30, boltLifeTime, boltType, shotLevel);
   bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   bolt->setDamages(fireDamages);
   bolt->setVelocity(Vector2D(velx, vely));
@@ -666,7 +668,7 @@ bool PlayerEntity::hurt(int damages, enumShotType hurtingType)
   if (!hurting)
   {
     SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
-    BaseCreatureEntity::hurt(damages, ShotTypeStandard);
+    BaseCreatureEntity::hurt(damages, ShotTypeStandard, 1);
     hurtingDelay = HURTING_DELAY * 2.0f;
     game().generateBlood(x, y, bloodColor);
     game().generateBlood(x, y, bloodColor);
@@ -882,7 +884,7 @@ void PlayerEntity::selectNextShotType()
 
 void PlayerEntity::initShotType()
 {
-  specialBoltTimer = STATUS_FROZEN_BOLT_DELAY;
+  specialBoltTimer = STATUS_FROZEN_BOLT_DELAY[shotLevel];
   needInitShotType = false;
 
   if (getShotType() == ShotTypeLightning)

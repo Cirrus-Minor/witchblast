@@ -22,6 +22,7 @@ class FairyEntity : public SpriteEntity
     enumFamiliar fairyType;
     enumShotType shotType;
     float fairyFireDelay;
+    unsigned int shotLevel;
 
     void computeFacingDirection();
     void checkCollisions();

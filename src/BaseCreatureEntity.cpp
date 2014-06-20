@@ -19,6 +19,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
     specialState[i].resistance = ResistanceStandard;
     specialState[i].active = false;
     specialState[i].timer = 0.0f;
+    specialState[i].level = 0;
   }
   recoil.active = false;
   facingDirection = 2;
@@ -71,7 +72,7 @@ float BaseCreatureEntity::animateStates(float delay)
       if (specialState[i].timer <= 0.0f) specialState[i].active = false;
     }
   }
-  if (specialState[SpecialStateIce].active) delay *= STATUS_FROZEN_MULT;
+  if (specialState[SpecialStateIce].active) delay *= STATUS_FROZEN_MULT[specialState[SpecialStateIce].level];
   return delay;
 }
 
@@ -279,7 +280,7 @@ bool BaseCreatureEntity::collideWithMap(int direction)
     return false;
 }
 
-bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType)
+bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level = 1)
 {
   hurting = true;
   hurtingDelay = HURTING_DELAY;
@@ -288,7 +289,8 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType)
   if (hurtingType == ShotTypeIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
   {
     specialState[SpecialStateIce].active = true;
-    specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY;
+    specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level];
+    specialState[SpecialStateIce].level = level;
   }
 
   hp -= damages;

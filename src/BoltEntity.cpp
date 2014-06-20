@@ -4,12 +4,13 @@
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 
-BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime, enumShotType boltType) : CollidingSpriteEntity (image, x, y, BOLT_WIDTH, BOLT_HEIGHT)
+BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime, enumShotType boltType, int level = 1) : CollidingSpriteEntity (image, x, y, BOLT_WIDTH, BOLT_HEIGHT)
 {
   lifetime = boltLifeTime;
   setDamages(INITIAL_BOLT_DAMAGES);
   type = ENTITY_BOLT;
   viscosity = 0.97f;
+  this->level = level;
   if (boltType == ShotTypeLightning) viscosity = 0.98f;
   frame = 0;
   this->boltType = boltType;
@@ -27,6 +28,11 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
 int BoltEntity::getDamages()
 {
   return damages;
+}
+
+unsigned int BoltEntity::getLevel()
+{
+  return level;
 }
 
 void BoltEntity::setDamages(int damages)

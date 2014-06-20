@@ -22,6 +22,7 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
   fireDelay = -1.0f;
   facingDirection = 2;
 
+  shotLevel = 1;
   switch (fairyType)
   {
     case FamiliarFairy: shotType = ShotTypeStandard; fairyFireDelay = FAIRY_FIRE_DELAY; break;
@@ -89,7 +90,7 @@ void FairyEntity::fire(int dir, GameMap* map)
     if (dir == 2) vely = + FAIRY_BOLT_VELOCITY;
     if (dir == 8) vely = - FAIRY_BOLT_VELOCITY;
 
-    BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, FAIRY_BOLT_LIFE, shotType);
+    BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     bolt->setDamages(FAIRY_BOLT_DAMAGES);
     bolt->setVelocity(Vector2D(velx, vely));

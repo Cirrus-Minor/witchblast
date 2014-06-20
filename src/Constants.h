@@ -181,11 +181,15 @@ enum enumShotType {
   ShotTypeLightning
   };
 
-// status
-const float STATUS_FROZEN_DELAY = 5.0f;   // how long the freeze occurs
-const float STATUS_FROZEN_BOLT_DELAY = 2.5f;   // how long the freeze occurs
-const float STATUS_FROZEN_MULT = 0.33f;   // speed multiplier (= 3 times slower)
+// special shots effects
+const int MAX_SHOT_LEVEL = 3;
 
+const float STATUS_FROZEN_DELAY[MAX_SHOT_LEVEL]   // how long the freeze occurs
+    = { 4.0f, 5.0f, 6.0f };
+const float STATUS_FROZEN_BOLT_DELAY[MAX_SHOT_LEVEL]   // how long the freeze occurs
+    = { 3.0f, 2.6f, 2.0f };
+const float STATUS_FROZEN_MULT[MAX_SHOT_LEVEL]   // speed multiplier (= 3 times slower)
+    = { 0.38f, 0.33f, 0.28f };
 // entity type
 const int ENTITY_PLAYER = 1;
 const int ENTITY_FAMILIAR = 2;
