@@ -190,6 +190,11 @@ const float STATUS_FROZEN_BOLT_DELAY[MAX_SHOT_LEVEL]   // reload time
     = { 3.0f, 2.6f, 2.0f };
 const float STATUS_FROZEN_MULT[MAX_SHOT_LEVEL]   // speed multiplier (= 3 times slower)
     = { 0.38f, 0.33f, 0.28f };
+const float STONE_DECOIL_DELAY[MAX_SHOT_LEVEL]   // how long the stun occurs
+    = { 0.15f, 0.3f, 0.5f };
+const float STONE_DECOIL_VELOCITY[MAX_SHOT_LEVEL]   // Decoil power
+    = { 110.0f, 160.0f, 220.0f };
+
 // entity type
 const int ENTITY_PLAYER = 1;
 const int ENTITY_FAMILIAR = 2;

@@ -71,7 +71,7 @@ void ItemEntity::animate(float delay)
 void ItemEntity::render(sf::RenderTarget* app)
 {
   // shadow
-  sprite.setTextureRect(sf::IntRect(9 * width, height, width, height));
+  sprite.setTextureRect(sf::IntRect(9 * width, 2 * height, width, height));
   app->draw(sprite);
 
   // price

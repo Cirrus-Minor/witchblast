@@ -217,9 +217,9 @@ bool KingRatEntity::hurt(int damages, enumShotType hurtingType, int level)
   int newDamages = damages;
   // berserk state protects
   if (state == 6)
-    damages = damages / 4;
+    newDamages = damages / 4;
 
-   return BaseCreatureEntity::hurt(damages, hurtingType, level);
+   return BaseCreatureEntity::hurt(newDamages, hurtingType, level);
 }
 
 void KingRatEntity::calculateBB()
