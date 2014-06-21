@@ -1367,7 +1367,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
     if (itemOk && !toSale && !items[eq].canBeFound) itemOk = false;
     if (itemOk && items[eq].level > level) itemOk = false;
     if (itemOk && items[eq].requirement >= FirstEquipItem
-        && !player->isEquiped(i)) itemOk = false;
+        && !player->isEquiped(items[eq].requirement - FirstEquipItem)) itemOk = false;
 
     if (itemOk && player->getShotType(SPECIAL_SHOT_SLOTS_STANDARD) != ShotTypeStandard
         && (items[eq].specialShot != ShotTypeStandard && items[eq].level < 4))
