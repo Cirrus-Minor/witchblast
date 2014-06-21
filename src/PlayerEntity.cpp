@@ -776,8 +776,14 @@ void PlayerEntity::computePlayer()
     specialShotLevel[i] = 0;
     if (specialShots[i] == ShotTypeIce && equip[EQUIP_RING_ICE])
       specialShotLevel[i]++;
+    if (specialShots[i] == ShotTypeStone && equip[EQUIP_RING_STONE])
+      specialShotLevel[i]++;
+    if (specialShots[i] == ShotTypeLightning && equip[EQUIP_RING_LIGHTNING])
+      specialShotLevel[i]++;
+    if (specialShots[i] == ShotTypeIllusion && equip[EQUIP_RING_ILLUSION])
+      specialShotLevel[i]++;
   }
-  if (getShotType() == ShotTypeIllusion) fireDamages *= 0.8f;
+  if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGES_DECREASE[getShotLevel()];
 }
 
 void PlayerEntity::acquireStance(enumItemType type)

@@ -9,9 +9,9 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
   lifetime = boltLifeTime;
   setDamages(INITIAL_BOLT_DAMAGES);
   type = ENTITY_BOLT;
-  viscosity = 0.97f;
+  viscosity = INITIAL_BOLT_VISCOSITY;
   this->level = level;
-  if (boltType == ShotTypeLightning) viscosity = 0.98f;
+  if (boltType == ShotTypeLightning) viscosity += LIGHTNING_VISCOSITY_INCREASE[level];
   frame = 0;
   this->boltType = boltType;
   switch (boltType)

@@ -152,6 +152,7 @@ const float UNLOCK_DELAY = 1.0f;
 const float INITIAL_BOLT_LIFE = 0.4f;
 const int INITIAL_BOLT_DAMAGES = 8;
 const float INITIAL_BOLT_VELOCITY = 700.0f;
+const float INITIAL_BOLT_VISCOSITY = 0.97f;
 
 const float FAIRY_SPEED = 180.0f;
 const float FAIRY_FIRE_DELAY = 0.8f;
@@ -194,6 +195,10 @@ const float STONE_DECOIL_DELAY[MAX_SHOT_LEVEL]   // how long the stun occurs
     = { 0.15f, 0.3f, 0.5f };
 const float STONE_DECOIL_VELOCITY[MAX_SHOT_LEVEL]   // Decoil power
     = { 110.0f, 160.0f, 220.0f };
+const float ILLUSION_DAMAGES_DECREASE[MAX_SHOT_LEVEL]   // Decoil power
+    = { 0.8f, 0.9f, 1.0f };
+const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Decoil power
+    = { 0.012, 0.02f, 0.028f };
 
 // entity type
 const int ENTITY_PLAYER = 1;
