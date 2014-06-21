@@ -1067,6 +1067,15 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
       }
       shotsSprite.setTextureRect(sf::IntRect(48 * ( 1 + type_shot), 0,  48, 48));
       app->draw(shotsSprite);
+
+      // level
+      if (i > 0)
+      {
+        std::ostringstream oss;
+        oss << "lvl " << player->getShotLevel(i) + 1;
+        write(oss.str(), 10, xHud + 48 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0);
+      }
+
       index++;
     }
   }
@@ -1734,6 +1743,7 @@ bool WitchBlastGame::loadGame()
       player->setShotType(i, (enumShotType)n);
     }
 
+    player->computePlayer();
     file.close();
     remove(SAVE_FILE.c_str());
   }

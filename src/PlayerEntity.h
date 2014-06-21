@@ -301,9 +301,12 @@ class PlayerEntity : public BaseCreatureEntity
     int getCollidingDirection();
 
     /*!
+     *  \brief compute all the player data (stats / items)
+     */
+    void computePlayer();
+
+    /*!
      *  \brief register a new special shot and select it
-     *
-     *  Register a new special shot and select it.
      *
      *  \param item : Item which provides the shot
      */
@@ -312,11 +315,23 @@ class PlayerEntity : public BaseCreatureEntity
     /*!
      *  \brief accessor on current shot type
      *
-     *  Accessor on the current shot type.
-     *
      *  \return : the current shot type
      */
     enumShotType getShotType();
+
+    /*!
+     *  \brief accessor on current shot level
+     *
+     *  \return : the current shot level
+     */
+    unsigned int getShotLevel();
+
+    /*!
+     *  \brief accessor a shot level
+     *  \param index : the index of the shot
+     *  \return : the shot level
+     */
+    unsigned int getShotLevel(int index);
 
     /*!
      *  \brief accessor on current shot index
@@ -375,7 +390,6 @@ class PlayerEntity : public BaseCreatureEntity
     FairyEntity* getFairy(unsigned int n);
 
   protected:
-    void computePlayer();
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
 
@@ -402,8 +416,8 @@ class PlayerEntity : public BaseCreatureEntity
 
     float specialBoltTimer;
     enumShotType specialShots[SPECIAL_SHOT_SLOTS];
+    unsigned int specialShotLevel[SPECIAL_SHOT_SLOTS];
     int specialShotIndex;
-    int shotLevel;
     bool needInitShotType;
 
     int collidingDirection;           /*!< Colliding direction (4, 8, 6, 2) to detect collision with closed doors */

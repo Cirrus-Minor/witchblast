@@ -35,10 +35,14 @@ PlayerEntity::PlayerEntity(float x, float y)
   collidingDirection = 0;
 
   // init the shots (to none)
-  for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++) specialShots[i] = ShotTypeStandard;
+  for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++)
+  {
+    specialShots[i] = ShotTypeStandard;
+    specialShotLevel[i] = 0;
+  }
+
   specialShotIndex = 0;
   needInitShotType = false;
-  shotLevel = 1; // TODO
 
   computePlayer();
 
@@ -404,7 +408,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
   {
     int fade;
     if (getShotType() != ShotTypeIce || specialBoltTimer <= 0.0f) fade = 255;
-    else fade = ((STATUS_FROZEN_BOLT_DELAY[shotLevel] - specialBoltTimer) / STATUS_FROZEN_BOLT_DELAY[shotLevel]) * 128;
+    else fade = ((STATUS_FROZEN_BOLT_DELAY[getShotLevel()] - specialBoltTimer) / STATUS_FROZEN_BOLT_DELAY[getShotLevel()]) * 128;
 
     if (getShotType() == ShotTypeLightning)
       fade = 150 + rand() % 105;
@@ -767,6 +771,12 @@ void PlayerEntity::computePlayer()
   boltLifeTime = INITIAL_BOLT_LIFE * boltLifeTimeBonus;
 
   // gems
+  for (int i = 1; i < SPECIAL_SHOT_SLOTS; i++)
+  {
+    specialShotLevel[i] = 0;
+    if (specialShots[i] == ShotTypeIce && equip[EQUIP_RING_ICE])
+      specialShotLevel[i]++;
+  }
   if (getShotType() == ShotTypeIllusion) fireDamages *= 0.8f;
 }
 
@@ -884,11 +894,21 @@ void PlayerEntity::selectNextShotType()
 
 void PlayerEntity::initShotType()
 {
-  specialBoltTimer = STATUS_FROZEN_BOLT_DELAY[shotLevel];
+  specialBoltTimer = STATUS_FROZEN_BOLT_DELAY[getShotLevel()];
   needInitShotType = false;
 
   if (getShotType() == ShotTypeLightning)
     SoundManager::getSoundManager()->playSound(SOUND_ELECTRIC_CHARGE);
+}
+
+unsigned int PlayerEntity::getShotLevel()
+{
+  return specialShotLevel[specialShotIndex];
+}
+
+unsigned int PlayerEntity::getShotLevel(int index)
+{
+  return specialShotLevel[index];
 }
 
 int PlayerEntity::getFairieNumber()

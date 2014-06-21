@@ -186,7 +186,7 @@ const int MAX_SHOT_LEVEL = 3;
 
 const float STATUS_FROZEN_DELAY[MAX_SHOT_LEVEL]   // how long the freeze occurs
     = { 4.0f, 5.0f, 6.0f };
-const float STATUS_FROZEN_BOLT_DELAY[MAX_SHOT_LEVEL]   // how long the freeze occurs
+const float STATUS_FROZEN_BOLT_DELAY[MAX_SHOT_LEVEL]   // reload time
     = { 3.0f, 2.6f, 2.0f };
 const float STATUS_FROZEN_MULT[MAX_SHOT_LEVEL]   // speed multiplier (= 3 times slower)
     = { 0.38f, 0.33f, 0.28f };
