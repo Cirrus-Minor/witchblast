@@ -566,6 +566,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
         if (specialBoltTimer <= 0.0f)
         {
           boltType = ShotTypeIce;
+          shotLevel = getShotLevel();
           needInitShotType = true;
         }
         else boltType = ShotTypeStandard;
@@ -575,7 +576,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
   case ShotTypeIllusion:
   case ShotTypeStone:
   case ShotTypeLightning:
-    boltType = getShotType(); break;
+    boltType = getShotType(); shotLevel = getShotLevel(); break;
   }
 
   BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 30, boltLifeTime, boltType, shotLevel);
