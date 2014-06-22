@@ -114,6 +114,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/select.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/heart.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/rat_die.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/bat_die.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {

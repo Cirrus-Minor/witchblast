@@ -19,6 +19,10 @@ BatEntity::BatEntity(float x, float y)
   changingDelay = -0.5f;
   shadowFrame = 3;
   movingStyle = movFlying;
+
+  dyingFrame = 2;
+  deathFrame = FRAME_CORPSE_BAT;
+  agonizingSound = SOUND_BAT_DYING;
 }
 
 void BatEntity::animate(float delay)
@@ -76,7 +80,7 @@ void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 void BatEntity::dying()
 {
-  isDying = true;
+  /*isDying = true;
   SpriteEntity* deadBat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadBat->setZ(OFFSET_Y);
   deadBat->setFrame(FRAME_CORPSE_BAT);
@@ -85,5 +89,7 @@ void BatEntity::dying()
   for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
 
   drop();
-  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
+  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);*/
+  EnnemyEntity::dying();
+  h = 25.0f;
 }

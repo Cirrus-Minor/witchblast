@@ -187,7 +187,7 @@ bool EnnemyEntity::canCollide()
 
 void EnnemyEntity::render(sf::RenderTarget* app)
 {
-  if (isAgonising)
+  if (isAgonising || (isDying && dyingFrame > -1))
   {
     if (shadowFrame > -1)
     {
@@ -196,12 +196,12 @@ void EnnemyEntity::render(sf::RenderTarget* app)
       sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
       app->draw(sprite);
     }
-    int nx = frame;
+    int nx = dyingFrame;
     int ny = 0;
     if (imagesProLine > 0)
     {
-        nx = frame % imagesProLine;
-        ny = frame / imagesProLine;
+        nx = dyingFrame % imagesProLine;
+        ny = dyingFrame / imagesProLine;
     }
     sprite.setPosition(x, y - h);
     sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
