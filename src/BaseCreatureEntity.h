@@ -6,6 +6,8 @@
 
 const int NB_SPECIAL_STATES = 1;
 
+const int NB_RESISTANCES = 6;
+
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
   public:
@@ -36,16 +38,27 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     {
       SpecialStateIce // = 0
     };
-    enum enumStateResistance { ResistanceImmune, ResistanceResistant, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
+    enum enumStateResistance { ResistanceImmune, ResistanceVeryHigh, ResistanceHigh, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
     struct specialStateStuct
     {
       enumSpecialState type;
-      enumStateResistance resistance;
       bool active;
       float timer;
-      int level;
+      float parameter;
     };
     specialStateStuct specialState[NB_SPECIAL_STATES];
+
+    enum enumResistances
+    {
+      ResistanceIce, // = 0
+      ResistanceFrozen,
+      ResistanceStone,
+      ResistanceRecoil,
+      ResistanceLightning,
+      ResistanceIllusion
+    };
+    enumStateResistance resistance[NB_RESISTANCES];
+
     virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
     virtual void computeFacingDirection();
@@ -72,6 +85,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       float timer;
     } recoil;
   private:
+    bool determineSatusChance(enumStateResistance resistance, int level);
 };
 
 #endif // BASECREATUREENTITY_H

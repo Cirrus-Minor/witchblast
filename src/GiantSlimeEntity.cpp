@@ -37,7 +37,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   slimeCounter = 0;
   slimeTimer =5.0f;
 
-  specialState[SpecialStateIce].resistance = ResistanceImmune;
+  resistance[ResistanceFrozen] = ResistanceVeryHigh;
 }
 
 void GiantSlimeEntity::changeToState(int n)
@@ -138,6 +138,8 @@ void GiantSlimeEntity::animate(float delay)
     age += delay;
     return;
   }
+  EnnemyEntity::animate(delay);
+  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
 
   timer -= delay;
   if (timer <= 0.0f)
@@ -285,7 +287,7 @@ void GiantSlimeEntity::animate(float delay)
     }
   }
 
-  EnnemyEntity::animate(delay);
+  //EnnemyEntity::animate(delay);
 
   if (state == 6 && timer < 0.5f)
   {

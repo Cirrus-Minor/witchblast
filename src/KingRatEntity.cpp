@@ -37,7 +37,7 @@ KingRatEntity::KingRatEntity(float x, float y)
 
   hasBeenBerserk = false;
 
-  specialState[SpecialStateIce].resistance = ResistanceImmune;
+  resistance[ResistanceFrozen] = ResistanceVeryHigh;
 }
 
 void KingRatEntity::animate(float delay)
@@ -47,6 +47,9 @@ void KingRatEntity::animate(float delay)
     age += delay;
     return;
   }
+
+  EnnemyEntity::animate(delay);
+  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
 
   float timerMult = 1.0f;
   if (hp <= hpMax / 4)
@@ -208,8 +211,6 @@ void KingRatEntity::animate(float delay)
     if (r == 1) frame = 1;
     else if (r == 3) frame = 2;
   }
-
-  EnnemyEntity::animate(delay);
 }
 
 bool KingRatEntity::hurt(int damages, enumShotType hurtingType, int level)

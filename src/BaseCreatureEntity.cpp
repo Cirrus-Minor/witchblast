@@ -16,10 +16,13 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
   {
     specialState[i].type = (enumSpecialState)i;
-    specialState[i].resistance = ResistanceStandard;
     specialState[i].active = false;
     specialState[i].timer = 0.0f;
-    specialState[i].level = 0;
+    specialState[i].parameter = 0.0f;
+  }
+  for (int i = 0; i < NB_RESISTANCES; i++)
+  {
+    resistance[i] = ResistanceStandard;
   }
   recoil.active = false;
   facingDirection = 2;
@@ -72,7 +75,7 @@ float BaseCreatureEntity::animateStates(float delay)
       if (specialState[i].timer <= 0.0f) specialState[i].active = false;
     }
   }
-  if (specialState[SpecialStateIce].active) delay *= STATUS_FROZEN_MULT[specialState[SpecialStateIce].level];
+  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
   return delay;
 }
 
@@ -280,17 +283,36 @@ bool BaseCreatureEntity::collideWithMap(int direction)
     return false;
 }
 
-bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level = 1)
+bool BaseCreatureEntity::determineSatusChance(enumStateResistance resistance, int level)
+{
+  bool hit = true;
+  switch (resistance)
+  {
+    case ResistanceVeryLow:
+    case ResistanceLow:
+    case ResistanceStandard: hit = true; break;
+    case ResistanceHigh: hit = rand() % 8 <= level * 2; break;
+    case ResistanceVeryHigh: hit = rand() % 10 <= level * 2; break;
+    case ResistanceImmune: hit = false; break;
+  }
+  return hit;
+}
+
+bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   hurting = true;
   hurtingDelay = HURTING_DELAY;
   this->hurtingType = hurtingType;
 
-  if (hurtingType == ShotTypeIce && specialState[SpecialStateIce].resistance > ResistanceImmune)
+  if (hurtingType == ShotTypeIce
+      && determineSatusChance(resistance[ResistanceFrozen], level)) // && specialState[SpecialStateIce].resistance > ResistanceImmune)
   {
+    // frozen ?
     specialState[SpecialStateIce].active = true;
     specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level];
-    specialState[SpecialStateIce].level = level;
+    specialState[SpecialStateIce].parameter = STATUS_FROZEN_MULT[level];
+
+    // damages
   }
 
   hp -= damages;
