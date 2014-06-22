@@ -72,13 +72,21 @@ Changes
 
 Next version
 - ADD New familiar (Ice Fairy)
+- ADD New items (4 rings)
 - ADD Lightning's shot effect and sound
+- ADD Special shots levels
 - ADD Menu screen
+- ADD Keys configuration
 - MOD Bolt's bounding box is bigger when testing collision with monsters
 - MOD Player's invincibility delay after being shot increases
 - MOD Player's diagonal velocity decreases
+- MOD Bosses are now in the middle of the room, 2 seconds idle
+- MOD Giant Slime's latency decreases
+- MOD Resistance and status immunity new system (boss can be frozen now, although it's difficult)
 - FIX Switching windows while player is dead
 - FIX Player can fire while getting an item
+- FIX Giant Slime life bar
+- FIX King Rat protection while berserk
 
 v0.1.0
 - ADD New enemies (slime and black rat)
