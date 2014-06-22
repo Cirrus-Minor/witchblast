@@ -18,7 +18,7 @@ class GreenRatEntity : public EnnemyEntity
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
 
-	  virtual void dying();
+	  virtual void drop();
   private:
     float timer;
 };

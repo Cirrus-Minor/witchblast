@@ -18,12 +18,15 @@ RatEntity::RatEntity(float x, float y)
 
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
-  shadowFrame = 6;
+  shadowFrame = 7;
+  dyingFrame = 6;
+  deathFrame = FRAME_CORPSE_RAT;
+  agonizingSound = SOUND_RAT_DYING;
 }
 
 void RatEntity::animate(float delay)
 {
-  if (age > 0.0f)
+  if (age > 0.0f && !isAgonising)
   {
     frame = ((int)(age * 5.0f)) % 2;
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
@@ -78,17 +81,4 @@ void RatEntity::collideWithEnnemy(GameEntity* collidingEntity)
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
     computeFacingDirection();
   }
-}
-
-void RatEntity::dying()
-{
-  isDying = true;
-  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
-  deadRat->setZ(OFFSET_Y);
-  deadRat->setFrame(FRAME_CORPSE_RAT);
-  deadRat->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-  drop();
-  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }

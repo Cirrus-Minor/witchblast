@@ -28,8 +28,6 @@ class SlimeEntity : public EnnemyEntity
 
   private:
     float jumpingDelay;
-    float h;
-    float hVelocity;
 
     bool isJumping;
     bool isFirstJumping;

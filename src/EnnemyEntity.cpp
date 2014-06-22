@@ -15,11 +15,38 @@ EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y)
   bloodColor = bloodRed;
 
   z = y;
+  h = 0;
   age = -0.001f * (rand()%800) - 0.4f;
+
+  deathFrame = -1;
+  dyingSound = SOUND_ENNEMY_DYING;
+  agonizingSound = SOUND_NONE;
+  isAgonising = false;
 }
 
 void EnnemyEntity::animate(float delay)
 {
+  if (isAgonising)
+  {
+    if (h < -0.01f)
+    {
+      isDying = true;
+      SpriteEntity* corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+      corpse->setZ(OFFSET_Y);
+      corpse->setFrame(deathFrame);
+      corpse->setType(ENTITY_CORPSE);
+      if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
+    }
+    else
+    {
+      frame = dyingFrame;
+      hVelocity -= 700.0f * delay;
+      h += hVelocity * delay;
+    }
+
+    return;
+  }
+
   if (canCollide()) testSpriteCollisions();
   if (age > 0.0f)
     BaseCreatureEntity::animate(delay);
@@ -57,7 +84,7 @@ void EnnemyEntity::collideMapBottom()
 
 void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
-  if (collideWithEntity(entity))
+  if (!isDying && !isAgonising && collideWithEntity(entity))
   {
     if (entity->getType() == ENTITY_PLAYER || entity->getType() == ENTITY_BOLT )
     {
@@ -80,7 +107,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         inflictsRecoilTo(playerEntity);
       }
 
-      else if (boltEntity != NULL && !boltEntity->getDying() && !isDying && boltEntity->getAge() > 0.05f)
+      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
       {
         boltEntity->collide();
         hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
@@ -114,33 +141,6 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       }
     }
   }
-
-/*
-  if (x < OFFSET_X + TILE_WIDTH)
-  {
-    x = OFFSET_X + TILE_WIDTH;
-    if (velocity.x > 1.0f) velocity.x = -velocity.x;
-    else if (velocity.x > -1.0f) velocity.x = -1.0f;
-  }
-  else if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1))
-  {
-    x = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1);
-    if (velocity.x < -1.0f) velocity.x = -velocity.x;
-    else if (velocity.x < 1.0f) velocity.x = 1.0f;
-  }
-
-  if (y < OFFSET_Y + TILE_HEIGHT)
-  {
-    y = OFFSET_Y + TILE_HEIGHT;
-    if (velocity.y > 1.0f) velocity.y = -velocity.y;
-    else if (velocity.y > -1.0f) velocity.y = -1.0f;
-  }
-  else if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1))
-  {
-    y = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1);
-    if (velocity.y < -1.0f) velocity.y = -velocity.y;
-    else if (velocity.y < 1.0f) velocity.y = 1.0f;
-  }*/
 }
 
 void EnnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
@@ -150,11 +150,23 @@ void EnnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 void EnnemyEntity::dying()
 {
-  isDying = true;
-  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(3), x, y, 64, 64);
-  deadRat->setZ(OFFSET_Y);
-  deadRat->setFrame(2);
-  deadRat->setType(13);
+  if (deathFrame == -1)
+  {
+    isDying = true;
+    SpriteEntity* corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+    corpse->setZ(OFFSET_Y);
+    corpse->setFrame(deathFrame);
+    corpse->setType(ENTITY_CORPSE);
+    if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
+  }
+  else
+  {
+    isAgonising = true;
+    hVelocity = 200.0f;
+    if (agonizingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(agonizingSound);
+  }
+  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
+  drop();
 }
 
 void EnnemyEntity::drop()
@@ -171,4 +183,32 @@ void EnnemyEntity::drop()
 bool EnnemyEntity::canCollide()
 {
   return true;
+}
+
+void EnnemyEntity::render(sf::RenderTarget* app)
+{
+  if (isAgonising)
+  {
+    if (shadowFrame > -1)
+    {
+      // shadow
+      sprite.setPosition(x, y);
+      sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
+      app->draw(sprite);
+    }
+    int nx = frame;
+    int ny = 0;
+    if (imagesProLine > 0)
+    {
+        nx = frame % imagesProLine;
+        ny = frame / imagesProLine;
+    }
+    sprite.setPosition(x, y - h);
+    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
+
+    app->draw(sprite);
+  }
+
+  else
+    BaseCreatureEntity::render(app);
 }

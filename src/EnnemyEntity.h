@@ -9,6 +9,7 @@ class EnnemyEntity : public BaseCreatureEntity
     EnnemyEntity(sf::Texture* image, float x, float y);
     virtual void animate(float delay);
     virtual void calculateBB();
+    virtual void render(sf::RenderTarget* app);
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -23,6 +24,15 @@ class EnnemyEntity : public BaseCreatureEntity
 	  virtual bool canCollide();
 
     int meleeDamages;
+
+    float h;
+    float hVelocity;
+
+    int dyingFrame;
+    int deathFrame;
+    bool isAgonising;
+    sound_resources dyingSound;
+    sound_resources agonizingSound;
   private:
 
 };

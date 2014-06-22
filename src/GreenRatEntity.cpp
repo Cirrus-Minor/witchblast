@@ -10,7 +10,7 @@
 GreenRatEntity::GreenRatEntity(float x, float y)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
 {
-  imagesProLine = 6;
+  imagesProLine = 8;
   creatureSpeed = GREEN_RAT_SPEED;
   velocity = Vector2D(creatureSpeed);
   computeFacingDirection();
@@ -19,18 +19,21 @@ GreenRatEntity::GreenRatEntity(float x, float y)
 
   type = ENTITY_ENNEMY_INVOCATED;
   bloodColor = bloodRed;
-  shadowFrame = 6;
+  shadowFrame = 7;
+  dyingFrame = 14;
+  deathFrame = FRAME_CORPSE_GREEN_RAT;
+  agonizingSound = SOUND_RAT_DYING;
 
   timer = (rand() % 50) / 10.0f;
   age = -GREEN_RAT_FADE;
-  frame = 6;
+  frame = 8;
 }
 
 void GreenRatEntity::animate(float delay)
 {
   z = y + boundingBox.top + boundingBox.height;
 
-  if (age > 0.0f)
+  if (age > 0.0f && !isAgonising)
   {
     sprite.setColor(sf::Color(255,255,255,255));
 
@@ -43,12 +46,12 @@ void GreenRatEntity::animate(float delay)
       computeFacingDirection();
     }
 
-    frame = 6 + ((int)(age * 5.0f)) % 2;
+    frame = 8 + ((int)(age * 5.0f)) % 2;
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
     isMirroring = (facingDirection == 4 );
     if (facingDirection == 8) frame += 4;
   }
-  else
+  else if (!isAgonising)
   {
     sprite.setColor(sf::Color(255,255,255,255 * (1.0 + age)));
   }
@@ -106,15 +109,7 @@ void GreenRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
   }
 }
 
-void GreenRatEntity::dying()
+void GreenRatEntity::drop()
 {
-  isDying = true;
-  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
-  deadRat->setZ(OFFSET_Y);
-  deadRat->setFrame(FRAME_CORPSE_GREEN_RAT);
-  deadRat->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-
-  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
+  // no drop
 }

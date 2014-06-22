@@ -556,7 +556,6 @@ void PlayerEntity::generateBolt(float velx, float vely)
 {
   enumShotType boltType = ShotTypeStandard;
   unsigned int shotLevel = 1;
-  // TODO
 
   switch (getShotType())
   {

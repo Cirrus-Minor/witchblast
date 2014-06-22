@@ -32,8 +32,6 @@ class GiantSlimeEntity : public EnnemyEntity
     int state, counter;
     float slimeTimer;
     int slimeCounter;
-    float h;
-    float hVelocity;
     bool isFirstJumping;
     bool isFalling;
     float missileDelay;

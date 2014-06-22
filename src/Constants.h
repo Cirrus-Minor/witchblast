@@ -100,6 +100,7 @@ enum item_images {
 };
 
 enum sound_resources {
+  SOUND_NONE = -1,
   SOUND_STEP,
   SOUND_BLAST_STANDARD,
   SOUND_BLAST_FLOWER,
@@ -127,7 +128,8 @@ enum sound_resources {
   SOUND_ICE_CHARGE,
   SOUND_ELECTRIC_CHARGE,
   SOUND_SHOT_SELECT,
-  SOUND_HEART
+  SOUND_HEART,
+  SOUND_RAT_DYING
 };
 
 enum corpses_ressources{

@@ -14,15 +14,18 @@ BlackRatEntity::BlackRatEntity(float x, float y)
   currentTile(0, 0),
   targetTile(0, 0)
 {
-  imagesProLine = 6;
+  imagesProLine = 8;
   creatureSpeed = BLACK_RAT_SPEED;
   hp = BLACK_RAT_HP;
   meleeDamages = BLACK_RAT_DAMAGES;
 
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
-  shadowFrame = 6;
-  frame = 12;
+  shadowFrame = 7;
+  frame = 16;
+  dyingFrame = 22;
+  deathFrame = FRAME_CORPSE_BLACK_RAT;
+  agonizingSound = SOUND_RAT_DYING;
 
   currentDirection = 0;
 
@@ -31,15 +34,15 @@ BlackRatEntity::BlackRatEntity(float x, float y)
 
 void BlackRatEntity::animate(float delay)
 {
-  // goal reached ?
-  if (currentDirection == 6 && x > (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2 + OFFSET_X) ) findNextGoal();
-  else if (currentDirection == 4 && x < (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2 + OFFSET_X) ) findNextGoal();
-  else if (currentDirection == 2 && y > (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
-  else if (currentDirection == 8 && y < (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
-
-  if (age > 0.0f)
+  if (age > 0.0f && !isAgonising)
   {
-    frame = 12 + ((int)(age * 5.0f)) % 2;
+      // goal reached ?
+    if (currentDirection == 6 && x > (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2 + OFFSET_X) ) findNextGoal();
+    else if (currentDirection == 4 && x < (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2 + OFFSET_X) ) findNextGoal();
+    else if (currentDirection == 2 && y > (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
+    else if (currentDirection == 8 && y < (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
+
+    frame = 16 + ((int)(age * 5.0f)) % 2;
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
     isMirroring = (facingDirection == 4 );
     if (facingDirection == 8) frame += 4;
@@ -111,19 +114,6 @@ void BlackRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
     }
     facingDirection = currentDirection;
   }
-}
-
-void BlackRatEntity::dying()
-{
-  isDying = true;
-  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
-  deadRat->setZ(OFFSET_Y);
-  deadRat->setFrame(FRAME_CORPSE_BLACK_RAT);
-  deadRat->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-  drop();
-  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
 }
 
 void BlackRatEntity::findNextGoal()

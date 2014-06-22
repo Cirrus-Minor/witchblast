@@ -17,7 +17,6 @@ class BlackRatEntity : public EnnemyEntity
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
 
-	  virtual void dying();
   private:
     void findNextGoal();
     int currentDirection;
