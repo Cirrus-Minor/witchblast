@@ -198,7 +198,7 @@ const float STONE_DECOIL_VELOCITY[MAX_SHOT_LEVEL]   // Decoil power
 const float ILLUSION_DAMAGES_DECREASE[MAX_SHOT_LEVEL]   // Decoil power
     = { 0.8f, 0.9f, 1.0f };
 const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Decoil power
-    = { 0.012, 0.02f, 0.028f };
+    = { 0.01, 0.015f, 0.02f };
 
 // entity type
 const int ENTITY_PLAYER = 1;
