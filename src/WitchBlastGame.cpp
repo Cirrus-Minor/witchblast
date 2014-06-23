@@ -85,7 +85,6 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage((char*)"media/pnj.png");
   ImageManager::getImageManager()->addImage((char*)"media/fairy.png");
 
-  SoundManager::getSoundManager()->addSound((char*)"media/sound/step.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/blast00.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/blast01.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/door_closing.ogg");

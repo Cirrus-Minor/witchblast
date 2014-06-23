@@ -197,7 +197,6 @@ void PlayerEntity::animate(float delay)
   {
     frame = ((int)(age * 5.0f)) % 4;
     if (frame == 3) frame = 1;
-    SoundManager::getSoundManager()->playSound(SOUND_STEP);
   }
   else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
     frame = 0;

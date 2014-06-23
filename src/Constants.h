@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.1.2";
+const std::string APP_VERSION =   "0.1.3";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
@@ -101,7 +101,6 @@ enum item_images {
 
 enum sound_resources {
   SOUND_NONE = -1,
-  SOUND_STEP,
   SOUND_BLAST_STANDARD,
   SOUND_BLAST_FLOWER,
   SOUND_DOOR_CLOSING,
