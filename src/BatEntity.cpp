@@ -80,16 +80,6 @@ void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 void BatEntity::dying()
 {
-  /*isDying = true;
-  SpriteEntity* deadBat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
-  deadBat->setZ(OFFSET_Y);
-  deadBat->setFrame(FRAME_CORPSE_BAT);
-  deadBat->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-
-  drop();
-  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);*/
   EnnemyEntity::dying();
   h = 25.0f;
 }
