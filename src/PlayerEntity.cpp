@@ -481,6 +481,15 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       boltEntity->collide();
       hurt(boltEntity->getDamages(), ShotTypeStandard);
       game().generateBlood(x, y, bloodColor);
+
+      float xs = (x + boltEntity->getX()) / 2;
+      float ys = (y + boltEntity->getY()) / 2;
+      SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+      star->setFading(true);
+      star->setZ(y+ 100);
+      star->setLifetime(0.7f);
+      star->setType(16);
+      star->setSpin(400.0f);
     }
   }
 }
