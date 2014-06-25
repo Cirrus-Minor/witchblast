@@ -365,7 +365,7 @@ void WitchBlastGame::updateRunningGame()
 
       if (event.key.code == sf::Keyboard::X)
       {
-        startNewGame(false);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false);
       }
     }
 
