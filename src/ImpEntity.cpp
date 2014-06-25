@@ -147,7 +147,7 @@ void ImpEntity::fire()
 {
     SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
-          (ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y);
+          (x, y, ShotTypeStandard, 0);
     bolt->setFrame(6);
 
     if (impType == ImpTypeBlue) bolt->setFrame(2);

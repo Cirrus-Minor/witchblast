@@ -1,27 +1,14 @@
 #ifndef ENNEMYBOLTENTITY_H
 #define ENNEMYBOLTENTITY_H
 
-#include "sfml_game/CollidingSpriteEntity.h"
+#include "BoltEntity.h"
 
-class EnnemyBoltEntity : public CollidingSpriteEntity
+
+class EnnemyBoltEntity : public BoltEntity
 {
   public:
-    EnnemyBoltEntity(sf::Texture* image, float x, float y);
+    EnnemyBoltEntity(float x, float y, enumShotType boltType, int level);
     virtual void animate(float delay);
-    void collide();
-    void generateParticule(Vector2D vel);
-
-    int getDamages();
-    void setDamages(int damages);
-
-  protected:
-    virtual void collideMapRight();
-    virtual void collideMapLeft();
-    virtual void collideMapTop();
-    virtual void collideMapBottom();
-
-    int damages;
-  private:
 };
 
 #endif // ENNEMYBOLTENTITY_H

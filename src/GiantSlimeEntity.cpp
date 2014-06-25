@@ -441,7 +441,7 @@ void GiantSlimeEntity::fire()
 {
     SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
-          (ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y + 10);
+          (x, y + 10, ShotTypeStandard, 0);
     bolt->setFrame(1);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
