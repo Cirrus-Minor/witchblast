@@ -15,7 +15,7 @@ Music: Seby
 Introduction
 ------------
 
-Witch Blast is a free roguelite dungeon crawl shooter heavily inspired from Binding Of Isaac. The player plays as a novice magician in a dungeon and trying to get as far as he can, using various items he can find to defeat the inhabitants of the dungeon.
+Witch Blast is a free roguelite dungeon crawl shooter heavily inspired from Binding Of Isaac. The player plays as a novice magician in a dungeon who is trying to get as far as he can, using various items he can find to defeat the inhabitants of the dungeon.
 
 Web: https://github.com/Cirrus-Minor/witchblast
 
@@ -63,8 +63,8 @@ Features
 Thanks
 --------
 Thanks to
-Billx (who suggest me the title "Witch Blast")
-and
+Billx (who suggested me the title "Witch Blast")
+Ruth (for the english corrections)
 Mika Attila (for his contribution concerning the Linux version)
 
 Changes
@@ -73,16 +73,20 @@ Changes
 Next version
 - ADD New familiar (Ice Fairy)
 - ADD New items (4 rings)
+- ADD New monster and variants
 - ADD Lightning's shot effect and sound
 - ADD Special shots levels
 - ADD Menu screen
 - ADD Keys configuration
+- ADD Death animation and sound for bats and rats
 - MOD Bolt's bounding box is bigger when testing collision with monsters
 - MOD Player's invincibility delay after being shot increases
 - MOD Player's diagonal velocity decreases
 - MOD Bosses are now in the middle of the room, 2 seconds idle
 - MOD Giant Slime's latency decreases
 - MOD Resistance and status immunity new system (boss can be frozen now, although it's difficult)
+- MOD Player's step sound removed
+- MOD New game with [LShift]+[X] now (used to be [X] alone)
 - FIX Switching windows while player is dead
 - FIX Player can fire while getting an item
 - FIX Giant Slime life bar
