@@ -586,8 +586,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
     boltType = getShotType(); shotLevel = getShotLevel(); break;
   }
 
-  BoltEntity* bolt = new BoltEntity(ImageManager::getImageManager()->getImage(1), x, y + 30, boltLifeTime, boltType, shotLevel);
-  bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  BoltEntity* bolt = new BoltEntity(x, y + 30, boltLifeTime, boltType, shotLevel);
   bolt->setDamages(fireDamages);
   bolt->setVelocity(Vector2D(velx, vely));
 }

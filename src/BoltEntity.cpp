@@ -1,10 +1,12 @@
 #include "BoltEntity.h"
 #include "Constants.h"
 #include "DungeonMap.h"
+#include "WitchBlastGame.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 
-BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime, enumShotType boltType, int level) : CollidingSpriteEntity (image, x, y, BOLT_WIDTH, BOLT_HEIGHT)
+BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltType, int level)
+: CollidingSpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT)
 {
   lifetime = boltLifeTime;
   setDamages(INITIAL_BOLT_DAMAGES);
@@ -13,6 +15,7 @@ BoltEntity::BoltEntity(sf::Texture* image, float x, float y, float boltLifeTime,
   this->level = level;
   if (boltType == ShotTypeLightning) viscosity += LIGHTNING_VISCOSITY_INCREASE[level];
   frame = 0;
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   this->boltType = boltType;
   switch (boltType)
   {
