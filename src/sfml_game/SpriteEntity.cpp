@@ -23,6 +23,7 @@ SpriteEntity::SpriteEntity(sf::Texture* image, float x, float y, int width, int 
     isShrinking = false;
     isVisible = true;
     isMirroring = false;
+    color = sf::Color(255, 255, 255, 255);
     this->image = image;
     sprite.setTexture(*image);
     this->width  = width  <= 0 ? image->getSize().x  : width;
@@ -44,6 +45,12 @@ float SpriteEntity::getScaleX()
 void SpriteEntity::setFading(bool isFading)
 {
     this->isFading = isFading;
+}
+
+void SpriteEntity::setColor(sf::Color color)
+{
+  this->color = color;
+  sprite.setColor(sf::Color(color.r, color.g, color.b, color.a));
 }
 
 void SpriteEntity::setShrinking(bool isShrinking)
@@ -104,7 +111,7 @@ void SpriteEntity::render(sf::RenderTarget* app)
 
     if (isFading)
     {
-        sprite.setColor(sf::Color(255, 255, 255, (sf::Uint8)(getFade() * 255)));
+        sprite.setColor(sf::Color(color.r, color.g, color.b, (sf::Uint8)(getFade() * 255)));
     }
 
     if (isShrinking)

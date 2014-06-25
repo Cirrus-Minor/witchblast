@@ -37,6 +37,7 @@ public:
   void setFrame(int frame);
   void setImagesProLine(int n);
   void setScale(float scx, float scy);
+  void setColor(sf::Color color);
 
   void removeCenter();
 
@@ -46,6 +47,7 @@ public:
 protected:
     sf::Sprite sprite;
     sf::Texture* image;
+    sf::Color color;
     int width;
     int height;
     int frame;

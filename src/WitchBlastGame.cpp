@@ -28,6 +28,7 @@
 #include "KingRatEntity.h"
 #include "GiantSlimeEntity.h"
 #include "BatEntity.h"
+#include "ImpEntity.h"
 #include "SlimeEntity.h"
 #include "ChestEntity.h"
 #include "EvilFlowerEntity.h"
@@ -72,6 +73,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage((char*)"media/bat.png");
   ImageManager::getImageManager()->addImage((char*)"media/evil_flower.png");
   ImageManager::getImageManager()->addImage((char*)"media/slime.png");
+  ImageManager::getImageManager()->addImage((char*)"media/imp.png");
   ImageManager::getImageManager()->addImage((char*)"media/giant_slime.png");
   ImageManager::getImageManager()->addImage((char*)"media/king_rat.png");
   ImageManager::getImageManager()->addImage((char*)"media/blood.png");
@@ -1256,6 +1258,7 @@ void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float y
     case MONSTER_BAT: new BatEntity(xm, ym); break;
     case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym - 2); break;
     case MONSTER_SLIME: new SlimeEntity(xm, ym, false); break;
+    case MONSTER_IMP: new ImpEntity(xm, ym); break;
 
     case MONSTER_KING_RAT: new KingRatEntity(xm, ym); break;
   }

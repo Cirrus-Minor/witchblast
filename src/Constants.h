@@ -83,6 +83,7 @@ enum item_images {
   IMAGE_BAT,
   IMAGE_FLOWER,
   IMAGE_SLIME,
+  IMAGE_IMP,
 
   IMAGE_GIANT_SLIME,
   IMAGE_KING_RAT,
@@ -139,6 +140,7 @@ enum corpses_ressources{
   FRAME_CORPSE_GREEN_RAT,
   FRAME_CORPSE_SLIME,
   FRAME_CORPSE_BLACK_RAT,
+  FRAME_CORPSE_IMP,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME
@@ -229,6 +231,7 @@ enum monster_type_enum
   MONSTER_EVIL_FLOWER,
   MONSTER_SLIME,
   MONSTER_BLACK_RAT,
+  MONSTER_IMP,
 
   MONSTER_KING_RAT
 };
@@ -283,6 +286,17 @@ const int SLIME_BB_LEFT = 13;
 const int SLIME_BB_WIDTH_DIFF = 26;
 const int SLIME_BB_TOP = 38;
 const int SLIME_BB_HEIGHT_DIFF = 40;
+
+// Imp
+const float IMP_SPEED = 180.0f;
+const int IMP_HP = 20;
+const int IMP_MELEE_DAMAGES = 5;
+const int IMP_MISSILE_DAMAGES = 8;
+const int IMP_BB_LEFT = 5;
+const int IMP_BB_WIDTH_DIFF = 10;
+const int IMP_BB_TOP = 2;
+const int IMP_BB_HEIGHT_DIFF = 32;
+const float IMP_FIRE_VELOCITY = 250.0f;
 
 // Giant Slime
 const int GIANT_SLIME_HP = 650;
