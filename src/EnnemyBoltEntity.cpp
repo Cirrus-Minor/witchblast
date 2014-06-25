@@ -1,12 +1,14 @@
 #include "EnnemyBoltEntity.h"
 #include "Constants.h"
 #include "sfml_game/ImageManager.h"
+#include "WitchBlastGame.h"
 
 EnnemyBoltEntity::EnnemyBoltEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f) : CollidingSpriteEntity (image, x, y, BOLT_WIDTH, BOLT_HEIGHT)
 {
   damages = INITIAL_BOLT_DAMAGES;
   type = ENTITY_ENNEMY_BOLT;
   frame = 1;
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 }
 
 int EnnemyBoltEntity::getDamages()

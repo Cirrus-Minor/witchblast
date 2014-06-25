@@ -7,7 +7,7 @@
 #include "WitchBlastGame.h"
 #include "EnnemyBoltEntity.h"
 
-ImpEntity::ImpEntity(float x, float y)
+ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_IMP), x, y)
 {
   creatureSpeed = IMP_SPEED * 0.7f;
@@ -20,10 +20,15 @@ ImpEntity::ImpEntity(float x, float y)
   changingDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
   shadowFrame = 4;
   movingStyle = movFlying;
+  imagesProLine = 5;
 
-  dyingFrame = 3;
+  if (impType == ImpTypeBlue) dyingFrame = 8;
+  else dyingFrame = 3;
+
   deathFrame = FRAME_CORPSE_IMP;
   agonizingSound = SOUND_BAT_DYING;
+
+  this->impType = impType;
 
   state = 0;
 }
@@ -75,6 +80,7 @@ void ImpEntity::animate(float delay)
         case 3: frame = 2; break;
       }
     }
+    if (impType == ImpTypeBlue) frame += 5;
   }
 
   EnnemyEntity::animate(delay);
@@ -143,7 +149,9 @@ void ImpEntity::fire()
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
           (ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y);
     bolt->setFrame(6);
-    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+
+    if (impType == ImpTypeBlue) bolt->setFrame(2);
+
 
     float flowerFireVelocity = IMP_FIRE_VELOCITY;
     if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
@@ -173,8 +181,16 @@ void ImpEntity::teleport()
 
   for(int i=0; i < 6; i++)
   {
-    generateStar(sf::Color(255, 0, 0, 255));
-    generateStar(sf::Color(255, 255, 255, 255));
+    if (impType == ImpTypeBlue)
+    {
+      generateStar(sf::Color(50, 50, 255, 255));
+      generateStar(sf::Color(200, 200, 255, 255));
+    }
+    else
+    {
+      generateStar(sf::Color(255, 50, 50, 255));
+      generateStar(sf::Color(255, 200, 200, 255));
+    }
   }
 
   while (!ok)
@@ -192,7 +208,15 @@ void ImpEntity::teleport()
 
   for(int i=0; i < 6; i++)
   {
-    generateStar(sf::Color(255, 50, 50, 255));
-    generateStar(sf::Color(255, 200, 200, 255));
+    if (impType == ImpTypeBlue)
+    {
+      generateStar(sf::Color(50, 50, 255, 255));
+      generateStar(sf::Color(200, 200, 255, 255));
+    }
+    else
+    {
+      generateStar(sf::Color(255, 50, 50, 255));
+      generateStar(sf::Color(255, 200, 200, 255));
+    }
   }
 }

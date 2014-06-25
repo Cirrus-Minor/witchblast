@@ -6,7 +6,8 @@
 class ImpEntity : public EnnemyEntity
 {
   public:
-    ImpEntity(float x, float y);
+    enum impTypeEnum { ImpTypeRed, ImpTypeBlue };
+    ImpEntity(float x, float y, impTypeEnum impType);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -20,6 +21,7 @@ class ImpEntity : public EnnemyEntity
 
 	  virtual void dying();
   private:
+    impTypeEnum impType;
     float changingDelay;
     int state;
     void fire();
