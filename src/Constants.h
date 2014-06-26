@@ -186,7 +186,8 @@ enum enumShotType {
   ShotTypeIce,
   ShotTypeIllusion,
   ShotTypeStone,
-  ShotTypeLightning
+  ShotTypeLightning,
+  ShotTypeFire
   };
 
 // special shots effects

@@ -12,6 +12,7 @@ EnnemyBoltEntity::EnnemyBoltEntity(float x, float y, enumShotType boltType, int 
   switch (boltType)
   {
     case ShotTypeIce: frame = 2; break;
+    case ShotTypeFire: frame = 6; break;
     default: frame = 1; break;
   }
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);

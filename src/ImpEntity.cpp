@@ -159,9 +159,16 @@ void ImpEntity::fire()
 
     EnnemyBoltEntity* bolt;
     if (impType == ImpTypeBlue)
+    {
       bolt = new EnnemyBoltEntity(x, y, ShotTypeIce, 0);
+      bolt->setDamages(5);
+    }
     else
-      bolt = new EnnemyBoltEntity(x, y, ShotTypeStandard, 0);
+    {
+      bolt = new EnnemyBoltEntity(x, y, ShotTypeFire, 0);
+      bolt->setDamages(8);
+    }
+
 
     float fireVelocity = IMP_FIRE_VELOCITY;
     if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
