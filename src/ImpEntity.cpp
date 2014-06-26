@@ -10,7 +10,8 @@
 ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_IMP), x, y)
 {
-  creatureSpeed = IMP_SPEED * 0.7f;
+  // general
+  creatureSpeed = IMP_SPEED;
   velocity = Vector2D(creatureSpeed);
   hp = IMP_HP;
   meleeDamages = IMP_MELEE_DAMAGES;
@@ -22,15 +23,23 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   movingStyle = movFlying;
   imagesProLine = 5;
 
-  if (impType == ImpTypeBlue) dyingFrame = 8;
-  else dyingFrame = 3;
-
-  deathFrame = FRAME_CORPSE_IMP;
   agonizingSound = SOUND_BAT_DYING;
-
   this->impType = impType;
 
   state = 0;
+
+  // Imp-specific
+  if (impType == ImpTypeBlue)
+  {
+    dyingFrame = 8;
+    deathFrame = FRAME_CORPSE_IMP_BLUE;
+    resistance[ResistanceFrozen] = ResistanceImmune;
+  }
+  else
+  {
+    dyingFrame = 3;
+    deathFrame = FRAME_CORPSE_IMP_RED;
+  }
 }
 
 void ImpEntity::animate(float delay)
@@ -146,16 +155,16 @@ void ImpEntity::dying()
 void ImpEntity::fire()
 {
     SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
-    EnnemyBoltEntity* bolt = new EnnemyBoltEntity
-          (x, y, ShotTypeStandard, 0);
-    bolt->setFrame(6);
 
-    if (impType == ImpTypeBlue) bolt->setFrame(2);
+    EnnemyBoltEntity* bolt;
+    if (impType == ImpTypeBlue)
+      bolt = new EnnemyBoltEntity(x, y, ShotTypeIce, 0);
+    else
+      bolt = new EnnemyBoltEntity(x, y, ShotTypeStandard, 0);
 
-
-    float flowerFireVelocity = IMP_FIRE_VELOCITY;
-    if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
-    bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), flowerFireVelocity ));
+    float fireVelocity = IMP_FIRE_VELOCITY;
+    if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
+    bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), fireVelocity ));
 }
 
 void ImpEntity::generateStar(sf::Color starColor)
@@ -201,7 +210,7 @@ void ImpEntity::teleport()
     xMonster = OFFSET_X + xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
     yMonster = OFFSET_Y + ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
 
-    ok = (game().getPlayerPosition().distance2(Vector2D(xMonster, yMonster)) > 60000);
+    ok = (game().getPlayerPosition().distance2(Vector2D(xMonster, yMonster)) > 40000);
   }
   x = xMonster;
   y = yMonster;
