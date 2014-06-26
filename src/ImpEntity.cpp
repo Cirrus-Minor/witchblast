@@ -23,7 +23,8 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   movingStyle = movFlying;
   imagesProLine = 5;
 
-  agonizingSound = SOUND_BAT_DYING;
+  hurtingSound = SOUND_IMP_HURT;
+  agonizingSound = SOUND_IMP_DYING;
   this->impType = impType;
 
   state = 0;
@@ -134,7 +135,7 @@ void ImpEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 bool ImpEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
-  bool result = BaseCreatureEntity::hurt(damages, hurtingType, level);
+  bool result = EnnemyEntity::hurt(damages, hurtingType, level);
 
   if (!isDying && !isAgonising)
   {

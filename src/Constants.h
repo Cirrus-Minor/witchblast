@@ -130,7 +130,9 @@ enum sound_resources {
   SOUND_SHOT_SELECT,
   SOUND_HEART,
   SOUND_RAT_DYING,
-  SOUND_BAT_DYING
+  SOUND_BAT_DYING,
+  SOUND_IMP_HURT,
+  SOUND_IMP_DYING
 };
 
 enum corpses_ressources{
