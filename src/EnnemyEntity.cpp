@@ -21,6 +21,7 @@ EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y)
   deathFrame = -1;
   dyingSound = SOUND_ENNEMY_DYING;
   agonizingSound = SOUND_NONE;
+  hurtingSound = SOUND_NONE;
   isAgonising = false;
 }
 
@@ -146,6 +147,14 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 void EnnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
   // To implement the behaviour when colliding with another ennemy
+}
+
+bool EnnemyEntity::hurt(int damages, enumShotType hurtingType, int level)
+{
+  bool hurted = BaseCreatureEntity::hurt(damages, hurtingType, level);
+  if (hurted && hurtingSound != SOUND_NONE && hp > 0)
+    SoundManager::getSoundManager()->playSound(hurtingSound);
+  return hurted;
 }
 
 void EnnemyEntity::dying()

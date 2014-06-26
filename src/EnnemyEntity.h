@@ -20,6 +20,7 @@ class EnnemyEntity : public BaseCreatureEntity
 	  virtual void dying();
 	  virtual void drop();
 	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
+	  virtual bool hurt(int damages, enumShotType hurtingType, int level);
 
 	  virtual bool canCollide();
 
@@ -31,6 +32,7 @@ class EnnemyEntity : public BaseCreatureEntity
     int dyingFrame;
     int deathFrame;
     bool isAgonising;
+    sound_resources hurtingSound;
     sound_resources dyingSound;
     sound_resources agonizingSound;
   private:
