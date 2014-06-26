@@ -9,7 +9,11 @@ EnnemyBoltEntity::EnnemyBoltEntity(float x, float y, enumShotType boltType, int 
   damages = INITIAL_BOLT_DAMAGES;
   type = ENTITY_ENNEMY_BOLT;
   viscosity = 1.0f;
-  frame = 1;
+  switch (boltType)
+  {
+    case ShotTypeIce: frame = 2; break;
+    default: frame = 1; break;
+  }
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 }
 
