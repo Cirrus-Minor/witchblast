@@ -479,7 +479,7 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     if (boltEntity != NULL && !boltEntity->getDying())
     {
       boltEntity->collide();
-      hurt(boltEntity->getDamages(), ShotTypeStandard);
+      hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
       game().generateBlood(x, y, bloodColor);
 
       float xs = (x + boltEntity->getX()) / 2;
@@ -674,12 +674,12 @@ bool PlayerEntity::canMove()
   return (playerStatus == playerStatusPlaying);
 }
 
-bool PlayerEntity::hurt(int damages, enumShotType hurtingType)
+bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   if (!hurting)
   {
     SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
-    BaseCreatureEntity::hurt(damages, ShotTypeStandard, 1);
+    BaseCreatureEntity::hurt(damages, hurtingType, level);
     hurtingDelay = HURTING_DELAY * 2.0f;
     game().generateBlood(x, y, bloodColor);
     game().generateBlood(x, y, bloodColor);

@@ -171,9 +171,10 @@ class PlayerEntity : public BaseCreatureEntity
      *
      *  \param damages : the inflicted damages
      *  \param hurtingType : damages type
+     *  \param level : damages level
      *  \return : True if the player has been hurt
      */
-    virtual bool hurt(int damages, enumShotType hurtingType);
+    virtual bool hurt(int damages, enumShotType hurtingType, int level);
 
     /*!
      *  \brief returns if the player is dead or not
