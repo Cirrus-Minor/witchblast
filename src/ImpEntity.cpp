@@ -168,7 +168,7 @@ void ImpEntity::fire()
       bolt = new EnnemyBoltEntity(x, y, ShotTypeFire, 0);
       bolt->setDamages(8);
     }
-
+    bolt->setFlying(true);
 
     float fireVelocity = IMP_FIRE_VELOCITY;
     if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
@@ -210,8 +210,10 @@ void ImpEntity::teleport()
     }
   }
 
-  while (!ok)
+  int counter = 50;
+  while (!ok && counter > 0)
   {
+    counter--;
     xm = 1 +rand() % (MAP_WIDTH - 3);
     ym = 1 +rand() % (MAP_HEIGHT - 3);
 
@@ -219,7 +221,7 @@ void ImpEntity::teleport()
     yMonster = OFFSET_Y + ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
 
     ok = (game().getPlayerPosition().distance2(Vector2D(xMonster, yMonster)) > 40000);
-  }
+    }
   x = xMonster;
   y = yMonster;
 
