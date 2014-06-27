@@ -17,9 +17,9 @@
 #include "CollidingSpriteEntity.h"
 
 CollidingSpriteEntity::CollidingSpriteEntity(sf::Texture* image, float x, float y, int width, int height)
-                                                    : SpriteEntity(image, x, y, width, height)
+  : SpriteEntity(image, x, y, width, height)
 {
-    maxY = 1000.0f;
+  maxY = 1000.0f;
 }
 
 CollidingSpriteEntity::~CollidingSpriteEntity()
@@ -28,253 +28,253 @@ CollidingSpriteEntity::~CollidingSpriteEntity()
 
 GameMap* CollidingSpriteEntity::getMap()
 {
-    return map;
+  return map;
 }
 
 void CollidingSpriteEntity::setMap(GameMap* map, int tileWidth, int tileHeight, int offsetX, int offsetY)
 {
-    this->map = map;
-    setTileDimensions(tileWidth, tileHeight);
-    this->offsetX = offsetX;
-    this->offsetY = offsetY;
+  this->map = map;
+  setTileDimensions(tileWidth, tileHeight);
+  this->offsetX = offsetX;
+  this->offsetY = offsetY;
 }
 
 void CollidingSpriteEntity::setTileDimensions(int width, int height)
 {
-    tileWidth = width;
-    tileHeight = height;
+  tileWidth = width;
+  tileHeight = height;
 }
 
 void CollidingSpriteEntity::render(sf::RenderTarget* app)
 {
-    SpriteEntity::render(app);
+  SpriteEntity::render(app);
 }
 
 
 void CollidingSpriteEntity::animate(float delay)
 {
-	velocity.x *= viscosity;
-	velocity.y *= viscosity;
+  velocity.x *= viscosity;
+  velocity.y *= viscosity;
 
   spin *= viscosity;
-	angle += spin * delay;
+  angle += spin * delay;
 
-	velocity.y += weight * delay;
+  velocity.y += weight * delay;
 
-    if ((int)velocity.x > 0)
+  if ((int)velocity.x > 0)
+  {
+    x += velocity.x * delay;
+
+    if (collideWithMap(DIRECTION_LEFT))
     {
-        x += velocity.x * delay;
-
-        if (collideWithMap(DIRECTION_LEFT))
-        {
-            x = (float)((int)x);
-            while (collideWithMap(DIRECTION_LEFT))
-                x--;
-            collideMapRight();
-        }
-        else if (x > map->getWidth() * tileWidth + offsetX)
-        {
-            exitMap(DIRECTION_RIGHT);
-        }
+      x = (float)((int)x);
+      while (collideWithMap(DIRECTION_LEFT))
+        x--;
+      collideMapRight();
     }
-    else if ((int)velocity.x < 0)
+    else if (x > map->getWidth() * tileWidth + offsetX)
     {
-        x += velocity.x * delay;
-
-        if (collideWithMap(DIRECTION_RIGHT))
-        {
-            x = (float)((int)x);
-            while (collideWithMap(DIRECTION_RIGHT))
-                x++;
-            collideMapLeft();
-        }
-        else if (x < offsetX)
-        {
-            exitMap(DIRECTION_LEFT);
-        }
+      exitMap(DIRECTION_RIGHT);
     }
+  }
+  else if ((int)velocity.x < 0)
+  {
+    x += velocity.x * delay;
 
-    velocity.y += weight * delay;
-    if ( velocity.y > maxY) velocity.y = maxY;
-
-    if ((int)velocity.y > 0)
+    if (collideWithMap(DIRECTION_RIGHT))
     {
-        y += velocity.y * delay;
-
-        if (collideWithMap(DIRECTION_BOTTOM))
-        {
-            y = (float)((int)y);
-            while (collideWithMap(DIRECTION_BOTTOM))
-                y--;
-            collideMapBottom();
-        }
+      x = (float)((int)x);
+      while (collideWithMap(DIRECTION_RIGHT))
+        x++;
+      collideMapLeft();
     }
-    else if ((int)velocity.y < 0)
+    else if (x < offsetX)
     {
-        y += velocity.y * delay;
-        //calculateBB();
-
-        if (collideWithMap(DIRECTION_TOP))
-        {
-            y = (float)((int)y);
-            while (collideWithMap(DIRECTION_TOP))
-                y++;
-            collideMapTop();
-        }
+      exitMap(DIRECTION_LEFT);
     }
+  }
+
+  velocity.y += weight * delay;
+  if ( velocity.y > maxY) velocity.y = maxY;
+
+  if ((int)velocity.y > 0)
+  {
+    y += velocity.y * delay;
+
+    if (collideWithMap(DIRECTION_BOTTOM))
+    {
+      y = (float)((int)y);
+      while (collideWithMap(DIRECTION_BOTTOM))
+        y--;
+      collideMapBottom();
+    }
+  }
+  else if ((int)velocity.y < 0)
+  {
+    y += velocity.y * delay;
+    //calculateBB();
+
+    if (collideWithMap(DIRECTION_TOP))
+    {
+      y = (float)((int)y);
+      while (collideWithMap(DIRECTION_TOP))
+        y++;
+      collideMapTop();
+    }
+  }
 
 
 
   // for platforming
- /*   if ((int)weight == 0)
-    {
-        if (!(isOnGround()))
-        {
-            makeFall();
-        }
-    }*/
+  /*   if ((int)weight == 0)
+     {
+         if (!(isOnGround()))
+         {
+             makeFall();
+         }
+     }*/
 
-    if (lifetime > 0)
-    {
-        if (age >= lifetime) isDying = true;
-    }
-    age += delay;
+  if (lifetime > 0)
+  {
+    if (age >= lifetime) isDying = true;
+  }
+  age += delay;
 }
 
 void CollidingSpriteEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2;
-    boundingBox.width = width;
-    boundingBox.top = (int)y - height / 2;
-    boundingBox.height =  height;
+  boundingBox.left = (int)x - width / 2;
+  boundingBox.width = width;
+  boundingBox.top = (int)y - height / 2;
+  boundingBox.height =  height;
 }
 
 void CollidingSpriteEntity::makeFall()
 {
-    weight = normalWeight;
+  weight = normalWeight;
 }
 
 bool CollidingSpriteEntity::isOnGround()
 {
-    calculateBB();
+  calculateBB();
 
-    int xTile0 = (boundingBox.left - offsetX) / tileWidth;
-    int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
-    int yTile = (boundingBox.top + boundingBox.height + 1 - offsetY) / tileHeight;
+  int xTile0 = (boundingBox.left - offsetX) / tileWidth;
+  int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
+  int yTile = (boundingBox.top + boundingBox.height + 1 - offsetY) / tileHeight;
 
-    for (int xTile = xTile0; xTile <= xTilef; xTile++)
-    {
-        if (map->isDownBlocking(xTile, yTile)) return true;
-    }
-    return false;
+  for (int xTile = xTile0; xTile <= xTilef; xTile++)
+  {
+    if (map->isDownBlocking(xTile, yTile)) return true;
+  }
+  return false;
 }
 
 void CollidingSpriteEntity::exitMap(int direction)
 {
-    if (direction == 0) {}
+  if (direction == 0) {}
 }
 
 void CollidingSpriteEntity::collideMapRight()
 {
-    velocity.x = 0.0f;
+  velocity.x = 0.0f;
 }
 
 void CollidingSpriteEntity::collideMapLeft()
 {
-    velocity.x = 0.0f;
+  velocity.x = 0.0f;
 }
 
 void CollidingSpriteEntity::collideMapTop()
 {
-    velocity.y = 0.0f;
+  velocity.y = 0.0f;
 }
 
 void CollidingSpriteEntity::collideMapBottom()
 {
-    velocity.y = 0.0f;
+  velocity.y = 0.0f;
 }
 
 
 bool CollidingSpriteEntity::collideWithMap(int direction)
 {
-    calculateBB();
+  calculateBB();
 
-    int xTile0 = (boundingBox.left - offsetX) / tileWidth;
-    int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
-    int yTile0 = (boundingBox.top - offsetY) / tileHeight;
-    int yTilef = (boundingBox.top + boundingBox.height - offsetY) / tileHeight;
+  int xTile0 = (boundingBox.left - offsetX) / tileWidth;
+  int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
+  int yTile0 = (boundingBox.top - offsetY) / tileHeight;
+  int yTilef = (boundingBox.top + boundingBox.height - offsetY) / tileHeight;
 
-    if (boundingBox.top < 0) yTile0 = -1;
+  if (boundingBox.top < 0) yTile0 = -1;
 
-    for (int xTile = xTile0; xTile <= xTilef; xTile++)
-        for (int yTile = yTile0; yTile <= yTilef; yTile++)
-        {
-            switch (direction)
-            {
-            case DIRECTION_LEFT:
-                if (map->isLeftBlocking(xTile, yTile)) return true;
-                break;
+  for (int xTile = xTile0; xTile <= xTilef; xTile++)
+    for (int yTile = yTile0; yTile <= yTilef; yTile++)
+    {
+      switch (direction)
+      {
+      case DIRECTION_LEFT:
+        if (map->isLeftBlocking(xTile, yTile)) return true;
+        break;
 
-            case DIRECTION_RIGHT:
-                if (map->isRightBlocking(xTile, yTile)) return true;
-                break;
+      case DIRECTION_RIGHT:
+        if (map->isRightBlocking(xTile, yTile)) return true;
+        break;
 
-            case DIRECTION_TOP:
-                if (map->isUpBlocking(xTile, yTile)) return true;
-                break;
+      case DIRECTION_TOP:
+        if (map->isUpBlocking(xTile, yTile)) return true;
+        break;
 
-            case DIRECTION_BOTTOM:
-                if (map->isDownBlocking(xTile, yTile)) return true;
-                break;
-            }
-        }
+      case DIRECTION_BOTTOM:
+        if (map->isDownBlocking(xTile, yTile)) return true;
+        break;
+      }
+    }
 
-    return false;
+  return false;
 }
 
 bool CollidingSpriteEntity::collideWithEntity(CollidingSpriteEntity* entity)
 {
-    calculateBB();
-    entity->calculateBB();
+  calculateBB();
+  entity->calculateBB();
 
-    return boundingBox.intersects(entity->boundingBox);
+  return boundingBox.intersects(entity->boundingBox);
 
-    /*if (boundingBox.left > entity->boundingBox.left + entity->boundingBox.width) return false;
-    if (boundingBox.Right < entity->boundingBox.Left) return false;
-    if (boundingBox.Top > entity->boundingBox.Bottom) return false;
-    if (boundingBox.Bottom < entity->boundingBox.Top) return false;*/
+  /*if (boundingBox.left > entity->boundingBox.left + entity->boundingBox.width) return false;
+  if (boundingBox.Right < entity->boundingBox.Left) return false;
+  if (boundingBox.Top > entity->boundingBox.Bottom) return false;
+  if (boundingBox.Bottom < entity->boundingBox.Top) return false;*/
 
-    return true;
+  return true;
 }
 
 void CollidingSpriteEntity::testSpriteCollisions()
 {
-    EntityManager::EntityList* entityList = EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList = EntityManager::getEntityManager()->getList();
 
-    EntityManager::EntityList::iterator it;
-    EntityManager::EntityList::iterator oldit = entityList->begin ();
+  EntityManager::EntityList::iterator it;
+  EntityManager::EntityList::iterator oldit = entityList->begin ();
 
-    for (it = entityList->begin (); it != entityList->end ();)
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity* entity = *it;
+
+    CollidingSpriteEntity* collidingEntity = dynamic_cast<CollidingSpriteEntity*>(entity);
+    if (collidingEntity != NULL)
     {
-        GameEntity* entity = *it;
+      readCollidingEntity(collidingEntity);
+    }
+    oldit = it;
+    it++;
 
-        CollidingSpriteEntity* collidingEntity = dynamic_cast<CollidingSpriteEntity*>(entity);
-        if (collidingEntity != NULL)
-        {
-            readCollidingEntity(collidingEntity);
-        }
-        oldit = it;
-        it++;
-
-    } // end for*/
+  } // end for*/
 }
 
 void CollidingSpriteEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
-    if (entity == NULL) return;
+  if (entity == NULL) return;
 }
 
 void CollidingSpriteEntity::collideEntity(CollidingSpriteEntity* entity)
 {
-    if (entity == NULL) return;
+  if (entity == NULL) return;
 }
