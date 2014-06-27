@@ -26,6 +26,11 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
     case ShotTypeIllusion:  frame = 3; break;
   }
   testWallsCollision = false;
+  flying = false;
+
+  // avoid starting in wall
+  if (y > (OFFSET_Y + (MAP_HEIGHT - 1) * TILE_HEIGHT - 16))
+    this->y = OFFSET_Y + (MAP_HEIGHT - 1) * TILE_HEIGHT - 16;
 }
 
 int BoltEntity::getDamages()
@@ -57,6 +62,16 @@ void BoltEntity::setDamages(int damages)
 enumShotType BoltEntity::getBoltType()
 {
   return boltType;
+}
+
+bool BoltEntity::isFlying()
+{
+    return flying;
+}
+
+void BoltEntity::setFlying(bool flying)
+{
+  this->flying = flying;
 }
 
 void BoltEntity::animate(float delay)
@@ -135,7 +150,14 @@ bool BoltEntity::collideWithMap(int direction)
         {
           if (boltType != ShotTypeIllusion)
           {
-            if ( dynamic_cast<DungeonMap*>(map)->isShootable(xTile, yTile) == false ) return true;
+            if (flying)
+            {
+              if ( dynamic_cast<DungeonMap*>(map)->isFlyable(xTile, yTile) == false ) return true;
+            }
+            else
+            {
+              if ( dynamic_cast<DungeonMap*>(map)->isShootable(xTile, yTile) == false ) return true;
+            }
           }
         }
 
