@@ -158,7 +158,7 @@ PlayerEntity* WitchBlastGame::getPlayer()
 
 Vector2D WitchBlastGame::getPlayerPosition()
 {
-  return Vector2D(player->getX(), player->getY());
+  return Vector2D(player->getX(), player->getY() + 30);
 }
 
 int WitchBlastGame::getLevel()
