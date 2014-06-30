@@ -33,7 +33,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};
     virtual enumMovingStyle getMovingStyle();
-    enum enumBloodColor { bloodRed, bloodGreen};
+    enum enumBloodColor { bloodNone = -1, bloodRed, bloodGreen, bloodRock};
     enum enumSpecialState
     {
       SpecialStateIce // = 0

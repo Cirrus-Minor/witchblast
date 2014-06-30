@@ -123,7 +123,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       {
         boltEntity->collide();
         hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
-        game().generateBlood(x, y, bloodColor);
+        if (bloodColor > bloodNone) game().generateBlood(x, y, bloodColor);
         SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 
         float xs = (x + boltEntity->getX()) / 2;
