@@ -82,6 +82,30 @@ public:
 
 	  return result;
 	}
+
+	Vector2D vectorNearlyTo(Vector2D vector, float amplitude, float diffAngle)
+	{
+	  float angle = angleTo(vector);
+	  float randomFloat = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+	  angle = angle - diffAngle * 0.5f + diffAngle * randomFloat;
+	  Vector2D result;
+
+	  if (vector.y > y)
+	  {
+	    result.x = sin(angle) * amplitude;
+	    result.y = cos(angle) * amplitude;
+	  }
+	  else
+	  {
+	    result.x = -sin(angle) * amplitude;
+	    result.y = -cos(angle) * amplitude;
+	  }
+
+    if (result.x != result.x)
+      return (Vector2D(amplitude));
+
+	  return result;
+	}
 };
 
 class IntCoord
