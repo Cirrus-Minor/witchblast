@@ -19,6 +19,7 @@ EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y)
   age = -0.001f * (rand()%800) - 0.4f;
 
   deathFrame = -1;
+  dyingFrame = -1;
   dyingSound = SOUND_ENNEMY_DYING;
   agonizingSound = SOUND_NONE;
   hurtingSound = SOUND_NONE;
@@ -32,9 +33,19 @@ void EnnemyEntity::animate(float delay)
     if (h < -0.01f)
     {
       isDying = true;
-      SpriteEntity* corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+      SpriteEntity* corpse;
+      if (deathFrame >= FRAME_CORPSE_KING_RAT)
+      {
+        corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
+        corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
+      }
+      else
+      {
+        corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+        corpse->setFrame(deathFrame);
+      }
+
       corpse->setZ(OFFSET_Y);
-      corpse->setFrame(deathFrame);
       corpse->setType(ENTITY_CORPSE);
       if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
     }
@@ -159,7 +170,7 @@ bool EnnemyEntity::hurt(int damages, enumShotType hurtingType, int level)
 
 void EnnemyEntity::dying()
 {
-  if (deathFrame == -1)
+  if (dyingFrame == -1)
   {
     isDying = true;
     SpriteEntity* corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
@@ -213,7 +224,10 @@ void EnnemyEntity::render(sf::RenderTarget* app)
         ny = dyingFrame / imagesProLine;
     }
     sprite.setPosition(x, y - h);
-    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect(nx * width + width, ny * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
 
     app->draw(sprite);
   }
