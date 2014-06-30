@@ -145,6 +145,12 @@ void BaseCreatureEntity::animatePhysics(float delay)
   spin *= viscosity;
 	angle += spin * delay;
 
+	if (isCollidingWithMap())
+  {
+    stuck();
+  }
+  else
+  {
     if ((int)velx > 0)
     {
         x += velx * delay;
@@ -177,6 +183,7 @@ void BaseCreatureEntity::animatePhysics(float delay)
             exitMap(DIRECTION_LEFT);
         }
     }
+  }
 
     vely += weight * delay;
     if ( vely > maxY) vely = maxY;

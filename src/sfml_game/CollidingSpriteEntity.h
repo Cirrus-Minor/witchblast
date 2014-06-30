@@ -37,6 +37,8 @@ public:
 	virtual void calculateBB();
 	virtual void makeFall();
 	virtual bool collideWithMap(int direction);
+	virtual bool isCollidingWithMap();
+	virtual void stuck();
 	virtual bool collideWithEntity(CollidingSpriteEntity* entity);
 
     enum directionEnum

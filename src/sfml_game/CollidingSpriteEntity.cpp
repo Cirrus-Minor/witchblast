@@ -97,33 +97,38 @@ void CollidingSpriteEntity::animate(float delay)
   velocity.y += weight * delay;
   if ( velocity.y > maxY) velocity.y = maxY;
 
-  if ((int)velocity.y > 0)
+  if (isCollidingWithMap())
   {
-    y += velocity.y * delay;
-
-    if (collideWithMap(DIRECTION_BOTTOM))
+    stuck();
+  }
+  else
+  {
+    if ((int)velocity.y > 0)
     {
-      y = (float)((int)y);
-      while (collideWithMap(DIRECTION_BOTTOM))
-        y--;
-      collideMapBottom();
+      y += velocity.y * delay;
+
+      if (collideWithMap(DIRECTION_BOTTOM))
+      {
+        y = (float)((int)y);
+        while (collideWithMap(DIRECTION_BOTTOM))
+          y--;
+        collideMapBottom();
+      }
+    }
+    else if ((int)velocity.y < 0)
+    {
+      y += velocity.y * delay;
+      //calculateBB();
+
+      if (collideWithMap(DIRECTION_TOP))
+      {
+        y = (float)((int)y);
+        while (collideWithMap(DIRECTION_TOP))
+          y++;
+        collideMapTop();
+      }
     }
   }
-  else if ((int)velocity.y < 0)
-  {
-    y += velocity.y * delay;
-    //calculateBB();
-
-    if (collideWithMap(DIRECTION_TOP))
-    {
-      y = (float)((int)y);
-      while (collideWithMap(DIRECTION_TOP))
-        y++;
-      collideMapTop();
-    }
-  }
-
-
 
   // for platforming
   /*   if ((int)weight == 0)
@@ -230,6 +235,19 @@ bool CollidingSpriteEntity::collideWithMap(int direction)
     }
 
   return false;
+}
+
+bool CollidingSpriteEntity::isCollidingWithMap()
+{
+  return (collideWithMap(DIRECTION_BOTTOM)
+          || collideWithMap(DIRECTION_TOP)
+          || collideWithMap(DIRECTION_LEFT)
+          || collideWithMap(DIRECTION_RIGHT));
+}
+
+void CollidingSpriteEntity::stuck()
+{
+  onDying();
 }
 
 bool CollidingSpriteEntity::collideWithEntity(CollidingSpriteEntity* entity)
