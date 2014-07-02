@@ -55,6 +55,7 @@ Features
 
 - randomly generated dungeons,
 - powerful items,
+- different shot types,
 - monsters,
 - chest and keys,
 - merchant,
@@ -74,6 +75,8 @@ Next version
 - ADD New familiar (Ice Fairy)
 - ADD New items (4 rings)
 - ADD New monster and variants
+- ADD New level
+- ADD New boss
 - ADD Lightning's shot effect and sound
 - ADD Special shots levels
 - ADD Menu screen
@@ -89,7 +92,8 @@ Next version
 - MOD New game with [LShift]+[X] now (used to be [X] alone)
 - FIX Switching windows while player is dead
 - FIX Player can fire while getting an item
-- FIX Giant Slime life bar
+- FIX Player does not drop fairies anymore when dying
+- FIX Giant Slime life bar corrected
 - FIX King Rat protection while berserk
 
 v0.1.0
