@@ -712,10 +712,17 @@ void PlayerEntity::dying()
   setVelocity(Vector2D(0.0f, 0.0f));
 
   int i;
-  for (i = 0; i < gold; i++) loseItem(ItemCopperCoin, false);
+  for (i = 0; i < gold && i < 10; i++) loseItem(ItemCopperCoin, false);
 
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
-    if (equip[i]) loseItem(enumItemType(i), true);
+  {
+    if (equip[i])
+    {
+      if (items[i + FirstEquipItem].familiar == FamiliarNone)
+        loseItem(enumItemType(i), true);
+    }
+  }
+
 
   for (i = 0; i < 8; i++) game().generateBlood(x, y, bloodColor);
 
