@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.1.3";
+const std::string APP_VERSION =   "0.1.5";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
@@ -87,6 +87,7 @@ enum item_images {
 
   IMAGE_GIANT_SLIME,
   IMAGE_KING_RAT,
+  IMAGE_CYCLOP,
 
   IMAGE_BLOOD,
   IMAGE_CORPSES,
@@ -132,7 +133,10 @@ enum sound_resources {
   SOUND_RAT_DYING,
   SOUND_BAT_DYING,
   SOUND_IMP_HURT,
-  SOUND_IMP_DYING
+  SOUND_IMP_DYING,
+  SOUND_ROCK_IMPACT,
+  SOUND_THROW,
+  SOUND_CYCLOP00
 };
 
 enum corpses_ressources{
@@ -146,7 +150,8 @@ enum corpses_ressources{
   FRAME_CORPSE_IMP_BLUE,
 
   FRAME_CORPSE_KING_RAT,
-  FRAME_CORPSE_GIANT_SLIME
+  FRAME_CORPSE_GIANT_SLIME,
+  FRAME_CORPSE_CYCLOP
 };
 
 // Player game play
@@ -322,6 +327,14 @@ const float KING_RAT_BERSERK_SPEED = 250.0f;
 const float KING_RAT_RUNNING_RECOIL = 750.0f;
 const int KING_RAT_HP = 700;
 const int KING_RAT_DAMAGES = 8;
+
+// Cyclop
+const float CYCLOP_SPEED[4] = { 120, 130, 140, 150};
+const int CYCLOP_NUMBER_ROCKS[4] = { 2, 4, 6, 8};
+const float CYCLOP_FIRE_DELAY[4] = { 0.35f, 0.3f, 0.25f, 0.2f};
+//const float KING_RAT_RUNNING_RECOIL = 750.0f;
+//const int KING_RAT_HP = 700;
+//const int KING_RAT_DAMAGES = 8;
 
 // EFFECTS
 const float HURTING_DELAY = 0.4f;
