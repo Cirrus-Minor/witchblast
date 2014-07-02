@@ -343,6 +343,7 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
   sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
   if (getShotType() != ShotTypeStandard)
   {
+    sf::Color savedColor = sprite.getColor();
     switch (getShotType())
     {
       case ShotTypeIce: sprite.setColor(sf::Color(100, 220, 255, 255)); break;
@@ -356,7 +357,7 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
 
     sprite.setTextureRect(sf::IntRect( xStone, yStone, width, height));
     app->draw(sprite);
-    sprite.setColor(sf::Color(255, 255, 255, 255));
+    sprite.setColor(savedColor);
   }
 }
 
@@ -406,6 +407,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
   if (getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning)
   {
     int fade;
+    sf::Color savedColor = sprite.getColor();
     if (getShotType() != ShotTypeIce || specialBoltTimer <= 0.0f) fade = 255;
     else fade = ((STATUS_FROZEN_BOLT_DELAY[getShotLevel()] - specialBoltTimer) / STATUS_FROZEN_BOLT_DELAY[getShotLevel()]) * 128;
 
@@ -450,7 +452,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
     app->draw(sprite, r);
 
     sprite.setPosition(x, y);
-    sprite.setColor(sf::Color(255, 255, 255, 255));
+    sprite.setColor(savedColor);
   }
 }
 
