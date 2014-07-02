@@ -26,6 +26,7 @@
 #include "BlackRatEntity.h"
 #include "GreenRatEntity.h"
 #include "KingRatEntity.h"
+#include "CyclopEntity.h"
 #include "GiantSlimeEntity.h"
 #include "BatEntity.h"
 #include "ImpEntity.h"
@@ -36,6 +37,7 @@
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
+#include "StandardRoomGenerator.h"
 
 #include <iostream>
 #include <sstream>
@@ -76,6 +78,8 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage((char*)"media/imp.png");
   ImageManager::getImageManager()->addImage((char*)"media/giant_slime.png");
   ImageManager::getImageManager()->addImage((char*)"media/king_rat.png");
+  ImageManager::getImageManager()->addImage((char*)"media/cyclop.png");
+
   ImageManager::getImageManager()->addImage((char*)"media/blood.png");
   ImageManager::getImageManager()->addImage((char*)"media/corpses.png");
   ImageManager::getImageManager()->addImage((char*)"media/corpses_big.png");
@@ -118,6 +122,9 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/bat_die.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/imp_hurt.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/imp_die.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/rock_impact.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/throw.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/cyclop00.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -1145,6 +1152,11 @@ void WitchBlastGame::generateMap()
     monsterArray[x0][y0] = true;
     findPlaceMonsters(MONSTER_RAT, 5);
     findPlaceMonsters(MONSTER_BAT, 5);
+    if (level > 1)
+    {
+      if (rand()%2 == 0)findPlaceMonsters(MONSTER_IMP_BLUE, 2);
+      else findPlaceMonsters(MONSTER_IMP_RED, 2);
+    }
   }
   else if (currentMap->getRoomType() == roomTypeMerchant)
   {
@@ -1182,8 +1194,11 @@ void WitchBlastGame::generateMap()
     if (level == 1)
       new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-    else
+    else if (level == 2)
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+    else //if (level == 3)
+      new CyclopEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
 
     playMusic(MusicBoss);
@@ -1316,47 +1331,7 @@ void WitchBlastGame::findPlaceMonsters(monster_type_enum monsterType, int amount
 void WitchBlastGame::generateStandardMap()
 {
   initMonsterArray();
-
-  int random = rand() % (level == 1 ? 95 : 110);
-
-  if (random < 16)
-  {
-    currentMap->generateRoom(rand()%4);
-    findPlaceMonsters(MONSTER_RAT,4);
-  }
-  else if (random < 32)
-  {
-    currentMap->generateRoom(rand()%5);
-    findPlaceMonsters(MONSTER_BAT,4);
-  }
-  else if (random < 48)
-  {
-    currentMap->generateRoom(rand()%5);
-    findPlaceMonsters(MONSTER_EVIL_FLOWER,4);
-  }
-  else if (random < 64)
-  {
-    Vector2D v = currentMap->generateBonusRoom();
-    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
-    currentMap->setCleared(true);
-  }
-  else if (random < 80)
-  {
-    currentMap->generateRoom(rand()%4);
-    findPlaceMonsters(MONSTER_RAT,3);
-    findPlaceMonsters(MONSTER_BAT,3);
-  }
-  else if (random < 95)
-  {
-    currentMap->generateRoom(4);
-    findPlaceMonsters(MONSTER_BLACK_RAT,6);
-  }
-  else
-  {
-    currentMap->generateRoom(rand()%4);
-    currentMap->addRandomGrids(4);
-    findPlaceMonsters(MONSTER_SLIME,8 + rand() % 5);
-  }
+  generateStandardRoom(level);
 }
 
 item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)

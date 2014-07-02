@@ -216,6 +216,15 @@ public:
    */
   item_equip_enum getRandomEquipItem(bool toSale);
 
+    /*!
+   *  \brief Adds monsters
+   *
+   * Adds monsters to the room in suitable places.
+   *  \param monsterType : monster type
+   *  \param amount : amount of monsters
+   */
+  void findPlaceMonsters(monster_type_enum monsterType, int amount);
+
 protected:
   /*!
    *  \brief Rendering method
@@ -430,15 +439,6 @@ private:
    *  \param ym : y position of the monster
    */
   void addMonster(monster_type_enum monsterType, float xm, float ym);
-
-  /*!
-   *  \brief Adds monsters
-   *
-   * Adds monsters to the room in suitable places.
-   *  \param monsterType : monster type
-   *  \param amount : amount of monsters
-   */
-  void findPlaceMonsters(monster_type_enum monsterType, int amount);
 
   /*!
    *  \brief Checks if player opens a door
