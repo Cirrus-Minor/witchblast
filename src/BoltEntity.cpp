@@ -164,6 +164,17 @@ bool BoltEntity::collideWithMap(int direction)
     return false;
 }
 
+void BoltEntity::onDying()
+{
+  SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+  for (int i=0; i<5; i++)
+  {
+    Vector2D vel(100.0f + rand() % 150);
+    generateParticule(vel);
+  }
+  isDying = true;
+}
+
 void BoltEntity::collideMapRight()
 {
   if (boltType == ShotTypeLightning)

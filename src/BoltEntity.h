@@ -33,6 +33,8 @@ class BoltEntity : public CollidingSpriteEntity
     virtual void collideMapBottom();
     virtual bool collideWithMap(int direction);
 
+    virtual void onDying();
+
     int damages;
     float renderScale;
     enumShotType boltType;
