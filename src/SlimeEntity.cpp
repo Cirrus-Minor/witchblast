@@ -1,18 +1,20 @@
 #include "SlimeEntity.h"
 #include "PlayerEntity.h"
+#include "EnnemyBoltEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-SlimeEntity::SlimeEntity(float x, float y, bool invocated)
+SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocated)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), x, y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
   hp = SLIME_HP;
   meleeDamages = SLIME_DAMAGES;
+  this->slimeType = slimeType;
 
   this->invocated = invocated;
   if (invocated)
@@ -30,6 +32,7 @@ SlimeEntity::SlimeEntity(float x, float y, bool invocated)
   bloodColor = bloodGreen;
   frame = 0;
   shadowFrame = 3;
+  imagesProLine = 4;
 
   isJumping = false;
   h = 0.0f;
@@ -60,6 +63,8 @@ void SlimeEntity::animate(float delay)
           isFirstJumping = false;
           hVelocity = 160.0f;
           SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT);
+          if (slimeType == SlimeTypeBlue || slimeType == SlimeTypeRed)
+            fire();
         }
         else
         {
@@ -117,7 +122,7 @@ void SlimeEntity::render(sf::RenderTarget* app)
     app->draw(sprite);
   }
   sprite.setPosition(x, y - h);
-  sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
+  sprite.setTextureRect(sf::IntRect(frame * width, slimeType * height, width, height));
   app->draw(sprite);
 
   #ifdef SHOW_BOUNDING_BOX
@@ -227,7 +232,12 @@ void SlimeEntity::dying()
   isDying = true;
   SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadSlime->setZ(OFFSET_Y);
-  deadSlime->setFrame(FRAME_CORPSE_SLIME);
+  switch (slimeType)
+  {
+    case SlimeTypeStandard: deadSlime->setFrame(FRAME_CORPSE_SLIME); break;
+    case SlimeTypeRed: deadSlime->setFrame(FRAME_CORPSE_SLIME_RED); break;
+    case SlimeTypeBlue: deadSlime->setFrame(FRAME_CORPSE_SLIME_BLUE); break;
+  }
   deadSlime->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
@@ -253,4 +263,34 @@ BaseCreatureEntity::enumMovingStyle SlimeEntity::getMovingStyle()
     return movWalking;
   else
     return movFlying;
+}
+
+void SlimeEntity::fire()
+{
+  for (int i = 0; i < 4; i++)
+  {
+    EnnemyBoltEntity* bolt;
+
+    if (slimeType == SlimeTypeBlue)
+    {
+      bolt = new EnnemyBoltEntity(x, y, ShotTypeIce, 0);
+      bolt->setDamages(5);
+    }
+    else if (slimeType == SlimeTypeRed)
+    {
+      bolt = new EnnemyBoltEntity(x, y, ShotTypeFire, 0);
+      bolt->setDamages(8);
+    }
+    else
+      return;
+
+    switch (i)
+    {
+      case 0: bolt->setVelocity(Vector2D(SLIME_FIRE_VELOCITY, 0)); break;
+      case 1: bolt->setVelocity(Vector2D(-SLIME_FIRE_VELOCITY, 0)); break;
+      case 2: bolt->setVelocity(Vector2D(0, SLIME_FIRE_VELOCITY)); break;
+      case 3: bolt->setVelocity(Vector2D(0, -SLIME_FIRE_VELOCITY)); break;
+    }
+  }
+  SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
 }

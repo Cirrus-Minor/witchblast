@@ -108,7 +108,9 @@ int random = rand() % 110;
   {
     game().getCurrentMap()->generateRoom(rand()%4);
     game().getCurrentMap()->addRandomGrids(4);
-    game().findPlaceMonsters(MONSTER_SLIME,8 + rand() % 5);
+    game().findPlaceMonsters(MONSTER_SLIME, 7 + rand() % 5);
+    if (rand() % 4 == 0) game().findPlaceMonsters(MONSTER_SLIME_BLUE, 1);
+    if (rand() % 4 == 0) game().findPlaceMonsters(MONSTER_SLIME_RED, 1);
   }
 }
 
@@ -156,7 +158,17 @@ int random = rand() % 110;
   {
     game().getCurrentMap()->generateRoom(rand()%4);
     game().getCurrentMap()->addRandomGrids(4);
-    game().findPlaceMonsters(MONSTER_SLIME,8 + rand() % 5);
+    int r = 8 + rand() % 5;
+    for (int i = 0; i < r; i++)
+    {
+      int rtype = rand() % 4;
+      switch (rtype)
+      {
+        case 0: case 3: game().findPlaceMonsters(MONSTER_SLIME,1); break;
+        case 1: game().findPlaceMonsters(MONSTER_SLIME_BLUE,1); break;
+        case 2: game().findPlaceMonsters(MONSTER_SLIME_RED,1); break;
+      }
+    }
   }
 }
 

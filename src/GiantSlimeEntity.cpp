@@ -123,10 +123,10 @@ void GiantSlimeEntity::animate(float delay)
   {
     switch (slimeCounter)
     {
-      case 0: new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, true); break;
-      case 1: new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, true); break;
-      case 2: new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, true); break;
-      case 3: new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, true); break;
+      case 0: new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true); break;
+      case 1: new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true); break;
+      case 2: new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true); break;
+      case 3: new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true); break;
     }
     slimeTimer = 7.0f;
     slimeCounter ++;
@@ -352,7 +352,7 @@ void GiantSlimeEntity::dying()
   for (int i = 0; i < 9; i++)
   {
     game().generateBlood(xSlime, ySlime, bloodColor);
-    new SlimeEntity(x, y, true);
+    new SlimeEntity(x, y, SlimeTypeStandard, true);
   }
 
   game().makeShake(1.0f);

@@ -4,10 +4,12 @@
 #include "EnnemyEntity.h"
 #include "PlayerEntity.h"
 
+enum slimeTypeEnum { SlimeTypeStandard, SlimeTypeRed, SlimeTypeBlue };
+
 class SlimeEntity : public EnnemyEntity
 {
   public:
-    SlimeEntity(float x, float y, bool invocated);
+    SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocated);
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
@@ -32,6 +34,9 @@ class SlimeEntity : public EnnemyEntity
     bool isJumping;
     bool isFirstJumping;
     bool invocated;
+    slimeTypeEnum slimeType;
+
+    void fire();
 };
 
 #endif // SLIMESPRITE_H
