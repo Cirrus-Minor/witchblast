@@ -26,14 +26,14 @@ RockMissileEntity::RockMissileEntity(float x, float y)
   if (rockType == 0)
   {
     creatureSpeed = 500.0f;
-    hp = BAT_HP;
+    hp = 12;
     meleeDamages = BAT_DAMAGES;
     frame = 18;
   }
   else
   {
     creatureSpeed = 450.0f;
-    hp = BAT_HP * 2;
+    hp = 24;
     meleeDamages = BAT_DAMAGES;
     frame = 38;
   }

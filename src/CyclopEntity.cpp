@@ -17,10 +17,10 @@ CyclopEntity::CyclopEntity(float x, float y)
   height = 192;
   creatureSpeed = CYCLOP_SPEED[0];
   velocity = Vector2D(creatureSpeed);
-  hp = 300;
-  hpDisplay = hp;
-  hpMax = 300;
-  meleeDamages = 10;
+  hp = CYCLOP_HP;
+  hpDisplay = CYCLOP_HP;
+  hpMax = CYCLOP_HP;
+  meleeDamages = CYCLOP_DAMAGES;
 
 
   type = ENTITY_ENNEMY_BOSS;

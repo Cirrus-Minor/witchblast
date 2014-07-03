@@ -335,11 +335,10 @@ const int KING_RAT_DAMAGES = 8;
 
 // Cyclop
 const float CYCLOP_SPEED[4] = { 120, 130, 140, 150};
-const int CYCLOP_NUMBER_ROCKS[4] = { 2, 4, 6, 8};
+const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
 const float CYCLOP_FIRE_DELAY[4] = { 0.35f, 0.3f, 0.25f, 0.2f};
-//const float KING_RAT_RUNNING_RECOIL = 750.0f;
-//const int KING_RAT_HP = 700;
-//const int KING_RAT_DAMAGES = 8;
+const int CYCLOP_HP = 900;
+const int CYCLOP_DAMAGES = 10;
 
 // EFFECTS
 const float HURTING_DELAY = 0.4f;
