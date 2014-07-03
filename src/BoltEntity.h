@@ -34,6 +34,7 @@ class BoltEntity : public CollidingSpriteEntity
     virtual bool collideWithMap(int direction);
 
     virtual void onDying();
+    virtual void stuck();
 
     int damages;
     float renderScale;

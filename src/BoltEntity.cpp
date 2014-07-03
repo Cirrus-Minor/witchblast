@@ -166,13 +166,18 @@ bool BoltEntity::collideWithMap(int direction)
 
 void BoltEntity::onDying()
 {
+  isDying = true;
+}
+
+void BoltEntity::stuck()
+{
   SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
   for (int i=0; i<5; i++)
   {
     Vector2D vel(100.0f + rand() % 150);
     generateParticule(vel);
   }
-  isDying = true;
+  onDying();
 }
 
 void BoltEntity::collideMapRight()
