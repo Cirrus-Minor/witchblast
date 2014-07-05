@@ -287,7 +287,6 @@ void KingRatEntity::dying()
   SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_DIE);
 
   ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
-  //newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
 }
