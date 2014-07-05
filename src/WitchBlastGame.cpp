@@ -575,21 +575,13 @@ void WitchBlastGame::renderRunningGame()
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
       app->draw(myText);
     }
-    else if (currentMap->getRoomType() == roomTypeExit && level > 1)
+    else if (currentMap->getRoomType() == roomTypeExit && level > 2)
     {
       float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
       myText.setColor(sf::Color(255, 255, 255, 255));
       myText.setCharacterSize(25);
       myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the boss !\nSee you soon for new adventures !");
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
-      app->draw(myText);
-    }
-    else if (currentMap->getRoomType() == roomTypeStarting && level == 1)
-    {
-      myText.setColor(sf::Color(255, 255, 255, 255));
-      myText.setCharacterSize(21);
-      myText.setString("CONTROLS :\n- WASD or ZQSD to move\n- Arrows to fire (in 4 directions)\n- [TAB] to switch shot types");
-      myText.setPosition(80, 80);
       app->draw(myText);
     }
 
