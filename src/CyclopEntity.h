@@ -22,6 +22,7 @@ class CyclopEntity : public EnnemyEntity
 
 	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
 	  virtual void dying();
+	  virtual void drop();
 
 	  void computeStates(float delay);
 	  int getHealthLevel();

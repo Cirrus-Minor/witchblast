@@ -31,7 +31,6 @@ CyclopEntity::CyclopEntity(float x, float y)
   deathFrame = FRAME_CORPSE_CYCLOP;
   frame = 0;
   if (game().getPlayerPosition().x > x) isMirroring = true;
-  sprite.setOrigin(64.0f, 64.0f);
 
   nextRockMissile = 0;
   destroyLevel = 0;
@@ -61,7 +60,7 @@ void CyclopEntity::fire()
 void CyclopEntity::initFallingGrid()
 {
   for (int i = 0; i < MAP_WIDTH; i++)
-    for (int j = 0; j < MAP_WIDTH; j++)
+    for (int j = 0; j < MAP_HEIGHT; j++)
       fallingGrid[i][j] = false;
 }
 
@@ -248,7 +247,6 @@ void CyclopEntity::animate(float delay)
     frame = 7;
   }
 
-
   // frame's mirroring
   if (velocity.x > 1.0f)
     isMirroring = true;
@@ -300,15 +298,17 @@ void CyclopEntity::collideMapBottom()
   afterWallCollide();
 }
 
-
 void CyclopEntity::dying()
 {
-  ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
-  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-  newItem->setViscosity(0.96f);
   EnnemyEntity::dying();
 }
 
+void CyclopEntity::drop()
+{
+  ItemEntity* newItem = new ItemEntity(itemBossHeart, x + 32, y + 96);
+  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  newItem->setViscosity(0.96f);
+}
 
 void CyclopEntity::render(sf::RenderTarget* app)
 {
