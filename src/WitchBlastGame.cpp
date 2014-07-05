@@ -132,6 +132,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   }
 
   miniMap = NULL;
+  menuMap = NULL;
   currentMap = NULL;
   currentFloor = NULL;
   xGameState = xGameStateNone;
@@ -150,6 +151,7 @@ WitchBlastGame::~WitchBlastGame()
 
   // cleaning data
   if (miniMap != NULL) delete (miniMap);
+  if (menuMap != NULL) delete (menuMap);
   if (currentFloor != NULL) delete (currentFloor);
 }
 
@@ -608,6 +610,7 @@ void WitchBlastGame::switchToMenu()
 {
   EntityManager::getEntityManager()->clean();
 
+  if (menuMap != NULL) delete menuMap;
   menuMap = new GameMap(MENU_MAP_WIDTH, MENU_MAP_HEIGHT);
   for (int i = 0; i < MENU_MAP_WIDTH; i++)
     for (int j = 0; j < MENU_MAP_HEIGHT; j++)
@@ -626,6 +629,27 @@ void WitchBlastGame::switchToMenu()
 
 void WitchBlastGame::updateMenu()
 {
+  EntityManager::getEntityManager()->animate(deltaTime);
+  menu.age += deltaTime;
+  float mapY = menuTileMap->getY();
+  mapY -= 30.0f * deltaTime;
+  if (mapY < -64.0f)
+  {
+    mapY += 64.0f;
+    for (int i = 0; i < MENU_MAP_WIDTH; i++)
+    {
+      for (int j = 0; j < MENU_MAP_HEIGHT - 1; j++)
+      {
+         menuMap->setTile(i, j, menuMap->getTile(i, j+1));
+      }
+      if (rand() % 6 == 0)
+        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, rand() %7 + 1);
+      else
+        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 0);
+    }
+  }
+  menuTileMap->setY(mapY);
+
   // Process events
   sf::Event event;
   while (app->pollEvent(event))
@@ -687,27 +711,6 @@ void WitchBlastGame::updateMenu()
       }
     }
   }
-
-  EntityManager::getEntityManager()->animate(deltaTime);
-  menu.age += deltaTime;
-  float mapY = menuTileMap->getY();
-  mapY -= 30.0f * deltaTime;
-  if (mapY < -64.0f)
-  {
-    mapY += 64.0f;
-    for (int i = 0; i < MENU_MAP_WIDTH; i++)
-    {
-      for (int j = 0; j < MENU_MAP_HEIGHT - 1; j++)
-      {
-         menuMap->setTile(i, j, menuMap->getTile(i, j+1));
-      }
-      if (rand() % 6 == 0)
-        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, rand() %7 + 1);
-      else
-        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 0);
-    }
-  }
-  menuTileMap->setY(mapY);
 }
 
 void WitchBlastGame::renderMenu()
