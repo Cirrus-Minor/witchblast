@@ -29,6 +29,18 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
     jumpingDelay = 0.6f + 0.1f * (rand() % 20);
   }
 
+  if (slimeType == SlimeTypeBlue)
+  {
+    resistance[ResistanceFrozen] = ResistanceImmune;
+    resistance[ResistanceIce] = ResistanceHigh;
+    resistance[ResistanceFire] = ResistanceLow;
+  }
+  else if (slimeType == SlimeTypeRed)
+  {
+    resistance[ResistanceIce] = ResistanceLow;
+    resistance[ResistanceFire] = ResistanceHigh;
+  }
+
   bloodColor = bloodGreen;
   frame = 0;
   shadowFrame = 3;

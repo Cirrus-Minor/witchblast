@@ -35,11 +35,15 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
     dyingFrame = 8;
     deathFrame = FRAME_CORPSE_IMP_BLUE;
     resistance[ResistanceFrozen] = ResistanceImmune;
+    resistance[ResistanceIce] = ResistanceHigh;
+    resistance[ResistanceFire] = ResistanceLow;
   }
-  else
+  else // ImpTypeRed
   {
     dyingFrame = 3;
     deathFrame = FRAME_CORPSE_IMP_RED;
+    resistance[ResistanceIce] = ResistanceLow;
+    resistance[ResistanceFire] = ResistanceHigh;
   }
 }
 
