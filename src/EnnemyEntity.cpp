@@ -149,7 +149,10 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
       {
         if (this != entity)
-          collideWithEnnemy(entity);
+        {
+          EnnemyEntity* ennemyEntity = static_cast<EnnemyEntity*>(entity);
+          if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
+        }
       }
     }
   }
@@ -202,7 +205,7 @@ void EnnemyEntity::drop()
 
 bool EnnemyEntity::canCollide()
 {
-  return true;
+  return (!isAgonising);
 }
 
 void EnnemyEntity::render(sf::RenderTarget* app)
