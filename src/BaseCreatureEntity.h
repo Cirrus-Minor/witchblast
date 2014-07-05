@@ -6,7 +6,7 @@
 
 const int NB_SPECIAL_STATES = 1;
 
-const int NB_RESISTANCES = 6;
+const int NB_RESISTANCES = 7;
 
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
@@ -51,11 +51,13 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     enum enumResistances
     {
       ResistanceIce, // = 0
-      ResistanceFrozen,
+      ResistanceFire,
       ResistanceStone,
-      ResistanceRecoil,
       ResistanceLightning,
-      ResistanceIllusion
+      ResistanceIllusion,
+
+      ResistanceRecoil,
+      ResistanceFrozen
     };
     enumStateResistance resistance[NB_RESISTANCES];
 
@@ -86,6 +88,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     } recoil;
   private:
     bool determineSatusChance(enumStateResistance resistance, int level);
+    int determineDamageBonus(enumStateResistance resistance, int level);
 };
 
 #endif // BASECREATUREENTITY_H

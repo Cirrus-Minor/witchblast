@@ -305,6 +305,21 @@ bool BaseCreatureEntity::determineSatusChance(enumStateResistance resistance, in
   return hit;
 }
 
+int BaseCreatureEntity::determineDamageBonus(enumStateResistance resistance, int level)
+{
+  int bonus = 0;
+  switch (resistance)
+  {
+    case ResistanceVeryLow: bonus = 40 + 10 * level; break;
+    case ResistanceLow: bonus = 20 + 5 * level; break;
+    case ResistanceStandard: bonus = 0; break;
+    case ResistanceHigh: bonus = -25 + 5 * level; break;
+    case ResistanceVeryHigh: bonus = -50 + 5 * level; break;
+    case ResistanceImmune: bonus = -100 + 5 * level; break;
+  }
+  return bonus;
+}
+
 bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   hurting = true;
@@ -318,9 +333,19 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
     specialState[SpecialStateIce].active = true;
     specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level];
     specialState[SpecialStateIce].parameter = STATUS_FROZEN_MULT[level];
-
-    // damages
   }
+
+  // damages bonus
+  if (hurtingType == ShotTypeIce)
+    damages += (damages * determineDamageBonus(resistance[ResistanceIce], level)) / 100;
+  else if (hurtingType == ShotTypeFire)
+    damages += (damages * determineDamageBonus(resistance[ResistanceFire], level)) / 100;
+  else if (hurtingType == ShotTypeLightning)
+    damages += (damages * determineDamageBonus(resistance[ResistanceLightning], level)) / 100;
+  else if (hurtingType == ShotTypeStone)
+    damages += (damages * determineDamageBonus(resistance[ResistanceStone], level)) / 100;
+  else if (hurtingType == ShotTypeIllusion)
+    damages += (damages * determineDamageBonus(resistance[ResistanceIllusion], level)) / 100;
 
   hp -= damages;
   if (hp <= 0)
