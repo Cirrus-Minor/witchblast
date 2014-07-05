@@ -55,6 +55,16 @@ void GreenRatEntity::animate(float delay)
   {
     sprite.setColor(sf::Color(255,255,255,255 * (1.0 + age)));
   }
+  else if (isAgonising)
+  {
+    if (hVelocity < -1.0f)
+    {
+      int fade = h * 200 / 25;
+      if (fade > 200) fade = 200;
+      else if (fade < 0) fade = 0;
+      sprite.setColor(sf::Color(255, 255, 255, fade));
+    }
+  }
 
   EnnemyEntity::animate(delay);
 }
