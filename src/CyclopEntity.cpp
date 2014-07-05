@@ -2,6 +2,7 @@
 #include "BoltEntity.h"
 #include "PlayerEntity.h"
 #include "RockMissileEntity.h"
+#include "FallingRockEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -32,6 +33,8 @@ CyclopEntity::CyclopEntity(float x, float y)
   if (game().getPlayerPosition().x > x) isMirroring = true;
   sprite.setOrigin(64.0f, 64.0f);
 
+  nextRockMissile = 0;
+  destroyLevel = 0;
   state = 0;
   timer = 2.0f;
   counter = 10;
@@ -51,8 +54,44 @@ int CyclopEntity::getHealthLevel()
 
 void CyclopEntity::fire()
 {
-  new RockMissileEntity(x, y+30);
+  new RockMissileEntity(x, y+30, nextRockMissile);
   SoundManager::getSoundManager()->playSound(SOUND_THROW);
+}
+
+void CyclopEntity::initFallingGrid()
+{
+  for (int i = 0; i < MAP_WIDTH; i++)
+    for (int j = 0; j < MAP_WIDTH; j++)
+      fallingGrid[i][j] = false;
+}
+
+void CyclopEntity::fallRock()
+{
+  int rx, ry;
+  do
+  {
+    rx = 1 + rand() % (MAP_WIDTH - 2);
+    ry = 1 + rand() % (MAP_HEIGHT - 2);
+  }
+  while (fallingGrid[rx][ry]);
+
+  fallingGrid[rx][ry] = true;
+  new FallingRockEntity(rx * TILE_WIDTH + OFFSET_X + TILE_WIDTH / 2,
+                        ry * TILE_HEIGHT + OFFSET_Y + TILE_HEIGHT / 2,
+                        rand() % 3);
+}
+
+
+void CyclopEntity::computeNextRockMissile()
+{
+  if (getHealthLevel() == 0)
+    nextRockMissile = rand()%5 == 0 ? 1 : 0;
+  else if (getHealthLevel() == 1)
+    nextRockMissile = rand()%3 == 0 ? 1 : 0;
+  else if (getHealthLevel() == 2)
+    nextRockMissile = rand()%2 == 0 ? 0 : 1;
+  else
+    nextRockMissile = rand()%3 == 0 ? 0 : 1;
 }
 
 void CyclopEntity::computeStates(float delay)
@@ -68,30 +107,44 @@ void CyclopEntity::computeStates(float delay)
         counter--;
         timer = 0.5f;
         creatureSpeed = CYCLOP_SPEED[getHealthLevel()];
-        setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
+        setVelocity(Vector2D(x + 32, y + 96).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       }
       else
       {
-        state = 1; // charge
-        timer = 0.9f;
         velocity.x = 0.0f;
         velocity.y = 0.0f;
-        counter = CYCLOP_NUMBER_ROCKS[getHealthLevel()];
-        SoundManager::getSoundManager()->playSound(SOUND_CYCLOP00);
+        if (destroyLevel < getHealthLevel())
+        {
+          state = 3; // charge to destroy
+          destroyLevel++;
+          counter = destroyLevel + 1;
+          timer = 0.9f;
+          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP00);
+          initFallingGrid();
+        }
+        else
+        {
+          state = 1; // charge to fire
+          timer = 0.9f;
+          counter = CYCLOP_NUMBER_ROCKS[getHealthLevel()];
+          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP00);
+
+          computeNextRockMissile();
+        }
       }
     }
     else if (state == 1) // fire
     {
       state = 2;
       fire();
-      timer = 0.2;
+      timer = CYCLOP_FIRE_DELAY[getHealthLevel()];
     }
     else if (state == 2) // fire end
     {
       if (counter <= 1)
       {
         state = 0;
-        timer = CYCLOP_FIRE_DELAY[getHealthLevel()];
+        timer = 0.2f;
         counter = 10;
       }
       else
@@ -99,6 +152,30 @@ void CyclopEntity::computeStates(float delay)
         counter--;
         state = 1;
         timer = 0.2f;
+        computeNextRockMissile();
+      }
+    }
+    else if (state == 3)
+    {
+      state = 4; // destroy
+      timer = 0.2;
+      game().makeShake(0.4f);
+      SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+      for (int i = 0; i < 10 ; i++) fallRock();
+    }
+    else if (state == 4)
+    {
+      if (counter <= 1)
+      {
+        state = 0;
+        timer = 0.2f;
+        counter = 10;
+      }
+      else
+      {
+        counter--;
+        state = 3;
+        timer = 0.3f;
       }
     }
   }
@@ -162,6 +239,14 @@ void CyclopEntity::animate(float delay)
   {
     frame = 4;
   }
+  else if (state == 3)
+  {
+    frame = 6;
+  }
+  else if (state == 4)
+  {
+    frame = 7;
+  }
 
 
   // frame's mirroring
@@ -173,15 +258,15 @@ void CyclopEntity::animate(float delay)
 
 bool CyclopEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
-   return EnnemyEntity::hurt(damages, hurtingType, level);
+  return EnnemyEntity::hurt(damages, hurtingType, level);
 }
 
 void CyclopEntity::calculateBB()
 {
-    boundingBox.left = OFFSET_X + (int)x - width / 2 + 32;
-    boundingBox.width = 58;
-    boundingBox.top = OFFSET_Y + (int)y - height / 2 + 120;
-    boundingBox.height =  90;
+  boundingBox.left = OFFSET_X + (int)x - width / 2 + 32;
+  boundingBox.width = 58;
+  boundingBox.top = OFFSET_Y + (int)y - height / 2 + 120;
+  boundingBox.height =  90;
 }
 
 void CyclopEntity::afterWallCollide()
@@ -227,48 +312,51 @@ void CyclopEntity::dying()
 
 void CyclopEntity::render(sf::RenderTarget* app)
 {
-    EnnemyEntity::render(app);
+  EnnemyEntity::render(app);
 
-    // stones
-    if (state == 1)
+  // stones
+  if (state == 1)
+  {
+    if (nextRockMissile == 0) // small rock
     {
-      sprite.setTextureRect(sf::IntRect(1152, 0,  64,  64));  // small
-      //sprite.setTextureRect(sf::IntRect(1152, 64,  64,  64));  // medium
+      sprite.setTextureRect(sf::IntRect(1152, 0,  64,  64));
       if (isMirroring)
         sprite.setPosition(x + 60, y);
       else
         sprite.setPosition(x + 4, y);
-
-      // medium
-      /*if (isMirroring)
+    }
+    else // medium rock
+    {
+      sprite.setTextureRect(sf::IntRect(1152, 64,  64,  64));
+      if (isMirroring)
         sprite.setPosition(x + 60, y - 12);
       else
-        sprite.setPosition(x + 4, y - 12);*/
-
-      app->draw(sprite);
-
-      sprite.setPosition(x, y);
+        sprite.setPosition(x + 4, y - 12);
     }
 
-    float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
+    app->draw(sprite);
+    sprite.setPosition(x, y);
+  }
 
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
-    rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
+  float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
 
-    rectangle.setSize(sf::Vector2f(l, 25));
-    rectangle.setFillColor(sf::Color(190, 20, 20));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
+  sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
+  rectangle.setFillColor(sf::Color(0, 0, 0,128));
+  rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+  app->draw(rectangle);
 
-    game().write(          "Cimmerian Cyclop",
-                            18,
-                            OFFSET_X + TILE_WIDTH / 2 + 10.0f,
-                            OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
-                            ALIGN_LEFT,
-                            sf::Color(255, 255, 255),
-                            app, 0 , 0);
+  rectangle.setSize(sf::Vector2f(l, 25));
+  rectangle.setFillColor(sf::Color(190, 20, 20));
+  rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+  app->draw(rectangle);
+
+  game().write(          "Cimmerian Cyclop",
+                         18,
+                         OFFSET_X + TILE_WIDTH / 2 + 10.0f,
+                         OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
+                         ALIGN_LEFT,
+                         sf::Color(255, 255, 255),
+                         app, 0 , 0);
 }
 
 void CyclopEntity::collideWithEnnemy(GameEntity* collidingEntity)

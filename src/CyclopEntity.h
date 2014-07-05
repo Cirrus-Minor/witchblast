@@ -29,8 +29,15 @@ class CyclopEntity : public EnnemyEntity
     float timer;
     int state;
     int counter;
+    int destroyLevel;
+
+    int nextRockMissile;
+    void computeNextRockMissile();
 
     void fire();
+    void fallRock();
+    void initFallingGrid();
+    bool fallingGrid[MAP_WIDTH][MAP_HEIGHT];
 };
 
 #endif // CYCLOPENTITY_H

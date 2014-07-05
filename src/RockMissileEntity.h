@@ -6,7 +6,7 @@
 class RockMissileEntity : public EnnemyEntity
 {
   public:
-    RockMissileEntity(float x, float y);
+    RockMissileEntity(float x, float y, int rockType);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
