@@ -77,6 +77,11 @@ void FairyEntity::animate(float delay)
 
 void FairyEntity::fire(int dir, GameMap* map)
 {
+  if (x < OFFSET_X + TILE_WIDTH * 1.3) return;
+  if (y < OFFSET_Y + TILE_HEIGHT * 1.3) return;
+  if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3) return;
+  if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3) return;
+
   if (fireDelay <= 0.0f)
   {
     SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
@@ -93,6 +98,7 @@ void FairyEntity::fire(int dir, GameMap* map)
     BoltEntity* bolt = new BoltEntity(x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
     bolt->setDamages(FAIRY_BOLT_DAMAGES);
     bolt->setVelocity(Vector2D(velx, vely));
+    bolt->setFlying(true);
   }
 }
 
