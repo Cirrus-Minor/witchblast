@@ -119,7 +119,7 @@ const itemStuct items[NUMBER_ITEMS] =
     250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemMagicianHat, "Enchanter Hat", "Increases fire rate",
+    ItemMagicianHat, "Sorcerer's Hat", "Increases fire rate",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
@@ -139,15 +139,15 @@ const itemStuct items[NUMBER_ITEMS] =
     200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemVibrationGloves, "Vibration Gloves", "Increases bolt's speed and damages",
+    ItemVibrationGloves, "Vibration Gloves", "Increases bolt's speed rate and vibrates",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemMahoganyStaff, "Mahogany Staff", "Increases bolt's speed and damages",
+    ItemMahoganyStaff, "Mahogany Staff", "Increases bolt's speed and damage",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemFairy, "Fairy", "Help you in the dungeon",
+    ItemFairy, "Fairy", "Helps you in the dungeon",
     20, true, FamiliarFairy, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
@@ -155,7 +155,7 @@ const itemStuct items[NUMBER_ITEMS] =
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemBloodSnake, "Blood Snake", "Increases damages",
+    ItemBloodSnake, "Blood Snake", "Increases damage",
     25, true, FamiliarNone, true, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
@@ -175,7 +175,7 @@ const itemStuct items[NUMBER_ITEMS] =
     25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeLightning
   },
   {
-    ItemFairyIce, "Ice Fairy", "Help you in the dungeon",
+    ItemFairyIce, "Ice Fairy", "Helps you in the dungeon",
     40, true, FamiliarFairyIce, false, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
