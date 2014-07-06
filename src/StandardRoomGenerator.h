@@ -161,10 +161,10 @@ int random = rand() % 110;
     int r = 8 + rand() % 5;
     for (int i = 0; i < r; i++)
     {
-      int rtype = rand() % 4;
+      int rtype = rand() % 5;
       switch (rtype)
       {
-        case 0: case 3: game().findPlaceMonsters(MONSTER_SLIME,1); break;
+        case 0: case 3: case 4: game().findPlaceMonsters(MONSTER_SLIME,1); break;
         case 1: game().findPlaceMonsters(MONSTER_SLIME_BLUE,1); break;
         case 2: game().findPlaceMonsters(MONSTER_SLIME_RED,1); break;
       }
