@@ -1,7 +1,6 @@
 #include "BaseCreatureEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "Constants.h"
-
 #include "WitchBlastGame.h"
 
 BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f, int spriteWidth = -1, int spriteHeight = -1)
@@ -327,12 +326,40 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
   this->hurtingType = hurtingType;
 
   if (hurtingType == ShotTypeIce
-      && determineSatusChance(resistance[ResistanceFrozen], level)) // && specialState[SpecialStateIce].resistance > ResistanceImmune)
+      && determineSatusChance(resistance[ResistanceFrozen], level))
   {
     // frozen ?
     specialState[SpecialStateIce].active = true;
-    specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level];
-    specialState[SpecialStateIce].parameter = STATUS_FROZEN_MULT[level];
+    float frozenDelayMult = 1.0f;
+    float frozenMultAdd = 0.0f;
+    if (resistance[ResistanceFrozen] == ResistanceHigh)
+    {
+      if (level == 0)
+      {
+        frozenDelayMult = 0.75f;
+        frozenMultAdd = 0.2f;
+      }
+      else
+      {
+        frozenDelayMult = 0.85f;
+        frozenMultAdd = 0.15f;
+      }
+    }
+    else if (resistance[ResistanceFrozen] == ResistanceVeryHigh)
+    {
+      if (level < 2)
+      {
+        frozenDelayMult = 0.55f;
+        frozenMultAdd = 0.3f;
+      }
+      else
+      {
+        frozenDelayMult = 0.7f;
+        frozenMultAdd = 0.25f;
+      }
+    }
+    specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level] * frozenDelayMult;
+    specialState[SpecialStateIce].parameter = STATUS_FROZEN_MULT[level] + frozenMultAdd;
   }
 
   // damages bonus
