@@ -43,6 +43,7 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
 void RockMissileEntity::animate(float delay)
 {
   EnnemyEntity::animate(delay);
+  if (x < -60 || x > 1050 || y < - 50 || y > 800) isDying = true;
 }
 
 void RockMissileEntity::calculateBB()
