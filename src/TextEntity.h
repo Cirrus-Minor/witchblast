@@ -39,6 +39,7 @@ public:
                          COLOR_GREEN,
                          COLOR_FADING_WHITE,
                          COLOR_FADING_BLUE,
+                         COLOR_FADING_GREEN,
                          COLOR_BLINKING_WHITE };
 
 protected:

@@ -165,9 +165,10 @@ void PlayerEntity::animate(float delay)
           std::ostringstream oss;
           oss << "HP Max +" << hpBonus;
           TextEntity* text = new TextEntity(oss.str(), 14, x, y - 50.0f);
-          text->setColor(TextEntity::COLOR_GREEN);
-          text->setLifetime(2.0f);
-          text->setWeight(-100.0f);
+          text->setColor(TextEntity::COLOR_FADING_GREEN);
+          text->setLifetime(4.0f);
+          text->setWeight(-80.0f);
+          text->setZ(2000);
         }
       }
       playerStatus = playerStatusPlaying;
