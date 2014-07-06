@@ -38,6 +38,7 @@ KingRatEntity::KingRatEntity(float x, float y)
   hasBeenBerserk = false;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
+  resistance[ResistanceRecoil] = ResistanceVeryHigh;
 }
 
 void KingRatEntity::animate(float delay)

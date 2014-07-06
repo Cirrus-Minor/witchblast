@@ -137,10 +137,24 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
         if (boltEntity->getBoltType() == ShotTypeStone)
         {
+          float recoilVelocity = STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
+          float recoilDelay = STONE_DECOIL_DELAY[boltEntity->getLevel()];
+
+          if (resistance[ResistanceRecoil] == ResistanceHigh)
+          {
+            recoilVelocity *= 0.75f;
+            recoilDelay *= 0.75f;
+          }
+          else if (resistance[ResistanceRecoil] == ResistanceVeryHigh)
+          {
+            recoilVelocity *= 0.5f;
+            recoilDelay *= 0.5f;
+          }
+
           Vector2D recoilVector = Vector2D(boltEntity->getX(),
                                            boltEntity->getY()).vectorTo(Vector2D(x, y),
-                                           STONE_DECOIL_VELOCITY[boltEntity->getLevel()] );
-          giveRecoil(true, recoilVector, STONE_DECOIL_DELAY[boltEntity->getLevel()]);
+                                           recoilVelocity );
+          giveRecoil(true, recoilVector, recoilDelay);
         }
       }
     }

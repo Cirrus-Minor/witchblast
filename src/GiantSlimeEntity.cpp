@@ -38,6 +38,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   slimeTimer =5.0f;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
+  resistance[ResistanceRecoil] = ResistanceVeryHigh;
 }
 
 void GiantSlimeEntity::changeToState(int n)

@@ -40,6 +40,7 @@ CyclopEntity::CyclopEntity(float x, float y)
   age = -1.5f;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
+  resistance[ResistanceRecoil] = ResistanceVeryHigh;
 }
 
 int CyclopEntity::getHealthLevel()
