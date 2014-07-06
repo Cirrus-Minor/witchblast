@@ -90,6 +90,7 @@ Next version
 - MOD Resistance and status immunity new system (boss can be frozen now, although it's difficult)
 - MOD Player's step sound removed
 - MOD New game with [LShift]+[X] now (used to be [X] alone)
+- MOD Tutorial's text (first room) removed
 - FIX Switching windows while player is dead
 - FIX Player can fire while getting an item
 - FIX Player does not drop fairies anymore when dying
