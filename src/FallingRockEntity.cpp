@@ -32,7 +32,7 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
 
 void FallingRockEntity::animate(float delay)
 {
-  h -= delay * 800.0f;
+  h -= delay * 750.0f;
   if (canCollide()) testSpriteCollisions();
   if (h <= 0.0f) dying();
 }
@@ -89,7 +89,7 @@ void FallingRockEntity::calculateBB()
 
 bool FallingRockEntity::canCollide()
 {
-  return h < 50;
+  return h < 70;
 }
 
 void FallingRockEntity::dying()
