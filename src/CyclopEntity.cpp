@@ -261,9 +261,9 @@ bool CyclopEntity::hurt(int damages, enumShotType hurtingType, int level)
 
 void CyclopEntity::calculateBB()
 {
-  boundingBox.left = OFFSET_X + (int)x - width / 2 + 32;
+  boundingBox.left = OFFSET_X + (int)x - width / 2 + 64;
   boundingBox.width = 58;
-  boundingBox.top = OFFSET_Y + (int)y - height / 2 + 120;
+  boundingBox.top = OFFSET_Y + (int)y - height / 2 + 152;
   boundingBox.height =  90;
 }
 
