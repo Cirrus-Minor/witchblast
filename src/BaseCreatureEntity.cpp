@@ -336,7 +336,7 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
     {
       if (level == 0)
       {
-        frozenDelayMult = 0.75f;
+        frozenDelayMult = 0.8f;
         frozenMultAdd = 0.2f;
       }
       else
@@ -349,13 +349,13 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
     {
       if (level < 2)
       {
-        frozenDelayMult = 0.55f;
-        frozenMultAdd = 0.3f;
+        frozenDelayMult = 0.7f;
+        frozenMultAdd = 0.25f;
       }
       else
       {
-        frozenDelayMult = 0.7f;
-        frozenMultAdd = 0.25f;
+        frozenDelayMult = 0.8f;
+        frozenMultAdd = 0.2f;
       }
     }
     specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level] * frozenDelayMult;
