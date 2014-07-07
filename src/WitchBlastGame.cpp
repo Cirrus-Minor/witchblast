@@ -624,6 +624,11 @@ void WitchBlastGame::switchToMenu()
 
   gameState = gameStateMenu;
   buildMenu();
+  if (!config.configFileExists())
+  {
+    menu.redefineKey = true;
+    menu.keyIndex = 0;
+  }
   playMusic(MusicIntro);
 }
 
@@ -730,7 +735,11 @@ void WitchBlastGame::renderMenu()
     app->draw(rectangle);
 
     // menu keys
-    write("Press key for", 18, 300, 260, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    if (config.configFileExists())
+      write("Key configuration", 18, 300, 250, ALIGN_LEFT, sf::Color(0, 200, 255, 255), app, 1, 1);
+    else
+      write("Please configure the keys", 18, 300, 250, ALIGN_LEFT, sf::Color(0, 200, 255, 255), app, 1, 1);
+    write("Press key for", 18, 300, 285, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -740,7 +749,7 @@ void WitchBlastGame::renderMenu()
       oss << inputKeyString[i] << ": ";
       if (menu.keyIndex == i && ((int)(menu.age * 1.5f)) % 2 == 0) oss << "_";
       else if (menu.keyIndex > i) oss << "DONE";
-      write(oss.str(), 16, 300, 300 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, 300, 315 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
   else

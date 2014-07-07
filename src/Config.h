@@ -25,15 +25,17 @@ using namespace std;
 class Config
 {
 public:
-    Config();
-    void loadFromFile(string file);
-    void saveToFile(std::string file, std::map<std::string, std::string> newMap);
-    void displayMap();
+  Config();
+  void loadFromFile(string file);
+  void saveToFile(std::string file, std::map<std::string, std::string> newMap);
+  void displayMap();
 
-    int findInt(string key);
+  int findInt(string key);
+  bool configFileExists();
 
 private:
-    std::map<std::string, std::string> configMap;
+  std::map<std::string, std::string> configMap;
+  bool configFileExistsFlag;
 };
 
 #endif // CONFIG_H_INCLUDED

@@ -24,26 +24,37 @@
 
 Config::Config()
 {
-    loadFromFile(CONFIG_FILE);
+  loadFromFile(CONFIG_FILE);
 }
 
- void Config::loadFromFile(string file)
- {
+bool Config::configFileExists()
+{
+  return configFileExistsFlag;
+}
+
+void Config::loadFromFile(string file)
+{
   ifstream f(file.c_str());
-  if (!f.is_open()) return;
-
-  string key;
-
-	while (f >> key)
-	{
-	  string data;
-	  if (f >> data)
-    {
-      configMap[key] = data;
-    }
+  if (!f.is_open())
+  {
+    configFileExistsFlag = false;
   }
+  else
+  {
+    configFileExistsFlag = true;
+    string key;
 
-  f.close();
+    while (f >> key)
+    {
+      string data;
+      if (f >> data)
+      {
+        configMap[key] = data;
+      }
+    }
+
+    f.close();
+  }
 }
 
 void Config::saveToFile(std::string fileName, std::map<std::string, std::string> newMap)
@@ -51,6 +62,7 @@ void Config::saveToFile(std::string fileName, std::map<std::string, std::string>
   std::ofstream file(fileName.c_str(), ios::out | ios::trunc);
   if (file)
   {
+    configFileExistsFlag = true;
     map<std::string, std::string>::iterator it;
 
     for(it = newMap.begin(); it != newMap.end(); it++)
@@ -65,8 +77,8 @@ void Config::displayMap()
 {
   std::map<std::string, std::string>::const_iterator
   mit (configMap.begin()),
-  mend(configMap.end());
-  for(;mit!=mend;++mit)
+      mend(configMap.end());
+  for(; mit!=mend; ++mit)
   {
     std::cout << "\"" << mit->first << "\"" << '\t' << mit->second << std::endl;
   }
@@ -76,7 +88,7 @@ int Config::findInt(std::string key)
 {
   std::map<std::string, std::string>::const_iterator
   mit(configMap.find(key)),
-  mend(configMap.end());
+      mend(configMap.end());
   if(mit!=mend)
   {
     int value = atoi(mit->second.c_str());
