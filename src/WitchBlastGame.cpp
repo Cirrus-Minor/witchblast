@@ -583,7 +583,7 @@ void WitchBlastGame::renderRunningGame()
       float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
       myText.setColor(sf::Color(255, 255, 255, 255));
       myText.setCharacterSize(25);
-      myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the boss !\nSee you soon for new adventures !");
+      myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !");
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
       app->draw(myText);
     }
