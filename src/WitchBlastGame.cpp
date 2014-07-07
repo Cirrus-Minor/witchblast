@@ -125,6 +125,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/rock_impact.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/throw.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/cyclop00.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/cyclop_die.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {

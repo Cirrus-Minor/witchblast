@@ -29,6 +29,7 @@ CyclopEntity::CyclopEntity(float x, float y)
   shadowFrame = 8;
   dyingFrame = 5;
   deathFrame = FRAME_CORPSE_CYCLOP;
+  dyingSound = SOUND_CYCLOP_DIE;
   frame = 0;
   if (game().getPlayerPosition().x > x) isMirroring = true;
 

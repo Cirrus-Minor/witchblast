@@ -136,7 +136,8 @@ enum sound_resources {
   SOUND_IMP_DYING,
   SOUND_ROCK_IMPACT,
   SOUND_THROW,
-  SOUND_CYCLOP00
+  SOUND_CYCLOP00,
+  SOUND_CYCLOP_DIE
 };
 
 enum corpses_ressources{
@@ -337,7 +338,7 @@ const int KING_RAT_DAMAGES = 8;
 const float CYCLOP_SPEED[4] = { 120, 130, 140, 150};
 const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
 const float CYCLOP_FIRE_DELAY[4] = { 0.3f, 0.26f, 0.23f, 0.2f};
-const int CYCLOP_HP = 900;
+const int CYCLOP_HP = 1000;
 const int CYCLOP_DAMAGES = 10;
 
 // EFFECTS
