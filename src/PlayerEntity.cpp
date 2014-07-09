@@ -48,6 +48,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   firingDirection = 5;
   facingDirection = 2;
+  sprinting = false;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -80,6 +81,16 @@ float PlayerEntity::getPercentFireDelay()
 int PlayerEntity::getCollidingDirection()
 {
   return collidingDirection;
+}
+
+void PlayerEntity::setSprinting(bool sprinting)
+{
+  this->sprinting = sprinting;
+}
+
+bool PlayerEntity::isSprinting()
+{
+  return sprinting;
 }
 
 PlayerEntity::playerStatusEnum PlayerEntity::getPlayerStatus()
@@ -196,7 +207,10 @@ void PlayerEntity::animate(float delay)
 
   if (isMoving())
   {
-    frame = ((int)(age * 5.0f)) % 4;
+    if (sprinting)
+      frame = ((int)(age * 10.0f)) % 4;
+    else
+      frame = ((int)(age * 5.0f)) % 4;
     if (frame == 3) frame = 1;
   }
   else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
@@ -520,6 +534,11 @@ void PlayerEntity::move(int direction)
     else if (direction == 7 || direction == 9)
       speedy = - creatureSpeed * 0.7f;
 
+    if (sprinting && !specialState[SpecialStateIce].active)
+    {
+      speedx += speedx;
+      speedy += speedy;
+    }
     setVelocity(Vector2D(speedx, speedy));
 
     {

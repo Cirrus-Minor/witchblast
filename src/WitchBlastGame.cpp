@@ -417,8 +417,12 @@ void WitchBlastGame::updateRunningGame()
     }
 
     player->resestFireDirection();
+    player->setSprinting(false);
+    // sprint ?
+    if (sf::Keyboard::isKeyPressed(input[KeySprint]))
+      player->setSprinting(true);
     // normal 4 directions gameplay
-    if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]))
+    else if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]))
       player->fire(4);
     else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]))
       player->fire(6);
@@ -1811,6 +1815,7 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["keyboard_fire_left"] = intToString(input[KeyFireLeft]);
   newMap["keyboard_fire_right"] = intToString(input[KeyFireRight]);
   newMap["keyboard_fire"] = intToString(input[KeyFire]);
+  newMap["keyboard_sprint"] = intToString(input[KeySprint]);
   newMap["keyboard_fire_select"] = intToString(input[KeyFireSelect]);
 
   config.saveToFile(CONFIG_FILE, newMap);
@@ -1829,6 +1834,7 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireRight] = sf::Keyboard::Right;
   input[KeyFire] = sf::Keyboard::Space;
   input[KeyFireSelect] = sf::Keyboard::Tab;
+  input[KeySprint] = sf::Keyboard::RShift;
 
   // from file
   addKey(KeyUp, "keyboard_move_up");
@@ -1840,6 +1846,7 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireLeft, "keyboard_fire_left");
   addKey(KeyFireRight, "keyboard_fire_right");
   addKey(KeyFire, "keyboard_fire");
+  addKey(KeySprint, "keyboard_sprint");
   addKey(KeyFireSelect, "keyboard_fire_select");
 }
 
