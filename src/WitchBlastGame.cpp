@@ -748,10 +748,9 @@ void WitchBlastGame::renderMenu()
 
     // menu keys
     if (config.configFileExists())
-      write("Key configuration", 18, 300, 250, ALIGN_LEFT, sf::Color(0, 200, 255, 255), app, 1, 1);
+      write("Key configuration", 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
     else
-      write("Please configure the keys", 18, 300, 250, ALIGN_LEFT, sf::Color(0, 200, 255, 255), app, 1, 1);
-    write("Press key for", 18, 300, 285, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write("Please configure the keys", 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -759,9 +758,9 @@ void WitchBlastGame::renderMenu()
       else itemColor = sf::Color(180, 180, 180, 255);
       std::ostringstream oss;
       oss << inputKeyString[i] << ": ";
-      if (menu.keyIndex == i && ((int)(menu.age * 1.5f)) % 2 == 0) oss << "_";
+      if (menu.keyIndex == i && ((int)(menu.age * 1.5f)) % 2 == 0) oss << "[insert Key]";
       else if (menu.keyIndex > i) oss << "DONE";
-      write(oss.str(), 16, 300, 315 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, 300, 285 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
   else
