@@ -8,8 +8,6 @@
 #include <iostream>
 #include <sstream>
 
-
-
 ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
     : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
@@ -115,27 +113,7 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
           dying();
 
-          if (items[itemType].generatesStance)
-          {
-
-            game().showArtefactDescription(itemType);
-            SpriteEntity* spriteItem = new SpriteEntity(
-                            image,
-                            playerEntity->getX(), playerEntity->getY() - 60.0f, ITEM_WIDTH, ITEM_HEIGHT);
-            spriteItem->setFrame(frame);
-            spriteItem->setImagesProLine(10);
-            spriteItem->setZ(z);
-            spriteItem->setLifetime(ACQUIRE_DELAY);
-
-            SpriteEntity* spriteStar = new SpriteEntity(
-                           ImageManager::getImageManager()->getImage(IMAGE_STAR),
-                            playerEntity->getX(), playerEntity->getY() - 60.0f);
-            spriteStar->setScale(4.0f, 4.0f);
-            spriteStar->setZ(z-1.0f);
-            spriteStar->setLifetime(ACQUIRE_DELAY);
-            spriteStar->setSpin(50.0f);
-          }
-          else
+          if (!items[itemType].generatesStance)
             new MagnetEntity(x, y, playerEntity, itemType);
         }
       }

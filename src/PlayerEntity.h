@@ -205,6 +205,12 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void acquireItem(enumItemType type);
 
+    /*!
+     *  \brief called when the player get an item and ends the stance
+     *
+     */
+    void acquireItemAfterStance();
+
      /*!
      *  \brief makes the player drop an item
      *
@@ -417,7 +423,8 @@ class PlayerEntity : public BaseCreatureEntity
     bool sprinting;
 
     bool equip[NUMBER_EQUIP_ITEMS];
-
+    SpriteEntity* spriteItem;
+    SpriteEntity* spriteItemStar;
 
     float specialBoltTimer;
     enumShotType specialShots[SPECIAL_SHOT_SLOTS];

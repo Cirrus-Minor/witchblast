@@ -125,29 +125,8 @@ void PlayerEntity::pay(int price)
   SoundManager::getSoundManager()->playSound(SOUND_PAY);
 }
 
-void PlayerEntity::animate(float delay)
+void PlayerEntity::acquireItemAfterStance()
 {
-  // shot timer
-  if (specialBoltTimer >= 0.0f)
-  {
-    specialBoltTimer -= delay;
-    if (specialBoltTimer <= 0.0f)
-    {
-      if (getShotType() == ShotTypeIce) SoundManager::getSoundManager()->playSound(SOUND_ICE_CHARGE);
-    }
-  }
-  // rate of fire
-  if (!canFirePlayer)
-  {
-    currentFireDelay -= delay;
-    canFirePlayer = (currentFireDelay <= 0.0f);
-  }
-  // acquisition animation
-  if (playerStatus == playerStatusAcquire)
-  {
-    acquireDelay -= delay;
-    if (acquireDelay <= 0.0f)
-    {
       if (acquiredItem >= FirstEquipItem)
       {
         equip[acquiredItem - FirstEquipItem] = true;
@@ -182,7 +161,35 @@ void PlayerEntity::animate(float delay)
           text->setZ(2000);
         }
       }
+      spriteItem->setDying(true);
+      spriteItemStar->setDying(true);
       playerStatus = playerStatusPlaying;
+}
+
+void PlayerEntity::animate(float delay)
+{
+  // shot timer
+  if (specialBoltTimer >= 0.0f)
+  {
+    specialBoltTimer -= delay;
+    if (specialBoltTimer <= 0.0f)
+    {
+      if (getShotType() == ShotTypeIce) SoundManager::getSoundManager()->playSound(SOUND_ICE_CHARGE);
+    }
+  }
+  // rate of fire
+  if (!canFirePlayer)
+  {
+    currentFireDelay -= delay;
+    canFirePlayer = (currentFireDelay <= 0.0f);
+  }
+  // acquisition animation
+  if (playerStatus == playerStatusAcquire)
+  {
+    acquireDelay -= delay;
+    if (acquireDelay <= 0.0f)
+    {
+      acquireItemAfterStance();
     }
   }
   // unlocking animation
@@ -513,6 +520,10 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
 void PlayerEntity::move(int direction)
 {
+  if (playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2)
+  {
+    acquireItemAfterStance();
+  }
   if (playerStatus == playerStatusPlaying)
   {
     float speedx = 0.0f, speedy = 0.0f;
@@ -693,7 +704,8 @@ void PlayerEntity::fire(int direction)
 
 bool PlayerEntity::canMove()
 {
-  return (playerStatus == playerStatusPlaying);
+  return (playerStatus == playerStatusPlaying
+          || playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2);
 }
 
 bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level)
@@ -830,6 +842,32 @@ void PlayerEntity::acquireStance(enumItemType type)
   acquireDelay = ACQUIRE_DELAY;
   acquiredItem = (enumItemType)(type);
   SoundManager::getSoundManager()->playSound(SOUND_BONUS);
+
+  game().showArtefactDescription(type);
+
+  enumItemType itemFrame = type;
+  int itemImage = IMAGE_ITEMS;
+  if (itemFrame >= FirstEquipItem)
+  {
+    itemFrame = (enumItemType)(itemFrame - FirstEquipItem);
+    itemImage = IMAGE_ITEMS_EQUIP;
+  }
+
+            spriteItem = new SpriteEntity(
+                            ImageManager::getImageManager()->getImage(itemImage),
+                            x, y - 60.0f, ITEM_WIDTH, ITEM_HEIGHT);
+            spriteItem->setFrame((int)itemFrame);
+            spriteItem->setImagesProLine(10);
+            spriteItem->setZ(z);
+            spriteItem->setLifetime(ACQUIRE_DELAY);
+
+            spriteItemStar = new SpriteEntity(
+                           ImageManager::getImageManager()->getImage(IMAGE_STAR),
+                            x, y - 60.0f);
+            spriteItemStar->setScale(4.0f, 4.0f);
+            spriteItemStar->setZ(z-1.0f);
+            spriteItemStar->setLifetime(ACQUIRE_DELAY);
+            spriteItemStar->setSpin(50.0f);
 }
 
 void PlayerEntity::collideMapRight()
