@@ -164,10 +164,10 @@ const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
 const float ACQUIRE_DELAY = 2.8f;
 const float UNLOCK_DELAY = 1.0f;
 
-const float INITIAL_BOLT_LIFE = 0.4f;
+const float INITIAL_BOLT_LIFE = 0.55f;
 const int INITIAL_BOLT_DAMAGES = 8;
 const float INITIAL_BOLT_VELOCITY = 700.0f;
-const float INITIAL_BOLT_VISCOSITY = 0.97f;
+const float INITIAL_BOLT_VISCOSITY = 0.98f;
 
 const float FAIRY_SPEED = 180.0f;
 const float FAIRY_FIRE_DELAY = 0.8f;
