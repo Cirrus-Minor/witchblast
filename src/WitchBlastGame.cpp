@@ -514,11 +514,10 @@ void WitchBlastGame::renderRunningGame()
   app->draw(myText);
 
   sf::RectangleShape rectangle(sf::Vector2f(200, 25));
-  // life
 
   if (gameState == gameStatePlaying)
   {
-    // life and mana
+    // life
     rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setPosition(sf::Vector2f(90, 622));
     rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 25));
@@ -529,6 +528,14 @@ void WitchBlastGame::renderRunningGame()
     rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 2));
     app->draw(rectangle);
 
+    oss.str("");
+    oss << player->getHp() << "/" << player->getHpMax();
+    myText.setString(oss.str());
+    myText.setPosition(95, 624);
+    myText.setColor(sf::Color(255, 255,255, 255));
+    app->draw(myText);
+
+    // mana
     rectangle.setFillColor(sf::Color(20, 20, 190));
     rectangle.setPosition(sf::Vector2f(90, 658));
     rectangle.setSize(sf::Vector2f(200.0f * player->getPercentFireDelay() , 25));
