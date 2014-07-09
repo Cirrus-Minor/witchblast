@@ -71,7 +71,7 @@ Mika Attila (for his contribution concerning the Linux version)
 Changes
 -------
 
-Next version
+v0.2.0
 - ADD New familiar (Ice Fairy)
 - ADD New items (4 rings)
 - ADD New monster and variants
