@@ -1480,6 +1480,8 @@ void WitchBlastGame::makeShake(float duration)
 
 void WitchBlastGame::saveGame()
 {
+  if (player->getPlayerStatus() == PlayerEntity::playerStatusAcquire)
+    player->acquireItemAfterStance();
   ofstream file(SAVE_FILE.c_str(), ios::out | ios::trunc);
 
   int i, j, k, l;
