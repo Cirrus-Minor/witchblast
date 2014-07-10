@@ -205,7 +205,8 @@ void GameFloor::generate()
 {
   int i, j;
   int nbRooms;
-  int requiredRoms = 15;
+  int requiredRoms = 6 + level * 2;
+  if (requiredRoms > 18) requiredRoms = 18;
   // Init
   for (i=0; i < FLOOR_WIDTH; i++)
     for (j=0; j < FLOOR_HEIGHT; j++)
