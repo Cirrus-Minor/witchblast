@@ -1165,12 +1165,20 @@ void WitchBlastGame::generateMap()
     int x0 = MAP_WIDTH / 2;
     int y0 = MAP_HEIGHT / 2;
     monsterArray[x0][y0] = true;
-    findPlaceMonsters(MONSTER_RAT, 5);
-    findPlaceMonsters(MONSTER_BAT, 5);
-    if (level > 1)
+    if (level == 1)
     {
-      if (rand()%2 == 0)findPlaceMonsters(MONSTER_IMP_BLUE, 2);
-      else findPlaceMonsters(MONSTER_IMP_RED, 2);
+      findPlaceMonsters(MONSTER_RAT, 2);
+      findPlaceMonsters(MONSTER_BAT, 2);
+    }
+    else
+    {
+      findPlaceMonsters(MONSTER_RAT, 5);
+      findPlaceMonsters(MONSTER_BAT, 5);
+      for (int i = 2; i < level; i++)
+      {
+        if (rand()%2 == 0)findPlaceMonsters(MONSTER_IMP_BLUE, 1);
+        else findPlaceMonsters(MONSTER_IMP_RED, 1);
+      }
     }
   }
   else if (currentMap->getRoomType() == roomTypeMerchant)
@@ -1210,9 +1218,12 @@ void WitchBlastGame::generateMap()
       new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else if (level == 2)
+      new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+    else if (level == 3)
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-    else //if (level == 3)
+    else //if (level == 4)
       new CyclopEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2 - 96);
 

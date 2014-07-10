@@ -19,16 +19,34 @@
 
 void generateStandardRoom01()
 {
-int random = rand() % 95; // (level == 1 ? 95 : 110);
+  int random = rand() % 64;
 
- /* if (random > 0)
+  if (random < 16)
   {
-    currentMap->generateRoom(rand()%4);
-
-    new CyclopEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+    game().getCurrentMap()->generateRoom(rand()%4);
+    game().findPlaceMonsters(MONSTER_RAT,2);
   }
-  else*/
+  else if (random < 32)
+  {
+    game().getCurrentMap()->generateRoom(rand()%5);
+    game().findPlaceMonsters(MONSTER_BAT,2);
+  }
+  else if (random < 48)
+  {
+    game().getCurrentMap()->generateRoom(rand()%5);
+    game().findPlaceMonsters(MONSTER_EVIL_FLOWER,2);
+  }
+  else
+  {
+    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
+    game().getCurrentMap()->setCleared(true);
+  }
+}
+
+void generateStandardRoom02()
+{
+  int random = rand() % 95;
 
   if (random < 16)
   {
@@ -64,9 +82,9 @@ int random = rand() % 95; // (level == 1 ? 95 : 110);
   }
 }
 
-void generateStandardRoom02()
+void generateStandardRoom03()
 {
-int random = rand() % 110;
+  int random = rand() % 110;
 
   if (random < 16)
   {
@@ -114,9 +132,9 @@ int random = rand() % 110;
   }
 }
 
-void generateStandardRoom03()
+void generateStandardRoom04()
 {
-int random = rand() % 110;
+  int random = rand() % 110;
 
   if (random < 16)
   {
@@ -179,7 +197,8 @@ void generateStandardRoom(int level)
     case 1: generateStandardRoom01(); break;
     case 2: generateStandardRoom02(); break;
     case 3: generateStandardRoom03(); break;
-    default: generateStandardRoom03(); break;
+    case 4: generateStandardRoom03(); break;
+    default: generateStandardRoom04(); break;
   }
 }
 
