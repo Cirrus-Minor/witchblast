@@ -1234,21 +1234,6 @@ void WitchBlastGame::generateMap()
     currentMap->generateRoom(0);
     currentMap->setCleared(true);
     int bonusType = getRandomEquipItem(false);
-    if (level == 1)
-    {
-      if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
-      {
-        new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                                             OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                                             CHEST_FAIRY + items[FirstEquipItem + bonusType].familiar, false);
-      }
-      else
-      {
-        new ItemEntity( (enumItemType)(FirstEquipItem + bonusType),
-                            OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                            OFFSET_Y + 120.0f + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
-      }
-    }
   }
   else if (currentMap->getRoomType() == roomTypeExit)
   {
