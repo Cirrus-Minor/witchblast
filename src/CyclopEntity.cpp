@@ -120,7 +120,7 @@ void CyclopEntity::computeStates(float delay)
           destroyLevel++;
           counter = destroyLevel + 1;
           timer = 0.9f;
-          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP00);
+          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP_00);
           initFallingGrid();
         }
         else
@@ -128,7 +128,7 @@ void CyclopEntity::computeStates(float delay)
           state = 1; // charge to fire
           timer = 0.9f;
           counter = CYCLOP_NUMBER_ROCKS[getHealthLevel()];
-          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP00);
+          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP_00);
 
           computeNextRockMissile();
         }

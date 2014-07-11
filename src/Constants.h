@@ -85,6 +85,7 @@ enum item_images {
   IMAGE_SLIME,
   IMAGE_IMP,
 
+  IMAGE_BUTCHER,
   IMAGE_GIANT_SLIME,
   IMAGE_KING_RAT,
   IMAGE_CYCLOP,
@@ -136,8 +137,12 @@ enum sound_resources {
   SOUND_IMP_DYING,
   SOUND_ROCK_IMPACT,
   SOUND_THROW,
-  SOUND_CYCLOP00,
-  SOUND_CYCLOP_DIE
+  SOUND_CYCLOP_00,
+  SOUND_CYCLOP_DIE,
+  SOUND_BUTCHER_00,
+  SOUND_BUTCHER_01,
+  SOUND_BUTCHER_HURT,
+  SOUND_BUTCHER_DIE
 };
 
 enum corpses_ressources{
@@ -154,7 +159,8 @@ enum corpses_ressources{
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
-  FRAME_CORPSE_CYCLOP
+  FRAME_CORPSE_CYCLOP,
+  FRAME_CORPSE_BUTCHER
 };
 
 // Player game play
@@ -313,6 +319,11 @@ const int IMP_BB_WIDTH_DIFF = 10;
 const int IMP_BB_TOP = 2;
 const int IMP_BB_HEIGHT_DIFF = 32;
 const float IMP_FIRE_VELOCITY = 250.0f;
+
+// Butcher
+const int BUTCHER_HP = 100;
+const int BUTCHER_DAMAGES = 8;
+const int BUTCHER_VELOCITY = 80;
 
 // Giant Slime
 const int GIANT_SLIME_HP = 650;

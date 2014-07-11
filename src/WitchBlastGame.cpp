@@ -28,6 +28,7 @@
 #include "KingRatEntity.h"
 #include "CyclopEntity.h"
 #include "GiantSlimeEntity.h"
+#include "ButcherEntity.h"
 #include "BatEntity.h"
 #include "ImpEntity.h"
 #include "SlimeEntity.h"
@@ -76,6 +77,8 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage((char*)"media/evil_flower.png");
   ImageManager::getImageManager()->addImage((char*)"media/slime.png");
   ImageManager::getImageManager()->addImage((char*)"media/imp.png");
+
+  ImageManager::getImageManager()->addImage((char*)"media/butcher.png");
   ImageManager::getImageManager()->addImage((char*)"media/giant_slime.png");
   ImageManager::getImageManager()->addImage((char*)"media/king_rat.png");
   ImageManager::getImageManager()->addImage((char*)"media/cyclop.png");
@@ -126,6 +129,10 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/throw.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/cyclop00.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/cyclop_die.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/butcher_00.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/butcher_01.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/butcher_hurt.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/butcher_die.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -1215,7 +1222,7 @@ void WitchBlastGame::generateMap()
     currentMap->generateRoom(0);
 
     if (level == 1)
-      new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+      new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else if (level == 2)
       new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
