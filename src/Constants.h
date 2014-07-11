@@ -23,7 +23,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.2.0";
+const std::string APP_VERSION =   "0.2.1";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
@@ -164,7 +164,7 @@ const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
 const float ACQUIRE_DELAY = 2.8f;
 const float UNLOCK_DELAY = 1.0f;
 
-const float INITIAL_BOLT_LIFE = 0.55f;
+const float INITIAL_BOLT_LIFE = 0.45f;
 const int INITIAL_BOLT_DAMAGES = 8;
 const float INITIAL_BOLT_VELOCITY = 700.0f;
 const float INITIAL_BOLT_VISCOSITY = 0.98f;
