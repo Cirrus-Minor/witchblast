@@ -71,6 +71,15 @@ Mika Attila (for his contribution concerning the Linux version)
 Changes
 -------
 
+Next version
+- ADD New mini-boss
+- ADD New first level - easier
+- ADD Sprint
+- ADD Display of HP/HPmax on the life bar
+- MOD Shot distance is longer
+- MOD Acquiring stance can be broken after the half of the time
+- FIX Lost item when leaving the game while acquiring the item
+
 v0.2.0
 - ADD New familiar (Ice Fairy)
 - ADD New items (4 rings)
