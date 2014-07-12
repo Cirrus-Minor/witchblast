@@ -765,8 +765,14 @@ void PlayerEntity::acquireItem(enumItemType type)
     case ItemGoldCoin: gold = gold + 10;
     SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
     break;
+    case itemHealthVerySmall: hp += 3;
+      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      if (hp > hpMax) hp = hpMax;  break;
+    case itemHealthSmall: hp += 7;
+      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      if (hp > hpMax) hp = hpMax;  break;
     case itemHealth: hp += 15;
-      SoundManager::getSoundManager()->playSound(SOUND_DRINK);
+      SoundManager::getSoundManager()->playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;  break;
     default: break;
   }
