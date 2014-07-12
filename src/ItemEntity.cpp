@@ -9,7 +9,7 @@
 #include <sstream>
 
 ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
-    : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
+  : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
   type = ENTITY_ITEM;
   this->itemType = itemType;
@@ -99,43 +99,49 @@ void ItemEntity::dying()
 void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
   if (itemType == itemBossHeart && !game().getCurrentMap()->isCleared()) return;
-    PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
 
-    if (collideWithEntity(entity))
+  PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
+
+  if (collideWithEntity(entity))
+  {
+    if (playerEntity != NULL && !playerEntity->isDead())
     {
-      if (playerEntity != NULL && !playerEntity->isDead())
+      if (playerEntity->getHp() == playerEntity->getHpMax())
       {
-        if (isMerchandise == false || playerEntity->getGold() >= getPrice())
-        {
-          playerEntity->acquireItem(itemType);
+        // don't use health item if you don't need it
+        if (itemType >= itemHealthVerySmall && itemType <= itemHealth) return;
+      }
+      if (isMerchandise == false || playerEntity->getGold() >= getPrice())
+      {
+        playerEntity->acquireItem(itemType);
 
-          if (isMerchandise) playerEntity->pay(getPrice());
+        if (isMerchandise) playerEntity->pay(getPrice());
 
-          dying();
+        dying();
 
-          if (!items[itemType].generatesStance)
-            new MagnetEntity(x, y, playerEntity, itemType);
-        }
+        if (!items[itemType].generatesStance)
+          new MagnetEntity(x, y, playerEntity, itemType);
       }
     }
+  }
 }
 
 void ItemEntity::collideMapRight()
 {
-    velocity.x = -velocity.x * 0.66f;
+  velocity.x = -velocity.x * 0.66f;
 }
 
 void ItemEntity::collideMapLeft()
 {
-    velocity.x = -velocity.x * 0.66f;
+  velocity.x = -velocity.x * 0.66f;
 }
 
 void ItemEntity::collideMapTop()
 {
-    velocity.y = -velocity.y * 0.66f;
+  velocity.y = -velocity.y * 0.66f;
 }
 
 void ItemEntity::collideMapBottom()
 {
-    velocity.y = -velocity.y * 0.66f;
+  velocity.y = -velocity.y * 0.66f;
 }

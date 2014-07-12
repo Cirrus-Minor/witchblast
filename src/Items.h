@@ -45,8 +45,10 @@ enum enumItemType
   ItemCopperCoin,
   ItemSilverCoin,
   ItemGoldCoin,
-  itemHealth,
   itemBossHeart,
+  itemHealthVerySmall,
+  itemHealthSmall,
+  itemHealth,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
@@ -94,7 +96,7 @@ struct itemStuct
   enumShotType specialShot;     /**< Special shot */
 };
 
-const int NUMBER_ITEMS = 24;  /*!< Total number of items */
+const int NUMBER_ITEMS = 26;  /*!< Total number of items */
 /** Array with all the items and data */
 const itemStuct items[NUMBER_ITEMS] =
 {
@@ -111,12 +113,20 @@ const itemStuct items[NUMBER_ITEMS] =
     20, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    itemHealth, "Health potion", "A health potion",
-    8, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
-  },
-  {
     itemBossHeart, "Titan's Heart", "Increases Max HP",
     250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    itemHealthVerySmall, "Apple", "Restores 3 HP",
+    2, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    itemHealthSmall, "Bread", "Restores 7 HP",
+    4, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    itemHealthSmall, "Cheese", "Restores 15 HP",
+    8, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemMagicianHat, "Sorcerer's Hat", "Increases fire rate",
