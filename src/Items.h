@@ -156,11 +156,11 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBloodSnake, "Blood Snake", "Increases damage",
-    25, true, FamiliarNone, true, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+    25, true, FamiliarNone, true, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemGemIce, "Ice Gem", "Ice attack (freeze)",
-    25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeIce
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeIce
   },
   {
     ItemGemIllusion, "Illusion Gem", "Illusion attack (ignore walls)",
@@ -168,31 +168,31 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemGemStone, "Stone Gem", "Stone attack (repulse)",
-    25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStone
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStone
   },
   {
     ItemGemLightning, "Lighting Gem", "Lightning attack (bouncing)",
-    25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeLightning
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeLightning
   },
   {
     ItemFairyIce, "Ice Fairy", "Helps you in the dungeon",
-    40, true, FamiliarFairyIce, false, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyIce, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemRingIce, "Sapphire Ring", "Increases ice power",
-    45, true, FamiliarNone, true, true, true, 2, RarityUnommon, AlignmentNone, ItemGemIce, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUnommon, AlignmentNone, ItemGemIce, ShotTypeStandard
   },
   {
     ItemRingStone, "Obsidian Ring", "Increases stone power",
-    45, true, FamiliarNone, true, true, true, 2, RarityUnommon, AlignmentNone, ItemGemStone, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUnommon, AlignmentNone, ItemGemStone, ShotTypeStandard
   },
   {
     ItemRingLightning, "Opal Ring", "Increases lightning power",
-    45, true, FamiliarNone, true, true, true, 2, RarityUnommon, AlignmentNone, ItemGemLightning, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUnommon, AlignmentNone, ItemGemLightning, ShotTypeStandard
   },
   {
     ItemRingIllusion, "Quartz Ring", "Increases illusion power",
-    45, true, FamiliarNone, true, true, true, 2, RarityUnommon, AlignmentNone, ItemGemIllusion, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 4, RarityUnommon, AlignmentNone, ItemGemIllusion, ShotTypeStandard
   }
 };
 
