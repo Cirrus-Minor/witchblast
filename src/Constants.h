@@ -327,7 +327,7 @@ const int BUTCHER_DAMAGES = 8;
 const int BUTCHER_VELOCITY = 80;
 
 // Giant Slime
-const int GIANT_SLIME_HP = 650;
+const int GIANT_SLIME_HP = 550;
 const int GIANT_SLIME_DAMAGES = 8;
 const int GIANT_SLIME_MISSILE_DAMAGES = 6;
 const float GIANT_SLIME_MISSILE_DELAY = 0.33f;
