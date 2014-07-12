@@ -267,9 +267,6 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void pay(int price);
 
-    void setSprinting(bool sprinting);
-    bool isSprinting();
-
     /** Player status enum
      *  The different player states.
      */
@@ -420,7 +417,6 @@ class PlayerEntity : public BaseCreatureEntity
     playerStatusEnum playerStatus;
     float acquireDelay;
     enumItemType acquiredItem;
-    bool sprinting;
 
     bool equip[NUMBER_EQUIP_ITEMS];
     SpriteEntity* spriteItem;
