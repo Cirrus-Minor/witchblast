@@ -188,6 +188,7 @@ void WitchBlastGame::onUpdate()
   if (!isPausing)
   {
     EntityManager::getEntityManager()->animate(deltaTime);
+    if (sf::Keyboard::isKeyPressed(input[KeyTimeControl])) EntityManager::getEntityManager()->animate(deltaTime);
 
     if (xGameState != xGameStateNone)
     {
@@ -424,12 +425,8 @@ void WitchBlastGame::updateRunningGame()
     }
 
     player->resestFireDirection();
-    player->setSprinting(false);
-    // sprint ?
-    if (sf::Keyboard::isKeyPressed(input[KeySprint]))
-      player->setSprinting(true);
-    // normal 4 directions gameplay
-    else if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]))
+
+    if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]))
       player->fire(4);
     else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]))
       player->fire(6);
@@ -604,6 +601,19 @@ void WitchBlastGame::renderRunningGame()
       myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !");
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
       app->draw(myText);
+    }
+
+    if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
+    {
+      // effect
+      //int effectFade = 10 + rand() % 20;
+      int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
+      rectangle.setFillColor(sf::Color(0, 255, 255, effectFade));
+      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+      sf::RenderStates r;
+      r.blendMode = sf::BlendAlpha ;
+      app->draw(rectangle, r);
     }
 
     if (xGameState == xGameStateFadeIn)
@@ -1819,7 +1829,7 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["keyboard_fire_left"] = intToString(input[KeyFireLeft]);
   newMap["keyboard_fire_right"] = intToString(input[KeyFireRight]);
   newMap["keyboard_fire"] = intToString(input[KeyFire]);
-  newMap["keyboard_sprint"] = intToString(input[KeySprint]);
+  newMap["keyboard_time_control"] = intToString(input[KeyTimeControl]);
   newMap["keyboard_fire_select"] = intToString(input[KeyFireSelect]);
 
   config.saveToFile(CONFIG_FILE, newMap);
@@ -1838,7 +1848,7 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireRight] = sf::Keyboard::Right;
   input[KeyFire] = sf::Keyboard::Space;
   input[KeyFireSelect] = sf::Keyboard::Tab;
-  input[KeySprint] = sf::Keyboard::RShift;
+  input[KeyTimeControl] = sf::Keyboard::RShift;
 
   // from file
   addKey(KeyUp, "keyboard_move_up");
@@ -1850,7 +1860,7 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireLeft, "keyboard_fire_left");
   addKey(KeyFireRight, "keyboard_fire_right");
   addKey(KeyFire, "keyboard_fire");
-  addKey(KeySprint, "keyboard_sprint");
+  addKey(KeyTimeControl, "keyboard_time_control");
   addKey(KeyFireSelect, "keyboard_fire_select");
 }
 

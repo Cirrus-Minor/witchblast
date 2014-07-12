@@ -41,7 +41,7 @@ const std::string inputKeyString[NumberKeys] =
   "fire left",
   "fire right",
   "fire select",
-  "sprint",
+  "time control",
   "fire (one button)"
 };
 
@@ -337,7 +337,7 @@ private:
     KeyFireLeft,
     KeyFireRight,
     KeyFireSelect,
-    KeySprint,
+    KeyTimeControl,
     KeyFire
   };
 
