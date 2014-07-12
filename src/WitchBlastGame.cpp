@@ -815,6 +815,7 @@ void WitchBlastGame::startGame()
   {
     deltaTime = getAbsolutTime() - lastTime;
     lastTime = getAbsolutTime();
+    if (deltaTime > 0.05f) deltaTime = 0.05f;
     switch (gameState)
     {
       case gameStateInit:
