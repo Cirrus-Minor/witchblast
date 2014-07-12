@@ -133,6 +133,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound((char*)"media/sound/butcher_01.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/butcher_hurt.ogg");
   SoundManager::getSoundManager()->addSound((char*)"media/sound/butcher_die.ogg");
+  SoundManager::getSoundManager()->addSound((char*)"media/sound/vib.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -188,7 +189,13 @@ void WitchBlastGame::onUpdate()
   if (!isPausing)
   {
     EntityManager::getEntityManager()->animate(deltaTime);
-    if (sf::Keyboard::isKeyPressed(input[KeyTimeControl])) EntityManager::getEntityManager()->animate(deltaTime);
+    if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
+    {
+      EntityManager::getEntityManager()->animate(deltaTime);
+      SoundManager::getSoundManager()->playSound(SOUND_VIB);
+    }
+    else
+      SoundManager::getSoundManager()->stopSound(SOUND_VIB);
 
     if (xGameState != xGameStateNone)
     {
@@ -593,7 +600,7 @@ void WitchBlastGame::renderRunningGame()
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
       app->draw(myText);
     }
-    else if (currentMap->getRoomType() == roomTypeExit && level > 2)
+    else if (currentMap->getRoomType() == roomTypeExit && level > 3)
     {
       float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
       myText.setColor(sf::Color(255, 255, 255, 255));

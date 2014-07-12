@@ -142,7 +142,8 @@ enum sound_resources {
   SOUND_BUTCHER_00,
   SOUND_BUTCHER_01,
   SOUND_BUTCHER_HURT,
-  SOUND_BUTCHER_DIE
+  SOUND_BUTCHER_DIE,
+  SOUND_VIB
 };
 
 enum corpses_ressources{
