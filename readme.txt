@@ -74,11 +74,12 @@ Changes
 Next version
 - ADD New mini-boss
 - ADD New first level - easier
-- ADD Sprint
+- ADD Time control (2x faster)
 - ADD Display of HP/HPmax on the life bar
 - MOD Shot distance is longer
 - MOD Acquiring stance can be broken after the half of the time
 - FIX Lost item when leaving the game while acquiring the item
+- FIX Monsters can leave the game zone while lagging or windows moving
 
 v0.2.0
 - ADD New familiar (Ice Fairy)
