@@ -806,7 +806,7 @@ void PlayerEntity::computePlayer()
     fireVelocityBonus += 0.15f;
     fireDamagesBonus += 0.5f;
   }
-  if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 1.0f;
+  if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 0.5f;
 
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;

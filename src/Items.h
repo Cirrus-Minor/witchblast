@@ -154,7 +154,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemMahoganyStaff, "Mahogany Staff", "Increases bolt's speed and damage",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemFairy, "Fairy", "Helps you in the dungeon",
@@ -166,7 +166,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBloodSnake, "Blood Snake", "Increases damage",
-    25, true, FamiliarNone, true, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemGemIce, "Ice Gem", "Ice attack (freeze)",
