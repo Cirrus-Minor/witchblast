@@ -43,6 +43,7 @@ public:
 
   virtual void render(sf::RenderTarget* app);
 	virtual void animate(float delay);
+	void displayCenterAndZ(sf::RenderTarget* app);
 
 protected:
     sf::Sprite sprite;

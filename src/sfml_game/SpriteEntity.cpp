@@ -124,6 +124,20 @@ void SpriteEntity::render(sf::RenderTarget* app)
   }
 }
 
+void SpriteEntity::displayCenterAndZ(sf::RenderTarget* app)
+{
+    sf::Vertex line[] =
+  {
+    sf::Vertex(sf::Vector2f(x - 2, y), sf::Color::Green),
+    sf::Vertex(sf::Vector2f(x + 2, y), sf::Color::Green),
+    sf::Vertex(sf::Vector2f(x, y - 2), sf::Color::Green),
+    sf::Vertex(sf::Vector2f(x, y + 2), sf::Color::Green),
+    sf::Vertex(sf::Vector2f(x - 5, z), sf::Color::Green),
+    sf::Vertex(sf::Vector2f(x + 5, z), sf::Color::Green)
+  };
+  app->draw(line, 6, sf::Lines);
+}
+
 void SpriteEntity::animate(float delay)
 {
     GameEntity::animate(delay);
