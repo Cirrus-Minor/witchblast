@@ -71,15 +71,22 @@ Mika Attila (for his contribution concerning the Linux version)
 Changes
 -------
 
-Next version
+v0.2.5
 - ADD New mini-boss
 - ADD New first level - easier
 - ADD Time control (2x faster)
 - ADD Display of HP/HPmax on the life bar
+- ADD New health items: apple, bread, cheese (no more potions)
+- ADD Monsters can drop health item
 - MOD Shot distance is longer
 - MOD Acquiring stance can be broken after the half of the time
+- MOD Changes in item' level
+- MOD Blood Snake damage's bonus decreases 
+- MOD Merchant sells cheese an bread now
 - FIX Lost item when leaving the game while acquiring the item
 - FIX Monsters can leave the game zone while lagging or windows moving
+- FIX Player can walk through south wall at the door
+- FIX Player's death display artefacts
 
 v0.2.0
 - ADD New familiar (Ice Fairy)
