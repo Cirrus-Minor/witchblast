@@ -221,7 +221,7 @@ void PlayerEntity::animate(float delay)
     game().moveToOtherMap(6);
   else if (y < OFFSET_Y)
     game().moveToOtherMap(8);
-  else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 15)
+  else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 16)
     game().moveToOtherMap(2);
 
   if (playerStatus == playerStatusEntering)
