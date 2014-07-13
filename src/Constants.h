@@ -17,13 +17,10 @@
 #ifndef CONSTANTS_H_INCLUDED
 #define CONSTANTS_H_INCLUDED
 
-// uncomment to show bounding box in the app
-// #define SHOW_BOUNDING_BOX
-
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.2.1";
+const std::string APP_VERSION =   "0.2.5";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
