@@ -32,47 +32,49 @@ public:
   void setTileDimensions(int width, int height);
 
   virtual void render(sf::RenderTarget* app);
-	virtual void animate(float delay);
+  virtual void animate(float delay);
 
-	virtual void calculateBB();
-	virtual void makeFall();
-	virtual bool collideWithMap(int direction);
-	virtual bool isCollidingWithMap();
-	virtual void stuck();
-	virtual bool collideWithEntity(CollidingSpriteEntity* entity);
+  virtual void calculateBB();
+  virtual void makeFall();
+  virtual bool collideWithMap(int direction);
+  virtual bool isCollidingWithMap();
+  virtual void stuck();
+  virtual bool collideWithEntity(CollidingSpriteEntity* entity);
 
-    enum directionEnum
-    {
-        DIRECTION_RIGHT,
-        DIRECTION_LEFT,
-        DIRECTION_TOP,
-        DIRECTION_BOTTOM
-    };
+  void displayBoundingBox(sf::RenderTarget* app);
 
-	bool isOnGround();
+  enum directionEnum
+  {
+    DIRECTION_RIGHT,
+    DIRECTION_LEFT,
+    DIRECTION_TOP,
+    DIRECTION_BOTTOM
+  };
+
+  bool isOnGround();
 
 protected:
-    GameMap* map;   // map to test collisions with
-    sf::IntRect boundingBox; // BoundingBox
-    int tileWidth;
-    int tileHeight;
-    int offsetX;
-    int offsetY;
+  GameMap* map;   // map to test collisions with
+  sf::IntRect boundingBox; // BoundingBox
+  int tileWidth;
+  int tileHeight;
+  int offsetX;
+  int offsetY;
 
-    float normalWeight;
-    float maxY;
+  float normalWeight;
+  float maxY;
 
-	virtual void exitMap(int direction);
+  virtual void exitMap(int direction);
 
-	virtual void collideMapRight();
-	virtual void collideMapLeft();
-	virtual void collideMapTop();
-	virtual void collideMapBottom();
+  virtual void collideMapRight();
+  virtual void collideMapLeft();
+  virtual void collideMapTop();
+  virtual void collideMapBottom();
 
   virtual void collideEntity(CollidingSpriteEntity* entity);
 
-	virtual void testSpriteCollisions();
-	virtual void readCollidingEntity(CollidingSpriteEntity* entity);
+  virtual void testSpriteCollisions();
+  virtual void readCollidingEntity(CollidingSpriteEntity* entity);
 };
 
 #endif // COLLIDINGSPRITEENTITY_H_INCLUDED

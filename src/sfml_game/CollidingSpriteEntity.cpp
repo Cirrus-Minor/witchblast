@@ -50,6 +50,21 @@ void CollidingSpriteEntity::render(sf::RenderTarget* app)
   SpriteEntity::render(app);
 }
 
+void CollidingSpriteEntity::displayBoundingBox(sf::RenderTarget* app)
+{
+  sf::Vertex line[] =
+  {
+    sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top), sf::Color::Red),
+    sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top), sf::Color::Red),
+    sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top), sf::Color::Red),
+    sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height), sf::Color::Red),
+    sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height), sf::Color::Red),
+    sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height), sf::Color::Red),
+    sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height), sf::Color::Red),
+    sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top), sf::Color::Red)
+  };
+  app->draw(line, 8, sf::Lines);
+}
 
 void CollidingSpriteEntity::animate(float delay)
 {
@@ -118,7 +133,6 @@ void CollidingSpriteEntity::animate(float delay)
     else if ((int)velocity.y < 0)
     {
       y += velocity.y * delay;
-      //calculateBB();
 
       if (collideWithMap(DIRECTION_TOP))
       {
