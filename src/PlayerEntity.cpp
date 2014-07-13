@@ -267,7 +267,7 @@ void PlayerEntity::renderBody(sf::RenderTarget* app)
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
   app->draw(sprite);
 
-  if (equip[EQUIP_CONCENTRATION_AMULET])
+  if (equip[EQUIP_CONCENTRATION_AMULET] && playerStatus != playerStatusDead)
   {
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_COLLAR));
     if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
@@ -279,7 +279,7 @@ void PlayerEntity::renderBody(sf::RenderTarget* app)
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
   }
 
-  if (equip[EQUIP_LEATHER_BELT])
+  if (equip[EQUIP_LEATHER_BELT] && playerStatus != playerStatusDead)
   {
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
     sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
@@ -290,7 +290,8 @@ void PlayerEntity::renderBody(sf::RenderTarget* app)
 
 void PlayerEntity::renderHands(sf::RenderTarget* app)
 {
-  if (equip[EQUIP_VIBRATION_GLOVES]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+  if (equip[EQUIP_VIBRATION_GLOVES] && playerStatus != playerStatusDead)
+    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
 
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
   app->draw(sprite);
@@ -300,7 +301,8 @@ void PlayerEntity::renderHands(sf::RenderTarget* app)
 
 void PlayerEntity::renderFeet(sf::RenderTarget* app)
 {
-  if (equip[EQUIP_LEATHER_BOOTS]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+  if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
+    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
 
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
   app->draw(sprite);
@@ -310,6 +312,8 @@ void PlayerEntity::renderFeet(sf::RenderTarget* app)
 
 void PlayerEntity::renderStaff(sf::RenderTarget* app)
 {
+  if (playerStatus == playerStatusDead) return;
+
   if (equip[EQUIP_MAHOGANY_STAFF]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
   int xSnake, ySnake;
   int xStone, yStone;
@@ -369,7 +373,6 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
   }
 }
 
-
 void PlayerEntity::render(sf::RenderTarget* app)
 {
   sprite.setPosition(x, y);
@@ -412,7 +415,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
   }
 
   // gems
-  if (getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning)
+  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning)  && playerStatus != playerStatusDead)
   {
     int fade;
     sf::Color savedColor = sprite.getColor();
@@ -463,7 +466,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
     sprite.setColor(savedColor);
   }
 
-  if (game().getShowLogical())
+  if (game().getShowLogical() && playerStatus != playerStatusDead)
   {
     displayBoundingBox(app);
     displayCenterAndZ(app);
