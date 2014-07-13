@@ -69,8 +69,18 @@ void ItemEntity::animate(float delay)
 void ItemEntity::render(sf::RenderTarget* app)
 {
   // shadow
-  sprite.setTextureRect(sf::IntRect(9 * width, 2 * height, width, height));
-  app->draw(sprite);
+  if (itemType < FirstEquipItem)
+  {
+    sprite.setTextureRect(sf::IntRect(9 * width, height, width, height));
+    sprite.setPosition(x, y + 3);
+    app->draw(sprite);
+    sprite.setPosition(x, y);
+  }
+  else
+  {
+    sprite.setTextureRect(sf::IntRect(9 * width, 2 * height, width, height));
+    app->draw(sprite);
+  }
 
   // price
   if (isMerchandise)
