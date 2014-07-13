@@ -242,20 +242,11 @@ void BaseCreatureEntity::render(sf::RenderTarget* app)
   }
   CollidingSpriteEntity::render(app);
 
-  #ifdef SHOW_BOUNDING_BOX
-  sf::Vertex line[] =
+  if (game().getShowLogical())
   {
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top))
-  };
-  app->draw(line, 8, sf::Lines);
-  #endif
+    displayBoundingBox(app);
+    displayCenterAndZ(app);
+  }
 }
 
 void BaseCreatureEntity::calculateBB()

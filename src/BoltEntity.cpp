@@ -89,6 +89,7 @@ void BoltEntity::animate(float delay)
   testWallsCollision = true;
   CollidingSpriteEntity::animate(delay);
   testWallsCollision = false;
+  calculateBB();
 
   if ( (lifetime - age) < 0.2f)
   {
@@ -99,6 +100,15 @@ void BoltEntity::animate(float delay)
   }
 
   if (((velocity.x)*(velocity.x) + (velocity.y)*(velocity.y)) < 1500.0f) isDying = true;
+}
+
+void BoltEntity::render(sf::RenderTarget* app)
+{
+  CollidingSpriteEntity::render(app);
+  if (game().getShowLogical())
+  {
+    displayBoundingBox(app);
+  }
 }
 
 void BoltEntity::calculateBB()

@@ -462,6 +462,12 @@ void PlayerEntity::render(sf::RenderTarget* app)
     sprite.setPosition(x, y);
     sprite.setColor(savedColor);
   }
+
+  if (game().getShowLogical())
+  {
+    displayBoundingBox(app);
+    displayCenterAndZ(app);
+  }
 }
 
 

@@ -146,6 +146,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   currentFloor = NULL;
   xGameState = xGameStateNone;
   isPausing = false;
+  showLogical = false;
 
   shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
 
@@ -182,6 +183,11 @@ Vector2D WitchBlastGame::getPlayerPosition()
 int WitchBlastGame::getLevel()
 {
   return level;
+}
+
+bool WitchBlastGame::getShowLogical()
+{
+  return showLogical;
 }
 
 void WitchBlastGame::onUpdate()
@@ -393,6 +399,11 @@ void WitchBlastGame::updateRunningGame()
       if (event.key.code == sf::Keyboard::X)
       {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false);
+      }
+
+      if (event.key.code == sf::Keyboard::F2)
+      {
+        showLogical = !showLogical;
       }
     }
 

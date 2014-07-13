@@ -105,6 +105,12 @@ public:
   int getLevel();
 
   /*!
+   *  \brief accessor on showLogical flag
+   *  \return : the value of the flag
+   */
+  bool getShowLogical();
+
+  /*!
    *  \brief Start the game and the game loop
    *
    *  This method starts the game and the game loop.
@@ -260,6 +266,7 @@ private:
   GameMap* miniMap;           /*!< Pointer to the logical minimap */
   DungeonMap* currentMap;     /*!< Pointer to the logical current map */
   GameFloor* currentFloor;    /*!< Pointer to the logical floor (level) */
+  bool showLogical;           /*!< True if showing bounding boxes, z and center */
 
   // game play
   int level;                  /*!< Level (floor) */

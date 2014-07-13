@@ -91,6 +91,11 @@ void ItemEntity::render(sf::RenderTarget* app)
   }
 
   CollidingSpriteEntity::render(app);
+  if (game().getShowLogical())
+  {
+    displayBoundingBox(app);
+    displayCenterAndZ(app);
+  }
 }
 
 void ItemEntity::calculateBB()
