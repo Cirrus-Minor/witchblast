@@ -216,7 +216,7 @@ void EnnemyEntity::drop()
     newItem->setViscosity(0.96f);
   }
 
-  if (rand() % 18 == 0)
+  if (rand() % 25 == 0)
   {
     ItemEntity* newItem = new ItemEntity(itemHealthVerySmall, x, y);
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
