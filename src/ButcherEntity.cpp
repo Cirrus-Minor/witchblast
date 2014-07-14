@@ -37,8 +37,6 @@ ButcherEntity::ButcherEntity(float x, float y)
 
 void ButcherEntity::animate(float delay)
 {
-  z = y + boundingBox.top + boundingBox.height;
-
   if (age > 0.0f && !isAgonising)
   {
     sprite.setColor(sf::Color(255,255,255,255));
@@ -64,6 +62,7 @@ void ButcherEntity::animate(float delay)
   }
 
   EnnemyEntity::animate(delay);
+  z = y + 55;
 }
 
 void ButcherEntity::calculateBB()

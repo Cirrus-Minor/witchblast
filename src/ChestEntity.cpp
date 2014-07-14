@@ -35,7 +35,17 @@ void ChestEntity::animate(float delay)
 {
   CollidingSpriteEntity::animate(delay);
   if (!isOpen) testSpriteCollisions();
-  z = y + height/2;
+  z = y + height/2 - 5;
+}
+
+void ChestEntity::render(sf::RenderTarget* app)
+{
+  CollidingSpriteEntity::render(app);
+  if (game().getShowLogical())
+  {
+    displayBoundingBox(app);
+    displayCenterAndZ(app);
+  }
 }
 
 void ChestEntity::calculateBB()

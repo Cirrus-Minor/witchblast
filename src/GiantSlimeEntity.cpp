@@ -39,6 +39,8 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
+
+  sprite.setOrigin(64, 84);
 }
 
 void GiantSlimeEntity::changeToState(int n)
@@ -215,7 +217,6 @@ void GiantSlimeEntity::animate(float delay)
     }
   }
 
-
   if (state == 0) // walking
   {
     frame = ((int)(age * 2.0f)) % 2;
@@ -288,8 +289,6 @@ void GiantSlimeEntity::animate(float delay)
     }
   }
 
-  //EnnemyEntity::animate(delay);
-
   if (state == 6 && timer < 0.5f)
   {
     int fade = timer * 512;
@@ -302,14 +301,16 @@ void GiantSlimeEntity::animate(float delay)
     sprite.setColor(sf::Color(255, 255, 255, (2.0f - timer) * 512));
   else if (state == 7)
     sprite.setColor(sf::Color(255, 255, 255, 0));
+
+  z = y + 26;
 }
 
 void GiantSlimeEntity::calculateBB()
 {
     boundingBox.left = (int)x - width / 2 + GIANT_SLIME_BB_LEFT;
     boundingBox.width = width - GIANT_SLIME_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + GIANT_SLIME_BB_TOP;
-    boundingBox.height =  height - GIANT_SLIME_BB_HEIGHT_DIFF - GIANT_SLIME_BB_TOP;
+    boundingBox.top = (int)y - height / 2 + 40;
+    boundingBox.height =  height - 76;
 }
 
 
@@ -405,6 +406,12 @@ void GiantSlimeEntity::render(sf::RenderTarget* app)
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
                             app, 0, 0);
+
+  if (game().getShowLogical())
+  {
+    displayBoundingBox(app);
+    displayCenterAndZ(app);
+  }
 }
 
 void GiantSlimeEntity::collideWithEnnemy(GameEntity* collidingEntity)

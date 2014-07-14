@@ -37,7 +37,6 @@ int ItemEntity::getPrice()
 
 void ItemEntity::animate(float delay)
 {
-  z = y + height;
   CollidingSpriteEntity::animate(delay);
   if (age > 0.7f) testSpriteCollisions();
 
@@ -64,6 +63,7 @@ void ItemEntity::animate(float delay)
     isBeating = true;
     timer = HEART_BEAT_DELAY;
   }
+  z = y + height / 2;
 }
 
 void ItemEntity::render(sf::RenderTarget* app)

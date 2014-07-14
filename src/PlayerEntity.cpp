@@ -13,7 +13,7 @@
 #include <sstream>
 
 PlayerEntity::PlayerEntity(float x, float y)
-      : BaseCreatureEntity (ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
+  : BaseCreatureEntity (ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
 {
   currentFireDelay = -1.0f;
   canFirePlayer = true;
@@ -48,6 +48,8 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   firingDirection = 5;
   facingDirection = 2;
+
+  sprite.setOrigin(40, 104);
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -116,43 +118,43 @@ void PlayerEntity::pay(int price)
 
 void PlayerEntity::acquireItemAfterStance()
 {
-      if (acquiredItem >= FirstEquipItem)
-      {
-        equip[acquiredItem - FirstEquipItem] = true;
+  if (acquiredItem >= FirstEquipItem)
+  {
+    equip[acquiredItem - FirstEquipItem] = true;
 
-        if (items[acquiredItem].familiar > FamiliarNone)
-        {
-          setEquiped(acquiredItem - FirstEquipItem, true);
-        }
+    if (items[acquiredItem].familiar > FamiliarNone)
+    {
+      setEquiped(acquiredItem - FirstEquipItem, true);
+    }
 
-        if (items[acquiredItem].specialShot != (ShotTypeStandard))
-          registerSpecialShot(acquiredItem);
+    if (items[acquiredItem].specialShot != (ShotTypeStandard))
+      registerSpecialShot(acquiredItem);
 
-        computePlayer();
-      }
-      else
-      {
-        if (acquiredItem == itemBossHeart)
-        {
-          int hpBonus = 2 + rand() % 4;
-          hpMax += hpBonus;
-          hp += hpBonus;
-          hpDisplay += hpBonus;
+    computePlayer();
+  }
+  else
+  {
+    if (acquiredItem == itemBossHeart)
+    {
+      int hpBonus = 2 + rand() % 4;
+      hpMax += hpBonus;
+      hp += hpBonus;
+      hpDisplay += hpBonus;
 
-          SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      SoundManager::getSoundManager()->playSound(SOUND_EAT);
 
-          std::ostringstream oss;
-          oss << "HP Max +" << hpBonus;
-          TextEntity* text = new TextEntity(oss.str(), 14, x, y - 50.0f);
-          text->setColor(TextEntity::COLOR_FADING_GREEN);
-          text->setLifetime(4.0f);
-          text->setWeight(-80.0f);
-          text->setZ(2000);
-        }
-      }
-      spriteItem->setDying(true);
-      spriteItemStar->setDying(true);
-      playerStatus = playerStatusPlaying;
+      std::ostringstream oss;
+      oss << "HP Max +" << hpBonus;
+      TextEntity* text = new TextEntity(oss.str(), 14, x, y - 50.0f);
+      text->setColor(TextEntity::COLOR_FADING_GREEN);
+      text->setLifetime(4.0f);
+      text->setWeight(-80.0f);
+      text->setZ(2000);
+    }
+  }
+  spriteItem->setDying(true);
+  spriteItemStar->setDying(true);
+  playerStatus = playerStatusPlaying;
 }
 
 void PlayerEntity::animate(float delay)
@@ -221,7 +223,7 @@ void PlayerEntity::animate(float delay)
     game().moveToOtherMap(6);
   else if (y < OFFSET_Y)
     game().moveToOtherMap(8);
-  else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 16)
+  else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT)
     game().moveToOtherMap(2);
 
   if (playerStatus == playerStatusEntering)
@@ -239,6 +241,10 @@ void PlayerEntity::animate(float delay)
   if (playerStatus == playerStatusDead)
   {
     z = OFFSET_Y - 2;
+  }
+  else
+  {
+    z = y + 13;
   }
 }
 
@@ -358,13 +364,23 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
     sf::Color savedColor = sprite.getColor();
     switch (getShotType())
     {
-      case ShotTypeIce: sprite.setColor(sf::Color(100, 220, 255, 255)); break;
-      case ShotTypeStone: sprite.setColor(sf::Color(120, 120, 150, 255)); break;
-      case ShotTypeLightning: sprite.setColor(sf::Color(255, 255, 0, 255)); break;
+    case ShotTypeIce:
+      sprite.setColor(sf::Color(100, 220, 255, 255));
+      break;
+    case ShotTypeStone:
+      sprite.setColor(sf::Color(120, 120, 150, 255));
+      break;
+    case ShotTypeLightning:
+      sprite.setColor(sf::Color(255, 255, 0, 255));
+      break;
 
-      case ShotTypeIllusion: sprite.setColor(sf::Color(240, 180, 250, 255)); break;
+    case ShotTypeIllusion:
+      sprite.setColor(sf::Color(240, 180, 250, 255));
+      break;
 
-      case ShotTypeStandard: sprite.setColor(sf::Color(255, 255, 255, 0)); break;
+    case ShotTypeStandard:
+      sprite.setColor(sf::Color(255, 255, 255, 0));
+      break;
     }
 
     sprite.setTextureRect(sf::IntRect( xStone, yStone, width, height));
@@ -476,15 +492,15 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
 void PlayerEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2;
-    boundingBox.width = width;
-    boundingBox.top = (int)y - height / 2;
-    boundingBox.height =  height;
+  boundingBox.left = (int)x - width / 2;
+  boundingBox.width = width;
+  boundingBox.top = (int)y - height / 2;
+  boundingBox.height =  height;
 
-    boundingBox.left += 25;
-    boundingBox.width -= 50;
-    boundingBox.top += 80.0f;
-    boundingBox.height = boundingBox.height - 90.0f;
+  boundingBox.left += 25;
+  boundingBox.width -= 50;
+  boundingBox.top += 40.0f;
+  boundingBox.height = 38.0;
 }
 
 void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -545,14 +561,30 @@ void PlayerEntity::move(int direction)
     {
       switch (direction)
       {
-      case 8:  facingDirection = 8; break;
-      case 2:  facingDirection = 2; break;
-      case 4:  facingDirection = 4; break;
-      case 6:  facingDirection = 6; break;
-      case 7:  if (facingDirection != 4 && facingDirection != 8) facingDirection = 4; break;
-      case 1:  if (facingDirection != 4 && facingDirection != 2) facingDirection = 4; break;
-      case 9:  if (facingDirection != 6 && facingDirection != 8) facingDirection = 6; break;
-      case 3:  if (facingDirection != 6 && facingDirection != 2) facingDirection = 6; break;
+      case 8:
+        facingDirection = 8;
+        break;
+      case 2:
+        facingDirection = 2;
+        break;
+      case 4:
+        facingDirection = 4;
+        break;
+      case 6:
+        facingDirection = 6;
+        break;
+      case 7:
+        if (facingDirection != 4 && facingDirection != 8) facingDirection = 4;
+        break;
+      case 1:
+        if (facingDirection != 4 && facingDirection != 2) facingDirection = 4;
+        break;
+      case 9:
+        if (facingDirection != 6 && facingDirection != 8) facingDirection = 6;
+        break;
+      case 3:
+        if (facingDirection != 6 && facingDirection != 2) facingDirection = 6;
+        break;
       }
     }
   }
@@ -580,7 +612,7 @@ void PlayerEntity::setEquiped(int item, bool toggleEquipped)
                                          items[FirstEquipItem + item].familiar);
     fairies.push_back(fairy);
   }
-   computePlayer();
+  computePlayer();
 }
 
 void PlayerEntity::generateBolt(float velx, float vely)
@@ -591,25 +623,27 @@ void PlayerEntity::generateBolt(float velx, float vely)
   switch (getShotType())
   {
   case ShotTypeIce:
-      if (getShotType() == ShotTypeIce)
+    if (getShotType() == ShotTypeIce)
+    {
+      if (specialBoltTimer <= 0.0f)
       {
-        if (specialBoltTimer <= 0.0f)
-        {
-          boltType = ShotTypeIce;
-          shotLevel = getShotLevel();
-          needInitShotType = true;
-        }
-        else boltType = ShotTypeStandard;
+        boltType = ShotTypeIce;
+        shotLevel = getShotLevel();
+        needInitShotType = true;
       }
-      break;
+      else boltType = ShotTypeStandard;
+    }
+    break;
   case ShotTypeStandard:
   case ShotTypeIllusion:
   case ShotTypeStone:
   case ShotTypeLightning:
-    boltType = getShotType(); shotLevel = getShotLevel(); break;
+    boltType = getShotType();
+    shotLevel = getShotLevel();
+    break;
   }
 
-  BoltEntity* bolt = new BoltEntity(x, y + 30, boltLifeTime, boltType, shotLevel);
+  BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, boltType, shotLevel);
   bolt->setDamages(fireDamages);
   bolt->setVelocity(Vector2D(velx, vely));
 }
@@ -644,21 +678,29 @@ void PlayerEntity::fire(int direction)
           || (direction == 8 && velocity.y < -1.0f) || (direction == 2 && velocity.y > 1.0f))
         shoot_angle = 0.1f;
       else if ((direction == 6 && velocity.x < -1.0f) || (direction == 4 && velocity.x > 1.0f)
-          || (direction == 2 && velocity.y < -1.0f) || (direction == 8 && velocity.y > 1.0f))
+               || (direction == 2 && velocity.y < -1.0f) || (direction == 8 && velocity.y > 1.0f))
         shoot_angle = 0.35f;
 
       if (equip[EQUIP_VIBRATION_GLOVES]) shoot_angle += (1000 - rand() % 2000) * 0.0001f;
 
       switch(direction)
       {
-        case 4: generateBolt(-fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
-                generateBolt(-fireVelocity * cos(shoot_angle), - fireVelocity * sin(shoot_angle));break;
-        case 6: generateBolt(fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
-                generateBolt(fireVelocity * cos(shoot_angle), - fireVelocity * sin(shoot_angle));break;
-        case 8: generateBolt(fireVelocity * sin(shoot_angle), -fireVelocity * cos(shoot_angle));
-                generateBolt(-fireVelocity * sin(shoot_angle), - fireVelocity * cos(shoot_angle));break;
-        case 2: generateBolt(fireVelocity * sin(shoot_angle), fireVelocity * cos(shoot_angle));
-                generateBolt(-fireVelocity * sin(shoot_angle),  fireVelocity * cos(shoot_angle));break;
+      case 4:
+        generateBolt(-fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
+        generateBolt(-fireVelocity * cos(shoot_angle), - fireVelocity * sin(shoot_angle));
+        break;
+      case 6:
+        generateBolt(fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
+        generateBolt(fireVelocity * cos(shoot_angle), - fireVelocity * sin(shoot_angle));
+        break;
+      case 8:
+        generateBolt(fireVelocity * sin(shoot_angle), -fireVelocity * cos(shoot_angle));
+        generateBolt(-fireVelocity * sin(shoot_angle), - fireVelocity * cos(shoot_angle));
+        break;
+      case 2:
+        generateBolt(fireVelocity * sin(shoot_angle), fireVelocity * cos(shoot_angle));
+        generateBolt(-fireVelocity * sin(shoot_angle),  fireVelocity * cos(shoot_angle));
+        break;
       }
     }
     else
@@ -668,20 +710,36 @@ void PlayerEntity::fire(int direction)
         float shoot_angle = (1000 - rand() % 2000) * 0.0001f;
         switch(direction)
         {
-          case 4: generateBolt(-fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle)); break;
-          case 6: generateBolt(fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle)); break;
-          case 8: generateBolt(fireVelocity * sin(shoot_angle), -fireVelocity * cos(shoot_angle)); break;
-          case 2: generateBolt(fireVelocity * sin(shoot_angle), fireVelocity * cos(shoot_angle)); break;
+        case 4:
+          generateBolt(-fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
+          break;
+        case 6:
+          generateBolt(fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
+          break;
+        case 8:
+          generateBolt(fireVelocity * sin(shoot_angle), -fireVelocity * cos(shoot_angle));
+          break;
+        case 2:
+          generateBolt(fireVelocity * sin(shoot_angle), fireVelocity * cos(shoot_angle));
+          break;
         }
       }
       else
       {
         switch(direction)
         {
-          case 4: generateBolt(-fireVelocity, 0.0f); break;
-          case 6: generateBolt(fireVelocity, 0.0f); break;
-          case 8: generateBolt(0.0f, -fireVelocity); break;
-          case 2: generateBolt(0.0f, fireVelocity); break;
+        case 4:
+          generateBolt(-fireVelocity, 0.0f);
+          break;
+        case 6:
+          generateBolt(fireVelocity, 0.0f);
+          break;
+        case 8:
+          generateBolt(0.0f, -fireVelocity);
+          break;
+        case 2:
+          generateBolt(0.0f, fireVelocity);
+          break;
         }
       }
     }
@@ -764,27 +822,37 @@ void PlayerEntity::acquireItem(enumItemType type)
 {
   if (items[type].generatesStance) acquireStance(type);
   else switch (type)
-  {
-    case ItemCopperCoin: gold++;
-    SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
-    break;
-    case ItemSilverCoin: gold = gold + 5;
-    SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
-    break;
-    case ItemGoldCoin: gold = gold + 10;
-    SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
-    break;
-    case itemHealthVerySmall: hp += 3;
+    {
+    case ItemCopperCoin:
+      gold++;
+      SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
+      break;
+    case ItemSilverCoin:
+      gold = gold + 5;
+      SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
+      break;
+    case ItemGoldCoin:
+      gold = gold + 10;
+      SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
+      break;
+    case itemHealthVerySmall:
+      hp += 3;
       SoundManager::getSoundManager()->playSound(SOUND_EAT);
-      if (hp > hpMax) hp = hpMax;  break;
-    case itemHealthSmall: hp += 7;
+      if (hp > hpMax) hp = hpMax;
+      break;
+    case itemHealthSmall:
+      hp += 7;
       SoundManager::getSoundManager()->playSound(SOUND_EAT);
-      if (hp > hpMax) hp = hpMax;  break;
-    case itemHealth: hp += 15;
+      if (hp > hpMax) hp = hpMax;
+      break;
+    case itemHealth:
+      hp += 15;
       SoundManager::getSoundManager()->playSound(SOUND_EAT);
-      if (hp > hpMax) hp = hpMax;  break;
-    default: break;
-  }
+      if (hp > hpMax) hp = hpMax;
+      break;
+    default:
+      break;
+    }
 }
 
 void PlayerEntity::computePlayer()
@@ -849,21 +917,21 @@ void PlayerEntity::acquireStance(enumItemType type)
     itemImage = IMAGE_ITEMS_EQUIP;
   }
 
-            spriteItem = new SpriteEntity(
-                            ImageManager::getImageManager()->getImage(itemImage),
-                            x, y - 60.0f, ITEM_WIDTH, ITEM_HEIGHT);
-            spriteItem->setFrame((int)itemFrame);
-            spriteItem->setImagesProLine(10);
-            spriteItem->setZ(z);
-            spriteItem->setLifetime(ACQUIRE_DELAY);
+  spriteItem = new SpriteEntity(
+    ImageManager::getImageManager()->getImage(itemImage),
+    x, y - 100.0f, ITEM_WIDTH, ITEM_HEIGHT);
+  spriteItem->setFrame((int)itemFrame);
+  spriteItem->setImagesProLine(10);
+  spriteItem->setZ(z);
+  spriteItem->setLifetime(ACQUIRE_DELAY);
 
-            spriteItemStar = new SpriteEntity(
-                           ImageManager::getImageManager()->getImage(IMAGE_STAR),
-                            x, y - 60.0f);
-            spriteItemStar->setScale(4.0f, 4.0f);
-            spriteItemStar->setZ(z-1.0f);
-            spriteItemStar->setLifetime(ACQUIRE_DELAY);
-            spriteItemStar->setSpin(50.0f);
+  spriteItemStar = new SpriteEntity(
+    ImageManager::getImageManager()->getImage(IMAGE_STAR),
+    x, y - 100.0f);
+  spriteItemStar->setScale(4.0f, 4.0f);
+  spriteItemStar->setZ(z-1.0f);
+  spriteItemStar->setLifetime(ACQUIRE_DELAY);
+  spriteItemStar->setSpin(50.0f);
 }
 
 void PlayerEntity::collideMapRight()
@@ -898,8 +966,8 @@ void PlayerEntity::useBossKey()
 
 
   SpriteEntity* spriteItem = new SpriteEntity(
-                          ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP),
-                          x, y - 60.0f, ITEM_WIDTH, ITEM_HEIGHT);
+    ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP),
+    x, y - 100.0f, ITEM_WIDTH, ITEM_HEIGHT);
   spriteItem->setFrame(EQUIP_BOSS_KEY);
   spriteItem->setZ(z);
   spriteItem->setLifetime(UNLOCK_DELAY);

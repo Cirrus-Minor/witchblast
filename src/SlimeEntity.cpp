@@ -50,6 +50,7 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
   h = 0.0f;
 
   viscosity = 0.98f;
+  sprite.setOrigin(32, 44);
 }
 
 void SlimeEntity::animate(float delay)
@@ -122,6 +123,7 @@ void SlimeEntity::animate(float delay)
   }
 
   EnnemyEntity::animate(delay);
+  z = y + 14;
 }
 
 void SlimeEntity::render(sf::RenderTarget* app)
@@ -137,27 +139,18 @@ void SlimeEntity::render(sf::RenderTarget* app)
   sprite.setTextureRect(sf::IntRect(frame * width, slimeType * height, width, height));
   app->draw(sprite);
 
-  #ifdef SHOW_BOUNDING_BOX
-  sf::Vertex line[] =
+  if (game().getShowLogical())
   {
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top))
-  };
-  app->draw(line, 8, sf::Lines);
-  #endif
+    displayBoundingBox(app);
+    displayCenterAndZ(app);
+  }
 }
 
 void SlimeEntity::calculateBB()
 {
     boundingBox.left = (int)x - width / 2 + SLIME_BB_LEFT;
     boundingBox.width = width - SLIME_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + SLIME_BB_TOP;
+    boundingBox.top = (int)y - height / 2 + SLIME_BB_TOP - 15;
     boundingBox.height =  height - SLIME_BB_HEIGHT_DIFF;
 }
 

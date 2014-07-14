@@ -177,7 +177,7 @@ PlayerEntity* WitchBlastGame::getPlayer()
 
 Vector2D WitchBlastGame::getPlayerPosition()
 {
-  return Vector2D(player->getX(), player->getY() + 30);
+  return Vector2D(player->getX(), player->getY());
 }
 
 int WitchBlastGame::getLevel()
@@ -1086,7 +1086,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
     {
       case (4): floorX--;  player->moveTo((OFFSET_X + MAP_WIDTH * TILE_WIDTH), player->getY()); player->move(4);  break;
       case (6): floorX++;  player->moveTo(OFFSET_X, player->getY()); player->move(6); break;
-      case (8): floorY--;  player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT - 20); player->move(8); break;
+      case (8): floorY--;  player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT/* - 20*/); player->move(8); break;
       case (2): floorY++;  player->moveTo(player->getX(), OFFSET_Y);  break;
     }
     refreshMap();

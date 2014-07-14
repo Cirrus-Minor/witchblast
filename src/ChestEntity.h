@@ -8,6 +8,7 @@ class ChestEntity : public CollidingSpriteEntity
   public:
     ChestEntity(float x, float y, int chestType, bool isOpen);
     virtual void animate(float delay);
+    virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
 
     void open();
