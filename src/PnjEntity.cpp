@@ -58,9 +58,9 @@ void PnjEntity::animate(float delay)
       int r = rand() % 3;
       switch (r)
       {
-        case 0: speech = "Best price in entire dungeon !"; break;
-        case 1: speech = "Welcome in deep deep stores !"; break;
-        case 2: speech = "Have look to our merchandise !"; break;
+        case 0: speech = "Best price in entire dungeon!"; break;
+        case 1: speech = "Welcome to Deep Deep Stores!"; break;
+        case 2: speech = "Have a look at our merchandise!"; break;
       }
     }
   }
@@ -74,7 +74,7 @@ void PnjEntity::animate(float delay)
     frame = 0 + (int)(4 * age) % 2;
     headFrame = 2;
   }
-  z = y + height / 2;
+  z = y + height / 2 - 3;
 
   SpriteEntity::animate(delay);
 }
@@ -98,5 +98,10 @@ void PnjEntity::render(sf::RenderTarget* app)
   if (isSpeaking)
   {
     game().write(speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app, 0 , 0);
+  }
+
+  if (game().getShowLogical())
+  {
+    displayCenterAndZ(app);
   }
 }
