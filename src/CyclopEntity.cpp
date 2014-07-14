@@ -32,6 +32,7 @@ CyclopEntity::CyclopEntity(float x, float y)
   dyingSound = SOUND_CYCLOP_DIE;
   frame = 0;
   if (game().getPlayerPosition().x > x) isMirroring = true;
+  sprite.setOrigin(64.0f, 128.0f);
 
   nextRockMissile = 0;
   destroyLevel = 0;
@@ -55,7 +56,7 @@ int CyclopEntity::getHealthLevel()
 
 void CyclopEntity::fire()
 {
-  new RockMissileEntity(x, y+30, nextRockMissile);
+  new RockMissileEntity(x, y - 62, nextRockMissile);
   SoundManager::getSoundManager()->playSound(SOUND_THROW);
 }
 
@@ -108,7 +109,7 @@ void CyclopEntity::computeStates(float delay)
         counter--;
         timer = 0.5f;
         creatureSpeed = CYCLOP_SPEED[getHealthLevel()];
-        setVelocity(Vector2D(x + 32, y + 96).vectorTo(game().getPlayerPosition(), creatureSpeed ));
+        setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       }
       else
       {
@@ -254,6 +255,8 @@ void CyclopEntity::animate(float delay)
     isMirroring = true;
   else if (velocity.x < -1.0f)
     isMirroring = false;
+
+  z = OFFSET_Y + y + 46;
 }
 
 bool CyclopEntity::hurt(int damages, enumShotType hurtingType, int level)
@@ -263,9 +266,9 @@ bool CyclopEntity::hurt(int damages, enumShotType hurtingType, int level)
 
 void CyclopEntity::calculateBB()
 {
-  boundingBox.left = OFFSET_X + (int)x - width / 2 + 64;
+  boundingBox.left = OFFSET_X + (int)x - 32;
   boundingBox.width = 58;
-  boundingBox.top = OFFSET_Y + (int)y - height / 2 + 152;
+  boundingBox.top = OFFSET_Y + (int)y - 42;
   boundingBox.height =  90;
 }
 

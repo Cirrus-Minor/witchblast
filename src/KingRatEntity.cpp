@@ -212,6 +212,8 @@ void KingRatEntity::animate(float delay)
     if (r == 1) frame = 1;
     else if (r == 3) frame = 2;
   }
+
+  z = y + 52;
 }
 
 bool KingRatEntity::hurt(int damages, enumShotType hurtingType, int level)
