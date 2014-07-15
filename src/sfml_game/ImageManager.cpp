@@ -38,7 +38,7 @@ ImageManager::~ImageManager()
    return &singleton;
  }
 
-void ImageManager::addImage(char* fileName)
+void ImageManager::addImage(const char* fileName)
 {
     sf::Texture* newImage = new sf::Texture;
     newImage->loadFromFile(fileName);

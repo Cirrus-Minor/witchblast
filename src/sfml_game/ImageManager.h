@@ -23,7 +23,7 @@ class ImageManager
 {
 public:
     static ImageManager* getImageManager();
-    void addImage(char* fileName);
+    void addImage(const char *fileName);
     bool reloadImage(int n, const char* fileName);
     sf::Texture* getImage(int n);
 

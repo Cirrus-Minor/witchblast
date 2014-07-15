@@ -42,7 +42,7 @@ SoundManager::~SoundManager()
    return &singleton;
  }
 
-void SoundManager::addSound(char* fileName)
+void SoundManager::addSound(const char* fileName)
 {
     //std::cout << "Loading sound: " << fileName << "...\n";
 
