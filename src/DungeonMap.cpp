@@ -147,6 +147,21 @@ bool DungeonMap::isShootable(int x, int y)
   return (map[x][y] < MAP_WALL);
 }
 
+bool DungeonMap::containsHealth()
+{
+  ItemList::iterator it;
+  for (it = itemList.begin (); it != itemList.end ();)
+  {
+    itemListElement ilm = *it;
+    it++;
+
+    if (ilm.type >= itemHealthVerySmall && ilm.type <= itemHealth)
+      return true;
+	}
+
+  return false;
+}
+
 void DungeonMap::randomize(int n)
 {
   int i, j;

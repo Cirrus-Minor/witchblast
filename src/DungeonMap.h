@@ -65,6 +65,8 @@ class DungeonMap : public GameMap
     bool isFlyable(int x, int y);
     bool isShootable(int x, int y);
 
+    bool containsHealth();
+
     // 0 == no, 1 == yes, 2 == boss
     int hasNeighbourLeft();
     int hasNeighbourRight();
