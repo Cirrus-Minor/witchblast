@@ -1,13 +1,7 @@
     WITCH BLAST
 ============================
-Author / code: Seby
+Author / code - art - music: Seby
 Email: sebygames@gmail.com
-
-Art: Sideous
-Email: bianchi.jonathan94@gmail.com
-and Seby
-
-Music: Seby
 
 2014
 ============================
@@ -64,12 +58,19 @@ Features
 Thanks
 --------
 Thanks to
+Sideous (for the main character design and graphics)
 Billx (who suggested me the title "Witch Blast")
 Ruth (for the english corrections)
 Mika Attila (for his contribution concerning the Linux version)
 
 Changes
 -------
+
+Next version
+- ADD New tiles : holes
+- ADD Display of health items on the minimap
+- MOD Health items drop's rate decreases
+- FIX Sprite center and Z-order 
 
 v0.2.5
 - ADD New mini-boss
