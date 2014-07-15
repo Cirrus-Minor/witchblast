@@ -19,7 +19,20 @@ const int MAP_WALL_1        =   57;
 const int MAP_WALL_2        =   58;
 const int MAP_WALL_3        =   59;
 const int MAP_GRID          =   29;
+const int MAP_HOLE          =   80;
+const int MAP_HOLE_7        =   80;
+const int MAP_HOLE_8        =   81;
+const int MAP_HOLE_9        =   82;
+const int MAP_HOLE_4        =   90;
+const int MAP_HOLE_5        =   91;
+const int MAP_HOLE_6        =   92;
+const int MAP_HOLE_1        =   100;
+const int MAP_HOLE_2        =   101;
+const int MAP_HOLE_3        =   102;
+const int MAP_HOLE_SINGLE   =   94;
 
+const int ROOM_TYPE_CHECKER = 4;
+const int ROOM_TYPE_ALL     = 5;
 
 class GameFloor;
 
@@ -66,7 +79,9 @@ class DungeonMap : public GameMap
     virtual void randomize(int n);
     void initRoom();
     void generateCarpet(int x0, int y0, int w, int h, int n);
-    void generateRoom(int type);
+    void generateRoomRandom(int type);
+    void generateRoomWithoutHoles(int type);
+    void generateRoomWithHoles(int type);
     void generateExitRoom();
     Vector2D generateBonusRoom();
     Vector2D generateMerchantRoom();

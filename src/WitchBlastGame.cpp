@@ -1248,7 +1248,7 @@ void WitchBlastGame::generateMap()
   }
   else if (currentMap->getRoomType() == roomTypeBoss)
   {
-    currentMap->generateRoom(0);
+    currentMap->generateRoomWithoutHoles(0);
 
     if (level == 1)
       new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
@@ -1267,7 +1267,7 @@ void WitchBlastGame::generateMap()
   }
   else if (currentMap->getRoomType() == roomTypeStarting)
   {
-    currentMap->generateRoom(0);
+    currentMap->generateRoomWithoutHoles(0);
     currentMap->setCleared(true);
     int bonusType = getRandomEquipItem(false);
   }

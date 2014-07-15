@@ -143,6 +143,7 @@ bool DungeonMap::isFlyable(int x, int y)
 bool DungeonMap::isShootable(int x, int y)
 {
   if (!inMap(x, y)) return true;
+  if (map[x][y] >=  MAP_HOLE) return true;
   return (map[x][y] < MAP_WALL);
 }
 
@@ -369,7 +370,13 @@ void DungeonMap::generateExitRoom()
   map[x0 + 1][0] = 61;
 }
 
-void DungeonMap::generateRoom(int type)
+void DungeonMap::generateRoomRandom(int type)
+{
+  if (rand() % 3 == 0) generateRoomWithHoles(type);
+  else generateRoomWithoutHoles(type);
+}
+
+void DungeonMap::generateRoomWithoutHoles(int type)
 {
   initRoom();
   int x0 = MAP_WIDTH / 2;
@@ -426,12 +433,98 @@ void DungeonMap::generateRoom(int type)
       }
 
   }
-  if (type == 4)
+  if (type == ROOM_TYPE_CHECKER)
   {
     // "checker"
     for (i = 2; i < MAP_WIDTH - 2; i = i + 2)
       for (j = 2; j < MAP_HEIGHT - 2; j = j + 2)
         map[i][j] = MAP_WALL;
+  }
+}
+
+void DungeonMap::generateRoomWithHoles(int type)
+{
+  initRoom();
+  int x0 = MAP_WIDTH / 2;
+  int y0 = MAP_HEIGHT / 2;
+  int i, j, r;
+
+  if (type == 0)
+  {
+    if (roomType == roomTypeStarting)
+    {
+      generateCarpet(5, 3, 5, 3, 30);
+
+      if (game().getLevel() > 1)
+      {
+        map[x0 - 1][MAP_HEIGHT - 1] = 62;
+        map[x0][MAP_HEIGHT - 1]     = 63;
+        map[x0 + 1][MAP_HEIGHT - 1] = 64;
+      }
+    }
+    if (roomType == roomTypeBoss && game().getLevel() == 2) // giant slime
+    {
+    map[1][1] = MAP_GRID;
+    map[1][MAP_HEIGHT -2] = MAP_GRID;
+    map[MAP_WIDTH - 2][1] = MAP_GRID;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
+    }
+  }
+  if (type == 1)
+  {
+    // corner hole
+    map[1][1] = MAP_HOLE_7;
+    map[1][MAP_HEIGHT -2] = MAP_HOLE_1;
+    map[MAP_WIDTH - 2][1] = MAP_HOLE_9;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_HOLE_3;
+  }
+  if (type == 2)
+  {
+    // blocks in the middle
+    r = 1 + rand() % 3;
+    for (i = x0 - r; i <= x0 + r; i++)
+      for (j = y0 - 1; j <= y0 + 1; j++)
+      {
+        if (i == x0 - r && j == y0 - 1) map[i][j] = MAP_HOLE_7;
+        else if (i == x0 - r && j == y0 + 1) map[i][j] = MAP_HOLE_4; //MAP_HOLE_1;
+        else if (i == x0 - r) map[i][j] = MAP_HOLE_4;
+        else if (i == x0 + r && j == y0 - 1) map[i][j] = MAP_HOLE_8; //MAP_HOLE_9;
+        else if (i == x0 + r && j == y0 + 1) map[i][j] = MAP_HOLE_5; //MAP_HOLE_3;
+        else if (i == x0 + r) map[i][j] = MAP_HOLE_5; //MAP_HOLE_6;
+        else if (j == y0 - 1) map[i][j] = MAP_HOLE_8;
+        else if (j == y0 + 1) map[i][j] = MAP_HOLE_5; //MAP_HOLE_2;
+        else map[i][j] = MAP_HOLE_5;
+      }
+  }
+  if (type == 3)
+  {
+    // 4 holes
+    map[2][2] = MAP_HOLE_7;
+    map[2][3] = MAP_HOLE_4;
+    map[3][2] = MAP_HOLE_8;
+    map[3][3] = MAP_HOLE_5;
+
+    map[MAP_WIDTH - 4][2] = MAP_HOLE_7;
+    map[MAP_WIDTH - 4][3] = MAP_HOLE_4;
+    map[MAP_WIDTH - 3][2] = MAP_HOLE_8;
+    map[MAP_WIDTH - 3][3] = MAP_HOLE_5;
+
+    map[2][MAP_HEIGHT - 4] = MAP_HOLE_7;
+    map[2][MAP_HEIGHT - 3] = MAP_HOLE_4;
+    map[3][MAP_HEIGHT - 4] = MAP_HOLE_8;
+    map[3][MAP_HEIGHT - 3] = MAP_HOLE_5;
+
+    map[MAP_WIDTH - 4][MAP_HEIGHT - 4] = MAP_HOLE_7;
+    map[MAP_WIDTH - 4][MAP_HEIGHT - 3] = MAP_HOLE_4;
+    map[MAP_WIDTH - 3][MAP_HEIGHT - 4] = MAP_HOLE_8;
+    map[MAP_WIDTH - 3][MAP_HEIGHT - 3] = MAP_HOLE_5;
+  }
+  if (type == 4)
+  {
+    // "checker"
+    for (i = 2; i < MAP_WIDTH - 2; i = i + 2)
+      for (j = 2; j < MAP_HEIGHT - 2; j = j + 2)
+        map[i][j] = MAP_HOLE_7;
   }
 }
 
