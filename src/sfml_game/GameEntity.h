@@ -53,6 +53,7 @@ public:
 	Vector2D getVelocity();
 	float getAge();
 	int getType();
+	float getLifetime();
 
 	// mutators
 	void setX(float x);

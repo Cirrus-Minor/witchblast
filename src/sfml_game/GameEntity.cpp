@@ -61,6 +61,7 @@ float GameEntity::getZ() { return z; }
 float GameEntity::getAge() { return age; }
 int GameEntity::getType() { return type; }
 Vector2D GameEntity::getVelocity() { return Vector2D(velocity.x, velocity.y); }
+float GameEntity::getLifetime() { return lifetime; }
 
 void GameEntity::setX(float x) { this->x = x; }
 void GameEntity::setY(float y) { this->y = y; }

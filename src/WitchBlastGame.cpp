@@ -194,6 +194,7 @@ void WitchBlastGame::onUpdate()
 {
   if (!isPausing)
   {
+    checkFallingEntities();
     EntityManager::getEntityManager()->animate(deltaTime);
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
     {
@@ -1939,6 +1940,35 @@ void WitchBlastGame::buildMenu()
   itemExit.description = "Return to the desktop";
   itemExit.id = MenuExit;
   menu.items.push_back(itemExit);
+}
+
+void WitchBlastGame::checkFallingEntities()
+{
+  int n=0;
+
+  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList::iterator it;
+
+	for (it = entityList->begin (); it != entityList->end ();)
+	{
+		GameEntity *e = *it;
+		it++;
+
+		if (e->getLifetime() < 0.8f && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE))
+		{
+		  int tilex = (e->getX() - OFFSET_X) / TILE_WIDTH;
+		  int tiley = (e->getY() - OFFSET_Y) / TILE_HEIGHT;
+
+		  if (currentMap->getTile(tilex, tiley) >= MAP_HOLE)
+      {
+        SpriteEntity* spriteEntity = dynamic_cast<SpriteEntity*>(e);
+        spriteEntity->setAge(0.0f);
+        spriteEntity->setLifetime(3.0f);
+        spriteEntity->setShrinking(true);
+        spriteEntity->setFading(true);
+      }
+		}
+	}
 }
 
 WitchBlastGame &game()

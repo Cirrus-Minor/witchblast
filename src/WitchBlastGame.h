@@ -547,6 +547,11 @@ private:
    *  \brief Switch to the menu
    */
   void switchToMenu();
+
+  /*!
+   *  \brief Check for falling (in holes) blood or bodies
+   */
+  void checkFallingEntities();
 };
 
 /*!
