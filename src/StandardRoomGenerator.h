@@ -71,7 +71,7 @@ void generateStandardRoom02()
   }
   else if (random < 80)
   {
-    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(MONSTER_RAT,3);
     game().findPlaceMonsters(MONSTER_BAT,3);
   }
