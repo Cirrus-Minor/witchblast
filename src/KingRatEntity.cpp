@@ -21,10 +21,14 @@ KingRatEntity::KingRatEntity(float x, float y)
   hpDisplay = hp;
   hpMax = KING_RAT_HP;
   meleeDamages = KING_RAT_DAMAGES;
+  imagesProLine = 5;
 
   type = ENTITY_ENNEMY_BOSS;
   bloodColor = bloodRed;
   shadowFrame = 4;
+  dyingFrame = 5;
+  deathFrame = FRAME_CORPSE_KING_RAT;
+  dyingSound = SOUND_KING_RAT_DIE;
   frame = 0;
   if (game().getPlayerPosition().x > x) sprite.setScale(-1.0f, 1.0f);
   sprite.setOrigin(64.0f, 64.0f);
@@ -46,6 +50,29 @@ void KingRatEntity::animate(float delay)
   if (age <= 0.0f)
   {
     age += delay;
+    return;
+  }
+
+ if (isAgonising)
+  {
+    if (h < -0.01f)
+    {
+      isDying = true;
+      SpriteEntity* corpse;
+      corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y + 48, 128, 128);
+      corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
+
+      corpse->setZ(OFFSET_Y);
+      corpse->setType(ENTITY_CORPSE);
+      if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
+    }
+    else
+    {
+      frame = dyingFrame;
+      hVelocity -= 700.0f * delay;
+      h += hVelocity * delay;
+    }
+
     return;
   }
 
@@ -223,7 +250,7 @@ bool KingRatEntity::hurt(int damages, enumShotType hurtingType, int level)
   if (state == 6)
     newDamages = damages / 4;
 
-   return BaseCreatureEntity::hurt(newDamages, hurtingType, level);
+   return EnnemyEntity::hurt(newDamages, hurtingType, level);
 }
 
 void KingRatEntity::calculateBB()
@@ -276,19 +303,8 @@ void KingRatEntity::collideMapBottom()
   afterWallCollide();
 }
 
-
-void KingRatEntity::dying()
+void KingRatEntity::drop()
 {
-  isDying = true;
-  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
-  deadRat->setZ(OFFSET_Y);
-  deadRat->setFrame(FRAME_CORPSE_KING_RAT - FRAME_CORPSE_KING_RAT);
-  deadRat->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 10; i++) game().generateBlood(x, y, bloodColor);
-
-  SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_DIE);
-
   ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);

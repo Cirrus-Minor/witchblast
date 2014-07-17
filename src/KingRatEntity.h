@@ -23,7 +23,7 @@ class KingRatEntity : public EnnemyEntity
     void generateGreenRats();
 
 	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
-	  virtual void dying();
+	  virtual void drop();
   private:
     float timer;
     float berserkDelay;
