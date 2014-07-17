@@ -310,7 +310,7 @@ void CyclopEntity::dying()
 
 void CyclopEntity::drop()
 {
-  ItemEntity* newItem = new ItemEntity(itemBossHeart, x + 32, y + 96);
+  ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
 }
