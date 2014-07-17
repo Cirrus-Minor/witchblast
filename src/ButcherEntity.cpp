@@ -33,6 +33,9 @@ ButcherEntity::ButcherEntity(float x, float y)
   timer = (rand() % 50) / 10.0f;
   age = -1.5f;
   frame = 0;
+
+  resistance[ResistanceFrozen] = ResistanceHigh;
+  resistance[ResistanceRecoil] = ResistanceHigh;
 }
 
 void ButcherEntity::animate(float delay)
