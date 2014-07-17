@@ -382,4 +382,15 @@ void KingRatEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), KING_RAT_RUNNING_RECOIL );
     targetEntity->giveRecoil(true, recoilVector, 1.0f);
   }
+
+  if (state == 6)
+  {
+    PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(targetEntity);
+
+    if (playerEntity != NULL && !playerEntity->isDead())
+    {
+      Vector2D recoilVector = Vector2D(targetEntity->getX(), targetEntity->getY()).vectorTo(Vector2D(x, y), KING_RAT_RUNNING_RECOIL);
+      giveRecoil(true, recoilVector, 1.0f);
+    }
+  }
 }
