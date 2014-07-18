@@ -17,6 +17,8 @@ class FallingRockEntity : public EnnemyEntity
   private:
     int rockType;
     int h;
+    bool jumping;
+    float hVelocity;
 };
 
 #endif // FALLINGROCKENTITY_H

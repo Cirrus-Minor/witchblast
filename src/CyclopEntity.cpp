@@ -261,6 +261,7 @@ void CyclopEntity::animate(float delay)
 
 bool CyclopEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
+  if (destroyLevel < getHealthLevel()) damages /= 3;
   return EnnemyEntity::hurt(damages, hurtingType, level);
 }
 

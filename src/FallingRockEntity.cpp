@@ -19,6 +19,8 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
   age = 0.0f;
   h = 1800 + rand() % 1000;
   hp = 24;
+  jumping = false;
+  hVelocity = 0.0f;
 
   this->rockType = rockType;
 
@@ -32,9 +34,24 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
 
 void FallingRockEntity::animate(float delay)
 {
-  h -= delay * 750.0f;
-  if (canCollide()) testSpriteCollisions();
-  if (h <= 0.0f) dying();
+  if (jumping)
+  {
+    hVelocity -= 700.0f * delay;
+    h += hVelocity * delay;
+
+    if (h <= 0.0f) dying();
+  }
+  else
+  {
+    h -= delay * 750.0f;
+    if (canCollide()) testSpriteCollisions();
+    if (h <= 0.0f)
+    {
+      hVelocity = 250.0f;
+      jumping = true;
+    }
+  }
+
 }
 
 void FallingRockEntity::render(sf::RenderTarget* app)
