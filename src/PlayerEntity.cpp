@@ -670,7 +670,7 @@ void PlayerEntity::fire(int direction)
   {
     SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
 
-    if (equip[EQUIP_BOOK_DUAL])
+    if (equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE])
     {
       float shoot_angle = 0.2f;
 
@@ -703,7 +703,7 @@ void PlayerEntity::fire(int direction)
         break;
       }
     }
-    else
+    if (!equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE])
     {
       if (equip[EQUIP_VIBRATION_GLOVES])
       {
@@ -867,7 +867,8 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
-  if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.6f;
+  if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
+  else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
   if (equip[EQUIP_CONCENTRATION_AMULET]) boltLifeTimeBonus += 0.5f;
   if (equip[EQUIP_MAHOGANY_STAFF])
   {

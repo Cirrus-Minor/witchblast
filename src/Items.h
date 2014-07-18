@@ -68,7 +68,8 @@ enum enumItemType
   ItemRingIce,
   ItemRingStone,
   ItemRingLightning,
-  ItemRingIllusion
+  ItemRingIllusion,
+  ItemBookTripleShots
 };
 
 const int FirstEquipItem = (int) ItemMagicianHat; /*!< Used as an offset when creating items */
@@ -96,7 +97,7 @@ struct itemStuct
   enumShotType specialShot;     /**< Special shot */
 };
 
-const int NUMBER_ITEMS = 26;  /*!< Total number of items */
+const int NUMBER_ITEMS = 27;  /*!< Total number of items */
 /** Array with all the items and data */
 const itemStuct items[NUMBER_ITEMS] =
 {
@@ -203,10 +204,14 @@ const itemStuct items[NUMBER_ITEMS] =
   {
     ItemRingIllusion, "Quartz Ring", "Increases illusion power",
     45, true, FamiliarNone, true, true, true, 4, RarityUnommon, AlignmentNone, ItemGemIllusion, ShotTypeStandard
+  },
+  {
+    ItemBookTripleShots, "Spell : Triple Bolts", "Shoots three bolts",
+    50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard
   }
 };
 
-const int NUMBER_EQUIP_ITEMS = 19;  /*!< Number of equip items */
+const int NUMBER_EQUIP_ITEMS = 20;  /*!< Number of equip items */
 /** Item equipment type enum
  *  All the equipments.
  */
@@ -229,7 +234,8 @@ enum item_equip_enum {
   EQUIP_RING_ICE,
   EQUIP_RING_STONE,
   EQUIP_RING_LIGHTNING,
-  EQUIP_RING_ILLUSION
+  EQUIP_RING_ILLUSION,
+  EQUIP_BOOK_TRIPLE
   };
 
 #endif
