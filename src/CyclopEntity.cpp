@@ -356,7 +356,7 @@ void CyclopEntity::render(sf::RenderTarget* app)
   rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
   app->draw(rectangle);
 
-  game().write(          "Cimmerian Cyclop",
+  game().write(          "Cimmerian Cyclops",
                          18,
                          OFFSET_X + TILE_WIDTH / 2 + 10.0f,
                          OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
