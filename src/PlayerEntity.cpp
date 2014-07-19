@@ -660,13 +660,14 @@ void PlayerEntity::rageFire()
 {
   for (int i = -1; i <= 1; i += 2)
     for (int j = -1; j <= 1; j += 2)
-  {
-    BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeFire, 0);
-    bolt->setDamages(10);
-    float velx = fireVelocity * i * 0.4f;
-    float vely = fireVelocity * j * 0.4f;
-    bolt->setVelocity(Vector2D(velx, vely));
-  }
+    {
+      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeFire, 0);
+      bolt->setDamages(10);
+      float velx = fireVelocity * i * 0.4f;
+      float vely = fireVelocity * j * 0.4f;
+      bolt->setVelocity(Vector2D(velx, vely));
+    }
+  SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
 }
 
 void PlayerEntity::resestFireDirection()
