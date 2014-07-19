@@ -22,11 +22,15 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
   fireDelay = -1.0f;
   facingDirection = 2;
 
+  fairyDamages = FAIRY_BOLT_DAMAGES;
+
   shotLevel = 1;
   switch (fairyType)
   {
+    case FamiliarFairyTarget:
     case FamiliarFairy: shotType = ShotTypeStandard; fairyFireDelay = FAIRY_FIRE_DELAY; break;
     case FamiliarFairyIce: shotType = ShotTypeIce; fairyFireDelay = ICE_FAIRY_FIRE_DELAY; break;
+    case FamiliarFairyFire: shotType = ShotTypeFire; fairyFireDelay = FAIRY_FIRE_DELAY; fairyDamages = FAIRY_FIRE_DAMAGES; break;
 
     case FamiliarNone: break;
   }
@@ -99,6 +103,13 @@ void FairyEntity::fire(int dir, GameMap* map)
     bolt->setDamages(FAIRY_BOLT_DAMAGES);
     bolt->setVelocity(Vector2D(velx, vely));
     bolt->setFlying(true);
+
+    if (fairyType == FamiliarFairyTarget)
+    {
+      Vector2D target = game().getNearestEnnemy(x, y);
+      if (target.x > -1.0f)
+        bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
+    }
   }
 }
 

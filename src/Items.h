@@ -31,9 +31,11 @@ enum enumRarity
  */
 enum enumFamiliar
 {
-  FamiliarNone = -1,     /**< No familiar */
-  FamiliarFairy,    /**< Standard Fairy */
-  FamiliarFairyIce  /**< Ice Fairy */
+  FamiliarNone = -1,    /**< No familiar */
+  FamiliarFairy,        /**< Standard Fairy */
+  FamiliarFairyIce,     /**< Ice Fairy */
+  FamiliarFairyFire,    /**< Fire Fairy */
+  FamiliarFairyTarget   /**< Target Fairy */
 };
 const int FAIRY_NUMBER = 2;
 
@@ -70,7 +72,9 @@ enum enumItemType
   ItemRingLightning,
   ItemRingIllusion,
   ItemBookTripleShots,
-  ItemBroochStar
+  ItemBroochStar,
+  ItemFairyFire,
+  ItemFairyTarget
 };
 
 const int FirstEquipItem = (int) ItemMagicianHat; /*!< Used as an offset when creating items */
@@ -98,7 +102,7 @@ struct itemStuct
   enumShotType specialShot;     /**< Special shot */
 };
 
-const int NUMBER_ITEMS = 28;  /*!< Total number of items */
+const int NUMBER_ITEMS = 30;  /*!< Total number of items */
 /** Array with all the items and data */
 const itemStuct items[NUMBER_ITEMS] =
 {
@@ -159,7 +163,7 @@ const itemStuct items[NUMBER_ITEMS] =
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemFairy, "Fairy", "Helps you in the dungeon",
+    ItemFairy, "Fairy Lilly", "Helps you in the dungeon",
     20, true, FamiliarFairy, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
@@ -187,7 +191,7 @@ const itemStuct items[NUMBER_ITEMS] =
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeLightning
   },
   {
-    ItemFairyIce, "Ice Fairy", "Helps you in the dungeon",
+    ItemFairyIce, "Fairy Natasha", "Helps you in the dungeon",
     40, true, FamiliarFairyIce, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
@@ -213,10 +217,18 @@ const itemStuct items[NUMBER_ITEMS] =
   {
     ItemBroochStar, "Star Brooch", "Increases fire range",
     20, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    ItemFairyFire, "Fairy Alicia", "Helps you in the dungeon",
+    40, true, FamiliarFairyFire, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    ItemFairyTarget, "Fairy Mary", "Helps you in the dungeon",
+    40, true, FamiliarFairyTarget, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
 
-const int NUMBER_EQUIP_ITEMS = 21;  /*!< Number of equip items */
+const int NUMBER_EQUIP_ITEMS = 23;  /*!< Number of equip items */
 /** Item equipment type enum
  *  All the equipments.
  */
@@ -241,7 +253,9 @@ enum item_equip_enum {
   EQUIP_RING_LIGHTNING,
   EQUIP_RING_ILLUSION,
   EQUIP_BOOK_TRIPLE,
-  EQUIP_BROOCH_STAR
+  EQUIP_BROOCH_STAR,
+  EQUIP_FAIRY_FIRE,
+  EQUIP_FAIRY_TARGET
   };
 
 #endif

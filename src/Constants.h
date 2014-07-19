@@ -178,6 +178,7 @@ const float FAIRY_FIRE_DELAY = 0.8f;
 const float ICE_FAIRY_FIRE_DELAY = 1.3f;
 const float FAIRY_BOLT_LIFE = 0.4f;
 const int FAIRY_BOLT_DAMAGES = 8;
+const int FAIRY_FIRE_DAMAGES = 12;
 const float FAIRY_BOLT_VELOCITY = 700.0f;
 
 enum chest_type_enum {
