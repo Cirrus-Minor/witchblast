@@ -155,6 +155,16 @@ public:
   int getEnnemyCount();
 
   /*!
+  *  \brief Return the position of the nearest enemy
+  *
+  *  \param x : x position of the source
+  *  \param y : y position of the source
+  *  \return amount of enemies
+  */
+  Vector2D getNearestEnnemy(float x, float y);
+
+
+  /*!
   *  \brief Generates blood
   *
   *  Generates blood, it's called when someone is hurt or dies.

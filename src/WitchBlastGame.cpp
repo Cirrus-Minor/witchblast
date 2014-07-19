@@ -922,6 +922,37 @@ int WitchBlastGame::getEnnemyCount()
 	return n;
 }
 
+Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
+{
+  Vector2D target(-100.0f, -100.0f);
+  float distanceMin = -1.0f;
+
+  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList::iterator it;
+
+	for (it = entityList->begin (); it != entityList->end ();)
+	{
+		GameEntity *e = *it;
+		it++;
+
+		if (e->getType() >= 20)
+		{
+		  // enemy
+		  EnnemyEntity* enemy = dynamic_cast<EnnemyEntity*>(e);
+		  float d2 = (x - enemy->getX()) * (x - enemy->getX()) + (y - enemy->getY()) * (y - enemy->getY());
+
+		  if (target.x < -1.0f || d2 < distanceMin)
+      {
+        distanceMin = d2;
+        target.x = enemy->getX();
+        target.y = enemy->getY();
+      }
+		}
+	}
+
+  return target;
+}
+
 void WitchBlastGame::refreshMap()
 {
   // clean the sprites from old map
