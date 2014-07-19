@@ -9,8 +9,6 @@
 FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
 {
-
-  Vector2D targetPos = game().getPlayerPosition();
   imagesProLine = 20;
   type = ENTITY_ENNEMY;
   movingStyle = movFlying;
