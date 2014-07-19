@@ -67,9 +67,14 @@ Changes
 -------
 
 Next version
+- ADD New items (star brooch, triple shot)
 - ADD New tiles : holes
 - ADD Display of health items on the minimap
+- ADD New graphics for Rat King
 - MOD Health items drop's rate decreases
+- MOD Rat King berserk's mode is easier now
+- MOD Cyclops' falling stones bounce (one time)
+- MOD Cyclops has protection before stones are falling
 - FIX Sprite center and Z-order 
 
 v0.2.5
