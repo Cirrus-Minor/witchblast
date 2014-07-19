@@ -292,6 +292,14 @@ void PlayerEntity::renderBody(sf::RenderTarget* app)
     app->draw(sprite);
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
   }
+
+  if (equip[EQUIP_BROOCH_STAR])
+  {
+    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+    sprite.setTextureRect(sf::IntRect( (14 + spriteDx / 3) * width, 2 * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+  }
 }
 
 void PlayerEntity::renderHands(sf::RenderTarget* app)
@@ -648,6 +656,19 @@ void PlayerEntity::generateBolt(float velx, float vely)
   bolt->setVelocity(Vector2D(velx, vely));
 }
 
+void PlayerEntity::rageFire()
+{
+  for (int i = -1; i <= 1; i += 2)
+    for (int j = -1; j <= 1; j += 2)
+  {
+    BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeFire, 0);
+    bolt->setDamages(10);
+    float velx = fireVelocity * i * 0.4f;
+    float vely = fireVelocity * j * 0.4f;
+    bolt->setVelocity(Vector2D(velx, vely));
+  }
+}
+
 void PlayerEntity::resestFireDirection()
 {
   firingDirection = 5;
@@ -765,6 +786,9 @@ bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level)
     hurtingDelay = HURTING_DELAY * 2.0f;
     game().generateBlood(x, y, bloodColor);
     game().generateBlood(x, y, bloodColor);
+
+    if (equip[EQUIP_CONCENTRATION_AMULET]) rageFire();
+
     return true;
   }
   return false;
@@ -869,7 +893,7 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
-  if (equip[EQUIP_CONCENTRATION_AMULET]) boltLifeTimeBonus += 0.5f;
+  if (equip[EQUIP_BROOCH_STAR]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
   {
     fireVelocityBonus += 0.15f;

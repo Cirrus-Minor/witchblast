@@ -399,6 +399,7 @@ class PlayerEntity : public BaseCreatureEntity
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
+    void rageFire();
 
     virtual void collideMapRight();
     virtual void collideMapLeft();

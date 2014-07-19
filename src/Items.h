@@ -69,7 +69,8 @@ enum enumItemType
   ItemRingStone,
   ItemRingLightning,
   ItemRingIllusion,
-  ItemBookTripleShots
+  ItemBookTripleShots,
+  ItemBroochStar
 };
 
 const int FirstEquipItem = (int) ItemMagicianHat; /*!< Used as an offset when creating items */
@@ -97,7 +98,7 @@ struct itemStuct
   enumShotType specialShot;     /**< Special shot */
 };
 
-const int NUMBER_ITEMS = 27;  /*!< Total number of items */
+const int NUMBER_ITEMS = 28;  /*!< Total number of items */
 /** Array with all the items and data */
 const itemStuct items[NUMBER_ITEMS] =
 {
@@ -142,11 +143,11 @@ const itemStuct items[NUMBER_ITEMS] =
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemRageAmulet, "Rage Amulet", "Increases fire range",
+    ItemRageAmulet, "Rage Amulet", "Retaliates",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemBossKey, "Boss Key", "Open the Boss gate",
+    ItemBossKey, "Boss Key", "Opens the Boss gate",
     200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
@@ -208,10 +209,14 @@ const itemStuct items[NUMBER_ITEMS] =
   {
     ItemBookTripleShots, "Spell : Triple Bolts", "Shoots three bolts",
     50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard
+  },
+  {
+    ItemBroochStar, "Star Brooch", "Increases fire range",
+    20, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
 
-const int NUMBER_EQUIP_ITEMS = 20;  /*!< Number of equip items */
+const int NUMBER_EQUIP_ITEMS = 21;  /*!< Number of equip items */
 /** Item equipment type enum
  *  All the equipments.
  */
@@ -235,7 +240,8 @@ enum item_equip_enum {
   EQUIP_RING_STONE,
   EQUIP_RING_LIGHTNING,
   EQUIP_RING_ILLUSION,
-  EQUIP_BOOK_TRIPLE
+  EQUIP_BOOK_TRIPLE,
+  EQUIP_BROOCH_STAR
   };
 
 #endif
