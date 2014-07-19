@@ -197,7 +197,7 @@ void CyclopEntity::animate(float delay)
     {
       isDying = true;
       SpriteEntity* corpse;
-      corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y + 48, 128, 128);
+      corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
       corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
 
       corpse->setZ(OFFSET_Y);
