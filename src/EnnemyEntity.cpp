@@ -121,13 +121,15 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
       {
+        float xs = (x + boltEntity->getX()) / 2;
+        float ys = (y + boltEntity->getY()) / 2;
+
         boltEntity->collide();
+
         hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
         if (bloodColor > bloodNone) game().generateBlood(x, y, bloodColor);
         SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 
-        float xs = (x + boltEntity->getX()) / 2;
-        float ys = (y + boltEntity->getY()) / 2;
         SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
         star->setFading(true);
         star->setZ(y+ 100);
