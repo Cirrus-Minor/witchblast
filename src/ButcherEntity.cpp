@@ -114,7 +114,10 @@ void ButcherEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 void ButcherEntity::drop()
 {
-  // no drop
+  ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
+  newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  newItem->setViscosity(0.96f);
 }
 
 void ButcherEntity::render(sf::RenderTarget* app)
