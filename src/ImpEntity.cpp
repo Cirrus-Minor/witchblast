@@ -192,6 +192,7 @@ void ImpEntity::generateStar(sf::Color starColor)
   spriteStar->setWeight(-150);
   spriteStar->setFading(true);
   spriteStar->setColor(starColor);
+  spriteStar->setType(ENTITY_EFFECT);
 }
 
 void ImpEntity::teleport()
