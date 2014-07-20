@@ -270,8 +270,10 @@ void PlayerEntity::renderHead(sf::RenderTarget* app)
 
 void PlayerEntity::renderBody(sf::RenderTarget* app)
 {
+  if (equip[EQUIP_MAGICIAN_ROBE]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
   app->draw(sprite);
+  sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
 
   if (equip[EQUIP_CONCENTRATION_AMULET] && playerStatus != playerStatusDead)
   {
@@ -288,7 +290,7 @@ void PlayerEntity::renderBody(sf::RenderTarget* app)
   if (equip[EQUIP_LEATHER_BELT] && playerStatus != playerStatusDead)
   {
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
-    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
+    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 5, width, height));
     app->draw(sprite);
     sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
   }
@@ -836,7 +838,8 @@ void PlayerEntity::dying()
   {
     if (equip[i])
     {
-      if (items[i + FirstEquipItem].familiar == FamiliarNone)
+      if (items[i + FirstEquipItem].familiar == FamiliarNone
+          && i + FirstEquipItem != ItemMagicianRobe)
         loseItem(enumItemType(i), true);
     }
   }
@@ -900,6 +903,7 @@ void PlayerEntity::computePlayer()
   float creatureSpeedBonus = 1.0f;
   float fireVelocityBonus = 1.0f;
   float fireDamagesBonus = 1.0f;
+  armor = 0.0f;
 
   if (equip[EQUIP_VIBRATION_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
@@ -914,6 +918,7 @@ void PlayerEntity::computePlayer()
     fireDamagesBonus += 0.5f;
   }
   if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 0.5f;
+  if (equip[EQUIP_MAGICIAN_ROBE]) armor += 0.15f;
 
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;

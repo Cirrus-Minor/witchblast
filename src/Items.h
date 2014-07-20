@@ -74,7 +74,8 @@ enum enumItemType
   ItemBookTripleShots,
   ItemBroochStar,
   ItemFairyFire,
-  ItemFairyTarget
+  ItemFairyTarget,
+  ItemMagicianRobe
 };
 
 const int FirstEquipItem = (int) ItemMagicianHat; /*!< Used as an offset when creating items */
@@ -102,7 +103,7 @@ struct itemStuct
   enumShotType specialShot;     /**< Special shot */
 };
 
-const int NUMBER_ITEMS = 30;  /*!< Total number of items */
+const int NUMBER_ITEMS = 31;  /*!< Total number of items */
 /** Array with all the items and data */
 const itemStuct items[NUMBER_ITEMS] =
 {
@@ -223,12 +224,16 @@ const itemStuct items[NUMBER_ITEMS] =
     40, true, FamiliarFairyFire, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemFairyTarget, "Fairy Mary", "Helps you in the dungeon",
+    ItemFairyTarget, "Fairy Scarlett", "Helps you in the dungeon",
     40, true, FamiliarFairyTarget, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    ItemMagicianRobe, "Magician's Robe", "Increases armor",
+    25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
 
-const int NUMBER_EQUIP_ITEMS = 23;  /*!< Number of equip items */
+const int NUMBER_EQUIP_ITEMS = 24;  /*!< Number of equip items */
 /** Item equipment type enum
  *  All the equipments.
  */
@@ -255,7 +260,8 @@ enum item_equip_enum {
   EQUIP_BOOK_TRIPLE,
   EQUIP_BROOCH_STAR,
   EQUIP_FAIRY_FIRE,
-  EQUIP_FAIRY_TARGET
+  EQUIP_FAIRY_TARGET,
+  EQUIP_MAGICIAN_ROBE
   };
 
 #endif
