@@ -67,7 +67,8 @@ Changes
 -------
 
 Next version
-- ADD New items (star brooch, triple shot)
+- ADD New items (star brooch, triple shot, magician robe)
+- ADD New familiars (2 types)
 - ADD New tiles : holes
 - ADD Display of health items on the minimap
 - ADD New graphics for Rat King
@@ -75,6 +76,7 @@ Next version
 - MOD Rat King berserk's mode is easier now
 - MOD Cyclops' falling stones bounce (one time)
 - MOD Cyclops has protection before stones are falling
+- MOD Butcher drops a silver coin now
 - FIX Sprite center and Z-order 
 
 v0.2.5
