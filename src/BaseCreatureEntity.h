@@ -72,6 +72,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     float creatureSpeed;
     int shadowFrame;
     int facingDirection;
+    float armor;
 
     bool hurting;
     float hurtingDelay;

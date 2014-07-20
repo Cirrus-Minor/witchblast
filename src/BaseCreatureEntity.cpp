@@ -11,6 +11,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   shadowFrame = -1;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   hpDisplay = 0;
+  armor = 0.0f;
   movingStyle = movWalking;
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
   {
@@ -315,6 +316,13 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
   hurting = true;
   hurtingDelay = HURTING_DELAY;
   this->hurtingType = hurtingType;
+
+  if (armor > 0.01f)
+  {
+    int absorbedHp = damages * armor;
+    if (absorbedHp == 0) absorbedHp = 1;
+    damages -= absorbedHp;
+  }
 
   if (hurtingType == ShotTypeIce
       && determineSatusChance(resistance[ResistanceFrozen], level))
