@@ -663,9 +663,22 @@ void PlayerEntity::rageFire()
     {
       BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeFire, 0);
       bolt->setDamages(10);
-      float velx = fireVelocity * i * 0.4f;
-      float vely = fireVelocity * j * 0.4f;
+      float velx = fireVelocity * i * 0.42f;
+      float vely = fireVelocity * j * 0.42f;
       bolt->setVelocity(Vector2D(velx, vely));
+
+      if (hp <= hpMax / 5)
+      {
+        BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeFire, 0);
+        bolt->setDamages(10);
+        float velx = 0.0f;
+        float vely = 0.0f;
+        if (i == -1 && j == -1) velx = -fireVelocity * i * 0.6f;
+        else if (i == -1 && j == 1) velx = fireVelocity * i * 0.6f;
+        else if (i == 1 && j == -1) vely= -fireVelocity * i * 0.6f;
+        else if (i == 1 && j == 1) vely = fireVelocity * i * 0.6f;
+        bolt->setVelocity(Vector2D(velx, vely));
+      }
     }
   SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
 }
