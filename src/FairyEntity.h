@@ -11,7 +11,7 @@ class FairyEntity : public SpriteEntity
     FairyEntity(float x, float y, enumFamiliar fairyType);
     virtual void animate(float delay);
 
-    void fire(int dir, GameMap* map);
+    void fire(int dir);
 
   protected:
 

@@ -701,7 +701,7 @@ void PlayerEntity::fire(int direction)
 
   if (playerStatus != playerStatusDead)
     for(int unsigned i = 0; i < fairies.size(); i++)
-      fairies[i]->fire(direction, map);
+      fairies[i]->fire(direction);
 
   if (canFirePlayer && playerStatus != playerStatusDead && playerStatus != playerStatusAcquire)
   {

@@ -64,7 +64,8 @@ void FairyEntity::animate(float delay)
 
   checkCollisions();
 
-  computeFacingDirection();
+  if (fairyType == FamiliarFairyTarget && !game().getCurrentMap()->isCleared()) fire(6);
+  else computeFacingDirection();
 
   isMirroring = false;
   frame = ((int)(age * 10.0f)) % 2;
@@ -79,7 +80,7 @@ void FairyEntity::animate(float delay)
   SpriteEntity::animate(delay);
 }
 
-void FairyEntity::fire(int dir, GameMap* map)
+void FairyEntity::fire(int dir)
 {
   if (x < OFFSET_X + TILE_WIDTH * 1.3) return;
   if (y < OFFSET_Y + TILE_HEIGHT * 1.3) return;
@@ -108,7 +109,41 @@ void FairyEntity::fire(int dir, GameMap* map)
     {
       Vector2D target = game().getNearestEnnemy(x, y);
       if (target.x > -1.0f)
-        bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
+      {
+         bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
+
+         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
+         {
+           if (target.x < x) facingDirection = 4;
+           else facingDirection = 6;
+         }
+         else
+         {
+           if (target.y < y) facingDirection = 8;
+           else facingDirection = 2;
+         }
+      }
+    }
+  }
+  else
+  {
+    if (fairyType == FamiliarFairyTarget)
+    {
+      Vector2D target = game().getNearestEnnemy(x, y);
+      if (target.x > -1.0f)
+      {
+         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
+         {
+           if (target.x < x) facingDirection = 4;
+           else facingDirection = 6;
+         }
+         else
+         {
+           if (target.y < y) facingDirection = 8;
+           else facingDirection = 2;
+         }
+      }
+      else computeFacingDirection();
     }
   }
 }
