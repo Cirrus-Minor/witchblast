@@ -282,29 +282,79 @@ void DungeonMap::initRoom()
   {
 
     if (x > 0 && gameFloor->getRoom(x-1, y) > 0)
-    {
-      //map[0][y0-1] = 0;
       map[0][y0] = 0;
-      //map[0][y0+1] = 0;
-    }
     if (x < MAP_WIDTH -1 && gameFloor->getRoom(x+1, y) > 0)
-    {
-      //map[MAP_WIDTH -1][y0-1] = 0;
       map[MAP_WIDTH -1][y0] = 0;
-      //map[MAP_WIDTH -1][y0+1] = 0;
-    }
     if (y > 0 && gameFloor->getRoom(x, y-1) > 0)
-    {
-      //map[x0-1][0] = 0;
       map[x0][0] = 0;
-      //map[x0+1][0] = 0;
-    }
     if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y+1) > 0)
-    {
-      //map[x0-1][MAP_HEIGHT -1] = 0;
       map[x0][MAP_HEIGHT -1] = 0;
-      //map[x0+1][MAP_HEIGHT -1] = 0;
-    }
+  }
+}
+
+void DungeonMap::initPattern(patternEnum n)
+{
+  int i, j;
+
+  if (n == PatternSmallChecker)
+  {
+    for ( i = 2 ; i < width - 2 ; i++)
+      for ( j = 2 ; j < height - 2 ; j++)
+      {
+        if ((i + j) % 2 == 1)
+          map[i][j] += 10;
+      }
+  }
+  if (n == PatternBigChecker)
+  {
+    for ( i = 1 ; i < width - 1 ; i++)
+      for ( j = 1 ; j < height - 1 ; j++)
+      {
+        if ((i + j) % 2 == 1)
+          map[i][j] += 10;
+      }
+  }
+  if (n == PatternBorder)
+  {
+    for ( i = 1 ; i < width - 1 ; i++)
+      for ( j = 1 ; j < height - 1 ; j++)
+      {
+        if (i == 1 || j == 1 || i == width - 2 || j == height - 2)
+          map[i][j] += 10;
+      }
+  }
+  if (n == PatternBigCircle)
+  {
+    for ( i = 2 ; i < width - 2 ; i++)
+      for ( j = 2 ; j < height - 2 ; j++)
+      {
+        if (i == 2 || j == 2 || i == width - 3 || j == height - 3)
+          map[i][j] += 10;
+      }
+  }
+  if (n == PatternSmallCircle || n == PatternSmallStar)
+  {
+    for ( i = 5 ; i < 10 ; i++)
+      for ( j = 2 ; j < height - 2 ; j++)
+      {
+        if (i == 5 || i == 9 || j == 2 || j == height - 3)
+          map[i][j] += 10;
+      }
+  }
+  if (n == PatternSmallStar)
+  {
+    map[7][1] += 10;
+    map[7][height - 2] += 10;
+    map[4][4] += 10;
+    map[10][4] += 10;
+  }
+  if (n == PatternSmallDisc)
+  {
+    for ( i = 5 ; i < 10 ; i++)
+      for ( j = 2 ; j < height - 2 ; j++)
+      {
+        map[i][j] += 10;
+      }
   }
 }
 
@@ -313,6 +363,12 @@ Vector2D DungeonMap::generateBonusRoom()
   initRoom();
   int x0 = MAP_WIDTH / 2;
   int y0 = MAP_HEIGHT / 2;
+
+  if (rand() % 3 == 0)
+  {
+    if (rand() % 2 == 0) initPattern(PatternSmallDisc);
+    else initPattern(PatternSmallStar);
+  }
 
   map[x0 - 1][y0 - 1] = MAP_WALL;
   map[x0 - 1][y0 + 1] = MAP_WALL;
@@ -373,6 +429,12 @@ Vector2D DungeonMap::generateKeyRoom()
   map[x0][y0] = 0;
   map[x0][y0+1] = MAP_DOOR;
 
+  if (rand() % 3 == 0)
+  {
+    if (rand() % 2 == 0) initPattern(PatternSmallCircle);
+    else initPattern(PatternSmallStar);
+  }
+
   return (Vector2D(OFFSET_X + x0 * TILE_WIDTH + TILE_WIDTH / 2, OFFSET_Y + y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
 
@@ -383,6 +445,8 @@ void DungeonMap::generateExitRoom()
   map[x0][0] = MAP_STAIRS_UP;
   map[x0 - 1][0] = 60;
   map[x0 + 1][0] = 61;
+
+  if (rand() % 3 == 0) initPattern(PatternBorder);
 }
 
 void DungeonMap::generateRoomRandom(int type)
@@ -413,15 +477,21 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     }
     if (roomType == roomTypeBoss && game().getLevel() == 2) // giant slime
     {
-    map[1][1] = MAP_GRID;
-    map[1][MAP_HEIGHT -2] = MAP_GRID;
-    map[MAP_WIDTH - 2][1] = MAP_GRID;
-    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
+      map[1][1] = MAP_GRID;
+      map[1][MAP_HEIGHT -2] = MAP_GRID;
+      map[MAP_WIDTH - 2][1] = MAP_GRID;
+      map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
+    }
+    if (roomType == roomTypeStandard)
+    {
+      if (rand() % 3 == 0) initPattern((patternEnum)(rand() % 4));
     }
   }
   if (type == 1)
   {
     // corner block
+    if (rand() % 3 == 0) initPattern(PatternSmallChecker);
+
     map[1][1] = MAP_WALL;
     map[1][MAP_HEIGHT -2] = MAP_WALL;
     map[MAP_WIDTH - 2][1] = MAP_WALL;
@@ -430,6 +500,8 @@ void DungeonMap::generateRoomWithoutHoles(int type)
   if (type == 2)
   {
     // blocks in the middle
+    if (rand() % 3 == 0) initPattern(PatternBorder);
+
     r = 1 + rand() % 3;
     for (i = x0 - r; i <= x0 + r; i++)
       for (j = y0 - 1; j <= y0 + 1; j++)
@@ -446,11 +518,12 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         map[MAP_WIDTH - 1 - i][MAP_HEIGHT - 1 - j] = MAP_WALL;
         map[MAP_WIDTH - 1 - i][j] = MAP_WALL;
       }
-
   }
   if (type == ROOM_TYPE_CHECKER)
   {
     // "checker"
+    if (rand() % 3 == 0) initPattern(PatternSmallChecker);
+
     for (i = 2; i < MAP_WIDTH - 2; i = i + 2)
       for (j = 2; j < MAP_HEIGHT - 2; j = j + 2)
         map[i][j] = MAP_WALL;
@@ -479,15 +552,17 @@ void DungeonMap::generateRoomWithHoles(int type)
     }
     if (roomType == roomTypeBoss && game().getLevel() == 2) // giant slime
     {
-    map[1][1] = MAP_GRID;
-    map[1][MAP_HEIGHT -2] = MAP_GRID;
-    map[MAP_WIDTH - 2][1] = MAP_GRID;
-    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
+      map[1][1] = MAP_GRID;
+      map[1][MAP_HEIGHT -2] = MAP_GRID;
+      map[MAP_WIDTH - 2][1] = MAP_GRID;
+      map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
     }
   }
   if (type == 1)
   {
     // corner hole
+    if (rand() % 3 == 0) initPattern(PatternSmallChecker);
+
     map[1][1] = MAP_HOLE_7;
     map[1][MAP_HEIGHT -2] = MAP_HOLE_1;
     map[MAP_WIDTH - 2][1] = MAP_HOLE_9;
@@ -496,6 +571,8 @@ void DungeonMap::generateRoomWithHoles(int type)
   if (type == 2)
   {
     // blocks in the middle
+    if (rand() % 3 == 0) initPattern(PatternBorder);
+
     r = 1 + rand() % 3;
     for (i = x0 - r; i <= x0 + r; i++)
       for (j = y0 - 1; j <= y0 + 1; j++)

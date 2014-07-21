@@ -80,6 +80,8 @@ class DungeonMap : public GameMap
 
     virtual void randomize(int n);
     void initRoom();
+    enum patternEnum { PatternSmallChecker, PatternBigChecker, PatternBorder, PatternBigCircle, PatternSmallCircle, PatternSmallStar, PatternSmallDisc};
+    void initPattern(patternEnum n);
     void generateCarpet(int x0, int y0, int w, int h, int n);
     void generateRoomRandom(int type);
     void generateRoomWithoutHoles(int type);
