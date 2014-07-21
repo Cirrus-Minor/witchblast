@@ -271,10 +271,18 @@ void GiantSlimeEntity::animate(float delay)
       x = game().getPlayer()->getX();
       y = game().getPlayer()->getY();
       // to prevent collisions
-      if (x < OFFSET_X + TILE_WIDTH * 3) velocity.x = -1.1f;
-      else if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 3)) velocity.x = 1.1f;
-      if (y < OFFSET_Y + TILE_HEIGHT * 3) velocity.y = -1.1f;
-      else if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 3)) velocity.y = 1.1f;
+      float x0 = OFFSET_X + TILE_WIDTH + 1;
+      float xf = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - 1;
+      float y0 = OFFSET_Y + TILE_HEIGHT + 1;
+      float yf = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - 1;
+
+      calculateBB();
+
+      if (boundingBox.left < x0) x += (x0 - boundingBox.left);
+      else if (boundingBox.left + boundingBox.width > xf) x -= (boundingBox.left + boundingBox.width - xf);
+
+      if (boundingBox.top < y0) y += (y0 - boundingBox.top);
+      else if (boundingBox.top + boundingBox.height > yf) y -= (boundingBox.top + boundingBox.height - yf);
     }
     if (timer < 2.3f)
     {
