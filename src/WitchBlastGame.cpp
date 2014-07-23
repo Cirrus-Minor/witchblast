@@ -82,6 +82,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage("media/giant_slime.png");
   ImageManager::getImageManager()->addImage("media/king_rat.png");
   ImageManager::getImageManager()->addImage("media/cyclop.png");
+  ImageManager::getImageManager()->addImage("media/giant_spider.png");
 
   ImageManager::getImageManager()->addImage("media/blood.png");
   ImageManager::getImageManager()->addImage("media/corpses.png");
