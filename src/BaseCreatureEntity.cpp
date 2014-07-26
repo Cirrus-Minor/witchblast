@@ -215,9 +215,14 @@ void BaseCreatureEntity::animatePhysics(float delay)
 
     if (lifetime > 0)
     {
-        if (age >= lifetime) isDying = true;
+        if (age >= lifetime) dyingFromAge();
     }
     age += delay;
+}
+
+void BaseCreatureEntity::dyingFromAge()
+{
+  dying();
 }
 
 void BaseCreatureEntity::animate(float delay)

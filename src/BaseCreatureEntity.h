@@ -33,7 +33,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};
     virtual enumMovingStyle getMovingStyle();
-    enum enumBloodColor { bloodNone = -1, bloodRed, bloodGreen, bloodRock};
+    enum enumBloodColor { bloodNone = -1, bloodRed, bloodGreen, bloodRock, bloodEgg};
     enum enumSpecialState
     {
       SpecialStateIce // = 0
@@ -64,6 +64,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
     virtual void computeFacingDirection();
+    virtual void dyingFromAge();
 
   protected:
     int hp;
