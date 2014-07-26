@@ -27,6 +27,7 @@
 #include "GreenRatEntity.h"
 #include "KingRatEntity.h"
 #include "CyclopEntity.h"
+#include "GiantSpiderEntity.h"
 #include "GiantSlimeEntity.h"
 #include "ButcherEntity.h"
 #include "BatEntity.h"
@@ -77,6 +78,8 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage("media/evil_flower.png");
   ImageManager::getImageManager()->addImage("media/slime.png");
   ImageManager::getImageManager()->addImage("media/imp.png");
+  ImageManager::getImageManager()->addImage("media/spider_egg.png");
+  ImageManager::getImageManager()->addImage("media/little_spider.png");
 
   ImageManager::getImageManager()->addImage("media/butcher.png");
   ImageManager::getImageManager()->addImage("media/giant_slime.png");
@@ -1300,8 +1303,11 @@ void WitchBlastGame::generateMap()
     else if (level == 3)
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-    else //if (level == 4)
+    else if (level == 4)
       new CyclopEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+    else //if (level == 5)
+      new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
 
     playMusic(MusicBoss);
@@ -1310,7 +1316,6 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoomWithoutHoles(0);
     currentMap->setCleared(true);
-    int bonusType = getRandomEquipItem(false);
   }
   else if (currentMap->getRoomType() == roomTypeExit)
   {
@@ -1976,8 +1981,6 @@ void WitchBlastGame::buildMenu()
 
 void WitchBlastGame::checkFallingEntities()
 {
-  int n=0;
-
   EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
   EntityManager::EntityList::iterator it;
 

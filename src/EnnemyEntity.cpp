@@ -43,6 +43,7 @@ void EnnemyEntity::animate(float delay)
       {
         corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
         corpse->setFrame(deathFrame);
+        corpse->setImagesProLine(10);
       }
 
       corpse->setZ(OFFSET_Y);
@@ -194,6 +195,7 @@ void EnnemyEntity::dying()
     isDying = true;
     SpriteEntity* corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
     corpse->setZ(OFFSET_Y);
+    corpse->setImagesProLine(10);
     corpse->setFrame(deathFrame);
     corpse->setType(ENTITY_CORPSE);
     if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
@@ -261,4 +263,27 @@ void EnnemyEntity::render(sf::RenderTarget* app)
 
   else
     BaseCreatureEntity::render(app);
+}
+
+void EnnemyEntity::displayLifeBar(std::string name, float posY, sf::RenderTarget* app)
+{
+  float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
+
+  sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
+  rectangle.setFillColor(sf::Color(0, 0, 0,128));
+  rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, posY));
+  app->draw(rectangle);
+
+  rectangle.setSize(sf::Vector2f(l, 25));
+  rectangle.setFillColor(sf::Color(190, 20, 20));
+  rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, posY));
+  app->draw(rectangle);
+
+  game().write(          name,
+                         18,
+                         OFFSET_X + TILE_WIDTH / 2 + 10.0f,
+                         posY + 1.0f,
+                         ALIGN_LEFT,
+                         sf::Color(255, 255, 255),
+                         app, 0, 0);
 }

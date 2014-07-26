@@ -1,6 +1,7 @@
 #include "GiantSpiderEntity.h"
-#include "BoltEntity.h"
+#include "EnnemyBoltEntity.h"
 #include "PlayerEntity.h"
+#include "SpiderEggEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -14,7 +15,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
 {
   width = 128;
   height = 128;
-  creatureSpeed = 180.0f;
+  creatureSpeed = 240.0f;
   velocity = Vector2D(0.0f, 0.0f);
 
   hp = 400;
@@ -33,6 +34,8 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
 
   h = 2000;
   state = 0;
+
+  creatureName = "???";
 }
 
 void GiantSpiderEntity::animate(float delay)
@@ -53,6 +56,7 @@ void GiantSpiderEntity::animate(float delay)
         h = 0;
         state = 1;
         timer = 1.0f;
+        creatureName = "Giant Spider";
       }
     }
     else if (state == 1) // wait after falling
@@ -62,11 +66,20 @@ void GiantSpiderEntity::animate(float delay)
       {
         state = 2;
         velocity = Vector2D(creatureSpeed);
-        timer = 8.0f;
+        timer = 6.0f;
+        fireDelay = 0.5f;
       }
     }
     else if (state == 2) // moving
     {
+      fireDelay -= delay;
+      if (fireDelay <= 0.0f)
+      {
+        fire(1);
+        fire(0);fire(0);fire(0);fire(0);
+        fireDelay = 0.5f;
+      }
+
       timer -= delay;
       if (timer <= 0.0f)
       {
@@ -86,6 +99,11 @@ void GiantSpiderEntity::animate(float delay)
       if (h >= 1500.0f)
       {
         state = 0;
+        for (int i = 0; i < 15; i++)
+        {
+          new SpiderEggEntity(OFFSET_X + TILE_WIDTH * 1.5f + rand() % (TILE_WIDTH * 12),
+                              OFFSET_Y + TILE_HEIGHT * 1.5f + rand() % (TILE_HEIGHT * 6));
+        }
       }
     }
 
@@ -115,28 +133,24 @@ void GiantSpiderEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
   if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else computeFacingDirection();
 }
 
 void GiantSpiderEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
   if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else computeFacingDirection();
 }
 
 void GiantSpiderEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else computeFacingDirection();
 }
 
 void GiantSpiderEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else computeFacingDirection();
 }
 
 void GiantSpiderEntity::collideWithEnnemy(GameEntity* collidingEntity)
@@ -144,8 +158,9 @@ void GiantSpiderEntity::collideWithEnnemy(GameEntity* collidingEntity)
   EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
-    setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
-    computeFacingDirection();
+    //setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
+    Vector2D v = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 150.0f);
+    entity->giveRecoil(false, v, 0.5f);
   }
 }
 
@@ -230,29 +245,31 @@ void GiantSpiderEntity::render(sf::RenderTarget* app)
   sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
   app->draw(sprite);
 
-  float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
-
-  sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
-  rectangle.setFillColor(sf::Color(0, 0, 0,128));
-  rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-  app->draw(rectangle);
-
-  rectangle.setSize(sf::Vector2f(l, 25));
-  rectangle.setFillColor(sf::Color(190, 20, 20));
-  rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-  app->draw(rectangle);
-
-  game().write(          "Giant Spider",
-                         18,
-                         OFFSET_X + TILE_WIDTH / 2 + 10.0f,
-                         OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
-                         ALIGN_LEFT,
-                         sf::Color(255, 255, 255),
-                         app, 0, 0);
+  displayLifeBar(creatureName, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT, app);
 
   if (game().getShowLogical())
   {
     displayBoundingBox(app);
     displayCenterAndZ(app);
   }
+}
+
+bool GiantSpiderEntity::canCollide()
+{
+  return h <= 70.0f;
+}
+
+void GiantSpiderEntity::fire(int fireType)
+{
+    SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+
+    EnnemyBoltEntity* bolt;
+
+    bolt = new EnnemyBoltEntity(x, y, ShotTypeStandard, 0);
+    bolt->setDamages(5);
+
+    float fireVelocity = 180.0f;
+    if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
+    bolt->setVelocity(Vector2D(fireVelocity));
+    //bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), fireVelocity ));
 }

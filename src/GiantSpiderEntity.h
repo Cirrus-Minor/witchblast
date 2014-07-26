@@ -17,11 +17,16 @@ class GiantSpiderEntity : public EnnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual bool canCollide();
   private:
     int state;
     float timer;
+    float fireDelay;
 
     void calculateRotation();
+    void fire(int type);
+
+    std::string creatureName;
 };
 
 #endif // GIANTSPIDERENTITY_H

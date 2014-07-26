@@ -695,6 +695,7 @@ void DungeonMap::restoreSprites()
       {
         corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), ilm.x, ilm.y, 64, 64);
         corpse->setFrame(ilm.frame);
+        corpse->setImagesProLine(10);
       }
 
       corpse->setZ(OFFSET_Y);

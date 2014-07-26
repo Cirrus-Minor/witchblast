@@ -10,6 +10,7 @@ class EnnemyEntity : public BaseCreatureEntity
     virtual void animate(float delay);
     virtual void calculateBB();
     virtual void render(sf::RenderTarget* app);
+    void displayLifeBar(std::string name, float posY, sf::RenderTarget* app);
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -35,8 +36,8 @@ class EnnemyEntity : public BaseCreatureEntity
     sound_resources hurtingSound;
     sound_resources dyingSound;
     sound_resources agonizingSound;
-  private:
 
+  private:
 };
 
 #endif // ENNEMYPRITE_H
