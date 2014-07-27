@@ -56,9 +56,19 @@ public:
 
 	float angleTo(Vector2D vector)
 	{
+	  float angle;
+	  if (vector.y - y < 0.001f && vector.y - y > -0.001f)
+    {
+      if (vector.x < x) angle = M_PI * 0.5;
+      else angle = -M_PI * 0.5;
+    }
+    else
+    {
       float tan = (vector.x - x) / (vector.y - y);
-      float angle = atan(tan);
-      return angle;
+      angle = atan(tan);
+    }
+
+    return angle;
 	}
 
 	Vector2D vectorTo(Vector2D vector, float amplitude)

@@ -154,8 +154,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
             recoilDelay *= 0.5f;
           }
 
-          Vector2D recoilVector = Vector2D(boltEntity->getX(),
-                                           boltEntity->getY()).vectorTo(Vector2D(x, y),
+          Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
                                            recoilVelocity );
           giveRecoil(true, recoilVector, recoilDelay);
         }
