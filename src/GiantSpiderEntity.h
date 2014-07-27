@@ -18,10 +18,15 @@ class GiantSpiderEntity : public EnnemyEntity
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
     virtual bool canCollide();
+    virtual bool hurt(int damages, enumShotType hurtingType, int level);
+
+    int getHealthLevel();
   private:
     int state;
     float timer;
     float fireDelay;
+
+    int hurtLevel;
 
     void calculateRotation();
     void fire(int type);

@@ -15,14 +15,14 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
 {
   width = 128;
   height = 128;
-  creatureSpeed = 240.0f;
+  creatureSpeed = GIANT_SPIDER_SPEED[0];
   velocity = Vector2D(0.0f, 0.0f);
 
-  hp = 400;
+  hp = GIANT_SPIDER_HP;
   hpMax = hp;
   hpDisplay = hp;
 
-  meleeDamages = 12;
+  meleeDamages = GIANT_SPIDER_DAMAGE;
 
   type = ENTITY_ENNEMY;
   bloodColor = bloodGreen;
@@ -34,6 +34,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
 
   h = 2000;
   state = 0;
+  hurtLevel = 0;
 
   creatureName = "???";
 }
@@ -66,7 +67,7 @@ void GiantSpiderEntity::animate(float delay)
       {
         state = 2;
         velocity = Vector2D(creatureSpeed);
-        timer = 6.0f;
+        timer = 10.0f;
         fireDelay = 0.5f;
       }
     }
@@ -77,15 +78,23 @@ void GiantSpiderEntity::animate(float delay)
       {
         fire(1);
         fire(0);fire(0);fire(0);fire(0);
-        fireDelay = 0.5f;
+        fireDelay = GIANT_SPIDER_FIRE_DELAY[hurtLevel];
       }
 
       timer -= delay;
-      if (timer <= 0.0f)
+      /*if (timer <= 0.0f)
       {
         state = 3;
         velocity = Vector2D(0.0f, 0.0f);
         timer = 1.0f;
+      }*/
+      if (getHealthLevel() > hurtLevel)
+      {
+        hurtLevel++;
+        state = 3;
+        velocity = Vector2D(0.0f, 0.0f);
+        timer = 1.0f;
+        creatureSpeed = GIANT_SPIDER_SPEED[hurtLevel];
       }
     }
     else if (state == 3) // wait after falling
@@ -98,13 +107,20 @@ void GiantSpiderEntity::animate(float delay)
       h += delay * 300.0f;
       if (h >= 1500.0f)
       {
-        state = 0;
-        for (int i = 0; i < 15; i++)
+        state = 5;
+        timer = 6.0f;
+        for (int i = 0; i < GIANT_SPIDER_NUMBER_EGGS[hurtLevel]; i++)
         {
           new SpiderEggEntity(OFFSET_X + TILE_WIDTH * 1.5f + rand() % (TILE_WIDTH * 12),
                               OFFSET_Y + TILE_HEIGHT * 1.5f + rand() % (TILE_HEIGHT * 6));
         }
       }
+    }
+    else if (state == 5) // waiting to fall
+    {
+      timer -= delay;
+      if (timer <= 0.0f)
+        state = 0;
     }
 
     // frame
@@ -119,6 +135,12 @@ void GiantSpiderEntity::animate(float delay)
 
   EnnemyEntity::animate(delay);
   z = y + 40;
+}
+
+bool GiantSpiderEntity::hurt(int damages, enumShotType hurtingType, int level)
+{
+  if (hurtLevel < getHealthLevel()) damages /= 5;
+  return EnnemyEntity::hurt(damages, hurtingType, level);
 }
 
 void GiantSpiderEntity::calculateBB()
@@ -158,7 +180,6 @@ void GiantSpiderEntity::collideWithEnnemy(GameEntity* collidingEntity)
   EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
-    //setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
     Vector2D v = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 150.0f);
     entity->giveRecoil(false, v, 0.5f);
   }
@@ -196,7 +217,7 @@ void GiantSpiderEntity::render(sf::RenderTarget* app)
     // shadow
     sprite.setRotation(0.0f);
 
-    if (state == 0 || state == 4)
+    if (state == 0 || state == 4 || state == 5)
     {
       int h0 = 850;
       int hf = 600;
@@ -272,4 +293,13 @@ void GiantSpiderEntity::fire(int fireType)
     if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
     bolt->setVelocity(Vector2D(fireVelocity));
     //bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), fireVelocity ));
+}
+
+int GiantSpiderEntity::getHealthLevel()
+{
+  int healthLevel = 0;
+  if (hp <= hpMax * 0.25) healthLevel = 3;
+  else if (hp <= hpMax * 0.5) healthLevel = 2;
+  else if (hp <= hpMax * 0.75) healthLevel = 1;
+  return healthLevel;
 }

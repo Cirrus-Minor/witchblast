@@ -354,8 +354,15 @@ const int KING_RAT_DAMAGES = 8;
 const float CYCLOP_SPEED[4] = { 120, 130, 140, 150};
 const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
 const float CYCLOP_FIRE_DELAY[4] = { 0.3f, 0.26f, 0.23f, 0.2f};
-const int CYCLOP_HP = 1000;
+const int CYCLOP_HP = 800;
 const int CYCLOP_DAMAGES = 10;
+
+// Giant Spider
+const float GIANT_SPIDER_SPEED[4] = { 235, 240, 245, 250};
+const int GIANT_SPIDER_NUMBER_EGGS[4] = { 10, 14, 16, 18};
+const float GIANT_SPIDER_FIRE_DELAY[4] = { 0.8f, 0.7f, 0.6f, 0.5f};
+const int GIANT_SPIDER_HP = 1000;
+const int GIANT_SPIDER_DAMAGE = 12;
 
 // EFFECTS
 const float HURTING_DELAY = 0.4f;

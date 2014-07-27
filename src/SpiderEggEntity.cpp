@@ -23,7 +23,7 @@ SpiderEggEntity::SpiderEggEntity(float x, float y)
   jumping = false;
   hVelocity = 0.0f;
 
-  lifetime = 10.0f + (rand() % 500) / 100;
+  lifetime = 12.0f + (rand() % 700) / 100;
 }
 
 void SpiderEggEntity::animate(float delay)
