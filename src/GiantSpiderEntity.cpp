@@ -37,6 +37,8 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
   state = 0;
   hurtLevel = 0;
 
+  resistance[ResistanceFrozen] = ResistanceVeryHigh;
+  resistance[ResistanceRecoil] = ResistanceVeryHigh;
   creatureName = "???";
 }
 
@@ -305,4 +307,11 @@ int GiantSpiderEntity::getHealthLevel()
   else if (hp <= hpMax * 0.5) healthLevel = 2;
   else if (hp <= hpMax * 0.75) healthLevel = 1;
   return healthLevel;
+}
+
+void GiantSpiderEntity::drop()
+{
+  ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
+  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  newItem->setViscosity(0.96f);
 }
