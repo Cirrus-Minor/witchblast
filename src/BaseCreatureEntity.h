@@ -4,10 +4,6 @@
 #include "sfml_game/CollidingSpriteEntity.h"
 #include "Constants.h"
 
-const int NB_SPECIAL_STATES = 1;
-
-const int NB_RESISTANCES = 7;
-
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
   public:
@@ -36,7 +32,10 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     enum enumBloodColor { bloodNone = -1, bloodRed, bloodGreen, bloodRock, bloodEgg};
     enum enumSpecialState
     {
-      SpecialStateIce // = 0
+      SpecialStateIce, // = 0
+      SpecialStateSlow,
+
+      NB_SPECIAL_STATES
     };
     enum enumStateResistance { ResistanceImmune, ResistanceVeryHigh, ResistanceHigh, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
     struct specialStateStuct
@@ -47,6 +46,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       float parameter;
     };
     specialStateStuct specialState[NB_SPECIAL_STATES];
+    void setSpecialState(enumSpecialState state, bool active, float timer, float parameter);
 
     enum enumResistances
     {
@@ -57,9 +57,13 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       ResistanceIllusion,
 
       ResistanceRecoil,
-      ResistanceFrozen
+      ResistanceFrozen,
+
+      NB_RESISTANCES
     };
     enumStateResistance resistance[NB_RESISTANCES];
+
+    bool isSpecialStateActive(enumSpecialState state);
 
     virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);

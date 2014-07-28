@@ -65,6 +65,18 @@ BaseCreatureEntity::enumMovingStyle BaseCreatureEntity::getMovingStyle()
   return movingStyle;
 }
 
+bool BaseCreatureEntity::isSpecialStateActive(enumSpecialState state)
+{
+  return specialState[state].active;
+}
+
+void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float parameter)
+{
+  specialState[state].active = active;
+  specialState[state].timer = timer;
+  specialState[state].parameter = parameter;
+}
+
 float BaseCreatureEntity::animateStates(float delay)
 {
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
@@ -130,6 +142,12 @@ void BaseCreatureEntity::animatePhysics(float delay)
 
 	float velx = velocity.x;
 	float vely = velocity.y;
+
+	if (specialState[SpecialStateSlow].active)
+  {
+    velx *= specialState[SpecialStateSlow].parameter;
+    vely *= specialState[SpecialStateSlow].parameter;
+  }
 
 	if (recoil.active)
   {
