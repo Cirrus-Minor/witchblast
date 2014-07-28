@@ -360,11 +360,11 @@ const int CYCLOP_HP = 800;
 const int CYCLOP_DAMAGES = 10;
 
 // Giant Spider
-const float GIANT_SPIDER_SPEED[4] = { 235, 240, 245, 250};
-const int GIANT_SPIDER_NUMBER_EGGS[4] = { 10, 14, 16, 18};
+const float GIANT_SPIDER_SPEED[4] = { 230, 235, 240, 245 };
+const int GIANT_SPIDER_NUMBER_EGGS[4] = { 10, 12, 14, 16};
 const float GIANT_SPIDER_FIRE_DELAY[4] = { 0.8f, 0.7f, 0.6f, 0.5f};
-const int GIANT_SPIDER_HP = 1000;
-const int GIANT_SPIDER_DAMAGE = 12;
+const int GIANT_SPIDER_HP = 800;
+const int GIANT_SPIDER_DAMAGE = 8;
 
 // EFFECTS
 const float HURTING_DELAY = 0.4f;
