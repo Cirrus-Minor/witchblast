@@ -2,6 +2,7 @@
 #include "EnnemyBoltEntity.h"
 #include "PlayerEntity.h"
 #include "SpiderEggEntity.h"
+#include "SpiderWebEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -76,18 +77,20 @@ void GiantSpiderEntity::animate(float delay)
       fireDelay -= delay;
       if (fireDelay <= 0.0f)
       {
-        fire(1);
-        fire(0);fire(0);fire(0);fire(0);
+        if (rand() % 12 == 0)
+        {
+          for (int i = 0; i < 3; i++) new SpiderWebEntity(x, y);
+        }
+        else
+        {
+          for (int i = 0; i < 3; i++) fire(i == 0 ? 1 : 0);
+        }
+
         fireDelay = GIANT_SPIDER_FIRE_DELAY[hurtLevel];
       }
 
       timer -= delay;
-      /*if (timer <= 0.0f)
-      {
-        state = 3;
-        velocity = Vector2D(0.0f, 0.0f);
-        timer = 1.0f;
-      }*/
+
       if (getHealthLevel() > hurtLevel)
       {
         hurtLevel++;

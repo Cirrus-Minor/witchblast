@@ -205,7 +205,7 @@ void EnnemyEntity::dying()
     hVelocity = 200.0f;
     if (agonizingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(agonizingSound);
   }
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
+  if (bloodColor != bloodNone) for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
 }
 
