@@ -1227,7 +1227,7 @@ void WitchBlastGame::generateMap()
   {
     currentMap->setCleared(true);
     Vector2D v = currentMap->generateBonusRoom();
-    int bonusType = getRandomEquipItem(false);
+    int bonusType = getRandomEquipItem(false, false);
     //if (bonusType == EQUIP_FAIRY)
     if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
     {
@@ -1278,7 +1278,7 @@ void WitchBlastGame::generateMap()
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item3->setMerchandise(true);
 
-    int bonusType = getRandomEquipItem(true);
+    int bonusType = getRandomEquipItem(true, true);
     ItemEntity* item2 = new ItemEntity(
       (enumItemType)(FirstEquipItem + bonusType),
       OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
@@ -1430,7 +1430,7 @@ void WitchBlastGame::generateStandardMap()
   generateStandardRoom(level);
 }
 
-item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
+item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noFairy = false)
 {
   std::vector<int> bonusSet;
   int setSize = 0;
@@ -1450,6 +1450,8 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false)
     if (itemOk && player->getShotType(SPECIAL_SHOT_SLOTS_STANDARD) != ShotTypeStandard
         && (items[eq].specialShot != ShotTypeStandard && items[eq].level < 4))
           itemOk = false;
+
+    if (itemOk && noFairy && items[eq].familiar != FamiliarNone) itemOk = false;
 
     if (itemOk)
     {

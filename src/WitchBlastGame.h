@@ -231,7 +231,7 @@ public:
    *
    *  \return the equipment item ID
    */
-  item_equip_enum getRandomEquipItem(bool toSale);
+  item_equip_enum getRandomEquipItem(bool toSale, bool noFairy);
 
     /*!
    *  \brief Adds monsters
