@@ -790,7 +790,7 @@ void PlayerEntity::fire(int direction)
 bool PlayerEntity::canMove()
 {
   return (playerStatus == playerStatusPlaying
-          || playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2);
+          || (playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2));
 }
 
 bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level)
