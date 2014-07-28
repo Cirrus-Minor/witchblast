@@ -26,6 +26,7 @@ SpiderWebEntity::SpiderWebEntity(float x, float y)
   sprite.setOrigin(64.0f, 64.0f);
   viscosity = 0.97f;
   hp = 40;
+  hpMax = 40;
 
   // avoid collisions
   calculateBB();
@@ -39,6 +40,11 @@ SpiderWebEntity::SpiderWebEntity(float x, float y)
 
   if (boundingBox.top < y0) this->y += (y0 - boundingBox.top);
   else if (boundingBox.top + boundingBox.height > yf) this->y -= (boundingBox.top + boundingBox.height - yf);
+
+  resistance[ResistanceFrozen] = ResistanceImmune;
+  resistance[ResistanceRecoil] = ResistanceImmune;
+  resistance[ResistanceFire] = ResistanceVeryLow;
+  resistance[ResistanceStone] = ResistanceVeryLow;
 }
 
 void SpiderWebEntity::animate(float delay)
@@ -51,14 +57,17 @@ void SpiderWebEntity::animate(float delay)
   }
   else
     sprite.setScale(1.0f, 1.0f);
+
+  int color = 177 + 78 * hp / hpMax;
+  sprite.setColor(sf::Color(color, color, color, 255));
 }
 
 void SpiderWebEntity::calculateBB()
 {
-  boundingBox.left = (int)x - 50;
-  boundingBox.width = 100;
-  boundingBox.top = (int)y - 50;
-  boundingBox.height =  100;
+  boundingBox.left = (int)x - 45;
+  boundingBox.width = 90;
+  boundingBox.top = (int)y - 45;
+  boundingBox.height =  90;
 }
 
 void SpiderWebEntity::collideMapRight()
@@ -91,11 +100,6 @@ void SpiderWebEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
 }
 
-/*void SpiderWebEntity::dying()
-{
-  isDying = true;
-}*/
-
 void SpiderWebEntity::drop()
 {
 }
@@ -111,7 +115,11 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        // TODO
+        if (!playerEntity->isSpecialStateActive(SpecialStateSlow))
+        {
+          playerEntity->setSpecialState(SpecialStateSlow, true, 0.1f, 0.33f);
+          hurt(2, ShotTypeStandard, 0);
+        }
       }
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
