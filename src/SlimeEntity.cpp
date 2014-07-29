@@ -242,6 +242,7 @@ bool SlimeEntity::collideWithMap(int direction)
 void SlimeEntity::dying()
 {
   isDying = true;
+  game().addKilledEnemy(enemyType);
   SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadSlime->setZ(OFFSET_Y);
   switch (slimeType)

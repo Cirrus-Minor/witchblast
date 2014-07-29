@@ -297,7 +297,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
     // the player
     player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
-
+    resetKilledEnemies();
     startNewLevel();
   }
 }
@@ -323,6 +323,8 @@ void WitchBlastGame::startNewLevel()
 
   // the boss room is closed
   bossRoomOpened = false;
+  // to test
+  displayKilledEnemies();
   playLevel();
 }
 
@@ -2007,6 +2009,26 @@ void WitchBlastGame::checkFallingEntities()
       }
 		}
 	}
+}
+
+void WitchBlastGame::resetKilledEnemies()
+{
+  for (int i = 0; i < NB_ENEMY; i++) killedEnemies[i] = 0;
+}
+
+void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
+{
+  if (enemyType == NB_ENEMY)
+    std::cout << "[ERROR] No enemy type";
+  else
+    killedEnemies[enemyType]++;
+}
+
+void WitchBlastGame::displayKilledEnemies()
+{
+  std::cout<<"KILLED: ";
+  for (int i = 0; i < NB_ENEMY; i++) if (killedEnemies[i] > 0) std::cout << i << "x" << killedEnemies[i] << " ";
+  std::cout << std::endl;
 }
 
 WitchBlastGame &game()

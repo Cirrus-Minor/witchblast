@@ -60,6 +60,7 @@ void EvilFlowerEntity::calculateBB()
 void EvilFlowerEntity::dying()
 {
   isDying = true;
+  game().addKilledEnemy(enemyType);
   SpriteEntity* deadFlower = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadFlower->setZ(OFFSET_Y);
   deadFlower->setFrame(FRAME_CORPSE_FLOWER);

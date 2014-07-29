@@ -347,6 +347,7 @@ void GiantSlimeEntity::collideMapBottom()
 void GiantSlimeEntity::dying()
 {
   isDying = true;
+  game().addKilledEnemy(enemyType);
   SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
   deadRat->setZ(OFFSET_Y);
   deadRat->setFrame(FRAME_CORPSE_GIANT_SLIME - FRAME_CORPSE_KING_RAT);

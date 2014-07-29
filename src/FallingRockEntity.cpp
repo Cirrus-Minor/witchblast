@@ -111,6 +111,7 @@ bool FallingRockEntity::canCollide()
 void FallingRockEntity::dying()
 {
   isDying = true;
+  game().addKilledEnemy(enemyType);
   SoundManager::getSoundManager()->playSound(SOUND_ROCK_IMPACT);
   game().makeShake(0.1f);
 

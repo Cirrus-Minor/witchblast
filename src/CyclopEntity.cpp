@@ -305,11 +305,6 @@ void CyclopEntity::collideMapBottom()
   afterWallCollide();
 }
 
-void CyclopEntity::dying()
-{
-  EnnemyEntity::dying();
-}
-
 void CyclopEntity::drop()
 {
   ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);

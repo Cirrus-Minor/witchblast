@@ -242,6 +242,9 @@ public:
    */
   void findPlaceMonsters(monster_type_enum monsterType, int amount);
 
+  void addKilledEnemy(enemyTypeEnum enemyType);
+  void displayKilledEnemies();
+
 protected:
   /*!
    *  \brief Rendering method
@@ -269,6 +272,8 @@ protected:
    */
   void renderHudShots(sf::RenderTarget* app);
 
+
+
 private:
   Config config;
   float deltaTime;
@@ -288,6 +293,7 @@ private:
   int firingDirection;        /*!< Save the firing direction - for the "one button" gameplay */
   bool isPlayerAlive;         /*!< Dying sets this bool to false (trigger the ending music) */
   bool monsterArray[MAP_WIDTH][MAP_HEIGHT]; /*!<  use to remember if a case has a monster in monster spawn */
+  int killedEnemies[NB_ENEMY];
 
   // game objects
   PlayerEntity* player;           /*!< Pointer to the player entity */
@@ -562,6 +568,8 @@ private:
    *  \brief Check for falling (in holes) blood or bodies
    */
   void checkFallingEntities();
+
+  void resetKilledEnemies();
 };
 
 /*!

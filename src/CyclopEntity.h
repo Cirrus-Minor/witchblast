@@ -21,7 +21,6 @@ class CyclopEntity : public EnnemyEntity
     virtual bool hurt(int damages, enumShotType hurtingType, int level);
 
 	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
-	  virtual void dying();
 	  virtual void drop();
 
 	  void computeStates(float delay);
