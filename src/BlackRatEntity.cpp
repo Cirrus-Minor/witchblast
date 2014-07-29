@@ -26,6 +26,7 @@ BlackRatEntity::BlackRatEntity(float x, float y)
   dyingFrame = 22;
   deathFrame = FRAME_CORPSE_BLACK_RAT;
   agonizingSound = SOUND_RAT_DYING;
+  enemyType = EnemyTypeRatBlack;
 
   currentDirection = 0;
 

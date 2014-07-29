@@ -11,7 +11,8 @@ SpiderWebEntity::SpiderWebEntity(float x, float y)
   : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SPIDER_WEB), x, y)
 {
   imagesProLine = 20;
-  type = ENTITY_ENNEMY;
+  type = ENTITY_ENNEMY_INVOCATED;
+  enemyType = EnemyTypeSpiderWeb;
   movingStyle = movFlying;
   bloodColor = bloodNone; // web don't bleed
   deathFrame = FRAME_CORPSE_SPIDER_WEB;

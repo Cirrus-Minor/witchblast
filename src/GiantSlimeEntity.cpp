@@ -25,6 +25,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   missileDelay = GIANT_SLIME_MISSILE_DELAY;
 
   type = ENTITY_ENNEMY_BOSS;
+  enemyType = EnemyTypeSlimeBoss;
   bloodColor = bloodGreen;
   shadowFrame = 3;
   frame = 0;

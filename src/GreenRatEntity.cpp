@@ -18,6 +18,7 @@ GreenRatEntity::GreenRatEntity(float x, float y)
   meleeDamages = GREEN_RAT_DAMAGES;
 
   type = ENTITY_ENNEMY_INVOCATED;
+  enemyType = EnemyTypeRatGreen;
   bloodColor = bloodRed;
   shadowFrame = 7;
   dyingFrame = 14;

@@ -26,6 +26,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
   meleeDamages = GIANT_SPIDER_DAMAGE;
 
   type = ENTITY_ENNEMY;
+  enemyType = EnemyTypeSpiderGiant;
   bloodColor = bloodGreen;
   shadowFrame = 3;
   dyingFrame = 4;

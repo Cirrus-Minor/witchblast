@@ -34,12 +34,19 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
     resistance[ResistanceFrozen] = ResistanceImmune;
     resistance[ResistanceIce] = ResistanceHigh;
     resistance[ResistanceFire] = ResistanceLow;
+    enemyType = invocated ? EnemyTypeSlimeBlue_invocated : EnemyTypeSlimeBlue;
   }
   else if (slimeType == SlimeTypeRed)
   {
     resistance[ResistanceIce] = ResistanceLow;
     resistance[ResistanceFire] = ResistanceHigh;
+    enemyType = invocated ? EnemyTypeSlimeRed_invocated : EnemyTypeSlimeRed;
   }
+  else
+  {
+    enemyType = invocated ? EnemyTypeSlime_invocated : EnemyTypeSlime;
+  }
+
 
   bloodColor = bloodGreen;
   frame = 0;

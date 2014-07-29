@@ -21,6 +21,7 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
   hVelocity = 0.0f;
 
   this->rockType = rockType;
+  enemyType = EnemyTypeRockFalling;
 
   switch (rockType)
   {

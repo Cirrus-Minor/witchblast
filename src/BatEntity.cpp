@@ -23,6 +23,8 @@ BatEntity::BatEntity(float x, float y)
   dyingFrame = 2;
   deathFrame = FRAME_CORPSE_BAT;
   agonizingSound = SOUND_BAT_DYING;
+
+  enemyType = EnemyTypeBat;
 }
 
 void BatEntity::animate(float delay)

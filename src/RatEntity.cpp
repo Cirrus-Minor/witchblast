@@ -22,6 +22,7 @@ RatEntity::RatEntity(float x, float y)
   dyingFrame = 6;
   deathFrame = FRAME_CORPSE_RAT;
   agonizingSound = SOUND_RAT_DYING;
+  enemyType = EnemyTypeRat;
 }
 
 void RatEntity::animate(float delay)

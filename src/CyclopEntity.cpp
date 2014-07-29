@@ -40,6 +40,7 @@ CyclopEntity::CyclopEntity(float x, float y)
   timer = 2.0f;
   counter = 10;
   age = -1.5f;
+  enemyType = EnemyTypeCyclops;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;

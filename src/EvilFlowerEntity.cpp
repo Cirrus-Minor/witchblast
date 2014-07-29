@@ -20,7 +20,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y)
 
   type = 23;
   bloodColor = bloodGreen;
-  //shadowFrame = 2;
+  enemyType = EnemyTypeEvilFlower;
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;
   age = -1.0f + (rand() % 2500) * 0.001f;

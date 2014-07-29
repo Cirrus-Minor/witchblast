@@ -17,6 +17,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y)
   meleeDamages = 5;
 
   type = ENTITY_ENNEMY_INVOCATED;
+  enemyType = EnemyTypeSpiderLittle_invocated;
   bloodColor = bloodGreen;
   shadowFrame = 4;
   dyingFrame = 3;

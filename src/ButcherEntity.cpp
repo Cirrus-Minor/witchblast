@@ -29,6 +29,7 @@ ButcherEntity::ButcherEntity(float x, float y)
   deathFrame = FRAME_CORPSE_BUTCHER;
   agonizingSound = SOUND_BUTCHER_DIE;
   hurtingSound = SOUND_BUTCHER_HURT;
+  enemyType = EnemyTypeButcher;
 
   timer = (rand() % 50) / 10.0f;
   age = -1.5f;

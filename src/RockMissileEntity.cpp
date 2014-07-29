@@ -14,6 +14,7 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
   imagesProLine = 20;
     collisionDirection = -1;
   type = ENTITY_ENNEMY;
+  enemyType = EnemyTypeRockMissile;
   movingStyle = movFlying;
   bloodColor = bloodNone; // stones don't bleed
   hasCollided = false;

@@ -24,6 +24,8 @@ EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y)
   agonizingSound = SOUND_NONE;
   hurtingSound = SOUND_NONE;
   isAgonising = false;
+
+  enemyType = NB_ENEMY;
 }
 
 void EnnemyEntity::animate(float delay)

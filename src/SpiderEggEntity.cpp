@@ -13,6 +13,7 @@ SpiderEggEntity::SpiderEggEntity(float x, float y)
 {
   imagesProLine = 20;
   type = ENTITY_ENNEMY_INVOCATED;
+  enemyType = EnemyTypeSpiderEgg_invocated;
   movingStyle = movFlying;
   bloodColor = bloodGreen;
   deathFrame = FRAME_CORPSE_SPIDER_EGG;
