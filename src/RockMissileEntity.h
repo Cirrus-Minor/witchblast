@@ -1,9 +1,9 @@
 #ifndef ROCKMISSILENTITY_H
 #define ROCKMISSILENTITY_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class RockMissileEntity : public EnnemyEntity
+class RockMissileEntity : public EnemyEntity
 {
   public:
     RockMissileEntity(float x, float y, int rockType);

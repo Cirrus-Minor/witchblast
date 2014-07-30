@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocated)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), x, y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
@@ -129,7 +129,7 @@ void SlimeEntity::animate(float delay)
     else frame = 0;
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   z = y + 14;
 }
 
@@ -189,7 +189,7 @@ void SlimeEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );

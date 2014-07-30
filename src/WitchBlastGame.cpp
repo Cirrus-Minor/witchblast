@@ -26,7 +26,7 @@
 #include "BlackRatEntity.h"
 #include "GreenRatEntity.h"
 #include "KingRatEntity.h"
-#include "CyclopEntity.h"
+#include "CyclopsEntity.h"
 #include "GiantSpiderEntity.h"
 #include "GiantSlimeEntity.h"
 #include "ButcherEntity.h"
@@ -945,7 +945,7 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
 		if (e->getType() >= 20)
 		{
 		  // enemy
-		  EnnemyEntity* enemy = dynamic_cast<EnnemyEntity*>(e);
+		  EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
 		  float d2 = (x - enemy->getX()) * (x - enemy->getX()) + (y - enemy->getY()) * (y - enemy->getY());
 
 		  if (target.x < -1.0f || d2 < distanceMin)
@@ -1307,7 +1307,7 @@ void WitchBlastGame::generateMap()
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else if (level == 4)
-      new CyclopEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+      new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else //if (level == 5)
       new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
@@ -1607,6 +1607,9 @@ void WitchBlastGame::saveGame()
       }
       file << std::endl;
     }
+    // kill stats
+    for (i = 0; i < NB_ENEMY; i++) file << killedEnemies[i] << " ";
+    file << std::endl;
 
     // maps
     saveMapItems();
@@ -1730,6 +1733,9 @@ bool WitchBlastGame::loadGame()
         currentFloor->setRoom(i, j, n);
       }
     }
+
+    // kill stats
+    for (int i = 0; i < NB_ENEMY; i++) file >> killedEnemies[i];
 
     // maps
     int nbRooms;

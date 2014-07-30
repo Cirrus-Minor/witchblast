@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 GreenRatEntity::GreenRatEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
 {
   imagesProLine = 8;
   creatureSpeed = GREEN_RAT_SPEED;
@@ -67,7 +67,7 @@ void GreenRatEntity::animate(float delay)
     }
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
 }
 
 void GreenRatEntity::calculateBB()
@@ -110,7 +110,7 @@ void GreenRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );

@@ -10,7 +10,7 @@
 #include <math.h>
 
 EvilFlowerEntity::EvilFlowerEntity(float x, float y)
-    : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_FLOWER), x, y)
+    : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_FLOWER), x, y)
 {
   hp = EVIL_FLOWER_HP;
   meleeDamages = EVIL_FLOWER_MELEE_DAMAGES;
@@ -35,7 +35,7 @@ void EvilFlowerEntity::animate(float delay)
   else if (fireDelay < 1.4f) setSpin(120.0f);
   else setSpin(50.0f);
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   angle += spin * flowerDelay;
 
   if (age > 0.0f)
@@ -97,5 +97,5 @@ void EvilFlowerEntity::render(sf::RenderTarget* app)
     app->draw(sprite);
 
     sprite.setRotation(savedAngle);
-    EnnemyEntity::render(app);
+    EnemyEntity::render(app);
 }

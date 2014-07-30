@@ -10,7 +10,7 @@
 #include <iostream>
 
 BlackRatEntity::BlackRatEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y),
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y),
   currentTile(0, 0),
   targetTile(0, 0)
 {
@@ -49,7 +49,7 @@ void BlackRatEntity::animate(float delay)
     if (facingDirection == 8) frame += 4;
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
 }
 
 void BlackRatEntity::calculateBB()
@@ -82,7 +82,7 @@ void BlackRatEntity::collideMapBottom()
 
 void BlackRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     if (currentDirection == 6 && entity->getX() > x)

@@ -1,4 +1,4 @@
-#include "CyclopEntity.h"
+#include "CyclopsEntity.h"
 #include "BoltEntity.h"
 #include "PlayerEntity.h"
 #include "RockMissileEntity.h"
@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-CyclopEntity::CyclopEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
+CyclopsEntity::CyclopsEntity(float x, float y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
 {
   width = 128;
   height = 192;
@@ -46,7 +46,7 @@ CyclopEntity::CyclopEntity(float x, float y)
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
 }
 
-int CyclopEntity::getHealthLevel()
+int CyclopsEntity::getHealthLevel()
 {
   int healthLevel = 0;
   if (hp <= hpMax * 0.25) healthLevel = 3;
@@ -55,20 +55,20 @@ int CyclopEntity::getHealthLevel()
   return healthLevel;
 }
 
-void CyclopEntity::fire()
+void CyclopsEntity::fire()
 {
   new RockMissileEntity(x, y - 62, nextRockMissile);
   SoundManager::getSoundManager()->playSound(SOUND_THROW);
 }
 
-void CyclopEntity::initFallingGrid()
+void CyclopsEntity::initFallingGrid()
 {
   for (int i = 0; i < MAP_WIDTH; i++)
     for (int j = 0; j < MAP_HEIGHT; j++)
       fallingGrid[i][j] = false;
 }
 
-void CyclopEntity::fallRock()
+void CyclopsEntity::fallRock()
 {
   int rx, ry;
   do
@@ -85,7 +85,7 @@ void CyclopEntity::fallRock()
 }
 
 
-void CyclopEntity::computeNextRockMissile()
+void CyclopsEntity::computeNextRockMissile()
 {
   if (getHealthLevel() == 0)
     nextRockMissile = rand()%5 == 0 ? 1 : 0;
@@ -97,7 +97,7 @@ void CyclopEntity::computeNextRockMissile()
     nextRockMissile = rand()%3 == 0 ? 0 : 1;
 }
 
-void CyclopEntity::computeStates(float delay)
+void CyclopsEntity::computeStates(float delay)
 {
   timer -= delay;
 
@@ -184,7 +184,7 @@ void CyclopEntity::computeStates(float delay)
   }
 }
 
-void CyclopEntity::animate(float delay)
+void CyclopsEntity::animate(float delay)
 {
   if (age <= 0.0f)
   {
@@ -260,13 +260,13 @@ void CyclopEntity::animate(float delay)
   z = OFFSET_Y + y + 46;
 }
 
-bool CyclopEntity::hurt(int damages, enumShotType hurtingType, int level)
+bool CyclopsEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   if (destroyLevel < getHealthLevel()) damages /= 3;
-  return EnnemyEntity::hurt(damages, hurtingType, level);
+  return EnemyEntity::hurt(damages, hurtingType, level);
 }
 
-void CyclopEntity::calculateBB()
+void CyclopsEntity::calculateBB()
 {
   boundingBox.left = OFFSET_X + (int)x - 32;
   boundingBox.width = 58;
@@ -274,47 +274,47 @@ void CyclopEntity::calculateBB()
   boundingBox.height =  90;
 }
 
-void CyclopEntity::afterWallCollide()
+void CyclopsEntity::afterWallCollide()
 {
 }
-void CyclopEntity::collideMapRight()
-{
-  velocity.x = -velocity.x;
-
-  afterWallCollide();
-}
-
-void CyclopEntity::collideMapLeft()
+void CyclopsEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
 
   afterWallCollide();
 }
 
-void CyclopEntity::collideMapTop()
+void CyclopsEntity::collideMapLeft()
+{
+  velocity.x = -velocity.x;
+
+  afterWallCollide();
+}
+
+void CyclopsEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
 
   afterWallCollide();
 }
 
-void CyclopEntity::collideMapBottom()
+void CyclopsEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
 
   afterWallCollide();
 }
 
-void CyclopEntity::drop()
+void CyclopsEntity::drop()
 {
   ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
 }
 
-void CyclopEntity::render(sf::RenderTarget* app)
+void CyclopsEntity::render(sf::RenderTarget* app)
 {
-  EnnemyEntity::render(app);
+  EnemyEntity::render(app);
 
   // stones
   if (state == 1)
@@ -361,15 +361,15 @@ void CyclopEntity::render(sf::RenderTarget* app)
                          app, 0 , 0);
 }
 
-void CyclopEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void CyclopsEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     inflictsRecoilTo(entity);
   }
 }
 
-void CyclopEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+void CyclopsEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
 {
 }

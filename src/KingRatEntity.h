@@ -1,10 +1,10 @@
 #ifndef KINGRATSPRITE_H
 #define KINGRATSPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-class KingRatEntity : public EnnemyEntity
+class KingRatEntity : public EnemyEntity
 {
   public:
     KingRatEntity(float x, float y);

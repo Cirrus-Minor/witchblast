@@ -12,7 +12,7 @@
 #include <iostream>
 
 GiantSpiderEntity::GiantSpiderEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_GIANT_SPIDER), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_GIANT_SPIDER), x, y)
 {
   width = 128;
   height = 128;
@@ -139,14 +139,14 @@ void GiantSpiderEntity::animate(float delay)
     }
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   z = y + 40;
 }
 
 bool GiantSpiderEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   if (hurtLevel < getHealthLevel()) damages /= 5;
-  return EnnemyEntity::hurt(damages, hurtingType, level);
+  return EnemyEntity::hurt(damages, hurtingType, level);
 }
 
 void GiantSpiderEntity::calculateBB()
@@ -183,7 +183,7 @@ void GiantSpiderEntity::collideMapBottom()
 
 void GiantSpiderEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D v = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 150.0f);

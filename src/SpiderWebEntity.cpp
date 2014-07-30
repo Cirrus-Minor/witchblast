@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 SpiderWebEntity::SpiderWebEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SPIDER_WEB), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SPIDER_WEB), x, y)
 {
   imagesProLine = 20;
   type = ENTITY_ENNEMY_INVOCATED;
@@ -50,7 +50,7 @@ SpiderWebEntity::SpiderWebEntity(float x, float y)
 
 void SpiderWebEntity::animate(float delay)
 {
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   if (age <= 0.5f)
   {
     float scale = age * 2.0f;

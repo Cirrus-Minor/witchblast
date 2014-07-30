@@ -7,7 +7,7 @@
 #include "WitchBlastGame.h"
 
 BatEntity::BatEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), x, y)
 {
   creatureSpeed = BAT_SPEED;
   velocity = Vector2D(creatureSpeed);
@@ -40,7 +40,7 @@ void BatEntity::animate(float delay)
   else
     frame = ((int)(age * 5.0f)) % 2;
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
 }
 
 void BatEntity::calculateBB()
@@ -73,7 +73,7 @@ void BatEntity::collideMapBottom()
 
 void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movFlying)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), BAT_SPEED ));
@@ -82,6 +82,6 @@ void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 void BatEntity::dying()
 {
-  EnnemyEntity::dying();
+  EnemyEntity::dying();
   h = 25.0f;
 }

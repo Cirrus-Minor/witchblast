@@ -8,7 +8,7 @@
 #include "EnnemyBoltEntity.h"
 
 ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_IMP), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_IMP), x, y)
 {
   // general
   creatureSpeed = IMP_SPEED;
@@ -99,7 +99,7 @@ void ImpEntity::animate(float delay)
     if (impType == ImpTypeBlue) frame += 5;
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
 }
 
 void ImpEntity::calculateBB()
@@ -132,7 +132,7 @@ void ImpEntity::collideMapBottom()
 
 void ImpEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movFlying)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
@@ -141,7 +141,7 @@ void ImpEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 bool ImpEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
-  bool result = EnnemyEntity::hurt(damages, hurtingType, level);
+  bool result = EnemyEntity::hurt(damages, hurtingType, level);
 
   if (!isDying && !isAgonising)
   {
@@ -155,7 +155,7 @@ bool ImpEntity::hurt(int damages, enumShotType hurtingType, int level)
 
 void ImpEntity::dying()
 {
-  EnnemyEntity::dying();
+  EnemyEntity::dying();
   h = 25.0f;
 }
 

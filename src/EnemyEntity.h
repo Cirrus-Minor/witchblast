@@ -37,10 +37,10 @@ enum enemyTypeEnum
   NB_ENEMY // = no enemy
 };
 
-class EnnemyEntity : public BaseCreatureEntity
+class EnemyEntity : public BaseCreatureEntity
 {
 public:
-  EnnemyEntity(sf::Texture* image, float x, float y);
+  EnemyEntity(sf::Texture* image, float x, float y);
   virtual void animate(float delay);
   virtual void calculateBB();
   virtual void render(sf::RenderTarget* app);

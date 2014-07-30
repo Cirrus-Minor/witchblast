@@ -1,9 +1,9 @@
 #ifndef RATSPRITE_H
 #define RATSPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class RatEntity : public EnnemyEntity
+class RatEntity : public EnemyEntity
 {
   public:
     RatEntity(float x, float y);

@@ -7,7 +7,7 @@
 #include "WitchBlastGame.h"
 
 RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
 {
 
   Vector2D targetPos = game().getPlayerPosition();
@@ -43,7 +43,7 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
 
 void RockMissileEntity::animate(float delay)
 {
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   if (x < -60 || x > 1050 || y < - 50 || y > 800) isDying = true;
 }
 

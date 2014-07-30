@@ -1,4 +1,4 @@
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "BoltEntity.h"
 #include "PlayerEntity.h"
 #include "sfml_game/SpriteEntity.h"
@@ -8,7 +8,7 @@
 #include <iostream>
 #include "WitchBlastGame.h"
 
-EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y)
+EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
     : BaseCreatureEntity (image, x, y, 64, 64)
 {
   type = ENTITY_ENNEMY;
@@ -28,7 +28,7 @@ EnnemyEntity::EnnemyEntity(sf::Texture* image, float x, float y)
   enemyType = NB_ENEMY;
 }
 
-void EnnemyEntity::animate(float delay)
+void EnemyEntity::animate(float delay)
 {
   if (isAgonising)
   {
@@ -69,7 +69,7 @@ void EnnemyEntity::animate(float delay)
     age += delay;
 }
 
-void EnnemyEntity::calculateBB()
+void EnemyEntity::calculateBB()
 {
     boundingBox.left = (int)x - width / 2;
     boundingBox.width = width;
@@ -77,27 +77,27 @@ void EnnemyEntity::calculateBB()
     boundingBox.height =  height;
 }
 
-void EnnemyEntity::collideMapRight()
+void EnemyEntity::collideMapRight()
 {
     velocity.x = 0.0f;
 }
 
-void EnnemyEntity::collideMapLeft()
+void EnemyEntity::collideMapLeft()
 {
     velocity.x = 0.0f;
 }
 
-void EnnemyEntity::collideMapTop()
+void EnemyEntity::collideMapTop()
 {
     velocity.y = 0.0f;
 }
 
-void EnnemyEntity::collideMapBottom()
+void EnemyEntity::collideMapBottom()
 {
     velocity.y = 0.0f;
 }
 
-void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
+void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
   if (!isDying && !isAgonising && collideWithEntity(entity))
   {
@@ -168,7 +168,7 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       {
         if (this != entity)
         {
-          EnnemyEntity* ennemyEntity = static_cast<EnnemyEntity*>(entity);
+          EnemyEntity* ennemyEntity = static_cast<EnemyEntity*>(entity);
           if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
         }
       }
@@ -176,12 +176,12 @@ void EnnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   }
 }
 
-void EnnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void EnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
   // To implement the behaviour when colliding with another ennemy
 }
 
-bool EnnemyEntity::hurt(int damages, enumShotType hurtingType, int level)
+bool EnemyEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   bool hurted = BaseCreatureEntity::hurt(damages, hurtingType, level);
   if (hurted && hurtingSound != SOUND_NONE && hp > 0)
@@ -189,7 +189,7 @@ bool EnnemyEntity::hurt(int damages, enumShotType hurtingType, int level)
   return hurted;
 }
 
-void EnnemyEntity::dying()
+void EnemyEntity::dying()
 {
   if (dyingFrame == -1)
   {
@@ -212,7 +212,7 @@ void EnnemyEntity::dying()
   game().addKilledEnemy(enemyType);
 }
 
-void EnnemyEntity::drop()
+void EnemyEntity::drop()
 {
   if (rand() % 5 == 0)
   {
@@ -231,12 +231,12 @@ void EnnemyEntity::drop()
   }
 }
 
-bool EnnemyEntity::canCollide()
+bool EnemyEntity::canCollide()
 {
   return (!isAgonising);
 }
 
-void EnnemyEntity::render(sf::RenderTarget* app)
+void EnemyEntity::render(sf::RenderTarget* app)
 {
   if (isAgonising || (isDying && dyingFrame > -1))
   {
@@ -267,7 +267,7 @@ void EnnemyEntity::render(sf::RenderTarget* app)
     BaseCreatureEntity::render(app);
 }
 
-void EnnemyEntity::displayLifeBar(std::string name, float posY, sf::RenderTarget* app)
+void EnemyEntity::displayLifeBar(std::string name, float posY, sf::RenderTarget* app)
 {
   float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
 

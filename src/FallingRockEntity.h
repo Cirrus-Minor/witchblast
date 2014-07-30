@@ -1,9 +1,9 @@
 #ifndef FALLINGROCKENTITY_H
 #define FALLINGROCKENTITY_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class FallingRockEntity : public EnnemyEntity
+class FallingRockEntity : public EnemyEntity
 {
   public:
     FallingRockEntity(float x, float y, int rockType);

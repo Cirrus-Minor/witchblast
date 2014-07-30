@@ -1,10 +1,10 @@
 #ifndef EVILFLOWER_H
 #define EVILFLOWER_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-class EvilFlowerEntity : public EnnemyEntity
+class EvilFlowerEntity : public EnemyEntity
 {
   public:
     EvilFlowerEntity(float x, float y);

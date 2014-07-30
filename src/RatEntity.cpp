@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 RatEntity::RatEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
 {
   creatureSpeed = RAT_SPEED;
   velocity = Vector2D(creatureSpeed);
@@ -35,7 +35,7 @@ void RatEntity::animate(float delay)
     if (facingDirection == 8) frame += 4;
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
 }
 
 void RatEntity::calculateBB()
@@ -76,7 +76,7 @@ void RatEntity::collideMapBottom()
 
 void RatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));

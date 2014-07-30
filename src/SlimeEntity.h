@@ -1,12 +1,12 @@
 #ifndef SLIMESPRITE_H
 #define SLIMESPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
 enum slimeTypeEnum { SlimeTypeStandard, SlimeTypeRed, SlimeTypeBlue };
 
-class SlimeEntity : public EnnemyEntity
+class SlimeEntity : public EnemyEntity
 {
   public:
     SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocated);

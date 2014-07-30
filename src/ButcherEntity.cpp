@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 ButcherEntity::ButcherEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BUTCHER), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BUTCHER), x, y)
 {
   width = 128;
   height = 128;
@@ -65,7 +65,7 @@ void ButcherEntity::animate(float delay)
     else if (velocity.x < -1.0f) isMirroring = false;
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   z = y + 55;
 }
 
@@ -105,7 +105,7 @@ void ButcherEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );
@@ -123,7 +123,7 @@ void ButcherEntity::drop()
 
 void ButcherEntity::render(sf::RenderTarget* app)
 {
-    EnnemyEntity::render(app);
+    EnemyEntity::render(app);
 
     float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
 
@@ -150,5 +150,5 @@ bool ButcherEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   creatureSpeed = BUTCHER_VELOCITY + hpMax - hp;
   setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
-  return EnnemyEntity::hurt(damages, hurtingType, level);
+  return EnemyEntity::hurt(damages, hurtingType, level);
 }

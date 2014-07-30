@@ -1,9 +1,9 @@
 #ifndef IMPSPRITE_H
 #define IMPSPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class ImpEntity : public EnnemyEntity
+class ImpEntity : public EnemyEntity
 {
   public:
     enum impTypeEnum { ImpTypeRed, ImpTypeBlue };

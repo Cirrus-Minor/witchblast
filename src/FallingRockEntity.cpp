@@ -7,7 +7,7 @@
 #include "WitchBlastGame.h"
 
 FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
 {
   imagesProLine = 20;
   type = ENTITY_ENNEMY;

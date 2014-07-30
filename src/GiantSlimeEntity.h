@@ -1,10 +1,10 @@
 #ifndef GIANTSLIMESPRITE_H
 #define GIANTSLIMESPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-class GiantSlimeEntity : public EnnemyEntity
+class GiantSlimeEntity : public EnemyEntity
 {
   public:
     GiantSlimeEntity(float x, float y);

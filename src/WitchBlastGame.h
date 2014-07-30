@@ -20,7 +20,7 @@
 #include "sfml_game/Game.h"
 #include "sfml_game/TileMapEntity.h"
 #include "PlayerEntity.h"
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "DoorEntity.h"
 #include "GameFloor.h"
 #include "Config.h"

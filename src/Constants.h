@@ -20,12 +20,12 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.2.5";
+const std::string APP_VERSION =   "0.2.7";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
 
-const std::string SAVE_VERSION =  "SAVE_0.1.2.1";
+const std::string SAVE_VERSION =  "SAVE_0.2.7";
 
 // Client size
 const int SCREEN_WIDTH = 970;

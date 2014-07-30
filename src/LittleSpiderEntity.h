@@ -1,10 +1,10 @@
 #ifndef LITTLESPIDERENTITY_H
 #define LITTLESPIDERENTITY_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-class LittleSpiderEntity : public EnnemyEntity
+class LittleSpiderEntity : public EnemyEntity
 {
   public:
     LittleSpiderEntity(float x, float y);

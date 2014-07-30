@@ -1,9 +1,9 @@
 #ifndef SPIDERWEBENTITY_H
 #define SPIDERWEBENTITY_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class SpiderWebEntity : public EnnemyEntity
+class SpiderWebEntity : public EnemyEntity
 {
   public:
     SpiderWebEntity(float x, float y);

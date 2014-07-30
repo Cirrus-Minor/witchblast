@@ -1,9 +1,9 @@
 #ifndef BATSPRITE_H
 #define BATSPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class BatEntity : public EnnemyEntity
+class BatEntity : public EnemyEntity
 {
   public:
     BatEntity(float x, float y);

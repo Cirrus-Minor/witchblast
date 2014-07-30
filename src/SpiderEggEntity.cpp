@@ -9,7 +9,7 @@
 #include "WitchBlastGame.h"
 
 SpiderEggEntity::SpiderEggEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SPIDER_EGG), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SPIDER_EGG), x, y)
 {
   imagesProLine = 20;
   type = ENTITY_ENNEMY_INVOCATED;
@@ -53,7 +53,7 @@ void SpiderEggEntity::animate(float delay)
       }
     }
   }
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   z = y + 25;
 
   frame = 0;

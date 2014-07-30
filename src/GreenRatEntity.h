@@ -1,10 +1,10 @@
 #ifndef GREENRATSPRITE_H
 #define GREENRATSPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-class GreenRatEntity : public EnnemyEntity
+class GreenRatEntity : public EnemyEntity
 {
   public:
     GreenRatEntity(float x, float y);

@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 LittleSpiderEntity::LittleSpiderEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_LITTLE_SPIDER), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_LITTLE_SPIDER), x, y)
 {
   imagesProLine = 8;
   creatureSpeed = 175.0f;
@@ -44,7 +44,7 @@ void LittleSpiderEntity::animate(float delay)
     frame = ((int)(age * 5.0f)) % 3;
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   z = y + 25;
 }
 
@@ -88,7 +88,7 @@ void LittleSpiderEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );

@@ -1,13 +1,13 @@
 #ifndef CYCLOPENTITY_H
 #define CYCLOPENTITY_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-class CyclopEntity : public EnnemyEntity
+class CyclopsEntity : public EnemyEntity
 {
   public:
-    CyclopEntity(float x, float y);
+    CyclopsEntity(float x, float y);
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();

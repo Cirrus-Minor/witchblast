@@ -12,7 +12,7 @@
 #include <iostream>
 
 GiantSlimeEntity::GiantSlimeEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_GIANT_SLIME), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_GIANT_SLIME), x, y)
 {
   width = 128;
   height = 128;
@@ -142,7 +142,7 @@ void GiantSlimeEntity::animate(float delay)
     age += delay;
     return;
   }
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
 
   timer -= delay;
@@ -426,7 +426,7 @@ void GiantSlimeEntity::render(sf::RenderTarget* app)
 
 void GiantSlimeEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     inflictsRecoilTo(entity);

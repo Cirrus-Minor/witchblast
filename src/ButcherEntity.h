@@ -1,10 +1,10 @@
 #ifndef BUTCHERENTITY_H
 #define BUTCHERENTITY_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-class ButcherEntity : public EnnemyEntity
+class ButcherEntity : public EnemyEntity
 {
   public:
     ButcherEntity(float x, float y);

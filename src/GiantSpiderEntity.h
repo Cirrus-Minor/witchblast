@@ -1,9 +1,9 @@
 #ifndef GIANTSPIDERENTITY_H
 #define GIANTSPIDERENTITY_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class GiantSpiderEntity : public EnnemyEntity
+class GiantSpiderEntity : public EnemyEntity
 {
   public:
     GiantSpiderEntity(float x, float y);

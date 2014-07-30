@@ -1,9 +1,9 @@
 #ifndef BLACKRATSPRITE_H
 #define BLACKRATSPRITE_H
 
-#include "EnnemyEntity.h"
+#include "EnemyEntity.h"
 
-class BlackRatEntity : public EnnemyEntity
+class BlackRatEntity : public EnemyEntity
 {
   public:
     BlackRatEntity(float x, float y);

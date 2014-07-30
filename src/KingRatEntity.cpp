@@ -11,7 +11,7 @@
 #include <iostream>
 
 KingRatEntity::KingRatEntity(float x, float y)
-  : EnnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_KING_RAT), x, y)
+  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_KING_RAT), x, y)
 {
   width = 128;
   height = 128;
@@ -77,7 +77,7 @@ void KingRatEntity::animate(float delay)
     return;
   }
 
-  EnnemyEntity::animate(delay);
+  EnemyEntity::animate(delay);
   if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
 
   float timerMult = 1.0f;
@@ -251,7 +251,7 @@ bool KingRatEntity::hurt(int damages, enumShotType hurtingType, int level)
   if (state == 6)
     newDamages = damages / 4;
 
-   return EnnemyEntity::hurt(newDamages, hurtingType, level);
+   return EnemyEntity::hurt(newDamages, hurtingType, level);
 }
 
 void KingRatEntity::calculateBB()
@@ -330,7 +330,7 @@ void KingRatEntity::generateGreenRats()
 
 void KingRatEntity::render(sf::RenderTarget* app)
 {
-    EnnemyEntity::render(app);
+    EnemyEntity::render(app);
 
     if (state == 6)
     {
@@ -369,7 +369,7 @@ void KingRatEntity::render(sf::RenderTarget* app)
 
 void KingRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnnemyEntity* entity = static_cast<EnnemyEntity*>(collidingEntity);
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     inflictsRecoilTo(entity);
