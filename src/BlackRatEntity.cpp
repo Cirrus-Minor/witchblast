@@ -7,26 +7,39 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-#include <iostream>
-
-BlackRatEntity::BlackRatEntity(float x, float y)
+BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
   : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y),
   currentTile(0, 0),
   targetTile(0, 0)
 {
+  this->ratType = ratType;
   imagesProLine = 8;
-  creatureSpeed = BLACK_RAT_SPEED;
-  hp = BLACK_RAT_HP;
+
+  if (ratType == RatBlackTypeNormal)
+  {
+    frame = 16;
+    dyingFrame = 22;
+    deathFrame = FRAME_CORPSE_RAT;
+    enemyType = EnemyTypeRatBlack;
+    hp = RAT_HP;
+    creatureSpeed = RAT_SPEED;
+  }
+  else //(ratType == RatBlackTypeHelmet)
+  {
+    frame = 32;
+    dyingFrame = 38;
+    deathFrame = FRAME_CORPSE_BLACK_RAT_HELMET;
+    enemyType = EnemyTypeRatBlackHelmet;
+    hp = RAT_HP_HELMET;
+    creatureSpeed = RAT_SPEED;
+  }
+
   meleeDamages = BLACK_RAT_DAMAGES;
 
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
   shadowFrame = 7;
-  frame = 16;
-  dyingFrame = 22;
-  deathFrame = FRAME_CORPSE_BLACK_RAT;
   agonizingSound = SOUND_RAT_DYING;
-  enemyType = EnemyTypeRatBlack;
 
   currentDirection = 0;
 
@@ -47,6 +60,9 @@ void BlackRatEntity::animate(float delay)
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
     isMirroring = (facingDirection == 4 );
     if (facingDirection == 8) frame += 4;
+
+    if (ratType == RatBlackTypeHelmet)
+      frame += 16;
   }
 
   EnemyEntity::animate(delay);
@@ -190,4 +206,43 @@ void BlackRatEntity::findNextGoal()
   }
 
   facingDirection = currentDirection;
+}
+
+void BlackRatEntity::collideWithBolt(BoltEntity* boltEntity)
+{
+  if (ratType == RatBlackTypeHelmet && boltEntity->getBoltType() != ShotTypeIllusion)
+  {
+    int collisionDir = getCollisionDirection(boltEntity);
+    bool boltCollide = true;
+
+    switch (facingDirection)
+    {
+    case 4:
+      if (collisionDir == 7 || collisionDir == 4 || collisionDir == 1) boltCollide = false;
+      break;
+    case 2:
+      if (collisionDir == 1 || collisionDir == 2 || collisionDir == 3) boltCollide = false;
+      break;
+    case 6:
+      if (collisionDir == 9 || collisionDir == 6 || collisionDir == 3) boltCollide = false;
+      break;
+    case 8:
+      if (collisionDir == 7 || collisionDir == 8 || collisionDir == 9) boltCollide = false;
+      break;
+    }
+    if (boltCollide) EnemyEntity::collideWithBolt(boltEntity);
+    else
+    {
+      float xs = (x + boltEntity->getX()) / 2;
+      float ys = (y + boltEntity->getY()) / 2;
+      boltEntity->collide();
+      SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+      star->setFading(true);
+      star->setZ(y+ 100);
+      star->setLifetime(0.7f);
+      star->setType(16);
+      star->setSpin(400.0f);
+    }
+  }
+  else EnemyEntity::collideWithBolt(boltEntity);
 }

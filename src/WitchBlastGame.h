@@ -240,7 +240,7 @@ public:
    *  \param monsterType : monster type
    *  \param amount : amount of monsters
    */
-  void findPlaceMonsters(monster_type_enum monsterType, int amount);
+  void findPlaceMonsters(enemyTypeEnum monsterType, int amount);
 
   void addKilledEnemy(enemyTypeEnum enemyType);
   void displayKilledEnemies();
@@ -463,7 +463,7 @@ private:
    *  \param xm : x position of the monster
    *  \param ym : y position of the monster
    */
-  void addMonster(monster_type_enum monsterType, float xm, float ym);
+  void addMonster(enemyTypeEnum monsterType, float xm, float ym);
 
   /*!
    *  \brief Checks if player opens a door

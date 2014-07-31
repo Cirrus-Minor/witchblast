@@ -325,6 +325,7 @@ void WitchBlastGame::startNewLevel()
   bossRoomOpened = false;
   // to test
   displayKilledEnemies();
+
   playLevel();
 }
 
@@ -1250,17 +1251,17 @@ void WitchBlastGame::generateMap()
     monsterArray[x0][y0] = true;
     if (level == 1)
     {
-      findPlaceMonsters(MONSTER_RAT, 2);
-      findPlaceMonsters(MONSTER_BAT, 2);
+      findPlaceMonsters(EnemyTypeRat, 2);
+      findPlaceMonsters(EnemyTypeBat, 2);
     }
     else
     {
-      findPlaceMonsters(MONSTER_RAT, 5);
-      findPlaceMonsters(MONSTER_BAT, 5);
+      findPlaceMonsters(EnemyTypeRat, 5);
+      findPlaceMonsters(EnemyTypeBat, 5);
       for (int i = 2; i < level; i++)
       {
-        if (rand()%2 == 0)findPlaceMonsters(MONSTER_IMP_BLUE, 1);
-        else findPlaceMonsters(MONSTER_IMP_RED, 1);
+        if (rand()%2 == 0)findPlaceMonsters(EnemyTypeImpBlue, 1);
+        else findPlaceMonsters(EnemyTypeImpRed, 1);
       }
     }
   }
@@ -1362,28 +1363,32 @@ void WitchBlastGame::initMonsterArray()
       monsterArray[i][j] = false;
 }
 
-void WitchBlastGame::addMonster(monster_type_enum monsterType, float xm, float ym)
+void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
 {
   switch (monsterType)
   {
-    case MONSTER_RAT: new RatEntity(xm, ym - 2); break;
-    case MONSTER_BLACK_RAT: new BlackRatEntity(xm, ym - 5); break;
-    case MONSTER_BAT: new BatEntity(xm, ym); break;
-    case MONSTER_EVIL_FLOWER: new EvilFlowerEntity(xm, ym - 2); break;
-    case MONSTER_SLIME: new SlimeEntity(xm, ym, SlimeTypeStandard, false); break;
-    case MONSTER_IMP_RED: new ImpEntity(xm, ym, ImpEntity::ImpTypeRed); break;
-    case MONSTER_IMP_BLUE: new ImpEntity(xm, ym, ImpEntity::ImpTypeBlue); break;
-    case MONSTER_SLIME_RED: new SlimeEntity(xm, ym, SlimeTypeRed, false); break;
-    case MONSTER_SLIME_BLUE: new SlimeEntity(xm, ym, SlimeTypeBlue, false); break;
+    case EnemyTypeRat: new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal); break;
+    case EnemyTypeRatBlack: new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeNormal); break;
+    case EnemyTypeRatHelmet: new RatEntity(xm, ym - 2, RatEntity::RatTypeHelmet); break;
+    case EnemyTypeRatBlackHelmet: new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeHelmet); break;
+    case EnemyTypeBat: new BatEntity(xm, ym); break;
+    case EnemyTypeEvilFlower: new EvilFlowerEntity(xm, ym - 2); break;
+    case EnemyTypeSlime: new SlimeEntity(xm, ym, SlimeTypeStandard, false); break;
+    case EnemyTypeImpRed: new ImpEntity(xm, ym, ImpEntity::ImpTypeRed); break;
+    case EnemyTypeImpBlue: new ImpEntity(xm, ym, ImpEntity::ImpTypeBlue); break;
+    case EnemyTypeSlimeRed: new SlimeEntity(xm, ym, SlimeTypeRed, false); break;
+    case EnemyTypeSlimeBlue: new SlimeEntity(xm, ym, SlimeTypeBlue, false); break;
 
-    case MONSTER_KING_RAT: new KingRatEntity(xm, ym); break;
+    default: std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
   }
 }
 
-void WitchBlastGame::findPlaceMonsters(monster_type_enum monsterType, int amount)
+void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
 {
   // find a suitable place
-  bool isMonsterFlying = monsterType == MONSTER_BAT;
+  bool isMonsterFlying = monsterType == EnemyTypeBat
+      || monsterType == EnemyTypeImpBlue
+      || monsterType == EnemyTypeImpRed;
 
   bool bOk;
   int xm, ym;

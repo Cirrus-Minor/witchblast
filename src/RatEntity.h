@@ -6,9 +6,11 @@
 class RatEntity : public EnemyEntity
 {
   public:
-    RatEntity(float x, float y);
+    enum ratTypeEnum { RatTypeNormal, RatTypeHelmet };
+    RatEntity(float x, float y, ratTypeEnum ratType);
     virtual void animate(float delay);
     virtual void calculateBB();
+
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -16,8 +18,9 @@ class RatEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithBolt(BoltEntity* boltEntity);
   private:
-
+    ratTypeEnum ratType;
 };
 
 #endif // RATSPRITE_H

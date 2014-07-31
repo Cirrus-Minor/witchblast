@@ -6,7 +6,8 @@
 class BlackRatEntity : public EnemyEntity
 {
   public:
-    BlackRatEntity(float x, float y);
+    enum ratBlackTypeEnum { RatBlackTypeNormal, RatBlackTypeHelmet };
+    BlackRatEntity(float x, float y, ratBlackTypeEnum ratType);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -16,12 +17,15 @@ class BlackRatEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithBolt(BoltEntity* boltEntity);
 
   private:
     void findNextGoal();
     int currentDirection;
     IntCoord currentTile;
     IntCoord targetTile;
+
+    ratBlackTypeEnum ratType;
 };
 
 #endif // BLACKRATSPRITE_H
