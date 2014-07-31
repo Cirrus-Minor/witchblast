@@ -2,6 +2,7 @@
 #define ENNEMYPRITE_H
 
 #include "BaseCreatureEntity.h"
+#include "BoltEntity.h"
 
 enum enemyTypeEnum
 {
@@ -9,6 +10,8 @@ enum enemyTypeEnum
   EnemyTypeBat,
   EnemyTypeRat,
   EnemyTypeRatBlack,
+  EnemyTypeRatHelmet,
+  EnemyTypeRatBlackHelmet,
   EnemyTypeEvilFlower,
   EnemyTypeSlime,
   EnemyTypeSlimeRed,
@@ -56,6 +59,8 @@ protected:
   virtual void dying();
   virtual void drop();
   virtual void collideWithEnnemy(GameEntity* collidingEntity);
+  virtual void collideWithBolt(BoltEntity* boltEntity);
+  int getCollisionDirection(BoltEntity* boltEntity);
   virtual bool hurt(int damages, enumShotType hurtingType, int level);
 
   virtual bool canCollide();

@@ -1,15 +1,13 @@
 #include "EnemyEntity.h"
-#include "BoltEntity.h"
 #include "PlayerEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
-#include <iostream>
 #include "WitchBlastGame.h"
 
 EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
-    : BaseCreatureEntity (image, x, y, 64, 64)
+  : BaseCreatureEntity (image, x, y, 64, 64)
 {
   type = ENTITY_ENNEMY;
   bloodColor = bloodRed;
@@ -71,30 +69,30 @@ void EnemyEntity::animate(float delay)
 
 void EnemyEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2;
-    boundingBox.width = width;
-    boundingBox.top = (int)y - height / 2;
-    boundingBox.height =  height;
+  boundingBox.left = (int)x - width / 2;
+  boundingBox.width = width;
+  boundingBox.top = (int)y - height / 2;
+  boundingBox.height =  height;
 }
 
 void EnemyEntity::collideMapRight()
 {
-    velocity.x = 0.0f;
+  velocity.x = 0.0f;
 }
 
 void EnemyEntity::collideMapLeft()
 {
-    velocity.x = 0.0f;
+  velocity.x = 0.0f;
 }
 
 void EnemyEntity::collideMapTop()
 {
-    velocity.y = 0.0f;
+  velocity.y = 0.0f;
 }
 
 void EnemyEntity::collideMapBottom()
 {
-    velocity.y = 0.0f;
+  velocity.y = 0.0f;
 }
 
 void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -124,42 +122,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
       {
-        float xs = (x + boltEntity->getX()) / 2;
-        float ys = (y + boltEntity->getY()) / 2;
-
-        boltEntity->collide();
-
-        hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
-        if (bloodColor > bloodNone) game().generateBlood(x, y, bloodColor);
-        SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
-
-        SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
-        star->setFading(true);
-        star->setZ(y+ 100);
-        star->setLifetime(0.7f);
-        star->setType(16);
-        star->setSpin(400.0f);
-
-        if (boltEntity->getBoltType() == ShotTypeStone)
-        {
-          float recoilVelocity = STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
-          float recoilDelay = STONE_DECOIL_DELAY[boltEntity->getLevel()];
-
-          if (resistance[ResistanceRecoil] == ResistanceHigh)
-          {
-            recoilVelocity *= 0.75f;
-            recoilDelay *= 0.75f;
-          }
-          else if (resistance[ResistanceRecoil] == ResistanceVeryHigh)
-          {
-            recoilVelocity *= 0.5f;
-            recoilDelay *= 0.5f;
-          }
-
-          Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
-                                           recoilVelocity );
-          giveRecoil(true, recoilVector, recoilDelay);
-        }
+        collideWithBolt(boltEntity);
       }
     }
     else // collision with other enemy ?
@@ -174,6 +137,86 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       }
     }
   }
+}
+
+void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
+{
+  float xs = (x + boltEntity->getX()) / 2;
+  float ys = (y + boltEntity->getY()) / 2;
+
+  boltEntity->collide();
+
+  hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
+  if (bloodColor > bloodNone) game().generateBlood(x, y, bloodColor);
+  SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
+
+  SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+  star->setFading(true);
+  star->setZ(y+ 100);
+  star->setLifetime(0.7f);
+  star->setType(16);
+  star->setSpin(400.0f);
+
+  if (boltEntity->getBoltType() == ShotTypeStone)
+  {
+    float recoilVelocity = STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
+    float recoilDelay = STONE_DECOIL_DELAY[boltEntity->getLevel()];
+
+    if (resistance[ResistanceRecoil] == ResistanceHigh)
+    {
+      recoilVelocity *= 0.75f;
+      recoilDelay *= 0.75f;
+    }
+    else if (resistance[ResistanceRecoil] == ResistanceVeryHigh)
+    {
+      recoilVelocity *= 0.5f;
+      recoilDelay *= 0.5f;
+    }
+
+    Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
+                            recoilVelocity );
+    giveRecoil(true, recoilVector, recoilDelay);
+  }
+}
+
+int EnemyEntity::getCollisionDirection(BoltEntity* boltEntity)
+{
+  int tol = 4;
+
+  float bx = boltEntity->getX();
+  float by = boltEntity->getY();
+
+  int alignX, alignY;
+
+  if (bx + tol < x) alignX = 4;
+  else if (bx - tol > x) alignX = 6;
+  else alignX = 5;
+
+  if (by + tol < y) alignY = 8;
+  else if (by - tol > y) alignY = 2;
+  else alignY = 5;
+
+  int collisionDir = 5;
+  if (alignX == 4)
+  {
+    if (alignY == 8) collisionDir = 7;
+    else if (alignY == 5) collisionDir = 4;
+    else if (alignY == 2) collisionDir = 1;
+  }
+  else if (alignX == 5)
+  {
+    if (alignY == 8) collisionDir = 8;
+    else if (alignY == 5) collisionDir = 5;
+    else if (alignY == 2) collisionDir = 2;
+  }
+  else if (alignX == 6)
+  {
+    if (alignY == 8) collisionDir = 9;
+    else if (alignY == 5) collisionDir = 6;
+    else if (alignY == 2) collisionDir = 3;
+  }
+
+  return collisionDir;
 }
 
 void EnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
@@ -251,8 +294,8 @@ void EnemyEntity::render(sf::RenderTarget* app)
     int ny = 0;
     if (imagesProLine > 0)
     {
-        nx = dyingFrame % imagesProLine;
-        ny = dyingFrame / imagesProLine;
+      nx = dyingFrame % imagesProLine;
+      ny = dyingFrame / imagesProLine;
     }
     sprite.setPosition(x, y - h);
     if (isMirroring)
