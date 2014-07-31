@@ -67,9 +67,12 @@ Changes
 -------
 
 Next version
+- ADD New level with a new boss
 - ADD New items (star brooch, triple shot, magician robe)
 - ADD New familiars (2 types)
+- ADD New monsters variants
 - ADD New tiles : holes
+- ADD New decorative tiles
 - ADD Display of health items on the minimap
 - ADD New graphics for Rat King
 - MOD Health items drop's rate decreases
@@ -77,7 +80,9 @@ Next version
 - MOD Cyclops' falling stones bounce (one time)
 - MOD Cyclops has protection before stones are falling
 - MOD Butcher drops a silver coin now
-- FIX Sprite center and Z-order 
+- FIX Sprite center and Z-order
+- FIX Giant Slime bug when falling on the wall 
+- FIX Freeze when opening a chest while having all the items (but not the fairies)
 
 v0.2.5
 - ADD New mini-boss
