@@ -19,7 +19,7 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
   {
     frame = 16;
     dyingFrame = 22;
-    deathFrame = FRAME_CORPSE_RAT;
+    deathFrame = FRAME_CORPSE_BLACK_RAT;
     enemyType = EnemyTypeRatBlack;
     hp = RAT_HP;
     creatureSpeed = RAT_SPEED;
