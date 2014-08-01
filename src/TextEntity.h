@@ -40,6 +40,7 @@ public:
                          COLOR_FADING_WHITE,
                          COLOR_FADING_BLUE,
                          COLOR_FADING_GREEN,
+                         COLOR_FADING_RED,
                          COLOR_BLINKING_WHITE };
 
 protected:

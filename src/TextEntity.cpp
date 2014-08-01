@@ -53,6 +53,13 @@ void TextEntity::animate(float delay)
     else if (alpha < 0) alpha = 0;
     color = sf::Color(0, 255, 0, alpha );
   }
+  else if (colorType == COLOR_FADING_RED)
+  {
+    int alpha = 255 * (lifetime - age) / lifetime;
+    if (alpha > 255) alpha = 255;
+    else if (alpha < 0) alpha = 0;
+    color = sf::Color(255, 0, 0, alpha );
+  }
 }
 
 
@@ -70,6 +77,8 @@ void TextEntity::setColor(int colorType)
     color = sf::Color(255, 255, 255);
   else if (colorType == COLOR_GREEN || colorType == COLOR_FADING_GREEN)
     color = sf::Color(0, 255, 0);
+  else if (colorType == COLOR_RED || colorType == COLOR_FADING_RED)
+    color = sf::Color(255, 0, 0);
 }
 
 void TextEntity::setAlignment(int alignment)

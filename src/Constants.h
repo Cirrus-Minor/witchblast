@@ -239,6 +239,7 @@ const int ENTITY_ARTIFACT_DESCRIPTION = 9;
 const int ENTITY_BLOOD    = 11;
 const int ENTITY_CORPSE   = 12;
 const int ENTITY_EFFECT   = 13;
+const int ENTITY_FLYING_TEXT = 14;
 const int ENTITY_BOLT = 15;
 const int ENTITY_ENNEMY_BOLT = 16;
 const int ENTITY_PNJ = 17;
