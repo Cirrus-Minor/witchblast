@@ -3,6 +3,9 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
+#include <iostream>
+#include <sstream>
+
 BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float y = 0.0f, int spriteWidth = -1, int spriteHeight = -1)
   : CollidingSpriteEntity (image, x, y, spriteWidth, spriteHeight )
 {
@@ -334,6 +337,29 @@ int BaseCreatureEntity::determineDamageBonus(enumStateResistance resistance, int
   return bonus;
 }
 
+bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, float yDistMin)
+{
+  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList::iterator it;
+
+	for (it = entityList->begin (); it != entityList->end ();)
+	{
+		GameEntity *e = *it;
+		it++;
+
+		if (e->getType() == ENTITY_FLYING_TEXT)
+		{
+		  if (e != textEntity)
+      {
+        if (textEntity->getX() - e->getX() < xDistMin && textEntity->getX() - e->getX() > - xDistMin
+            && textEntity->getY() - e->getY() < yDistMin && textEntity->getY() - e->getY() > - yDistMin)
+              return true;
+      }
+		}
+	}
+	return false;
+}
+
 bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
 {
   hurting = true;
@@ -402,6 +428,17 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
     hp = 0;
     prepareDying();
   }
+
+  std::ostringstream oss;
+  oss << "-" << damages;
+  TextEntity* text = new TextEntity(oss.str(), 16, x, y - 20.0f);
+  text->setColor(TextEntity::COLOR_FADING_RED);
+  text->setAge(-1.0f);
+  text->setLifetime(2.0f);
+  text->setWeight(-60.0f);
+  text->setZ(2000);
+  text->setType(ENTITY_FLYING_TEXT);
+  while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
 
   return true;
 }

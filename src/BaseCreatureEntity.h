@@ -2,6 +2,7 @@
 #define BASECREATUREENTITY_H
 
 #include "sfml_game/CollidingSpriteEntity.h"
+#include "TextEntity.h"
 #include "Constants.h"
 
 class BaseCreatureEntity : public CollidingSpriteEntity
@@ -95,6 +96,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
   private:
     bool determineSatusChance(enumStateResistance resistance, int level);
     int determineDamageBonus(enumStateResistance resistance, int level);
+    bool textTooClose(TextEntity* textEntity, float xDistMin, float yDistMin);
 };
 
 #endif // BASECREATUREENTITY_H
