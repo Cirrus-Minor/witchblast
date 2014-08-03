@@ -264,6 +264,11 @@ void CollidingSpriteEntity::stuck()
   onDying();
 }
 
+sf::IntRect CollidingSpriteEntity::getBoundingBox()
+{
+  return boundingBox;
+}
+
 bool CollidingSpriteEntity::collideWithEntity(CollidingSpriteEntity* entity)
 {
   calculateBB();

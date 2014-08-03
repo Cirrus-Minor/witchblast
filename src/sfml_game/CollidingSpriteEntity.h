@@ -42,6 +42,7 @@ public:
   virtual bool collideWithEntity(CollidingSpriteEntity* entity);
 
   void displayBoundingBox(sf::RenderTarget* app);
+  sf::IntRect getBoundingBox();
 
   enum directionEnum
   {
