@@ -31,6 +31,37 @@ TextEntity::TextEntity(std::string text, int size, float x, float y) : GameEntit
 
 void TextEntity::render(sf::RenderTarget* app)
 {
+  if (colorType == COLOR_FADING_RED)
+  {
+    int alpha = 255 * (lifetime - age) / lifetime;
+    if (alpha > 255) alpha = 255;
+    else if (alpha < 0) alpha = 0;
+
+    color = sf::Color(0, 0, 0, alpha );
+    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0);
+
+    color = sf::Color(0, 0, 0, alpha );
+    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0);
+
+    color = sf::Color(255, 50, 20, alpha );
+    game().write(text, size, x, y, alignment, color, app, 0 , 0);
+  }
+  else if (colorType == COLOR_FADING_GREEN)
+  {
+    int alpha = 255 * (lifetime - age) / lifetime;
+    if (alpha > 255) alpha = 255;
+    else if (alpha < 0) alpha = 0;
+
+    color = sf::Color(0, 0, 0, alpha );
+    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0);
+
+    color = sf::Color(0, 0, 0, alpha );
+    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0);
+
+    color = sf::Color(20, 255, 50, alpha );
+    game().write(text, size, x, y, alignment, color, app, 0 , 0);
+  }
+  else
     game().write(text, size, x, y, alignment, color, app, 0 , 0);
 }
 
