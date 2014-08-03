@@ -484,3 +484,8 @@ void BaseCreatureEntity::giveRecoil(bool stun, Vector2D velocity, float timer)
 void BaseCreatureEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
 {
 }
+
+bool BaseCreatureEntity::canCollide()
+{
+  return true;
+}

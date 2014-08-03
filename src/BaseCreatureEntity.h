@@ -71,6 +71,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void computeFacingDirection();
     virtual void dyingFromAge();
 
+    virtual bool canCollide();
+
   protected:
     int hp;
     int hpMax;
