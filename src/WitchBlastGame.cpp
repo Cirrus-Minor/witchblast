@@ -95,6 +95,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   ImageManager::getImageManager()->addImage("media/star2.png");
   ImageManager::getImageManager()->addImage("media/interface.png");
   ImageManager::getImageManager()->addImage("media/hud_shots.png");
+  ImageManager::getImageManager()->addImage("media/boom64.png");
 
   ImageManager::getImageManager()->addImage("media/pnj.png");
   ImageManager::getImageManager()->addImage("media/fairy.png");
@@ -921,10 +922,7 @@ int WitchBlastGame::getEnnemyCount()
 		GameEntity *e = *it;
 		it++;
 
-		if (e->getType() >= 20)
-		{
-		  n++;
-		}
+		if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX) n++;
 	}
 
 	return n;
@@ -1378,6 +1376,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     case EnemyTypeImpBlue: new ImpEntity(xm, ym, ImpEntity::ImpTypeBlue); break;
     case EnemyTypeSlimeRed: new SlimeEntity(xm, ym, SlimeTypeRed, false); break;
     case EnemyTypeSlimeBlue: new SlimeEntity(xm, ym, SlimeTypeBlue, false); break;
+    case EnemyTypeSlimeViolet: new SlimeEntity(xm, ym, SlimeTypeViolet, false); break;
 
     default: std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
   }

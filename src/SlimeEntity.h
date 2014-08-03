@@ -4,7 +4,7 @@
 #include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-enum slimeTypeEnum { SlimeTypeStandard, SlimeTypeRed, SlimeTypeBlue };
+enum slimeTypeEnum { SlimeTypeStandard, SlimeTypeRed, SlimeTypeBlue, SlimeTypeViolet };
 
 class SlimeEntity : public EnemyEntity
 {
@@ -37,6 +37,7 @@ class SlimeEntity : public EnemyEntity
     slimeTypeEnum slimeType;
 
     void fire();
+    void explode();
 };
 
 #endif // SLIMESPRITE_H

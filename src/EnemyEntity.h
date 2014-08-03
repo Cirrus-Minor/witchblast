@@ -16,6 +16,7 @@ enum enemyTypeEnum
   EnemyTypeSlime,
   EnemyTypeSlimeRed,
   EnemyTypeSlimeBlue,
+  EnemyTypeSlimeViolet,
   EnemyTypeImpBlue,
   EnemyTypeImpRed,
 
@@ -33,6 +34,7 @@ enum enemyTypeEnum
   EnemyTypeSlime_invocated,
   EnemyTypeSlimeRed_invocated,
   EnemyTypeSlimeBlue_invocated,
+  EnemyTypeSlimeViolet_invocated,
   EnemyTypeSpiderEgg_invocated,
   EnemyTypeSpiderLittle_invocated,
   EnemyTypeSpiderWeb,

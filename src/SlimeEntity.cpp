@@ -1,6 +1,7 @@
 #include "SlimeEntity.h"
 #include "PlayerEntity.h"
 #include "EnnemyBoltEntity.h"
+#include "ExplosionEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -41,6 +42,10 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
     resistance[ResistanceIce] = ResistanceLow;
     resistance[ResistanceFire] = ResistanceHigh;
     enemyType = invocated ? EnemyTypeSlimeRed_invocated : EnemyTypeSlimeRed;
+  }
+  else if (slimeType == SlimeTypeViolet)
+  {
+    enemyType = invocated ? EnemyTypeSlimeViolet_invocated : EnemyTypeSlimeViolet;
   }
   else
   {
@@ -245,11 +250,13 @@ void SlimeEntity::dying()
   game().addKilledEnemy(enemyType);
   SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadSlime->setZ(OFFSET_Y);
+  deadSlime->setImagesProLine(10);
   switch (slimeType)
   {
     case SlimeTypeStandard: deadSlime->setFrame(FRAME_CORPSE_SLIME); break;
     case SlimeTypeRed: deadSlime->setFrame(FRAME_CORPSE_SLIME_RED); break;
     case SlimeTypeBlue: deadSlime->setFrame(FRAME_CORPSE_SLIME_BLUE); break;
+    case SlimeTypeViolet: deadSlime->setFrame(FRAME_CORPSE_SLIME_VIOLET); explode(); break;
   }
   deadSlime->setType(ENTITY_CORPSE);
 
@@ -306,4 +313,10 @@ void SlimeEntity::fire()
     }
   }
   SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+}
+
+void SlimeEntity::explode()
+{
+  new ExplosionEntity(x, y);
+  game().makeShake(1.0f);
 }
