@@ -984,21 +984,25 @@ void PlayerEntity::acquireStance(enumItemType type)
 void PlayerEntity::collideMapRight()
 {
   collidingDirection = 6;
+  if (recoil.active) recoil.velocity.x = -recoil.velocity.x * 0.7f;
 }
 
 void PlayerEntity::collideMapLeft()
 {
   collidingDirection = 4;
+  if (recoil.active) recoil.velocity.x = -recoil.velocity.x * 0.7f;
 }
 
 void PlayerEntity::collideMapTop()
 {
   collidingDirection = 8;
+  if (recoil.active) recoil.velocity.y= -recoil.velocity.y * 0.7f;
 }
 
 void PlayerEntity::collideMapBottom()
 {
   collidingDirection = 2;
+  if (recoil.active) recoil.velocity.y= -recoil.velocity.y * 0.7f;
 }
 
 void PlayerEntity::useBossKey()
