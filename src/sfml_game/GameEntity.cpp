@@ -32,6 +32,7 @@ GameEntity::GameEntity(float m_x, float m_y)
 {
 	x = m_x;
 	y = m_y;
+	z = y;
 	bbox.x = 0.0f; bbox.y = 0.0f;
 	bbox.width = 0.0f; bbox.height = 0.0f;
 	age = 0;

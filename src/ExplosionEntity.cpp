@@ -8,14 +8,15 @@
 #include <iostream>
 
 ExplosionEntity::ExplosionEntity(float x, float y)
-  : SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_EXPLOSION64), x, y, 64, 64)
+  : SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_EXPLOSION64), x, y, 100, 100)
 {
   type = ENTITY_EXPLOSION;
   frame = 0;
-  imagesProLine = 10;
+  imagesProLine = 14;
   lifetime = 1.0f;
   spin = 900.0f;
 
+  sprite.setOrigin(50, 50);
   testCollisions();
 }
 
@@ -26,7 +27,7 @@ void ExplosionEntity::animate(float delay)
     if (age >= lifetime) isDying = true;
   }
   age += delay;
-  angle += spin * delay;
+  //angle += spin * delay;
 
   z = y + height / 2;
 
@@ -35,6 +36,8 @@ void ExplosionEntity::animate(float delay)
     float f = (lifetime - age) * 2.0f;
     sprite.setScale(f, f);
   }
+
+  frame = age / lifetime * 14;
 }
 
 void ExplosionEntity::render(sf::RenderTarget* app)
@@ -62,20 +65,22 @@ void ExplosionEntity::testCollisions()
 		GameEntity *e = *it;
 		it++;
 
-		if ( (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX)
-        || e->getType() == ENTITY_PLAYER)
+		//if ( (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX)
+    //    || e->getType() == ENTITY_PLAYER)
+    BaseCreatureEntity* entity = dynamic_cast<BaseCreatureEntity*>(e);
+    if (entity != NULL)
 		{
-		  BaseCreatureEntity* entity = static_cast<BaseCreatureEntity*>(e);
+		  //BaseCreatureEntity* entity = static_cast<BaseCreatureEntity*>(e);
 
 		  if (entity->getHp() > 0 && entity->canCollide())
       {
         entity->calculateBB();
 
         sf::IntRect bb;
-        bb.left = x - 75;
-        bb.width = 150;
-        bb.top = y - 75;
-        bb.height = 150;
+        bb.left = x - 90;
+        bb.width = 180;
+        bb.top = y - 90;
+        bb.height = 180;
 
         if (bb.intersects(entity->getBoundingBox()))
         {

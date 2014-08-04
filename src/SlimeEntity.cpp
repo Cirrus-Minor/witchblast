@@ -90,6 +90,11 @@ void SlimeEntity::animate(float delay)
           SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT);
           if (slimeType == SlimeTypeBlue || slimeType == SlimeTypeRed)
             fire();
+          else if (slimeType == SlimeTypeViolet)
+          {
+            hp = 0;
+            dying();
+          }
         }
         else
         {
@@ -319,4 +324,5 @@ void SlimeEntity::explode()
 {
   new ExplosionEntity(x, y);
   game().makeShake(1.0f);
+  SoundManager::getSoundManager()->playSound(SOUND_BOOM_00);
 }

@@ -140,6 +140,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound("media/sound/butcher_hurt.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/butcher_die.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/vib.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/boom_00.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
