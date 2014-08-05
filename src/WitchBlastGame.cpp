@@ -141,6 +141,7 @@ WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
   SoundManager::getSoundManager()->addSound("media/sound/butcher_die.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/vib.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/boom_00.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/clang_00.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -622,7 +623,7 @@ void WitchBlastGame::renderRunningGame()
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
       app->draw(myText);
     }
-    else if (currentMap->getRoomType() == roomTypeExit && level > 3)
+    else if (currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
     {
       float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
       myText.setColor(sf::Color(255, 255, 255, 255));

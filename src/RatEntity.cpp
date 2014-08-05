@@ -139,6 +139,7 @@ void RatEntity::collideWithBolt(BoltEntity* boltEntity)
       star->setLifetime(0.7f);
       star->setType(16);
       star->setSpin(400.0f);
+      SoundManager::getSoundManager()->playSound(SOUND_CLANG_00);
     }
   }
   else EnemyEntity::collideWithBolt(boltEntity);

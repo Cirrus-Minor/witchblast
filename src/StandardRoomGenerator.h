@@ -17,6 +17,8 @@
 #ifndef STANDARDROOMGENERATOR_H_INCLUDED
 #define STANDARDROOMGENERATOR_H_INCLUDED
 
+const int LAST_LEVEL = 5;
+
 void generateStandardRoom01()
 {
   int random = rand() % 64;
@@ -196,6 +198,75 @@ void generateStandardRoom04()
   }
 }
 
+void generateStandardRoom05()
+{
+  int random = rand() % 110;
+
+  if (random < 16)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeRat, 4);
+    game().findPlaceMonsters(EnemyTypeRatHelmet, 4);
+  }
+  else if (random < 32)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
+    game().findPlaceMonsters(EnemyTypeBat, 4);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 4);
+    else game().findPlaceMonsters(EnemyTypeImpBlue, 4);
+  }
+  else if (random < 48)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
+    game().findPlaceMonsters(EnemyTypeEvilFlower, 5);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 3);
+    else game().findPlaceMonsters(EnemyTypeImpBlue, 3);
+  }
+  else if (random < 64)
+  {
+    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
+    game().getCurrentMap()->setCleared(true);
+  }
+  else if (random < 80)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    int r = rand() % 3;
+    if (r == 0)
+    {
+      game().findPlaceMonsters(EnemyTypeImpRed, 4);
+      game().findPlaceMonsters(EnemyTypeImpBlue, 4);
+    }
+    else if (r == 1)
+      game().findPlaceMonsters(EnemyTypeImpRed, 8);
+    else
+      game().findPlaceMonsters(EnemyTypeImpBlue, 8);
+  }
+  else if (random < 95)
+  {
+    game().getCurrentMap()->generateRoomRandom(ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeRatBlack, 4);
+    game().findPlaceMonsters(EnemyTypeRatBlackHelmet, 4);
+  }
+  else
+  {
+    game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
+    game().getCurrentMap()->addRandomGrids(4);
+    int r = 9 + rand() % 5;
+    for (int i = 0; i < r; i++)
+    {
+      int rtype = rand() % 5;
+      switch (rtype)
+      {
+        case 0: case 4: game().findPlaceMonsters(EnemyTypeSlime,1); break;
+        case 1: game().findPlaceMonsters(EnemyTypeSlimeBlue,1); break;
+        case 2: game().findPlaceMonsters(EnemyTypeSlimeRed,1); break;
+        case 3: game().findPlaceMonsters(EnemyTypeSlimeViolet,1); break;
+      }
+    }
+  }
+}
+
 void generateStandardRoom(int level)
 {
   switch (level)
@@ -203,8 +274,9 @@ void generateStandardRoom(int level)
     case 1: generateStandardRoom01(); break;
     case 2: generateStandardRoom02(); break;
     case 3: generateStandardRoom03(); break;
-    case 4: generateStandardRoom03(); break;
-    default: generateStandardRoom04(); break;
+    case 4: generateStandardRoom04(); break;
+    case 5: generateStandardRoom05(); break;
+    default: generateStandardRoom05(); break;
   }
 }
 

@@ -23,7 +23,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   playerStatus = playerStatusPlaying;
   hp = INITIAL_PLAYER_HP;
   hpDisplay = hp;
-  hpMax = INITIAL_PLAYER_HP;
+  hpMax = hp;
   gold = 0;
 
   boltLifeTime = INITIAL_BOLT_LIFE;
