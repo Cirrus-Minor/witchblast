@@ -18,7 +18,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y)
   setSpin(50.0f);
   frame = 0;
 
-  type = 23;
+  type = ENTITY_ENNEMY;
   bloodColor = bloodGreen;
   enemyType = EnemyTypeEvilFlower;
 
