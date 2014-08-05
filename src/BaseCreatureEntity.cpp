@@ -431,6 +431,9 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
 
   std::ostringstream oss;
   oss << "-" << damages;
+  int textSize;
+  if (damages < 8) textSize = 17;
+  else textSize = 17 + (damages - 4) / 4;
   TextEntity* text = new TextEntity(oss.str(), 18, x, y - 20.0f);
   text->setColor(TextEntity::COLOR_FADING_RED);
   text->setAge(-1.0f);
