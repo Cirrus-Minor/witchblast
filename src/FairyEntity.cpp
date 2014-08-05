@@ -101,7 +101,7 @@ void FairyEntity::fire(int dir)
     if (dir == 8) vely = - FAIRY_BOLT_VELOCITY;
 
     BoltEntity* bolt = new BoltEntity(x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
-    bolt->setDamages(FAIRY_BOLT_DAMAGES);
+    bolt->setDamages(fairyDamages);
     bolt->setVelocity(Vector2D(velx, vely));
     bolt->setFlying(true);
 
