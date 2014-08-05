@@ -114,7 +114,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           star->setFading(true);
           star->setZ(y+ 100);
           star->setLifetime(0.7f);
-          star->setType(16);
+          star->setType(ENTITY_EFFECT);
           star->setSpin(400.0f);
         }
         inflictsRecoilTo(playerEntity);
@@ -154,7 +154,7 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
   star->setFading(true);
   star->setZ(y+ 100);
   star->setLifetime(0.7f);
-  star->setType(16);
+  star->setType(ENTITY_EFFECT);
   star->setSpin(400.0f);
 
   if (boltEntity->getBoltType() == ShotTypeStone)

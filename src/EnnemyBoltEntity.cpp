@@ -26,7 +26,7 @@ void EnnemyBoltEntity::animate(float delay)
   trace->setLifetime(0.2f);
   trace->setShrinking(true);
   trace->setFrame(frame);
-  trace->setType(16);
+  trace->setType(ENTITY_EFFECT);
 
   z = y + height;
   CollidingSpriteEntity::animate(delay);

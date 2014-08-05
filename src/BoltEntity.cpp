@@ -82,7 +82,7 @@ void BoltEntity::animate(float delay)
   trace->setZ(y);
   trace->setLifetime(0.2f);
   trace->setShrinking(true, renderScale, renderScale);
-  trace->setType(16);
+  trace->setType(ENTITY_EFFECT);
   trace->setFrame(frame);
 
   z = y + height;
@@ -141,7 +141,7 @@ void BoltEntity::generateParticule(Vector2D vel)
   trace->setScale(0.3f, 0.3f);
   trace->setVelocity(vel);
   trace->setViscosity(0.97f);
-  trace->setType(16);
+  trace->setType(ENTITY_EFFECT);
   trace->setFrame(frame);
 }
 

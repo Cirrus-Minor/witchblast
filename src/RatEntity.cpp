@@ -137,7 +137,7 @@ void RatEntity::collideWithBolt(BoltEntity* boltEntity)
       star->setFading(true);
       star->setZ(y+ 100);
       star->setLifetime(0.7f);
-      star->setType(16);
+      star->setType(ENTITY_EFFECT);
       star->setSpin(400.0f);
       SoundManager::getSoundManager()->playSound(SOUND_CLANG_00);
     }

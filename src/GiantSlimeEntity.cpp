@@ -380,7 +380,7 @@ void GiantSlimeEntity::dying()
   star->setZ(y+ 100);
   star->setAge(-0.4f);
   star->setLifetime(0.3f);
-  star->setType(16);
+  star->setType(ENTITY_EFFECT);
   star->setSpin(400.0f);
 }
 

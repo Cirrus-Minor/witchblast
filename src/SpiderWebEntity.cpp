@@ -138,7 +138,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         star->setFading(true);
         star->setZ(y+ 100);
         star->setLifetime(0.7f);
-        star->setType(16);
+        star->setType(ENTITY_EFFECT);
         star->setSpin(400.0f);
       }
     }
