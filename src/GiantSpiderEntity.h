@@ -10,6 +10,8 @@ class GiantSpiderEntity : public EnemyEntity
     virtual void animate(float delay);
     virtual void calculateBB();
     virtual void render(sf::RenderTarget* app);
+    virtual bool canCollide();
+
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -17,7 +19,6 @@ class GiantSpiderEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
-    virtual bool canCollide();
     virtual bool hurt(int damages, enumShotType hurtingType, int level);
     virtual void drop();
 

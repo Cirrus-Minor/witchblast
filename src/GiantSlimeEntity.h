@@ -12,6 +12,8 @@ class GiantSlimeEntity : public EnemyEntity
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+    virtual bool canCollide();
+
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -24,7 +26,6 @@ class GiantSlimeEntity : public EnemyEntity
 	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
 	  virtual void dying();
 
-	  virtual bool canCollide();
 	  virtual enumMovingStyle getMovingStyle();
 
   private:

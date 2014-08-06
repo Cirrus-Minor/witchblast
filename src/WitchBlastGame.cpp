@@ -147,6 +147,7 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/clang_00.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/bubble_00.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/bubble_01.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/trap.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -954,7 +955,7 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
 		  EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
 		  float d2 = (x - enemy->getX()) * (x - enemy->getX()) + (y - enemy->getY()) * (y - enemy->getY());
 
-		  if (target.x < -1.0f || d2 < distanceMin)
+		  if (enemy->canCollide() && target.x < -1.0f || d2 < distanceMin)
       {
         distanceMin = d2;
         target.x = enemy->getX();

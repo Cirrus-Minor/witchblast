@@ -10,10 +10,11 @@ class FallingRockEntity : public EnemyEntity
     virtual void animate(float delay);
     virtual void calculateBB();
     virtual void render(sf::RenderTarget* app);
-  protected:
     virtual bool canCollide();
 
+  protected:
 	  virtual void dying();
+
   private:
     int rockType;
     int h;

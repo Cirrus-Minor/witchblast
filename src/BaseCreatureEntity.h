@@ -70,7 +70,6 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
     virtual void computeFacingDirection();
     virtual void dyingFromAge();
-
     virtual bool canCollide();
 
   protected:

@@ -13,6 +13,8 @@ class SlimeEntity : public EnemyEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
+	  virtual bool canCollide();
+
   protected:
     virtual bool collideWithMap(int direction);
     virtual void collideMapRight();
@@ -24,8 +26,6 @@ class SlimeEntity : public EnemyEntity
 
 	  virtual void dying();
 	  virtual void prepareDying();
-	  virtual bool canCollide();
-
 	  virtual enumMovingStyle getMovingStyle();
 
   private:
