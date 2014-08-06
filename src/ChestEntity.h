@@ -2,6 +2,7 @@
 #define CHESTENTITY_H
 
 #include "sfml_game/CollidingSpriteEntity.h"
+#include "Constants.h"
 
 class ChestEntity : public CollidingSpriteEntity
 {
@@ -22,6 +23,11 @@ class ChestEntity : public CollidingSpriteEntity
   private:
     bool isOpen;
     int chestType;
+
+    float timer;
+    void fallRock();
+    void initFallingGrid();
+    bool fallingGrid[MAP_WIDTH][MAP_HEIGHT];
 };
 
 #endif // CHESTENTITY_H

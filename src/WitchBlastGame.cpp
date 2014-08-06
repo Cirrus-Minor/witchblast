@@ -949,17 +949,20 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
 		GameEntity *e = *it;
 		it++;
 
-		if (e->getType() >= 20)
+		if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX)
 		{
 		  // enemy
 		  EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
-		  float d2 = (x - enemy->getX()) * (x - enemy->getX()) + (y - enemy->getY()) * (y - enemy->getY());
-
-		  if (enemy->canCollide() && target.x < -1.0f || d2 < distanceMin)
+		  if (enemy->canCollide())
       {
-        distanceMin = d2;
-        target.x = enemy->getX();
-        target.y = enemy->getY();
+        float d2 = (x - enemy->getX()) * (x - enemy->getX()) + (y - enemy->getY()) * (y - enemy->getY());
+
+        if (target.x < -1.0f || d2 < distanceMin)
+        {
+          distanceMin = d2;
+          target.x = enemy->getX();
+          target.y = enemy->getY();
+        }
       }
 		}
 	}

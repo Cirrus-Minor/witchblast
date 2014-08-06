@@ -150,7 +150,8 @@ enum sound_resources {
   SOUND_BOOM_00,
   SOUND_CLANG_00,
   SOUND_BUBBLE_00,
-  SOUND_BUBBLE_01
+  SOUND_BUBBLE_01,
+  SOUND_TRAP
 };
 
 enum corpses_ressources{

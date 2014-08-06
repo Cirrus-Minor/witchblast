@@ -1,5 +1,6 @@
 #include "ChestEntity.h"
 #include "PlayerEntity.h"
+#include "FallingRockEntity.h"
 #include "WitchBlastGame.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -19,6 +20,8 @@ ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
   if (chestType > CHEST_FAIRY) frame = CHEST_FAIRY * 2;
   frame += (isOpen ? 1 : 0);
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+
+  timer = -1.0f;
 }
 
 bool ChestEntity::getOpened()
@@ -36,6 +39,19 @@ void ChestEntity::animate(float delay)
   CollidingSpriteEntity::animate(delay);
   if (!isOpen) testSpriteCollisions();
   z = y + height/2 - 5;
+
+  // trap
+  if (timer > 0.0f)
+  {
+    timer -= delay;
+    if (timer <= 0.0f)
+    {
+      initFallingGrid();
+      for (int i = 0; i < 22; i++) fallRock();
+      SoundManager::getSoundManager()->playSound(SOUND_TRAP);
+      game().makeShake(0.25f);
+    }
+  }
 }
 
 void ChestEntity::render(sf::RenderTarget* app)
@@ -85,6 +101,12 @@ void ChestEntity::open()
       newItem->setVelocity(Vector2D(50.0f + rand()% 150));
       newItem->setViscosity(0.96f);
     }
+
+    // trap !
+    if (game().getLevel() >= 5)
+    {
+      if (rand() % 6 == 0) timer = 0.5f;
+    }
   }
   else if (chestType >= CHEST_FAIRY)
   {
@@ -133,5 +155,27 @@ void ChestEntity::open()
       newItem->setViscosity(0.96f);
     }
   }
+}
+void ChestEntity::initFallingGrid()
+{
+  for (int i = 0; i < MAP_WIDTH; i++)
+    for (int j = 0; j < MAP_HEIGHT; j++)
+      fallingGrid[i][j] = false;
+}
+
+void ChestEntity::fallRock()
+{
+  int rx, ry;
+  do
+  {
+    rx = 1 + rand() % (MAP_WIDTH - 2);
+    ry = 1 + rand() % (MAP_HEIGHT - 2);
+  }
+  while (fallingGrid[rx][ry]);
+
+  fallingGrid[rx][ry] = true;
+  new FallingRockEntity(rx * TILE_WIDTH + OFFSET_X + TILE_WIDTH / 2,
+                        ry * TILE_HEIGHT + OFFSET_Y + TILE_HEIGHT / 2,
+                        rand() % 3);
 }
 
