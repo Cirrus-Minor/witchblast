@@ -25,7 +25,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 
 
   type = ENTITY_ENNEMY_BOSS;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   shadowFrame = 8;
   dyingFrame = 5;
   deathFrame = FRAME_CORPSE_CYCLOP;

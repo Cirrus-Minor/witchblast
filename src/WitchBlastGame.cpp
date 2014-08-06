@@ -1206,7 +1206,7 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
     SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
     blood->setZ(OFFSET_Y - 1);
     int b0 = 0;
-    if (bloodColor == BaseCreatureEntity::bloodGreen) b0 += 6;
+    if (bloodColor == BaseCreatureEntity::BloodGreen) b0 += 6;
     blood->setFrame(b0 + rand()%6);
     blood->setType(ENTITY_BLOOD);
     blood->setVelocity(Vector2D(rand()%250));

@@ -10,7 +10,7 @@ EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   : BaseCreatureEntity (image, x, y, 64, 64)
 {
   type = ENTITY_ENNEMY;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
 
   z = y;
   h = 0;
@@ -147,7 +147,7 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
   boltEntity->collide();
 
   hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
-  if (bloodColor > bloodNone) game().generateBlood(x, y, bloodColor);
+  if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
   SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 
   SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
@@ -250,7 +250,7 @@ void EnemyEntity::dying()
     hVelocity = 200.0f;
     if (agonizingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(agonizingSound);
   }
-  if (bloodColor != bloodNone) for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
+  if (bloodColor != BloodNone) for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
   game().addKilledEnemy(enemyType);
 }

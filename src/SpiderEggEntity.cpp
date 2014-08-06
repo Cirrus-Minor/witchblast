@@ -15,7 +15,7 @@ SpiderEggEntity::SpiderEggEntity(float x, float y)
   type = ENTITY_ENNEMY_INVOCATED;
   enemyType = EnemyTypeSpiderEgg_invocated;
   movingStyle = movFlying;
-  bloodColor = bloodGreen;
+  bloodColor = BloodGreen;
   deathFrame = FRAME_CORPSE_SPIDER_EGG;
 
   age = 0.0f;
@@ -156,7 +156,7 @@ void SpiderEggEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         boltEntity->collide();
 
         hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
-        if (bloodColor > bloodNone) game().generateBlood(x, y, bloodColor);
+        if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
         SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 
         SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);

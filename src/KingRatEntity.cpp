@@ -25,7 +25,7 @@ KingRatEntity::KingRatEntity(float x, float y)
 
   type = ENTITY_ENNEMY_BOSS;
   enemyType = EnemyTypeRatKing;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   shadowFrame = 4;
   dyingFrame = 5;
   deathFrame = FRAME_CORPSE_KING_RAT;

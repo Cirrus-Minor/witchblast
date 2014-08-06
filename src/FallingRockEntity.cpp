@@ -12,7 +12,7 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
   imagesProLine = 20;
   type = ENTITY_ENNEMY;
   movingStyle = movFlying;
-  bloodColor = bloodNone; // stones don't bleed
+  bloodColor = BloodNone; // stones don't bleed
 
   age = 0.0f;
   h = 1800 + rand() % 1000;

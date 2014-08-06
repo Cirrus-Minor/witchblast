@@ -53,7 +53,7 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
   }
 
 
-  bloodColor = bloodGreen;
+  bloodColor = BloodGreen;
   frame = 0;
   shadowFrame = 3;
   imagesProLine = 4;

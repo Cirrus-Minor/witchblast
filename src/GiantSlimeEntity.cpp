@@ -26,7 +26,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
 
   type = ENTITY_ENNEMY_BOSS;
   enemyType = EnemyTypeSlimeBoss;
-  bloodColor = bloodGreen;
+  bloodColor = BloodGreen;
   shadowFrame = 3;
   frame = 0;
   sprite.setOrigin(64.0f, 64.0f);

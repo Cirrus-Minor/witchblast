@@ -23,7 +23,7 @@ ButcherEntity::ButcherEntity(float x, float y)
   meleeDamages = BUTCHER_DAMAGES;
 
   type = ENTITY_ENNEMY_BOSS;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   shadowFrame = 5;
   dyingFrame = 3;
   deathFrame = FRAME_CORPSE_BUTCHER;

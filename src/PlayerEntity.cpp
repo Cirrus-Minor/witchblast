@@ -28,7 +28,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   boltLifeTime = INITIAL_BOLT_LIFE;
   specialBoltTimer = -1.0f;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
 
   // init the equipment (to empty)
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equip[i] = false;

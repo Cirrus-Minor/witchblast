@@ -15,7 +15,7 @@ BatEntity::BatEntity(float x, float y)
   meleeDamages = BAT_DAMAGES;
 
   type = ENTITY_ENNEMY;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   changingDelay = -0.5f;
   shadowFrame = 3;
   movingStyle = movFlying;

@@ -37,7 +37,7 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType)
   meleeDamages = RAT_DAMAGES;
 
   type = ENTITY_ENNEMY;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   shadowFrame = 7;
 
 

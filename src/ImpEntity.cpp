@@ -17,7 +17,7 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   meleeDamages = IMP_MELEE_DAMAGES;
 
   type = ENTITY_ENNEMY;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   changingDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
   shadowFrame = 4;
   movingStyle = movFlying;

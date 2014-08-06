@@ -37,7 +37,7 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
   meleeDamages = BLACK_RAT_DAMAGES;
 
   type = ENTITY_ENNEMY;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   shadowFrame = 7;
   agonizingSound = SOUND_RAT_DYING;
 

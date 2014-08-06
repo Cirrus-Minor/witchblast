@@ -19,7 +19,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y)
   frame = 0;
 
   type = ENTITY_ENNEMY;
-  bloodColor = bloodGreen;
+  bloodColor = BloodGreen;
   enemyType = EnemyTypeEvilFlower;
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;

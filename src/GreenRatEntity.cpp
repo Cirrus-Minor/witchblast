@@ -19,7 +19,7 @@ GreenRatEntity::GreenRatEntity(float x, float y)
 
   type = ENTITY_ENNEMY_INVOCATED;
   enemyType = EnemyTypeRatGreen;
-  bloodColor = bloodRed;
+  bloodColor = BloodRed;
   shadowFrame = 7;
   dyingFrame = 14;
   deathFrame = FRAME_CORPSE_GREEN_RAT;
