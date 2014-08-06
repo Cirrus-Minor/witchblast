@@ -83,6 +83,7 @@ WitchBlastGame::WitchBlastGame():
   ImageManager::getImageManager()->addImage("media/spider_egg.png");
   ImageManager::getImageManager()->addImage("media/spider_web.png");
   ImageManager::getImageManager()->addImage("media/little_spider.png");
+  ImageManager::getImageManager()->addImage("media/bubble.png");
 
   ImageManager::getImageManager()->addImage("media/butcher.png");
   ImageManager::getImageManager()->addImage("media/giant_slime.png");
@@ -144,6 +145,8 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/vib.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/boom_00.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/clang_00.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/bubble_00.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/bubble_01.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {

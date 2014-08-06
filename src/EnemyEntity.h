@@ -20,6 +20,9 @@ enum enemyTypeEnum
   EnemyTypeImpBlue,
   EnemyTypeImpRed,
 
+  // mini boss
+  EnemyTypeBubble,
+
   // boss
   EnemyTypeButcher,
   EnemyTypeSlimeBoss,

@@ -84,6 +84,7 @@ enum item_images {
   IMAGE_SPIDER_EGG,
   IMAGE_SPIDER_WEB,
   IMAGE_LITTLE_SPIDER,
+  IMAGE_BUBBLE,
 
   IMAGE_BUTCHER,
   IMAGE_GIANT_SLIME,
@@ -147,7 +148,9 @@ enum sound_resources {
   SOUND_BUTCHER_DIE,
   SOUND_VIB,
   SOUND_BOOM_00,
-  SOUND_CLANG_00
+  SOUND_CLANG_00,
+  SOUND_BUBBLE_00,
+  SOUND_BUBBLE_01
 };
 
 enum corpses_ressources{
