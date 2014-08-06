@@ -69,11 +69,15 @@ Changes
 Next version
 - ADD New level with a new boss
 - ADD New items (star brooch, triple shot, magician robe)
-- ADD New familiars (2 types)
-- ADD New monsters variants
+- ADD New familiars (fire and target fairies)
+- ADD New monsters variants (rats with helmet, violet slime)
+- ADD New monster (bubble)
+- ADD Explosions
+- ADD Chest's trap
 - ADD New tiles : holes
 - ADD New decorative tiles
 - ADD Display of health items on the minimap
+- ADD Display of the damage in the game area
 - ADD New graphics for Rat King
 - MOD Health items drop's rate decreases
 - MOD Rat King berserk's mode is easier now
@@ -83,6 +87,7 @@ Next version
 - FIX Sprite center and Z-order
 - FIX Giant Slime bug when falling on the wall 
 - FIX Freeze when opening a chest while having all the items (but not the fairies)
+- FIX Player does not bounce while being repulsed
 
 v0.2.5
 - ADD New mini-boss
