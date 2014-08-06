@@ -57,10 +57,12 @@ namespace {
 WitchBlastGame* gameptr;
 }
 
-WitchBlastGame::WitchBlastGame(): Game(SCREEN_WIDTH, SCREEN_HEIGHT)
+WitchBlastGame::WitchBlastGame():
+  Game(SCREEN_WIDTH,
+       SCREEN_HEIGHT,
+       APP_NAME + " V" + APP_VERSION)
 {
   gameptr = this;
-  app->setTitle(APP_NAME + " V" + APP_VERSION);
 
   // loading resources
   ImageManager::getImageManager()->addImage("media/player_base.png");
