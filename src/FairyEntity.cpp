@@ -27,12 +27,23 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
   shotLevel = 1;
   switch (fairyType)
   {
-    case FamiliarFairyTarget:
-    case FamiliarFairy: shotType = ShotTypeStandard; fairyFireDelay = FAIRY_FIRE_DELAY; break;
-    case FamiliarFairyIce: shotType = ShotTypeIce; fairyFireDelay = ICE_FAIRY_FIRE_DELAY; break;
-    case FamiliarFairyFire: shotType = ShotTypeFire; fairyFireDelay = FAIRY_FIRE_DELAY; fairyDamages = FAIRY_FIRE_DAMAGES; break;
+  case FamiliarFairyTarget:
+  case FamiliarFairy:
+    shotType = ShotTypeStandard;
+    fairyFireDelay = FAIRY_FIRE_DELAY;
+    break;
+  case FamiliarFairyIce:
+    shotType = ShotTypeIce;
+    fairyFireDelay = ICE_FAIRY_FIRE_DELAY;
+    break;
+  case FamiliarFairyFire:
+    shotType = ShotTypeFire;
+    fairyFireDelay = FAIRY_FIRE_DELAY;
+    fairyDamages = FAIRY_FIRE_DAMAGES;
+    break;
 
-    case FamiliarNone: break;
+  case FamiliarNone:
+    break;
   }
 }
 
@@ -64,7 +75,7 @@ void FairyEntity::animate(float delay)
 
   checkCollisions();
 
-  if (fairyType == FamiliarFairyTarget && !game().getCurrentMap()->isCleared()) fire(6);
+  if (fairyType == FamiliarFairyTarget && !game().getCurrentMap()->isCleared()) tryToFire();
   else computeFacingDirection();
 
   isMirroring = false;
@@ -110,18 +121,18 @@ void FairyEntity::fire(int dir)
       Vector2D target = game().getNearestEnnemy(x, y);
       if (target.x > -1.0f)
       {
-         bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
+        bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
 
-         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
-         {
-           if (target.x < x) facingDirection = 4;
-           else facingDirection = 6;
-         }
-         else
-         {
-           if (target.y < y) facingDirection = 8;
-           else facingDirection = 2;
-         }
+        if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
+        {
+          if (target.x < x) facingDirection = 4;
+          else facingDirection = 6;
+        }
+        else
+        {
+          if (target.y < y) facingDirection = 8;
+          else facingDirection = 2;
+        }
       }
     }
   }
@@ -132,16 +143,78 @@ void FairyEntity::fire(int dir)
       Vector2D target = game().getNearestEnnemy(x, y);
       if (target.x > -1.0f)
       {
-         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
-         {
-           if (target.x < x) facingDirection = 4;
-           else facingDirection = 6;
-         }
-         else
-         {
-           if (target.y < y) facingDirection = 8;
-           else facingDirection = 2;
-         }
+        if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
+        {
+          if (target.x < x) facingDirection = 4;
+          else facingDirection = 6;
+        }
+        else
+        {
+          if (target.y < y) facingDirection = 8;
+          else facingDirection = 2;
+        }
+      }
+      else computeFacingDirection();
+    }
+  }
+}
+
+void FairyEntity::tryToFire()
+{
+  if (x < OFFSET_X + TILE_WIDTH * 1.3) return;
+  if (y < OFFSET_Y + TILE_HEIGHT * 1.3) return;
+  if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3) return;
+  if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3) return;
+
+  if (fireDelay <= 0.0f)
+  {
+    if (fairyType == FamiliarFairyTarget)
+    {
+      Vector2D target = game().getNearestEnnemy(x, y);
+      if (target.x > -1.0f)
+      {
+        BoltEntity* bolt = new BoltEntity(x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
+        bolt->setDamages(fairyDamages);
+        bolt->setFlying(true);
+        bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
+
+        SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
+        fireDelay = fairyFireDelay;
+
+        if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
+        {
+          if (target.x < x) facingDirection = 4;
+          else facingDirection = 6;
+        }
+        else
+        {
+          if (target.y < y) facingDirection = 8;
+          else facingDirection = 2;
+        }
+      }
+      else
+      {
+        computeFacingDirection();
+      }
+    }
+  }
+  else
+  {
+    if (fairyType == FamiliarFairyTarget)
+    {
+      Vector2D target = game().getNearestEnnemy(x, y);
+      if (target.x > -1.0f)
+      {
+        if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
+        {
+          if (target.x < x) facingDirection = 4;
+          else facingDirection = 6;
+        }
+        else
+        {
+          if (target.y < y) facingDirection = 8;
+          else facingDirection = 2;
+        }
       }
       else computeFacingDirection();
     }
@@ -183,7 +256,7 @@ void FairyEntity::checkCollisions()
         int dist = 40;
 
         if (x > fairy->getX() + dist || x < fairy->getX() - dist
-              || y > fairy->getY() + dist || y < fairy->getY() - dist)
+            || y > fairy->getY() + dist || y < fairy->getY() - dist)
           isColliding = false;
 
         if (isColliding)

@@ -27,5 +27,7 @@ class FairyEntity : public SpriteEntity
 
     void computeFacingDirection();
     void checkCollisions();
+
+    void tryToFire();
 };
 #endif // MAGNETENTITY_H
