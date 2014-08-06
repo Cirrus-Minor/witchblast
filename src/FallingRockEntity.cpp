@@ -75,20 +75,11 @@ void FallingRockEntity::render(sf::RenderTarget* app)
   sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
   app->draw(sprite);
 
-  #ifdef SHOW_BOUNDING_BOX
-  sf::Vertex line[] =
+  if (game().getShowLogical())
   {
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left + boundingBox.width, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top + boundingBox.height)),
-      sf::Vertex(sf::Vector2f(boundingBox.left, boundingBox.top))
-  };
-  app->draw(line, 8, sf::Lines);
-  #endif
+    displayBoundingBox(app);
+    displayCenterAndZ(app);
+  }
 }
 
 void FallingRockEntity::calculateBB()
