@@ -73,29 +73,32 @@ void GameFloor::displayToConsole()
     {
       switch (floor[i][j])
       {
-      case 0:
+      case roomTypeNULL:
         printf(".");
         break;
-      case 1:
+      case roomTypeStandard:
         printf("#");
         break;
-      case 2:
-        printf("&");
+      case roomTypeBoss:
+        printf("@");
         break;
-      case 3:
+      case roomTypeMerchant:
         printf("$");
         break;
-      case 4:
+      case roomTypeKey:
         printf("!");
         break;
-      case 5:
+      case roomTypeBonus:
         printf("*");
         break;
-      case 6:
+      case roomTypeExit:
         printf("X");
         break;
-      case 7:
+      case roomTypeStarting:
         printf("0");
+        break;
+      case roomTypeChallenge:
+        printf("?");
         break;
       }
     }
@@ -197,6 +200,12 @@ bool GameFloor::finalize()
   // shop
   index = rand() % isolatedVector.size();
   floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeMerchant;
+  isolatedVector.erase(isolatedVector.begin() + index);
+
+  if (level == 1 || nbIsolatedRooms < 4) return true;
+  // challenge
+  index = rand() % isolatedVector.size();
+  floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeChallenge;
   isolatedVector.erase(isolatedVector.begin() + index);
 
   return true;

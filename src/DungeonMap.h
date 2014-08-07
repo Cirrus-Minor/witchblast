@@ -45,7 +45,8 @@ enum roomTypeEnum
   roomTypeKey,
   roomTypeBonus,
   roomTypeExit,
-  roomTypeStarting
+  roomTypeStarting,
+  roomTypeChallenge
 };
 
 class DungeonMap : public GameMap
