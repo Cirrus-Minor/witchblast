@@ -3,6 +3,8 @@
 
 #include "Constants.h"
 #include "DungeonMap.h"
+#include <vector>
+#include <iostream>
 
 class GameFloor
 {
@@ -23,7 +25,10 @@ class GameFloor
     int floor[FLOOR_WIDTH][FLOOR_HEIGHT];
 
     int neighboorCount(int x, int y);
+    IntCoord getFirstNeighboor(int x, int y);
+
     bool isSuperIsolated(int x, int y);
+    std::vector<IntCoord> findSuperIsolated();
     void generate();
     bool finalize();
 

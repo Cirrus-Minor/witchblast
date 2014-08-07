@@ -73,14 +73,30 @@ void GameFloor::displayToConsole()
     {
       switch (floor[i][j])
       {
-        case 0: printf("."); break;
-        case 1: printf("#"); break;
-        case 2: printf("&"); break;
-        case 3: printf("$"); break;
-        case 4: printf("!"); break;
-        case 5: printf("*"); break;
-        case 6: printf("X"); break;
-        case 7: printf("0"); break;
+      case 0:
+        printf(".");
+        break;
+      case 1:
+        printf("#");
+        break;
+      case 2:
+        printf("&");
+        break;
+      case 3:
+        printf("$");
+        break;
+      case 4:
+        printf("!");
+        break;
+      case 5:
+        printf("*");
+        break;
+      case 6:
+        printf("X");
+        break;
+      case 7:
+        printf("0");
+        break;
       }
     }
     printf("\n");
@@ -97,71 +113,93 @@ int GameFloor::neighboorCount(int x, int y)
   return count;
 }
 
+IntCoord GameFloor::getFirstNeighboor(int x, int y)
+{
+  if (x > 0 && floor[x - 1][y] > 0) return IntCoord(x - 1, y);
+  if (x < FLOOR_WIDTH - 1 && floor[x + 1][y] > 0) return IntCoord(x + 1, y);
+  if (y > 0 && floor[x][y - 1] > 0) return IntCoord(x, y - 1);
+  if (y < FLOOR_HEIGHT - 1 && floor[x][y + 1] > 0) return IntCoord(x, y + 1);
+  return IntCoord(-1, -1);
+}
+
+std::vector<IntCoord> GameFloor::findSuperIsolated()
+{
+  std::vector<IntCoord> results;
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] == roomTypeStandard && neighboorCount(i, j) == 1)
+      {
+        if (isSuperIsolated(i, j))
+        {
+          IntCoord result(i, j);
+          results.push_back(result);
+        }
+      }
+    }
+  return results;
+}
+
 bool GameFloor::isSuperIsolated(int x, int y)
 {
   if (neighboorCount(x, y) != 1) return false;
   else
   {
-    if (x > 0 && floor[x-1][y]==1 && neighboorCount(x-1, y) == 2)
-    {
-      floor[x-1][y] = roomTypeBoss;
-      floor[x][y] = roomTypeExit;
-      return true;
-    }
-    else if (x < FLOOR_WIDTH - 1 && floor[x+1][y]==1 &&  neighboorCount(x+1, y) == 2)
-    {
-      floor[x+1][y] = roomTypeBoss;
-      floor[x][y] = roomTypeExit;
-      return true;
-    }
-    else if (y < FLOOR_HEIGHT - 1 && floor[x][y+1]==1 &&  neighboorCount(x, y+1) == 2)
-    {
-      floor[x][y+1] = roomTypeBoss;
-      floor[x][y] = roomTypeExit;
-      return true;
-    }
+    if (x > 0 && floor[x-1][y]==1 && neighboorCount(x-1, y) == 2) return true;
+    else if (x < FLOOR_WIDTH - 1 && floor[x+1][y]==1 &&  neighboorCount(x+1, y) == 2) return true;
+    else if (y < FLOOR_HEIGHT - 1 && floor[x][y+1]==1 &&  neighboorCount(x, y+1) == 2) return true;
   }
   return false;
 }
 
 bool GameFloor::finalize()
 {
-  bool bKey = false;
-  bool bBonus = false;
-  bool bMerchant = false;
-  bool bExit = false;
+  // step 1 : Exit and boss rooms
+  std::vector<IntCoord> superIsolatedVector = findSuperIsolated();
+  if (superIsolatedVector.size() == 0)
+    return false;
+  else
+  {
+    int index = rand() % superIsolatedVector.size();
+    floor[superIsolatedVector[index].x][superIsolatedVector[index].y] = roomTypeExit;
 
+    IntCoord bossCoord = getFirstNeighboor(superIsolatedVector[index].x, superIsolatedVector[index].y);
+    if (bossCoord.x == -1) return false;
+
+    floor[bossCoord.x][bossCoord.y] = roomTypeBoss;
+  }
+
+  // step 2 : bonus, key, etc...
+  std::vector<IntCoord> isolatedVector;
   for (int i=0; i < FLOOR_WIDTH; i++)
     for (int j=0; j < FLOOR_HEIGHT; j++)
-    {
       if (floor[i][j] == 1 && neighboorCount(i, j) == roomTypeStandard)
       {
-        if (!bExit && isSuperIsolated(i, j))
-        {
-          bExit = true;
-        }
-        else
-        {
-          if (!bKey)
-          {
-            floor[i][j]= roomTypeKey;
-            bKey = true;
-          }
-          else if (!bBonus)
-          {
-            floor[i][j]= roomTypeBonus;
-            bBonus = true;
-          }
-          else if (!bMerchant)
-          {
-            floor[i][j]= roomTypeMerchant;
-            bMerchant = true;
-          }
-        }
+        IntCoord found(i, j);
+        isolatedVector.push_back(found);
       }
-    }
 
-  return bExit && bKey && bBonus;
+  int nbIsolatedRooms = isolatedVector.size();
+  if (nbIsolatedRooms < 2) return false;
+  int index;
+
+  // bonus
+  index = rand() % isolatedVector.size();
+  floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeBonus;
+  isolatedVector.erase(isolatedVector.begin() + index);
+
+  // key
+  index = rand() % isolatedVector.size();
+  floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeKey;
+  isolatedVector.erase(isolatedVector.begin() + index);
+
+  if (nbIsolatedRooms < 3) return true;
+  // shop
+  index = rand() % isolatedVector.size();
+  floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeMerchant;
+  isolatedVector.erase(isolatedVector.begin() + index);
+
+  return true;
 }
 
 void GameFloor::createFloor()
@@ -259,33 +297,31 @@ void GameFloor::generate()
         int n = neighboorCount(i, j);
         switch (n)
         {
-          case 1:
+        case 1:
+        {
+          floor[i][j] = 1;
+          nbRooms++;
+          break;
+        }
+        case 2:
+        {
+          if (rand()% 5 == 0)
           {
             floor[i][j] = 1;
             nbRooms++;
-            break;
           }
-          case 2:
+          break;
+        }
+        case 3:
+        {
+          if (rand()% 20 == 0)
           {
-            if (rand()% 5 == 0)
-            {
-              floor[i][j] = 1;
-              nbRooms++;
-            }
-            break;
+            floor[i][j] = 1;
+            nbRooms++;
           }
-          case 3:
-          {
-            if (rand()% 20 == 0)
-            {
-              floor[i][j] = 1;
-              nbRooms++;
-            }
-            break;
-          }
+          break;
+        }
         }
       }
     }
-
-
 }
