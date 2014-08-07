@@ -35,6 +35,7 @@
 #include "SlimeEntity.h"
 #include "ChestEntity.h"
 #include "EvilFlowerEntity.h"
+#include "BubbleEntity.h"
 #include "ItemEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
@@ -1050,6 +1051,7 @@ void WitchBlastGame::refreshMinimap()
       if (n > 0 && currentFloor->getMap(i, j)->isVisited())
       {
         if (currentFloor->getRoom(i, j) == roomTypeStarting
+            || currentFloor->getRoom(i, j) == roomTypeChallenge
             || currentFloor->getRoom(i, j) == roomTypeBonus
             || currentFloor->getRoom(i, j) == roomTypeKey
             || currentFloor->getRoom(i, j) == roomTypeStandard)
@@ -1302,6 +1304,23 @@ void WitchBlastGame::generateMap()
                   0);
 
     currentMap->setCleared(true);
+  }
+  else if (currentMap->getRoomType() == roomTypeChallenge)
+  {
+    currentMap->generateRoomWithoutHoles(0);
+
+    if (level < 3)
+    {
+      new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+    }
+    else
+    {
+      new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 80,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+      new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+    }
   }
   else if (currentMap->getRoomType() == roomTypeBoss)
   {
