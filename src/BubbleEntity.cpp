@@ -123,6 +123,7 @@ void BubbleEntity::collideWithEnnemy(GameEntity* collidingEntity)
   if (entity->getMovingStyle() == movWalking)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
+    entity->setVelocity(Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), entity->getCreatureSpeed()));
   }
 }
 

@@ -14,6 +14,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     void setHp(int hp);
     void setHpMax(int hpMax);
     int getHpDisplay();
+    float getCreatureSpeed();
 
     IntCoord getCurrentTile();
 

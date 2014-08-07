@@ -56,6 +56,11 @@ int BaseCreatureEntity::getHpDisplay()
   return hpDisplay;
 }
 
+float BaseCreatureEntity::getCreatureSpeed()
+{
+  return creatureSpeed;
+}
+
 IntCoord BaseCreatureEntity::getCurrentTile()
 {
   int xMap = (x - OFFSET_X) / TILE_WIDTH;
