@@ -3,6 +3,8 @@
 
 #include "sfml_game/SpriteEntity.h"
 
+enum doorEnum { DoorStandard, DoorBoss, DoorChallenge };
+
 class DoorEntity : public SpriteEntity
 {
   public:
@@ -11,7 +13,7 @@ class DoorEntity : public SpriteEntity
     void render(sf::RenderTarget* app);
 
     void setOpen(bool open);
-    void setDoorType(int doorType);
+    void setDoorType(doorEnum doorType);
     void closeDoor();
     void openDoor();
 
@@ -19,6 +21,6 @@ class DoorEntity : public SpriteEntity
     int direction;
     bool isOpen;
     float timer;
-    int doorType;
+    doorEnum doorType;
 };
 #endif // DOORENTITY_H

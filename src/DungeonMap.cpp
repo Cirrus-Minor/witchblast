@@ -248,6 +248,27 @@ int DungeonMap::hasNeighbourDown()
   return 0;
 }
 
+roomTypeEnum DungeonMap::getNeighbourLeft()
+{
+  if (x > 0) return gameFloor->getRoom(x - 1, y);
+  else return roomTypeNULL;
+}
+roomTypeEnum DungeonMap::getNeighbourRight()
+{
+  if (x < MAP_WIDTH - 1) return gameFloor->getRoom(x + 1, y);
+  else return roomTypeNULL;
+}
+roomTypeEnum DungeonMap::getNeighbourUp()
+{
+  if (y > 0) return gameFloor->getRoom(x, y - 1);
+  else return roomTypeNULL;
+}
+roomTypeEnum DungeonMap::getNeighbourDown()
+{
+  if (y < MAP_HEIGHT - 1) return gameFloor->getRoom(x, y + 1);
+  else return roomTypeNULL;
+}
+
 void DungeonMap::initRoom()
 {
   int x0 = MAP_WIDTH / 2;

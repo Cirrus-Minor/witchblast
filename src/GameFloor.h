@@ -14,15 +14,16 @@ class GameFloor
     virtual ~GameFloor();
     void createFloor();
     void displayToConsole();
-    int getRoom(int x, int y);
-    void setRoom(int x, int y, int roomType);
+    roomTypeEnum getRoom(int x, int y);
+    // int getRoom(int x, int y);
+    void setRoom(int x, int y, roomTypeEnum roomType);
     DungeonMap* getMap(int x, int y);
     void setMap(int x, int y, DungeonMap* map);
     DungeonMap* getAndVisitMap(int x, int y);
   protected:
   private:
     int level;
-    int floor[FLOOR_WIDTH][FLOOR_HEIGHT];
+    roomTypeEnum floor[FLOOR_WIDTH][FLOOR_HEIGHT];
 
     int neighboorCount(int x, int y);
     IntCoord getFirstNeighboor(int x, int y);

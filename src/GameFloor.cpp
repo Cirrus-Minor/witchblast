@@ -31,13 +31,13 @@ GameFloor::~GameFloor()
       if (maps[i][j] != NULL) delete (maps[i][j]);
 }
 
-int GameFloor::getRoom(int x, int y)
+roomTypeEnum GameFloor::getRoom(int x, int y)
 {
-  if (x < 0 || y < 0 || x >= FLOOR_WIDTH || y >= FLOOR_HEIGHT) return 0;
+  if (x < 0 || y < 0 || x >= FLOOR_WIDTH || y >= FLOOR_HEIGHT) return roomTypeNULL;
   return floor[x][y];
 }
 
-void GameFloor::setRoom(int x, int y, int roomType)
+void GameFloor::setRoom(int x, int y, roomTypeEnum roomType)
 {
   floor[x][y] = roomType;
 }
@@ -258,7 +258,7 @@ void GameFloor::generate()
   for (i=0; i < FLOOR_WIDTH; i++)
     for (j=0; j < FLOOR_HEIGHT; j++)
     {
-      floor[i][j] = 0;
+      floor[i][j] = roomTypeNULL;
     }
 
   // First room
@@ -272,24 +272,24 @@ void GameFloor::generate()
   {
     if (rand() % 3 == 0)
     {
-      floor[x0-1][y0] = 1;
+      floor[x0-1][y0] = roomTypeStandard;
       nbRooms++;
     }
     if (rand() % 3 == 0)
     {
-      floor[x0+1][y0] = 1;
+      floor[x0+1][y0] = roomTypeStandard;
       nbRooms++;
     }
     if (rand() % 3 == 0)
     {
-      floor[x0][y0-1] = 1;
+      floor[x0][y0-1] = roomTypeStandard;
       nbRooms++;
     }
     if (level == 1)
     {
       if (rand() % 3 == 0)
       {
-        floor[x0][y0+1] = 1;
+        floor[x0][y0+1] = roomTypeStandard;
         nbRooms++;
       }
     }
@@ -308,7 +308,7 @@ void GameFloor::generate()
         {
         case 1:
         {
-          floor[i][j] = 1;
+          floor[i][j] = roomTypeStandard;
           nbRooms++;
           break;
         }
@@ -316,7 +316,7 @@ void GameFloor::generate()
         {
           if (rand()% 5 == 0)
           {
-            floor[i][j] = 1;
+            floor[i][j] = roomTypeStandard;
             nbRooms++;
           }
           break;
@@ -325,7 +325,7 @@ void GameFloor::generate()
         {
           if (rand()% 20 == 0)
           {
-            floor[i][j] = 1;
+            floor[i][j] = roomTypeStandard;
             nbRooms++;
           }
           break;

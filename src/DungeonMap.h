@@ -68,6 +68,11 @@ class DungeonMap : public GameMap
 
     bool containsHealth();
 
+    roomTypeEnum getNeighbourLeft();
+    roomTypeEnum getNeighbourRight();
+    roomTypeEnum getNeighbourUp();
+    roomTypeEnum getNeighbourDown();
+
     // 0 == no, 1 == yes, 2 == boss
     int hasNeighbourLeft();
     int hasNeighbourRight();

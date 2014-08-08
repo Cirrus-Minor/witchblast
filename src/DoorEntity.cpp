@@ -11,7 +11,7 @@ DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getImageMana
   height = TILE_HEIGHT;
   z = -0.5f;
   type = ENTITY_DOOR;
-  doorType = 0;
+  doorType = DoorStandard;
 }
 
 
@@ -27,7 +27,7 @@ void DoorEntity::setOpen(bool open)
   timer = 0.0f;
 }
 
-void DoorEntity::setDoorType(int doorType)
+void DoorEntity::setDoorType(doorEnum doorType)
 {
   this->doorType = doorType;
 }
@@ -70,7 +70,7 @@ void DoorEntity::render(sf::RenderTarget* app)
       }
       else
       {
-          if (timer > 0.0f)
+        if (timer > 0.0f)
         {
           xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
             - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
@@ -141,23 +141,23 @@ void DoorEntity::render(sf::RenderTarget* app)
       }
 
       // back
-      sprite.setTextureRect(sf::IntRect(width + (3 * width * doorType), 2 * height,  width , height* 3));
+      sprite.setTextureRect(sf::IntRect(width + (3 * width * doorType), 3 * height,  width , height* 3));
       sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
       sprite.setPosition(OFFSET_X,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
       app->draw(sprite);
 
 
       // door
-      sprite.setTextureRect(sf::IntRect( 3 * width * doorType, 2.5 * height,  width,  height));
+      sprite.setTextureRect(sf::IntRect( 3 * width * doorType, 3.5 * height,  width,  height));
       sprite.setPosition(xl, yl);
       app->draw(sprite);
 
-      sprite.setTextureRect(sf::IntRect( 3 * width * doorType, 3.5 * height,  width,  height));
+      sprite.setTextureRect(sf::IntRect( 3 * width * doorType, 4.5 * height,  width,  height));
       sprite.setPosition(xr, yr);
       app->draw(sprite);
 
       // front
-      sprite.setTextureRect(sf::IntRect(2 * width + (3 * width * doorType), 2 * height,  width , height* 3));
+      sprite.setTextureRect(sf::IntRect(2 * width + (3 * width * doorType), 3 * height,  width , height* 3));
       sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
       sprite.setPosition(OFFSET_X,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
       app->draw(sprite);
@@ -257,23 +257,23 @@ void DoorEntity::render(sf::RenderTarget* app)
       }
 
       // back
-      sprite.setTextureRect(sf::IntRect(width * 2  + (3 * width * doorType), 2 * height,  -width , height* 3));
+      sprite.setTextureRect(sf::IntRect(width * 2  + (3 * width * doorType), 3 * height,  -width , height* 3));
       sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
       sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
       app->draw(sprite);
 
 
       // door
-      sprite.setTextureRect(sf::IntRect(1 * width + (3 * width * doorType), 2.5 * height,  -width,  height));
+      sprite.setTextureRect(sf::IntRect(1 * width + (3 * width * doorType), 3.5 * height,  -width,  height));
       sprite.setPosition(xl, yl);
       app->draw(sprite);
 
-      sprite.setTextureRect(sf::IntRect(1* width + (3 * width * doorType), 3.5 * height,  -width,  height));
+      sprite.setTextureRect(sf::IntRect(1* width + (3 * width * doorType), 4.5 * height,  -width,  height));
       sprite.setPosition(xr, yr);
       app->draw(sprite);
 
       // front
-      sprite.setTextureRect(sf::IntRect(3 * width + (3 * width * doorType), 2 * height,  -width , height* 3));
+      sprite.setTextureRect(sf::IntRect(3 * width + (3 * width * doorType), 3 * height,  -width , height* 3));
       sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
       sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
       app->draw(sprite);

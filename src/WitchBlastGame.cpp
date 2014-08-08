@@ -997,8 +997,11 @@ void WitchBlastGame::refreshMap()
 
   // check doors
   doorEntity[0]->setVisible(currentMap->hasNeighbourUp() > 0);
-  if (currentMap->hasNeighbourUp() == 1) doorEntity[0]->setDoorType(0);
-  if (currentMap->hasNeighbourUp() == 2 || currentMap->getRoomType()==roomTypeBoss) doorEntity[0]->setDoorType(1);
+  if (currentMap->hasNeighbourUp() == 1) doorEntity[0]->setDoorType(DoorStandard);
+  if (currentMap->hasNeighbourUp() == 2 || currentMap->getRoomType() == roomTypeBoss)
+    doorEntity[0]->setDoorType(DoorBoss);
+  if (currentMap->getNeighbourUp() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
+    doorEntity[0]->setDoorType(DoorChallenge);
   if (currentMap->hasNeighbourUp() == 2 && !bossRoomOpened)
   {
     doorEntity[0]->setOpen(false);
@@ -1008,8 +1011,11 @@ void WitchBlastGame::refreshMap()
     doorEntity[0]->setOpen(true);
 
   doorEntity[3]->setVisible(currentMap->hasNeighbourRight() > 0);
-  if (currentMap->hasNeighbourRight() == 1) doorEntity[3]->setDoorType(0);
-  if (currentMap->hasNeighbourRight() == 2 || currentMap->getRoomType()==roomTypeBoss) doorEntity[3]->setDoorType(1);
+  if (currentMap->hasNeighbourRight() == 1) doorEntity[3]->setDoorType(DoorStandard);
+  if (currentMap->hasNeighbourRight() == 2 || currentMap->getRoomType() == roomTypeBoss)
+    doorEntity[3]->setDoorType(DoorBoss);
+  if (currentMap->getNeighbourRight() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
+    doorEntity[3]->setDoorType(DoorChallenge);
   if (currentMap->hasNeighbourRight() == 2 && !bossRoomOpened)
   {
     doorEntity[3]->setOpen(false);
@@ -1019,8 +1025,11 @@ void WitchBlastGame::refreshMap()
     doorEntity[3]->setOpen(true);
 
   doorEntity[2]->setVisible(currentMap->hasNeighbourDown() > 0);
-  if (currentMap->hasNeighbourDown() == 1) doorEntity[2]->setDoorType(0);
-  if (currentMap->hasNeighbourDown() == 2 || currentMap->getRoomType()==roomTypeBoss) doorEntity[2]->setDoorType(1);
+  if (currentMap->hasNeighbourDown() == 1) doorEntity[2]->setDoorType(DoorStandard);
+  if (currentMap->hasNeighbourDown() == 2 || currentMap->getRoomType() == roomTypeBoss)
+    doorEntity[2]->setDoorType(DoorBoss);
+  if (currentMap->getNeighbourDown() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
+    doorEntity[2]->setDoorType(DoorChallenge);
   if (currentMap->hasNeighbourDown() == 2 && !bossRoomOpened)
   {
     doorEntity[2]->setOpen(false);
@@ -1030,8 +1039,11 @@ void WitchBlastGame::refreshMap()
     doorEntity[2]->setOpen(true);
 
   doorEntity[1]->setVisible(currentMap->hasNeighbourLeft() > 0);
-  if (currentMap->hasNeighbourLeft() == 1) doorEntity[1]->setDoorType(0);
-  if (currentMap->hasNeighbourLeft() == 2 || currentMap->getRoomType()==roomTypeBoss) doorEntity[1]->setDoorType(1);
+  if (currentMap->hasNeighbourLeft() == 1) doorEntity[1]->setDoorType(DoorStandard);
+  if (currentMap->hasNeighbourLeft() == 2 || currentMap->getRoomType() == roomTypeBoss)
+    doorEntity[1]->setDoorType(DoorBoss);
+  if (currentMap->getNeighbourLeft() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
+    doorEntity[1]->setDoorType(DoorChallenge);
   if (currentMap->hasNeighbourLeft() == 2 && !bossRoomOpened)
   {
     doorEntity[1]->setOpen(false);
@@ -1764,7 +1776,7 @@ bool WitchBlastGame::loadGame()
       {
         int n;
         file >> n;
-        currentFloor->setRoom(i, j, n);
+        currentFloor->setRoom(i, j, (roomTypeEnum)n);
       }
     }
 
