@@ -157,7 +157,7 @@ void PlayerEntity::acquireItemAfterStance()
     else if (acquiredItem == ItemBonusHealth)
     {
       hpMax += 1;
-      hp += hpMax;
+      hp = hpMax;
 
       SoundManager::getSoundManager()->playSound(SOUND_EAT);
 
