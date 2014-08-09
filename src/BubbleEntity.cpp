@@ -130,12 +130,30 @@ void BubbleEntity::collideWithEnnemy(GameEntity* collidingEntity)
 void BubbleEntity::dying()
 {
   isDying = true;
-  game().addKilledEnemy(enemyType);
+  if (bubbleSize == 0) game().addKilledEnemy(enemyType);
 
   if (bubbleSize < 4)
   {
     new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
     new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
+  }
+  else
+  {
+    // the last one should drop
+    if (game().getEnnemyCount() == 1)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemBonusHealth, x, y);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+
+      int gold = 2 + rand() % 9;
+      for (int i = 0; i < gold; i++)
+      {
+        ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
+        newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+        newItem->setViscosity(0.96f);
+      }
+    }
   }
 
   for (int i = 0; i < 5 - bubbleSize; i++)
