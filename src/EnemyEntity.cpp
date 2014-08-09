@@ -267,7 +267,7 @@ void EnemyEntity::drop()
 
   if (rand() % 25 == 0)
   {
-    ItemEntity* newItem = new ItemEntity(itemHealthVerySmall, x, y);
+    ItemEntity* newItem = new ItemEntity(ItemHealthVerySmall, x, y);
     newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);

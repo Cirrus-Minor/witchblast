@@ -143,7 +143,7 @@ void ChestEntity::open()
         newItem->setVelocity(Vector2D(90.0f + rand()% 150));
         newItem->setViscosity(0.96f);
       }
-      ItemEntity* newItem = new ItemEntity(itemHealth, x, y);
+      ItemEntity* newItem = new ItemEntity(ItemHealth, x, y);
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
       newItem->setViscosity(0.96f);
     }

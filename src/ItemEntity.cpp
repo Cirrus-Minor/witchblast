@@ -57,7 +57,7 @@ void ItemEntity::animate(float delay)
       sc = 1.0f;
     sprite.setScale(sc, sc);
   }
-  if (itemType == itemBossHeart && !isBeating && game().getCurrentMap()->isCleared())
+  if (itemType == ItemBossHeart && !isBeating && game().getCurrentMap()->isCleared())
   {
     // start beating
     isBeating = true;
@@ -113,7 +113,7 @@ void ItemEntity::dying()
 
 void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
-  if (itemType == itemBossHeart && !game().getCurrentMap()->isCleared()) return;
+  if (itemType == ItemBossHeart && !game().getCurrentMap()->isCleared()) return;
 
   PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
 
@@ -124,7 +124,7 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       if (playerEntity->getHp() == playerEntity->getHpMax())
       {
         // don't use health item if you don't need it
-        if (itemType >= itemHealthVerySmall && itemType <= itemHealth) return;
+        if (itemType >= ItemHealthVerySmall && itemType <= ItemHealth) return;
       }
       if (isMerchandise == false || playerEntity->getGold() >= getPrice())
       {

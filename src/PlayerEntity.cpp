@@ -134,7 +134,7 @@ void PlayerEntity::acquireItemAfterStance()
   }
   else
   {
-    if (acquiredItem == itemBossHeart)
+    if (acquiredItem == ItemBossHeart)
     {
       int hpBonus = 2 + rand() % 4;
       hpMax += hpBonus;
@@ -146,6 +146,22 @@ void PlayerEntity::acquireItemAfterStance()
       std::ostringstream oss;
       oss << "HP Max +" << hpBonus;
       TextEntity* text = new TextEntity(oss.str(), 15, x, y - 50.0f);
+      text->setColor(TextEntity::COLOR_FADING_GREEN);
+      text->setAlignment(ALIGN_CENTER);
+      text->setAge(-1.0f);
+      text->setLifetime(1.2f);
+      text->setWeight(-60.0f);
+      text->setType(ENTITY_FLYING_TEXT);
+      text->setZ(2000);
+    }
+    else if (acquiredItem == ItemBonusHealth)
+    {
+      hpMax += 1;
+      hp += hpMax;
+
+      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+
+      TextEntity* text = new TextEntity("HP Max + 1", 15, x, y - 50.0f);
       text->setColor(TextEntity::COLOR_FADING_GREEN);
       text->setAlignment(ALIGN_CENTER);
       text->setAge(-1.0f);
@@ -879,17 +895,17 @@ void PlayerEntity::acquireItem(enumItemType type)
       gold = gold + 10;
       SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
       break;
-    case itemHealthVerySmall:
+    case ItemHealthVerySmall:
       hp += 3;
       SoundManager::getSoundManager()->playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
-    case itemHealthSmall:
+    case ItemHealthSmall:
       hp += 7;
       SoundManager::getSoundManager()->playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
-    case itemHealth:
+    case ItemHealth:
       hp += 15;
       SoundManager::getSoundManager()->playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;

@@ -1273,13 +1273,13 @@ void WitchBlastGame::generateMap()
     currentMap->generateMerchantRoom();
 
     ItemEntity* item1 = new ItemEntity(
-      itemHealth,
+      ItemHealth,
       OFFSET_X + (MAP_WIDTH / 2 - 3) * TILE_WIDTH + TILE_WIDTH / 2,
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item1->setMerchandise(true);
 
     ItemEntity* item3 = new ItemEntity(
-      itemHealthSmall,
+      ItemHealthSmall,
       OFFSET_X + (MAP_WIDTH / 2 + 3) * TILE_WIDTH + TILE_WIDTH / 2,
       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item3->setMerchandise(true);

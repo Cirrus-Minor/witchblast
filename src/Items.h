@@ -47,10 +47,11 @@ enum enumItemType
   ItemCopperCoin,
   ItemSilverCoin,
   ItemGoldCoin,
-  itemBossHeart,
-  itemHealthVerySmall,
-  itemHealthSmall,
-  itemHealth,
+  ItemBossHeart,
+  ItemBonusHealth,
+  ItemHealthVerySmall,
+  ItemHealthSmall,
+  ItemHealth,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
@@ -75,7 +76,9 @@ enum enumItemType
   ItemBroochStar,
   ItemFairyFire,
   ItemFairyTarget,
-  ItemMagicianRobe
+  ItemMagicianRobe,
+
+  NUMBER_ITEMS
 };
 
 const int FirstEquipItem = (int) ItemMagicianHat; /*!< Used as an offset when creating items */
@@ -103,7 +106,6 @@ struct itemStuct
   enumShotType specialShot;     /**< Special shot */
 };
 
-const int NUMBER_ITEMS = 31;  /*!< Total number of items */
 /** Array with all the items and data */
 const itemStuct items[NUMBER_ITEMS] =
 {
@@ -120,19 +122,22 @@ const itemStuct items[NUMBER_ITEMS] =
     20, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    itemBossHeart, "Titan's Heart", "Increases Max HP",
+    ItemBossHeart, "Titan's Heart", "Increases Max HP",
     250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    itemHealthVerySmall, "Apple", "Restores 3 HP",
+    ItemBonusHealth, "Elven Cookie", "Restores and increases Max HP",
+    250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+  },{
+    ItemHealthVerySmall, "Apple", "Restores 3 HP",
     2, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    itemHealthSmall, "Bread", "Restores 7 HP",
+    ItemHealthSmall, "Bread", "Restores 7 HP",
     4, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    itemHealthSmall, "Cheese", "Restores 15 HP",
+    ItemHealthSmall, "Cheese", "Restores 15 HP",
     8, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
@@ -233,7 +238,6 @@ const itemStuct items[NUMBER_ITEMS] =
   }
 };
 
-const int NUMBER_EQUIP_ITEMS = 24;  /*!< Number of equip items */
 /** Item equipment type enum
  *  All the equipments.
  */
@@ -261,7 +265,9 @@ enum item_equip_enum {
   EQUIP_BROOCH_STAR,
   EQUIP_FAIRY_FIRE,
   EQUIP_FAIRY_TARGET,
-  EQUIP_MAGICIAN_ROBE
+  EQUIP_MAGICIAN_ROBE,
+
+  NUMBER_EQUIP_ITEMS
   };
 
 #endif

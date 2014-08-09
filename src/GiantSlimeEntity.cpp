@@ -370,7 +370,7 @@ void GiantSlimeEntity::dying()
   game().makeShake(1.0f);
   SoundManager::getSoundManager()->playSound(SOUND_SLIME_SMASH);
 
-  ItemEntity* newItem = new ItemEntity(itemBossHeart, x, y);
+  ItemEntity* newItem = new ItemEntity(ItemBossHeart, x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
 
