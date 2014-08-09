@@ -232,12 +232,14 @@ const float STATUS_FROZEN_MULT[MAX_SHOT_LEVEL]   // speed multiplier (= 3 times 
     = { 0.38f, 0.33f, 0.28f };
 const float STONE_DECOIL_DELAY[MAX_SHOT_LEVEL]   // how long the stun occurs
     = { 0.15f, 0.3f, 0.5f };
-const float STONE_DECOIL_VELOCITY[MAX_SHOT_LEVEL]   // Decoil power
+const float STONE_DECOIL_VELOCITY[MAX_SHOT_LEVEL]   // Decoil velocity
     = { 110.0f, 160.0f, 220.0f };
-const float ILLUSION_DAMAGES_DECREASE[MAX_SHOT_LEVEL]   // Decoil power
+const float ILLUSION_DAMAGE_DECREASE[MAX_SHOT_LEVEL]   // Illusion damage malus
     = { 0.8f, 0.9f, 1.0f };
-const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Decoil power
+const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Air resistance
     = { 0.01, 0.015f, 0.02f };
+const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
+    = { 1.15f, 1.3f, 1.45f };
 
 // entity type
 const int ENTITY_PLAYER = 1;

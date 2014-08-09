@@ -22,7 +22,7 @@ const int SPECIAL_SHOT_SLOTS = 1 + SPECIAL_SHOT_SLOTS_STANDARD + SPECIAL_SHOT_SL
 enum enumRarity
 {
   RarityCommon,  /**< Common */
-  RarityUnommon, /**< Uncommon */
+  RarityUncommon, /**< Uncommon */
   RarityRare     /**< Rare */
 };
 
@@ -77,6 +77,8 @@ enum enumItemType
   ItemFairyFire,
   ItemFairyTarget,
   ItemMagicianRobe,
+  ItemGemFire,
+  ItemRingFire,
 
   NUMBER_ITEMS
 };
@@ -178,7 +180,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBloodSnake, "Blood Snake", "Increases damage",
-    20, true, FamiliarNone, true, true, true, 1, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemGemIce, "Ice Gem", "Ice attack (freeze)",
@@ -186,7 +188,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemGemIllusion, "Illusion Gem", "Illusion attack (ignore walls)",
-    25, true, FamiliarNone, true, true, true, 4, RarityUnommon, AlignmentDark, -1, ShotTypeIllusion
+    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, -1, ShotTypeIllusion
   },
   {
     ItemGemStone, "Stone Gem", "Stone attack (repulse)",
@@ -198,23 +200,23 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyIce, "Fairy Natasha", "Helps you in the dungeon",
-    40, true, FamiliarFairyIce, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemRingIce, "Sapphire Ring", "Increases ice power",
-    45, true, FamiliarNone, true, true, true, 3, RarityUnommon, AlignmentNone, ItemGemIce, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemIce, ShotTypeStandard
   },
   {
     ItemRingStone, "Obsidian Ring", "Increases stone power",
-    45, true, FamiliarNone, true, true, true, 3, RarityUnommon, AlignmentNone, ItemGemStone, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemStone, ShotTypeStandard
   },
   {
     ItemRingLightning, "Opal Ring", "Increases lightning power",
-    45, true, FamiliarNone, true, true, true, 3, RarityUnommon, AlignmentNone, ItemGemLightning, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemLightning, ShotTypeStandard
   },
   {
     ItemRingIllusion, "Quartz Ring", "Increases illusion power",
-    45, true, FamiliarNone, true, true, true, 4, RarityUnommon, AlignmentNone, ItemGemIllusion, ShotTypeStandard
+    50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, ItemGemIllusion, ShotTypeStandard
   },
   {
     ItemBookTripleShots, "Spell : Triple Bolts", "Shoots three bolts",
@@ -226,15 +228,23 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyFire, "Fairy Alicia", "Helps you in the dungeon",
-    40, true, FamiliarFairyFire, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemFairyTarget, "Fairy Scarlett", "Helps you in the dungeon",
-    40, true, FamiliarFairyTarget, false, true, true, 2, RarityUnommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyTarget, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemMagicianRobe, "Magician's Robe", "Increases armor",
     25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    ItemGemFire, "Fire Gem", "Fire attack (more damage)",
+    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, -1, ShotTypeFire
+  },
+  {
+    ItemRingStone, "Rubis Ring", "Increases fire power",
+    50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, ItemGemFire, ShotTypeStandard
   }
 };
 
@@ -266,6 +276,8 @@ enum item_equip_enum {
   EQUIP_FAIRY_FIRE,
   EQUIP_FAIRY_TARGET,
   EQUIP_MAGICIAN_ROBE,
+  EQUIP_GEM_FIRE,
+  EQUIP_RING_FIRE,
 
   NUMBER_EQUIP_ITEMS
   };

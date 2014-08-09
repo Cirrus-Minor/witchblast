@@ -21,7 +21,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   imagesProLine = 8;
   playerStatus = playerStatusPlaying;
-  hp = INITIAL_PLAYER_HP;
+  hp = INITIAL_PLAYER_HP * 15;
   hpDisplay = hp;
   hpMax = hp;
   gold = 0;
@@ -396,9 +396,11 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
     case ShotTypeIce:
       sprite.setColor(sf::Color(100, 220, 255, 255));
       break;
+
     case ShotTypeStone:
       sprite.setColor(sf::Color(120, 120, 150, 255));
       break;
+
     case ShotTypeLightning:
       sprite.setColor(sf::Color(255, 255, 0, 255));
       break;
@@ -409,6 +411,10 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
 
     case ShotTypeStandard:
       sprite.setColor(sf::Color(255, 255, 255, 0));
+      break;
+
+    case ShotTypeFire:
+      sprite.setColor(sf::Color(255, 180, 0, 255));
       break;
     }
 
@@ -460,7 +466,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
   }
 
   // gems
-  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning)  && playerStatus != playerStatusDead)
+  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeFire)  && playerStatus != playerStatusDead)
   {
     int fade;
     sf::Color savedColor = sprite.getColor();
@@ -469,11 +475,16 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
     if (getShotType() == ShotTypeLightning)
       fade = 150 + rand() % 105;
+    if (getShotType() == ShotTypeFire)
+      fade = 200 + rand() % 40;
 
     if (getShotType() == ShotTypeIce)
       sprite.setTextureRect(sf::IntRect(320, 0, 20, 20));
     else if (getShotType() == ShotTypeLightning)
       sprite.setTextureRect(sf::IntRect(340, 0, 20, 20));
+    else if (getShotType() == ShotTypeFire)
+      sprite.setTextureRect(sf::IntRect(360, 0, 20, 20));
+
     sprite.setColor(sf::Color(255, 255, 255, fade));
 
     if (isMoving() || firingDirection != 5)
@@ -667,6 +678,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
   case ShotTypeIllusion:
   case ShotTypeStone:
   case ShotTypeLightning:
+  case ShotTypeFire:
     boltType = getShotType();
     shotLevel = getShotLevel();
     break;
@@ -957,8 +969,11 @@ void PlayerEntity::computePlayer()
       specialShotLevel[i]++;
     if (specialShots[i] == ShotTypeIllusion && equip[EQUIP_RING_ILLUSION])
       specialShotLevel[i]++;
+    if (specialShots[i] == ShotTypeFire && equip[EQUIP_RING_FIRE])
+      specialShotLevel[i]++;
   }
-  if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGES_DECREASE[getShotLevel()];
+  if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
+  else if (getShotType() == ShotTypeFire) fireDamages *= FIRE_DAMAGE_INCREASE[getShotLevel()];
 }
 
 void PlayerEntity::acquireStance(enumItemType type)

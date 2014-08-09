@@ -1487,7 +1487,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
       switch (items[eq].rarity)
       {
         case RarityCommon:  n = 4; break;
-        case RarityUnommon: n = 2; break;
+        case RarityUncommon: n = 2; break;
         case RarityRare:    n = 1; break;
       }
       for (int j = 0; j < n; j++)
