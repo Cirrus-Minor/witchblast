@@ -283,7 +283,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
-  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_MINIMAP), miniMap, 15, 11, 10);
+  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_MINIMAP), miniMap, 15, 11, 12);
   miniMapEntity->setTileBox(16, 12);
   miniMapEntity->setX(407);
   miniMapEntity->setY(614);
@@ -971,6 +971,35 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
   return target;
 }
 
+void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour)
+{
+  if (roomNeighbour == roomTypeNULL)
+  {
+    doorEntity[doorId]->setVisible(false);
+    return;
+  }
+  doorEntity[doorId]->setVisible(true);
+  doorEntity[doorId]->setDoorType(DoorStandard);
+  if (roomNeighbour == roomTypeBoss || roomCurrent == roomTypeBoss)
+    doorEntity[doorId]->setDoorType(DoorBoss);
+  if (roomNeighbour == roomTypeChallenge || roomCurrent == roomTypeChallenge)
+    doorEntity[doorId]->setDoorType(DoorChallenge);
+  if (roomNeighbour == roomTypeBoss && !bossRoomOpened)
+  {
+    doorEntity[doorId]->setOpen(false);
+    switch (doorId)
+    {
+      case 0: currentMap->setTile(MAP_WIDTH/2, 0, MAP_DOOR); break;
+      case 1: currentMap->setTile(0, MAP_HEIGHT / 2, MAP_DOOR); break;
+      case 2: currentMap->setTile(MAP_WIDTH/2, MAP_HEIGHT - 1, MAP_DOOR); break;
+      case 3: currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, MAP_DOOR); break;
+    }
+
+  }
+  else
+    doorEntity[doorId]->setOpen(true);
+}
+
 void WitchBlastGame::refreshMap()
 {
   // clean the sprites from old map
@@ -996,61 +1025,10 @@ void WitchBlastGame::refreshMap()
   }
 
   // check doors
-  doorEntity[0]->setVisible(currentMap->hasNeighbourUp() > 0);
-  if (currentMap->hasNeighbourUp() == 1) doorEntity[0]->setDoorType(DoorStandard);
-  if (currentMap->hasNeighbourUp() == 2 || currentMap->getRoomType() == roomTypeBoss)
-    doorEntity[0]->setDoorType(DoorBoss);
-  if (currentMap->getNeighbourUp() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
-    doorEntity[0]->setDoorType(DoorChallenge);
-  if (currentMap->hasNeighbourUp() == 2 && !bossRoomOpened)
-  {
-    doorEntity[0]->setOpen(false);
-    currentMap->setTile(MAP_WIDTH/2, 0, MAP_DOOR);
-  }
-  else
-    doorEntity[0]->setOpen(true);
-
-  doorEntity[3]->setVisible(currentMap->hasNeighbourRight() > 0);
-  if (currentMap->hasNeighbourRight() == 1) doorEntity[3]->setDoorType(DoorStandard);
-  if (currentMap->hasNeighbourRight() == 2 || currentMap->getRoomType() == roomTypeBoss)
-    doorEntity[3]->setDoorType(DoorBoss);
-  if (currentMap->getNeighbourRight() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
-    doorEntity[3]->setDoorType(DoorChallenge);
-  if (currentMap->hasNeighbourRight() == 2 && !bossRoomOpened)
-  {
-    doorEntity[3]->setOpen(false);
-    currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, MAP_DOOR);
-  }
-  else
-    doorEntity[3]->setOpen(true);
-
-  doorEntity[2]->setVisible(currentMap->hasNeighbourDown() > 0);
-  if (currentMap->hasNeighbourDown() == 1) doorEntity[2]->setDoorType(DoorStandard);
-  if (currentMap->hasNeighbourDown() == 2 || currentMap->getRoomType() == roomTypeBoss)
-    doorEntity[2]->setDoorType(DoorBoss);
-  if (currentMap->getNeighbourDown() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
-    doorEntity[2]->setDoorType(DoorChallenge);
-  if (currentMap->hasNeighbourDown() == 2 && !bossRoomOpened)
-  {
-    doorEntity[2]->setOpen(false);
-    currentMap->setTile(MAP_WIDTH/2, MAP_HEIGHT - 1, MAP_DOOR);
-  }
-  else
-    doorEntity[2]->setOpen(true);
-
-  doorEntity[1]->setVisible(currentMap->hasNeighbourLeft() > 0);
-  if (currentMap->hasNeighbourLeft() == 1) doorEntity[1]->setDoorType(DoorStandard);
-  if (currentMap->hasNeighbourLeft() == 2 || currentMap->getRoomType() == roomTypeBoss)
-    doorEntity[1]->setDoorType(DoorBoss);
-  if (currentMap->getNeighbourLeft() == roomTypeChallenge || currentMap->getRoomType() == roomTypeChallenge)
-    doorEntity[1]->setDoorType(DoorChallenge);
-  if (currentMap->hasNeighbourLeft() == 2 && !bossRoomOpened)
-  {
-    doorEntity[1]->setOpen(false);
-    currentMap->setTile(0, MAP_HEIGHT / 2, MAP_DOOR);
-  }
-  else
-    doorEntity[1]->setOpen(true);
+  checkDoor(0, currentMap->getRoomType(), currentMap->getNeighbourUp());
+  checkDoor(1, currentMap->getRoomType(), currentMap->getNeighbourLeft());
+  checkDoor(2, currentMap->getRoomType(), currentMap->getNeighbourDown());
+  checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
 }
 
 void WitchBlastGame::refreshMinimap()
@@ -1081,6 +1059,8 @@ void WitchBlastGame::refreshMinimap()
       {
         if (currentFloor->getRoom(i, j) == roomTypeBoss)
           miniMap->setTile(i, j, 7);
+        else if (currentFloor->getRoom(i, j) == roomTypeChallenge)
+          miniMap->setTile(i, j, 10);
         else
           miniMap->setTile(i, j, 9);
       }

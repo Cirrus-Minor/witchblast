@@ -15,7 +15,6 @@ class GameFloor
     void createFloor();
     void displayToConsole();
     roomTypeEnum getRoom(int x, int y);
-    // int getRoom(int x, int y);
     void setRoom(int x, int y, roomTypeEnum roomType);
     DungeonMap* getMap(int x, int y);
     void setMap(int x, int y, DungeonMap* map);

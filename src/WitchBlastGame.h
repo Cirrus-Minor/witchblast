@@ -404,9 +404,18 @@ private:
    * Create a room (if this is a new one) or refresh it.
    * Called when the player changes room.
    * Checks the visibility of the doors and close it if there are monsters.
-   * Loads the mas items and sprites.
+   * Loads the map items and sprites.
    */
   void refreshMap();
+
+  /*!
+   *  \brief Check if a door is present, and its style
+   *
+   *  \param doorId : index of the door
+   *  \param roomCurrent : type of the current door
+   *  \param roomNeighbour : type of the neighbour door
+   */
+   void checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour);
 
   /*!
    *  \brief Refreshes the minimap
