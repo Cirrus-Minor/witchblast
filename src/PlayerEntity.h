@@ -396,6 +396,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     FairyEntity* getFairy(unsigned int n);
 
+    bool canGetNewShot(bool advancedShot);
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);

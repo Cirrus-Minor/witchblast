@@ -21,7 +21,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   imagesProLine = 8;
   playerStatus = playerStatusPlaying;
-  hp = INITIAL_PLAYER_HP * 15;
+  hp = INITIAL_PLAYER_HP;
   hpDisplay = hp;
   hpMax = hp;
   gold = 0;
@@ -1148,4 +1148,34 @@ FairyEntity* PlayerEntity::getFairy(unsigned int n)
     return fairies[n];
   else
     return NULL;
+}
+
+bool PlayerEntity::canGetNewShot(bool advancedShot)
+{
+  int nbSpecial =0;
+  int nbAdvanced =0;
+  for (int i = 1; i < SPECIAL_SHOT_SLOTS; i++)
+  {
+    switch (specialShots[i])
+    {
+      case ShotTypeIce:
+      case ShotTypeStone:
+      case ShotTypeLightning:
+        nbSpecial++;
+        break;
+
+      case ShotTypeFire:
+      case ShotTypeIllusion:
+        nbAdvanced++;
+        break;
+
+      case ShotTypeStandard:
+        break;
+    }
+  }
+
+  if (advancedShot)
+    return (nbAdvanced >= SPECIAL_SHOT_SLOTS_ADVANCED);
+  else
+    return (nbSpecial >= SPECIAL_SHOT_SLOTS_STANDARD);
 }
