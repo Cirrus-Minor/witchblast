@@ -63,15 +63,23 @@ Billx (who suggested me the title "Witch Blast")
 Ruth (for the english corrections)
 Mika Attila (for his contribution concerning the Linux version)
 
+Credits
+-------
+The sound used in the game come from:
+- http://www.freesound.org/
+- http://www.freesfx.co.uk/
+
 Changes
 -------
 
 Next version
 - ADD New level with a new boss
-- ADD New items (star brooch, triple shot, magician robe)
+- ADD New items
 - ADD New familiars (fire and target fairies)
 - ADD New monsters variants (rats with helmet, violet slime)
 - ADD New monster (bubble)
+- ADD New shot type (fire)
+- ADD Challenge Room
 - ADD Explosions
 - ADD Chest's trap
 - ADD New tiles : holes
