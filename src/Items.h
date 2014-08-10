@@ -79,6 +79,7 @@ enum enumItemType
   ItemMagicianRobe,
   ItemGemFire,
   ItemRingFire,
+  ItemManualStaff,
 
   NUMBER_ITEMS
 };
@@ -223,8 +224,8 @@ const itemStuct items[NUMBER_ITEMS] =
     50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard
   },
   {
-    ItemBroochStar, "Star Brooch", "Increases fire range",
-    20, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    ItemBroochStar, "Star Brooch", "Chance to critical shot (x2)",
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
     ItemFairyFire, "Fairy Alicia", "Helps you in the dungeon",
@@ -245,6 +246,10 @@ const itemStuct items[NUMBER_ITEMS] =
   {
     ItemRingStone, "Rubis Ring", "Increases fire power",
     50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, ItemGemFire, ShotTypeStandard
+  },
+  {
+    ItemManualStaff, "Staff's Manual", "Increases fire range",
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
 
@@ -278,6 +283,7 @@ enum item_equip_enum {
   EQUIP_MAGICIAN_ROBE,
   EQUIP_GEM_FIRE,
   EQUIP_RING_FIRE,
+  EQUIP_MANUAL_STAFF,
 
   NUMBER_EQUIP_ITEMS
   };

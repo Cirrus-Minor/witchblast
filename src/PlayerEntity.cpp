@@ -685,7 +685,10 @@ void PlayerEntity::generateBolt(float velx, float vely)
   }
 
   BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, boltType, shotLevel);
-  bolt->setDamages(fireDamages);
+  int boltDamage = fireDamages;
+  if (criticalChance > 0)
+    if (rand()% 100 < criticalChance) boltDamage += boltDamage;
+  bolt->setDamages(boltDamage);
   bolt->setVelocity(Vector2D(velx, vely));
 }
 
@@ -935,6 +938,7 @@ void PlayerEntity::computePlayer()
   float fireVelocityBonus = 1.0f;
   float fireDamagesBonus = 1.0f;
   armor = 0.0f;
+  criticalChance = 0;
 
   if (equip[EQUIP_VIBRATION_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
@@ -942,7 +946,8 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
-  if (equip[EQUIP_BROOCH_STAR]) boltLifeTimeBonus += 0.4f;
+  if (equip[EQUIP_BROOCH_STAR]) criticalChance += 5;
+  if (equip[EQUIP_MANUAL_STAFF]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
   {
     fireVelocityBonus += 0.15f;

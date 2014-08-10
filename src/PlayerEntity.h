@@ -415,6 +415,7 @@ class PlayerEntity : public BaseCreatureEntity
     float currentFireDelay;
     float boltLifeTime;
     int gold;
+    int criticalChance;
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
