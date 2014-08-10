@@ -26,6 +26,11 @@ EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   enemyType = NB_ENEMY;
 }
 
+enemyTypeEnum EnemyEntity::getEnemyType()
+{
+  return enemyType;
+}
+
 void EnemyEntity::animate(float delay)
 {
   if (isAgonising)

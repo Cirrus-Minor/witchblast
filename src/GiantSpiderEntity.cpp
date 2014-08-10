@@ -323,4 +323,22 @@ void GiantSpiderEntity::drop()
   ItemEntity* newItem = new ItemEntity(ItemBossHeart, x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
+
+  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList::iterator it;
+
+	for (it = entityList->begin (); it != entityList->end ();)
+	{
+		GameEntity *e = *it;
+		it++;
+
+    EnemyEntity* entity = dynamic_cast<EnemyEntity*>(e);
+    if (entity != NULL)
+		{
+		  if (entity->getEnemyType()== EnemyTypeSpiderWeb)
+      {
+        entity->hurt(entity->getHp(), ShotTypeStandard, 0);
+      }
+		}
+	}
 }

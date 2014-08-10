@@ -53,8 +53,10 @@ public:
   virtual void calculateBB();
   virtual void render(sf::RenderTarget* app);
   void displayLifeBar(std::string name, float posY, sf::RenderTarget* app);
+  virtual bool hurt(int damages, enumShotType hurtingType, int level);
 
   virtual bool canCollide();
+  enemyTypeEnum getEnemyType();
 
 protected:
   virtual void collideMapRight();
@@ -68,7 +70,6 @@ protected:
   virtual void collideWithEnnemy(GameEntity* collidingEntity);
   virtual void collideWithBolt(BoltEntity* boltEntity);
   int getCollisionDirection(BoltEntity* boltEntity);
-  virtual bool hurt(int damages, enumShotType hurtingType, int level);
 
   int meleeDamages;
 
