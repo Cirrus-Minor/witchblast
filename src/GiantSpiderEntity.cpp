@@ -33,6 +33,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
   deathFrame = FRAME_CORPSE_GIANT_SPIDER;
   //agonizingSound = SOUND_RAT_DYING;
   sprite.setOrigin(64.0f, 64.0f);
+  walkingSoundDelay = -1.0f;
 
   h = 2000;
   state = 0;
@@ -77,6 +78,12 @@ void GiantSpiderEntity::animate(float delay)
     }
     else if (state == 2) // moving
     {
+      walkingSoundDelay -= delay;
+      if (walkingSoundDelay <= 0.0f)
+      {
+        walkingSoundDelay = 1.0f;
+        SoundManager::getSoundManager()->playSound(SOUND_SPIDER_WALKING);
+      }
       fireDelay -= delay;
       if (fireDelay <= 0.0f)
       {

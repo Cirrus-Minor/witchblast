@@ -149,6 +149,9 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/bubble_00.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/bubble_01.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/trap.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/egg_smash_00.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/egg_smash_01.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/spider_walking.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -1475,9 +1478,12 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     if (itemOk && items[eq].requirement >= FirstEquipItem
         && !player->isEquiped(items[eq].requirement - FirstEquipItem)) itemOk = false;
 
-    if (itemOk && player->getShotType(SPECIAL_SHOT_SLOTS_STANDARD) != ShotTypeStandard
-        && (items[eq].specialShot != ShotTypeStandard && items[eq].level < 4))
-          itemOk = false;
+    if (itemOk && (items[eq].specialShot != ShotTypeStandard && items[eq].level < 3) && player->canGetNewShot(false))
+      itemOk = false;
+
+    if (itemOk && (items[eq].specialShot != ShotTypeStandard && items[eq].level >= 3) && player->canGetNewShot(true))
+      itemOk = false;
+
 
     if (itemOk && noFairy && items[eq].familiar != FamiliarNone) itemOk = false;
 

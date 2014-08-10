@@ -27,6 +27,7 @@ class GiantSpiderEntity : public EnemyEntity
     int state;
     float timer;
     float fireDelay;
+    float walkingSoundDelay;
 
     int hurtLevel;
 

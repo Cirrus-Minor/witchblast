@@ -17,6 +17,8 @@ SpiderEggEntity::SpiderEggEntity(float x, float y)
   movingStyle = movFlying;
   bloodColor = BloodGreen;
   deathFrame = FRAME_CORPSE_SPIDER_EGG;
+  dyingSound = rand() %  2 == 0 ? SOUND_EGG_SMASH_00 : SOUND_EGG_SMASH_01;
+  meleeDamages = 5;
 
   age = 0.0f;
   h = 1800 + rand() % 1000;
@@ -77,6 +79,8 @@ void SpiderEggEntity::dyingFromAge()
     float bloodScale = 1.0f + (rand() % 10) * 0.1f;
     blood->setScale(bloodScale, bloodScale);
   }
+
+  SoundManager::getSoundManager()->playSound(SOUND_EGG_SMASH_00 + rand() %  2);
 
   isDying = true;
 }
