@@ -150,7 +150,11 @@ void ChestEntity::open()
     else
     {
       int bonusType = game().getRandomEquipItem(false, true);
-      ItemEntity* newItem = new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), x ,y);
+      ItemEntity* newItem;
+      if (game().getPlayer()->isEquiped(bonusType))
+        newItem = new ItemEntity( (enumItemType)(ItemBonusHealth), x ,y);
+      else
+        newItem = new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), x ,y);
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
       newItem->setViscosity(0.96f);
     }
