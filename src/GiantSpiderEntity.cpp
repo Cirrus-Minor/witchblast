@@ -31,7 +31,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
   shadowFrame = 3;
   dyingFrame = 4;
   deathFrame = FRAME_CORPSE_GIANT_SPIDER;
-  //agonizingSound = SOUND_RAT_DYING;
+  agonizingSound = SOUND_SPIDER_DIE;
   sprite.setOrigin(64.0f, 64.0f);
   walkingSoundDelay = -1.0f;
 
@@ -89,6 +89,7 @@ void GiantSpiderEntity::animate(float delay)
       {
         if (rand() % 12 == 0)
         {
+          SoundManager::getSoundManager()->playSound(SOUND_SPIDER_WEB);
           for (int i = 0; i < 3; i++) new SpiderWebEntity(x, y);
         }
         else
@@ -108,6 +109,7 @@ void GiantSpiderEntity::animate(float delay)
         velocity = Vector2D(0.0f, 0.0f);
         timer = 1.0f;
         creatureSpeed = GIANT_SPIDER_SPEED[hurtLevel];
+        SoundManager::getSoundManager()->playSound(SOUND_SPIDER_HURT);
       }
     }
     else if (state == 3) // wait after falling
@@ -305,7 +307,6 @@ void GiantSpiderEntity::fire(int fireType)
     float fireVelocity = 180.0f;
     if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
     bolt->setVelocity(Vector2D(fireVelocity));
-    //bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), fireVelocity ));
 }
 
 int GiantSpiderEntity::getHealthLevel()

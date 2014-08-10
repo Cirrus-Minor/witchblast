@@ -152,6 +152,10 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/egg_smash_00.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/egg_smash_01.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/spider_walking.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/spider_web.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/spider_hurt.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/spider_die.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/little_spider_die.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {

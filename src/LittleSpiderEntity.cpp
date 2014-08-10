@@ -22,7 +22,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y)
   shadowFrame = 4;
   dyingFrame = 3;
   deathFrame = FRAME_CORPSE_LITTLE_SPIDER;
-  //agonizingSound = SOUND_RAT_DYING;
+  agonizingSound = SOUND_SPIDER_LITTLE_DIE;
 
   timer = (rand() % 50) / 10.0f;
   age = 0.0f;
