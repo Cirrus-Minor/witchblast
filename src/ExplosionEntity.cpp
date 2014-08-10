@@ -65,13 +65,9 @@ void ExplosionEntity::testCollisions()
 		GameEntity *e = *it;
 		it++;
 
-		//if ( (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX)
-    //    || e->getType() == ENTITY_PLAYER)
     BaseCreatureEntity* entity = dynamic_cast<BaseCreatureEntity*>(e);
     if (entity != NULL)
 		{
-		  //BaseCreatureEntity* entity = static_cast<BaseCreatureEntity*>(e);
-
 		  if (entity->getHp() > 0 && entity->canCollide())
       {
         entity->calculateBB();
@@ -90,7 +86,6 @@ void ExplosionEntity::testCollisions()
           entity->giveRecoil(true, recoilVector, 1.0f);
         }
       }
-
 		}
 	}
 }
