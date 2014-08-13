@@ -104,7 +104,7 @@ void BaseCreatureEntity::animateColors(float delay)
   // no color
   sprite.setColor(sf::Color(255, 255, 255, 255 ));
 
-  if (hurting and hp > 0)
+  if (hurting && hp > 0)
   {
     hurtingDelay -= delay;
     if (hurtingDelay > 0.0f)
