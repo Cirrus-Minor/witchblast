@@ -40,9 +40,7 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType)
   bloodColor = BloodRed;
   shadowFrame = 7;
 
-
   agonizingSound = SOUND_RAT_DYING;
-  enemyType = EnemyTypeRat;
 }
 
 void RatEntity::animate(float delay)
