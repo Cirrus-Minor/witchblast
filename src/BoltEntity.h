@@ -37,6 +37,8 @@ class BoltEntity : public CollidingSpriteEntity
     virtual void onDying();
     virtual void stuck();
 
+    void explode();
+
     int damages;
     float renderScale;
     enumShotType boltType;

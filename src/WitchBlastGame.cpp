@@ -37,6 +37,7 @@
 #include "EvilFlowerEntity.h"
 #include "BubbleEntity.h"
 #include "ItemEntity.h"
+#include "WitchEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -85,6 +86,7 @@ WitchBlastGame::WitchBlastGame():
   ImageManager::getImageManager()->addImage("media/spider_web.png");
   ImageManager::getImageManager()->addImage("media/little_spider.png");
   ImageManager::getImageManager()->addImage("media/bubble.png");
+  ImageManager::getImageManager()->addImage("media/witch.png");
 
   ImageManager::getImageManager()->addImage("media/butcher.png");
   ImageManager::getImageManager()->addImage("media/giant_slime.png");
@@ -156,6 +158,11 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/spider_hurt.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/spider_die.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/little_spider_die.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/witch_00.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/witch_01.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/witch_die_00.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/witch_die_01.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/witch_02.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -1406,6 +1413,8 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     case EnemyTypeSlimeRed: new SlimeEntity(xm, ym, SlimeTypeRed, false); break;
     case EnemyTypeSlimeBlue: new SlimeEntity(xm, ym, SlimeTypeBlue, false); break;
     case EnemyTypeSlimeViolet: new SlimeEntity(xm, ym, SlimeTypeViolet, false); break;
+    case EnemyTypeWitch: new WitchEntity(xm, ym, WitchEntity::WitchTypeNormal); break;
+    case EnemyTypeWitchRed: new WitchEntity(xm, ym, WitchEntity::WitchTypeRed); break;
 
     default: std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
   }

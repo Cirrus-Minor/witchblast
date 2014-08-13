@@ -19,6 +19,8 @@ enum enemyTypeEnum
   EnemyTypeSlimeViolet,
   EnemyTypeImpBlue,
   EnemyTypeImpRed,
+  EnemyTypeWitch,
+  EnemyTypeWitchRed,
 
   // mini boss
   EnemyTypeBubble,

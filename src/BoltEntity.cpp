@@ -1,4 +1,5 @@
 #include "BoltEntity.h"
+#include "ExplosionEntity.h"
 #include "Constants.h"
 #include "DungeonMap.h"
 #include "WitchBlastGame.h"
@@ -25,6 +26,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
     case ShotTypeLightning: frame = 5; break;
     case ShotTypeIllusion:  frame = 3; break;
     case ShotTypeFire:      frame = 6; break;
+    case ShotTypeBomb:      frame = 8; damages = 0; sprite.setScale(1.0f, 1.0f); break;
   }
   testWallsCollision = false;
   flying = false;
@@ -77,13 +79,16 @@ void BoltEntity::setFlying(bool flying)
 
 void BoltEntity::animate(float delay)
 {
-  SpriteEntity* trace = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
-  trace->setFading(true);
-  trace->setZ(y);
-  trace->setLifetime(0.2f);
-  trace->setShrinking(true, renderScale, renderScale);
-  trace->setType(ENTITY_EFFECT);
-  trace->setFrame(frame);
+  if (boltType != ShotTypeBomb)
+  {
+    SpriteEntity* trace = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
+    trace->setFading(true);
+    trace->setZ(y);
+    trace->setLifetime(0.2f);
+    trace->setShrinking(true, renderScale, renderScale);
+    trace->setType(ENTITY_EFFECT);
+    trace->setFrame(frame);
+  }
 
   z = y + height;
 
@@ -92,7 +97,7 @@ void BoltEntity::animate(float delay)
   testWallsCollision = false;
   calculateBB();
 
-  if ( (lifetime - age) < 0.2f)
+  if (boltType != ShotTypeBomb && (lifetime - age) < 0.2f)
   {
     if (age >= lifetime)
       sprite.setColor(sf::Color(255, 255, 255, 0));
@@ -125,11 +130,16 @@ void BoltEntity::calculateBB()
 void BoltEntity::collide()
 {
   isDying = true;
-  for (int i=0; i<5; i++)
+  if (boltType == ShotTypeBomb)
+    explode();
+  else
+  {
+    for (int i=0; i<5; i++)
     {
       Vector2D vel(40.0f + rand() % 50);
       generateParticule(vel);
     }
+  }
 }
 
 void BoltEntity::generateParticule(Vector2D vel)
@@ -183,11 +193,17 @@ void BoltEntity::onDying()
 void BoltEntity::stuck()
 {
   SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
-  for (int i=0; i<5; i++)
+  if (boltType == ShotTypeBomb)
+    explode();
+  else
   {
-    Vector2D vel(100.0f + rand() % 150);
-    generateParticule(vel);
+    for (int i=0; i<5; i++)
+    {
+      Vector2D vel(100.0f + rand() % 150);
+      generateParticule(vel);
+    }
   }
+
   onDying();
 }
 
@@ -197,6 +213,8 @@ void BoltEntity::collideMapRight()
   {
     velocity.x = -velocity.x;
   }
+  else if (boltType == ShotTypeBomb)
+    explode();
   else
   {
     velocity.x = 0.0f;
@@ -218,6 +236,8 @@ void BoltEntity::collideMapLeft()
   {
     velocity.x = -velocity.x;
   }
+  else if (boltType == ShotTypeBomb)
+    explode();
   else
   {
     velocity.x = 0.0f;
@@ -239,6 +259,8 @@ void BoltEntity::collideMapTop()
   {
     velocity.y = -velocity.y;
   }
+  else if (boltType == ShotTypeBomb)
+    explode();
   else
   {
     velocity.y = 0.0f;
@@ -260,6 +282,8 @@ void BoltEntity::collideMapBottom()
   {
     velocity.y = -velocity.y;
   }
+  else if (boltType == ShotTypeBomb)
+    explode();
   else
   {
     velocity.y = 0.0f;
@@ -273,4 +297,18 @@ void BoltEntity::collideMapBottom()
       generateParticule(vel);
     }
   }
+}
+
+void BoltEntity::explode()
+{
+  isDying = true;
+  new ExplosionEntity(x, y);
+  game().makeShake(0.5f);
+  SoundManager::getSoundManager()->playSound(SOUND_BOOM_00);
+
+  SpriteEntity* corpse= new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+  corpse->setFrame(FRAME_CORPSE_SLIME_VIOLET);
+  corpse->setImagesProLine(10);
+  corpse->setZ(OFFSET_Y);
+  corpse->setType(ENTITY_CORPSE);
 }

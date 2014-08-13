@@ -20,12 +20,12 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.2.7";
+const std::string APP_VERSION =   "0.2.8";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
 
-const std::string SAVE_VERSION =  "SAVE_0.2.7";
+const std::string SAVE_VERSION =  "SAVE_0.2.8";
 
 // Client size
 const int SCREEN_WIDTH = 970;
@@ -85,6 +85,7 @@ enum item_images {
   IMAGE_SPIDER_WEB,
   IMAGE_LITTLE_SPIDER,
   IMAGE_BUBBLE,
+  IMAGE_WITCH,
 
   IMAGE_BUTCHER,
   IMAGE_GIANT_SLIME,
@@ -158,7 +159,12 @@ enum sound_resources {
   SOUND_SPIDER_WEB,
   SOUND_SPIDER_HURT,
   SOUND_SPIDER_DIE,
-  SOUND_SPIDER_LITTLE_DIE
+  SOUND_SPIDER_LITTLE_DIE,
+  SOUND_WITCH_00,
+  SOUND_WITCH_01,
+  SOUND_WITCH_02,
+  SOUND_WITCH_DIE_00,
+  SOUND_WITCH_DIE_01
 };
 
 enum corpses_ressources{
@@ -178,6 +184,8 @@ enum corpses_ressources{
   FRAME_CORPSE_RAT_HELMET,
   FRAME_CORPSE_BLACK_RAT_HELMET,
   FRAME_CORPSE_SLIME_VIOLET,
+  FRAME_CORPSE_WITCH,
+  FRAME_CORPSE_WITCH_RED,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -225,7 +233,8 @@ enum enumShotType {
   ShotTypeIllusion,
   ShotTypeStone,
   ShotTypeLightning,
-  ShotTypeFire
+  ShotTypeFire,
+  ShotTypeBomb
   };
 
 // special shots effects
