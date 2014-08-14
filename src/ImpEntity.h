@@ -26,7 +26,6 @@ class ImpEntity : public EnemyEntity
     int state;
     void fire();
     void teleport();
-    void generateStar(sf::Color starColor);
 };
 
 #endif // BATSPRITE_H

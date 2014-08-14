@@ -95,6 +95,9 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       bool stun;
       float timer;
     } recoil;
+
+    void generateStar(sf::Color starColor);
+
   private:
     bool determineSatusChance(enumStateResistance resistance, int level);
     int determineDamageBonus(enumStateResistance resistance, int level);
