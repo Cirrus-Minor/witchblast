@@ -2,6 +2,8 @@
 #include "BoltEntity.h"
 #include "EnnemyBoltEntity.h"
 #include "PlayerEntity.h"
+#include "RatEntity.h"
+#include "BatEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -29,8 +31,8 @@ WitchEntity::WitchEntity(float x, float y, witchTypeEnum witchType)
     enemyType = EnemyTypeWitchRed;
   }
 
-  hp = 50;
-  creatureSpeed = 120.0f;
+  hp = 80;
+  creatureSpeed = 130.0f;
 
   velocity = Vector2D(creatureSpeed);
   meleeDamages = 5;
@@ -57,12 +59,34 @@ void WitchEntity::animate(float delay)
     {
       if (state == 0)
       {
-        fire();
-        if (witchType == WitchTypeNormal) fire();
+
         state = 1;
         velocity = Vector2D(0.0f, 0.0f);
         timer = 0.6f;
         SoundManager::getSoundManager()->playSound(SOUND_WITCH_00 + rand() % 3);
+        if (rand() % 7 == 0)
+        {
+          // invoke
+          int x0 = ((x - OFFSET_X) / TILE_WIDTH);
+          x0 = x0 * TILE_WIDTH + TILE_WIDTH / 2;
+          int y0 = ((y - OFFSET_Y) / TILE_HEIGHT);
+          y0 = y0 * TILE_HEIGHT + TILE_HEIGHT / 2;
+          if (witchType == WitchTypeNormal) new RatEntity(x0, y0, RatEntity::RatTypeNormal, true);
+          else new BatEntity(x0, y0, true);
+          SoundManager::getSoundManager()->playSound(SOUND_INVOKE);
+
+          for(int i=0; i < 6; i++)
+          {
+            generateStar(sf::Color(120, 50, 120, 255));
+            generateStar(sf::Color(120, 0, 120, 255));
+          }
+        }
+        else
+        {
+          // fire
+          fire();
+          if (witchType == WitchTypeNormal) fire();
+        }
       }
       else if (state == 1)
       {
@@ -158,7 +182,7 @@ void WitchEntity::fire()
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
     float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
-    if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
+    if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.7f;
     bolt->setVelocity(Vector2D(x, y).vectorNearlyTo(game().getPlayerPosition(), flowerFireVelocity, 1.0f ));
   }
   else

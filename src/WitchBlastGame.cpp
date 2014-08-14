@@ -163,6 +163,7 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/witch_die_00.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/witch_die_01.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/witch_02.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/invoke.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -1401,11 +1402,11 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
 {
   switch (monsterType)
   {
-    case EnemyTypeRat: new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal); break;
+    case EnemyTypeRat: new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal, false); break;
     case EnemyTypeRatBlack: new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeNormal); break;
-    case EnemyTypeRatHelmet: new RatEntity(xm, ym - 2, RatEntity::RatTypeHelmet); break;
+    case EnemyTypeRatHelmet: new RatEntity(xm, ym - 2, RatEntity::RatTypeHelmet, false); break;
     case EnemyTypeRatBlackHelmet: new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeHelmet); break;
-    case EnemyTypeBat: new BatEntity(xm, ym); break;
+    case EnemyTypeBat: new BatEntity(xm, ym, false); break;
     case EnemyTypeEvilFlower: new EvilFlowerEntity(xm, ym - 2); break;
     case EnemyTypeSlime: new SlimeEntity(xm, ym, SlimeTypeStandard, false); break;
     case EnemyTypeImpRed: new ImpEntity(xm, ym, ImpEntity::ImpTypeRed); break;

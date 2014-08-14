@@ -1,12 +1,12 @@
-#ifndef BATSPRITE_H
-#define BATSPRITE_H
+#ifndef BATENTITY_H
+#define BATENTITY_H
 
 #include "EnemyEntity.h"
 
 class BatEntity : public EnemyEntity
 {
   public:
-    BatEntity(float x, float y);
+    BatEntity(float x, float y, bool invocated);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -18,9 +18,10 @@ class BatEntity : public EnemyEntity
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
 
 	  virtual void dying();
+	  virtual void drop();
   private:
     float changingDelay;
-
+    bool invocated;
 };
 
-#endif // BATSPRITE_H
+#endif // BATENTITY_H

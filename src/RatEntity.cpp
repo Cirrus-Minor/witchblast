@@ -7,18 +7,20 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-RatEntity::RatEntity(float x, float y, ratTypeEnum ratType)
+RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
   : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
 {
   this->ratType = ratType;
   imagesProLine = 8;
+  this->invocated = invocated;
 
   if (ratType == RatTypeNormal)
   {
     frame = 0;
     dyingFrame = 6;
     deathFrame = FRAME_CORPSE_RAT;
-    enemyType = EnemyTypeRat;
+    if (invocated) enemyType = EnemyTypeRat_invocated;
+    else enemyType = EnemyTypeRat;
     hp = RAT_HP;
     creatureSpeed = RAT_SPEED;
   }
@@ -27,7 +29,8 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType)
     frame = 24;
     dyingFrame = 30;
     deathFrame = FRAME_CORPSE_RAT_HELMET;
-    enemyType = EnemyTypeRatHelmet;
+    if (invocated) enemyType = EnemyTypeRatHelmet_invocated;
+    else enemyType = EnemyTypeRatHelmet;
     hp = RAT_HP_HELMET;
     creatureSpeed = RAT_SPEED;
   }
@@ -141,4 +144,9 @@ void RatEntity::collideWithBolt(BoltEntity* boltEntity)
     }
   }
   else EnemyEntity::collideWithBolt(boltEntity);
+}
+
+void RatEntity::drop()
+{
+  if (!invocated) EnemyEntity::drop();
 }

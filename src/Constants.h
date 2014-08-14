@@ -164,7 +164,8 @@ enum sound_resources {
   SOUND_WITCH_01,
   SOUND_WITCH_02,
   SOUND_WITCH_DIE_00,
-  SOUND_WITCH_DIE_01
+  SOUND_WITCH_DIE_01,
+  SOUND_INVOKE
 };
 
 enum corpses_ressources{

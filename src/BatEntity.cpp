@@ -6,13 +6,14 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-BatEntity::BatEntity(float x, float y)
+BatEntity::BatEntity(float x, float y, bool invocated)
   : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), x, y)
 {
   creatureSpeed = BAT_SPEED;
   velocity = Vector2D(creatureSpeed);
   hp = BAT_HP;
   meleeDamages = BAT_DAMAGES;
+  this->invocated = invocated;
 
   type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
@@ -24,7 +25,7 @@ BatEntity::BatEntity(float x, float y)
   deathFrame = FRAME_CORPSE_BAT;
   agonizingSound = SOUND_BAT_DYING;
 
-  enemyType = EnemyTypeBat;
+  enemyType = invocated ? EnemyTypeBat_invocated : EnemyTypeBat;
 }
 
 void BatEntity::animate(float delay)
@@ -84,4 +85,9 @@ void BatEntity::dying()
 {
   EnemyEntity::dying();
   h = 25.0f;
+}
+
+void BatEntity::drop()
+{
+  if (!invocated) EnemyEntity::drop();
 }

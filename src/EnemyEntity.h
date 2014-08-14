@@ -33,7 +33,10 @@ enum enemyTypeEnum
   EnemyTypeSpiderGiant,
 
   // invocated
+  EnemyTypeBat_invocated,
+  EnemyTypeRat_invocated,
   EnemyTypeRatGreen,
+  EnemyTypeRatHelmet_invocated,
   EnemyTypeRockFalling,
   EnemyTypeRockMissile,
   EnemyTypeSlime_invocated,

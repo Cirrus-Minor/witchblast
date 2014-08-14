@@ -1,5 +1,5 @@
-#ifndef RATSPRITE_H
-#define RATSPRITE_H
+#ifndef RATENTITY_H
+#define RATENTITY_H
 
 #include "EnemyEntity.h"
 
@@ -7,7 +7,7 @@ class RatEntity : public EnemyEntity
 {
   public:
     enum ratTypeEnum { RatTypeNormal, RatTypeHelmet };
-    RatEntity(float x, float y, ratTypeEnum ratType);
+    RatEntity(float x, float y, ratTypeEnum ratType, bool invocated);
     virtual void animate(float delay);
     virtual void calculateBB();
 
@@ -19,8 +19,10 @@ class RatEntity : public EnemyEntity
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
     virtual void collideWithBolt(BoltEntity* boltEntity);
+    virtual void drop();
   private:
     ratTypeEnum ratType;
+    bool invocated;
 };
 
-#endif // RATSPRITE_H
+#endif // RATENTITY_H
