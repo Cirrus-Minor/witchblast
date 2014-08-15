@@ -167,17 +167,6 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
     float recoilVelocity = STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
     float recoilDelay = STONE_DECOIL_DELAY[boltEntity->getLevel()];
 
-    if (resistance[ResistanceRecoil] == ResistanceHigh)
-    {
-      recoilVelocity *= 0.75f;
-      recoilDelay *= 0.75f;
-    }
-    else if (resistance[ResistanceRecoil] == ResistanceVeryHigh)
-    {
-      recoilVelocity *= 0.5f;
-      recoilDelay *= 0.5f;
-    }
-
     Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
                             recoilVelocity );
     giveRecoil(true, recoilVector, recoilDelay);

@@ -480,6 +480,19 @@ void BaseCreatureEntity::computeFacingDirection()
 
 void BaseCreatureEntity::giveRecoil(bool stun, Vector2D velocity, float timer)
 {
+  if (resistance[ResistanceRecoil] == ResistanceHigh)
+    {
+      velocity.x *= 0.75f;
+      velocity.y *= 0.75f;
+      timer *= 0.75f;
+    }
+    else if (resistance[ResistanceRecoil] == ResistanceVeryHigh)
+    {
+      velocity.x *= 0.5f;
+      velocity.y *= 0.5f;
+      timer *= 0.5f;
+    }
+
   if (!(recoil.active && recoil.stun))
   {
     recoil.active = true;
