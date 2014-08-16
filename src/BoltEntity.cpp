@@ -30,6 +30,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   }
   testWallsCollision = false;
   flying = false;
+  critical = false;
 
   // avoid starting in wall
   if (y > (OFFSET_Y + (MAP_HEIGHT - 1) * TILE_HEIGHT - 16))
@@ -75,6 +76,16 @@ bool BoltEntity::isFlying()
 void BoltEntity::setFlying(bool flying)
 {
   this->flying = flying;
+}
+
+bool BoltEntity::isCritical()
+{
+    return critical;
+}
+
+void BoltEntity::setCritical(bool critical)
+{
+  this->critical = critical;
 }
 
 void BoltEntity::animate(float delay)

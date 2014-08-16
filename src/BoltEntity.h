@@ -25,6 +25,8 @@ class BoltEntity : public CollidingSpriteEntity
     enumShotType getBoltType();
     bool isFlying();
     void setFlying(bool flying);
+    bool isCritical();
+    void setCritical(bool setCritical);
 
   protected:
     virtual void calculateBB();
@@ -45,6 +47,7 @@ class BoltEntity : public CollidingSpriteEntity
   private:
     bool testWallsCollision;
     bool flying;
+    bool critical;
     unsigned int level;
 };
 
