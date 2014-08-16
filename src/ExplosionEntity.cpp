@@ -80,7 +80,7 @@ void ExplosionEntity::testCollisions()
 
         if (bb.intersects(entity->getBoundingBox()))
         {
-          entity->hurt(12, ShotTypeFire, 0);
+          entity->hurt(12, ShotTypeFire, 0, false);
 
           Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 800.0f );
           entity->giveRecoil(true, recoilVector, 1.0f);

@@ -365,12 +365,8 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 	return false;
 }
 
-bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
+bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
 {
-  hurting = true;
-  hurtingDelay = HURTING_DELAY;
-  this->hurtingType = hurtingType;
-
   if (armor > 0.01f)
   {
     int absorbedHp = damages * armor;
@@ -427,28 +423,36 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level)
   else if (hurtingType == ShotTypeIllusion)
     damages += (damages * determineDamageBonus(resistance[ResistanceIllusion], level)) / 100;
 
-  hp -= damages;
-  if (hp <= 0)
+  if (damages > 0)
   {
-    hp = 0;
-    prepareDying();
+    hurting = true;
+    hurtingDelay = HURTING_DELAY;
+    this->hurtingType = hurtingType;
+
+    hp -= damages;
+    if (hp <= 0)
+    {
+      hp = 0;
+      prepareDying();
+    }
+
+    std::ostringstream oss;
+    oss << "-" << damages;
+    int textSize;
+    if (damages < 8) textSize = 17;
+    else textSize = 17 + (damages - 4) / 4;
+    TextEntity* text = new TextEntity(oss.str(), 18, x, y - 20.0f);
+    text->setColor(TextEntity::COLOR_FADING_RED);
+    text->setAge(-1.0f);
+    text->setLifetime(1.2f);
+    text->setWeight(-60.0f);
+    text->setZ(2000);
+    text->setType(ENTITY_FLYING_TEXT);
+    while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
+
+    return true;
   }
-
-  std::ostringstream oss;
-  oss << "-" << damages;
-  int textSize;
-  if (damages < 8) textSize = 17;
-  else textSize = 17 + (damages - 4) / 4;
-  TextEntity* text = new TextEntity(oss.str(), 18, x, y - 20.0f);
-  text->setColor(TextEntity::COLOR_FADING_RED);
-  text->setAge(-1.0f);
-  text->setLifetime(1.2f);
-  text->setWeight(-60.0f);
-  text->setZ(2000);
-  text->setType(ENTITY_FLYING_TEXT);
-  while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
-
-  return true;
+  return false;
 }
 
 void BaseCreatureEntity::prepareDying()

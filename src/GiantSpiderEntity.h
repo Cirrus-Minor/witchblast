@@ -19,7 +19,7 @@ class GiantSpiderEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
-    virtual bool hurt(int damages, enumShotType hurtingType, int level) override;
+    virtual bool hurt(int damages, enumShotType hurtingType, int level, bool critical) override;
     virtual void drop();
 
     int getHealthLevel();

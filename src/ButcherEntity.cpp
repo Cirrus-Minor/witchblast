@@ -146,9 +146,9 @@ void ButcherEntity::render(sf::RenderTarget* app)
                             app, 0 , 0);
 }
 
-bool ButcherEntity::hurt(int damages, enumShotType hurtingType, int level)
+bool ButcherEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
 {
   creatureSpeed = BUTCHER_VELOCITY + hpMax - hp;
   setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
-  return EnemyEntity::hurt(damages, hurtingType, level);
+  return EnemyEntity::hurt(damages, hurtingType, level, critical);
 }

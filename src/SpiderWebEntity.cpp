@@ -119,7 +119,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         if (!playerEntity->isSpecialStateActive(SpecialStateSlow))
         {
           playerEntity->setSpecialState(SpecialStateSlow, true, 0.1f, 0.33f);
-          hurt(2, ShotTypeStandard, 0);
+          hurt(2, ShotTypeStandard, 0, false);
         }
       }
 
@@ -130,7 +130,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
         boltEntity->collide();
 
-        hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel());
+        hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical());
         if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
         SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
 

@@ -152,10 +152,10 @@ void GiantSpiderEntity::animate(float delay)
   z = y + 40;
 }
 
-bool GiantSpiderEntity::hurt(int damages, enumShotType hurtingType, int level)
+bool GiantSpiderEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
 {
   if (hurtLevel < getHealthLevel()) damages /= 5;
-  return EnemyEntity::hurt(damages, hurtingType, level);
+  return EnemyEntity::hurt(damages, hurtingType, level, critical);
 }
 
 void GiantSpiderEntity::calculateBB()
@@ -337,7 +337,7 @@ void GiantSpiderEntity::drop()
 		{
 		  if (entity->getEnemyType()== EnemyTypeSpiderWeb)
       {
-        entity->hurt(entity->getHp(), ShotTypeStandard, 0);
+        entity->hurt(entity->getHp(), ShotTypeStandard, 0, false);
       }
 		}
 	}

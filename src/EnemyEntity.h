@@ -59,7 +59,7 @@ public:
   virtual void calculateBB();
   virtual void render(sf::RenderTarget* app);
   void displayLifeBar(std::string name, float posY, sf::RenderTarget* app);
-  virtual bool hurt(int damages, enumShotType hurtingType, int level) override;
+  virtual bool hurt(int damages, enumShotType hurtingType, int level, bool critical) override;
 
   virtual bool canCollide();
   enemyTypeEnum getEnemyType();
