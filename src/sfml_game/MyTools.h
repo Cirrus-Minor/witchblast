@@ -20,6 +20,8 @@
 #include <stdlib.h>
 #include <math.h>
 
+const float PI = 3.141592;
+
 /** Vector utility, used in physics
  ** Default constructor creates a random Vector */
 class Vector2D
@@ -59,8 +61,8 @@ public:
 	  float angle;
 	  if (vector.y - y < 0.001f && vector.y - y > -0.001f)
     {
-      if (vector.x < x) angle = M_PI * 0.5;
-      else angle = -M_PI * 0.5;
+      if (vector.x < x) angle = PI * 0.5;
+      else angle = -PI * 0.5;
     }
     else
     {
