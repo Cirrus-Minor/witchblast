@@ -77,7 +77,7 @@ Next version
 - ADD New items
 - ADD New familiars (fire and target fairies)
 - ADD New monsters variants (rats with helmet, violet slime)
-- ADD New monster (bubble)
+- ADD New monsters (bubble, witches, cauldron)
 - ADD New shot type (fire)
 - ADD Challenge Room
 - ADD Explosions
