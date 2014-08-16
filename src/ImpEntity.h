@@ -17,7 +17,7 @@ class ImpEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
-    virtual bool hurt(int damages, enumShotType hurtingType, int level);
+    virtual bool hurt(int damages, enumShotType hurtingType, int level) override;
 
 	  virtual void dying();
   private:
