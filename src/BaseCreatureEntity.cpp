@@ -1,5 +1,6 @@
 #include "BaseCreatureEntity.h"
 #include "sfml_game/ImageManager.h"
+#include "sfml_game/SoundManager.h"
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
@@ -437,7 +438,8 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
     }
 
     std::ostringstream oss;
-    oss << "-" << damages;
+    if (critical) oss << "CRITICAL X2\n-" << damages;
+    else oss << "-" << damages;
     int textSize;
     if (damages < 8) textSize = 17;
     else textSize = 17 + (damages - 4) / 4;
@@ -449,6 +451,8 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
     text->setZ(2000);
     text->setType(ENTITY_FLYING_TEXT);
     while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
+
+    if (critical) SoundManager::getSoundManager()->playSound(SOUND_CRITICAL);
 
     return true;
   }
