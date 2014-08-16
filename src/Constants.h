@@ -168,7 +168,8 @@ enum sound_resources {
   SOUND_WITCH_DIE_01,
   SOUND_INVOKE,
   SOUND_CAULDRON_DIE,
-  SOUND_CRITICAL
+  SOUND_CRITICAL,
+  SOUND_GONG
 };
 
 enum corpses_ressources{
