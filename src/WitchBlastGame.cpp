@@ -38,6 +38,7 @@
 #include "BubbleEntity.h"
 #include "ItemEntity.h"
 #include "WitchEntity.h"
+#include "CauldronEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -87,6 +88,7 @@ WitchBlastGame::WitchBlastGame():
   ImageManager::getImageManager()->addImage("media/little_spider.png");
   ImageManager::getImageManager()->addImage("media/bubble.png");
   ImageManager::getImageManager()->addImage("media/witch.png");
+  ImageManager::getImageManager()->addImage("media/cauldron.png");
 
   ImageManager::getImageManager()->addImage("media/butcher.png");
   ImageManager::getImageManager()->addImage("media/giant_slime.png");
@@ -164,6 +166,7 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/witch_die_01.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/witch_02.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/invoke.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/cauldron_die.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -1416,6 +1419,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     case EnemyTypeSlimeViolet: new SlimeEntity(xm, ym, SlimeTypeViolet, false); break;
     case EnemyTypeWitch: new WitchEntity(xm, ym, WitchEntity::WitchTypeNormal); break;
     case EnemyTypeWitchRed: new WitchEntity(xm, ym, WitchEntity::WitchTypeRed); break;
+    case EnemyTypeCauldron: new CauldronEntity(xm, ym); break;
 
     default: std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
   }
