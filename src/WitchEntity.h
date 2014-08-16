@@ -22,6 +22,7 @@ class WitchEntity : public EnemyEntity
   private:
     witchTypeEnum witchType;
     float timer;
+    float escapeTimer;
 
     void fire();
     int state;

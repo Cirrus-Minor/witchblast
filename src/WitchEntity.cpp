@@ -31,11 +31,12 @@ WitchEntity::WitchEntity(float x, float y, witchTypeEnum witchType)
     enemyType = EnemyTypeWitchRed;
   }
 
-  hp = 80;
-  creatureSpeed = 130.0f;
+  hp = WITCH_HP;
+  hpMax = hp;
+  creatureSpeed = WITCH_VELOCITY;
 
   velocity = Vector2D(creatureSpeed);
-  meleeDamages = 5;
+  meleeDamages = WITCH_DAMAGE;
 
   type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
@@ -46,6 +47,7 @@ WitchEntity::WitchEntity(float x, float y, witchTypeEnum witchType)
   sprite.setOrigin(32, 75);
 
   timer = 3.0f;
+  escapeTimer = -1.0f;
   state = 0;
   agonizingSound = (sound_resources)(SOUND_WITCH_DIE_00 + rand() % 2);
 }
@@ -54,6 +56,7 @@ void WitchEntity::animate(float delay)
 {
   if (age > 0.0f && !isAgonising)
   {
+    if (escapeTimer > 0.0f) escapeTimer -= delay;
     timer -= delay;
     if (timer <= 0.0f)
     {
@@ -98,9 +101,10 @@ void WitchEntity::animate(float delay)
 
     if (state == 0)
     {
-      if (Vector2D(x, y).distance2(game().getPlayerPosition()) <= 36000)
+      if (escapeTimer < 0.0f && Vector2D(x, y).distance2(game().getPlayerPosition()) <= 36000)
       {
         velocity = game().getPlayerPosition().vectorTo(Vector2D(x, y), creatureSpeed);
+        escapeTimer = 2.5f;
       }
 
       frame = ((int)(age * 5.0f)) % 4;

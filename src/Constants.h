@@ -320,7 +320,7 @@ const int BAT_BB_HEIGHT_DIFF = 32;
 
 // Evl Flower
 const int EVIL_FLOWER_HP = 16;
-const int EVIL_FLOWER_MELEE_DAMAGES = 8;
+const int EVIL_FLOWER_MELEE_DAMAGES = 6;
 const int EVIL_FLOWER_MISSILE_DAMAGES = 5;
 const int EVIL_FLOWER_BB_LEFT = 14;
 const int EVIL_FLOWER_BB_WIDTH_DIFF = 28;
@@ -348,6 +348,11 @@ const int IMP_BB_WIDTH_DIFF = 10;
 const int IMP_BB_TOP = 2;
 const int IMP_BB_HEIGHT_DIFF = 32;
 const float IMP_FIRE_VELOCITY = 250.0f;
+
+// Witch
+const int WITCH_HP = 80;
+const int WITCH_DAMAGE = 5;
+const int WITCH_VELOCITY = 130.0f;
 
 // Butcher
 const int BUTCHER_HP = 100;
