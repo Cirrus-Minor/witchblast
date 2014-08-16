@@ -687,7 +687,11 @@ void PlayerEntity::generateBolt(float velx, float vely)
   BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, boltType, shotLevel);
   int boltDamage = fireDamages;
   if (criticalChance > 0)
-    if (rand()% 100 < criticalChance) boltDamage += boltDamage;
+    if (rand()% 100 < criticalChance)
+    {
+      boltDamage += boltDamage;
+      bolt->setCritical(true);
+    }
   bolt->setDamages(boltDamage);
   bolt->setVelocity(Vector2D(velx, vely));
 }
