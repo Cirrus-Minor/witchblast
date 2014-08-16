@@ -5,6 +5,7 @@
   *  the Free Software Foundation, either version 3 of the License, or
   *  (at your option) any later version.
   *
+
   *  Witch Blast is distributed in the hope that it will be useful,
   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -147,6 +148,7 @@ void generateStandardRoom04()
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeRat, 4);
     game().findPlaceMonsters(EnemyTypeRatHelmet, 3);
+    if (rand() % 4 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
   }
   else if (random < 32)
   {
@@ -173,6 +175,7 @@ void generateStandardRoom04()
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeImpRed, 3);
     game().findPlaceMonsters(EnemyTypeImpBlue, 3);
+    if (rand() % 4 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
   else if (random < 95)
   {
@@ -202,18 +205,27 @@ void generateStandardRoom05()
 {
   int random = rand() % 110;
 
-  if (random < 16)
+  if (random < 10)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeRat, 4);
     game().findPlaceMonsters(EnemyTypeRatHelmet, 4);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
+    else game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
-  else if (random < 32)
+  else if (random < 20)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
     game().findPlaceMonsters(EnemyTypeBat, 4);
     if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 4);
     else game().findPlaceMonsters(EnemyTypeImpBlue, 4);
+  }
+  else if (random < 32)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeWitch, 3);
+    game().findPlaceMonsters(EnemyTypeWitchRed, 2);
+    game().findPlaceMonsters(EnemyTypeCauldron, 1 + rand() % 2);
   }
   else if (random < 48)
   {
@@ -241,6 +253,7 @@ void generateStandardRoom05()
       game().findPlaceMonsters(EnemyTypeImpRed, 8);
     else
       game().findPlaceMonsters(EnemyTypeImpBlue, 8);
+    if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
   else if (random < 95)
   {
@@ -264,6 +277,7 @@ void generateStandardRoom05()
         case 3: game().findPlaceMonsters(EnemyTypeSlimeViolet,1); break;
       }
     }
+    if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
   }
 }
 
