@@ -594,7 +594,7 @@ void DungeonMap::generateRoomWithHoles(int type)
     // blocks in the middle
     if (rand() % 3 == 0) initPattern(PatternBorder);
 
-    r = 1 + rand() % 3;
+    r = 1 + rand() % 2;
     for (i = x0 - r; i <= x0 + r; i++)
       for (j = y0 - 1; j <= y0 + 1; j++)
       {
