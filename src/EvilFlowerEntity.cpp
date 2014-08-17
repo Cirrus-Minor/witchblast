@@ -77,6 +77,7 @@ void EvilFlowerEntity::fire()
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
           (x, y + 10, ShotTypeStandard, 0);
     bolt->setFrame(1);
+    bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
     float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
