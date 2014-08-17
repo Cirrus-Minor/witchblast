@@ -20,12 +20,12 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.2.8";
+const std::string APP_VERSION =   "0.3.0";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
 
-const std::string SAVE_VERSION =  "SAVE_0.2.8";
+const std::string SAVE_VERSION =  "SAVE_0.3.0";
 
 // Client size
 const int SCREEN_WIDTH = 970;
@@ -354,6 +354,9 @@ const float IMP_FIRE_VELOCITY = 250.0f;
 const int WITCH_HP = 80;
 const int WITCH_DAMAGE = 5;
 const int WITCH_VELOCITY = 130.0f;
+
+// Cauldron
+const int CAULDRON_HP = 150;
 
 // Butcher
 const int BUTCHER_HP = 100;

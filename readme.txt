@@ -68,11 +68,12 @@ Credits
 The sound used in the game come from:
 - http://www.freesound.org/
 - http://www.freesfx.co.uk/
+- http://www.universal-soundbank.com/
 
 Changes
 -------
 
-Next version
+v0.3.0
 - ADD New level with a new boss
 - ADD New items
 - ADD New familiars (fire and target fairies)
@@ -92,6 +93,7 @@ Next version
 - MOD Cyclops' falling stones bounce (one time)
 - MOD Cyclops has protection before stones are falling
 - MOD Butcher drops a silver coin now
+- MOD Evil Flower missile's damage decreased
 - FIX Sprite center and Z-order
 - FIX Giant Slime bug when falling on the wall 
 - FIX Freeze when opening a chest while having all the items (but not the fairies)

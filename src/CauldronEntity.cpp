@@ -12,7 +12,7 @@ CauldronEntity::CauldronEntity(float x, float y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
-  hp = 150;
+  hp = CAULDRON_HP;
   hpMax = hp;
   meleeDamages = 0;
 
