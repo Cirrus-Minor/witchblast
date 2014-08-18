@@ -438,19 +438,32 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
     }
 
     std::ostringstream oss;
-    if (critical) oss << "CRITICAL X2\n-" << damages;
-    else oss << "-" << damages;
+    /*if (critical) oss << "CRITICAL X2\n-" << damages;
+    else */oss << "-" << damages;
     int textSize;
     if (damages < 8) textSize = 17;
-    else textSize = 17 + (damages - 4) / 4;
+    else textSize = 17 + (damages - 3) / 5;
     TextEntity* text = new TextEntity(oss.str(), textSize, x, y - 20.0f);
     text->setColor(TextEntity::COLOR_FADING_RED);
-    text->setAge(-1.0f);
-    text->setLifetime(1.2f);
+    text->setAge(-0.6f);
+    text->setLifetime(0.3f);
     text->setWeight(-60.0f);
     text->setZ(2000);
+    text->setAlignment(ALIGN_CENTER);
     text->setType(ENTITY_FLYING_TEXT);
     while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
+
+    if (critical)
+    {
+      TextEntity* textCrit = new TextEntity("CRITICAL X2", 16, x, text->getY() - 16.0f);
+      textCrit->setColor(TextEntity::COLOR_FADING_RED);
+      textCrit->setAge(-0.6f);
+      textCrit->setLifetime(0.3f);
+      textCrit->setWeight(-60.0f);
+      textCrit->setZ(2000);
+      textCrit->setAlignment(ALIGN_CENTER);
+      textCrit->setType(ENTITY_FLYING_TEXT);
+    }
 
     if (critical) SoundManager::getSoundManager()->playSound(SOUND_CRITICAL);
 
