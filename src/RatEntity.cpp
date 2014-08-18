@@ -32,7 +32,7 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
     if (invocated) enemyType = EnemyTypeRatHelmet_invocated;
     else enemyType = EnemyTypeRatHelmet;
     hp = RAT_HP_HELMET;
-    creatureSpeed = RAT_SPEED;
+    creatureSpeed = RAT_SPEED_HELMET;
   }
 
   velocity = Vector2D(creatureSpeed);

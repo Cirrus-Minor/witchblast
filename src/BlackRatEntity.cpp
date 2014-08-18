@@ -21,8 +21,8 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
     dyingFrame = 22;
     deathFrame = FRAME_CORPSE_BLACK_RAT;
     enemyType = EnemyTypeRatBlack;
-    hp = RAT_HP;
-    creatureSpeed = RAT_SPEED;
+    hp = BLACK_RAT_HP;
+    creatureSpeed = BLACK_RAT_SPEED;
   }
   else //(ratType == RatBlackTypeHelmet)
   {
@@ -30,8 +30,8 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
     dyingFrame = 38;
     deathFrame = FRAME_CORPSE_BLACK_RAT_HELMET;
     enemyType = EnemyTypeRatBlackHelmet;
-    hp = RAT_HP_HELMET;
-    creatureSpeed = RAT_SPEED;
+    hp = BLACK_RAT_HP_HELMET;
+    creatureSpeed = BLACK_RAT_SPEED_HELMET;
   }
 
   meleeDamages = BLACK_RAT_DAMAGES;
@@ -123,10 +123,10 @@ void BlackRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
     }
     switch (currentDirection)
     {
-      case 4: velocity.x = - BLACK_RAT_SPEED; velocity.y = 0.0f; break;
-      case 6: velocity.x = + BLACK_RAT_SPEED; velocity.y = 0.0f; break;
-      case 2: velocity.y = + BLACK_RAT_SPEED; velocity.x = 0.0f; break;
-      case 8: velocity.y = - BLACK_RAT_SPEED; velocity.x = 0.0f; break;
+      case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
+      case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
+      case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
+      case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
       default: break;
     }
     facingDirection = currentDirection;
@@ -198,10 +198,10 @@ void BlackRatEntity::findNextGoal()
 
   switch (currentDirection)
   {
-    case 4: velocity.x = - BLACK_RAT_SPEED; velocity.y = 0.0f; break;
-    case 6: velocity.x = + BLACK_RAT_SPEED; velocity.y = 0.0f; break;
-    case 2: velocity.y = + BLACK_RAT_SPEED; velocity.x = 0.0f; break;
-    case 8: velocity.y = - BLACK_RAT_SPEED; velocity.x = 0.0f; break;
+    case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
+    case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
+    case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
+    case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
     default: break;
   }
 
