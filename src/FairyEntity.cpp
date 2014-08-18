@@ -73,6 +73,26 @@ void FairyEntity::animate(float delay)
     viscosity = 0.96f;
   }
 
+  if (velocity.x < 50.0f && velocity.x > -50.0f && velocity.y < 50.0f && velocity.y > -50.0f)
+  {
+    if (x < OFFSET_X + TILE_WIDTH * 1.3)
+    {
+      velocity.x = FAIRY_SPEED;
+    }
+    else if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3)
+    {
+      velocity.x = -FAIRY_SPEED;
+    }
+    if (y < OFFSET_Y + TILE_HEIGHT * 1.3)
+    {
+      velocity.y = FAIRY_SPEED;
+    }
+    else if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3)
+    {
+      velocity.y = -FAIRY_SPEED;
+    }
+  }
+
   checkCollisions();
 
   if (fairyType == FamiliarFairyTarget && !game().getCurrentMap()->isCleared()) tryToFire();
