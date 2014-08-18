@@ -106,6 +106,11 @@ void GreenRatEntity::collideMapBottom()
     computeFacingDirection();
 }
 
+bool GreenRatEntity::canCollide()
+{
+  return (age >= 0.0f);
+}
+
 void GreenRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
   if (recoil.active && recoil.stun) return;

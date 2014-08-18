@@ -15,6 +15,7 @@ class GreenRatEntity : public EnemyEntity
     virtual void collideMapLeft();
     virtual void collideMapTop();
     virtual void collideMapBottom();
+    virtual bool canCollide();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
 
