@@ -1,7 +1,19 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.8.12)
 
 # Projet name
 project("Witch_Blast")
+
+# Detect compiler
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(USING_GCC TRUE)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    set(USING_CLANG TRUE)
+endif()
+
+# For GCC and Clang, enable C++11 support and add some other flags
+if(USING_GCC OR USING_CLANG)
+  add_compile_options(-std=c++11 -pedantic -Wall)
+endif()
 
 file(
         GLOB_RECURSE
