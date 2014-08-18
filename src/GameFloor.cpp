@@ -42,6 +42,14 @@ void GameFloor::setRoom(int x, int y, roomTypeEnum roomType)
   floor[x][y] = roomType;
 }
 
+bool GameFloor::hasRoomOfType(roomTypeEnum roomType)
+{
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+      if (floor[i][j] == roomType) return true;
+  return false;
+}
+
 DungeonMap* GameFloor::getMap(int x, int y)
 {
   if (x < 0 || y < 0 || x >= FLOOR_WIDTH || y >= FLOOR_HEIGHT) return NULL;
