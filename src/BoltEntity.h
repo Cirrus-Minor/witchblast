@@ -2,6 +2,7 @@
 #define BOLTENTITY_H
 
 #include "sfml_game/CollidingSpriteEntity.h"
+#include "ParticleGenerator.h"
 #include "Constants.h"
 
 /*! \class BoltEntity
@@ -49,6 +50,8 @@ class BoltEntity : public CollidingSpriteEntity
     bool flying;
     bool critical;
     unsigned int level;
+
+    ParticleGenerator particleGenerator;
 };
 
 #endif // BOLTENTITY_H

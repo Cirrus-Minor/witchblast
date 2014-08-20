@@ -91,15 +91,7 @@ void BoltEntity::setCritical(bool critical)
 void BoltEntity::animate(float delay)
 {
   if (boltType != ShotTypeBomb)
-  {
-    SpriteEntity* trace = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
-    trace->setFading(true);
-    trace->setZ(y);
-    trace->setLifetime(0.2f);
-    trace->setShrinking(true, renderScale, renderScale);
-    trace->setType(ENTITY_EFFECT);
-    trace->setFrame(frame);
-  }
+    particleGenerator.GenerateParticles(frame, IMAGE_BOLT, x, y, BOLT_WIDTH, BOLT_HEIGHT, Vector2D(0.0f, 0.0f), 10, renderScale);
 
   z = y + height;
 
@@ -108,7 +100,7 @@ void BoltEntity::animate(float delay)
   testWallsCollision = false;
   calculateBB();
 
-  if (boltType != ShotTypeBomb && (lifetime - age) < 0.2f)
+  if (boltType != ShotTypeBomb && boltType != ShotTypeStone && (lifetime - age) < 0.2f)
   {
     if (age >= lifetime)
       sprite.setColor(sf::Color(255, 255, 255, 0));

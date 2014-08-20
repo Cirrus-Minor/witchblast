@@ -39,6 +39,8 @@ public:
   void setScale(float scx, float scy);
   void setColor(sf::Color color);
 
+  void setRenderAdd();
+
   void removeCenter();
 
   virtual void render(sf::RenderTarget* app);
@@ -61,6 +63,8 @@ protected:
     bool isShrinking;
     bool isVisible;
     bool isMirroring;
+
+    bool renderAdd;
 };
 
 #endif // SPRITEENTITY_H_INCLUDED

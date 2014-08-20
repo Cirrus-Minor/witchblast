@@ -31,6 +31,7 @@ SpriteEntity::SpriteEntity(sf::Texture* image, float x, float y, int width, int 
     //sprite.SetSubRect(sf::IntRect(0, 0, this->width, this->height));
     sprite.setOrigin((float)(this->width / 2), (float)(this->height / 2));
     this->imagesProLine = imagesProLine;
+    renderAdd = false;
 }
 
 int SpriteEntity::getFrame() { return frame; }
@@ -83,6 +84,11 @@ void SpriteEntity::setImagesProLine(int n)
   imagesProLine = n;
 }
 
+void SpriteEntity::setRenderAdd()
+{
+  renderAdd = true;
+}
+
 void SpriteEntity::removeCenter()
 {
   sprite.setOrigin(0.0f, 0.0f);
@@ -120,7 +126,16 @@ void SpriteEntity::render(sf::RenderTarget* app)
                         initialScaleY * getFade());
     }
 
-    app->draw(sprite);
+    if (renderAdd)
+    {
+      sf::RenderStates r;
+      r.blendMode = sf::BlendAdd;
+      app->draw(sprite, r);
+    }
+    else
+    {
+      app->draw(sprite);
+    }
   }
 }
 

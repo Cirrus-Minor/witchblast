@@ -56,6 +56,7 @@ const int ITEM_HEIGHT = 32;
 
 const int BOLT_WIDTH = 24;
 const int BOLT_HEIGHT = 24;
+const int BOLT_PRO_LINE = 10;
 
 const int BB_LEFT    = 22;
 const int BB_RIGHT   = 22;
