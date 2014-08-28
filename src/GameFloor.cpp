@@ -7,6 +7,7 @@
 GameFloor::GameFloor()
 {
   this->level = 0;
+  forceShop = false;
   // Init maps
   for (int i=0; i < FLOOR_WIDTH; i++)
     for (int j=0; j < FLOOR_HEIGHT; j++)
@@ -15,12 +16,18 @@ GameFloor::GameFloor()
 
 GameFloor::GameFloor(int level)
 {
+  forceShop = false;
   // Init maps
   for (int i=0; i < FLOOR_WIDTH; i++)
     for (int j=0; j < FLOOR_HEIGHT; j++)
       maps[i][j] = NULL;
 
   this->level = level;
+}
+
+void GameFloor::setForceShop()
+{
+  forceShop = true;
 }
 
 GameFloor::~GameFloor()
@@ -204,7 +211,11 @@ bool GameFloor::finalize()
   floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeKey;
   isolatedVector.erase(isolatedVector.begin() + index);
 
-  if (nbIsolatedRooms < 3) return true;
+  if (nbIsolatedRooms < 3)
+  {
+    if (forceShop) return false;
+    else return true;
+  }
   // shop
   index = rand() % isolatedVector.size();
   floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeMerchant;

@@ -20,6 +20,9 @@ class GameFloor
      */
     GameFloor(int level);
     virtual ~GameFloor();
+
+    void setForceShop();
+
     void createFloor();
     void displayToConsole();
 
@@ -53,6 +56,8 @@ class GameFloor
     std::vector<IntCoord> findSuperIsolated();
     void generate();
     bool finalize();
+
+    bool forceShop;
 
     DungeonMap* maps[FLOOR_WIDTH][FLOOR_HEIGHT];
 };

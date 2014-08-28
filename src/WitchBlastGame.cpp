@@ -334,9 +334,18 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
 void WitchBlastGame::startNewLevel()
 {
+  bool needShop = false;
   // create the new level
-  if (currentFloor != NULL) delete currentFloor;
+  if (currentFloor != NULL)
+  {
+    if (level > 1)
+    {
+      if (!currentFloor->hasRoomOfType(roomTypeMerchant)) needShop = true;
+    }
+    delete currentFloor;
+  }
   currentFloor = new GameFloor(level);
+  if (needShop) currentFloor->setForceShop();
   currentFloor->createFloor();
 
   // center it
