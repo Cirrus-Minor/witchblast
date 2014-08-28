@@ -754,7 +754,9 @@ void PlayerEntity::fire(int direction)
         shoot_angle = 0.1f;
       else if ((direction == 6 && velocity.x < -1.0f) || (direction == 4 && velocity.x > 1.0f)
                || (direction == 2 && velocity.y < -1.0f) || (direction == 8 && velocity.y > 1.0f))
-        shoot_angle = 0.35f;
+        shoot_angle = equip[EQUIP_BOOK_TRIPLE] ? 0.35f : 0.2f;
+      else if (!equip[EQUIP_BOOK_TRIPLE])
+        shoot_angle = 0.1f;
 
       if (equip[EQUIP_VIBRATION_GLOVES]) shoot_angle += (1000 - rand() % 2000) * 0.0001f;
 
