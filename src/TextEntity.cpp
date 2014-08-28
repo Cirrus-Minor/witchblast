@@ -61,6 +61,21 @@ void TextEntity::render(sf::RenderTarget* app)
     color = sf::Color(20, 255, 50, alpha );
     game().write(text, size, x, y, alignment, color, app, 0 , 0);
   }
+  else if (colorType == COLOR_FADING_YELLOW)
+  {
+    int alpha = 255 * (lifetime - age) / lifetime;
+    if (alpha > 255) alpha = 255;
+    else if (alpha < 0) alpha = 0;
+
+    color = sf::Color(0, 0, 0, alpha );
+    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0);
+
+    color = sf::Color(0, 0, 0, alpha );
+    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0);
+
+    color = sf::Color(255, 255, 128, alpha );
+    game().write(text, size, x, y, alignment, color, app, 0 , 0);
+  }
   else
     game().write(text, size, x, y, alignment, color, app, 0 , 0);
 }
@@ -91,6 +106,13 @@ void TextEntity::animate(float delay)
     else if (alpha < 0) alpha = 0;
     color = sf::Color(255, 0, 0, alpha );
   }
+  else if (colorType == COLOR_FADING_YELLOW)
+  {
+    int alpha = 255 * (lifetime - age) / lifetime;
+    if (alpha > 255) alpha = 255;
+    else if (alpha < 0) alpha = 0;
+    color = sf::Color(255, 255, 0, alpha );
+  }
 }
 
 
@@ -110,6 +132,8 @@ void TextEntity::setColor(int colorType)
     color = sf::Color(0, 255, 0);
   else if (colorType == COLOR_RED || colorType == COLOR_FADING_RED)
     color = sf::Color(255, 0, 0);
+  else if (colorType == COLOR_YELLOW || colorType == COLOR_FADING_YELLOW)
+    color = sf::Color(255, 255, 0);
 }
 
 void TextEntity::setAlignment(int alignment)

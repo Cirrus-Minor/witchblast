@@ -899,6 +899,20 @@ void PlayerEntity::dying()
   itemSprite->setSpin( (rand() % 700) - 350.0f);
 }
 
+void PlayerEntity::displayAcquiredGold(int n)
+{
+  std::ostringstream oss;
+  oss << "+" << n;
+  TextEntity* text = new TextEntity(oss.str(), 16, x, y - 30.0f);
+  text->setColor(TextEntity::COLOR_FADING_YELLOW);
+  text->setAge(-0.6f);
+  text->setLifetime(0.3f);
+  text->setWeight(-60.0f);
+  text->setZ(2000);
+  text->setAlignment(ALIGN_CENTER);
+  text->setType(ENTITY_FLYING_TEXT);
+}
+
 void PlayerEntity::acquireItem(enumItemType type)
 {
   if (items[type].generatesStance) acquireStance(type);
@@ -906,14 +920,17 @@ void PlayerEntity::acquireItem(enumItemType type)
     {
     case ItemCopperCoin:
       gold++;
+      displayAcquiredGold(1);
       SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
       break;
     case ItemSilverCoin:
       gold = gold + 5;
+      displayAcquiredGold(5);
       SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
       break;
     case ItemGoldCoin:
       gold = gold + 10;
+      displayAcquiredGold(10);
       SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
       break;
     case ItemHealthVerySmall:

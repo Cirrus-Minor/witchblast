@@ -37,10 +37,12 @@ public:
                          COLOR_BLUE,
                          COLOR_RED,
                          COLOR_GREEN,
+                         COLOR_YELLOW,
                          COLOR_FADING_WHITE,
                          COLOR_FADING_BLUE,
                          COLOR_FADING_GREEN,
                          COLOR_FADING_RED,
+                         COLOR_FADING_YELLOW,
                          COLOR_BLINKING_WHITE };
 
 protected:

@@ -438,8 +438,7 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
     }
 
     std::ostringstream oss;
-    /*if (critical) oss << "CRITICAL X2\n-" << damages;
-    else */oss << "-" << damages;
+    oss << "-" << damages;
     int textSize;
     if (damages < 8) textSize = 17;
     else textSize = 17 + (damages - 3) / 5;

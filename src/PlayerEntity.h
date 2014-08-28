@@ -267,6 +267,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void pay(int price);
 
+    void displayAcquiredGold(int n);
+
     /** Player status enum
      *  The different player states.
      */
