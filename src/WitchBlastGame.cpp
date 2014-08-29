@@ -843,7 +843,7 @@ void WitchBlastGame::renderMenu()
       if (menu.keyIndex == i) itemColor = sf::Color(255, 255, 255, 255);
       else itemColor = sf::Color(180, 180, 180, 255);
       std::ostringstream oss;
-      oss << inputKeyString[i] << ": ";
+      oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menu.keyIndex == i) oss << tools::getLabel("key_configuration_insert");
       else if (menu.keyIndex > i) oss << tools::getLabel("key_configuration_done");
       write(oss.str(), 16, 300, 285 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);

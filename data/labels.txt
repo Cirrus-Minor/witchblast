@@ -13,6 +13,17 @@ key_configuration#Keys' configuration
 key_configuration_desc#Please configure the keys
 key_configuration_insert#[insert Key]
 key_configuration_done#DONE
+key_move_up#move up
+key_move_down#move down
+key_move_left#move left
+key_move_right#move right
+key_fire_up#fire up
+key_fire_down#fire down
+key_fire_left#fire left
+key_fire_right#fire right
+key_fire_select#fire select
+key_time#time control
+key_fire#fire (one button)
 
 play_again#Press [ENTER] to play again / [ESC] to go back to the menu
 congratulations#CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !
@@ -101,7 +112,7 @@ item_manual_staff#Staff's Manual
 item_manual_staff_desc#Increases fire range
 
 [french]
-start_new_game#Commencer une nouvelle partie
+start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
 restore#Continuer la partie
 at#à
@@ -115,6 +126,17 @@ key_configuration#Configuration des touches
 key_configuration_desc#Veuillez configurer les touches
 key_configuration_insert#[presser touche]
 key_configuration_done#FAIT
+key_move_up#Déplacement haut
+key_move_down#Déplacement bas
+key_move_left#Déplacement gauche
+key_move_right#Déplacement droite
+key_fire_up#Tir haut
+key_fire_down#Tir bas
+key_fire_left#Tir gauche
+key_fire_right#Tir droite
+key_fire_select#Sélecteur de tir
+key_time#Accélerer le temps
+key_fire#Tir (un bouton)
 
 play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
 congratulations#FELICITATIONS !\nVous êtes brillament arrivé au terme de cette démo !\nA bientôt pour de nouvelles aventures !
@@ -126,8 +148,8 @@ merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
 merchant_speech_2#Jetez un oeil à nos produits !
 
 enemy_butcher#Boucher porcin
-enemy_cyclops#Cyclope cimmérien
-enemy_giant_slime#Slime gént
+enemy_cyclops#Cyclope Cimmérien
+enemy_giant_slime#Slime géant
 enemy_giant_spider#Araignée géante
 enemy_rat_king#Roi des rats
 
@@ -139,7 +161,7 @@ item_gold#Pièce d'or
 item_gold_desc#Une pièce d'or (10)
 item_titan_heart#Coeur de Titan
 item_titan_heart_desc#Augmente les PV max
-item_elven_cookie#Biscuit elfe
+item_elven_cookie#Biscuit elfique
 item_elven_cookie_desc#Guérit et augmente les PV
 item_apple#Pomme
 item_apple_desc#Guérit 3 PV
@@ -192,7 +214,7 @@ item_brooch_star_desc#Chance de dégâts critiques (x2)
 item_fairy_fire#La fée Alicia
 item_fairy_fire_desc"#Vous aide dans le donjon
 item_fairy_target#La fée Scarlett
-item_fairy_target_desc"#Vous aide dans le donjon
+item_fairy_target_desc#Vous aide dans le donjon
 item_robe_magician#Robe de magicien
 item_robe_magician_desc#Augmente l'armure
 item_gem_fire#Gemme de feu

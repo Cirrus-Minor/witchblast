@@ -32,17 +32,17 @@ const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
 unsigned const int NumberKeys = 11;
 const std::string inputKeyString[NumberKeys] =
 {
-  "move up",
-  "move down",
-  "move left",
-  "move right",
-  "fire up",
-  "fire down",
-  "fire left",
-  "fire right",
-  "fire select",
-  "time control",
-  "fire (one button)"
+  "key_move_up",
+  "key_move_down",
+  "key_move_left",
+  "key_move_right",
+  "key_fire_up",
+  "key_fire_down",
+  "key_fire_left",
+  "key_fire_right",
+  "key_fire_select",
+  "key_time",
+  "key_fire"
 };
 
 /*! \class WitchBlastGame
