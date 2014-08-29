@@ -291,7 +291,7 @@ const float DOOR_CLOSE_TIME = 1.0f;
 
 // Rat
 const float RAT_SPEED = 160.0f;
-const float RAT_SPEED_HELMET = 120.0f;
+const float RAT_SPEED_HELMET = 130.0f;
 const int RAT_HP = 24;
 const int RAT_HP_HELMET = 32;
 const int RAT_DAMAGES = 5;
@@ -390,7 +390,7 @@ const int KING_RAT_DAMAGES = 8;
 const float CYCLOP_SPEED[4] = { 120, 130, 140, 150};
 const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
 const float CYCLOP_FIRE_DELAY[4] = { 0.3f, 0.26f, 0.23f, 0.2f};
-const int CYCLOP_HP = 800;
+const int CYCLOP_HP = 700;
 const int CYCLOP_DAMAGES = 10;
 
 // Giant Spider

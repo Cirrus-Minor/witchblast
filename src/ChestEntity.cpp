@@ -103,7 +103,7 @@ void ChestEntity::open()
     }
 
     // trap !
-    if (game().getLevel() >= 5)
+    if (game().getLevel() >= 4)
     {
       if (rand() % 6 == 0) timer = 0.5f;
     }
