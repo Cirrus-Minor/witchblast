@@ -8,6 +8,7 @@
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
 #include "WitchBlastGame.h"
+#include "TextMapper.h"
 
 #include <iostream>
 
@@ -62,7 +63,7 @@ void GiantSpiderEntity::animate(float delay)
         h = 0;
         state = 1;
         timer = 1.0f;
-        creatureName = "Giant Spider";
+        creatureName = tools::getLabel("enemy_giant_spider");
       }
     }
     else if (state == 1) // wait after falling

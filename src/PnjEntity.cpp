@@ -1,8 +1,9 @@
 #include "PnjEntity.h"
 #include "Constants.h"
-//#include "StaticTextEntity.h"
 #include "WitchBlastGame.h"
 #include "sfml_game/ImageManager.h"
+
+#include "TextMapper.h"
 
 PnjEntity::PnjEntity(float x, float y, int pnjType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_PNJ), x, y, 64, 96)
 {
@@ -58,9 +59,9 @@ void PnjEntity::animate(float delay)
       int r = rand() % 3;
       switch (r)
       {
-        case 0: speech = "Best price in entire dungeon!"; break;
-        case 1: speech = "Welcome to Deep Deep Stores!"; break;
-        case 2: speech = "Have a look at our merchandise!"; break;
+        case 0: speech = tools::getLabel("merchant_speech_0"); break;
+        case 1: speech = tools::getLabel("merchant_speech_1"); break;
+        case 2: speech = tools::getLabel("merchant_speech_2"); break;
       }
     }
   }

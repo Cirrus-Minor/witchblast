@@ -399,7 +399,7 @@ void WitchBlastGame::playLevel()
   float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
 
   std::ostringstream oss;
-  oss << "Level " << level;
+  oss << tools::getLabel("level") << " " << level;
 
   TextEntity* text = new TextEntity(oss.str(), 30, x0, y0);
   text->setAlignment(ALIGN_CENTER);
@@ -585,7 +585,7 @@ void WitchBlastGame::renderRunningGame()
   myText.setCharacterSize(16);
 
   oss.str("");
-  oss << "Level " << level;
+  oss << tools::getLabel("level") << " " << level;
   myText.setString(oss.str());
   myText.setPosition(410, 692);
   app->draw(myText);
@@ -658,7 +658,7 @@ void WitchBlastGame::renderRunningGame()
 
       myText.setColor(sf::Color(255, 255, 255, fade));
       myText.setCharacterSize(20);
-      myText.setString("Press [ENTER] to play again / [ESC] to go back to the menu");
+      myText.setString(tools::getLabel("play_again"));
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
       app->draw(myText);
     }
@@ -667,7 +667,7 @@ void WitchBlastGame::renderRunningGame()
       float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
       myText.setColor(sf::Color(255, 255, 255, 255));
       myText.setCharacterSize(25);
-      myText.setString("CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !");
+      myText.setString(tools::getLabel("congratulations"));
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
       app->draw(myText);
     }
@@ -834,9 +834,9 @@ void WitchBlastGame::renderMenu()
 
     // menu keys
     if (config.configFileExists())
-      write("Key configuration", 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration"), 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
     else
-      write("Please configure the keys", 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration_desc"), 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -844,8 +844,8 @@ void WitchBlastGame::renderMenu()
       else itemColor = sf::Color(180, 180, 180, 255);
       std::ostringstream oss;
       oss << inputKeyString[i] << ": ";
-      if (menu.keyIndex == i) oss << "[insert Key]";
-      else if (menu.keyIndex > i) oss << "DONE";
+      if (menu.keyIndex == i) oss << tools::getLabel("key_configuration_insert");
+      else if (menu.keyIndex > i) oss << tools::getLabel("key_configuration_done");
       write(oss.str(), 16, 300, 285 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
@@ -870,7 +870,7 @@ void WitchBlastGame::renderMenu()
   }
 
   std::ostringstream oss;
-  oss << APP_NAME << " v" << APP_VERSION << " by Seby 2014";
+  oss << APP_NAME << " v" << APP_VERSION << " " << tools::getLabel("by") << " Seby 2014";
   write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
 }
 

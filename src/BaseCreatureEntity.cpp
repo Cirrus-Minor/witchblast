@@ -3,6 +3,7 @@
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
 #include "WitchBlastGame.h"
+#include "TextMapper.h"
 
 #include <iostream>
 #include <sstream>
@@ -454,7 +455,7 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
 
     if (critical)
     {
-      TextEntity* textCrit = new TextEntity("CRITICAL X2", 16, x, text->getY() - 16.0f);
+      TextEntity* textCrit = new TextEntity(tools::getLabel("critical"), 16, x, text->getY() - 16.0f);
       textCrit->setColor(TextEntity::COLOR_FADING_RED);
       textCrit->setAge(-0.6f);
       textCrit->setLifetime(0.3f);

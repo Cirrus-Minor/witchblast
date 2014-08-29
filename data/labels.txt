@@ -9,6 +9,25 @@ config_keys#Configure keys
 redef_input#Redefine player's input
 exit_game#Exit game
 return_to_desktop#Return to the desktop
+key_configuration#Keys' configuration
+key_configuration_desc#Please configure the keys
+key_configuration_insert#[insert Key]
+key_configuration_done#DONE
+
+play_again#Press [ENTER] to play again / [ESC] to go back to the menu
+congratulations#CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !
+by#by
+critical#CRITICAL X2
+
+merchant_speech_0#Best price in the entire dungeon!
+merchant_speech_1#Welcome to the Pawn'n'Witches shop!
+merchant_speech_2#Have a look at our merchandise!
+
+enemy_butcher#Pigman Butcher
+enemy_cyclops#Cimmerian Cyclops
+enemy_giant_slime#Giant Slime
+enemy_giant_spider#Giant Spider
+enemy_rat_king#Rat King
 
 item_copper#Copper coin
 item_copper_desc#A copper coin (value 1)
@@ -54,7 +73,32 @@ item_gem_stone#Stone Gem
 item_gem_stone_desc#Stone attack (repulse)
 item_gem_lightning#Lightning Gem
 item_gem_lightning_desc#Lightning attack (bouncing)
-
+item_fairy_ice#Fairy Natasha
+item_fairy_ice_desc"#Helps you in the dungeon
+item_ring_ice#Sapphire Ring
+item_ring_ice_desc#Increases ice power
+item_ring_stone#Obsidian Ring
+item_ring_stone_desc#Increases stone power
+item_ring_lightning#Opal Ring
+item_ring_lightning_desc#Increases lightning power
+item_ring_quartz#Quartz Ring
+item_ring_quartz_desc#Increases illusion power
+item_spell_triple#Spell : Triple bolts
+item_spell_triple_desc#Shoots three bolts
+item_brooch_star#Star Brooch
+item_brooch_star_desc#Chance to critical shot (x2)
+item_fairy_fire#Fairy Alicia
+item_fairy_fire_desc"#Helps you in the dungeon
+item_fairy_target#Fairy Scarlett
+item_fairy_target_desc"#Helps you in the dungeon
+item_robe_magician#Magician's Robe
+item_robe_magician_desc#Increases armor
+item_gem_fire#Fire Gem
+item_gem_fire_desc#Fire attack (more damages)
+item_ring_fire#Ruby Ring
+item_ring_fire_desc#Increases fire power
+item_manual_staff#Staff's Manual
+item_manual_staff_desc#Increases fire range
 
 [french]
 start_new_game#Commencer une nouvelle partie
@@ -67,6 +111,25 @@ config_keys#Configurer le clavier
 redef_input#Redéfinir les touches
 exit_game#Quitter
 return_to_desktop#Retour au bureau
+key_configuration#Configuration des touches
+key_configuration_desc#Veuillez configurer les touches
+key_configuration_insert#[presser touche]
+key_configuration_done#FAIT
+
+play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
+congratulations#FELICITATIONS !\nVous êtes brillament arrivé au terme de cette démo !\nA bientôt pour de nouvelles aventures !
+by#par
+critical#CRITIQUE X2
+
+merchant_speech_0#Les meilleurs affaires du donjon !
+merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
+merchant_speech_2#Jetez un oeil à nos produits !
+
+enemy_butcher#Boucher porcin
+enemy_cyclops#Cyclope cimmérien
+enemy_giant_slime#Slime gént
+enemy_giant_spider#Araignée géante
+enemy_rat_king#Roi des rats
 
 item_copper#Pièce de cuivre
 item_copper_desc#Une pièce de cuivre (1)
@@ -96,7 +159,7 @@ item_rage_amulet#Amulette de rage
 item_rage_amulet_desc#Contre-attaque
 item_vibration_gloves#Gants de vibration
 item_vibration_gloves_desc#Vibre et augmente la cadence de tir
-item_staff#Baton d'acajou
+item_staff#Bâton d'acajou
 item_staff_desc#Augmente les dégâts et la vitesse de tir
 item_fairy#La fée Lilly
 item_fairy_desc"#Vous aide dans le donjon
@@ -112,3 +175,29 @@ item_gem_stone#Gemme de pierre
 item_gem_stone_desc#Attaque de pierre(repousse)
 item_gem_lightning#Gemme de foudre
 item_gem_lightning_desc#Attaque de foudre(rebondit)
+item_fairy_ice#La fée Natacha
+item_fairy_ice_desc"#Vous aide dans le donjon
+item_ring_ice#Anneau de saphir
+item_ring_ice_desc#Augmente le pouvoir de glace
+item_ring_stone#Anneau d'obsidienne
+item_ring_stone_desc#Augmente le pouvoir de pierre
+item_ring_lightning#Anneau d'opale
+item_ring_lightning_desc#Augmente le pouvoir de foudre
+item_ring_quartz#Anneau de quartz
+item_ring_quartz_desc#Augmente le pouvoir d'illusion
+item_spell_triple#Spell : Triple-tir
+item_spell_triple_desc#Tire trois projectiles
+item_brooch_star#Broche d'étoile
+item_brooch_star_desc#Chance de dégâts critiques (x2)
+item_fairy_fire#La fée Alicia
+item_fairy_fire_desc"#Vous aide dans le donjon
+item_fairy_target#La fée Scarlett
+item_fairy_target_desc"#Vous aide dans le donjon
+item_robe_magician#Robe de magicien
+item_robe_magician_desc#Augmente l'armure
+item_gem_fire#Gemme de feu
+item_gem_fire_desc#Attaque de feu (dégâts augmentés)
+item_ring_fire#Anneau de rubis
+item_ring_fire_desc#Augmente le pouvoir de feu
+item_manual_staff#Manuel du bâton
+item_manual_staff_desc#Augmente la portée

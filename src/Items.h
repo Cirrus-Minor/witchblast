@@ -200,55 +200,55 @@ const itemStuct items[NUMBER_ITEMS] =
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeLightning
   },
   {
-    ItemFairyIce, "Fairy Natasha", "Helps you in the dungeon",
+    ItemFairyIce, "item_fairy_ice", "item_fairy_ice_desc",
     40, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemRingIce, "Sapphire Ring", "Increases ice power",
+    ItemRingIce, "item_ring_ice", "item_ring_ice_desc",
     45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemIce, ShotTypeStandard
   },
   {
-    ItemRingStone, "Obsidian Ring", "Increases stone power",
+    ItemRingStone, "item_ring_stone", "item_ring_stone_desc",
     45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemStone, ShotTypeStandard
   },
   {
-    ItemRingLightning, "Opal Ring", "Increases lightning power",
+    ItemRingLightning, "item_ring_lightning", "item_ring_lightning_desc",
     45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemLightning, ShotTypeStandard
   },
   {
-    ItemRingIllusion, "Quartz Ring", "Increases illusion power",
+    ItemRingIllusion, "item_ring_illusion", "item_ring_illusion_desc",
     50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, ItemGemIllusion, ShotTypeStandard
   },
   {
-    ItemBookTripleShots, "Spell : Triple Bolts", "Shoots three bolts",
+    ItemBookTripleShots, "item_spell_triple", "item_spell_triple_desc",
     50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard
   },
   {
-    ItemBroochStar, "Star Brooch", "Chance to critical shot (x2)",
+    ItemBroochStar, "item_brooch_star", "item_brooch_star",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemFairyFire, "Fairy Alicia", "Helps you in the dungeon",
+    ItemFairyFire, "item_fairy_fire", "item_fairy_fire_desc",
     40, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemFairyTarget, "Fairy Scarlett", "Helps you in the dungeon",
+    ItemFairyTarget, "item_fairy_target", "item_fairy_target_desc",
     40, true, FamiliarFairyTarget, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemMagicianRobe, "Magician's Robe", "Increases armor",
+    ItemMagicianRobe, "item_robe_magician", "item_robe_magician_desc",
     25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemGemFire, "Fire Gem", "Fire attack (more damage)",
+    ItemGemFire, "item_gem_fire", "item_gem_fire_desc",
     30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, -1, ShotTypeFire
   },
   {
-    ItemRingStone, "Rubis Ring", "Increases fire power",
+    ItemRingStone, "item_ring_fire", "item_ring_fire_desc",
     50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, ItemGemFire, ShotTypeStandard
   },
   {
-    ItemManualStaff, "Staff's Manual", "Increases fire range",
+    ItemManualStaff, "item_manual_staff", "item_manual_staff_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
