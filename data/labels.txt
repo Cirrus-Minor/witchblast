@@ -101,7 +101,7 @@ item_brooch_star_desc#Chance to critical shot (x2)
 item_fairy_fire#Fairy Alicia
 item_fairy_fire_desc"#Helps you in the dungeon
 item_fairy_target#Fairy Scarlett
-item_fairy_target_desc"#Helps you in the dungeon
+item_fairy_target_desc#Helps you in the dungeon
 item_robe_magician#Magician's Robe
 item_robe_magician_desc#Increases armor
 item_gem_fire#Fire Gem
