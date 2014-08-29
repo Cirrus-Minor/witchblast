@@ -73,6 +73,18 @@ The sound used in the game come from:
 Changes
 -------
 
+Next release
+- ADD Particles for player'ss missiles
+- ADD Force shop generation if there is no one in the previous floor
+- ADD Display gold when getting coins
+- ADD French text
+- MOD Invert Cyclop and Rat King bosses
+- MOD Dual bolt angle is smaller
+- MOD Damage's display size increases with damage
+- MOD Rat with helmet are slower
+- MOD Green rats' don't collide while spawning
+- MOD Fairies don't stay stuck in wall/door 
+
 v0.3.0
 - ADD New level with a new boss
 - ADD New items
