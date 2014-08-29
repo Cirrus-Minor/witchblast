@@ -3,6 +3,7 @@
 #include "sfml_game/ImageManager.h"
 #include "WitchBlastGame.h"
 #include "Items.h"
+#include "TextMapper.h"
 
 ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
       : SpriteEntity (ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS ),
@@ -35,8 +36,8 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
 
   if (items[itemType].type == itemType)
   {
-    artefactName = items[itemType].name;
-    artefactDescription = items[itemType].description;
+    artefactName = tools::getLabel(items[itemType].name);
+    artefactDescription = tools::getLabel(items[itemType].description);
   }
   else
   {

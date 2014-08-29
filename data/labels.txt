@@ -1,0 +1,114 @@
+[english]
+start_new_game#Start a new game
+start_desc#Old game will be destroyed
+restore#Restore game
+at#at
+level#level
+begin_journey#Begin your journey in a new dungeon
+config_keys#Configure keys
+redef_input#Redefine player's input
+exit_game#Exit game
+return_to_desktop#Return to the desktop
+
+item_copper#Copper coin
+item_copper_desc#A copper coin (value 1)
+item_silver#Silver coin
+item_silver_desc#A silver coin (value 5)
+item_gold#Gold coin
+item_gold_desc#A gold coin (value 10)
+item_titan_heart#Titan's Heart
+item_titan_heart_desc#Increases Max HP
+item_elven_cookie#Elven Cookie
+item_elven_cookie_desc#Restores and increases Max HP"
+item_apple#Apple
+item_apple_desc#Restores 3 HP
+item_bread#Bread
+item_bread_desc#Restores 7 HP
+item_cheese#Cheese
+item_cheese_desc#Restores 15 HP
+item_boss_key#Boss Key
+item_boss_key_desc#Opens the Boss gate
+item_sorcerer_hat#Sorcerer's Hat
+item_sorcerer_hat_desc#Increases fire rate
+item_velvet_boots#Velvet Boots
+item_velvet_boots_desc#Increases speed
+item_spell_dual#Spell : Dual bolts
+item_spell_dual_desc#Shoots two bolts
+item_rage_amulet#Rage Amulet
+item_rage_amulet_desc#Retaliates
+item_vibration_gloves#Vibration Gloves
+item_vibration_gloves_desc#Increases bolt's speed rate and vibrates
+item_staff#Mahogany Staff
+item_staff_desc#Increases bolt's speed and damage
+item_fairy#Fairy Lilly
+item_fairy_desc"#Helps you in the dungeon
+item_leather_belt#Leather belt
+item_leather_belt_desc#Increases fire rate
+item_blood_snake#Blood Snake
+item_blood_snake_desc#Increases damage
+item_gem_ice#Ice Gem
+item_gem_ice_desc#Ice attack (freeze)
+item_gem_illusion#illusion Gem
+item_gem_illusion_desc#illusion attack (ignores walls and armor)
+item_gem_stone#Stone Gem
+item_gem_stone_desc#Stone attack (repulse)
+item_gem_lightning#Lightning Gem
+item_gem_lightning_desc#Lightning attack (bouncing)
+
+
+[french]
+start_new_game#Commencer une nouvelle partie
+start_desc#L'ancienne partie sera perdue
+restore#Continuer la partie
+at#à
+level#niveau
+begin_journey#Commencer votre voyage dans un nouveau donjon
+config_keys#Configurer le clavier
+redef_input#Redéfinir les touches
+exit_game#Quitter
+return_to_desktop#Retour au bureau
+
+item_copper#Pièce de cuivre
+item_copper_desc#Une pièce de cuivre (1)
+item_silver#Pièce d'argent
+item_silver_desc#Une pièce d'argent (5)
+item_gold#Pièce d'or
+item_gold_desc#Une pièce d'or (10)
+item_titan_heart#Coeur de Titan
+item_titan_heart_desc#Augmente les PV max
+item_elven_cookie#Biscuit elfe
+item_elven_cookie_desc#Guérit et augmente les PV
+item_apple#Pomme
+item_apple_desc#Guérit 3 PV
+item_bread#Pain
+item_bread_desc#Guérit 7 HP
+item_cheese#Fromage
+item_cheese_desc#Guérit 15 HP
+item_boss_key#Clef du boss
+item_boss_key_desc#Ouvre la porte du boss
+item_sorcerer_hat#Chapeau d'enchanteur
+item_sorcerer_hat_desc#Augmente la cadence de tir
+item_velvet_boots#Bottes de velour
+item_velvet_boots_desc#Augmente la vitesse
+item_spell_dual#Sort: double-tir
+item_spell_dual_desc#Tire deux projectiles
+item_rage_amulet#Amulette de rage
+item_rage_amulet_desc#Contre-attaque
+item_vibration_gloves#Gants de vibration
+item_vibration_gloves_desc#Vibre et augmente la cadence de tir
+item_staff#Baton d'acajou
+item_staff_desc#Augmente les dégâts et la vitesse de tir
+item_fairy#La fée Lilly
+item_fairy_desc"#Vous aide dans le donjon
+item_leather_belt#Ceinture de cuir
+item_leather_belt_desc#Augmente la cadence de tir
+item_blood_snake#Serpent de sang
+item_blood_snake_desc#Augmente les dégâts
+item_gem_ice#Gemme de glace
+item_gem_ice_desc#Attaque de glace (gèle)
+item_gem_illusion#Gemme d'illusion
+item_gem_illusion_desc#Attaque d'illusion(ignore murs et armures)
+item_gem_stone#Gemme de pierre
+item_gem_stone_desc#Attaque de pierre(repousse)
+item_gem_lightning#Gemme de foudre
+item_gem_lightning_desc#Attaque de foudre(rebondit)

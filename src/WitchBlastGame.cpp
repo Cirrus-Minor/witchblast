@@ -43,6 +43,7 @@
 #include "PnjEntity.h"
 #include "TextEntity.h"
 #include "StandardRoomGenerator.h"
+#include "TextMapper.h"
 
 #include <iostream>
 #include <sstream>
@@ -187,6 +188,8 @@ WitchBlastGame::WitchBlastGame():
 
   configureFromFile();
   srand(time(NULL));
+
+  //tools::setLanguage("french");
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -2012,15 +2015,18 @@ void WitchBlastGame::buildMenu()
   if (saveHeader.ok)
   {
     menuItemStuct itemStart;
-    itemStart.label = "Start a new game";
-    itemStart.description = "Old game will be destroyed";
+	itemStart.label = tools::getLabel("start_new_game");
+	itemStart.description = tools::getLabel("start_desc");
+
     itemStart.id = MenuStartNew;
     menu.items.push_back(itemStart);
 
     menuItemStuct itemLoad;
-    itemStart.label = "Restore game";
+	itemStart.label = tools::getLabel("restore");
+
     std::ostringstream oss;
-    oss << saveHeader.date << " at " << saveHeader.time << " - level " << saveHeader.level;
+	oss << saveHeader.date << " " << tools::getLabel("at") << " " << saveHeader.time << " - " << tools::getLabel("level") << " " << saveHeader.level;
+
     itemStart.description = oss.str();
     itemStart.id = MenuStartOld;
     menu.items.push_back(itemStart);
@@ -2030,8 +2036,9 @@ void WitchBlastGame::buildMenu()
   else
   {
     menuItemStuct itemStart;
-    itemStart.label = "Start a new game";
-    itemStart.description = "Begin your journey in a new dungeon";
+	itemStart.label = tools::getLabel("start_new_game");
+	itemStart.description = tools::getLabel("begin_journey");
+
     itemStart.id = MenuStartNew;
     menu.items.push_back(itemStart);
 
@@ -2039,14 +2046,16 @@ void WitchBlastGame::buildMenu()
   }
 
   menuItemStuct itemKeys;
-  itemKeys.label = "Configure keys";
-  itemKeys.description = "Redefine player's input";
+  itemKeys.label = tools::getLabel("config_keys");
+  itemKeys.description = tools::getLabel("redef_input");
+
   itemKeys.id = MenuKeys;
   menu.items.push_back(itemKeys);
 
   menuItemStuct itemExit;
-  itemExit.label = "Exit game";
-  itemExit.description = "Return to the desktop";
+  itemExit.label = tools::getLabel("exit_game");
+  itemExit.description = tools::getLabel("return_to_desktop");
+
   itemExit.id = MenuExit;
   menu.items.push_back(itemExit);
 }

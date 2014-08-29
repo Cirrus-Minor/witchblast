@@ -113,90 +113,90 @@ struct itemStuct
 const itemStuct items[NUMBER_ITEMS] =
 {
   {
-    ItemCopperCoin, "Copper coin", "A copper coin (value 1)",
+    ItemCopperCoin, "item_copper", "item_copper_desc",
     1, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemSilverCoin, "Silver coin", "A silver coin (value 5)",
+    ItemSilverCoin, "item_silver", "item_silver_desc",
     5, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemGoldCoin, "Gold coin", "A gold coin (value 20)",
+    ItemGoldCoin, "item_gold", "item_gold_desc",
     20, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemBossHeart, "Titan's Heart", "Increases Max HP",
+    ItemBossHeart, "item_titan_heart", "item_titan_heart_desc",
     250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemBonusHealth, "Elven Cookie", "Restores and increases Max HP",
+    ItemBonusHealth, "item_elven_cookie", "item_elven_cookie_desc",
     250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },{
-    ItemHealthVerySmall, "Apple", "Restores 3 HP",
+    ItemHealthVerySmall, "item_apple", "item_apple_desc",
     2, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemHealthSmall, "Bread", "Restores 7 HP",
+    ItemHealthSmall, "item_bread", "item_bread_desc",
     4, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemHealthSmall, "Cheese", "Restores 15 HP",
+    ItemHealthSmall, "item_cheese", "item_cheese_desc",
     8, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemMagicianHat, "Sorcerer's Hat", "Increases fire rate",
+    ItemMagicianHat, "item_sorcerer_hat", "item_sorcerer_hat_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemLeatherBoots, "Velvet Boots", "Increases speed",
+    ItemLeatherBoots, "item_velvet_boots", "item_velvet_boots_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemBookDualShots, "Spell : Dual Bolts", "Shoots two bolts",
+    ItemBookDualShots, "item_spell_dual", "item_spell_dual_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemRageAmulet, "Rage Amulet", "Retaliates",
+    ItemRageAmulet, "item_rage_amulet", "item_rage_amulet_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemBossKey, "Boss Key", "Opens the Boss gate",
+    ItemBossKey, "item_boss_key", "item_boss_key_desc",
     200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemVibrationGloves, "Vibration Gloves", "Increases bolt's speed rate and vibrates",
+    ItemVibrationGloves, "item_vibration_gloves", "item_vibration_gloves_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemMahoganyStaff, "Mahogany Staff", "Increases bolt's speed and damage",
+    ItemMahoganyStaff, "item_staff", "item_staff_desc",
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemFairy, "Fairy Lilly", "Helps you in the dungeon",
+    ItemFairy, "item_fairy", "item_fairy_desc",
     20, true, FamiliarFairy, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemLeatherBelt, "Leather Belt", "Increases fire rate",
+    ItemLeatherBelt, "item_leather_belt", "item_leather_belt_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemBloodSnake, "Blood Snake", "Increases damage",
+    ItemBloodSnake, "item_blood_snake", "item_blood_snake_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
-    ItemGemIce, "Ice Gem", "Ice attack (freeze)",
+    ItemGemIce, "item_gem_ice", "item_gem_ice_desc",
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeIce
   },
   {
-    ItemGemIllusion, "Illusion Gem", "Illusion attack (ignore walls)",
+    ItemGemIllusion, "item_gem_illusion", "item_gem_illusion_desc",
     30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, -1, ShotTypeIllusion
   },
   {
-    ItemGemStone, "Stone Gem", "Stone attack (repulse)",
+    ItemGemStone, "item_gem_stone", "item_gem_stone_desc",
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStone
   },
   {
-    ItemGemLightning, "Lighting Gem", "Lightning attack (bouncing)",
+    ItemGemLightning, "item_gem_lightning", "item_gem_lightning_desc",
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeLightning
   },
   {
