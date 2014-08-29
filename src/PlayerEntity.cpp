@@ -537,10 +537,10 @@ void PlayerEntity::calculateBB()
   boundingBox.top = (int)y - height / 2;
   boundingBox.height =  height;
 
-  boundingBox.left += 25;
-  boundingBox.width -= 50;
-  boundingBox.top += 40.0f;
-  boundingBox.height = 38.0;
+  boundingBox.left += 30;
+  boundingBox.width = 20;
+  boundingBox.top += 45.0f;
+  boundingBox.height = 33.0;
 }
 
 void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
