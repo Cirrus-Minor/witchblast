@@ -794,7 +794,8 @@ void WitchBlastGame::updateMenu()
     {
       if (event.key.code == sf::Keyboard::Escape)
       {
-        app->close();
+        if (menuState == MenuStateConfig) menuState = MenuStateMain;
+        else app->close();
       }
       else if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
       {
@@ -809,6 +810,18 @@ void WitchBlastGame::updateMenu()
         else menu->index--;
 
         SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+      }
+      else if (event.key.code == input[KeyRight] || event.key.code == sf::Keyboard::Right)
+      {
+        if (menu->items[menu->index].id == MenuLanguage)
+        {
+          SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+          parameters.language++;
+          if (parameters.language >= NB_LANGUAGES) parameters.language = 0;
+          saveConfigurationToFile();
+          tools::setLanguage(languageString[parameters.language]);
+          buildMenu(true);
+        }
       }
       else if (event.key.code == sf::Keyboard::Return)
       {
@@ -894,7 +907,16 @@ void WitchBlastGame::renderMenu()
       sf::Color itemColor;
       if (menu->index == i) itemColor = sf::Color(255, 255, 255, 255);
       else itemColor = sf::Color(180, 180, 180, 255);
-      write(menu->items[i].label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
+
+      std::string label = menu->items[i].label;
+      if (menu->items[i].id == MenuLanguage)
+      {
+        std::ostringstream oss;
+        oss << label << " : " << tools::getLabel(languageString[parameters.language]);
+        label = oss.str();
+      }
+
+      write(label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
       write(menu->items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
     }
   }
@@ -2057,6 +2079,9 @@ void WitchBlastGame::saveConfigurationToFile()
 {
   std::map<std::string, std::string> newMap;
 
+  // parameters
+  newMap["language"] = intToString(parameters.language);
+
   // Keys
   newMap["keyboard_move_up"] = intToString(input[KeyUp]);
   newMap["keyboard_move_down"] = intToString(input[KeyDown]);
@@ -2076,9 +2101,11 @@ void WitchBlastGame::saveConfigurationToFile()
 void WitchBlastGame::configureFromFile()
 {
   // default
-  input[KeyUp]    = sf::Keyboard::Z;
+  parameters.language = 0;  // english
+
+  input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
-  input[KeyLeft]  = sf::Keyboard::Q;
+  input[KeyLeft]  = sf::Keyboard::A;
   input[KeyRight] = sf::Keyboard::D;
   input[KeyFireUp]    = sf::Keyboard::Up;
   input[KeyFireDown]  = sf::Keyboard::Down;
@@ -2100,18 +2127,25 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFire, "keyboard_fire");
   addKey(KeyTimeControl, "keyboard_time_control");
   addKey(KeyFireSelect, "keyboard_fire_select");
+
+  int iLang = config.findInt("language");
+  if (iLang >= 0) parameters.language = iLang;
+
+  tools::setLanguage(languageString[parameters.language]);
 }
 
 void WitchBlastGame::buildMenu(bool rebuild)
 {
-  menuState = MenuStateMain;
-
   menuMain.items.clear();
-  menuMain.age = 0.0f;
-
   menuConfig.items.clear();
-  menuConfig.age = 0.0f;
-  menuConfig.index = 0;
+
+  if (!rebuild)
+  {
+    menuState = MenuStateMain;
+    menuMain.age = 0.0f;
+    menuConfig.age = 0.0f;
+    menuConfig.index = 0;
+  }
 
   WitchBlastGame::saveHeaderStruct saveHeader = loadGameHeader();
 
@@ -2134,7 +2168,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
     itemStart.id = MenuStartOld;
     menuMain.items.push_back(itemStart);
 
-    menuMain.index = 1;
+    if (!rebuild) menuMain.index = 1;
   }
   else
   {
@@ -2145,7 +2179,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
     itemStart.id = MenuStartNew;
     menuMain.items.push_back(itemStart);
 
-    menuMain.index = 0;
+    if (!rebuild) menuMain.index = 0;
   }
 
   menuItemStuct itemConfig;
@@ -2166,6 +2200,12 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemKeys.description = tools::getLabel("redef_input");
   itemKeys.id = MenuKeys;
   menuConfig.items.push_back(itemKeys);
+
+  menuItemStuct itemLanguage;
+  itemLanguage.label = tools::getLabel("config_lang");
+  itemLanguage.description = tools::getLabel("config_lang_desc");
+  itemLanguage.id = MenuLanguage;
+  menuConfig.items.push_back(itemLanguage);
 
   menuItemStuct itemConfigBack;
   itemConfigBack.label = tools::getLabel("config_back");

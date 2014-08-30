@@ -28,6 +28,10 @@ configure_game#Configuration
 configure_game_desc#Changes game options
 config_back#Back
 config_back_desc#Back to the main menu
+config_lang#Language
+config_lang_desc#Choose the game's language
+english#English
+french#French
 
 play_again#Press [ENTER] to play again / [ESC] to go back to the menu
 congratulations#CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !
@@ -145,6 +149,10 @@ configure_game#Configuration
 configure_game_desc#Modifier les options
 config_back#Retour
 config_back_desc#Retour au menu principal
+config_lang#Langue
+config_lang_desc#Choisissez la langue du jeu
+english#Anglais
+french#Français
 
 play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
 congratulations#FELICITATIONS !\nVous êtes brillament arrivé au terme de cette démo !\nA bientôt pour de nouvelles aventures !

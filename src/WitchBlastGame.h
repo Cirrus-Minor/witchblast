@@ -538,6 +538,7 @@ private:
     MenuConfig,   /**< When configuring the game */
     MenuKeys,     /**< When configuring keys */
     MenuConfigBack,/**< Back to the main menu */
+    MenuLanguage, /**< When configuring the language */
     MenuExit      /**< When exiting the game */
   };
 
@@ -585,6 +586,12 @@ private:
    *  \brief Switch to the menu
    */
   void switchToMenu();
+
+  struct parameterStruct
+  {
+    int language;
+  } parameters;
+
 
   /*!
    *  \brief Check for falling (in holes) blood or bodies
