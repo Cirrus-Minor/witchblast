@@ -528,16 +528,29 @@ private:
    */
   void renderMenu();
 
-  /** Music enum
-   *  Identify the various music tracks of the game.
+  /** Menu keys enum
+   *  Identify the various keys of the menu.
    */
   enum menuItemEnum
   {
     MenuStartNew, /**< When starting the game */
     MenuStartOld, /**< When restoring the game */
+    MenuConfig,   /**< When configuring the game */
     MenuKeys,     /**< When configuring keys */
+    MenuConfigBack,/**< Back to the main menu */
     MenuExit      /**< When exiting the game */
   };
+
+  /** Menu states enum
+   *  Identify the various states of the menu.
+   */
+  enum menuStateEnum
+  {
+    MenuStateMain,
+    MenuStateConfig,
+    MenuStateKeys
+  };
+  menuStateEnum menuState;
 
   /*!
    *  \brief Menu item structure
@@ -556,17 +569,17 @@ private:
   {
     std::vector<menuItemStuct> items; /**< Menu items */
     unsigned int index;               /**< Position int the menu */
-    bool redefineKey;                 /**< true when configuring input */
-    unsigned int keyIndex;            /**< Position int the key configuration */
     float age;                        /**< Age of the menu */
   };
 
-  menuStuct menu;
+  menuStuct menuMain;
+  menuStuct menuConfig;
+  unsigned int menuKeyIndex;
 
   /*!
    *  \brief Build the menu items
    */
-  void buildMenu();
+  void buildMenu(bool rebuild);
 
   /*!
    *  \brief Switch to the menu

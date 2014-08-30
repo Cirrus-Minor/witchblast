@@ -57,7 +57,8 @@ static std::string intToString(int n)
   return oss.str();
 }
 
-namespace {
+namespace
+{
 WitchBlastGame* gameptr;
 }
 
@@ -358,10 +359,10 @@ void WitchBlastGame::startNewLevel()
   // move the player
   if (level == 1)
     player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+                   OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
   else
     player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT - 3 * TILE_HEIGHT));
+                   OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT - 3 * TILE_HEIGHT));
 
   // the boss room is closed
   bossRoomOpened = false;
@@ -675,7 +676,6 @@ void WitchBlastGame::renderRunningGame()
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
     {
       // effect
-      //int effectFade = 10 + rand() % 20;
       int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
       rectangle.setFillColor(sf::Color(0, 255, 255, effectFade));
       rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
@@ -721,19 +721,27 @@ void WitchBlastGame::switchToMenu()
   menuTileMap->setY(-20.0f);
 
   gameState = gameStateMenu;
-  buildMenu();
+  buildMenu(false);
+
   if (!config.configFileExists())
   {
-    menu.redefineKey = true;
-    menu.keyIndex = 0;
+    // TODO Language selection
+    menuState = MenuStateKeys;
+    menuKeyIndex = 0;
   }
   playMusic(MusicIntro);
 }
 
 void WitchBlastGame::updateMenu()
 {
+  menuStuct* menu = NULL;
+  if (menuState == MenuStateMain)
+   menu = &menuMain;
+  else if (menuState == MenuStateConfig)
+   menu = &menuConfig;
+
   EntityManager::getEntityManager()->animate(deltaTime);
-  menu.age += deltaTime;
+  if (menu != NULL) menu->age += deltaTime;
   float mapY = menuTileMap->getY();
   mapY -= 30.0f * deltaTime;
   if (mapY < -64.0f)
@@ -743,7 +751,7 @@ void WitchBlastGame::updateMenu()
     {
       for (int j = 0; j < MENU_MAP_HEIGHT - 1; j++)
       {
-         menuMap->setTile(i, j, menuMap->getTile(i, j+1));
+        menuMap->setTile(i, j, menuMap->getTile(i, j+1));
       }
       if (rand() % 6 == 0)
         menuMap->setTile(i, MENU_MAP_HEIGHT - 1, rand() %7 + 1);
@@ -760,29 +768,29 @@ void WitchBlastGame::updateMenu()
     // Close window : exit
     if (event.type == sf::Event::Closed)
     {
-       app->close();
+      app->close();
     }
 
-    if (event.type == sf::Event::KeyPressed && menu.redefineKey)
+    if (event.type == sf::Event::KeyPressed && menuState == MenuStateKeys)
     {
       bool alreadyUsed = false;
       if (event.key.code == sf::Keyboard::Escape) alreadyUsed = true;
-      for (unsigned int i = 0; i < menu.keyIndex; i++)
+      for (unsigned int i = 0; i < menuKeyIndex; i++)
         if (input[i] == event.key.code) alreadyUsed = true;
 
       // TODO more tests
       if (!alreadyUsed)
       {
-        input[menu.keyIndex] = event.key.code;
-        menu.keyIndex++;
-        if (menu.keyIndex == NumberKeys)
+        input[menuKeyIndex] = event.key.code;
+        menuKeyIndex++;
+        if (menuKeyIndex == NumberKeys)
         {
-          menu.redefineKey = false;
+          menuState = MenuStateConfig;
           saveConfigurationToFile();
         }
       }
     }
-    else if (event.type == sf::Event::KeyPressed && !menu.redefineKey)
+    else if (event.type == sf::Event::KeyPressed)
     {
       if (event.key.code == sf::Keyboard::Escape)
       {
@@ -790,27 +798,43 @@ void WitchBlastGame::updateMenu()
       }
       else if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
       {
-        menu.index++;
-        if (menu.index == menu.items.size()) menu.index = 0;
+        menu->index++;
+        if (menu->index == menu->items.size()) menu->index = 0;
         SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
       }
 
       else if (event.key.code == input[KeyUp] || event.key.code == sf::Keyboard::Up)
       {
-        if (menu.index == 0) menu.index = menu.items.size() - 1;
-        else menu.index--;
+        if (menu->index == 0) menu->index = menu->items.size() - 1;
+        else menu->index--;
 
         SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
       }
       else if (event.key.code == sf::Keyboard::Return)
       {
-       switch (menu.items[menu.index].id)
-       {
-         case MenuStartNew: startNewGame(false); remove(SAVE_FILE.c_str()); break;
-         case MenuStartOld: startNewGame(true); break;
-         case MenuKeys: menu.redefineKey = true; menu.keyIndex = 0; break;
-         case MenuExit: app->close(); break;
-       }
+        switch (menu->items[menu->index].id)
+        {
+        case MenuStartNew:
+          startNewGame(false);
+          remove(SAVE_FILE.c_str());
+          break;
+        case MenuStartOld:
+          startNewGame(true);
+          break;
+        case MenuKeys:
+          menuState = MenuStateKeys;
+          menuKeyIndex = 0;
+          break;
+        case MenuConfig:
+          menuState = MenuStateConfig;
+          break;
+        case MenuConfigBack:
+          menuState = MenuStateMain;
+          break;
+        case MenuExit:
+          app->close();
+          break;
+        }
       }
     }
   }
@@ -824,7 +848,13 @@ void WitchBlastGame::renderMenu()
   // title
   write("Witch Blast", 70, 485, 120, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
 
-  if (menu.redefineKey)
+  menuStuct* menu;
+  if (menuState == MenuStateMain)
+   menu = &menuMain;
+  else if (menuState == MenuStateConfig)
+   menu = &menuConfig;
+
+  if (menuState == MenuStateKeys)
   {
     // menu background
     sf::RectangleShape rectangle(sf::Vector2f(470 , 400));
@@ -840,12 +870,12 @@ void WitchBlastGame::renderMenu()
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
-      if (menu.keyIndex == i) itemColor = sf::Color(255, 255, 255, 255);
+      if (menuKeyIndex == i) itemColor = sf::Color(255, 255, 255, 255);
       else itemColor = sf::Color(180, 180, 180, 255);
       std::ostringstream oss;
       oss << tools::getLabel(inputKeyString[i]) << ": ";
-      if (menu.keyIndex == i) oss << tools::getLabel("key_configuration_insert");
-      else if (menu.keyIndex > i) oss << tools::getLabel("key_configuration_done");
+      if (menuKeyIndex == i) oss << tools::getLabel("key_configuration_insert");
+      else if (menuKeyIndex > i) oss << tools::getLabel("key_configuration_done");
       write(oss.str(), 16, 300, 285 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
@@ -855,17 +885,17 @@ void WitchBlastGame::renderMenu()
     sf::RectangleShape rectangle(sf::Vector2f(470 , 390));
     rectangle.setFillColor(sf::Color(50, 50, 50, 160));
     rectangle.setPosition(sf::Vector2f(250, 240));
-    if (menu.items.size() == 3) rectangle.setSize(sf::Vector2f(470 , 310));
+    if (menu->items.size() == 3) rectangle.setSize(sf::Vector2f(470 , 310));
     app->draw(rectangle);
 
     // menu
-    for (unsigned int i = 0; i < menu.items.size(); i++)
+    for (unsigned int i = 0; i < menu->items.size(); i++)
     {
       sf::Color itemColor;
-      if (menu.index == i) itemColor = sf::Color(255, 255, 255, 255);
+      if (menu->index == i) itemColor = sf::Color(255, 255, 255, 255);
       else itemColor = sf::Color(180, 180, 180, 255);
-      write(menu.items[i].label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu.items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(menu->items[i].label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(menu->items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
     }
   }
 
@@ -887,10 +917,14 @@ void WitchBlastGame::startGame()
     if (deltaTime > 0.05f) deltaTime = 0.05f;
     switch (gameState)
     {
-      case gameStateInit:
-      case gameStateKeyConfig:
-      case gameStateMenu: updateMenu(); break;
-      case gameStatePlaying: updateRunningGame(); break;
+    case gameStateInit:
+    case gameStateKeyConfig:
+    case gameStateMenu:
+      updateMenu();
+      break;
+    case gameStatePlaying:
+      updateRunningGame();
+      break;
     }
     onRender();
   }
@@ -923,10 +957,10 @@ void WitchBlastGame::closeDoors()
 
 void WitchBlastGame::openDoors()
 {
-    int i, j;
-    for(i = 0; i < MAP_WIDTH; i++)
-      for(j = 0; j < MAP_WIDTH; j++)
-        if (currentMap->getTile(i, j) == MAP_DOOR) currentMap->setTile(i, j, MAP_DOOR_OPEN);
+  int i, j;
+  for(i = 0; i < MAP_WIDTH; i++)
+    for(j = 0; j < MAP_WIDTH; j++)
+      if (currentMap->getTile(i, j) == MAP_DOOR) currentMap->setTile(i, j, MAP_DOOR_OPEN);
   roomClosed = false;
   SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
 
@@ -958,15 +992,15 @@ int WitchBlastGame::getEnnemyCount()
   EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
   EntityManager::EntityList::iterator it;
 
-	for (it = entityList->begin (); it != entityList->end ();)
-	{
-		GameEntity *e = *it;
-		it++;
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
 
-		if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX) n++;
-	}
+    if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX) n++;
+  }
 
-	return n;
+  return n;
 }
 
 Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
@@ -977,16 +1011,16 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
   EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
   EntityManager::EntityList::iterator it;
 
-	for (it = entityList->begin (); it != entityList->end ();)
-	{
-		GameEntity *e = *it;
-		it++;
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
 
-		if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX)
-		{
-		  // enemy
-		  EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
-		  if (enemy->canCollide())
+    if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX)
+    {
+      // enemy
+      EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
+      if (enemy->canCollide())
       {
         float d2 = (x - enemy->getX()) * (x - enemy->getX()) + (y - enemy->getY()) * (y - enemy->getY());
 
@@ -997,8 +1031,8 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
           target.y = enemy->getY();
         }
       }
-		}
-	}
+    }
+  }
 
   return target;
 }
@@ -1021,10 +1055,18 @@ void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnu
     doorEntity[doorId]->setOpen(false);
     switch (doorId)
     {
-      case 0: currentMap->setTile(MAP_WIDTH/2, 0, MAP_DOOR); break;
-      case 1: currentMap->setTile(0, MAP_HEIGHT / 2, MAP_DOOR); break;
-      case 2: currentMap->setTile(MAP_WIDTH/2, MAP_HEIGHT - 1, MAP_DOOR); break;
-      case 3: currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, MAP_DOOR); break;
+    case 0:
+      currentMap->setTile(MAP_WIDTH/2, 0, MAP_DOOR);
+      break;
+    case 1:
+      currentMap->setTile(0, MAP_HEIGHT / 2, MAP_DOOR);
+      break;
+    case 2:
+      currentMap->setTile(MAP_WIDTH/2, MAP_HEIGHT - 1, MAP_DOOR);
+      break;
+    case 3:
+      currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, MAP_DOOR);
+      break;
     }
 
   }
@@ -1052,8 +1094,8 @@ void WitchBlastGame::refreshMap()
   {
     if (currentMap->getRoomType() == roomTypeMerchant)
       new PnjEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                  OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
-                  0);
+                    OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
+                    0);
   }
 
   // check doors
@@ -1077,12 +1119,12 @@ void WitchBlastGame::refreshMinimap()
             || currentFloor->getRoom(i, j) == roomTypeBonus
             || currentFloor->getRoom(i, j) == roomTypeKey
             || currentFloor->getRoom(i, j) == roomTypeStandard)
-            {
-              if ( currentFloor->getMap(i, j)->containsHealth())
-                miniMap->setTile(i, j, 5);
-              else
-                miniMap->setTile(i, j, roomTypeStandard);
-            }
+        {
+          if ( currentFloor->getMap(i, j)->containsHealth())
+            miniMap->setTile(i, j, 5);
+          else
+            miniMap->setTile(i, j, roomTypeStandard);
+        }
 
         else
           miniMap->setTile(i, j, currentFloor->getRoom(i, j));
@@ -1118,23 +1160,23 @@ void WitchBlastGame::saveMapItems()
   EntityManager::EntityList* entityList = EntityManager::getEntityManager()->getList();
   EntityManager::EntityList::iterator it;
 
-	for (it = entityList->begin (); it != entityList->end ();)
-	{
-		GameEntity* e = *it;
-		it++;
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity* e = *it;
+    it++;
 
     ItemEntity* itemEntity = dynamic_cast<ItemEntity*>(e);
     ChestEntity* chestEntity = dynamic_cast<ChestEntity*>(e);
 
-		if (itemEntity != NULL)
-		{
+    if (itemEntity != NULL)
+    {
       currentMap->addItem(itemEntity->getItemType(), itemEntity->getX(), itemEntity->getY(), itemEntity->getMerchandise());
-		} // endif
-		else if (chestEntity != NULL)
-		{
+    } // endif
+    else if (chestEntity != NULL)
+    {
       currentMap->addChest(chestEntity->getChestType(), chestEntity->getOpened(), chestEntity->getX(), chestEntity->getY());
-		} // endif
-		else
+    } // endif
+    else
     {
       SpriteEntity* spriteEntity = dynamic_cast<SpriteEntity*>(e);
       if (spriteEntity != NULL && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE ) )
@@ -1145,7 +1187,7 @@ void WitchBlastGame::saveMapItems()
       }
 
     }
-	} // end for
+  } // end for
 }
 
 void WitchBlastGame::moveToOtherMap(int direction)
@@ -1167,10 +1209,25 @@ void WitchBlastGame::moveToOtherMap(int direction)
     saveMapItems();
     switch (direction)
     {
-      case (4): floorX--;  player->moveTo((OFFSET_X + MAP_WIDTH * TILE_WIDTH), player->getY()); player->move(4);  break;
-      case (6): floorX++;  player->moveTo(OFFSET_X, player->getY()); player->move(6); break;
-      case (8): floorY--;  player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT/* - 20*/); player->move(8); break;
-      case (2): floorY++;  player->moveTo(player->getX(), OFFSET_Y);  break;
+    case (4):
+      floorX--;
+      player->moveTo((OFFSET_X + MAP_WIDTH * TILE_WIDTH), player->getY());
+      player->move(4);
+      break;
+    case (6):
+      floorX++;
+      player->moveTo(OFFSET_X, player->getY());
+      player->move(6);
+      break;
+    case (8):
+      floorY--;
+      player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT/* - 20*/);
+      player->move(8);
+      break;
+    case (2):
+      floorY++;
+      player->moveTo(player->getX(), OFFSET_Y);
+      break;
     }
     refreshMap();
     checkEntering();
@@ -1180,18 +1237,22 @@ void WitchBlastGame::moveToOtherMap(int direction)
 
 void WitchBlastGame::onRender()
 {
-    // clear the view
-    app->clear(sf::Color(32, 32, 32));
+  // clear the view
+  app->clear(sf::Color(32, 32, 32));
 
-    switch (gameState)
-    {
-      case gameStateInit:
-      case gameStateKeyConfig:
-      case gameStateMenu: renderMenu(); break;
-      case gameStatePlaying: renderRunningGame(); break;
-    }
+  switch (gameState)
+  {
+  case gameStateInit:
+  case gameStateKeyConfig:
+  case gameStateMenu:
+    renderMenu();
+    break;
+  case gameStatePlaying:
+    renderRunningGame();
+    break;
+  }
 
-    app->display();
+  app->display();
 }
 
 void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
@@ -1266,7 +1327,7 @@ void WitchBlastGame::generateMap()
     currentMap->setCleared(true);
     Vector2D v = currentMap->generateBonusRoom();
     int bonusType = getRandomEquipItem(false, false);
-    //if (bonusType == EQUIP_FAIRY)
+
     if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
     {
       new ChestEntity(v.x, v.y, CHEST_FAIRY + items[FirstEquipItem + bonusType].familiar, false);
@@ -1336,14 +1397,14 @@ void WitchBlastGame::generateMap()
     if (level < 3)
     {
       new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
     }
     else
     {
       new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 80,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
       new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
     }
   }
   else if (currentMap->getRoomType() == roomTypeBoss)
@@ -1352,19 +1413,19 @@ void WitchBlastGame::generateMap()
 
     if (level == 1)
       new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else if (level == 2)
       new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else if (level == 3)
       new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else if (level == 4)
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     else //if (level == 5)
       new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
 
     playMusic(MusicBoss);
   }
@@ -1419,23 +1480,54 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
 {
   switch (monsterType)
   {
-    case EnemyTypeRat: new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal, false); break;
-    case EnemyTypeRatBlack: new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeNormal); break;
-    case EnemyTypeRatHelmet: new RatEntity(xm, ym - 2, RatEntity::RatTypeHelmet, false); break;
-    case EnemyTypeRatBlackHelmet: new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeHelmet); break;
-    case EnemyTypeBat: new BatEntity(xm, ym, false); break;
-    case EnemyTypeEvilFlower: new EvilFlowerEntity(xm, ym - 2); break;
-    case EnemyTypeSlime: new SlimeEntity(xm, ym, SlimeTypeStandard, false); break;
-    case EnemyTypeImpRed: new ImpEntity(xm, ym, ImpEntity::ImpTypeRed); break;
-    case EnemyTypeImpBlue: new ImpEntity(xm, ym, ImpEntity::ImpTypeBlue); break;
-    case EnemyTypeSlimeRed: new SlimeEntity(xm, ym, SlimeTypeRed, false); break;
-    case EnemyTypeSlimeBlue: new SlimeEntity(xm, ym, SlimeTypeBlue, false); break;
-    case EnemyTypeSlimeViolet: new SlimeEntity(xm, ym, SlimeTypeViolet, false); break;
-    case EnemyTypeWitch: new WitchEntity(xm, ym, WitchEntity::WitchTypeNormal); break;
-    case EnemyTypeWitchRed: new WitchEntity(xm, ym, WitchEntity::WitchTypeRed); break;
-    case EnemyTypeCauldron: new CauldronEntity(xm, ym); break;
+  case EnemyTypeRat:
+    new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal, false);
+    break;
+  case EnemyTypeRatBlack:
+    new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeNormal);
+    break;
+  case EnemyTypeRatHelmet:
+    new RatEntity(xm, ym - 2, RatEntity::RatTypeHelmet, false);
+    break;
+  case EnemyTypeRatBlackHelmet:
+    new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeHelmet);
+    break;
+  case EnemyTypeBat:
+    new BatEntity(xm, ym, false);
+    break;
+  case EnemyTypeEvilFlower:
+    new EvilFlowerEntity(xm, ym - 2);
+    break;
+  case EnemyTypeSlime:
+    new SlimeEntity(xm, ym, SlimeTypeStandard, false);
+    break;
+  case EnemyTypeImpRed:
+    new ImpEntity(xm, ym, ImpEntity::ImpTypeRed);
+    break;
+  case EnemyTypeImpBlue:
+    new ImpEntity(xm, ym, ImpEntity::ImpTypeBlue);
+    break;
+  case EnemyTypeSlimeRed:
+    new SlimeEntity(xm, ym, SlimeTypeRed, false);
+    break;
+  case EnemyTypeSlimeBlue:
+    new SlimeEntity(xm, ym, SlimeTypeBlue, false);
+    break;
+  case EnemyTypeSlimeViolet:
+    new SlimeEntity(xm, ym, SlimeTypeViolet, false);
+    break;
+  case EnemyTypeWitch:
+    new WitchEntity(xm, ym, WitchEntity::WitchTypeNormal);
+    break;
+  case EnemyTypeWitchRed:
+    new WitchEntity(xm, ym, WitchEntity::WitchTypeRed);
+    break;
+  case EnemyTypeCauldron:
+    new CauldronEntity(xm, ym);
+    break;
 
-    default: std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
+  default:
+    std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
   }
 }
 
@@ -1443,8 +1535,8 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
 {
   // find a suitable place
   bool isMonsterFlying = monsterType == EnemyTypeBat
-      || monsterType == EnemyTypeImpBlue
-      || monsterType == EnemyTypeImpRed;
+                         || monsterType == EnemyTypeImpBlue
+                         || monsterType == EnemyTypeImpRed;
 
   bool bOk;
   int xm, ym;
@@ -1524,9 +1616,15 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
       int n = 0;
       switch (items[eq].rarity)
       {
-        case RarityCommon:  n = 4; break;
-        case RarityUncommon: n = 2; break;
-        case RarityRare:    n = 1; break;
+      case RarityCommon:
+        n = 4;
+        break;
+      case RarityUncommon:
+        n = 2;
+        break;
+      case RarityRare:
+        n = 1;
+        break;
       }
       for (int j = 0; j < n; j++)
       {
@@ -1686,10 +1784,10 @@ void WitchBlastGame::saveGame()
         if (currentFloor->getRoom(i,j) > 0)
         {
           file << i << " " << j << " "
-          << currentFloor->getMap(i, j)->getRoomType() << " "
-          << currentFloor->getMap(i, j)->isKnown() << " "
-          << currentFloor->getMap(i, j)->isVisited() << " "
-          << currentFloor->getMap(i, j)->isCleared() << std::endl;
+               << currentFloor->getMap(i, j)->getRoomType() << " "
+               << currentFloor->getMap(i, j)->isKnown() << " "
+               << currentFloor->getMap(i, j)->isVisited() << " "
+               << currentFloor->getMap(i, j)->isCleared() << std::endl;
           if (currentFloor->getMap(i, j)->isVisited())
           {
             for (l = 0; l < MAP_HEIGHT; l++)
@@ -2004,60 +2102,76 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireSelect, "keyboard_fire_select");
 }
 
-void WitchBlastGame::buildMenu()
+void WitchBlastGame::buildMenu(bool rebuild)
 {
-  menu.items.clear();
-  menu.redefineKey = false;
-  menu.age = 0.0f;
+  menuState = MenuStateMain;
+
+  menuMain.items.clear();
+  menuMain.age = 0.0f;
+
+  menuConfig.items.clear();
+  menuConfig.age = 0.0f;
+  menuConfig.index = 0;
 
   WitchBlastGame::saveHeaderStruct saveHeader = loadGameHeader();
 
   if (saveHeader.ok)
   {
     menuItemStuct itemStart;
-	itemStart.label = tools::getLabel("start_new_game");
-	itemStart.description = tools::getLabel("start_desc");
+    itemStart.label = tools::getLabel("start_new_game");
+    itemStart.description = tools::getLabel("start_desc");
 
     itemStart.id = MenuStartNew;
-    menu.items.push_back(itemStart);
+    menuMain.items.push_back(itemStart);
 
     menuItemStuct itemLoad;
-	itemStart.label = tools::getLabel("restore");
+    itemStart.label = tools::getLabel("restore");
 
     std::ostringstream oss;
-	oss << saveHeader.date << " " << tools::getLabel("at") << " " << saveHeader.time << " - " << tools::getLabel("level") << " " << saveHeader.level;
+    oss << saveHeader.date << " " << tools::getLabel("at") << " " << saveHeader.time << " - " << tools::getLabel("level") << " " << saveHeader.level;
 
     itemStart.description = oss.str();
     itemStart.id = MenuStartOld;
-    menu.items.push_back(itemStart);
+    menuMain.items.push_back(itemStart);
 
-    menu.index = 1;
+    menuMain.index = 1;
   }
   else
   {
     menuItemStuct itemStart;
-	itemStart.label = tools::getLabel("start_new_game");
-	itemStart.description = tools::getLabel("begin_journey");
+    itemStart.label = tools::getLabel("start_new_game");
+    itemStart.description = tools::getLabel("begin_journey");
 
     itemStart.id = MenuStartNew;
-    menu.items.push_back(itemStart);
+    menuMain.items.push_back(itemStart);
 
-    menu.index = 0;
+    menuMain.index = 0;
   }
 
-  menuItemStuct itemKeys;
-  itemKeys.label = tools::getLabel("config_keys");
-  itemKeys.description = tools::getLabel("redef_input");
-
-  itemKeys.id = MenuKeys;
-  menu.items.push_back(itemKeys);
+  menuItemStuct itemConfig;
+  itemConfig.label = tools::getLabel("configure_game");
+  itemConfig.description = tools::getLabel("configure_game_desc");
+  itemConfig.id = MenuConfig;
+  menuMain.items.push_back(itemConfig);
 
   menuItemStuct itemExit;
   itemExit.label = tools::getLabel("exit_game");
   itemExit.description = tools::getLabel("return_to_desktop");
-
   itemExit.id = MenuExit;
-  menu.items.push_back(itemExit);
+  menuMain.items.push_back(itemExit);
+
+  // configuration
+  menuItemStuct itemKeys;
+  itemKeys.label = tools::getLabel("config_keys");
+  itemKeys.description = tools::getLabel("redef_input");
+  itemKeys.id = MenuKeys;
+  menuConfig.items.push_back(itemKeys);
+
+  menuItemStuct itemConfigBack;
+  itemConfigBack.label = tools::getLabel("config_back");
+  itemConfigBack.description = tools::getLabel("config_back_desc");
+  itemConfigBack.id = MenuConfigBack;
+  menuConfig.items.push_back(itemConfigBack);
 }
 
 void WitchBlastGame::checkFallingEntities()
@@ -2065,17 +2179,17 @@ void WitchBlastGame::checkFallingEntities()
   EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
   EntityManager::EntityList::iterator it;
 
-	for (it = entityList->begin (); it != entityList->end ();)
-	{
-		GameEntity *e = *it;
-		it++;
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
 
-		if (e->getLifetime() < 0.8f && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE))
-		{
-		  int tilex = (e->getX() - OFFSET_X) / TILE_WIDTH;
-		  int tiley = (e->getY() - OFFSET_Y) / TILE_HEIGHT;
+    if (e->getLifetime() < 0.8f && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE))
+    {
+      int tilex = (e->getX() - OFFSET_X) / TILE_WIDTH;
+      int tiley = (e->getY() - OFFSET_Y) / TILE_HEIGHT;
 
-		  if (currentMap->getTile(tilex, tiley) >= MAP_HOLE)
+      if (currentMap->getTile(tilex, tiley) >= MAP_HOLE)
       {
         SpriteEntity* spriteEntity = dynamic_cast<SpriteEntity*>(e);
         spriteEntity->setAge(0.0f);
@@ -2083,8 +2197,8 @@ void WitchBlastGame::checkFallingEntities()
         spriteEntity->setShrinking(true);
         spriteEntity->setFading(true);
       }
-		}
-	}
+    }
+  }
 }
 
 void WitchBlastGame::resetKilledEnemies()
@@ -2109,5 +2223,5 @@ void WitchBlastGame::displayKilledEnemies()
 
 WitchBlastGame &game()
 {
-    return *gameptr;
+  return *gameptr;
 }
