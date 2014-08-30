@@ -27,7 +27,7 @@ key_fire#fire (one button)
 configure_game#Configuration
 configure_game_desc#Changes game options
 config_back#Back
-config_back#Back to the main menu
+config_back_desc#Back to the main menu
 
 play_again#Press [ENTER] to play again / [ESC] to go back to the menu
 congratulations#CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !
@@ -144,7 +144,7 @@ key_fire#Tir (un bouton)
 configure_game#Configuration
 configure_game_desc#Modifier les options
 config_back#Retour
-config_back#Retour au menu principal
+config_back_desc#Retour au menu principal
 
 play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
 congratulations#FELICITATIONS !\nVous êtes brillament arrivé au terme de cette démo !\nA bientôt pour de nouvelles aventures !
