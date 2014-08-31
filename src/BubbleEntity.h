@@ -8,6 +8,7 @@ class BubbleEntity : public EnemyEntity
   public:
     BubbleEntity(float x, float y, int bubbleSize);
     virtual void calculateBB();
+    int getBubbleSize();
 
   protected:
     virtual void collideMapRight();

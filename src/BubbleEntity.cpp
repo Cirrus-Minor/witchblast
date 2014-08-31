@@ -65,6 +65,11 @@ BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
   sprite.setOrigin(64, 64);
 }
 
+int BubbleEntity::getBubbleSize()
+{
+  return bubbleSize;
+}
+
 void BubbleEntity::render(sf::RenderTarget* app)
 {
   if (!isDying && shadowFrame > -1)
@@ -119,11 +124,18 @@ void BubbleEntity::collideMapBottom()
 
 void BubbleEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
-  if (entity->getMovingStyle() == movWalking)
+  BubbleEntity* bubbleEntity = dynamic_cast<BubbleEntity*>(collidingEntity);
+
+  if (bubbleEntity == NULL)
   {
-    setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
-    entity->setVelocity(Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), entity->getCreatureSpeed()));
+   EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
+    if (entity->getMovingStyle() == movWalking)
+      setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
+  }
+  else
+  {
+    if (bubbleEntity->getBubbleSize() <= bubbleSize)
+      setVelocity(Vector2D(bubbleEntity->getX(), bubbleEntity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
   }
 }
 
