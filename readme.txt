@@ -55,20 +55,24 @@ Features
 - merchant,
 - candy eye effects.
 
-Thanks
---------
-Thanks to
-Sideous (for the main character design and graphics)
-Billx (who suggested me the title "Witch Blast")
-Ruth (for the english corrections)
-Mika Attila (for his contribution concerning the Linux version)
-
 Credits
 -------
+Sideous: the main character design and graphics
+R0d: particles system and multilingual support coding
+Seby: code, music and 2D art
+
 The sound used in the game come from:
 - http://www.freesound.org/
 - http://www.freesfx.co.uk/
 - http://www.universal-soundbank.com/
+
+Thanks
+--------
+Thanks to
+
+Billx (who suggested me the title "Witch Blast")
+Ruth (for the english corrections)
+Mika Attila (for his contribution concerning the Linux version)
 
 Changes
 -------
@@ -77,13 +81,15 @@ Next release
 - ADD Particles for player'ss missiles
 - ADD Force shop generation if there is no one in the previous floor
 - ADD Display gold when getting coins
-- ADD French text
+- ADD New starting screen with language selection (English or French) and standard keyboard configuration
 - MOD Invert Cyclop and Rat King bosses
 - MOD Dual bolt angle is smaller
 - MOD Damage's display size increases with damage
 - MOD Rat with helmet are slower
 - MOD Green rats' don't collide while spawning
 - MOD Fairies don't stay stuck in wall/door 
+- MOD Player's bounding box is now smaller
+- MOD Rat and bat's dying sound's volume is lower now
 
 v0.3.0
 - ADD New level with a new boss
