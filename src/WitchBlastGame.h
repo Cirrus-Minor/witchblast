@@ -533,13 +533,14 @@ private:
    */
   enum menuItemEnum
   {
-    MenuStartNew, /**< When starting the game */
-    MenuStartOld, /**< When restoring the game */
-    MenuConfig,   /**< When configuring the game */
-    MenuKeys,     /**< When configuring keys */
-    MenuConfigBack,/**< Back to the main menu */
-    MenuLanguage, /**< When configuring the language */
-    MenuExit      /**< When exiting the game */
+    MenuStartNew,     /**< When starting the game */
+    MenuStartOld,     /**< When restoring the game */
+    MenuConfig,       /**< When configuring the game */
+    MenuKeys,         /**< When configuring keys */
+    MenuConfigBack,   /**< Back to the main menu */
+    MenuLanguage,     /**< When configuring the language */
+    MenuLanguageOk,   /**< When choosing the language (first time) */
+    MenuExit          /**< When exiting the game */
   };
 
   /** Menu states enum
@@ -549,7 +550,8 @@ private:
   {
     MenuStateMain,
     MenuStateConfig,
-    MenuStateKeys
+    MenuStateKeys,
+    MenuStateFirst    /**< First time, we choose language and keyboard */
   };
   menuStateEnum menuState;
 
@@ -574,6 +576,7 @@ private:
   };
 
   menuStuct menuMain;
+  menuStuct menuFirst;
   menuStuct menuConfig;
   unsigned int menuKeyIndex;
 
@@ -586,6 +589,11 @@ private:
    *  \brief Switch to the menu
    */
   void switchToMenu();
+
+  /*!
+   *  \brief Save language config and default keys configuration
+   */
+  void registerLanguage();
 
   struct parameterStruct
   {

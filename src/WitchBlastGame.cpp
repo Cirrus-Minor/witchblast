@@ -106,6 +106,8 @@ WitchBlastGame::WitchBlastGame():
   ImageManager::getImageManager()->addImage("media/interface.png");
   ImageManager::getImageManager()->addImage("media/hud_shots.png");
   ImageManager::getImageManager()->addImage("media/boom64.png");
+  ImageManager::getImageManager()->addImage("media/keys_qwer.png");
+  ImageManager::getImageManager()->addImage("media/keys_azer.png");
 
   ImageManager::getImageManager()->addImage("media/pnj.png");
   ImageManager::getImageManager()->addImage("media/fairy.png");
@@ -713,8 +715,20 @@ void WitchBlastGame::switchToMenu()
   for (int i = 0; i < MENU_MAP_WIDTH; i++)
     for (int j = 0; j < MENU_MAP_HEIGHT; j++)
     {
-      if (rand() % 6 == 0)
-        menuMap->setTile(i, j, rand() %7 + 1);
+      int r = rand() % 200;
+      if (r == 0)
+        menuMap->setTile(i, j, 29);
+      else if (r == 1)
+        menuMap->setTile(i, j, 49);
+      else if (r == 2)
+        menuMap->setTile(i, j, 50);
+      else
+      {
+        if (rand() % 6 == 0)
+          menuMap->setTile(i, j, rand() %7 + 1);
+        if (rand() % 7 == 0)
+          menuMap->setTile(i, j, menuMap->getTile(i, j) + 10);
+      }
     }
   menuTileMap = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_TILES), menuMap, 64, 64, 10);
   menuTileMap->setX(-30.0f);
@@ -726,7 +740,8 @@ void WitchBlastGame::switchToMenu()
   if (!config.configFileExists())
   {
     // TODO Language selection
-    menuState = MenuStateKeys;
+    menuState = MenuStateFirst; //MenuStateKeys;
+    menuFirst.index = 0;
     menuKeyIndex = 0;
   }
   playMusic(MusicIntro);
@@ -739,6 +754,8 @@ void WitchBlastGame::updateMenu()
    menu = &menuMain;
   else if (menuState == MenuStateConfig)
    menu = &menuConfig;
+  else if (menuState == MenuStateFirst)
+   menu = &menuFirst;
 
   EntityManager::getEntityManager()->animate(deltaTime);
   if (menu != NULL) menu->age += deltaTime;
@@ -753,10 +770,22 @@ void WitchBlastGame::updateMenu()
       {
         menuMap->setTile(i, j, menuMap->getTile(i, j+1));
       }
-      if (rand() % 6 == 0)
-        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, rand() %7 + 1);
+      int r = rand() % 200;
+      if (r == 0)
+        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 29);
+      else if (r == 1)
+        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 49);
+      else if (r == 2)
+        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 50);
       else
-        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 0);
+      {
+        if (rand() % 6 == 0)
+          menuMap->setTile(i, MENU_MAP_HEIGHT - 1, rand() %7 + 1);
+        else
+          menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 0);
+        if (rand() % 7 == 0)
+          menuMap->setTile(i, MENU_MAP_HEIGHT - 1, menuMap->getTile(i, MENU_MAP_HEIGHT - 1) + 10);
+      }
     }
   }
   menuTileMap->setY(mapY);
@@ -818,7 +847,19 @@ void WitchBlastGame::updateMenu()
           SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
           parameters.language++;
           if (parameters.language >= NB_LANGUAGES) parameters.language = 0;
-          saveConfigurationToFile();
+          if (menuState == MenuStateConfig) saveConfigurationToFile();
+          tools::setLanguage(languageString[parameters.language]);
+          buildMenu(true);
+        }
+      }
+      else if (event.key.code == input[KeyLeft] || event.key.code == sf::Keyboard::Left)
+      {
+        if (menu->items[menu->index].id == MenuLanguage)
+        {
+          SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+          parameters.language--;
+          if (parameters.language < 0) parameters.language = NB_LANGUAGES - 1;
+          if (menuState == MenuStateConfig) saveConfigurationToFile();
           tools::setLanguage(languageString[parameters.language]);
           buildMenu(true);
         }
@@ -844,6 +885,10 @@ void WitchBlastGame::updateMenu()
         case MenuConfigBack:
           menuState = MenuStateMain;
           break;
+        case MenuLanguageOk:
+          registerLanguage();
+          menuState = MenuStateMain;
+          break;
         case MenuExit:
           app->close();
           break;
@@ -866,12 +911,14 @@ void WitchBlastGame::renderMenu()
    menu = &menuMain;
   else if (menuState == MenuStateConfig)
    menu = &menuConfig;
+  else if (menuState == MenuStateFirst)
+   menu = &menuFirst;
 
   if (menuState == MenuStateKeys)
   {
     // menu background
     sf::RectangleShape rectangle(sf::Vector2f(470 , 400));
-    rectangle.setFillColor(sf::Color(50, 50, 50, 160));
+    rectangle.setFillColor(sf::Color(50, 50, 50, 190));
     rectangle.setPosition(sf::Vector2f(250, 240));
     app->draw(rectangle);
 
@@ -918,6 +965,30 @@ void WitchBlastGame::renderMenu()
 
       write(label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
       write(menu->items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+    }
+
+    // Keys
+    if (menuState == MenuStateFirst)
+    {
+      // displaying the standard key configuration
+      int xKeys = 280;
+      int yKeys = 425;
+      sf::Sprite keysSprite;
+      if (parameters.language == 1) // french
+        keysSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_KEYS_AZER));
+      else
+        keysSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_KEYS_QWER));
+      keysSprite.setPosition(xKeys, yKeys);
+      app->draw(keysSprite);
+
+      // legend
+      write(tools::getLabel("keys_move"), 16, xKeys + 190, yKeys + 10, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+      write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+      write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+      write(tools::getLabel("keys_fire"), 16, xKeys + 124, yKeys + 110, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+      std::ostringstream oss;
+      oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
+      write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
     }
   }
 
@@ -2138,6 +2209,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
 {
   menuMain.items.clear();
   menuConfig.items.clear();
+  menuFirst.items.clear();
 
   if (!rebuild)
   {
@@ -2212,6 +2284,18 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemConfigBack.description = tools::getLabel("config_back_desc");
   itemConfigBack.id = MenuConfigBack;
   menuConfig.items.push_back(itemConfigBack);
+
+  //first time screen
+  /*menuItemStuct itemLanguage;
+  itemLanguage.label = tools::getLabel("config_lang");
+  itemLanguage.description = tools::getLabel("config_lang_desc");
+  itemLanguage.id = MenuLanguage;*/
+  menuFirst.items.push_back(itemLanguage);
+  menuItemStuct itemLanguageOk;
+  itemLanguageOk.label = tools::getLabel("config_lang_ok");
+  itemLanguageOk.description = tools::getLabel("config_lang_ok_desc");
+  itemLanguageOk.id = MenuLanguageOk;
+  menuFirst.items.push_back(itemLanguageOk);
 }
 
 void WitchBlastGame::checkFallingEntities()
@@ -2259,6 +2343,35 @@ void WitchBlastGame::displayKilledEnemies()
   std::cout<<"KILLED: ";
   for (int i = 0; i < NB_ENEMY; i++) if (killedEnemies[i] > 0) std::cout << i << "x" << killedEnemies[i] << " ";
   std::cout << std::endl;
+}
+
+void WitchBlastGame::registerLanguage()
+{
+  // default keys
+  if (parameters.language == 1)
+  {
+    // french keyboard
+    input[KeyUp]    = sf::Keyboard::Z;
+    input[KeyLeft]  = sf::Keyboard::Q;
+  }
+  else
+  {
+    // QWERT / QWERTZ keyboard
+    input[KeyUp]    = sf::Keyboard::W;
+    input[KeyLeft]  = sf::Keyboard::A;
+  }
+
+  input[KeyDown]  = sf::Keyboard::S;
+  input[KeyRight] = sf::Keyboard::D;
+  input[KeyFireUp]    = sf::Keyboard::Up;
+  input[KeyFireDown]  = sf::Keyboard::Down;
+  input[KeyFireLeft]  = sf::Keyboard::Left;
+  input[KeyFireRight] = sf::Keyboard::Right;
+  input[KeyFire] = sf::Keyboard::Space;
+  input[KeyFireSelect] = sf::Keyboard::Tab;
+  input[KeyTimeControl] = sf::Keyboard::RShift;
+
+  saveConfigurationToFile();
 }
 
 WitchBlastGame &game()
