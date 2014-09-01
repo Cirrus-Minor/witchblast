@@ -35,6 +35,8 @@ void EnemyEntity::animate(float delay)
 {
   if (isAgonising)
   {
+    if (hpDisplay > hp) hpDisplay--;
+
     if (h < -0.01f)
     {
       isDying = true;
