@@ -19,6 +19,7 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   imagesProLine = 10;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   isBeating = false;
+  isFlying = false;
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)
@@ -35,9 +36,54 @@ int ItemEntity::getPrice()
   return (items[itemType].price);
 }
 
+bool ItemEntity::isOnMap()
+{
+  if (x < OFFSET_X) return false;
+  if (x > OFFSET_X + TILE_WIDTH * MAP_WIDTH) return false;
+  if (y < OFFSET_Y) return false;
+  if (y > OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT) return false;
+  return true;
+}
+
 void ItemEntity::animate(float delay)
 {
-  CollidingSpriteEntity::animate(delay);
+  if (isFlying)
+  {
+    if (!isCollidingWithMap() && isOnMap())
+    {
+      isFlying = false;
+      viscosity = 0.96f;
+    }
+    else
+    {
+      if (velocity.x < -10 || velocity.x > 10 || velocity.y < -10 || velocity.y > 10) // moving
+      {
+        // stay in the map
+        if (velocity.x < -10 && x < OFFSET_X) velocity.x = -velocity.x;
+        else if (velocity.x > 10 && x > OFFSET_X + TILE_WIDTH * MAP_WIDTH) velocity.x = -velocity.x;
+        if (velocity.y < -10 && y < OFFSET_Y) velocity.y = -velocity.y;
+        else if (velocity.y > 10 && y > OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT) velocity.y = -velocity.y;
+      }
+      else // not moving
+      {
+        setVelocity(Vector2D(100.0f + rand()% 250));
+      }
+      // make move
+      x += velocity.x * delay;
+      y += velocity.y * delay;
+      age += delay;
+    }
+  }
+  else // not flying
+  {
+    if (isCollidingWithMap() || !isOnMap())
+    {
+      isFlying = true;
+    }
+    else
+      CollidingSpriteEntity::animate(delay);
+  }
+
   if (age > 0.7f) testSpriteCollisions();
 
   if (isBeating)

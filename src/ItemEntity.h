@@ -28,11 +28,14 @@ class ItemEntity : public CollidingSpriteEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
+    bool isOnMap();
+
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
 
   private:
     float timer;
     bool isBeating;
+    bool isFlying;
 };
 
 #endif // ITEMENTITY_H
