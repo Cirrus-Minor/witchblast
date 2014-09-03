@@ -29,8 +29,8 @@ enum enemyTypeEnum
   // boss
   EnemyTypeButcher,
   EnemyTypeSlimeBoss,
-  EnemyTypeRatKing,
   EnemyTypeCyclops,
+  EnemyTypeRatKing,
   EnemyTypeSpiderGiant,
 
   // invocated
