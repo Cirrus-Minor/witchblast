@@ -58,8 +58,6 @@ BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
   bloodColor = BloodNone;
   shadowFrame = 1;
 
-  enemyType = EnemyTypeRat;
-
   width = 128;
   height = 128;
   sprite.setOrigin(64, 64);
