@@ -25,6 +25,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   hpDisplay = hp;
   hpMax = hp;
   gold = 0;
+  deathAge = -1.0f;
 
   boltLifeTime = INITIAL_BOLT_LIFE;
   specialBoltTimer = -1.0f;
@@ -96,7 +97,12 @@ void PlayerEntity::setPlayerStatus(PlayerEntity::playerStatusEnum playerStatus)
 
 bool PlayerEntity::isDead()
 {
-  return playerStatus==playerStatusDead;
+  return playerStatus == playerStatusDead;
+}
+
+float PlayerEntity::getDeathAge()
+{
+  return deathAge;
 }
 
 void PlayerEntity::setEntering()
@@ -212,7 +218,10 @@ void PlayerEntity::animate(float delay)
     }
   }
   if (playerStatus == playerStatusDead)
+  {
+    deathAge += delay;
     velocity = Vector2D(0.0f, 0.0f);
+  }
   else
     testSpriteCollisions();
 
@@ -867,6 +876,7 @@ void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
 void PlayerEntity::dying()
 {
   playerStatus = playerStatusDead;
+  deathAge = 0.0f;
   hp = 0;
   SoundManager::getSoundManager()->playSound(SOUND_PLAYER_DIE);
   setVelocity(Vector2D(0.0f, 0.0f));

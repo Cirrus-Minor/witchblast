@@ -400,6 +400,8 @@ class PlayerEntity : public BaseCreatureEntity
 
     bool canGetNewShot(bool advancedShot);
 
+    float getDeathAge();
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
@@ -439,6 +441,8 @@ class PlayerEntity : public BaseCreatureEntity
     int firingDirection;
 
     std::vector<FairyEntity*> fairies;
+
+    float deathAge;
 
     int spriteDx;
     void renderHead(sf::RenderTarget* app);
