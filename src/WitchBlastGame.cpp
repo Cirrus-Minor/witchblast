@@ -650,29 +650,15 @@ void WitchBlastGame::renderRunningGame()
 
     if (player->isDead())
     {
-      float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-      int fade = 255 * (1.0f + cos(2.0f * getAbsolutTime())) * 0.5f;
-
-      myText.setColor(sf::Color(255, 255, 255, 255));
-      myText.setCharacterSize(25);
-      myText.setString("GAME OVER");
-      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 400);
-      app->draw(myText);
-
-      myText.setColor(sf::Color(255, 255, 255, fade));
-      myText.setCharacterSize(20);
-      myText.setString(tools::getLabel("play_again"));
-      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 440);
-      app->draw(myText);
+      renderDeathScreen();
     }
     else if (currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
     {
       float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-      myText.setColor(sf::Color(255, 255, 255, 255));
-      myText.setCharacterSize(25);
-      myText.setString(tools::getLabel("congratulations"));
-      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 220);
-      app->draw(myText);
+
+      write(tools::getLabel("congratulations_1"), 25, x0, 220, ALIGN_CENTER, sf::Color::White, app, 2, 2);
+      write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2);
+      write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2);
     }
 
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
@@ -704,6 +690,222 @@ void WitchBlastGame::renderRunningGame()
       app->draw(rectangle);
     }
   }
+}
+
+void WitchBlastGame::renderDeathScreen()
+{
+  float deathAge = player->getDeathAge();
+  if (deathAge < 1.0f) return;
+
+  int rectFade = 220;
+  if (deathAge < 2.0f) rectFade = rectFade * (deathAge - 1.0f);
+  //  background
+  sf::RectangleShape rectangle(sf::Vector2f(810 , 300));
+  rectangle.setFillColor(sf::Color(40, 40, 40, rectFade));
+  rectangle.setPosition(sf::Vector2f(80, 110));
+  rectangle.setOutlineThickness(2);
+  rectangle.setOutlineColor(sf::Color::White);
+  app->draw(rectangle);
+
+  // lines
+  sf::RectangleShape line(sf::Vector2f(810 , 1));
+  line.setFillColor(sf::Color::White);
+  line.setPosition(sf::Vector2f(80, 150));
+  app->draw(line);
+
+  line.setPosition(sf::Vector2f(205, 110));
+  line.setSize(sf::Vector2f(1 , 300));
+  line.setFillColor(sf::Color(190, 190, 190, 255));
+  //app->draw(line);
+
+  if (deathAge > 2.0f)
+  {
+    int xItems = 90;
+    int yItems = 120;
+
+    int xMonsters = 85;
+    int yMonsters = 160;
+    // items
+    write(tools::getLabel("items_found"), 17, xItems, yItems, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+
+    int n = 0;
+    int nMax = 40;
+    int nMaxTime = ((deathAge - 2.0f) * 120.0f);
+    for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
+    {
+      if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
+      {
+        sf::Sprite itemSprite;
+        itemSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP));
+        itemSprite.setPosition(xItems + 120 + n * 32, yItems - 5);
+        itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
+        app->draw(itemSprite);
+        n++;
+      }
+    }
+
+    // monsters
+    write(tools::getLabel("monsters_killed"), 17, xMonsters, yMonsters, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+    n = 0;
+    for (int i = EnemyTypeBat; i <= EnemyTypeBubble; i++)
+    {
+      for (int j = 0; j < killedEnemies[i] && n <= nMaxTime; j++)
+      {
+        sf::Sprite monsterSprite;
+        monsterSprite.setScale(0.75f, 0.75f);
+        int dy = -5;
+        switch (i)
+        {
+        case EnemyTypeBat:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_BAT));
+          monsterSprite.setTextureRect(sf::IntRect(64, 0, 64, 64));
+          dy = -1;
+          break;
+
+        case EnemyTypeRat:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTextureRect(sf::IntRect(0, 12, 64, 52));
+          break;
+
+        case EnemyTypeRatBlack:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTextureRect(sf::IntRect(0, 140, 64, 52));
+          break;
+
+        case EnemyTypeRatHelmet:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTextureRect(sf::IntRect(0, 204, 64, 52));
+          break;
+
+        case EnemyTypeRatBlackHelmet:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTextureRect(sf::IntRect(0, 268, 64, 52));
+          break;
+
+        case EnemyTypeEvilFlower:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_FLOWER));
+          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+          break;
+
+        case EnemyTypeSlime:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 54));
+          break;
+
+        case EnemyTypeSlimeRed:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTextureRect(sf::IntRect(0, 74, 64, 54));
+          break;
+
+        case EnemyTypeSlimeBlue:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTextureRect(sf::IntRect(0, 138, 64, 54));
+          break;
+
+        case EnemyTypeSlimeViolet:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTextureRect(sf::IntRect(0, 202, 64, 54));
+          break;
+
+        case EnemyTypeImpBlue:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_IMP));
+          monsterSprite.setTextureRect(sf::IntRect(0, 64, 64, 64));
+          dy = -2;
+          break;
+
+        case EnemyTypeImpRed:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_IMP));
+          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+          dy = -2;
+          break;
+
+        case EnemyTypeWitch:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_WITCH));
+          monsterSprite.setTextureRect(sf::IntRect(0, 18, 64, 50));
+          dy = -1;
+          break;
+
+        case EnemyTypeWitchRed:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_WITCH));
+          monsterSprite.setTextureRect(sf::IntRect(0, 114, 64, 50));
+          dy = -1;
+          break;
+
+        case EnemyTypeCauldron:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_CAULDRON));
+          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+          monsterSprite.setScale(0.65f, 0.65);
+          dy = -1;
+          break;
+
+        case EnemyTypeBubble:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_BUBBLE));
+          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
+          monsterSprite.setScale(0.25f, 0.25f);
+          dy = -1;
+          break;
+        }
+        monsterSprite.setPosition(xMonsters + 120 + n % nMax * 16, yMonsters + dy + n / nMax * 16 );
+        app->draw(monsterSprite);
+        n++;
+      }
+    }
+
+    // bosses
+    n = (1 + (n - 1)/ nMax) * nMax;
+    for (int i = EnemyTypeButcher; i <= EnemyTypeSpiderGiant; i++)
+    {
+      for (int j = 0; j < killedEnemies[i] && n <= nMaxTime; j++)
+      {
+        sf::Sprite monsterSprite;
+        monsterSprite.setScale(0.75f, 0.75f);
+        int dy = 0;
+        switch (i)
+        {
+        case EnemyTypeButcher:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_BUTCHER));
+          monsterSprite.setTextureRect(sf::IntRect(32, 0, 64, 128));
+          dy = -5;
+          break;
+
+        case EnemyTypeSlimeBoss:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_GIANT_SLIME));
+          monsterSprite.setTextureRect(sf::IntRect(7, 0, 120, 128));
+          dy = -1;
+          break;
+
+        case EnemyTypeCyclops:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_CYCLOP));
+          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 192));
+          monsterSprite.setScale(0.6f, 0.6f);
+          dy = -21;
+          break;
+
+        case EnemyTypeRatKing:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_KING_RAT));
+          monsterSprite.setTextureRect(sf::IntRect(12, 0, 128, 116));
+          break;
+
+        case EnemyTypeSpiderGiant:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_GIANT_SPIDER));
+          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
+          dy = 2;
+          break;
+        }
+
+        monsterSprite.setPosition(xMonsters + 120 + n % nMax * 16, yMonsters + dy + n / nMax * 16 );
+        app->draw(monsterSprite);
+        n += 3;
+      }
+    }
+  }
+
+  // Game over text
+  float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+  int fade = 255 * (1.0f + cos(2.0f * getAbsolutTime())) * 0.5f;
+
+  write("GAME OVER", 32, x0, 40, ALIGN_CENTER, sf::Color::White, app, 2, 2);
+  write(tools::getLabel("play_again"), 20, x0, 480, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0);
 }
 
 void WitchBlastGame::switchToMenu()
@@ -751,11 +953,11 @@ void WitchBlastGame::updateMenu()
 {
   menuStuct* menu = NULL;
   if (menuState == MenuStateMain)
-   menu = &menuMain;
+    menu = &menuMain;
   else if (menuState == MenuStateConfig)
-   menu = &menuConfig;
+    menu = &menuConfig;
   else if (menuState == MenuStateFirst)
-   menu = &menuFirst;
+    menu = &menuFirst;
 
   EntityManager::getEntityManager()->animate(deltaTime);
   if (menu != NULL) menu->age += deltaTime;
@@ -908,11 +1110,11 @@ void WitchBlastGame::renderMenu()
 
   menuStuct* menu;
   if (menuState == MenuStateMain)
-   menu = &menuMain;
+    menu = &menuMain;
   else if (menuState == MenuStateConfig)
-   menu = &menuConfig;
+    menu = &menuConfig;
   else if (menuState == MenuStateFirst)
-   menu = &menuFirst;
+    menu = &menuFirst;
 
   if (menuState == MenuStateKeys)
   {

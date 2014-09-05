@@ -41,7 +41,11 @@ keys_select_2#selector
 keys_time#time control
 
 play_again#Press [ENTER] to play again / [ESC] to go back to the menu
-congratulations#CONGRATULATIONS !\nYou've challenged this demo and\nmanaged to kill the bosses !\nSee you soon for new adventures !
+items_found#Items
+monsters_killed#Monsters
+congratulations_1#CONGRATULATIONS !
+congratulations_2#You've challenged this demo and kill the bosses !
+congratulations_3#\nSee you soon for new adventures !
 by#by
 critical#CRITICAL X2
 
@@ -169,7 +173,11 @@ keys_select_2#de tir
 keys_time#accélerer
 
 play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
-congratulations#FELICITATIONS !\nVous êtes brillament arrivé au terme de cette démo !\nA bientôt pour de nouvelles aventures !
+items_found#Objets
+monsters_killed#Monstres
+congratulations_1#FELICITATIONS !
+congratulations_2#Vous êtes brillament arrivé au terme de cette démo !
+congratulations_3#A bientôt pour de nouvelles aventures !
 by#par
 critical#CRITIQUE X2
 

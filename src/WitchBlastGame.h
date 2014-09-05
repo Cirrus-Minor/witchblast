@@ -528,6 +528,11 @@ private:
    */
   void renderMenu();
 
+/*!
+   *  \brief Render the death screen (when the player dies)
+   */
+  void renderDeathScreen();
+
   /** Menu keys enum
    *  Identify the various keys of the menu.
    */
