@@ -59,10 +59,10 @@ void ItemEntity::animate(float delay)
       if (velocity.x < -10 || velocity.x > 10 || velocity.y < -10 || velocity.y > 10) // moving
       {
         // stay in the map
-        if (velocity.x < -10 && x < OFFSET_X) velocity.x = -velocity.x;
-        else if (velocity.x > 10 && x > OFFSET_X + TILE_WIDTH * MAP_WIDTH) velocity.x = -velocity.x;
-        if (velocity.y < -10 && y < OFFSET_Y) velocity.y = -velocity.y;
-        else if (velocity.y > 10 && y > OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT) velocity.y = -velocity.y;
+        if (velocity.x < -10 && x < OFFSET_X) velocity.x = 200.0f;
+        else if (velocity.x > 10 && x > OFFSET_X + TILE_WIDTH * MAP_WIDTH) velocity.x = -200.0f;
+        if (velocity.y < -10 && y < OFFSET_Y) velocity.y = 200.0f;
+        else if (velocity.y > 10 && y > OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT) velocity.y = -200.0f;
       }
       else // not moving
       {
