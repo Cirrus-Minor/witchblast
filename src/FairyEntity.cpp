@@ -28,6 +28,9 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
   switch (fairyType)
   {
   case FamiliarFairyTarget:
+    shotType = ShotTypeStandard;
+    fairyFireDelay = TARGET_FAIRY_FIRE_DELAY;
+    break;
   case FamiliarFairy:
     shotType = ShotTypeStandard;
     fairyFireDelay = FAIRY_FIRE_DELAY;

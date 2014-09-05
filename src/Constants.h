@@ -109,7 +109,6 @@ enum item_images {
   IMAGE_KEYS_QWER,
   IMAGE_KEYS_AZER,
 
-
   IMAGE_PNJ,
   IMAGE_FAIRY
 };
@@ -222,6 +221,7 @@ const float INITIAL_BOLT_VISCOSITY = 0.98f;
 const float FAIRY_SPEED = 180.0f;
 const float FAIRY_FIRE_DELAY = 0.8f;
 const float ICE_FAIRY_FIRE_DELAY = 1.3f;
+const float TARGET_FAIRY_FIRE_DELAY = 1.0f;
 const float FAIRY_BOLT_LIFE = 0.4f;
 const int FAIRY_BOLT_DAMAGES = 8;
 const int FAIRY_FIRE_DAMAGES = 12;
