@@ -224,7 +224,7 @@ const itemStuct items[NUMBER_ITEMS] =
     50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard
   },
   {
-    ItemBroochStar, "item_brooch_star", "item_brooch_star",
+    ItemBroochStar, "item_brooch_star", "item_brooch_star_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   },
   {
