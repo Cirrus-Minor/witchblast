@@ -544,7 +544,6 @@ private:
     MenuKeys,         /**< When configuring keys */
     MenuConfigBack,   /**< Back to the main menu */
     MenuLanguage,     /**< When configuring the language */
-    MenuLanguageOk,   /**< When choosing the language (first time) */
     MenuExit          /**< When exiting the game */
   };
 
