@@ -41,7 +41,7 @@ Saving
 --------
 
 Game saves automatically when leaving the game in a cleared area.
-Leaving the game during a fight destroys the current game.
+Leaving the game while fighting destroys the current game.
 
 
 Features
@@ -79,6 +79,7 @@ Changes
 
 Next release
 - ADD Particles for player'ss missiles
+- ADD Death Screen
 - ADD Force shop generation if there is no one in the previous floor
 - ADD Display gold when getting coins
 - ADD New starting screen with language selection (English or French) and standard keyboard configuration
@@ -90,6 +91,10 @@ Next release
 - MOD Fairies don't stay stuck in wall/door 
 - MOD Player's bounding box is now smaller
 - MOD Rat and bat's dying sound's volume is lower now
+- MOD Better Bubble physics
+- MOD Target Fairy (Scarlett) firerate decreased
+- FIX Wrong HP display (bar) when a boss is dying
+- FIX Items are not dropped out of screen anymore
 
 v0.3.0
 - ADD New level with a new boss
