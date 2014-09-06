@@ -43,7 +43,7 @@ items_found#Items
 monsters_killed#Monsters
 congratulations_1#CONGRATULATIONS !
 congratulations_2#You've challenged this demo and kill the bosses !
-congratulations_3#\nSee you soon for new adventures !
+congratulations_3#See you soon for new adventures !
 by#by
 critical#CRITICAL X2
 
