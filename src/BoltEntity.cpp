@@ -91,7 +91,8 @@ void BoltEntity::setCritical(bool critical)
 void BoltEntity::animate(float delay)
 {
   if (boltType != ShotTypeBomb)
-    particleGenerator.GenerateParticles(frame, IMAGE_BOLT, x, y, BOLT_WIDTH, BOLT_HEIGHT, Vector2D(0.0f, 0.0f), 10, renderScale);
+    particleGenerator.GenerateParticles(frame, IMAGE_BOLT, x, y, BOLT_WIDTH, BOLT_HEIGHT,
+                        boltType == ShotTypeLightning ? Vector2D(20.0f) : Vector2D(0.0f, 0.0f), 10, renderScale);
 
   z = y + height;
 
