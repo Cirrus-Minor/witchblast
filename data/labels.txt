@@ -30,8 +30,6 @@ config_back#Back
 config_back_desc#Back to the main menu
 config_lang#Language
 config_lang_desc#Choose with left and right arrows
-config_lang_ok#OK
-config_lang_ok_desc#Save and start the game
 english#English
 french#French
 keys_move#move
@@ -162,8 +160,6 @@ config_back#Retour
 config_back_desc#Retour au menu principal
 config_lang#Langue
 config_lang_desc#Choisissez avec les flèches (gauche et droite)
-config_lang_ok#OK
-config_lang_ok_desc#Sauvegarder et démarrer le jeu
 english#Anglais
 french#Français
 keys_move#déplacer

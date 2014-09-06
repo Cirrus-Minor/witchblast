@@ -1087,9 +1087,12 @@ void WitchBlastGame::updateMenu()
         case MenuConfigBack:
           menuState = MenuStateMain;
           break;
-        case MenuLanguageOk:
-          registerLanguage();
-          menuState = MenuStateMain;
+        case MenuLanguage:
+          if (menuState == MenuStateFirst)
+          {
+            registerLanguage();
+            menuState = MenuStateMain;
+          }
           break;
         case MenuExit:
           app->close();
@@ -1174,7 +1177,7 @@ void WitchBlastGame::renderMenu()
     {
       // displaying the standard key configuration
       int xKeys = 280;
-      int yKeys = 425;
+      int yKeys = 380;
       sf::Sprite keysSprite;
       if (parameters.language == 1) // french
         keysSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_KEYS_AZER));
@@ -2488,16 +2491,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
   menuConfig.items.push_back(itemConfigBack);
 
   //first time screen
-  /*menuItemStuct itemLanguage;
-  itemLanguage.label = tools::getLabel("config_lang");
-  itemLanguage.description = tools::getLabel("config_lang_desc");
-  itemLanguage.id = MenuLanguage;*/
   menuFirst.items.push_back(itemLanguage);
-  menuItemStuct itemLanguageOk;
-  itemLanguageOk.label = tools::getLabel("config_lang_ok");
-  itemLanguageOk.description = tools::getLabel("config_lang_ok_desc");
-  itemLanguageOk.id = MenuLanguageOk;
-  menuFirst.items.push_back(itemLanguageOk);
 }
 
 void WitchBlastGame::checkFallingEntities()
