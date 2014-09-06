@@ -170,6 +170,7 @@ WitchBlastGame::WitchBlastGame():
   SoundManager::getSoundManager()->addSound("media/sound/witch_die_01.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/witch_02.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/invoke.ogg");
+  SoundManager::getSoundManager()->addSound("media/sound/cauldron.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/cauldron_die.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/critical.ogg");
   SoundManager::getSoundManager()->addSound("media/sound/gong.ogg");
