@@ -2529,10 +2529,13 @@ void WitchBlastGame::resetKilledEnemies()
 
 void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
 {
-  if (enemyType == NB_ENEMY)
-    std::cout << "[ERROR] No enemy type";
-  else
-    killedEnemies[enemyType]++;
+  if(!player->isDead())
+  {
+    if (enemyType == NB_ENEMY)
+      std::cout << "[ERROR] No enemy type";
+    else
+      killedEnemies[enemyType]++;
+  }
 }
 
 void WitchBlastGame::displayKilledEnemies()
