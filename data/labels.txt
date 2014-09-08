@@ -109,8 +109,8 @@ item_ring_stone#Obsidian Ring
 item_ring_stone_desc#Increases stone power
 item_ring_lightning#Opal Ring
 item_ring_lightning_desc#Increases lightning power
-item_ring_quartz#Quartz Ring
-item_ring_quartz_desc#Increases illusion power
+item_ring_illusion#Quartz Ring
+item_ring_illusion_desc#Increases illusion power
 item_spell_triple#Spell : Triple bolts
 item_spell_triple_desc#Shoots three bolts
 item_brooch_star#Star Brooch
@@ -239,8 +239,8 @@ item_ring_stone#Anneau d'obsidienne
 item_ring_stone_desc#Augmente le pouvoir de pierre
 item_ring_lightning#Anneau d'opale
 item_ring_lightning_desc#Augmente le pouvoir de foudre
-item_ring_quartz#Anneau de quartz
-item_ring_quartz_desc#Augmente le pouvoir d'illusion
+item_ring_illusion#Anneau de quartz
+item_ring_illusion_desc#Augmente le pouvoir d'illusion
 item_spell_triple#Spell : Triple-tir
 item_spell_triple_desc#Tire trois projectiles
 item_brooch_star#Broche d'étoile
@@ -257,3 +257,134 @@ item_ring_fire#Anneau de rubis
 item_ring_fire_desc#Augmente le pouvoir de feu
 item_manual_staff#Manuel du bâton
 item_manual_staff_desc#Augmente la portée
+
+[german]
+start_new_game#Neues Spiel starten
+start_desc#Alter Speicherstand wird überschrieben !
+restore#Speicherstand wiederherstellen
+at#um
+level#Level
+begin_journey#Beginne deine Reise in einem neuen Verlies
+config_keys#Steuerung
+redef_input#Ändere die Tastenbelegung
+exit_game#Spiel verlassen
+return_to_desktop#Kehre zum Desktop zurück
+key_configuration#Tastenbelegung
+key_configuration_desc#Bitte belege die Tasten
+key_configuration_insert#[Taste einsetzen]
+key_configuration_done#FERTIG
+key_move_up#Nach oben
+key_move_down#Nach unten
+key_move_left#Nach links
+key_move_right#Nach rechts
+key_fire_up#Schieße oben
+key_fire_down#Schieße unten
+key_fire_left#Schieße links
+key_fire_right#Schieße rechts
+key_fire_select#Schieße Auswahl
+key_time#Zeitsteuerung
+key_fire#Schießen (ein Knopf)
+configure_game#Optionen
+configure_game_desc#Ändere die Spieloptionen
+config_back#Zurück
+config_back_desc#Zurück zum Hauptmenü
+config_lang#Sprache
+config_lang_desc#Wähle mit linker und rechter Pfeiltaste aus
+english#Englisch
+french#Französisch
+german#Deutsch
+keys_move#Bewegen
+keys_fire#Schießen
+keys_select_1#Waffe
+keys_select_2#wechseln
+keys_time#Zeitsteuerung
+
+play_again#Drücke [ENTER], um nochmal zu spielen / [ESC], um ins Hauptmenü zurückzukehren
+items_found#Items
+monsters_killed#Monster
+congratulations_1#HERZLICHEN GLÜCKWUNSCH !
+congratulations_2#Du hast dich der Demo Version gestellt und die Bosse getötet !
+congratulations_3#Bis bald für neue Abenteuer !
+by#von
+critical#KRITISCH X2
+
+merchant_speech_0#Bester Preis im gesamten Verlies!
+merchant_speech_1#Willkommen im Pawn'n'Witches Shop!
+merchant_speech_2#Schau dir unsere Waren an!
+
+enemy_butcher#Schweinemetzger
+enemy_cyclops#Kimmerischer Zyklop
+enemy_giant_slime#Gigantischer Schleim
+enemy_giant_spider#Gigantische Spinne
+enemy_rat_king#Rattenkönig
+
+item_copper#Kupfermünze
+item_copper_desc#Eine Kupfermünze (Wert 1)
+item_silver#Silbermünze
+item_silver_desc#Eine Silbermünze (Wert 5)
+item_gold#Goldmünze
+item_gold_desc#Eine Goldmünze (Wert 10)
+item_titan_heart#Herz des Titanen
+item_titan_heart_desc#Erhöht die maximalen TP
+item_elven_cookie#Elfenkeks
+item_elven_cookie_desc#Stellt das Leben wieder her und erhöht die maximalen TP
+item_apple#Apfel
+item_apple_desc#Stellt 3 TP wieder her
+item_bread#Brot
+item_bread_desc#Stellt 7 TP wieder her
+item_cheese#Käse
+item_cheese_desc#Stellt 15 TP wieder her
+item_boss_key#Boss-Schlüssel
+item_boss_key_desc#Öffnet die Boss-Tür
+item_sorcerer_hat#Hut des Zauberers
+item_sorcerer_hat_desc#Erhöht die Feuerrate
+item_velvet_boots#Samtschuhe
+item_velvet_boots_desc#Erhöht die Geschwindigkeit
+item_spell_dual#Zauber : Doppelter Schuss
+item_spell_dual_desc#Schießt zwei Schüsse
+item_rage_amulet#Wutamulett
+item_rage_amulet_desc#Revanchiert sich bei Kontakt
+item_vibration_gloves#Vibrationshandschuhe
+item_vibration_gloves_desc#Erhöht die Geschwindigkeit der Schüsse und vibriert
+item_staff#Mahagoni-Stab
+item_staff_desc#Erhöht die Geschwindigkeit und den Schaden der Schüsse
+item_fairy#Lilly-Fee
+item_fairy_desc#Hilft dir im Verlies
+item_leather_belt#Ledergürtel
+item_leather_belt_desc#Erhöht die Feuerrate
+item_blood_snake#Blutschlange
+item_blood_snake_desc#Erhöht den Schaden
+item_gem_ice#Eisjuwel
+item_gem_ice_desc#Eisangriff (einfrieren)
+item_gem_illusion#Illusionsjuwel
+item_gem_illusion_desc#Illusionsangriff (ignoriert Wände und Rüstungen)
+item_gem_stone#Steinjuwel
+item_gem_stone_desc#Steinangriff (rückstoßen)
+item_gem_lightning#Blitzjuwel
+item_gem_lightning_desc#Blitzangriff (abprallen)
+item_fairy_ice#Natasha-Fee
+item_fairy_ice_desc#Hilft dir im Verlies
+item_ring_ice#Saphir Ring
+item_ring_ice_desc#Erhöht die Eiskraft
+item_ring_stone#Obsidian Ring
+item_ring_stone_desc#Erhöht die Steinkraft
+item_ring_lightning#Matter Ring
+item_ring_lightning_desc#Erhöht die Blitzkraft
+item_ring_illusion#Quartz Ring
+item_ring_illusion_desc#Erhöht die Illusionskraft
+item_spell_triple#Zauber : Dreifacher Schuss
+item_spell_triple_desc#Schießt drei Schüsse
+item_brooch_star#Stern Brosche
+item_brooch_star_desc#Kritische Trefferchance (x2)
+item_fairy_fire#Alicia-Fee
+item_fairy_fire_desc#Hilft dir im Verlies
+item_fairy_target#Scarlett-Fee
+item_fairy_target_desc#Hilft dir im Verlies
+item_robe_magician#Robe des Zauberers
+item_robe_magician_desc#Erhöht die Rüstung
+item_gem_fire#Feuerjuwel
+item_gem_fire_desc#Feuerangriff (mehr Schaden)
+item_ring_fire#Rubin Ring
+item_ring_fire_desc#Erhöht die Feuerkraft
+item_manual_staff#Handbuch des Zauberstabes
+item_manual_staff_desc#Erhöht die Reichweite
