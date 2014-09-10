@@ -73,6 +73,7 @@ Thanks to
 Billx (who suggested me the title "Witch Blast")
 Ruth (for the english corrections)
 Mika Attila (for his contribution concerning the Linux version)
+Geheim (for the German translation)
 
 Changes
 -------
