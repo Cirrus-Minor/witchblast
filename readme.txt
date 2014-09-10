@@ -77,8 +77,12 @@ Mika Attila (for his contribution concerning the Linux version)
 Changes
 -------
 
-Next release
-- ADD Particles for player'ss missiles
+v0.3.3
+- ADD German version
+- FIX Crash when getting the quartz ring
+
+v0.3.2
+- ADD Particles for player's missiles
 - ADD Death Screen
 - ADD Force shop generation if there is no one in the previous floor
 - ADD Display gold when getting coins
