@@ -313,7 +313,7 @@ merchant_speech_1#Willkommen im Pawn'n'Witches Shop!
 merchant_speech_2#Schau dir unsere Waren an!
 
 enemy_butcher#Schweinemetzger
-enemy_cyclops#Kimmerischer Zyklop
+enemy_cyclops#Barbarischer Zyklop
 enemy_giant_slime#Gigantischer Schleim
 enemy_giant_spider#Gigantische Spinne
 enemy_rat_king#Rattenkönig
@@ -327,7 +327,7 @@ item_gold_desc#Eine Goldmünze (Wert 10)
 item_titan_heart#Herz des Titanen
 item_titan_heart_desc#Erhöht die maximalen TP
 item_elven_cookie#Elfenkeks
-item_elven_cookie_desc#Stellt das Leben wieder her und erhöht die maximalen TP
+item_elven_cookie_desc#Regeneriert und erhöht die max. TP
 item_apple#Apfel
 item_apple_desc#Stellt 3 TP wieder her
 item_bread#Brot
@@ -345,9 +345,9 @@ item_spell_dual_desc#Schießt zwei Schüsse
 item_rage_amulet#Wutamulett
 item_rage_amulet_desc#Revanchiert sich bei Kontakt
 item_vibration_gloves#Vibrationshandschuhe
-item_vibration_gloves_desc#Erhöht die Geschwindigkeit der Schüsse und vibriert
+item_vibration_gloves_desc#Erhöht die Feuerrate und vibriert
 item_staff#Mahagoni-Stab
-item_staff_desc#Erhöht die Geschwindigkeit und den Schaden der Schüsse
+item_staff_desc#Erhöht Schussgeschwindigkeit und Schaden
 item_fairy#Lilly-Fee
 item_fairy_desc#Hilft dir im Verlies
 item_leather_belt#Ledergürtel
@@ -357,7 +357,7 @@ item_blood_snake_desc#Erhöht den Schaden
 item_gem_ice#Eisjuwel
 item_gem_ice_desc#Eisangriff (einfrieren)
 item_gem_illusion#Illusionsjuwel
-item_gem_illusion_desc#Illusionsangriff (ignoriert Wände und Rüstungen)
+item_gem_illusion_desc#Illusionsangriff (ignoriert Wände)
 item_gem_stone#Steinjuwel
 item_gem_stone_desc#Steinangriff (rückstoßen)
 item_gem_lightning#Blitzjuwel

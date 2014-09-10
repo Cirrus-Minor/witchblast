@@ -1120,6 +1120,8 @@ void WitchBlastGame::renderMenu()
   else if (menuState == MenuStateFirst)
     menu = &menuFirst;
 
+  int xAlign = 290;
+
   if (menuState == MenuStateKeys)
   {
     // menu background
@@ -1130,9 +1132,9 @@ void WitchBlastGame::renderMenu()
 
     // menu keys
     if (config.configFileExists())
-      write(tools::getLabel("key_configuration"), 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration"), 18, xAlign, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
     else
-      write(tools::getLabel("key_configuration_desc"), 18, 300, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration_desc"), 18, xAlign, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -1142,7 +1144,7 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menuKeyIndex == i) oss << tools::getLabel("key_configuration_insert");
       else if (menuKeyIndex > i) oss << tools::getLabel("key_configuration_done");
-      write(oss.str(), 16, 300, 285 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, xAlign, 285 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
   else
@@ -1169,15 +1171,15 @@ void WitchBlastGame::renderMenu()
         label = oss.str();
       }
 
-      write(label, 24, 300, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu->items[i].description, 15, 300, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(label, 23, xAlign, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(menu->items[i].description, 15, xAlign, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
     }
 
     // Keys
     if (menuState == MenuStateFirst)
     {
       // displaying the standard key configuration
-      int xKeys = 280;
+      int xKeys = 270;
       int yKeys = 380;
       sf::Sprite keysSprite;
       if (parameters.language == 1) // french
