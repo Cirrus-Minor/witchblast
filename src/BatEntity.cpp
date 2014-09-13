@@ -18,12 +18,13 @@ BatEntity::BatEntity(float x, float y, bool invocated)
   type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
   changingDelay = -0.5f;
-  shadowFrame = 3;
+  shadowFrame = 9;
   movingStyle = movFlying;
 
-  dyingFrame = 2;
+  dyingFrame = 8;
   deathFrame = FRAME_CORPSE_BAT;
   agonizingSound = SOUND_BAT_DYING;
+  sprite.setOrigin(32.0f, 20.0f);
 
   enemyType = invocated ? EnemyTypeBat_invocated : EnemyTypeBat;
 }
@@ -35,41 +36,60 @@ void BatEntity::animate(float delay)
   {
     velocity = Vector2D(creatureSpeed);
     changingDelay = 0.5f + (float)(rand() % 2500) / 1000.0f;
+    computeFacingDirection();
   }
+
   if (age < 0.0f)
     frame = 1;
   else
-    frame = ((int)(age * 5.0f)) % 2;
+  {
+    switch (facingDirection)
+    {
+      case 2: frame = 0; break;
+      case 4: frame = 2; break;
+      case 6: frame = 4; break;
+      case 8: frame = 6; break;
+    }
+    frame += ((int)(age * 5.0f)) % 2;
+  }
 
   EnemyEntity::animate(delay);
 }
 
 void BatEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + BAT_BB_LEFT;
-    boundingBox.width = width - BAT_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + BAT_BB_TOP;
-    boundingBox.height =  height - BAT_BB_HEIGHT_DIFF;
+    boundingBox.left = (int)x - 12;
+    boundingBox.width = 24;
+    boundingBox.top = (int)y - 11;
+    boundingBox.height =  22;
 }
 
 void BatEntity::collideMapRight()
 {
     velocity.x = -velocity.x;
+    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  else computeFacingDirection();
 }
 
 void BatEntity::collideMapLeft()
 {
     velocity.x = -velocity.x;
+    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  else computeFacingDirection();
 }
 
 void BatEntity::collideMapTop()
 {
     velocity.y = -velocity.y;
+    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  else computeFacingDirection();
 }
 
 void BatEntity::collideMapBottom()
 {
     velocity.y = -velocity.y;
+    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  else computeFacingDirection();
 }
 
 void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
@@ -78,6 +98,7 @@ void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
   if (entity->getMovingStyle() == movFlying)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), BAT_SPEED ));
+    computeFacingDirection();
   }
 }
 
