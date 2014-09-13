@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.3.3";
+const std::string APP_VERSION =   "0.3.4";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
@@ -91,6 +91,7 @@ enum item_images {
   IMAGE_BUBBLE,
   IMAGE_WITCH,
   IMAGE_CAULDRON,
+  IMAGE_SNAKE,
 
   IMAGE_BUTCHER,
   IMAGE_GIANT_SLIME,
@@ -199,6 +200,7 @@ enum corpses_ressources{
   FRAME_CORPSE_WITCH,
   FRAME_CORPSE_WITCH_RED,
   FRAME_CORPSE_CAULDRON,
+  FRAME_CORPSE_SNAKE,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -213,6 +215,7 @@ const int INITIAL_PLAYER_HP = 20;
 const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
 const float ACQUIRE_DELAY = 2.8f;
 const float UNLOCK_DELAY = 1.0f;
+const float INVINCIBLE_DELAY = 1.5f;
 
 const float INITIAL_BOLT_LIFE = 0.45f;
 const int INITIAL_BOLT_DAMAGES = 8;
@@ -248,7 +251,10 @@ enum enumShotType {
   ShotTypeStone,
   ShotTypeLightning,
   ShotTypeFire,
-  ShotTypeBomb
+  ShotTypePoison,
+  ShotTypeBomb,
+
+  ShotTypeDeterministic
   };
 
 // special shots effects

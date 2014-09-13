@@ -39,6 +39,7 @@
 #include "ItemEntity.h"
 #include "WitchEntity.h"
 #include "CauldronEntity.h"
+#include "SnakeEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -91,6 +92,7 @@ WitchBlastGame::WitchBlastGame():
   ImageManager::getImageManager()->addImage("media/bubble.png");
   ImageManager::getImageManager()->addImage("media/witch.png");
   ImageManager::getImageManager()->addImage("media/cauldron.png");
+  ImageManager::getImageManager()->addImage("media/snake.png");
 
   ImageManager::getImageManager()->addImage("media/butcher.png");
   ImageManager::getImageManager()->addImage("media/giant_slime.png");
@@ -446,6 +448,11 @@ void WitchBlastGame::updateRunningGame()
         if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
       }
 
+      if (event.key.code == input[KeySpell])
+      {
+        if (gameState == gameStatePlaying && !isPausing) player->castSpell();
+      }
+
       if (event.key.code == input[KeyFire])
       {
         if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
@@ -788,9 +795,15 @@ void WitchBlastGame::renderDeathScreen()
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
           break;
 
+        case EnemyTypeSnake:
+          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SNAKE));
+          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 54));
+          dy = 2;
+          break;
+
         case EnemyTypeSlime:
           monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 54));
+          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 44));
           break;
 
         case EnemyTypeSlimeRed:
@@ -1144,7 +1157,7 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menuKeyIndex == i) oss << tools::getLabel("key_configuration_insert");
       else if (menuKeyIndex > i) oss << tools::getLabel("key_configuration_done");
-      write(oss.str(), 16, xAlign, 285 + i * 32, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, xAlign, 285 + i * 28, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
   else
@@ -1796,6 +1809,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeBat:
     new BatEntity(xm, ym, false);
     break;
+  case EnemyTypeSnake:
+    new SnakeEntity(xm, ym, SnakeEntity::SnakeTypeNormal, false);
+    break;
   case EnemyTypeEvilFlower:
     new EvilFlowerEntity(xm, ym - 2);
     break;
@@ -2370,6 +2386,7 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["keyboard_fire_down"] = intToString(input[KeyFireDown]);
   newMap["keyboard_fire_left"] = intToString(input[KeyFireLeft]);
   newMap["keyboard_fire_right"] = intToString(input[KeyFireRight]);
+  newMap["keyboard_spell"] = intToString(input[KeySpell]);
   newMap["keyboard_fire"] = intToString(input[KeyFire]);
   newMap["keyboard_time_control"] = intToString(input[KeyTimeControl]);
   newMap["keyboard_fire_select"] = intToString(input[KeyFireSelect]);
@@ -2391,6 +2408,7 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireLeft]  = sf::Keyboard::Left;
   input[KeyFireRight] = sf::Keyboard::Right;
   input[KeyFire] = sf::Keyboard::Space;
+  input[KeySpell] = sf::Keyboard::Q;
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
 
@@ -2404,6 +2422,7 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireLeft, "keyboard_fire_left");
   addKey(KeyFireRight, "keyboard_fire_right");
   addKey(KeyFire, "keyboard_fire");
+  addKey(KeyFire, "keyboard_spell");
   addKey(KeyTimeControl, "keyboard_time_control");
   addKey(KeyFireSelect, "keyboard_fire_select");
 
@@ -2555,12 +2574,14 @@ void WitchBlastGame::registerLanguage()
     // french keyboard
     input[KeyUp]    = sf::Keyboard::Z;
     input[KeyLeft]  = sf::Keyboard::Q;
+    input[KeySpell]  = sf::Keyboard::A;
   }
   else
   {
     // QWERT / QWERTZ keyboard
     input[KeyUp]    = sf::Keyboard::W;
     input[KeyLeft]  = sf::Keyboard::A;
+    input[KeySpell]  = sf::Keyboard::Q;
   }
 
   input[KeyDown]  = sf::Keyboard::S;
