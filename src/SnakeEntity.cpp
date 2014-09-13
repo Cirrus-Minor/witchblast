@@ -21,14 +21,14 @@ SnakeEntity::SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocat
     deathFrame = FRAME_CORPSE_SNAKE;
     if (invocated) enemyType = EnemyTypeSnake_invocated;
     else enemyType = EnemyTypeSnake;
-    hp = RAT_HP;
-    creatureSpeed = RAT_SPEED * 0.7f;
+    hp = SNAKE_HP;
+    creatureSpeed = SNAKE_SPEED;
   }
 
   velocity = Vector2D(creatureSpeed);
   computeFacingDirection();
 
-  meleeDamages = 2;
+  meleeDamages = SNAKE_DAMAGE;
   meleeType = ShotTypePoison;
 
   type = ENTITY_ENNEMY;

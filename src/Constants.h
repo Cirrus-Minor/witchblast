@@ -346,6 +346,11 @@ const int EVIL_FLOWER_BB_HEIGHT_DIFF = 22;
 const float EVIL_FLOWER_FIRE_DELAY = 2.7f;
 const float EVIL_FLOWER_FIRE_VELOCITY = 220.0f;
 
+// Snake
+const float SNAKE_SPEED = 120.0f;
+const int SNAKE_HP = 16;
+const int SNAKE_DAMAGE = 5;
+
 // Slime
 const int SLIME_HP = 16;
 const int SLIME_DAMAGES = 5;
