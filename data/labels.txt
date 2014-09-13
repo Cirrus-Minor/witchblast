@@ -24,6 +24,7 @@ key_fire_right#fire right
 key_fire_select#fire select
 key_time#time control
 key_fire#fire (one button)
+key_spell#cast a spell
 configure_game#Configuration
 configure_game_desc#Changes game options
 config_back#Back
@@ -154,6 +155,7 @@ key_fire_right#Tir droite
 key_fire_select#Sélecteur de tir
 key_time#Accélerer le temps
 key_fire#Tir (un bouton)
+key_spell#Lancer un sort
 configure_game#Configuration
 configure_game_desc#Modifier les options
 config_back#Retour
@@ -284,6 +286,7 @@ key_fire_right#Schieße rechts
 key_fire_select#Schieße Auswahl
 key_time#Zeitsteuerung
 key_fire#Schießen (ein Knopf)
+key_spell#Verzaubern
 configure_game#Optionen
 configure_game_desc#Ändere die Spieloptionen
 config_back#Zurück
