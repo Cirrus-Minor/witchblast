@@ -24,6 +24,8 @@ EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   isAgonising = false;
 
   enemyType = NB_ENEMY;
+  meleeLevel = 0;
+  meleeType = ShotTypeStandard;
 }
 
 enemyTypeEnum EnemyEntity::getEnemyType()
@@ -113,7 +115,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(meleeDamages, ShotTypeStandard, 0, false))
+        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false))
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;

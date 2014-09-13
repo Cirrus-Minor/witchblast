@@ -217,7 +217,7 @@ void CyclopsEntity::animate(float delay)
   }
 
   // special states
-  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
+  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].param1;
 
   // IA
   computeStates(delay);

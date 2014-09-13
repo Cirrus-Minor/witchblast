@@ -13,6 +13,7 @@ enum enemyTypeEnum
   EnemyTypeRatHelmet,
   EnemyTypeRatBlackHelmet,
   EnemyTypeEvilFlower,
+  EnemyTypeSnake,
   EnemyTypeSlime,
   EnemyTypeSlimeRed,
   EnemyTypeSlimeBlue,
@@ -38,6 +39,7 @@ enum enemyTypeEnum
   EnemyTypeRat_invocated,
   EnemyTypeRatGreen,
   EnemyTypeRatHelmet_invocated,
+  EnemyTypeSnake_invocated,
   EnemyTypeRockFalling,
   EnemyTypeRockMissile,
   EnemyTypeSlime_invocated,
@@ -78,6 +80,8 @@ protected:
   int getCollisionDirection(BoltEntity* boltEntity);
 
   int meleeDamages;
+  int meleeLevel;
+  enumShotType meleeType;
 
   float h;
   float hVelocity;

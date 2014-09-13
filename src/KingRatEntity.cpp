@@ -79,7 +79,7 @@ void KingRatEntity::animate(float delay)
   }
 
   EnemyEntity::animate(delay);
-  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
+  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].param1;
 
   float timerMult = 1.0f;
   if (hp <= hpMax / 4)

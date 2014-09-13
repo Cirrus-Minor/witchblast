@@ -144,7 +144,7 @@ void GiantSlimeEntity::animate(float delay)
     return;
   }
   EnemyEntity::animate(delay);
-  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
+  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].param1;
 
   timer -= delay;
   if (timer <= 0.0f)

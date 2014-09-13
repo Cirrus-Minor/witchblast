@@ -23,7 +23,8 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
     specialState[i].type = (enumSpecialState)i;
     specialState[i].active = false;
     specialState[i].timer = 0.0f;
-    specialState[i].parameter = 0.0f;
+    specialState[i].param1 = 0.0f;
+    specialState[i].param2 = 0.0f;
   }
   for (int i = 0; i < NB_RESISTANCES; i++)
   {
@@ -80,11 +81,12 @@ bool BaseCreatureEntity::isSpecialStateActive(enumSpecialState state)
   return specialState[state].active;
 }
 
-void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float parameter)
+void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
 {
   specialState[state].active = active;
   specialState[state].timer = timer;
-  specialState[state].parameter = parameter;
+  specialState[state].param1 = param1;
+  specialState[state].param2 = param2;
 }
 
 float BaseCreatureEntity::animateStates(float delay)
@@ -97,7 +99,21 @@ float BaseCreatureEntity::animateStates(float delay)
       if (specialState[i].timer <= 0.0f) specialState[i].active = false;
     }
   }
-  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].parameter;
+  // ice
+  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].param1;
+
+  // poison
+  if (specialState[SpecialStatePoison].active)
+  {
+    std::cout << "poison\n";
+    specialState[SpecialStatePoison].param3 -= delay;
+    if (specialState[SpecialStatePoison].param3 <= 0.0f)
+    {
+      specialState[SpecialStatePoison].param3 += specialState[SpecialStatePoison].param2;
+      hurt(specialState[SpecialStatePoison].param1, ShotTypeDeterministic, 0, false);
+    }
+  }
+
   return delay;
 }
 
@@ -155,8 +171,8 @@ void BaseCreatureEntity::animatePhysics(float delay)
 
 	if (specialState[SpecialStateSlow].active)
   {
-    velx *= specialState[SpecialStateSlow].parameter;
-    vely *= specialState[SpecialStateSlow].parameter;
+    velx *= specialState[SpecialStateSlow].param1;
+    vely *= specialState[SpecialStateSlow].param1;
   }
 
 	if (recoil.active)
@@ -410,7 +426,16 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
       }
     }
     specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level] * frozenDelayMult;
-    specialState[SpecialStateIce].parameter = STATUS_FROZEN_MULT[level] + frozenMultAdd;
+    specialState[SpecialStateIce].param1 = STATUS_FROZEN_MULT[level] + frozenMultAdd;
+  }
+  else if (hurtingType == ShotTypePoison
+      /*&& determineSatusChance(resistance[ResistanceFrozen], level)*/)
+  {
+    specialState[SpecialStatePoison].active = true;
+    specialState[SpecialStatePoison].timer = 10.5f;
+    specialState[SpecialStatePoison].param1 = 1.0f;
+    specialState[SpecialStatePoison].param2 = 2.0f;
+    specialState[SpecialStatePoison].param3 = 2.0f;
   }
 
   // damages bonus
@@ -424,6 +449,8 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
     damages += (damages * determineDamageBonus(resistance[ResistanceStone], level)) / 100;
   else if (hurtingType == ShotTypeIllusion)
     damages += (damages * determineDamageBonus(resistance[ResistanceIllusion], level)) / 100;
+  else if (hurtingType == ShotTypePoison)
+    damages += (damages * determineDamageBonus(resistance[ResistancePoison], level)) / 100;
 
   if (damages > 0)
   {

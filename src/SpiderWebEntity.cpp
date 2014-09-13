@@ -118,7 +118,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       {
         if (!playerEntity->isSpecialStateActive(SpecialStateSlow))
         {
-          playerEntity->setSpecialState(SpecialStateSlow, true, 0.1f, 0.33f);
+          playerEntity->setSpecialState(SpecialStateSlow, true, 0.1f, 0.33f, 0.0f);
           hurt(2, ShotTypeStandard, 0, false);
         }
       }

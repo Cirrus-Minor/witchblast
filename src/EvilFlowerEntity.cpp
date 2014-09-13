@@ -29,7 +29,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y)
 void EvilFlowerEntity::animate(float delay)
 {
   float flowerDelay = delay;
-  if (specialState[SpecialStateIce].active) flowerDelay = delay * specialState[SpecialStateIce].parameter;
+  if (specialState[SpecialStateIce].active) flowerDelay = delay * specialState[SpecialStateIce].param1;
 
   if (fireDelay < 0.7f) setSpin(500.0f);
   else if (fireDelay < 1.4f) setSpin(120.0f);

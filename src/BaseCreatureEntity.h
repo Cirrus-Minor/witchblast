@@ -36,6 +36,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     {
       SpecialStateIce, // = 0
       SpecialStateSlow,
+      SpecialStatePoison,
 
       NB_SPECIAL_STATES
     };
@@ -45,10 +46,12 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       enumSpecialState type;
       bool active;
       float timer;
-      float parameter;
+      float param1;
+      float param2;
+      float param3;
     };
     specialStateStuct specialState[NB_SPECIAL_STATES];
-    void setSpecialState(enumSpecialState state, bool active, float timer, float parameter);
+    void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2);
 
     enum enumResistances
     {
@@ -57,6 +60,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       ResistanceStone,
       ResistanceLightning,
       ResistanceIllusion,
+      ResistancePoison,
 
       ResistanceRecoil,
       ResistanceFrozen,
