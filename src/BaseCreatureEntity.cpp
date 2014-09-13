@@ -105,7 +105,6 @@ float BaseCreatureEntity::animateStates(float delay)
   // poison
   if (specialState[SpecialStatePoison].active)
   {
-    std::cout << "poison\n";
     specialState[SpecialStatePoison].param3 -= delay;
     if (specialState[SpecialStatePoison].param3 <= 0.0f)
     {
