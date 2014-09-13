@@ -29,7 +29,7 @@ const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
 const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
 
-unsigned const int NumberKeys = 11;
+unsigned const int NumberKeys = 12;
 const std::string inputKeyString[NumberKeys] =
 {
   "key_move_up",
@@ -41,6 +41,7 @@ const std::string inputKeyString[NumberKeys] =
   "key_fire_left",
   "key_fire_right",
   "key_fire_select",
+  "key_spell",
   "key_time",
   "key_fire"
 };
@@ -360,6 +361,7 @@ private:
     KeyFireLeft,
     KeyFireRight,
     KeyFireSelect,
+    KeySpell,
     KeyTimeControl,
     KeyFire
   };
