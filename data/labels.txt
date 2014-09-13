@@ -47,6 +47,7 @@ congratulations_2#You've challenged this demo and kill the bosses !
 congratulations_3#See you soon for new adventures !
 by#by
 critical#CRITICAL X2
+poison#POISON
 
 merchant_speech_0#Best price in the entire dungeon!
 merchant_speech_1#Welcome to the Pawn'n'Witches shop!
@@ -178,6 +179,7 @@ congratulations_2#Vous êtes brillament arrivé au terme de cette démo !
 congratulations_3#A bientôt pour de nouvelles aventures !
 by#par
 critical#CRITIQUE X2
+poison#POISON
 
 merchant_speech_0#Les meilleurs affaires du donjon !
 merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
@@ -310,6 +312,7 @@ congratulations_2#Du hast dich der Demo Version gestellt und die Bosse getötet !
 congratulations_3#Bis bald für neue Abenteuer !
 by#von
 critical#KRITISCH X2
+poison#GIFT
 
 merchant_speech_0#Bester Preis im gesamten Verlies!
 merchant_speech_1#Willkommen im Pawn'n'Witches Shop!

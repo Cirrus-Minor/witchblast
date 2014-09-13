@@ -491,6 +491,18 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
       textCrit->setType(ENTITY_FLYING_TEXT);
     }
 
+    if (hurtingType == ShotTypePoison)
+    {
+      TextEntity* textCrit = new TextEntity(tools::getLabel("poison"), 16, x, text->getY() - 16.0f);
+      textCrit->setColor(TextEntity::COLOR_FADING_RED);
+      textCrit->setAge(-0.6f);
+      textCrit->setLifetime(0.3f);
+      textCrit->setWeight(-60.0f);
+      textCrit->setZ(2000);
+      textCrit->setAlignment(ALIGN_CENTER);
+      textCrit->setType(ENTITY_FLYING_TEXT);
+    }
+
     if (critical) SoundManager::getSoundManager()->playSound(SOUND_CRITICAL);
 
     return true;
