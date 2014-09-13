@@ -16,6 +16,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   : BaseCreatureEntity (ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
 {
   currentFireDelay = -1.0f;
+  invincibleDelay = -1.0f;
   canFirePlayer = true;
   type = ENTITY_PLAYER;
 
@@ -51,6 +52,8 @@ PlayerEntity::PlayerEntity(float x, float y)
   facingDirection = 2;
 
   sprite.setOrigin(40, 104);
+
+  activeSpell.delay = -1.0f;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -199,6 +202,11 @@ void PlayerEntity::animate(float delay)
     currentFireDelay -= delay;
     canFirePlayer = (currentFireDelay <= 0.0f);
   }
+  // spelss
+  if (activeSpell.delay > 0.0f)
+  {
+    activeSpell.delay -= delay;
+  }
   // acquisition animation
   if (playerStatus == playerStatusAcquire)
   {
@@ -273,7 +281,9 @@ void PlayerEntity::animate(float delay)
   else
   {
     z = y + 13;
+    if (invincibleDelay >= 0.0f) invincibleDelay -= delay;
   }
+
 }
 
 void PlayerEntity::renderHead(sf::RenderTarget* app)
@@ -844,17 +854,25 @@ bool PlayerEntity::canMove()
 
 bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
 {
-  if (!hurting)
+  if (playerStatus == playerStatusDead) return false;
+
+  if (invincibleDelay <= 0.0f || hurtingType == ShotTypeDeterministic)
   {
     SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
-    BaseCreatureEntity::hurt(damages, hurtingType, level, critical);
-    hurtingDelay = HURTING_DELAY * 2.0f;
-    game().generateBlood(x, y, bloodColor);
-    game().generateBlood(x, y, bloodColor);
+    if (BaseCreatureEntity::hurt(damages, hurtingType, level, critical))
+    {
+      if (hurtingType != ShotTypeDeterministic)
+      {
+        invincibleDelay = INVINCIBLE_DELAY;
+        if (equip[EQUIP_CONCENTRATION_AMULET]) rageFire();
+        game().generateBlood(x, y, bloodColor);
+      }
 
-    if (equip[EQUIP_CONCENTRATION_AMULET]) rageFire();
+      hurtingDelay = HURTING_DELAY * 2.0f;
+      game().generateBlood(x, y, bloodColor);
 
-    return true;
+      return true;
+    }
   }
   return false;
 }
@@ -1216,4 +1234,15 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
     return (nbAdvanced >= SPECIAL_SHOT_SLOTS_ADVANCED);
   else
     return (nbSpecial >= SPECIAL_SHOT_SLOTS_STANDARD);
+}
+
+void PlayerEntity::castSpell()
+{
+  // todo type, etc...
+  if (playerStatus == playerStatusDead) return;
+
+  if (activeSpell.delay <= 0.0f)
+  {
+    // test spell
+  }
 }

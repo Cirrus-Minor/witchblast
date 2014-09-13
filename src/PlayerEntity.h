@@ -363,8 +363,6 @@ class PlayerEntity : public BaseCreatureEntity
     /*!
      *  \brief accessor on current shot type of a slot
      *
-     *  Accessor on the current shot type of a slot.
-     *
      *  \param slot : The slot number
      *  \return : the current shot type
      */
@@ -398,9 +396,30 @@ class PlayerEntity : public BaseCreatureEntity
      */
     FairyEntity* getFairy(unsigned int n);
 
+    /*!
+     *  \brief checks if the player can get a new shot type
+     *
+     *  \param advancedShot : true if the shot type is "advanced"
+     *  \return : true if there is a free slot
+     */
     bool canGetNewShot(bool advancedShot);
 
+    /*!
+     *  \brief returns time since player's death
+     *
+     *  \return : time since player's death (in seconds)
+     */
     float getDeathAge();
+
+    /*!
+     *  \brief casts a spell (if possible)
+     */
+    void castSpell();
+
+    struct castStruct
+    {
+      float delay;
+    } activeSpell;
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
@@ -420,6 +439,7 @@ class PlayerEntity : public BaseCreatureEntity
     float boltLifeTime;
     int gold;
     int criticalChance;
+    float invincibleDelay;
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
