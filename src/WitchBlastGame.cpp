@@ -606,7 +606,10 @@ void WitchBlastGame::renderRunningGame()
   if (gameState == gameStatePlaying)
   {
     // life
-    rectangle.setFillColor(sf::Color(190, 20, 20));
+    if (player->isPoisoned())
+      rectangle.setFillColor(sf::Color(20, 190, 20));
+    else
+      rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setPosition(sf::Vector2f(90, 622));
     rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 25));
     app->draw(rectangle);

@@ -83,6 +83,11 @@ float PlayerEntity::getPercentFireDelay()
   else return (1.0f - currentFireDelay / fireDelay);
 }
 
+bool PlayerEntity::isPoisoned()
+{
+  return (specialState[SpecialStatePoison].active);
+}
+
 int PlayerEntity::getCollidingDirection()
 {
   return collidingDirection;

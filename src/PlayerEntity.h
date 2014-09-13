@@ -121,6 +121,13 @@ class PlayerEntity : public BaseCreatureEntity
      */
     bool isEquiped(int eq);
 
+/*!
+     *  \brief returns if the player is poisoned or not
+     *
+     *  \return : True if the player is poisoned
+     */
+    bool isPoisoned();
+
     /*!
      *  \brief updates the equipment of the player
      *
