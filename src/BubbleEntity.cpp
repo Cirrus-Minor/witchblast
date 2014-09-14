@@ -152,28 +152,7 @@ void BubbleEntity::dying()
     // the last one should drop
     if (game().getEnnemyCount() == 1)
     {
-      SoundManager::getSoundManager()->playSound(SOUND_GONG);
-
-      ItemEntity* newItem = new ItemEntity(ItemBonusHealth, x, y);
-      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-      newItem->setViscosity(0.96f);
-
-      int gold = 2 + rand() % 9;
-      for (int i = 0; i < gold; i++)
-      {
-        ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
-        newItem->setVelocity(Vector2D(90.0f + rand()% 150));
-        newItem->setViscosity(0.96f);
-      }
-
-      float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
-      float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
-      TextEntity* text = new TextEntity("COMPLETE !", 30, x0, y0);
-      text->setAlignment(ALIGN_CENTER);
-      text->setLifetime(2.5f);
-      text->setWeight(-36.0f);
-      text->setZ(1000);
-      text->setColor(TextEntity::COLOR_FADING_WHITE);
+      game().generateChallengeBonus(x, y);
     }
   }
 

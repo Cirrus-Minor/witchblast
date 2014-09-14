@@ -129,6 +129,8 @@ item_ring_fire#Ruby Ring
 item_ring_fire_desc#Increases fire power
 item_manual_staff#Staff's Manual
 item_manual_staff_desc#Increases fire range
+item_spell_teleport#Spell: Teleport
+item_spell_teleport_desc#Cast to teleport within the room
 
 spell_teleport#teleport
 [french]
@@ -246,7 +248,7 @@ item_ring_lightning#Anneau d'opale
 item_ring_lightning_desc#Augmente le pouvoir de foudre
 item_ring_illusion#Anneau de quartz
 item_ring_illusion_desc#Augmente le pouvoir d'illusion
-item_spell_triple#Spell : Triple-tir
+item_spell_triple#Manuel de Triple-tir
 item_spell_triple_desc#Tire trois projectiles
 item_brooch_star#Broche d'étoile
 item_brooch_star_desc#Chance de dégâts critiques (x2)
@@ -262,6 +264,8 @@ item_ring_fire#Anneau de rubis
 item_ring_fire_desc#Augmente le pouvoir de feu
 item_manual_staff#Manuel du bâton
 item_manual_staff_desc#Augmente la portée
+item_spell_teleport#Sort : Téléportation
+item_spell_teleport_desc#Permet de se téléporter dans la pièce
 
 spell_teleport#téléportation
 [german]
@@ -396,5 +400,7 @@ item_ring_fire#Rubin Ring
 item_ring_fire_desc#Erhöht die Feuerkraft
 item_manual_staff#Handbuch des Zauberstabes
 item_manual_staff_desc#Erhöht die Reichweite
+item_spell_teleport#Spell: Teleport
+item_spell_teleport_desc#Cast to teleport within the room
 
 spell_teleport#Teleportation

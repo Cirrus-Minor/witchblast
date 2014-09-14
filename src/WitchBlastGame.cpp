@@ -958,8 +958,7 @@ void WitchBlastGame::switchToMenu()
 
   if (!config.configFileExists())
   {
-    // TODO Language selection
-    menuState = MenuStateFirst; //MenuStateKeys;
+    menuState = MenuStateFirst;
     menuFirst.index = 0;
     menuKeyIndex = 0;
   }
@@ -1959,6 +1958,44 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
   return (item_equip_enum) bonusType;
 }
 
+void WitchBlastGame::generateChallengeBonus(float x, float y)
+{
+  // loot
+  if (player->getActiveSpell() == SpellNone)
+  {
+    ItemEntity* newItem = new ItemEntity(ItemSpellTeleport, x, y);
+    newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+    newItem->setViscosity(0.96f);
+  }
+  else
+  {
+    ItemEntity* newItem = new ItemEntity(ItemBonusHealth, x, y);
+    newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+    newItem->setViscosity(0.96f);
+
+    int gold = 2 + rand() % 9;
+    for (int i = 0; i < gold; i++)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
+      newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+      newItem->setViscosity(0.96f);
+    }
+  }
+
+  // sound
+    SoundManager::getSoundManager()->playSound(SOUND_GONG);
+
+  // text
+  float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
+  float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
+  TextEntity* text = new TextEntity("COMPLETE !", 30, x0, y0);
+  text->setAlignment(ALIGN_CENTER);
+  text->setLifetime(2.5f);
+  text->setWeight(-36.0f);
+  text->setZ(1000);
+  text->setColor(TextEntity::COLOR_FADING_WHITE);
+}
+
 void WitchBlastGame::verifyDoorUnlocking()
 {
   int collidingDirection = (player->getCollidingDirection());
@@ -2170,8 +2207,8 @@ void WitchBlastGame::saveGame()
     file << std::endl;
     file << player->getX() << " " << player->getY() << std::endl;
     file << player->getShotIndex();
-    for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i);
-
+    for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
+    file << player->getActiveSpell();
     file.close();
   }
   else
@@ -2314,6 +2351,9 @@ bool WitchBlastGame::loadGame()
       file >> n;
       player->setShotType(i, (enumShotType)n);
     }
+
+    file >> n;
+    player->setActiveSpell((enumCastSpell)n);
 
     player->computePlayer();
     file.close();

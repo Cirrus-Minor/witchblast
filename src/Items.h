@@ -80,6 +80,7 @@ enum enumItemType
   ItemGemFire,
   ItemRingFire,
   ItemManualStaff,
+  ItemSpellTeleport,
 
   NUMBER_ITEMS
 };
@@ -250,6 +251,10 @@ const itemStuct items[NUMBER_ITEMS] =
   {
     ItemManualStaff, "item_manual_staff", "item_manual_staff_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+  },
+  {
+    ItemSpellTeleport, "item_spell_teleport", "item_spell_teleport_desc",
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
   }
 };
 
@@ -284,6 +289,7 @@ enum item_equip_enum {
   EQUIP_GEM_FIRE,
   EQUIP_RING_FIRE,
   EQUIP_MANUAL_STAFF,
+  EQUIP_SPELL_TELEPORT,
 
   NUMBER_EQUIP_ITEMS
   };

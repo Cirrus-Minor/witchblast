@@ -234,6 +234,14 @@ public:
    */
   item_equip_enum getRandomEquipItem(bool toSale, bool noFairy);
 
+  /*!
+   *  \brief Generate a random challenge loot
+   *
+   *  \param x : x position of the bonus
+   *  \param y : y position of the bonus
+   */
+  void generateChallengeBonus(float x, float y);
+
     /*!
    *  \brief Adds monsters
    *

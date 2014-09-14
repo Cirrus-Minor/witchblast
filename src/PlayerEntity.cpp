@@ -55,11 +55,6 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   activeSpell.delay = -1.0f;
   activeSpell.spell = SpellNone;
-
-  // TEST
-  //activeSpell.spell = SpellTeleport;
-  //activeSpell.delayMax = 6.0f;
-  //activeSpell.delay = 0.0f;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -160,6 +155,10 @@ void PlayerEntity::acquireItemAfterStance()
 
     if (items[acquiredItem].specialShot != (ShotTypeStandard))
       registerSpecialShot(acquiredItem);
+
+    // spells
+    if (acquiredItem == ItemSpellTeleport)
+      setActiveSpell(SpellTeleport);
 
     computePlayer();
   }
@@ -1266,14 +1265,25 @@ enumCastSpell PlayerEntity::getActiveSpell()
   return activeSpell.spell;
 }
 
+void PlayerEntity::setActiveSpell(enumCastSpell spell)
+{
+  activeSpell.spell = spell;
+
+  switch (spell)
+  {
+  case SpellTeleport: activeSpell.delayMax = 20.0f; break;
+
+  case SpellNone: break;
+  }
+  activeSpell.delay = activeSpell.delayMax;
+}
+
 void PlayerEntity::castSpell()
 {
-  // todo type, etc...
   if (playerStatus == playerStatusDead) return;
 
   if (activeSpell.spell != SpellNone && activeSpell.delay <= 0.0f)
   {
-    // test spell
     activeSpell.delay = activeSpell.delayMax;
 
     switch (activeSpell.spell)
@@ -1291,7 +1301,7 @@ void PlayerEntity::teleport()
   bool ok = false;
   int xm, ym;
   float xNew = x, yNew = y;
-  invincibleDelay = 2.5f;
+  invincibleDelay = 2.0f;
 
   for(int i=0; i < 6; i++)
   {

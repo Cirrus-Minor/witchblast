@@ -430,6 +430,7 @@ class PlayerEntity : public BaseCreatureEntity
       float delayMax;
     };
 
+    void setActiveSpell(enumCastSpell spell);
     enumCastSpell getActiveSpell();
     float getPercentSpellDelay();
     void teleport();
