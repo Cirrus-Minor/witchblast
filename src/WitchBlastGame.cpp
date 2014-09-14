@@ -629,12 +629,12 @@ void WitchBlastGame::renderRunningGame()
     // mana
     rectangle.setFillColor(sf::Color(20, 20, 190));
     rectangle.setPosition(sf::Vector2f(90, 658));
-    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentFireDelay() , 25));
+    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 25));
     app->draw(rectangle);
 
     rectangle.setFillColor(sf::Color(190, 190, 255));
     rectangle.setPosition(sf::Vector2f(90, 661));
-    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentFireDelay() , 2));
+    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 2));
     app->draw(rectangle);
 
     // drawing the key on the interface
@@ -2425,7 +2425,7 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireLeft, "keyboard_fire_left");
   addKey(KeyFireRight, "keyboard_fire_right");
   addKey(KeyFire, "keyboard_fire");
-  addKey(KeyFire, "keyboard_spell");
+  addKey(KeySpell, "keyboard_spell");
   addKey(KeyTimeControl, "keyboard_time_control");
   addKey(KeyFireSelect, "keyboard_fire_select");
 
