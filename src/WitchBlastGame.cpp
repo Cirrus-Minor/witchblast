@@ -597,9 +597,7 @@ void WitchBlastGame::renderRunningGame()
 
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  myText.setString(oss.str());
-  myText.setPosition(410, 692);
-  app->draw(myText);
+  write(oss.str(), 16, 410, 692, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
 
   sf::RectangleShape rectangle(sf::Vector2f(200, 25));
 
@@ -621,10 +619,7 @@ void WitchBlastGame::renderRunningGame()
 
     oss.str("");
     oss << player->getHp() << "/" << player->getHpMax();
-    myText.setString(oss.str());
-    myText.setPosition(95, 624);
-    myText.setColor(sf::Color(255, 255,255, 255));
-    app->draw(myText);
+    write(oss.str(), 18, 95, 624, ALIGN_LEFT, sf::Color::White, app, 0, 0);
 
     // mana
     rectangle.setFillColor(sf::Color(20, 20, 190));
@@ -636,6 +631,11 @@ void WitchBlastGame::renderRunningGame()
     rectangle.setPosition(sf::Vector2f(90, 661));
     rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 2));
     app->draw(rectangle);
+
+    if (player->getActiveSpell() != SpellNone)
+    {
+      write(tools::getLabel(spellLabel[player->getActiveSpell()]), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+    }
 
     // drawing the key on the interface
     if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);

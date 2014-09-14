@@ -54,8 +54,12 @@ PlayerEntity::PlayerEntity(float x, float y)
   sprite.setOrigin(40, 104);
 
   activeSpell.delay = -1.0f;
-
   activeSpell.spell = SpellNone;
+
+  // TEST
+  //activeSpell.spell = SpellTeleport;
+  //activeSpell.delayMax = 6.0f;
+  //activeSpell.delay = 0.0f;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -1257,6 +1261,11 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
     return (nbSpecial >= SPECIAL_SHOT_SLOTS_STANDARD);
 }
 
+enumCastSpell PlayerEntity::getActiveSpell()
+{
+  return activeSpell.spell;
+}
+
 void PlayerEntity::castSpell()
 {
   // todo type, etc...
@@ -1266,5 +1275,67 @@ void PlayerEntity::castSpell()
   {
     // test spell
     activeSpell.delay = activeSpell.delayMax;
+
+    switch (activeSpell.spell)
+    {
+      case SpellTeleport: teleport(); break;
+
+      default: break;
+    }
+
+  }
+}
+
+void PlayerEntity::teleport()
+{
+  bool ok = false;
+  int xm, ym;
+  float xNew = x, yNew = y;
+  invincibleDelay = 2.5f;
+
+  for(int i=0; i < 6; i++)
+  {
+    generateStar(sf::Color(50, 50, 255, 255));
+    generateStar(sf::Color(200, 200, 255, 255));
+  }
+
+  int counter = 50;
+  while (!ok && counter > 0)
+  {
+    counter--;
+    xm = 1 +rand() % (MAP_WIDTH - 3);
+    ym = 1 +rand() % (MAP_HEIGHT - 3);
+
+    if (game().getCurrentMap()->isWalkable(xm, ym))
+    {
+      // enemy or bolt ?
+      EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+      EntityManager::EntityList::iterator it;
+
+      bool isBad = false;
+      xNew = OFFSET_X + xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
+      yNew = OFFSET_Y + ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
+
+      for (it = entityList->begin (); !isBad && it != entityList->end ();)
+      {
+        GameEntity *e = *it;
+        it++;
+
+        if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX || e->getType() == ENTITY_ENNEMY_BOLT)
+          isBad = Vector2D(xNew, yNew).distance2(Vector2D(e->getX(), e->getY())) < 30000;
+      }
+
+      if (!isBad)
+      {
+        x = xNew;
+        y = yNew;
+      }
+    }
+  }
+
+  for(int i=0; i < 6; i++)
+  {
+    generateStar(sf::Color(50, 50, 255, 255));
+    generateStar(sf::Color(200, 200, 255, 255));
   }
 }

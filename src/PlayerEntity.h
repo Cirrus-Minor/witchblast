@@ -423,13 +423,6 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void castSpell();
 
-    enum enumCastSpell
-    {
-      SpellBlink,
-
-      SpellNone
-    };
-
     struct castSpellStruct
     {
       enumCastSpell spell;
@@ -437,7 +430,9 @@ class PlayerEntity : public BaseCreatureEntity
       float delayMax;
     };
 
+    enumCastSpell getActiveSpell();
     float getPercentSpellDelay();
+    void teleport();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);

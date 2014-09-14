@@ -277,6 +277,19 @@ const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Air resistance
 const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
     = { 1.15f, 1.3f, 1.45f };
 
+// spells
+enum enumCastSpell
+{
+  SpellTeleport,
+
+  SpellNone
+};
+
+const std::string spellLabel[SpellNone] =
+{
+  "spell_teleport"
+};
+
 // entity type
 const int ENTITY_PLAYER = 1;
 const int ENTITY_FAMILIAR = 2;

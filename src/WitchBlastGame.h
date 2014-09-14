@@ -273,8 +273,6 @@ protected:
    */
   void renderHudShots(sf::RenderTarget* app);
 
-
-
 private:
   Config config;
   float deltaTime;

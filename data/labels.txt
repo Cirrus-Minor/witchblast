@@ -130,6 +130,7 @@ item_ring_fire_desc#Increases fire power
 item_manual_staff#Staff's Manual
 item_manual_staff_desc#Increases fire range
 
+spell_teleport#teleport
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
@@ -262,6 +263,7 @@ item_ring_fire_desc#Augmente le pouvoir de feu
 item_manual_staff#Manuel du bâton
 item_manual_staff_desc#Augmente la portée
 
+spell_teleport#téléportation
 [german]
 start_new_game#Neues Spiel starten
 start_desc#Alter Speicherstand wird überschrieben !
@@ -394,3 +396,5 @@ item_ring_fire#Rubin Ring
 item_ring_fire_desc#Erhöht die Feuerkraft
 item_manual_staff#Handbuch des Zauberstabes
 item_manual_staff_desc#Erhöht die Reichweite
+
+spell_teleport#Teleportation
