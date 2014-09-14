@@ -54,6 +54,8 @@ PlayerEntity::PlayerEntity(float x, float y)
   sprite.setOrigin(40, 104);
 
   activeSpell.delay = -1.0f;
+
+  activeSpell.spell = SpellNone;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -81,6 +83,17 @@ float PlayerEntity::getPercentFireDelay()
   if (canFirePlayer) return 1.0f;
 
   else return (1.0f - currentFireDelay / fireDelay);
+}
+
+float PlayerEntity::getPercentSpellDelay()
+{
+  if (activeSpell.spell == SpellNone)
+    return getPercentFireDelay();
+  else
+  {
+    if (activeSpell.delay <= 0.0f) return 1.0f;
+    else return (1.0f - activeSpell.delay / activeSpell.delayMax);
+  }
 }
 
 bool PlayerEntity::isPoisoned()
@@ -207,10 +220,13 @@ void PlayerEntity::animate(float delay)
     currentFireDelay -= delay;
     canFirePlayer = (currentFireDelay <= 0.0f);
   }
-  // spelss
+  // spells
   if (activeSpell.delay > 0.0f)
   {
-    activeSpell.delay -= delay;
+    if (game().getCurrentMap()->isCleared())
+      activeSpell.delay -= 40 * delay;
+    else
+      activeSpell.delay -= delay;
   }
   // acquisition animation
   if (playerStatus == playerStatusAcquire)
@@ -1246,8 +1262,9 @@ void PlayerEntity::castSpell()
   // todo type, etc...
   if (playerStatus == playerStatusDead) return;
 
-  if (activeSpell.delay <= 0.0f)
+  if (activeSpell.spell != SpellNone && activeSpell.delay <= 0.0f)
   {
     // test spell
+    activeSpell.delay = activeSpell.delayMax;
   }
 }

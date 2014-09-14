@@ -423,10 +423,21 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void castSpell();
 
-    struct castStruct
+    enum enumCastSpell
     {
+      SpellBlink,
+
+      SpellNone
+    };
+
+    struct castSpellStruct
+    {
+      enumCastSpell spell;
       float delay;
-    } activeSpell;
+      float delayMax;
+    };
+
+    float getPercentSpellDelay();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
@@ -485,6 +496,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  Called when the player get a new shot, or after a switch.
      */
     void initShotType();
+    castSpellStruct activeSpell;
 };
 
 #endif // PLAYERSPRITE_H
