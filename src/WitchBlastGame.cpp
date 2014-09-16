@@ -51,6 +51,8 @@
 #include <fstream>
 #include <ctime>
 
+#include <extlib/utf8/utf8.h>
+
 static std::string intToString(int n)
 {
   std::ostringstream oss;
@@ -1780,7 +1782,9 @@ void WitchBlastGame::generateMap()
 
 void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0)
 {
-  myText.setString(str);
+  std::basic_string<sf::Uint32> utf32String;
+  utf8::utf8to32(str.begin(), str.end(), std::back_inserter(utf32String));
+  myText.setString(utf32String);
   myText.setCharacterSize(size);
 
   float xFont = x;
