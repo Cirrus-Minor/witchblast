@@ -1260,18 +1260,27 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
     return (nbSpecial >= SPECIAL_SHOT_SLOTS_STANDARD);
 }
 
-enumCastSpell PlayerEntity::getActiveSpell()
+castSpellStruct PlayerEntity::getActiveSpell()
 {
-  return activeSpell.spell;
+  return activeSpell;
 }
 
 void PlayerEntity::setActiveSpell(enumCastSpell spell)
 {
   activeSpell.spell = spell;
 
+
   switch (spell)
   {
-  case SpellTeleport: activeSpell.delayMax = 20.0f; break;
+  case SpellTeleport:
+    activeSpell.delayMax = 20.0f;
+    activeSpell.frame = ItemSpellTeleport - ItemMagicianHat;
+    break;
+
+  case SpellSlimeExplode:
+    activeSpell.delayMax = 60.0f;
+    activeSpell.frame = ItemSpellSlimeExplode - ItemMagicianHat;
+    break;
 
   case SpellNone: break;
   }
@@ -1282,7 +1291,7 @@ void PlayerEntity::castSpell()
 {
   if (playerStatus == playerStatusDead) return;
 
-  if (activeSpell.spell != SpellNone && activeSpell.delay <= 0.0f)
+  if (canCastSpell())
   {
     activeSpell.delay = activeSpell.delayMax;
 
@@ -1292,8 +1301,12 @@ void PlayerEntity::castSpell()
 
       default: break;
     }
-
   }
+}
+
+bool PlayerEntity::canCastSpell()
+{
+  return activeSpell.spell != SpellNone && activeSpell.delay <= 0.0f;
 }
 
 void PlayerEntity::teleport()
@@ -1348,4 +1361,9 @@ void PlayerEntity::teleport()
     generateStar(sf::Color(50, 50, 255, 255));
     generateStar(sf::Color(200, 200, 255, 255));
   }
+}
+
+void PlayerEntity::summonsSlimeExplode()
+{
+
 }

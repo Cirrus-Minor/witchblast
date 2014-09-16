@@ -7,6 +7,14 @@
 
 class FairyEntity;
 
+struct castSpellStruct
+{
+  enumCastSpell spell;
+  float delay;
+  float delayMax;
+  int frame;
+};
+
 /*! \class PlayerEntity
 * \brief Class for the player
 *
@@ -423,17 +431,13 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void castSpell();
 
-    struct castSpellStruct
-    {
-      enumCastSpell spell;
-      float delay;
-      float delayMax;
-    };
-
     void setActiveSpell(enumCastSpell spell);
-    enumCastSpell getActiveSpell();
+    castSpellStruct getActiveSpell();
     float getPercentSpellDelay();
+    bool canCastSpell();
+
     void teleport();
+    void summonsSlimeExplode();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);

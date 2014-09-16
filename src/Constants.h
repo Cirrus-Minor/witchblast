@@ -281,6 +281,7 @@ const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
 enum enumCastSpell
 {
   SpellTeleport,
+  SpellSlimeExplode,
 
   SpellNone
 };
