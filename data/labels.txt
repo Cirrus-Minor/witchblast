@@ -137,27 +137,27 @@ spell_teleport#teleport
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
 restore#Continuer la partie
-at#à
+at#Ã 
 level#niveau
-begin_journey#Démarrer dans un nouveau donjon
+begin_journey#DÃ©marrer dans un nouveau donjon
 config_keys#Configurer le clavier
-redef_input#Redéfinir les touches
+redef_input#RedÃ©finir les touches
 exit_game#Quitter
 return_to_desktop#Retour au bureau
 key_configuration#Configuration des touches
 key_configuration_desc#Veuillez configurer les touches
 key_configuration_insert#[presser touche]
 key_configuration_done#FAIT
-key_move_up#Déplacement haut
-key_move_down#Déplacement bas
-key_move_left#Déplacement gauche
-key_move_right#Déplacement droite
+key_move_up#DÃ©placement haut
+key_move_down#DÃ©placement bas
+key_move_left#DÃ©placement gauche
+key_move_right#DÃ©placement droite
 key_fire_up#Tir haut
 key_fire_down#Tir bas
 key_fire_left#Tir gauche
 key_fire_right#Tir droite
-key_fire_select#Sélecteur de tir
-key_time#Accélerer le temps
+key_fire_select#SÃ©lecteur de tir
+key_time#AccÃ©lerer le temps
 key_fire#Tir (un bouton)
 key_spell#Lancer un sort
 configure_game#Configuration
@@ -165,51 +165,51 @@ configure_game_desc#Modifier les options
 config_back#Retour
 config_back_desc#Retour au menu principal
 config_lang#Langue
-config_lang_desc#Choisissez avec les flèches (gauche et droite)
+config_lang_desc#Choisissez avec les flÃ¨ches (gauche et droite)
 english#Anglais
-french#Français
-keys_move#déplacer
+french#FranÃ§ais
+keys_move#dÃ©placer
 keys_fire#tirer
-keys_select_1#sélecteur
+keys_select_1#sÃ©lecteur
 keys_select_2#de tir
-keys_time#accélerer
+keys_time#accÃ©lerer
 
 play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
 items_found#Objets
 monsters_killed#Monstres
 congratulations_1#FELICITATIONS !
-congratulations_2#Vous êtes brillament arrivé au terme de cette démo !
-congratulations_3#A bientôt pour de nouvelles aventures !
+congratulations_2#Vous Ãªtes brillament arrivÃ© au terme de cette dÃ©mo !
+congratulations_3#A bientÃ´t pour de nouvelles aventures !
 by#par
 critical#CRITIQUE X2
 poison#POISON
 
 merchant_speech_0#Les meilleurs affaires du donjon !
-merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
-merchant_speech_2#Jetez un oeil à nos produits !
+merchant_speech_1#Bienvenue Ã  la boutique Pawn'n'Witches !
+merchant_speech_2#Jetez un oeil Ã  nos produits !
 
 enemy_butcher#Boucher porcin
-enemy_cyclops#Cyclope Cimmérien
-enemy_giant_slime#Slime géant
-enemy_giant_spider#Araignée géante
+enemy_cyclops#Cyclope CimmÃ©rien
+enemy_giant_slime#Slime gÃ©ant
+enemy_giant_spider#AraignÃ©e gÃ©ante
 enemy_rat_king#Roi des rats
 
-item_copper#Pièce de cuivre
-item_copper_desc#Une pièce de cuivre (1)
-item_silver#Pièce d'argent
-item_silver_desc#Une pièce d'argent (5)
-item_gold#Pièce d'or
-item_gold_desc#Une pièce d'or (10)
+item_copper#PiÃ¨ce de cuivre
+item_copper_desc#Une piÃ¨ce de cuivre (1)
+item_silver#PiÃ¨ce d'argent
+item_silver_desc#Une piÃ¨ce d'argent (5)
+item_gold#PiÃ¨ce d'or
+item_gold_desc#Une piÃ¨ce d'or (10)
 item_titan_heart#Coeur de Titan
 item_titan_heart_desc#Augmente les PV max
 item_elven_cookie#Biscuit elfique
-item_elven_cookie_desc#Guérit et augmente les PV
+item_elven_cookie_desc#GuÃ©rit et augmente les PV
 item_apple#Pomme
-item_apple_desc#Guérit 3 PV
+item_apple_desc#GuÃ©rit 3 PV
 item_bread#Pain
-item_bread_desc#Guérit 7 HP
+item_bread_desc#GuÃ©rit 7 HP
 item_cheese#Fromage
-item_cheese_desc#Guérit 15 HP
+item_cheese_desc#GuÃ©rit 15 HP
 item_boss_key#Clef du boss
 item_boss_key_desc#Ouvre la porte du boss
 item_sorcerer_hat#Chapeau d'enchanteur
@@ -222,23 +222,23 @@ item_rage_amulet#Amulette de rage
 item_rage_amulet_desc#Contre-attaque
 item_vibration_gloves#Gants de vibration
 item_vibration_gloves_desc#Vibre et augmente la cadence de tir
-item_staff#Bâton d'acajou
-item_staff_desc#Augmente les dégâts et la vitesse de tir
-item_fairy#La fée Lilly
+item_staff#BÃ¢ton d'acajou
+item_staff_desc#Augmente les dÃ©gÃ¢ts et la vitesse de tir
+item_fairy#La fÃ©e Lilly
 item_fairy_desc#Vous aide dans le donjon
 item_leather_belt#Ceinture de cuir
 item_leather_belt_desc#Augmente la cadence de tir
 item_blood_snake#Serpent de sang
-item_blood_snake_desc#Augmente les dégâts
+item_blood_snake_desc#Augmente les dÃ©gÃ¢ts
 item_gem_ice#Gemme de glace
-item_gem_ice_desc#Attaque de glace (gèle)
+item_gem_ice_desc#Attaque de glace (gÃ¨le)
 item_gem_illusion#Gemme d'illusion
 item_gem_illusion_desc#Attaque d'illusion(ignore murs et armures)
 item_gem_stone#Gemme de pierre
 item_gem_stone_desc#Attaque de pierre(repousse)
 item_gem_lightning#Gemme de foudre
 item_gem_lightning_desc#Attaque de foudre(rebondit)
-item_fairy_ice#La fée Natacha
+item_fairy_ice#La fÃ©e Natacha
 item_fairy_ice_desc#Vous aide dans le donjon
 item_ring_ice#Anneau de saphir
 item_ring_ice_desc#Augmente le pouvoir de glace
@@ -250,35 +250,35 @@ item_ring_illusion#Anneau de quartz
 item_ring_illusion_desc#Augmente le pouvoir d'illusion
 item_spell_triple#Manuel de Triple-tir
 item_spell_triple_desc#Tire trois projectiles
-item_brooch_star#Broche d'étoile
-item_brooch_star_desc#Chance de dégâts critiques (x2)
-item_fairy_fire#La fée Alicia
+item_brooch_star#Broche d'Ã©toile
+item_brooch_star_desc#Chance de dÃ©gÃ¢ts critiques (x2)
+item_fairy_fire#La fÃ©e Alicia
 item_fairy_fire_desc#Vous aide dans le donjon
-item_fairy_target#La fée Scarlett
+item_fairy_target#La fÃ©e Scarlett
 item_fairy_target_desc#Vous aide dans le donjon
 item_robe_magician#Robe de magicien
 item_robe_magician_desc#Augmente l'armure
 item_gem_fire#Gemme de feu
-item_gem_fire_desc#Attaque de feu (dégâts augmentés)
+item_gem_fire_desc#Attaque de feu (dÃ©gÃ¢ts augmentÃ©s)
 item_ring_fire#Anneau de rubis
 item_ring_fire_desc#Augmente le pouvoir de feu
-item_manual_staff#Manuel du bâton
-item_manual_staff_desc#Augmente la portée
-item_spell_teleport#Sort : Téléportation
-item_spell_teleport_desc#Permet de se téléporter dans la pièce
+item_manual_staff#Manuel du bÃ¢ton
+item_manual_staff_desc#Augmente la portÃ©e
+item_spell_teleport#Sort : TÃ©lÃ©portation
+item_spell_teleport_desc#Permet de se tÃ©lÃ©porter dans la piÃ¨ce
 
-spell_teleport#téléportation
+spell_teleport#tÃ©lÃ©portation
 [german]
 start_new_game#Neues Spiel starten
-start_desc#Alter Speicherstand wird überschrieben !
+start_desc#Alter Speicherstand wird Ã¼berschrieben !
 restore#Speicherstand wiederherstellen
 at#um
 level#Level
 begin_journey#Beginne deine Reise in einem neuen Verlies
 config_keys#Steuerung
-redef_input#Ändere die Tastenbelegung
+redef_input#Ã„ndere die Tastenbelegung
 exit_game#Spiel verlassen
-return_to_desktop#Kehre zum Desktop zurück
+return_to_desktop#Kehre zum Desktop zurÃ¼ck
 key_configuration#Tastenbelegung
 key_configuration_desc#Bitte belege die Tasten
 key_configuration_insert#[Taste einsetzen]
@@ -287,35 +287,35 @@ key_move_up#Nach oben
 key_move_down#Nach unten
 key_move_left#Nach links
 key_move_right#Nach rechts
-key_fire_up#Schieße oben
-key_fire_down#Schieße unten
-key_fire_left#Schieße links
-key_fire_right#Schieße rechts
-key_fire_select#Schieße Auswahl
+key_fire_up#SchieÃŸe oben
+key_fire_down#SchieÃŸe unten
+key_fire_left#SchieÃŸe links
+key_fire_right#SchieÃŸe rechts
+key_fire_select#SchieÃŸe Auswahl
 key_time#Zeitsteuerung
-key_fire#Schießen (ein Knopf)
+key_fire#SchieÃŸen (ein Knopf)
 key_spell#Verzaubern
 configure_game#Optionen
-configure_game_desc#Ändere die Spieloptionen
-config_back#Zurück
-config_back_desc#Zurück zum Hauptmenü
+configure_game_desc#Ã„ndere die Spieloptionen
+config_back#ZurÃ¼ck
+config_back_desc#ZurÃ¼ck zum HauptmenÃ¼
 config_lang#Sprache
-config_lang_desc#Wähle mit linker und rechter Pfeiltaste aus
+config_lang_desc#WÃ¤hle mit linker und rechter Pfeiltaste aus
 english#Englisch
-french#Französisch
+french#FranzÃ¶sisch
 german#Deutsch
 keys_move#Bewegen
-keys_fire#Schießen
+keys_fire#SchieÃŸen
 keys_select_1#Waffe
 keys_select_2#wechseln
 keys_time#Zeitsteuerung
 
-play_again#Drücke [ENTER], um nochmal zu spielen / [ESC], um ins Hauptmenü zurückzukehren
+play_again#DrÃ¼cke [ENTER], um nochmal zu spielen / [ESC], um ins HauptmenÃ¼ zurÃ¼ckzukehren
 items_found#Items
 monsters_killed#Monster
-congratulations_1#HERZLICHEN GLÜCKWUNSCH !
-congratulations_2#Du hast dich der Demo Version gestellt und die Bosse getötet !
-congratulations_3#Bis bald für neue Abenteuer !
+congratulations_1#HERZLICHEN GLÃœCKWUNSCH !
+congratulations_2#Du hast dich der Demo Version gestellt und die Bosse getÃ¶tet !
+congratulations_3#Bis bald fÃ¼r neue Abenteuer !
 by#von
 critical#KRITISCH X2
 poison#GIFT
@@ -328,64 +328,64 @@ enemy_butcher#Schweinemetzger
 enemy_cyclops#Barbarischer Zyklop
 enemy_giant_slime#Gigantischer Schleim
 enemy_giant_spider#Gigantische Spinne
-enemy_rat_king#Rattenkönig
+enemy_rat_king#RattenkÃ¶nig
 
-item_copper#Kupfermünze
-item_copper_desc#Eine Kupfermünze (Wert 1)
-item_silver#Silbermünze
-item_silver_desc#Eine Silbermünze (Wert 5)
-item_gold#Goldmünze
-item_gold_desc#Eine Goldmünze (Wert 10)
+item_copper#KupfermÃ¼nze
+item_copper_desc#Eine KupfermÃ¼nze (Wert 1)
+item_silver#SilbermÃ¼nze
+item_silver_desc#Eine SilbermÃ¼nze (Wert 5)
+item_gold#GoldmÃ¼nze
+item_gold_desc#Eine GoldmÃ¼nze (Wert 10)
 item_titan_heart#Herz des Titanen
-item_titan_heart_desc#Erhöht die maximalen TP
+item_titan_heart_desc#ErhÃ¶ht die maximalen TP
 item_elven_cookie#Elfenkeks
-item_elven_cookie_desc#Regeneriert und erhöht die max. TP
+item_elven_cookie_desc#Regeneriert und erhÃ¶ht die max. TP
 item_apple#Apfel
 item_apple_desc#Stellt 3 TP wieder her
 item_bread#Brot
 item_bread_desc#Stellt 7 TP wieder her
-item_cheese#Käse
+item_cheese#KÃ¤se
 item_cheese_desc#Stellt 15 TP wieder her
-item_boss_key#Boss-Schlüssel
-item_boss_key_desc#Öffnet die Boss-Tür
+item_boss_key#Boss-SchlÃ¼ssel
+item_boss_key_desc#Ã–ffnet die Boss-TÃ¼r
 item_sorcerer_hat#Hut des Zauberers
-item_sorcerer_hat_desc#Erhöht die Feuerrate
+item_sorcerer_hat_desc#ErhÃ¶ht die Feuerrate
 item_velvet_boots#Samtschuhe
-item_velvet_boots_desc#Erhöht die Geschwindigkeit
+item_velvet_boots_desc#ErhÃ¶ht die Geschwindigkeit
 item_spell_dual#Zauber : Doppelter Schuss
-item_spell_dual_desc#Schießt zwei Schüsse
+item_spell_dual_desc#SchieÃŸt zwei SchÃ¼sse
 item_rage_amulet#Wutamulett
 item_rage_amulet_desc#Revanchiert sich bei Kontakt
 item_vibration_gloves#Vibrationshandschuhe
-item_vibration_gloves_desc#Erhöht die Feuerrate und vibriert
+item_vibration_gloves_desc#ErhÃ¶ht die Feuerrate und vibriert
 item_staff#Mahagoni-Stab
-item_staff_desc#Erhöht Schussgeschwindigkeit und Schaden
+item_staff_desc#ErhÃ¶ht Schussgeschwindigkeit und Schaden
 item_fairy#Lilly-Fee
 item_fairy_desc#Hilft dir im Verlies
-item_leather_belt#Ledergürtel
-item_leather_belt_desc#Erhöht die Feuerrate
+item_leather_belt#LedergÃ¼rtel
+item_leather_belt_desc#ErhÃ¶ht die Feuerrate
 item_blood_snake#Blutschlange
-item_blood_snake_desc#Erhöht den Schaden
+item_blood_snake_desc#ErhÃ¶ht den Schaden
 item_gem_ice#Eisjuwel
 item_gem_ice_desc#Eisangriff (einfrieren)
 item_gem_illusion#Illusionsjuwel
-item_gem_illusion_desc#Illusionsangriff (ignoriert Wände)
+item_gem_illusion_desc#Illusionsangriff (ignoriert WÃ¤nde)
 item_gem_stone#Steinjuwel
-item_gem_stone_desc#Steinangriff (rückstoßen)
+item_gem_stone_desc#Steinangriff (rÃ¼ckstoÃŸen)
 item_gem_lightning#Blitzjuwel
 item_gem_lightning_desc#Blitzangriff (abprallen)
 item_fairy_ice#Natasha-Fee
 item_fairy_ice_desc#Hilft dir im Verlies
 item_ring_ice#Saphir Ring
-item_ring_ice_desc#Erhöht die Eiskraft
+item_ring_ice_desc#ErhÃ¶ht die Eiskraft
 item_ring_stone#Obsidian Ring
-item_ring_stone_desc#Erhöht die Steinkraft
+item_ring_stone_desc#ErhÃ¶ht die Steinkraft
 item_ring_lightning#Matter Ring
-item_ring_lightning_desc#Erhöht die Blitzkraft
+item_ring_lightning_desc#ErhÃ¶ht die Blitzkraft
 item_ring_illusion#Quartz Ring
-item_ring_illusion_desc#Erhöht die Illusionskraft
+item_ring_illusion_desc#ErhÃ¶ht die Illusionskraft
 item_spell_triple#Zauber : Dreifacher Schuss
-item_spell_triple_desc#Schießt drei Schüsse
+item_spell_triple_desc#SchieÃŸt drei SchÃ¼sse
 item_brooch_star#Stern Brosche
 item_brooch_star_desc#Kritische Trefferchance (x2)
 item_fairy_fire#Alicia-Fee
@@ -393,13 +393,13 @@ item_fairy_fire_desc#Hilft dir im Verlies
 item_fairy_target#Scarlett-Fee
 item_fairy_target_desc#Hilft dir im Verlies
 item_robe_magician#Robe des Zauberers
-item_robe_magician_desc#Erhöht die Rüstung
+item_robe_magician_desc#ErhÃ¶ht die RÃ¼stung
 item_gem_fire#Feuerjuwel
 item_gem_fire_desc#Feuerangriff (mehr Schaden)
 item_ring_fire#Rubin Ring
-item_ring_fire_desc#Erhöht die Feuerkraft
+item_ring_fire_desc#ErhÃ¶ht die Feuerkraft
 item_manual_staff#Handbuch des Zauberstabes
-item_manual_staff_desc#Erhöht die Reichweite
+item_manual_staff_desc#ErhÃ¶ht die Reichweite
 item_spell_teleport#Spell: Teleport
 item_spell_teleport_desc#Cast to teleport within the room
 

@@ -1765,7 +1765,7 @@ void WitchBlastGame::generateMap()
 
 void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0)
 {
-  myText.setString(str);
+  myText.setString(sf::String::fromUtf8(str.begin(), str.end()));
   myText.setCharacterSize(size);
 
   float xFont = x;
