@@ -632,9 +632,24 @@ void WitchBlastGame::renderRunningGame()
     rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 2));
     app->draw(rectangle);
 
-    if (player->getActiveSpell() != SpellNone)
+    if (player->getActiveSpell().spell != SpellNone)
     {
-      write(tools::getLabel(spellLabel[player->getActiveSpell()]), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      write(tools::getLabel(spellLabel[player->getActiveSpell().spell]), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      // TODO
+      sf::Sprite itemSprite;
+      itemSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP));
+      itemSprite.setPosition(10, 620);
+      int frame = player->getActiveSpell().frame;
+      itemSprite.setTextureRect(sf::IntRect((frame % 10) * 32, (frame / 10) * 32, 32, 32));
+      itemSprite.scale(2.0f, 2.0f);
+      app->draw(itemSprite);
+
+      if (player->canCastSpell())
+      {
+        float fade = (cos(8.0f * getAbsolutTime()) + 1.0f) * 0.5f;
+        itemSprite.setColor(sf::Color(255, 255, 255, 255 * fade));
+        app->draw(itemSprite, sf::BlendAdd);
+      }
     }
 
     // drawing the key on the interface
@@ -1961,7 +1976,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
 void WitchBlastGame::generateChallengeBonus(float x, float y)
 {
   // loot
-  if (player->getActiveSpell() == SpellNone)
+  if (player->getActiveSpell().spell == SpellNone)
   {
     ItemEntity* newItem = new ItemEntity(ItemSpellTeleport, x, y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
@@ -2208,7 +2223,7 @@ void WitchBlastGame::saveGame()
     file << player->getX() << " " << player->getY() << std::endl;
     file << player->getShotIndex();
     for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
-    file << player->getActiveSpell();
+    file << player->getActiveSpell().spell;
     file.close();
   }
   else
