@@ -15,6 +15,8 @@ if(USING_GCC OR USING_CLANG)
   add_compile_options(-std=c++11 -pedantic -Wall)
 endif()
 
+include_directories(.)
+
 file(
         GLOB_RECURSE
         source_files
