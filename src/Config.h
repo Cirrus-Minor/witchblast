@@ -20,17 +20,15 @@
 #include <map>
 #include "Constants.h"
 
-using namespace std;
-
 class Config
 {
 public:
   Config();
-  void loadFromFile(string file);
+  void loadFromFile(std::string file);
   void saveToFile(std::string file, std::map<std::string, std::string> newMap);
   void displayMap();
 
-  int findInt(string key);
+  int findInt(std::string key);
   bool configFileExists();
 
 private:
