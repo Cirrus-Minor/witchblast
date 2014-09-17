@@ -414,6 +414,137 @@ item_spell_slime_explode_desc#Cast to invoke an explosive slime
 spell_teleport#Teleportation
 spell_slime_explode#invoke slime
 
+[spanish]
+start_new_game#Empezar nueva partida
+start_desc#La partida anterior se perderá
+restore#Restaurar partida
+at#en
+level#nivel
+begin_journey#Comienza tu aventura en un nuevo calabozo
+config_keys#Configurar teclas
+redef_input#Redefinir controles del jugador
+exit_game#Salir del juego
+return_to_desktop#Volver al escritorio
+key_configuration#Configuración de teclas
+key_configuration_desc#Por favor configure las teclas
+key_configuration_insert#[presione tecla]
+key_configuration_done#LISTO
+key_move_up#moverse arriba
+key_move_down#moverse abajo
+key_move_left#moverse a la izquierda
+key_move_right#moverse a la derecha
+key_fire_up#disparar arriba
+key_fire_down#disparar abajo
+key_fire_left#disparar a la izquierda
+key_fire_right#disparar a la derecha
+key_fire_select#seleccionar disparo
+key_time#control del tiempo
+key_fire#disparo (un botón)
+configure_game#Configuración
+configure_game_desc#Cambia las opciones del juego
+config_back#Volver
+config_back_desc#Volver al menú principal
+config_lang#Idioma
+config_lang_desc#Elije usando las teclas izquierda y derecha
+english#Inglés
+french#Francés
+german#Alemán
+keys_move#mover
+keys_fire#disparar
+keys_select_1#disparo
+keys_select_2#selector
+keys_time#control de tiempo
+
+play_again#Presiona [ENTER] para jugar de nuevo / [ESC] para volver al menú 
+items_found#Items
+monsters_killed#Monstruos
+congratulations_1#FELICIDADES !
+congratulations_2#Te haz enfrentado a este demo y has derrotado a los jefes!
+congratulations_3#Nos veremos luego en una nueva aventura !
+by#por
+critical#CRÍTICO X2
+
+merchant_speech_0#¡Los mejores precios de todo el calabozo!
+merchant_speech_1#¡Bienvenido a la tienda Pawn'n'Witches!
+merchant_speech_2#¡Echa una mirada a nuestra mercancía!
+
+enemy_butcher#Cerdo Carnicero
+enemy_cyclops#Cíclope Cimeriano
+enemy_giant_slime#Baba Gigante
+enemy_giant_spider#Araña gigante
+enemy_rat_king#Rey Ratón
+
+item_copper#Moneda de cobre
+item_copper_desc#Una moneda de cobre (valor 1)
+item_silver#Moneda de plata
+item_silver_desc#Una moneda de plata (valor 5)
+item_gold#Moneda de oro
+item_gold_desc#Una moneda de oro (valor 10)
+item_titan_heart#Corazón de Titán
+item_titan_heart_desc#Incrementa PV máximos
+item_elven_cookie#Galleta Elven
+item_elven_cookie_desc#Restaura y aumenta PV máximos
+item_apple#Manzana
+item_apple_desc#Restaura 3 PV
+item_bread#Pan
+item_bread_desc#Restaura 7 PV
+item_cheese#Queso
+item_cheese_desc#Restaura 15 PV
+item_boss_key#Llave del jefe
+item_boss_key_desc#Abre la puerta del jefe
+item_sorcerer_hat#Sombrero del hechicero
+item_sorcerer_hat_desc#Aumenta velocidad de disparo
+item_velvet_boots#Botas de terciopelo
+item_velvet_boots_desc#Aumenta la velocidad
+item_spell_dual#Conjuro : Rayo doble
+item_spell_dual_desc#Dispara dos rayos
+item_rage_amulet#Amuleto de furia
+item_rage_amulet_desc#Contraataca
+item_vibration_gloves#Guantes de vibración
+item_vibration_gloves_desc#Aumenta la velocidad del rayo y además vibra
+item_staff#Báculo Mahogany
+item_staff_desc#Aumenta la velocidad y el daño del rayo
+item_fairy#Hada Lilly
+item_fairy_desc#Te ayuda en el calabozo
+item_leather_belt#Cinturón de cuero
+item_leather_belt_desc#Aumenta la velocidad de disparo
+item_blood_snake#Serpiente de sangre
+item_blood_snake_desc#Aumenta el daño
+item_gem_ice#Gema de hielo
+item_gem_ice_desc#Ataque de hielo (congelar)
+item_gem_illusion#Gema de ilusión
+item_gem_illusion_desc#Ataque de ilusión (ignora paredes y armaduras)
+item_gem_stone#Gema de piedra
+item_gem_stone_desc#Ataque de piedra (repeler)
+item_gem_lightning#Gema de trueno
+item_gem_lightning_desc#Ataque de trueno (rebote)
+item_fairy_ice#Hada Natasha
+item_fairy_ice_desc#Te ayuda en el calabozo
+item_ring_ice#Anillo de safiro
+item_ring_ice_desc#Aumenta el poder del hielo
+item_ring_stone#Anillo de obsidiana
+item_ring_stone_desc#Aumenta el poder de la piedra
+item_ring_lightning#Anillo de ópalo
+item_ring_lightning_desc#Aumenta el poder del trueno
+item_ring_illusion#Anillo de cuarzo
+item_ring_illusion_desc#Aumenta el poder de la ilusión
+item_spell_triple#Conjuro : Rayo triple
+item_spell_triple_desc#Dispara tres rayos
+item_brooch_star#Broche de estrella
+item_brooch_star_desc#Probabilidad de disparo crítico (x2)
+item_fairy_fire#Hada Alicia
+item_fairy_fire_desc#Te ayuda en el calabozo
+item_fairy_target#Hada Scarlett
+item_fairy_target_desc#Te ayuda en el calabozo
+item_robe_magician#Bata del Mago
+item_robe_magician_desc#Aumenta armadura
+item_gem_fire#Gema de fuego
+item_gem_fire_desc#Ataque de fuego (más daño)
+item_ring_fire#Anillo de rubí
+item_ring_fire_desc#Aumenta el poder del fuego
+item_manual_staff#Manual del báculo
+item_manual_staff_desc#Aumenta rango de disparo
+
 [russian]
 start_new_game#Начать новую игру
 start_desc#Старая игра будет стёрта
