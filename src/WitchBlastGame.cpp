@@ -1977,12 +1977,21 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
   return (item_equip_enum) bonusType;
 }
 
+enumCastSpell WitchBlastGame::generateRandomSpell()
+{
+  // TODO
+  if (rand() % 2 == 0)
+    return SpellTeleport;
+  else
+    return SpellSlimeExplode;
+}
+
 void WitchBlastGame::generateChallengeBonus(float x, float y)
 {
   // loot
-  if (player->getActiveSpell().spell == SpellNone)
+  if (player->getActiveSpell().spell == SpellNone || rand() % 2 == 0) // TODO
   {
-    ItemEntity* newItem = new ItemEntity(ItemSpellTeleport, x, y);
+    ItemEntity* newItem = new ItemEntity(rand() % 2 == 0 ? ItemSpellTeleport : ItemSpellSlimeExplode, x, y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
   }

@@ -288,7 +288,8 @@ enum enumCastSpell
 
 const std::string spellLabel[SpellNone] =
 {
-  "spell_teleport"
+  "spell_teleport",
+  "spell_slime_explode"
 };
 
 // entity type

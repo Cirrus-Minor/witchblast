@@ -131,8 +131,11 @@ item_manual_staff#Staff's Manual
 item_manual_staff_desc#Increases fire range
 item_spell_teleport#Spell: Teleport
 item_spell_teleport_desc#Cast to teleport within the room
+item_spell_slime_explode#Spell: Invoke Slime
+item_spell_slime_explode_desc#Cast to invoke an explosive slime
 
 spell_teleport#teleport
+spell_slime_explode#invoke slime
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
@@ -266,8 +269,11 @@ item_manual_staff#Manuel du bâton
 item_manual_staff_desc#Augmente la portée
 item_spell_teleport#Sort : Téléportation
 item_spell_teleport_desc#Permet de se téléporter dans la pièce
+item_spell_slime_explode#Spell: Invoquer Slime
+item_spell_slime_explode_desc#Invoque un slime explosif
 
 spell_teleport#téléportation
+spell_slime_explode#invoquer slime
 [german]
 start_new_game#Neues Spiel starten
 start_desc#Alter Speicherstand wird überschrieben !
@@ -402,5 +408,8 @@ item_manual_staff#Handbuch des Zauberstabes
 item_manual_staff_desc#Erhöht die Reichweite
 item_spell_teleport#Spell: Teleport
 item_spell_teleport_desc#Cast to teleport within the room
+item_spell_slime_explode#Spell: Invoke Slime
+item_spell_slime_explode_desc#Cast to invoke an explosive slime
 
 spell_teleport#Teleportation
+spell_slime_explode#invoke slime

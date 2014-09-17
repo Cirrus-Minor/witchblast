@@ -242,6 +242,13 @@ public:
    */
   void generateChallengeBonus(float x, float y);
 
+  /*!
+   *  \brief Returns a random spell (not the current one)
+   *
+   *  \return the spell ID
+   */
+  enumCastSpell generateRandomSpell();
+
     /*!
    *  \brief Adds monsters
    *

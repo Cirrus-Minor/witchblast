@@ -1,4 +1,5 @@
 #include "PlayerEntity.h"
+#include "SlimeEntity.h"
 #include "BoltEntity.h"
 #include "EnnemyBoltEntity.h"
 #include "ItemEntity.h"
@@ -1278,7 +1279,7 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
     break;
 
   case SpellSlimeExplode:
-    activeSpell.delayMax = 60.0f;
+    activeSpell.delayMax = 40.0f;
     activeSpell.frame = ItemSpellSlimeExplode - ItemMagicianHat;
     break;
 
@@ -1298,6 +1299,7 @@ void PlayerEntity::castSpell()
     switch (activeSpell.spell)
     {
       case SpellTeleport: teleport(); break;
+      case SpellSlimeExplode: summonsSlimeExplode(); break;
 
       default: break;
     }
@@ -1322,10 +1324,14 @@ void PlayerEntity::teleport()
     generateStar(sf::Color(200, 200, 255, 255));
   }
 
-  int counter = 50;
+  int counter = 150;
   while (!ok && counter > 0)
   {
     counter--;
+    int distanceMin = 20000;
+    if (counter < 50) distanceMin = 30000;
+    else if (counter < 100) distanceMin = 25000;
+
     xm = 1 +rand() % (MAP_WIDTH - 3);
     ym = 1 +rand() % (MAP_HEIGHT - 3);
 
@@ -1345,7 +1351,7 @@ void PlayerEntity::teleport()
         it++;
 
         if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX || e->getType() == ENTITY_ENNEMY_BOLT)
-          isBad = Vector2D(xNew, yNew).distance2(Vector2D(e->getX(), e->getY())) < 30000;
+          isBad = Vector2D(xNew, yNew).distance2(Vector2D(e->getX(), e->getY())) < distanceMin;
       }
 
       if (!isBad)
@@ -1365,5 +1371,6 @@ void PlayerEntity::teleport()
 
 void PlayerEntity::summonsSlimeExplode()
 {
-
+  SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeViolet, true);
+  slime->makePet(facingDirection);
 }
