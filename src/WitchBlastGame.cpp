@@ -73,111 +73,70 @@ WitchBlastGame::WitchBlastGame():
   gameptr = this;
 
   // loading resources
-  ImageManager::getInstance().addImage("media/player_base.png");
-  ImageManager::getInstance().addImage("media/player_equip.png");
-  ImageManager::getInstance().addImage("media/player_collar.png");
-  ImageManager::getInstance().addImage("media/bolt.png");
-  ImageManager::getInstance().addImage("media/tiles.png");
-  ImageManager::getInstance().addImage("media/rat.png");
-  ImageManager::getInstance().addImage("media/minimap.png");
-  ImageManager::getInstance().addImage("media/doors.png");
-  ImageManager::getInstance().addImage("media/items.png");
-  ImageManager::getInstance().addImage("media/items_equip.png");
-  ImageManager::getInstance().addImage("media/chest.png");
-  ImageManager::getInstance().addImage("media/bat.png");
-  ImageManager::getInstance().addImage("media/evil_flower.png");
-  ImageManager::getInstance().addImage("media/slime.png");
-  ImageManager::getInstance().addImage("media/imp.png");
-  ImageManager::getInstance().addImage("media/spider_egg.png");
-  ImageManager::getInstance().addImage("media/spider_web.png");
-  ImageManager::getInstance().addImage("media/little_spider.png");
-  ImageManager::getInstance().addImage("media/bubble.png");
-  ImageManager::getInstance().addImage("media/witch.png");
-  ImageManager::getInstance().addImage("media/cauldron.png");
-  ImageManager::getInstance().addImage("media/snake.png");
+  const char *const images[] = {
+    "media/player_base.png",   "media/player_equip.png",
+    "media/player_collar.png", "media/bolt.png",
+    "media/tiles.png",         "media/rat.png",
+    "media/minimap.png",       "media/doors.png",
+    "media/items.png",         "media/items_equip.png",
+    "media/chest.png",         "media/bat.png",
+    "media/evil_flower.png",   "media/slime.png",
+    "media/imp.png",           "media/spider_egg.png",
+    "media/spider_web.png",    "media/little_spider.png",
+    "media/bubble.png",        "media/witch.png",
+    "media/cauldron.png",      "media/snake.png",
+    "media/butcher.png",       "media/giant_slime.png",
+    "media/king_rat.png",      "media/cyclop.png",
+    "media/giant_spider.png",  "media/blood.png",
+    "media/corpses.png",       "media/corpses_big.png",
+    "media/star.png",          "media/star2.png",
+    "media/interface.png",     "media/hud_shots.png",
+    "media/boom64.png",        "media/keys_qwer.png",
+    "media/keys_azer.png",     "media/pnj.png",
+    "media/fairy.png",
+  };
 
-  ImageManager::getInstance().addImage("media/butcher.png");
-  ImageManager::getInstance().addImage("media/giant_slime.png");
-  ImageManager::getInstance().addImage("media/king_rat.png");
-  ImageManager::getInstance().addImage("media/cyclop.png");
-  ImageManager::getInstance().addImage("media/giant_spider.png");
+  for (const char *const filename : images) {
+    ImageManager::getInstance().addImage(filename);
+  }
 
-  ImageManager::getInstance().addImage("media/blood.png");
-  ImageManager::getInstance().addImage("media/corpses.png");
-  ImageManager::getInstance().addImage("media/corpses_big.png");
-  ImageManager::getInstance().addImage("media/star.png");
-  ImageManager::getInstance().addImage("media/star2.png");
-  ImageManager::getInstance().addImage("media/interface.png");
-  ImageManager::getInstance().addImage("media/hud_shots.png");
-  ImageManager::getInstance().addImage("media/boom64.png");
-  ImageManager::getInstance().addImage("media/keys_qwer.png");
-  ImageManager::getInstance().addImage("media/keys_azer.png");
+  const char *const sounds[] = {
+    "media/sound/blast00.ogg",        "media/sound/blast01.ogg",
+    "media/sound/door_closing.ogg",   "media/sound/door_opening.ogg",
+    "media/sound/chest_opening.ogg",  "media/sound/impact.ogg",
+    "media/sound/bonus.ogg",          "media/sound/drink.ogg",
+    "media/sound/eat.ogg",            "media/sound/player_hit.ogg",
+    "media/sound/player_die.ogg",     "media/sound/ennemy_dying.ogg",
+    "media/sound/coin.ogg",           "media/sound/pay.ogg",
+    "media/sound/wall_impact.ogg",    "media/sound/big_wall_impact.ogg",
+    "media/sound/king_rat_cry_1.ogg", "media/sound/king_rat_cry_2.ogg",
+    "media/sound/king_rat_die.ogg",   "media/sound/slime_jump.ogg",
+    "media/sound/slime_impact.ogg",   "media/sound/slime_impact_weak.ogg",
+    "media/sound/slime_smash.ogg",    "media/sound/ice_charge.ogg",
+    "media/sound/electric.ogg",       "media/sound/select.ogg",
+    "media/sound/heart.ogg",          "media/sound/rat_die.ogg",
+    "media/sound/bat_die.ogg",        "media/sound/imp_hurt.ogg",
+    "media/sound/imp_die.ogg",        "media/sound/rock_impact.ogg",
+    "media/sound/throw.ogg",          "media/sound/cyclop00.ogg",
+    "media/sound/cyclop_die.ogg",     "media/sound/butcher_00.ogg",
+    "media/sound/butcher_01.ogg",     "media/sound/butcher_hurt.ogg",
+    "media/sound/butcher_die.ogg",    "media/sound/vib.ogg",
+    "media/sound/boom_00.ogg",        "media/sound/clang_00.ogg",
+    "media/sound/bubble_00.ogg",      "media/sound/bubble_01.ogg",
+    "media/sound/trap.ogg",           "media/sound/egg_smash_00.ogg",
+    "media/sound/egg_smash_01.ogg",   "media/sound/spider_walking.ogg",
+    "media/sound/spider_web.ogg",     "media/sound/spider_hurt.ogg",
+    "media/sound/spider_die.ogg",     "media/sound/little_spider_die.ogg",
+    "media/sound/witch_00.ogg",       "media/sound/witch_01.ogg",
+    "media/sound/witch_die_00.ogg",   "media/sound/witch_die_01.ogg",
+    "media/sound/witch_02.ogg",       "media/sound/invoke.ogg",
+    "media/sound/cauldron.ogg",       "media/sound/cauldron_die.ogg",
+    "media/sound/critical.ogg",       "media/sound/gong.ogg",
+  };
 
-  ImageManager::getInstance().addImage("media/pnj.png");
-  ImageManager::getInstance().addImage("media/fairy.png");
-
-  SoundManager::getInstance().addSound("media/sound/blast00.ogg");
-  SoundManager::getInstance().addSound("media/sound/blast01.ogg");
-  SoundManager::getInstance().addSound("media/sound/door_closing.ogg");
-  SoundManager::getInstance().addSound("media/sound/door_opening.ogg");
-  SoundManager::getInstance().addSound("media/sound/chest_opening.ogg");
-  SoundManager::getInstance().addSound("media/sound/impact.ogg");
-  SoundManager::getInstance().addSound("media/sound/bonus.ogg");
-  SoundManager::getInstance().addSound("media/sound/drink.ogg");
-  SoundManager::getInstance().addSound("media/sound/eat.ogg");
-  SoundManager::getInstance().addSound("media/sound/player_hit.ogg");
-  SoundManager::getInstance().addSound("media/sound/player_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/ennemy_dying.ogg");
-  SoundManager::getInstance().addSound("media/sound/coin.ogg");
-  SoundManager::getInstance().addSound("media/sound/pay.ogg");
-  SoundManager::getInstance().addSound("media/sound/wall_impact.ogg");
-  SoundManager::getInstance().addSound("media/sound/big_wall_impact.ogg");
-  SoundManager::getInstance().addSound("media/sound/king_rat_cry_1.ogg");
-  SoundManager::getInstance().addSound("media/sound/king_rat_cry_2.ogg");
-  SoundManager::getInstance().addSound("media/sound/king_rat_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/slime_jump.ogg");
-  SoundManager::getInstance().addSound("media/sound/slime_impact.ogg");
-  SoundManager::getInstance().addSound("media/sound/slime_impact_weak.ogg");
-  SoundManager::getInstance().addSound("media/sound/slime_smash.ogg");
-  SoundManager::getInstance().addSound("media/sound/ice_charge.ogg");
-  SoundManager::getInstance().addSound("media/sound/electric.ogg");
-  SoundManager::getInstance().addSound("media/sound/select.ogg");
-  SoundManager::getInstance().addSound("media/sound/heart.ogg");
-  SoundManager::getInstance().addSound("media/sound/rat_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/bat_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/imp_hurt.ogg");
-  SoundManager::getInstance().addSound("media/sound/imp_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/rock_impact.ogg");
-  SoundManager::getInstance().addSound("media/sound/throw.ogg");
-  SoundManager::getInstance().addSound("media/sound/cyclop00.ogg");
-  SoundManager::getInstance().addSound("media/sound/cyclop_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/butcher_00.ogg");
-  SoundManager::getInstance().addSound("media/sound/butcher_01.ogg");
-  SoundManager::getInstance().addSound("media/sound/butcher_hurt.ogg");
-  SoundManager::getInstance().addSound("media/sound/butcher_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/vib.ogg");
-  SoundManager::getInstance().addSound("media/sound/boom_00.ogg");
-  SoundManager::getInstance().addSound("media/sound/clang_00.ogg");
-  SoundManager::getInstance().addSound("media/sound/bubble_00.ogg");
-  SoundManager::getInstance().addSound("media/sound/bubble_01.ogg");
-  SoundManager::getInstance().addSound("media/sound/trap.ogg");
-  SoundManager::getInstance().addSound("media/sound/egg_smash_00.ogg");
-  SoundManager::getInstance().addSound("media/sound/egg_smash_01.ogg");
-  SoundManager::getInstance().addSound("media/sound/spider_walking.ogg");
-  SoundManager::getInstance().addSound("media/sound/spider_web.ogg");
-  SoundManager::getInstance().addSound("media/sound/spider_hurt.ogg");
-  SoundManager::getInstance().addSound("media/sound/spider_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/little_spider_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/witch_00.ogg");
-  SoundManager::getInstance().addSound("media/sound/witch_01.ogg");
-  SoundManager::getInstance().addSound("media/sound/witch_die_00.ogg");
-  SoundManager::getInstance().addSound("media/sound/witch_die_01.ogg");
-  SoundManager::getInstance().addSound("media/sound/witch_02.ogg");
-  SoundManager::getInstance().addSound("media/sound/invoke.ogg");
-  SoundManager::getInstance().addSound("media/sound/cauldron.ogg");
-  SoundManager::getInstance().addSound("media/sound/cauldron_die.ogg");
-  SoundManager::getInstance().addSound("media/sound/critical.ogg");
-  SoundManager::getInstance().addSound("media/sound/gong.ogg");
+  for (const char *const filename : sounds) {
+    SoundManager::getInstance().addSound(filename);
+  }
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
