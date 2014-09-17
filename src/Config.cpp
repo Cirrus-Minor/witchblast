@@ -32,9 +32,9 @@ bool Config::configFileExists()
   return configFileExistsFlag;
 }
 
-void Config::loadFromFile(string file)
+void Config::loadFromFile(std::string file)
 {
-  ifstream f(file.c_str());
+  std::ifstream f(file.c_str());
   if (!f.is_open())
   {
     configFileExistsFlag = false;
@@ -42,11 +42,11 @@ void Config::loadFromFile(string file)
   else
   {
     configFileExistsFlag = true;
-    string key;
+    std::string key;
 
     while (f >> key)
     {
-      string data;
+      std::string data;
       if (f >> data)
       {
         configMap[key] = data;
@@ -59,11 +59,11 @@ void Config::loadFromFile(string file)
 
 void Config::saveToFile(std::string fileName, std::map<std::string, std::string> newMap)
 {
-  std::ofstream file(fileName.c_str(), ios::out | ios::trunc);
+  std::ofstream file(fileName.c_str(), std::ios::out | std::ios::trunc);
   if (file)
   {
     configFileExistsFlag = true;
-    map<std::string, std::string>::iterator it;
+    std::map<std::string, std::string>::iterator it;
 
     for(it = newMap.begin(); it != newMap.end(); it++)
     {

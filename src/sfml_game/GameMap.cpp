@@ -112,7 +112,7 @@ void GameMap::randomize(int n)
 void GameMap::loadFromFile(const char* fileName)
 {
   hasChanged = true;
-  ifstream f(fileName);
+  std::ifstream f(fileName);
   if (!f.is_open()) return;
 
   int n;

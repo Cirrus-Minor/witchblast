@@ -2112,7 +2112,7 @@ void WitchBlastGame::saveGame()
 {
   if (player->getPlayerStatus() == PlayerEntity::playerStatusAcquire)
     player->acquireItemAfterStance();
-  ofstream file(SAVE_FILE.c_str(), ios::out | ios::trunc);
+  std::ofstream file(SAVE_FILE.c_str(), std::ios::out | std::ios::trunc);
 
   int i, j, k, l;
 
@@ -2132,14 +2132,14 @@ void WitchBlastGame::saveGame()
     if (now->tm_mday < 9) file << "0";
 
     file <<  now->tm_mday
-         << endl;
+         << std::endl;
 
     if (now->tm_hour <= 9) file << "0";
 
     file << (now->tm_hour) << ':';
 
     if (now->tm_min <= 9) file << "0";
-    file << (now->tm_min) << endl;
+    file << (now->tm_min) << std::endl;
 
     // floor
     file << level << std::endl;
@@ -2241,13 +2241,13 @@ void WitchBlastGame::saveGame()
   }
   else
   {
-    cerr << "[ERROR] Saving the game..." << endl;
+    std::cerr << "[ERROR] Saving the game..." << std::endl;
   }
 }
 
 bool WitchBlastGame::loadGame()
 {
-  ifstream file(SAVE_FILE.c_str(), ios::in);
+  std::ifstream file(SAVE_FILE.c_str(), std::ios::in);
 
   if (file)
   {
@@ -2400,7 +2400,7 @@ WitchBlastGame::saveHeaderStruct WitchBlastGame::loadGameHeader()
   saveHeaderStruct saveHeader;
   saveHeader.ok = true;
 
-  ifstream file(SAVE_FILE.c_str(), ios::in);
+  std::ifstream file(SAVE_FILE.c_str(), std::ios::in);
 
   if (file)
   {

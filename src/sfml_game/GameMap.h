@@ -18,8 +18,6 @@
 
 #include <string>
 
-using namespace std ;
-
 class GameMap
 {
 public:
