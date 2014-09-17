@@ -73,111 +73,111 @@ WitchBlastGame::WitchBlastGame():
   gameptr = this;
 
   // loading resources
-  ImageManager::getImageManager()->addImage("media/player_base.png");
-  ImageManager::getImageManager()->addImage("media/player_equip.png");
-  ImageManager::getImageManager()->addImage("media/player_collar.png");
-  ImageManager::getImageManager()->addImage("media/bolt.png");
-  ImageManager::getImageManager()->addImage("media/tiles.png");
-  ImageManager::getImageManager()->addImage("media/rat.png");
-  ImageManager::getImageManager()->addImage("media/minimap.png");
-  ImageManager::getImageManager()->addImage("media/doors.png");
-  ImageManager::getImageManager()->addImage("media/items.png");
-  ImageManager::getImageManager()->addImage("media/items_equip.png");
-  ImageManager::getImageManager()->addImage("media/chest.png");
-  ImageManager::getImageManager()->addImage("media/bat.png");
-  ImageManager::getImageManager()->addImage("media/evil_flower.png");
-  ImageManager::getImageManager()->addImage("media/slime.png");
-  ImageManager::getImageManager()->addImage("media/imp.png");
-  ImageManager::getImageManager()->addImage("media/spider_egg.png");
-  ImageManager::getImageManager()->addImage("media/spider_web.png");
-  ImageManager::getImageManager()->addImage("media/little_spider.png");
-  ImageManager::getImageManager()->addImage("media/bubble.png");
-  ImageManager::getImageManager()->addImage("media/witch.png");
-  ImageManager::getImageManager()->addImage("media/cauldron.png");
-  ImageManager::getImageManager()->addImage("media/snake.png");
+  ImageManager::getInstance().addImage("media/player_base.png");
+  ImageManager::getInstance().addImage("media/player_equip.png");
+  ImageManager::getInstance().addImage("media/player_collar.png");
+  ImageManager::getInstance().addImage("media/bolt.png");
+  ImageManager::getInstance().addImage("media/tiles.png");
+  ImageManager::getInstance().addImage("media/rat.png");
+  ImageManager::getInstance().addImage("media/minimap.png");
+  ImageManager::getInstance().addImage("media/doors.png");
+  ImageManager::getInstance().addImage("media/items.png");
+  ImageManager::getInstance().addImage("media/items_equip.png");
+  ImageManager::getInstance().addImage("media/chest.png");
+  ImageManager::getInstance().addImage("media/bat.png");
+  ImageManager::getInstance().addImage("media/evil_flower.png");
+  ImageManager::getInstance().addImage("media/slime.png");
+  ImageManager::getInstance().addImage("media/imp.png");
+  ImageManager::getInstance().addImage("media/spider_egg.png");
+  ImageManager::getInstance().addImage("media/spider_web.png");
+  ImageManager::getInstance().addImage("media/little_spider.png");
+  ImageManager::getInstance().addImage("media/bubble.png");
+  ImageManager::getInstance().addImage("media/witch.png");
+  ImageManager::getInstance().addImage("media/cauldron.png");
+  ImageManager::getInstance().addImage("media/snake.png");
 
-  ImageManager::getImageManager()->addImage("media/butcher.png");
-  ImageManager::getImageManager()->addImage("media/giant_slime.png");
-  ImageManager::getImageManager()->addImage("media/king_rat.png");
-  ImageManager::getImageManager()->addImage("media/cyclop.png");
-  ImageManager::getImageManager()->addImage("media/giant_spider.png");
+  ImageManager::getInstance().addImage("media/butcher.png");
+  ImageManager::getInstance().addImage("media/giant_slime.png");
+  ImageManager::getInstance().addImage("media/king_rat.png");
+  ImageManager::getInstance().addImage("media/cyclop.png");
+  ImageManager::getInstance().addImage("media/giant_spider.png");
 
-  ImageManager::getImageManager()->addImage("media/blood.png");
-  ImageManager::getImageManager()->addImage("media/corpses.png");
-  ImageManager::getImageManager()->addImage("media/corpses_big.png");
-  ImageManager::getImageManager()->addImage("media/star.png");
-  ImageManager::getImageManager()->addImage("media/star2.png");
-  ImageManager::getImageManager()->addImage("media/interface.png");
-  ImageManager::getImageManager()->addImage("media/hud_shots.png");
-  ImageManager::getImageManager()->addImage("media/boom64.png");
-  ImageManager::getImageManager()->addImage("media/keys_qwer.png");
-  ImageManager::getImageManager()->addImage("media/keys_azer.png");
+  ImageManager::getInstance().addImage("media/blood.png");
+  ImageManager::getInstance().addImage("media/corpses.png");
+  ImageManager::getInstance().addImage("media/corpses_big.png");
+  ImageManager::getInstance().addImage("media/star.png");
+  ImageManager::getInstance().addImage("media/star2.png");
+  ImageManager::getInstance().addImage("media/interface.png");
+  ImageManager::getInstance().addImage("media/hud_shots.png");
+  ImageManager::getInstance().addImage("media/boom64.png");
+  ImageManager::getInstance().addImage("media/keys_qwer.png");
+  ImageManager::getInstance().addImage("media/keys_azer.png");
 
-  ImageManager::getImageManager()->addImage("media/pnj.png");
-  ImageManager::getImageManager()->addImage("media/fairy.png");
+  ImageManager::getInstance().addImage("media/pnj.png");
+  ImageManager::getInstance().addImage("media/fairy.png");
 
-  SoundManager::getSoundManager()->addSound("media/sound/blast00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/blast01.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/door_closing.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/door_opening.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/chest_opening.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/impact.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/bonus.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/drink.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/eat.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/player_hit.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/player_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/ennemy_dying.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/coin.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/pay.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/wall_impact.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/big_wall_impact.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/king_rat_cry_1.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/king_rat_cry_2.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/king_rat_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/slime_jump.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/slime_impact.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/slime_impact_weak.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/slime_smash.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/ice_charge.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/electric.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/select.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/heart.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/rat_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/bat_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/imp_hurt.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/imp_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/rock_impact.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/throw.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/cyclop00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/cyclop_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/butcher_00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/butcher_01.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/butcher_hurt.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/butcher_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/vib.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/boom_00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/clang_00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/bubble_00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/bubble_01.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/trap.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/egg_smash_00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/egg_smash_01.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/spider_walking.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/spider_web.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/spider_hurt.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/spider_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/little_spider_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/witch_00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/witch_01.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/witch_die_00.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/witch_die_01.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/witch_02.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/invoke.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/cauldron.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/cauldron_die.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/critical.ogg");
-  SoundManager::getSoundManager()->addSound("media/sound/gong.ogg");
+  SoundManager::getInstance().addSound("media/sound/blast00.ogg");
+  SoundManager::getInstance().addSound("media/sound/blast01.ogg");
+  SoundManager::getInstance().addSound("media/sound/door_closing.ogg");
+  SoundManager::getInstance().addSound("media/sound/door_opening.ogg");
+  SoundManager::getInstance().addSound("media/sound/chest_opening.ogg");
+  SoundManager::getInstance().addSound("media/sound/impact.ogg");
+  SoundManager::getInstance().addSound("media/sound/bonus.ogg");
+  SoundManager::getInstance().addSound("media/sound/drink.ogg");
+  SoundManager::getInstance().addSound("media/sound/eat.ogg");
+  SoundManager::getInstance().addSound("media/sound/player_hit.ogg");
+  SoundManager::getInstance().addSound("media/sound/player_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/ennemy_dying.ogg");
+  SoundManager::getInstance().addSound("media/sound/coin.ogg");
+  SoundManager::getInstance().addSound("media/sound/pay.ogg");
+  SoundManager::getInstance().addSound("media/sound/wall_impact.ogg");
+  SoundManager::getInstance().addSound("media/sound/big_wall_impact.ogg");
+  SoundManager::getInstance().addSound("media/sound/king_rat_cry_1.ogg");
+  SoundManager::getInstance().addSound("media/sound/king_rat_cry_2.ogg");
+  SoundManager::getInstance().addSound("media/sound/king_rat_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/slime_jump.ogg");
+  SoundManager::getInstance().addSound("media/sound/slime_impact.ogg");
+  SoundManager::getInstance().addSound("media/sound/slime_impact_weak.ogg");
+  SoundManager::getInstance().addSound("media/sound/slime_smash.ogg");
+  SoundManager::getInstance().addSound("media/sound/ice_charge.ogg");
+  SoundManager::getInstance().addSound("media/sound/electric.ogg");
+  SoundManager::getInstance().addSound("media/sound/select.ogg");
+  SoundManager::getInstance().addSound("media/sound/heart.ogg");
+  SoundManager::getInstance().addSound("media/sound/rat_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/bat_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/imp_hurt.ogg");
+  SoundManager::getInstance().addSound("media/sound/imp_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/rock_impact.ogg");
+  SoundManager::getInstance().addSound("media/sound/throw.ogg");
+  SoundManager::getInstance().addSound("media/sound/cyclop00.ogg");
+  SoundManager::getInstance().addSound("media/sound/cyclop_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/butcher_00.ogg");
+  SoundManager::getInstance().addSound("media/sound/butcher_01.ogg");
+  SoundManager::getInstance().addSound("media/sound/butcher_hurt.ogg");
+  SoundManager::getInstance().addSound("media/sound/butcher_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/vib.ogg");
+  SoundManager::getInstance().addSound("media/sound/boom_00.ogg");
+  SoundManager::getInstance().addSound("media/sound/clang_00.ogg");
+  SoundManager::getInstance().addSound("media/sound/bubble_00.ogg");
+  SoundManager::getInstance().addSound("media/sound/bubble_01.ogg");
+  SoundManager::getInstance().addSound("media/sound/trap.ogg");
+  SoundManager::getInstance().addSound("media/sound/egg_smash_00.ogg");
+  SoundManager::getInstance().addSound("media/sound/egg_smash_01.ogg");
+  SoundManager::getInstance().addSound("media/sound/spider_walking.ogg");
+  SoundManager::getInstance().addSound("media/sound/spider_web.ogg");
+  SoundManager::getInstance().addSound("media/sound/spider_hurt.ogg");
+  SoundManager::getInstance().addSound("media/sound/spider_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/little_spider_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/witch_00.ogg");
+  SoundManager::getInstance().addSound("media/sound/witch_01.ogg");
+  SoundManager::getInstance().addSound("media/sound/witch_die_00.ogg");
+  SoundManager::getInstance().addSound("media/sound/witch_die_01.ogg");
+  SoundManager::getInstance().addSound("media/sound/witch_02.ogg");
+  SoundManager::getInstance().addSound("media/sound/invoke.ogg");
+  SoundManager::getInstance().addSound("media/sound/cauldron.ogg");
+  SoundManager::getInstance().addSound("media/sound/cauldron_die.ogg");
+  SoundManager::getInstance().addSound("media/sound/critical.ogg");
+  SoundManager::getInstance().addSound("media/sound/gong.ogg");
 
   if (font.loadFromFile("media/DejaVuSans-Bold.ttf"))
   {
@@ -192,7 +192,7 @@ WitchBlastGame::WitchBlastGame():
   isPausing = false;
   showLogical = false;
 
-  shotsSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_HUD_SHOTS));
+  shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
 
   configureFromFile();
   srand(time(NULL));
@@ -203,7 +203,7 @@ WitchBlastGame::WitchBlastGame():
 WitchBlastGame::~WitchBlastGame()
 {
   // cleaning all entities
-  EntityManager::getEntityManager()->clean();
+  EntityManager::getInstance().clean();
 
   // cleaning data
   if (miniMap != NULL) delete (miniMap);
@@ -241,14 +241,14 @@ void WitchBlastGame::onUpdate()
   if (!isPausing)
   {
     checkFallingEntities();
-    EntityManager::getEntityManager()->animate(deltaTime);
+    EntityManager::getInstance().animate(deltaTime);
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
     {
-      EntityManager::getEntityManager()->animate(deltaTime);
-      SoundManager::getSoundManager()->playSound(SOUND_VIB);
+      EntityManager::getInstance().animate(deltaTime);
+      SoundManager::getInstance().playSound(SOUND_VIB);
     }
     else
-      SoundManager::getSoundManager()->stopSound(SOUND_VIB);
+      SoundManager::getInstance().stopSound(SOUND_VIB);
 
     if (xGameState != xGameStateNone)
     {
@@ -288,7 +288,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   level = 1;
 
   // cleaning all entities
-  EntityManager::getEntityManager()->clean();
+  EntityManager::getInstance().clean();
 
   // cleaning data
   if (miniMap != NULL) delete (miniMap);
@@ -297,24 +297,24 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   currentFloor = NULL;
 
   // current map (tiles)
-  currentTileMap = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_TILES), currentMap, 64, 64, 10);
+  currentTileMap = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_TILES), currentMap, 64, 64, 10);
   currentTileMap->setX(OFFSET_X);
   currentTileMap->setY(OFFSET_Y);
 
   // the interface
-  SpriteEntity* interface = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_INTERFACE));
+  SpriteEntity* interface = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_INTERFACE));
   interface->setZ(10000.0f);
   interface->removeCenter();
   interface->setType(0);
 
   // key symbol on the interface
-  keySprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP));
+  keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
   keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
   keySprite.setPosition(326, 616);
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
-  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_MINIMAP), miniMap, 15, 11, 12);
+  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 15, 11, 12);
   miniMapEntity->setTileBox(16, 12);
   miniMapEntity->setX(407);
   miniMapEntity->setY(614);
@@ -566,7 +566,7 @@ void WitchBlastGame::updateRunningGame()
 
 void WitchBlastGame::renderRunningGame()
 {
-  EntityManager::getEntityManager()->sortByZ();
+  EntityManager::getInstance().sortByZ();
   if (xGameState == xGameStateShake)
   {
     sf::View view = app->getDefaultView();
@@ -574,15 +574,15 @@ void WitchBlastGame::renderRunningGame()
     view.move(-4 + rand() % 9, -4 + rand() % 9);
     app->setView(view);
 
-    EntityManager::getEntityManager()->renderUnder(app, 5000);
+    EntityManager::getInstance().renderUnder(app, 5000);
 
     app->setView(viewSave);
-    EntityManager::getEntityManager()->renderAfter(app, 5000);
+    EntityManager::getInstance().renderAfter(app, 5000);
   }
   else
   {
     // render the game objects
-    EntityManager::getEntityManager()->render(app);
+    EntityManager::getInstance().render(app);
   }
 
   myText.setColor(sf::Color(255, 255, 255, 255));
@@ -639,7 +639,7 @@ void WitchBlastGame::renderRunningGame()
       write(tools::getLabel(spellLabel[player->getActiveSpell().spell]), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
       // TODO
       sf::Sprite itemSprite;
-      itemSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP));
+      itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
       itemSprite.setPosition(10, 620);
       int frame = player->getActiveSpell().frame;
       itemSprite.setTextureRect(sf::IntRect((frame % 10) * 32, (frame / 10) * 32, 32, 32));
@@ -764,7 +764,7 @@ void WitchBlastGame::renderDeathScreen()
       if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
       {
         sf::Sprite itemSprite;
-        itemSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP));
+        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
         itemSprite.setPosition(xItems + 120 + n * 32, yItems - 5);
         itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
         app->draw(itemSprite);
@@ -785,95 +785,95 @@ void WitchBlastGame::renderDeathScreen()
         switch (i)
         {
         case EnemyTypeBat:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_BAT));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BAT));
           monsterSprite.setTextureRect(sf::IntRect(64, 0, 64, 64));
           dy = -1;
           break;
 
         case EnemyTypeRat:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
           monsterSprite.setTextureRect(sf::IntRect(0, 12, 64, 52));
           break;
 
         case EnemyTypeRatBlack:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
           monsterSprite.setTextureRect(sf::IntRect(0, 140, 64, 52));
           break;
 
         case EnemyTypeRatHelmet:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
           monsterSprite.setTextureRect(sf::IntRect(0, 204, 64, 52));
           break;
 
         case EnemyTypeRatBlackHelmet:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_RAT));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
           monsterSprite.setTextureRect(sf::IntRect(0, 268, 64, 52));
           break;
 
         case EnemyTypeEvilFlower:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_FLOWER));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FLOWER));
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
           break;
 
         case EnemyTypeSnake:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SNAKE));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SNAKE));
           monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 54));
           dy = 2;
           break;
 
         case EnemyTypeSlime:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
           monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 44));
           break;
 
         case EnemyTypeSlimeRed:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
           monsterSprite.setTextureRect(sf::IntRect(0, 74, 64, 54));
           break;
 
         case EnemyTypeSlimeBlue:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
           monsterSprite.setTextureRect(sf::IntRect(0, 138, 64, 54));
           break;
 
         case EnemyTypeSlimeViolet:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_SLIME));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
           monsterSprite.setTextureRect(sf::IntRect(0, 202, 64, 54));
           break;
 
         case EnemyTypeImpBlue:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_IMP));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_IMP));
           monsterSprite.setTextureRect(sf::IntRect(0, 64, 64, 64));
           dy = -2;
           break;
 
         case EnemyTypeImpRed:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_IMP));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_IMP));
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
           dy = -2;
           break;
 
         case EnemyTypeWitch:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_WITCH));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WITCH));
           monsterSprite.setTextureRect(sf::IntRect(0, 18, 64, 50));
           dy = -1;
           break;
 
         case EnemyTypeWitchRed:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_WITCH));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WITCH));
           monsterSprite.setTextureRect(sf::IntRect(0, 114, 64, 50));
           dy = -1;
           break;
 
         case EnemyTypeCauldron:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_CAULDRON));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CAULDRON));
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
           monsterSprite.setScale(0.65f, 0.65);
           dy = -1;
           break;
 
         case EnemyTypeBubble:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_BUBBLE));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BUBBLE));
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
           monsterSprite.setScale(0.25f, 0.25f);
           dy = -1;
@@ -897,31 +897,31 @@ void WitchBlastGame::renderDeathScreen()
         switch (i)
         {
         case EnemyTypeButcher:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_BUTCHER));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BUTCHER));
           monsterSprite.setTextureRect(sf::IntRect(32, 0, 64, 128));
           dy = -5;
           break;
 
         case EnemyTypeSlimeBoss:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_GIANT_SLIME));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_GIANT_SLIME));
           monsterSprite.setTextureRect(sf::IntRect(7, 0, 120, 128));
           dy = -1;
           break;
 
         case EnemyTypeCyclops:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_CYCLOP));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CYCLOP));
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 192));
           monsterSprite.setScale(0.6f, 0.6f);
           dy = -21;
           break;
 
         case EnemyTypeRatKing:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_KING_RAT));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_KING_RAT));
           monsterSprite.setTextureRect(sf::IntRect(12, 0, 128, 116));
           break;
 
         case EnemyTypeSpiderGiant:
-          monsterSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_GIANT_SPIDER));
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_GIANT_SPIDER));
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
           dy = 2;
           break;
@@ -944,7 +944,7 @@ void WitchBlastGame::renderDeathScreen()
 
 void WitchBlastGame::switchToMenu()
 {
-  EntityManager::getEntityManager()->clean();
+  EntityManager::getInstance().clean();
 
   if (menuMap != NULL) delete menuMap;
   menuMap = new GameMap(MENU_MAP_WIDTH, MENU_MAP_HEIGHT);
@@ -966,7 +966,7 @@ void WitchBlastGame::switchToMenu()
           menuMap->setTile(i, j, menuMap->getTile(i, j) + 10);
       }
     }
-  menuTileMap = new TileMapEntity(ImageManager::getImageManager()->getImage(IMAGE_TILES), menuMap, 64, 64, 10);
+  menuTileMap = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_TILES), menuMap, 64, 64, 10);
   menuTileMap->setX(-30.0f);
   menuTileMap->setY(-20.0f);
 
@@ -992,7 +992,7 @@ void WitchBlastGame::updateMenu()
   else if (menuState == MenuStateFirst)
     menu = &menuFirst;
 
-  EntityManager::getEntityManager()->animate(deltaTime);
+  EntityManager::getInstance().animate(deltaTime);
   if (menu != NULL) menu->age += deltaTime;
   float mapY = menuTileMap->getY();
   mapY -= 30.0f * deltaTime;
@@ -1065,7 +1065,7 @@ void WitchBlastGame::updateMenu()
       {
         menu->index++;
         if (menu->index == menu->items.size()) menu->index = 0;
-        SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
 
       else if (event.key.code == input[KeyUp] || event.key.code == sf::Keyboard::Up)
@@ -1073,13 +1073,13 @@ void WitchBlastGame::updateMenu()
         if (menu->index == 0) menu->index = menu->items.size() - 1;
         else menu->index--;
 
-        SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
       else if (event.key.code == input[KeyRight] || event.key.code == sf::Keyboard::Right)
       {
         if (menu->items[menu->index].id == MenuLanguage)
         {
-          SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
           parameters.language++;
           if (parameters.language >= NB_LANGUAGES) parameters.language = 0;
           if (menuState == MenuStateConfig) saveConfigurationToFile();
@@ -1091,7 +1091,7 @@ void WitchBlastGame::updateMenu()
       {
         if (menu->items[menu->index].id == MenuLanguage)
         {
-          SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
           parameters.language--;
           if (parameters.language < 0) parameters.language = NB_LANGUAGES - 1;
           if (menuState == MenuStateConfig) saveConfigurationToFile();
@@ -1139,7 +1139,7 @@ void WitchBlastGame::updateMenu()
 void WitchBlastGame::renderMenu()
 {
   // rendering tiles
-  EntityManager::getEntityManager()->render(app);
+  EntityManager::getInstance().render(app);
 
   // title
   write("Witch Blast", 70, 485, 120, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
@@ -1215,9 +1215,9 @@ void WitchBlastGame::renderMenu()
       int yKeys = 380;
       sf::Sprite keysSprite;
       if (parameters.language == 1) // french
-        keysSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_KEYS_AZER));
+        keysSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_KEYS_AZER));
       else
-        keysSprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_KEYS_QWER));
+        keysSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_KEYS_QWER));
       keysSprite.setPosition(xKeys, yKeys);
       app->draw(keysSprite);
 
@@ -1295,7 +1295,7 @@ void WitchBlastGame::openDoors()
     for(j = 0; j < MAP_WIDTH; j++)
       if (currentMap->getTile(i, j) == MAP_DOOR) currentMap->setTile(i, j, MAP_DOOR_OPEN);
   roomClosed = false;
-  SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
+  SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
 
   if (currentMap->hasNeighbourUp() == 2 && !bossRoomOpened)
     currentMap->setTile(MAP_WIDTH/2, 0, MAP_DOOR);
@@ -1322,7 +1322,7 @@ int WitchBlastGame::getEnnemyCount()
 {
   int n=0;
 
-  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
   for (it = entityList->begin (); it != entityList->end ();)
@@ -1341,7 +1341,7 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
   Vector2D target(-100.0f, -100.0f);
   float distanceMin = -1.0f;
 
-  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
   for (it = entityList->begin (); it != entityList->end ();)
@@ -1410,7 +1410,7 @@ void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnu
 void WitchBlastGame::refreshMap()
 {
   // clean the sprites from old map
-  EntityManager::getEntityManager()->partialClean(10);
+  EntityManager::getInstance().partialClean(10);
 
   // if new map, it has to be randomized
   bool generateMap = !(currentFloor->getMap(floorX, floorY)->isVisited());
@@ -1482,7 +1482,7 @@ void WitchBlastGame::checkEntering()
   if (!currentMap->isCleared())
   {
     player->setEntering();
-    SoundManager::getSoundManager()->playSound(SOUND_DOOR_CLOSING);
+    SoundManager::getInstance().playSound(SOUND_DOOR_CLOSING);
     for (int i=0; i<4; i++)
       doorEntity[i]->closeDoor();
   }
@@ -1490,7 +1490,7 @@ void WitchBlastGame::checkEntering()
 
 void WitchBlastGame::saveMapItems()
 {
-  EntityManager::EntityList* entityList = EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
   for (it = entityList->begin (); it != entityList->end ();)
@@ -1632,7 +1632,7 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
 
   for (int i=0; i < nbIt; i++)
   {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
+    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
     blood->setZ(OFFSET_Y - 1);
     int b0 = 0;
     if (bloodColor == BaseCreatureEntity::BloodGreen) b0 += 6;
@@ -2011,7 +2011,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   }
 
   // sound
-    SoundManager::getSoundManager()->playSound(SOUND_GONG);
+    SoundManager::getInstance().playSound(SOUND_GONG);
 
   // text
   float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
@@ -2037,7 +2037,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     {
       doorEntity[0]->openDoor();
       currentMap->setTile(MAP_WIDTH / 2, 0, 0);
-      SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
+      SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
     }
@@ -2045,7 +2045,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     {
       doorEntity[2]->openDoor();
       currentMap->setTile(MAP_WIDTH / 2, MAP_HEIGHT - 1, 0);
-      SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
+      SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
     }
@@ -2054,7 +2054,7 @@ void WitchBlastGame::verifyDoorUnlocking()
 
       doorEntity[1]->openDoor();
       currentMap->setTile(0, MAP_HEIGHT / 2, 0);
-      SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
+      SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
     }
@@ -2062,7 +2062,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     {
       doorEntity[3]->openDoor();
       currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, 0);
-      SoundManager::getSoundManager()->playSound(SOUND_DOOR_OPENING);
+      SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
     }
@@ -2589,7 +2589,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
 
 void WitchBlastGame::checkFallingEntities()
 {
-  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
   for (it = entityList->begin (); it != entityList->end ();)

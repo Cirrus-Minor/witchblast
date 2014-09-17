@@ -8,7 +8,7 @@
 #include <iostream>
 
 ExplosionEntity::ExplosionEntity(float x, float y, int damage)
-  : SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_EXPLOSION64), x, y, 100, 100)
+  : SpriteEntity(ImageManager::getInstance().getImage(IMAGE_EXPLOSION64), x, y, 100, 100)
 {
   type = ENTITY_EXPLOSION;
   frame = 0;
@@ -54,7 +54,7 @@ void ExplosionEntity::dying()
 
 void ExplosionEntity::testCollisions()
 {
-  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
 	for (it = entityList->begin (); it != entityList->end ();)

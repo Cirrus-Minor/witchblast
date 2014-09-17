@@ -9,7 +9,7 @@
 #include <sstream>
 
 ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
-  : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
+  : CollidingSpriteEntity(ImageManager::getInstance().getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, ITEM_WIDTH, ITEM_HEIGHT)
 {
   type = ENTITY_ITEM;
   this->itemType = itemType;
@@ -92,7 +92,7 @@ void ItemEntity::animate(float delay)
     if (timer <= 0.0f)
     {
       timer = HEART_BEAT_DELAY;
-      SoundManager::getSoundManager()->playSound(SOUND_HEART);
+      SoundManager::getInstance().playSound(SOUND_HEART);
     }
     float sc;
     if (timer > HEART_BEAT_DELAY - 0.25f)

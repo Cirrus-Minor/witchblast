@@ -32,11 +32,11 @@ ImageManager::~ImageManager()
     std::cout << "OK" << std::endl;
 }
 
- ImageManager* ImageManager::getImageManager()
- {
-   static ImageManager singleton;
-   return &singleton;
- }
+ImageManager& ImageManager::getInstance()
+{
+    static ImageManager singleton;
+    return singleton;
+}
 
 void ImageManager::addImage(const char* fileName)
 {

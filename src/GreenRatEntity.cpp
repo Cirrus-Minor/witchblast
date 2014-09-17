@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 GreenRatEntity::GreenRatEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_RAT), x, y)
 {
   imagesProLine = 8;
   creatureSpeed = GREEN_RAT_SPEED;

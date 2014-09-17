@@ -13,7 +13,7 @@
 #include <iostream>
 
 CyclopsEntity::CyclopsEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_CYCLOP), x, y)
 {
   width = 128;
   height = 192;
@@ -59,7 +59,7 @@ int CyclopsEntity::getHealthLevel()
 void CyclopsEntity::fire()
 {
   new RockMissileEntity(x, y - 62, nextRockMissile);
-  SoundManager::getSoundManager()->playSound(SOUND_THROW);
+  SoundManager::getInstance().playSound(SOUND_THROW);
 }
 
 void CyclopsEntity::initFallingGrid()
@@ -123,7 +123,7 @@ void CyclopsEntity::computeStates(float delay)
           destroyLevel++;
           counter = destroyLevel + 1;
           timer = 0.9f;
-          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP_00);
+          SoundManager::getInstance().playSound(SOUND_CYCLOP_00);
           initFallingGrid();
         }
         else
@@ -131,7 +131,7 @@ void CyclopsEntity::computeStates(float delay)
           state = 1; // charge to fire
           timer = 0.9f;
           counter = CYCLOP_NUMBER_ROCKS[getHealthLevel()];
-          SoundManager::getSoundManager()->playSound(SOUND_CYCLOP_00);
+          SoundManager::getInstance().playSound(SOUND_CYCLOP_00);
 
           computeNextRockMissile();
         }
@@ -164,7 +164,7 @@ void CyclopsEntity::computeStates(float delay)
       state = 4; // destroy
       timer = 0.2;
       game().makeShake(0.4f);
-      SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+      SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
       for (int i = 0; i < 10 ; i++) fallRock();
     }
     else if (state == 4)
@@ -199,12 +199,12 @@ void CyclopsEntity::animate(float delay)
     {
       isDying = true;
       SpriteEntity* corpse;
-      corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
+      corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
       corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
 
       corpse->setZ(OFFSET_Y);
       corpse->setType(ENTITY_CORPSE);
-      if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
+      if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
     else
     {

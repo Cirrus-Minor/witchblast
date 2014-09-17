@@ -23,7 +23,7 @@ void EnnemyBoltEntity::animate(float delay)
 {
   if (boltType != ShotTypeBomb)
   {
-    SpriteEntity* trace = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
+    SpriteEntity* trace = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
     trace->setFading(true);
     trace->setZ(y);
     trace->setLifetime(0.2f);

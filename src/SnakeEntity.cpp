@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 SnakeEntity::SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocated)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SNAKE), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SNAKE), x, y)
 {
   this->snakeType = snakeType;
   imagesProLine = 10;

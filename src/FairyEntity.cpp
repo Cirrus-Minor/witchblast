@@ -7,7 +7,7 @@
 #include "sfml_game/MyTools.h"
 #include <iostream>
 
-FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_FAIRY), x, y, 48, 72)
+FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_FAIRY), x, y, 48, 72)
 {
   this->x = x;
   this->y = y;
@@ -123,7 +123,7 @@ void FairyEntity::fire(int dir)
 
   if (fireDelay <= 0.0f)
   {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
+    SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
     fireDelay = fairyFireDelay;
 
     float velx = 0.0f;
@@ -201,7 +201,7 @@ void FairyEntity::tryToFire()
         bolt->setFlying(true);
         bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
 
-        SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
+        SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
         fireDelay = fairyFireDelay;
 
         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))

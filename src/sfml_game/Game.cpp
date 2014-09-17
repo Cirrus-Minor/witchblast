@@ -80,7 +80,7 @@ void Game::onRender()
     app->clear(sf::Color(32, 32, 32));
 
     // render the game objects
-    EntityManager::getEntityManager()->render(app);
+    EntityManager::getInstance().render(app);
 
     app->display();
 }
@@ -89,6 +89,6 @@ void Game::onUpdate()
 {
   float delta = getAbsolutTime() - lastTime;
   lastTime = getAbsolutTime();
-  EntityManager::getEntityManager()->animate(delta);
+  EntityManager::getInstance().animate(delta);
 }
 

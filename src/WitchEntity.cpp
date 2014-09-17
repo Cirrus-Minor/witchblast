@@ -11,7 +11,7 @@
 #include "WitchBlastGame.h"
 
 WitchEntity::WitchEntity(float x, float y, witchTypeEnum witchType)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_WITCH), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_WITCH), x, y)
 {
   this->witchType = witchType;
   imagesProLine = 8;
@@ -66,7 +66,7 @@ void WitchEntity::animate(float delay)
         state = 1;
         velocity = Vector2D(0.0f, 0.0f);
         timer = 0.6f;
-        SoundManager::getSoundManager()->playSound(SOUND_WITCH_00 + rand() % 3);
+        SoundManager::getInstance().playSound(SOUND_WITCH_00 + rand() % 3);
         if (rand() % 7 == 0)
         {
           // invoke
@@ -76,7 +76,7 @@ void WitchEntity::animate(float delay)
           y0 = y0 * TILE_HEIGHT + TILE_HEIGHT / 2;
           if (witchType == WitchTypeNormal) new RatEntity(x0, y0, RatEntity::RatTypeNormal, true);
           else new BatEntity(x0, y0, true);
-          SoundManager::getSoundManager()->playSound(SOUND_INVOKE);
+          SoundManager::getInstance().playSound(SOUND_INVOKE);
 
           for(int i=0; i < 6; i++)
           {
@@ -180,7 +180,7 @@ void WitchEntity::fire()
 {
   if (witchType == WitchTypeNormal)
   {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
           (x, y + 10, ShotTypeStandard, 0);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
@@ -191,7 +191,7 @@ void WitchEntity::fire()
   }
   else
   {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
           (x, y + 10, ShotTypeBomb, 0);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);

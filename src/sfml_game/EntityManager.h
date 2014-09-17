@@ -25,7 +25,7 @@ class EntityManager
 {
 
 public:
-  static EntityManager* getEntityManager();
+  static EntityManager& getInstance();
 
   void initIterator();
 	void add(GameEntity* g);

@@ -7,7 +7,7 @@
 #include "WitchBlastGame.h"
 
 FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CYCLOP), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_CYCLOP), x, y)
 {
   imagesProLine = 20;
   type = ENTITY_ENNEMY;
@@ -103,12 +103,12 @@ void FallingRockEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType);
-  SoundManager::getSoundManager()->playSound(SOUND_ROCK_IMPACT);
+  SoundManager::getInstance().playSound(SOUND_ROCK_IMPACT);
   game().makeShake(0.1f);
 
   for (int i = 0; i < 4; i++)
   {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
+    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
     blood->setZ(OFFSET_Y - 1);
 
     blood->setFrame(12 + rand()%6);

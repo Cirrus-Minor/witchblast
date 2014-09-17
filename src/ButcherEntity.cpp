@@ -9,7 +9,7 @@
 #include "TextMapper.h"
 
 ButcherEntity::ButcherEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BUTCHER), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_BUTCHER), x, y)
 {
   width = 128;
   height = 128;
@@ -53,9 +53,9 @@ void ButcherEntity::animate(float delay)
       timer = (rand() % 50) / 10.0f;
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       if (rand()%2 == 0)
-        SoundManager::getSoundManager()->playSound(SOUND_BUTCHER_00);
+        SoundManager::getInstance().playSound(SOUND_BUTCHER_00);
       else
-        SoundManager::getSoundManager()->playSound(SOUND_BUTCHER_01);
+        SoundManager::getInstance().playSound(SOUND_BUTCHER_01);
     }
 
     frame = ((int)(age * creatureSpeed / 25)) % 4;

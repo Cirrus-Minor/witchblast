@@ -10,7 +10,7 @@
 #include <iostream>
 
 ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
-    : CollidingSpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CHEST), x, y, 48, 48)
+    : CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_CHEST), x, y, 48, 48)
 {
   type = ENTITY_CHEST;
   imagesProLine = 2;
@@ -48,7 +48,7 @@ void ChestEntity::animate(float delay)
     {
       initFallingGrid();
       for (int i = 0; i < 22; i++) fallRock();
-      SoundManager::getSoundManager()->playSound(SOUND_TRAP);
+      SoundManager::getInstance().playSound(SOUND_TRAP);
       game().makeShake(0.25f);
     }
   }
@@ -90,7 +90,7 @@ void ChestEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 void ChestEntity::open()
 {
   isOpen = true;
-  SoundManager::getSoundManager()->playSound(SOUND_CHEST_OPENING);
+  SoundManager::getInstance().playSound(SOUND_CHEST_OPENING);
 
   if (chestType == CHEST_BASIC)
   {

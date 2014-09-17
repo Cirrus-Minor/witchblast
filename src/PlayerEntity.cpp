@@ -14,7 +14,7 @@
 #include <sstream>
 
 PlayerEntity::PlayerEntity(float x, float y)
-  : BaseCreatureEntity (ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
+  : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
 {
   currentFireDelay = -1.0f;
   invincibleDelay = -1.0f;
@@ -140,7 +140,7 @@ void PlayerEntity::pay(int price)
 {
   gold -= price;
   if (gold < 0) gold = 0;
-  SoundManager::getSoundManager()->playSound(SOUND_PAY);
+  SoundManager::getInstance().playSound(SOUND_PAY);
 }
 
 void PlayerEntity::acquireItemAfterStance()
@@ -172,7 +172,7 @@ void PlayerEntity::acquireItemAfterStance()
       hp += hpBonus;
       hpDisplay += hpBonus;
 
-      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      SoundManager::getInstance().playSound(SOUND_EAT);
 
       std::ostringstream oss;
       oss << "HP Max +" << hpBonus;
@@ -190,7 +190,7 @@ void PlayerEntity::acquireItemAfterStance()
       hpMax += 1;
       hp = hpMax;
 
-      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      SoundManager::getInstance().playSound(SOUND_EAT);
 
       TextEntity* text = new TextEntity("HP Max + 1", 15, x, y - 50.0f);
       text->setColor(TextEntity::COLOR_FADING_GREEN);
@@ -215,7 +215,7 @@ void PlayerEntity::animate(float delay)
     specialBoltTimer -= delay;
     if (specialBoltTimer <= 0.0f)
     {
-      if (getShotType() == ShotTypeIce) SoundManager::getSoundManager()->playSound(SOUND_ICE_CHARGE);
+      if (getShotType() == ShotTypeIce) SoundManager::getInstance().playSound(SOUND_ICE_CHARGE);
     }
   }
   // rate of fire
@@ -320,80 +320,80 @@ void PlayerEntity::renderHead(sf::RenderTarget* app)
 
     if (equip[EQUIP_ENCHANTER_HAT])
     {
-      sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+      sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
       if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
         sprite.setTextureRect(sf::IntRect( 0, 0, width, height));
       else
         sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
       app->draw(sprite);
-      sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+      sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
     }
   }
 }
 
 void PlayerEntity::renderBody(sf::RenderTarget* app)
 {
-  if (equip[EQUIP_MAGICIAN_ROBE]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+  if (equip[EQUIP_MAGICIAN_ROBE]) sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
   app->draw(sprite);
-  sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
 
   if (equip[EQUIP_CONCENTRATION_AMULET] && playerStatus != playerStatusDead)
   {
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_COLLAR));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_COLLAR));
     if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
       sprite.setTextureRect(sf::IntRect( 0, 0, width, height));
     else
       sprite.setTextureRect(sf::IntRect( (spriteDx / 3) * width, 0, width, height));
 
     app->draw(sprite);
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
   }
 
   if (equip[EQUIP_LEATHER_BELT] && playerStatus != playerStatusDead)
   {
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
     sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 5, width, height));
     app->draw(sprite);
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
   }
 
   if (equip[EQUIP_BROOCH_STAR])
   {
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
     sprite.setTextureRect(sf::IntRect( (14 + spriteDx / 3) * width, 2 * height, width, height));
     app->draw(sprite);
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
   }
 }
 
 void PlayerEntity::renderHands(sf::RenderTarget* app)
 {
   if (equip[EQUIP_VIBRATION_GLOVES] && playerStatus != playerStatusDead)
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
 
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
   app->draw(sprite);
 
-  sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
 }
 
 void PlayerEntity::renderFeet(sf::RenderTarget* app)
 {
   if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
 
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
   app->draw(sprite);
 
-  sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
 }
 
 void PlayerEntity::renderStaff(sf::RenderTarget* app)
 {
   if (playerStatus == playerStatusDead) return;
 
-  if (equip[EQUIP_MAHOGANY_STAFF]) sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+  if (equip[EQUIP_MAHOGANY_STAFF]) sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
   int xSnake, ySnake;
   int xStone, yStone;
 
@@ -427,11 +427,11 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
 
   if (equip[EQUIP_BLOOD_SNAKE])
   {
-    sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_EQUIP));
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
     sprite.setTextureRect(sf::IntRect( xSnake, ySnake, width, height));
     app->draw(sprite);
   }
-  sprite.setTexture(*ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE));
+  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
   if (getShotType() != ShotTypeStandard)
   {
     sf::Color savedColor = sprite.getColor();
@@ -603,7 +603,7 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       float xs = (x + boltEntity->getX()) / 2;
       float ys = (y + boltEntity->getY()) / 2;
-      SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+      SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
       star->setFading(true);
       star->setZ(y+ 100);
       star->setLifetime(0.7f);
@@ -764,7 +764,7 @@ void PlayerEntity::rageFire()
         bolt->setVelocity(Vector2D(velx, vely));
       }
     }
-  SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
+  SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
 }
 
 void PlayerEntity::resestFireDirection()
@@ -787,7 +787,7 @@ void PlayerEntity::fire(int direction)
 
   if (canFirePlayer && playerStatus != playerStatusDead && playerStatus != playerStatusAcquire)
   {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_STANDARD);
+    SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
 
     if (equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE])
     {
@@ -883,7 +883,7 @@ bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool c
 
   if (invincibleDelay <= 0.0f || hurtingType == ShotTypeDeterministic)
   {
-    SoundManager::getSoundManager()->playSound(SOUND_PLAYER_HIT);
+    SoundManager::getInstance().playSound(SOUND_PLAYER_HIT);
     if (BaseCreatureEntity::hurt(damages, hurtingType, level, critical))
     {
       if (hurtingType != ShotTypeDeterministic)
@@ -905,7 +905,7 @@ bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool c
 void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
 {
   CollidingSpriteEntity* itemSprite
-    = new CollidingSpriteEntity(ImageManager::getImageManager()->getImage(isEquip ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, 32, 32);
+    = new CollidingSpriteEntity(ImageManager::getInstance().getImage(isEquip ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, 32, 32);
   itemSprite->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   itemSprite->setZ(OFFSET_Y - 1);
   itemSprite->setFrame(itemType);
@@ -921,7 +921,7 @@ void PlayerEntity::dying()
   playerStatus = playerStatusDead;
   deathAge = 0.0f;
   hp = 0;
-  SoundManager::getSoundManager()->playSound(SOUND_PLAYER_DIE);
+  SoundManager::getInstance().playSound(SOUND_PLAYER_DIE);
   setVelocity(Vector2D(0.0f, 0.0f));
 
   int i;
@@ -941,7 +941,7 @@ void PlayerEntity::dying()
   for (i = 0; i < 8; i++) game().generateBlood(x, y, bloodColor);
 
   CollidingSpriteEntity* itemSprite
-    = new CollidingSpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_PLAYER_BASE), x, y, 80, 120);
+    = new CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 80, 120);
   itemSprite->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   itemSprite->setZ(OFFSET_Y - 1);
   itemSprite->setImagesProLine(14);
@@ -974,31 +974,31 @@ void PlayerEntity::acquireItem(enumItemType type)
     case ItemCopperCoin:
       gold++;
       displayAcquiredGold(1);
-      SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
+      SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
       break;
     case ItemSilverCoin:
       gold = gold + 5;
       displayAcquiredGold(5);
-      SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
+      SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
       break;
     case ItemGoldCoin:
       gold = gold + 10;
       displayAcquiredGold(10);
-      SoundManager::getSoundManager()->playSound(SOUND_COIN_PICK_UP);
+      SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
       break;
     case ItemHealthVerySmall:
       hp += 3;
-      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      SoundManager::getInstance().playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
     case ItemHealthSmall:
       hp += 7;
-      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      SoundManager::getInstance().playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
     case ItemHealth:
       hp += 15;
-      SoundManager::getSoundManager()->playSound(SOUND_EAT);
+      SoundManager::getInstance().playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
     default:
@@ -1064,7 +1064,7 @@ void PlayerEntity::acquireStance(enumItemType type)
   playerStatus = playerStatusAcquire;
   acquireDelay = ACQUIRE_DELAY;
   acquiredItem = (enumItemType)(type);
-  SoundManager::getSoundManager()->playSound(SOUND_BONUS);
+  SoundManager::getInstance().playSound(SOUND_BONUS);
 
   game().showArtefactDescription(type);
 
@@ -1077,7 +1077,7 @@ void PlayerEntity::acquireStance(enumItemType type)
   }
 
   spriteItem = new SpriteEntity(
-    ImageManager::getImageManager()->getImage(itemImage),
+    ImageManager::getInstance().getImage(itemImage),
     x, y - 100.0f, ITEM_WIDTH, ITEM_HEIGHT);
   spriteItem->setFrame((int)itemFrame);
   spriteItem->setImagesProLine(10);
@@ -1085,7 +1085,7 @@ void PlayerEntity::acquireStance(enumItemType type)
   spriteItem->setLifetime(ACQUIRE_DELAY);
 
   spriteItemStar = new SpriteEntity(
-    ImageManager::getImageManager()->getImage(IMAGE_STAR),
+    ImageManager::getInstance().getImage(IMAGE_STAR),
     x, y - 100.0f);
   spriteItemStar->setScale(4.0f, 4.0f);
   spriteItemStar->setZ(z-1.0f);
@@ -1124,12 +1124,12 @@ void PlayerEntity::useBossKey()
   playerStatus = playerStatusUnlocking;
   acquireDelay = UNLOCK_DELAY;
   acquiredItem = (enumItemType)(type - FirstEquipItem);
-  SoundManager::getSoundManager()->playSound(SOUND_BONUS);
+  SoundManager::getInstance().playSound(SOUND_BONUS);
   equip[EQUIP_BOSS_KEY] = false;
 
 
   SpriteEntity* spriteItem = new SpriteEntity(
-    ImageManager::getImageManager()->getImage(IMAGE_ITEMS_EQUIP),
+    ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP),
     x, y - 100.0f, ITEM_WIDTH, ITEM_HEIGHT);
   spriteItem->setFrame(EQUIP_BOSS_KEY);
   spriteItem->setZ(z);
@@ -1195,7 +1195,7 @@ void PlayerEntity::selectNextShotType()
   else
     specialShotIndex = 0;
 
-  SoundManager::getSoundManager()->playSound(SOUND_SHOT_SELECT);
+  SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
   computePlayer();
 }
 
@@ -1205,7 +1205,7 @@ void PlayerEntity::initShotType()
   needInitShotType = false;
 
   if (getShotType() == ShotTypeLightning)
-    SoundManager::getSoundManager()->playSound(SOUND_ELECTRIC_CHARGE);
+    SoundManager::getInstance().playSound(SOUND_ELECTRIC_CHARGE);
 }
 
 unsigned int PlayerEntity::getShotLevel()
@@ -1338,7 +1338,7 @@ void PlayerEntity::teleport()
     if (game().getCurrentMap()->isWalkable(xm, ym))
     {
       // enemy or bolt ?
-      EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+      EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
       EntityManager::EntityList::iterator it;
 
       bool isBad = false;

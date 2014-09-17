@@ -286,7 +286,7 @@ bool CollidingSpriteEntity::collideWithEntity(CollidingSpriteEntity* entity)
 
 void CollidingSpriteEntity::testSpriteCollisions()
 {
-  EntityManager::EntityList* entityList = EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
 
   EntityManager::EntityList::iterator it;
   EntityManager::EntityList::iterator oldit = entityList->begin ();

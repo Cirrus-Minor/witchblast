@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BUBBLE), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_BUBBLE), x, y)
 {
   this->bubbleSize = bubbleSize;
   imagesProLine = 8;
@@ -158,7 +158,7 @@ void BubbleEntity::dying()
 
   for (int i = 0; i < 5 - bubbleSize; i++)
   {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
+    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
     blood->setZ(OFFSET_Y - 1);
 
     blood->setFrame(24 + rand()%6);
@@ -170,5 +170,5 @@ void BubbleEntity::dying()
     blood->setScale(bloodScale, bloodScale);
   }
 
-  SoundManager::getSoundManager()->playSound(SOUND_BUBBLE_00 + rand() % 2);
+  SoundManager::getInstance().playSound(SOUND_BUBBLE_00 + rand() % 2);
 }

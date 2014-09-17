@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 CauldronEntity::CauldronEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_CAULDRON), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_CAULDRON), x, y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
@@ -31,7 +31,7 @@ CauldronEntity::CauldronEntity(float x, float y)
 
 void CauldronEntity::animate(float delay)
 {
-  SoundManager::getSoundManager()->playSound(SOUND_CAULDRON);
+  SoundManager::getInstance().playSound(SOUND_CAULDRON);
 
   invokeDelay -= delay;
   if (invokeDelay < 0.0f)
@@ -48,7 +48,7 @@ void CauldronEntity::animate(float delay)
     for (int i=0; i < 2; i++)
     {
       float xBub = x - 16 + rand() % 32;
-      SpriteEntity* bubble = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CAULDRON), xBub, y - 20, 8, 8);
+      SpriteEntity* bubble = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CAULDRON), xBub, y - 20, 8, 8);
       bubble->setZ(z);
       bubble->setFrame(32);
       bubble->setType(ENTITY_EFFECT);

@@ -10,7 +10,7 @@
 #include <math.h>
 
 EvilFlowerEntity::EvilFlowerEntity(float x, float y)
-    : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_FLOWER), x, y)
+    : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_FLOWER), x, y)
 {
   hp = EVIL_FLOWER_HP;
   meleeDamages = EVIL_FLOWER_MELEE_DAMAGES;
@@ -61,19 +61,19 @@ void EvilFlowerEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType);
-  SpriteEntity* deadFlower = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+  SpriteEntity* deadFlower = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadFlower->setZ(OFFSET_Y);
   deadFlower->setFrame(FRAME_CORPSE_FLOWER);
   deadFlower->setType(ENTITY_CORPSE);
 
   for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
-  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
+  SoundManager::getInstance().playSound(SOUND_ENNEMY_DYING);
 }
 
 void EvilFlowerEntity::fire()
 {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
           (x, y + 10, ShotTypeStandard, 0);
     bolt->setFrame(1);

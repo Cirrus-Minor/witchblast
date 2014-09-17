@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 LittleSpiderEntity::LittleSpiderEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_LITTLE_SPIDER), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_LITTLE_SPIDER), x, y)
 {
   imagesProLine = 8;
   creatureSpeed = 175.0f;

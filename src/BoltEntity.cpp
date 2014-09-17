@@ -7,7 +7,7 @@
 #include "sfml_game/SoundManager.h"
 
 BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltType, int level)
-: CollidingSpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT)
+: CollidingSpriteEntity (ImageManager::getInstance().getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT)
 {
   lifetime = boltLifeTime;
   setDamages(INITIAL_BOLT_DAMAGES);
@@ -148,7 +148,7 @@ void BoltEntity::collide()
 
 void BoltEntity::generateParticule(Vector2D vel)
 {
-  SpriteEntity* trace = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
+  SpriteEntity* trace = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
   trace->setFading(true);
   trace->setZ(y);
   trace->setLifetime(0.5f);
@@ -196,7 +196,7 @@ void BoltEntity::onDying()
 
 void BoltEntity::stuck()
 {
-  SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+  SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
   if (boltType == ShotTypeBomb)
     explode();
   else
@@ -224,7 +224,7 @@ void BoltEntity::collideMapRight()
     velocity.x = 0.0f;
     isDying = true;
 
-    SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+    SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
     {
       Vector2D vel(100.0f + rand() % 150);
@@ -247,7 +247,7 @@ void BoltEntity::collideMapLeft()
     velocity.x = 0.0f;
     isDying = true;
 
-    SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+    SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
     {
       Vector2D vel(100.0f + rand() % 150);
@@ -270,7 +270,7 @@ void BoltEntity::collideMapTop()
     velocity.y = 0.0f;
     isDying = true;
 
-    SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+    SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
     {
       Vector2D vel(100.0f + rand() % 150);
@@ -293,7 +293,7 @@ void BoltEntity::collideMapBottom()
     velocity.y = 0.0f;
     isDying = true;
 
-    SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+    SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
     {
       Vector2D vel(100.0f + rand() % 150);
@@ -308,9 +308,9 @@ void BoltEntity::explode()
   isDying = true;
   new ExplosionEntity(x, y, 12);
   game().makeShake(0.5f);
-  SoundManager::getSoundManager()->playSound(SOUND_BOOM_00);
+  SoundManager::getInstance().playSound(SOUND_BOOM_00);
 
-  SpriteEntity* corpse= new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+  SpriteEntity* corpse= new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
   corpse->setFrame(FRAME_CORPSE_SLIME_VIOLET);
   corpse->setImagesProLine(10);
   corpse->setZ(OFFSET_Y);

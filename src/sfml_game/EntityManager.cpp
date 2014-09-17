@@ -26,11 +26,11 @@ EntityManager::EntityManager()
 	mItems = 0;
 }
 
- EntityManager* EntityManager::getEntityManager()
- {
-   static EntityManager singleton;
-   return &singleton;
- }
+EntityManager& EntityManager::getInstance()
+{
+    static EntityManager singleton;
+    return singleton;
+}
 
 
 void EntityManager::add(GameEntity* g)

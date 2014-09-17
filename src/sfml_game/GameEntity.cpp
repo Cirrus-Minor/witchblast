@@ -48,7 +48,7 @@ GameEntity::GameEntity(float m_x, float m_y)
 	angle = 0.0f;
 	spin = 0.0f;
 
-	EntityManager::getEntityManager()->add(this);
+	EntityManager::getInstance().add(this);
 }
 
 GameEntity::~GameEntity()
