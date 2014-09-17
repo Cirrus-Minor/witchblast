@@ -235,6 +235,11 @@ public:
   item_equip_enum getRandomEquipItem(bool toSale, bool noFairy);
 
   /*!
+   *  \brief Returns a random spell object
+   */
+  enumItemType getItemSpell();
+
+  /*!
    *  \brief Generate a random challenge loot
    *
    *  \param x : x position of the bonus

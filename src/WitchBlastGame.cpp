@@ -132,6 +132,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/witch_02.ogg",       "media/sound/invoke.ogg",
     "media/sound/cauldron.ogg",       "media/sound/cauldron_die.ogg",
     "media/sound/critical.ogg",       "media/sound/gong.ogg",
+    "media/sound/teleport.ogg",       "media/sound/spell_charge.ogg",
   };
 
   for (const char *const filename : sounds) {
@@ -1945,12 +1946,27 @@ enumCastSpell WitchBlastGame::generateRandomSpell()
     return SpellSlimeExplode;
 }
 
+enumItemType WitchBlastGame::getItemSpell()
+{
+  int n = rand() % SPELL_MAX;
+  while (player->getActiveSpell().spell == n) n = rand() % SPELL_MAX;
+
+  enumItemType item;
+  switch (n)
+  {
+    case SpellNone:
+    case SpellTeleport: item = ItemSpellTeleport; break;
+    case SpellSlimeExplode: item = ItemSpellSlimeExplode; break;
+  }
+  return item;
+}
+
 void WitchBlastGame::generateChallengeBonus(float x, float y)
 {
   // loot
-  if (player->getActiveSpell().spell == SpellNone || rand() % 2 == 0) // TODO
+  if (player->getActiveSpell().spell == SpellNone || rand() % 2 == 0)
   {
-    ItemEntity* newItem = new ItemEntity(rand() % 2 == 0 ? ItemSpellTeleport : ItemSpellSlimeExplode, x, y);
+    ItemEntity* newItem = new ItemEntity(getItemSpell(), x, y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
   }

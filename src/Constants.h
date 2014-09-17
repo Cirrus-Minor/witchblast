@@ -177,7 +177,9 @@ enum sound_resources {
   SOUND_CAULDRON,
   SOUND_CAULDRON_DIE,
   SOUND_CRITICAL,
-  SOUND_GONG
+  SOUND_GONG,
+  SOUND_TELEPORT,
+  SOUND_SPELL_CHARGE
 };
 
 enum corpses_ressources{
@@ -285,6 +287,7 @@ enum enumCastSpell
 
   SpellNone
 };
+const int SPELL_MAX = SpellNone;
 
 const std::string spellLabel[SpellNone] =
 {

@@ -160,6 +160,8 @@ void PlayerEntity::acquireItemAfterStance()
     // spells
     if (acquiredItem == ItemSpellTeleport)
       setActiveSpell(SpellTeleport);
+    else if (acquiredItem == ItemSpellSlimeExplode)
+      setActiveSpell(SpellSlimeExplode);
 
     computePlayer();
   }
@@ -231,6 +233,7 @@ void PlayerEntity::animate(float delay)
       activeSpell.delay -= 40 * delay;
     else
       activeSpell.delay -= delay;
+    if (activeSpell.delay <= 0.0f) SoundManager::getInstance().playSound(SOUND_SPELL_CHARGE);
   }
   // acquisition animation
   if (playerStatus == playerStatusAcquire)
@@ -1268,8 +1271,16 @@ castSpellStruct PlayerEntity::getActiveSpell()
 
 void PlayerEntity::setActiveSpell(enumCastSpell spell)
 {
-  activeSpell.spell = spell;
+  if (activeSpell.spell != SpellNone)
+  {
+    // drop the old spell
+    equip[activeSpell.frame] = false;
+    ItemEntity* newItem = new ItemEntity((enumItemType)(ItemMagicianHat + activeSpell.frame), x, y);
+    newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+    newItem->setViscosity(0.96f);
+  }
 
+  activeSpell.spell = spell;
 
   switch (spell)
   {
@@ -1290,7 +1301,7 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
 
 void PlayerEntity::castSpell()
 {
-  if (playerStatus == playerStatusDead) return;
+  if (playerStatus != playerStatusPlaying) return;
 
   if (canCastSpell())
   {
@@ -1317,6 +1328,7 @@ void PlayerEntity::teleport()
   int xm, ym;
   float xNew = x, yNew = y;
   invincibleDelay = 2.0f;
+  SoundManager::getInstance().playSound(SOUND_TELEPORT);
 
   for(int i=0; i < 6; i++)
   {
