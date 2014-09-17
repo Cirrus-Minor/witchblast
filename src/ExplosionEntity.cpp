@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-ExplosionEntity::ExplosionEntity(float x, float y)
+ExplosionEntity::ExplosionEntity(float x, float y, int damage)
   : SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_EXPLOSION64), x, y, 100, 100)
 {
   type = ENTITY_EXPLOSION;
@@ -15,6 +15,8 @@ ExplosionEntity::ExplosionEntity(float x, float y)
   imagesProLine = 14;
   lifetime = 1.0f;
   spin = 900.0f;
+
+  this->damage = damage;
 
   sprite.setOrigin(50, 50);
   testCollisions();
@@ -43,11 +45,6 @@ void ExplosionEntity::animate(float delay)
 void ExplosionEntity::render(sf::RenderTarget* app)
 {
   SpriteEntity::render(app);
-  /*if (game().getShowLogical())
-  {
-    displayBoundingBox(app);
-    displayCenterAndZ(app);
-  }*/
 }
 
 void ExplosionEntity::dying()
@@ -80,7 +77,7 @@ void ExplosionEntity::testCollisions()
 
         if (bb.intersects(entity->getBoundingBox()))
         {
-          entity->hurt(12, ShotTypeFire, 0, false);
+          entity->hurt(damage, ShotTypeFire, 0, false);
 
           Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 800.0f );
           entity->giveRecoil(true, recoilVector, 1.0f);

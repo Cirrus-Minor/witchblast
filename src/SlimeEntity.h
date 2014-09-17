@@ -14,6 +14,7 @@ class SlimeEntity : public EnemyEntity
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
 	  virtual bool canCollide();
+	  void makePet(int direction);
 
   protected:
     virtual bool collideWithMap(int direction);
@@ -22,6 +23,7 @@ class SlimeEntity : public EnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
+    virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
 
 	  virtual void dying();
@@ -32,6 +34,7 @@ class SlimeEntity : public EnemyEntity
     float jumpingDelay;
 
     bool isJumping;
+    bool isPet;
     bool isFirstJumping;
     bool invocated;
     slimeTypeEnum slimeType;

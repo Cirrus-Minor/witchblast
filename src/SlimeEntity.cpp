@@ -63,6 +63,8 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
 
   viscosity = 0.98f;
   sprite.setOrigin(32, 44);
+
+  isPet = false;
 }
 
 void SlimeEntity::animate(float delay)
@@ -141,6 +143,50 @@ void SlimeEntity::animate(float delay)
 
   EnemyEntity::animate(delay);
   z = y + 14;
+}
+
+void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
+{
+  if (!isDying && !isAgonising && collideWithEntity(entity))
+  {
+    if (!isPet && (entity->getType() == ENTITY_PLAYER || entity->getType() == ENTITY_BOLT ) )
+    {
+      PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
+      BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
+
+      if (playerEntity != NULL && !playerEntity->isDead())
+      {
+        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false))
+        {
+          float xs = (x + playerEntity->getX()) / 2;
+          float ys = (y + playerEntity->getY()) / 2;
+          SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+          star->setFading(true);
+          star->setZ(y+ 100);
+          star->setLifetime(0.7f);
+          star->setType(ENTITY_EFFECT);
+          star->setSpin(400.0f);
+        }
+        inflictsRecoilTo(playerEntity);
+      }
+
+      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
+      {
+        collideWithBolt(boltEntity);
+      }
+    }
+    else // collision with other enemy ?
+    {
+      if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
+      {
+        if (this != entity)
+        {
+          EnemyEntity* ennemyEntity = static_cast<EnemyEntity*>(entity);
+          if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
+        }
+      }
+    }
+  }
 }
 
 void SlimeEntity::render(sf::RenderTarget* app)
@@ -322,7 +368,25 @@ void SlimeEntity::fire()
 
 void SlimeEntity::explode()
 {
-  new ExplosionEntity(x, y);
+  ExplosionEntity* expl = new ExplosionEntity(x, y, isPet ? 18 : 12);
+
   game().makeShake(1.0f);
   SoundManager::getSoundManager()->playSound(SOUND_BOOM_00);
+}
+
+void SlimeEntity::makePet(int direction)
+{
+  isPet = true;
+  hVelocity = 450.0f;
+  SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);
+  isJumping = true;
+  isFirstJumping = true;
+
+  switch (direction)
+  {
+    case 4: velocity.x = -350.0f; velocity.y = -0; break;
+    case 6: velocity.x = 350.0f; velocity.y = -0; break;
+    case 2: velocity.y = 350.0f; velocity.x = -0; break;
+    default: velocity.y = -350.0f; velocity.x = -0; break;
+  }
 }

@@ -6,7 +6,7 @@
 class ExplosionEntity : public SpriteEntity
 {
   public:
-    ExplosionEntity(float x, float y);
+    ExplosionEntity(float x, float y, int damage);
 
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
@@ -14,6 +14,9 @@ class ExplosionEntity : public SpriteEntity
 
   protected:
     void testCollisions();
+
+  private:
+    int damage;
 };
 
 #endif // EXPLOSIONENTITY_H
