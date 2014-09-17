@@ -23,18 +23,21 @@ A CMake file is available.
 
 Commands
 --------
+Standard commands (can be changed in the game):
 
 WASD (US, DE) or QSDZ (FR) to move in 8 directions
 ---
 Arrows to shoot in 4 directions,
 or
-[Space] (can be hold) to shoot in the facing direction.
+[Right CTRL] (can be hold) to shoot in the facing direction.
 or
 Mouse left-click
 ---
 [Tab] to change shoot type (if you've found any).
 or 
 Mouse Wheel
+---
+[Space] to cast a spell (if you've found any).
 
 
 Saving
@@ -53,6 +56,7 @@ Features
 - monsters,
 - chest and keys,
 - merchant,
+- spells with cooldown,
 - candy eye effects.
 
 Credits
@@ -71,12 +75,22 @@ Thanks
 Thanks to
 
 Billx (who suggested me the title "Witch Blast")
-Ruth (for the english corrections)
 Mika Attila (for his contribution concerning the Linux version)
+Ruth (for the english corrections)
 Geheim (for the German translation)
+Achpile (for the Russian version and his help in the code)
+AFS (for the Spanish translation)
 
 Changes
 -------
+Next release
+- ADD New monsters (snakes)
+- ADD New items (spell orbs)
+- ADD Poison
+- ADD Spells
+- ADD Translations: Spanish and Russian
+- ADD New art for bats
+- FIX Texts are now in UTF-8
 
 v0.3.3
 - ADD German version
