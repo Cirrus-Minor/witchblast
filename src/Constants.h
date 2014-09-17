@@ -27,8 +27,8 @@ const std::string SAVE_FILE =     "game.sav";
 
 const std::string SAVE_VERSION =  "SAVE_0.3.0";
 
-const int NB_LANGUAGES = 3;
-const std::string languageString[NB_LANGUAGES] = { "english", "french", "german" };
+const int NB_LANGUAGES = 4;
+const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "russian" };
 
 // Client size
 const int SCREEN_WIDTH = 970;
