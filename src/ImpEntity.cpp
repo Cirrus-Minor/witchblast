@@ -8,7 +8,7 @@
 #include "EnnemyBoltEntity.h"
 
 ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_IMP), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_IMP), x, y)
 {
   // general
   creatureSpeed = IMP_SPEED;
@@ -161,7 +161,7 @@ void ImpEntity::dying()
 
 void ImpEntity::fire()
 {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
 
     EnnemyBoltEntity* bolt;
     if (impType == ImpTypeBlue)

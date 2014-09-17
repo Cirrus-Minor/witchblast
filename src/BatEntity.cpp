@@ -7,7 +7,7 @@
 #include "WitchBlastGame.h"
 
 BatEntity::BatEntity(float x, float y, bool invocated)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_BAT), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_BAT), x, y)
 {
   creatureSpeed = BAT_SPEED;
   velocity = Vector2D(creatureSpeed);

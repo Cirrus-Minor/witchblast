@@ -9,7 +9,7 @@
 #include "WitchBlastGame.h"
 
 SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocated)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SLIME), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SLIME), x, y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
@@ -89,7 +89,7 @@ void SlimeEntity::animate(float delay)
         {
           isFirstJumping = false;
           hVelocity = 160.0f;
-          SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT);
+          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT);
           if (slimeType == SlimeTypeBlue || slimeType == SlimeTypeRed)
             fire();
           else if (slimeType == SlimeTypeViolet)
@@ -102,7 +102,7 @@ void SlimeEntity::animate(float delay)
         {
           jumpingDelay = 0.4f + 0.1f * (rand() % 20);
           isJumping = false;
-          SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT_WEAK);
+          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_WEAK);
         }
       }
     }
@@ -114,7 +114,7 @@ void SlimeEntity::animate(float delay)
     jumpingDelay -= slimeDelay;
     if (jumpingDelay < 0.0f)
     {
-      SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);
+      SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
       hVelocity = 350.0f + rand() % 300;
       isJumping = true;
       isFirstJumping = true;
@@ -160,7 +160,7 @@ void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
-          SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
           star->setFading(true);
           star->setZ(y+ 100);
           star->setLifetime(0.7f);
@@ -299,7 +299,7 @@ void SlimeEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType);
-  SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+  SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
   deadSlime->setZ(OFFSET_Y);
   deadSlime->setImagesProLine(10);
   switch (slimeType)
@@ -314,7 +314,7 @@ void SlimeEntity::dying()
   for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
 
   if (!invocated) drop();
-  SoundManager::getSoundManager()->playSound(SOUND_ENNEMY_DYING);
+  SoundManager::getInstance().playSound(SOUND_ENNEMY_DYING);
 }
 
 void SlimeEntity::prepareDying()
@@ -363,7 +363,7 @@ void SlimeEntity::fire()
       case 3: bolt->setVelocity(Vector2D(0, -SLIME_FIRE_VELOCITY)); break;
     }
   }
-  SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+  SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
 }
 
 void SlimeEntity::explode()
@@ -371,14 +371,14 @@ void SlimeEntity::explode()
   ExplosionEntity* expl = new ExplosionEntity(x, y, isPet ? 18 : 12);
 
   game().makeShake(1.0f);
-  SoundManager::getSoundManager()->playSound(SOUND_BOOM_00);
+  SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }
 
 void SlimeEntity::makePet(int direction)
 {
   isPet = true;
   hVelocity = 450.0f;
-  SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);
+  SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
   isJumping = true;
   isFirstJumping = true;
 

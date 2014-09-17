@@ -45,19 +45,19 @@ void EnemyEntity::animate(float delay)
       SpriteEntity* corpse;
       if (deathFrame >= FRAME_CORPSE_KING_RAT)
       {
-        corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
+        corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
         corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
       }
       else
       {
-        corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+        corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
         corpse->setFrame(deathFrame);
         corpse->setImagesProLine(10);
       }
 
       corpse->setZ(OFFSET_Y);
       corpse->setType(ENTITY_CORPSE);
-      if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
+      if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
     else
     {
@@ -119,7 +119,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
-          SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
           star->setFading(true);
           star->setZ(y+ 100);
           star->setLifetime(0.7f);
@@ -157,9 +157,9 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
 
   hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical());
   if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
-  SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
+  SoundManager::getInstance().playSound(SOUND_IMPACT);
 
-  SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+  SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
   star->setFading(true);
   star->setZ(y+ 100);
   star->setLifetime(0.7f);
@@ -226,7 +226,7 @@ bool EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool cr
 {
   bool hurted = BaseCreatureEntity::hurt(damages, hurtingType, level, critical);
   if (hurted && hurtingSound != SOUND_NONE && hp > 0)
-    SoundManager::getSoundManager()->playSound(hurtingSound);
+    SoundManager::getInstance().playSound(hurtingSound);
   return hurted;
 }
 
@@ -235,18 +235,18 @@ void EnemyEntity::dying()
   if (dyingFrame == -1)
   {
     isDying = true;
-    SpriteEntity* corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES), x, y, 64, 64);
+    SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
     corpse->setZ(OFFSET_Y);
     corpse->setImagesProLine(10);
     corpse->setFrame(deathFrame);
     corpse->setType(ENTITY_CORPSE);
-    if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
+    if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
   }
   else
   {
     isAgonising = true;
     hVelocity = 200.0f;
-    if (agonizingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(agonizingSound);
+    if (agonizingSound != SOUND_NONE) SoundManager::getInstance().playSound(agonizingSound);
   }
   if (bloodColor != BloodNone) for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();

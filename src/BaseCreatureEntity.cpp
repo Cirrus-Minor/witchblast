@@ -361,7 +361,7 @@ int BaseCreatureEntity::determineDamageBonus(enumStateResistance resistance, int
 
 bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, float yDistMin)
 {
-  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
 	for (it = entityList->begin (); it != entityList->end ();)
@@ -503,7 +503,7 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
       textCrit->setType(ENTITY_FLYING_TEXT);
     }
 
-    if (critical) SoundManager::getSoundManager()->playSound(SOUND_CRITICAL);
+    if (critical) SoundManager::getInstance().playSound(SOUND_CRITICAL);
 
     return true;
   }
@@ -573,7 +573,7 @@ bool BaseCreatureEntity::canCollide()
 void BaseCreatureEntity::generateStar(sf::Color starColor)
 {
   SpriteEntity* spriteStar = new SpriteEntity(
-                           ImageManager::getImageManager()->getImage(IMAGE_STAR_2),
+                           ImageManager::getInstance().getImage(IMAGE_STAR_2),
                             x, y);
   spriteStar->setScale(0.8f, 0.8f);
   spriteStar->setZ(z-1.0f);

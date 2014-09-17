@@ -13,7 +13,7 @@
 #include <iostream>
 
 GiantSpiderEntity::GiantSpiderEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_GIANT_SPIDER), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_GIANT_SPIDER), x, y)
 {
   width = 128;
   height = 128;
@@ -83,14 +83,14 @@ void GiantSpiderEntity::animate(float delay)
       if (walkingSoundDelay <= 0.0f)
       {
         walkingSoundDelay = 1.0f;
-        SoundManager::getSoundManager()->playSound(SOUND_SPIDER_WALKING);
+        SoundManager::getInstance().playSound(SOUND_SPIDER_WALKING);
       }
       fireDelay -= delay;
       if (fireDelay <= 0.0f)
       {
         if (rand() % 12 == 0)
         {
-          SoundManager::getSoundManager()->playSound(SOUND_SPIDER_WEB);
+          SoundManager::getInstance().playSound(SOUND_SPIDER_WEB);
           for (int i = 0; i < 3; i++) new SpiderWebEntity(x, y);
         }
         else
@@ -110,7 +110,7 @@ void GiantSpiderEntity::animate(float delay)
         velocity = Vector2D(0.0f, 0.0f);
         timer = 1.0f;
         creatureSpeed = GIANT_SPIDER_SPEED[hurtLevel];
-        SoundManager::getSoundManager()->playSound(SOUND_SPIDER_HURT);
+        SoundManager::getInstance().playSound(SOUND_SPIDER_HURT);
       }
     }
     else if (state == 3) // wait after falling
@@ -298,7 +298,7 @@ bool GiantSpiderEntity::canCollide()
 
 void GiantSpiderEntity::fire(int fireType)
 {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
 
     EnnemyBoltEntity* bolt;
 
@@ -325,7 +325,7 @@ void GiantSpiderEntity::drop()
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
 
-  EntityManager::EntityList* entityList =EntityManager::getEntityManager()->getList();
+  EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
 	for (it = entityList->begin (); it != entityList->end ();)

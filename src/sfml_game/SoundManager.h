@@ -22,7 +22,7 @@
 class SoundManager
 {
 public:
-    static SoundManager* getSoundManager();
+    static SoundManager& getInstance();
     void addSound(const char *fileName);
     void playSound(int n);
     void stopSound(int n);

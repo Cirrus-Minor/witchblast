@@ -36,11 +36,11 @@ SoundManager::~SoundManager()
     std::cout << "OK" << std::endl;
 }
 
- SoundManager* SoundManager::getSoundManager()
- {
-   static SoundManager singleton;
-   return &singleton;
- }
+SoundManager& SoundManager::getInstance()
+{
+    static SoundManager singleton;
+    return singleton;
+}
 
 void SoundManager::addSound(const char* fileName)
 {

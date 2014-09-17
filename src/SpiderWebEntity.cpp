@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 SpiderWebEntity::SpiderWebEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SPIDER_WEB), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SPIDER_WEB), x, y)
 {
   imagesProLine = 20;
   type = ENTITY_ENNEMY_INVOCATED;
@@ -132,9 +132,9 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
         hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical());
         if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
-        SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
+        SoundManager::getInstance().playSound(SOUND_IMPACT);
 
-        SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+        SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
         star->setFading(true);
         star->setZ(y+ 100);
         star->setLifetime(0.7f);

@@ -12,7 +12,7 @@
 #include <iostream>
 
 KingRatEntity::KingRatEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_KING_RAT), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_KING_RAT), x, y)
 {
   width = 128;
   height = 128;
@@ -61,12 +61,12 @@ void KingRatEntity::animate(float delay)
     {
       isDying = true;
       SpriteEntity* corpse;
-      corpse = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y + 48, 128, 128);
+      corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y + 48, 128, 128);
       corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
 
       corpse->setZ(OFFSET_Y);
       corpse->setType(ENTITY_CORPSE);
-      if (dyingSound != SOUND_NONE) SoundManager::getSoundManager()->playSound(dyingSound);
+      if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
     else
     {
@@ -119,7 +119,7 @@ void KingRatEntity::animate(float delay)
       state = 1;
       // generate rats
       generateGreenRats();
-      SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_1);
+      SoundManager::getInstance().playSound(SOUND_KING_RAT_1);
       timer = 2.0f;
 
       velocity.x = 0.0f;
@@ -135,7 +135,7 @@ void KingRatEntity::animate(float delay)
         timer = 12.0f;
         state = 6;
         velocity = Vector2D(KING_RAT_BERSERK_SPEED);
-        SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_2);
+        SoundManager::getInstance().playSound(SOUND_KING_RAT_2);
       }
       else
       {
@@ -153,7 +153,7 @@ void KingRatEntity::animate(float delay)
 
       velocity.x = 0.0f;
       velocity.y = 0.0f;
-      SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_2);
+      SoundManager::getInstance().playSound(SOUND_KING_RAT_2);
     }
 
     else if (state == 3) // normal -> rush
@@ -181,7 +181,7 @@ void KingRatEntity::animate(float delay)
         timer = 12.0f;
         state = 6;
         velocity = Vector2D(KING_RAT_BERSERK_SPEED);
-        SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_2);
+        SoundManager::getInstance().playSound(SOUND_KING_RAT_2);
       }
       else
       {
@@ -206,7 +206,7 @@ void KingRatEntity::animate(float delay)
     if (berserkDelay <= 0.0f)
     {
       berserkDelay = 0.8f + (rand()%10) / 10.0f;
-      SoundManager::getSoundManager()->playSound(SOUND_KING_RAT_2);
+      SoundManager::getInstance().playSound(SOUND_KING_RAT_2);
 
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(),KING_RAT_BERSERK_SPEED ));
     }
@@ -273,7 +273,7 @@ void KingRatEntity::afterWallCollide()
       velocity.x *= 0.75f;
       velocity.y *= 0.75f;
 
-      SoundManager::getSoundManager()->playSound(SOUND_BIG_WALL_IMPACT);
+      SoundManager::getInstance().playSound(SOUND_BIG_WALL_IMPACT);
       game().makeShake(0.75f);
     }
 }

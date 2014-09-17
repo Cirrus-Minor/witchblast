@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "sfml_game/ImageManager.h"
 
-DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_DOOR))
+DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_DOOR))
 {
   this->direction = direction;
   isOpen = true;

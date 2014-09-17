@@ -13,7 +13,7 @@
 #include <iostream>
 
 GiantSlimeEntity::GiantSlimeEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_GIANT_SLIME), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_GIANT_SLIME), x, y)
 {
   width = 128;
   height = 128;
@@ -67,7 +67,7 @@ void GiantSlimeEntity::changeToState(int n)
 
     viscosity = 0.991f;
 
-    SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);
+    SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
     hVelocity = 420.0f + rand() % 380;
 
     isFirstJumping = true;
@@ -107,7 +107,7 @@ void GiantSlimeEntity::changeToState(int n)
 
     viscosity = 1.0f;
 
-    SoundManager::getSoundManager()->playSound(SOUND_SLIME_JUMP);
+    SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
     hVelocity = 1200.0f;
   }
   else if (n == 7) // falling
@@ -247,11 +247,11 @@ void GiantSlimeEntity::animate(float delay)
         {
           isFirstJumping = false;
           hVelocity = 160.0f;
-          SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT);
+          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT);
         }
         else
         {
-          SoundManager::getSoundManager()->playSound(SOUND_SLIME_IMAPCT_WEAK);
+          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_WEAK);
           viscosity = 0.96f;
           changeToState(0);
         }
@@ -294,7 +294,7 @@ void GiantSlimeEntity::animate(float delay)
         h = 0;
         changeToState(8);
         game().makeShake(0.8f);
-        SoundManager::getSoundManager()->playSound(SOUND_WALL_IMPACT);
+        SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
       }
     }
   }
@@ -349,7 +349,7 @@ void GiantSlimeEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType);
-  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
+  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
   deadRat->setZ(OFFSET_Y);
   deadRat->setFrame(FRAME_CORPSE_GIANT_SLIME - FRAME_CORPSE_KING_RAT);
   deadRat->setType(ENTITY_CORPSE);
@@ -369,13 +369,13 @@ void GiantSlimeEntity::dying()
   }
 
   game().makeShake(1.0f);
-  SoundManager::getSoundManager()->playSound(SOUND_SLIME_SMASH);
+  SoundManager::getInstance().playSound(SOUND_SLIME_SMASH);
 
   ItemEntity* newItem = new ItemEntity(ItemBossHeart, x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
 
-  SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_GIANT_SLIME), x, y, 128, 128, 8);
+  SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_GIANT_SLIME), x, y, 128, 128, 8);
   star->setFrame(4);
   star->setFading(true);
   star->setZ(y+ 100);
@@ -458,7 +458,7 @@ BaseCreatureEntity::enumMovingStyle GiantSlimeEntity::getMovingStyle()
 
 void GiantSlimeEntity::fire()
 {
-    SoundManager::getSoundManager()->playSound(SOUND_BLAST_FLOWER);
+    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
     EnnemyBoltEntity* bolt = new EnnemyBoltEntity
           (x, y + 10, ShotTypeStandard, 0);
     bolt->setFrame(1);

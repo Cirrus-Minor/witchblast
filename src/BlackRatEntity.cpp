@@ -8,7 +8,7 @@
 #include "WitchBlastGame.h"
 
 BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_RAT), x, y),
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_RAT), x, y),
   currentTile(0, 0),
   targetTile(0, 0)
 {
@@ -236,13 +236,13 @@ void BlackRatEntity::collideWithBolt(BoltEntity* boltEntity)
       float xs = (x + boltEntity->getX()) / 2;
       float ys = (y + boltEntity->getY()) / 2;
       boltEntity->collide();
-      SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+      SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
       star->setFading(true);
       star->setZ(y+ 100);
       star->setLifetime(0.7f);
       star->setType(ENTITY_EFFECT);
       star->setSpin(400.0f);
-      SoundManager::getSoundManager()->playSound(SOUND_CLANG_00);
+      SoundManager::getInstance().playSound(SOUND_CLANG_00);
     }
   }
   else EnemyEntity::collideWithBolt(boltEntity);

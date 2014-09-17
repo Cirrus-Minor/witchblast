@@ -6,7 +6,7 @@
 #include "TextMapper.h"
 
 ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
-      : SpriteEntity (ImageManager::getImageManager()->getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS ),
+      : SpriteEntity (ImageManager::getInstance().getImage(itemType >= FirstEquipItem ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS ),
                       0, 0, ITEM_WIDTH, ITEM_HEIGHT)
 {
   this->setLifetime(6.0f);

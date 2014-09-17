@@ -9,7 +9,7 @@
 #include "WitchBlastGame.h"
 
 SpiderEggEntity::SpiderEggEntity(float x, float y)
-  : EnemyEntity (ImageManager::getImageManager()->getImage(IMAGE_SPIDER_EGG), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SPIDER_EGG), x, y)
 {
   imagesProLine = 20;
   type = ENTITY_ENNEMY_INVOCATED;
@@ -70,7 +70,7 @@ void SpiderEggEntity::dyingFromAge()
 
   for (int i = 0; i < 4; i++)
   {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
+    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
     blood->setZ(OFFSET_Y - 1);
     blood->setFrame(18 + rand()%6);
     blood->setType(ENTITY_BLOOD);
@@ -80,7 +80,7 @@ void SpiderEggEntity::dyingFromAge()
     blood->setScale(bloodScale, bloodScale);
   }
 
-  SoundManager::getSoundManager()->playSound(SOUND_EGG_SMASH_00 + rand() %  2);
+  SoundManager::getInstance().playSound(SOUND_EGG_SMASH_00 + rand() %  2);
 
   isDying = true;
 }
@@ -142,7 +142,7 @@ void SpiderEggEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
-          SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
           star->setFading(true);
           star->setZ(y+ 100);
           star->setLifetime(0.7f);
@@ -161,9 +161,9 @@ void SpiderEggEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
         hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical());
         if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
-        SoundManager::getSoundManager()->playSound(SOUND_IMPACT);
+        SoundManager::getInstance().playSound(SOUND_IMPACT);
 
-        SpriteEntity* star = new SpriteEntity(ImageManager::getImageManager()->getImage(IMAGE_STAR_2), xs, ys);
+        SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
         star->setFading(true);
         star->setZ(y+ 100);
         star->setLifetime(0.7f);

@@ -5,7 +5,7 @@
 
 #include "TextMapper.h"
 
-PnjEntity::PnjEntity(float x, float y, int pnjType) : SpriteEntity (ImageManager::getImageManager()->getImage(IMAGE_PNJ), x, y, 64, 96)
+PnjEntity::PnjEntity(float x, float y, int pnjType) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_PNJ), x, y, 64, 96)
 {
   this->x = x;
   this->y = y;
