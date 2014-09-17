@@ -54,12 +54,15 @@ void generateStandardRoom02()
   if (random < 16)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeRat, 4);
+    game().findPlaceMonsters(EnemyTypeRat, 3);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeSnake, 1);
+    else game().findPlaceMonsters(EnemyTypeBat, 2);
   }
   else if (random < 32)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
-    game().findPlaceMonsters(EnemyTypeBat, 4);
+    game().findPlaceMonsters(EnemyTypeBat, 3);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeSnake, 1);
   }
   else if (random < 48)
   {
@@ -75,8 +78,7 @@ void generateStandardRoom02()
   else if (random < 80)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeRat, 3);
-    game().findPlaceMonsters(EnemyTypeBat, 3);
+    game().findPlaceMonsters(EnemyTypeSnake, 4);
   }
   else
   {
@@ -98,14 +100,15 @@ void generateStandardRoom03()
   else if (random < 32)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
-    game().findPlaceMonsters(EnemyTypeBat, 6);
+    game().findPlaceMonsters(EnemyTypeBat, 5);
     if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 1);
   }
   else if (random < 48)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
-    game().findPlaceMonsters(EnemyTypeEvilFlower, 5);
+    game().findPlaceMonsters(EnemyTypeEvilFlower, 4 + rand() % 2);
     if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeImpBlue, 1);
+    if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeSnake, 1);
   }
   else if (random < 64)
   {
@@ -116,11 +119,15 @@ void generateStandardRoom03()
   else if (random < 80)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeRat,2);
-    game().findPlaceMonsters(EnemyTypeBat,3);
+    game().findPlaceMonsters(EnemyTypeSnake, 4 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeRatHelmet, 1);
-    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 1);
-    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpBlue, 1);
+    if (rand() % 2 == 0)
+    {
+      if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 1);
+      if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpBlue, 1);
+    }
+    else
+      if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeSnake, 2);
   }
   else if (random < 95)
   {
@@ -149,6 +156,7 @@ void generateStandardRoom04()
     game().findPlaceMonsters(EnemyTypeRat, 4);
     game().findPlaceMonsters(EnemyTypeRatHelmet, 3);
     if (rand() % 4 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
+    else game().findPlaceMonsters(EnemyTypeSnake, 1);
   }
   else if (random < 32)
   {
@@ -177,7 +185,14 @@ void generateStandardRoom04()
     game().findPlaceMonsters(EnemyTypeImpBlue, 3);
     if (rand() % 4 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
-  else if (random < 95)
+  else if (random < 90)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeSnake, 5);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
+    else game().findPlaceMonsters(EnemyTypeWitch, 1);
+  }
+  else if (random < 100)
   {
     game().getCurrentMap()->generateRoomRandom(ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeRatBlack, 4);
@@ -255,11 +270,19 @@ void generateStandardRoom05()
       game().findPlaceMonsters(EnemyTypeImpBlue, 8);
     if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
-  else if (random < 95)
+  else if (random < 90)
   {
     game().getCurrentMap()->generateRoomRandom(ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeRatBlack, 4);
     game().findPlaceMonsters(EnemyTypeRatBlackHelmet, 4);
+  }
+  else if (random < 100)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeSnake, 6);
+    for (int i = 0; i < 2; i++)
+      if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
+      else game().findPlaceMonsters(EnemyTypeWitch, 1);
   }
   else
   {
