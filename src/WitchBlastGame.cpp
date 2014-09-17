@@ -2604,14 +2604,12 @@ void WitchBlastGame::registerLanguage()
     // french keyboard
     input[KeyUp]    = sf::Keyboard::Z;
     input[KeyLeft]  = sf::Keyboard::Q;
-    input[KeySpell]  = sf::Keyboard::A;
   }
   else
   {
     // QWERT / QWERTZ keyboard
     input[KeyUp]    = sf::Keyboard::W;
     input[KeyLeft]  = sf::Keyboard::A;
-    input[KeySpell]  = sf::Keyboard::Q;
   }
 
   input[KeyDown]  = sf::Keyboard::S;
@@ -2620,9 +2618,10 @@ void WitchBlastGame::registerLanguage()
   input[KeyFireDown]  = sf::Keyboard::Down;
   input[KeyFireLeft]  = sf::Keyboard::Left;
   input[KeyFireRight] = sf::Keyboard::Right;
-  input[KeyFire] = sf::Keyboard::Space;
+  input[KeyFire] = sf::Keyboard::RControl;
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
+  input[KeySpell]  = sf::Keyboard::Space;
 
   saveConfigurationToFile();
 }
