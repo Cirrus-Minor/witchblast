@@ -581,7 +581,7 @@ void WitchBlastGame::renderRunningGame()
 
     oss.str("");
     oss << player->getHp() << "/" << player->getHpMax();
-    write(oss.str(), 18, 95, 624, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+    write(oss.str(), 16, 95, 624, ALIGN_LEFT, sf::Color::White, app, 0, 0);
 
     // mana
     rectangle.setFillColor(sf::Color(20, 20, 190));
