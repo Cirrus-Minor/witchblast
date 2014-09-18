@@ -272,6 +272,7 @@ item_spell_teleport_desc#Permet de se téléporter dans la pièce
 item_spell_slime_explode#Spell: Invoquer Slime
 item_spell_slime_explode_desc#Invoque un slime explosif
 
+
 spell_teleport#téléportation
 spell_slime_explode#invoquer slime
 [german]
@@ -454,6 +455,7 @@ keys_fire#disparar
 keys_select_1#disparo
 keys_select_2#selector
 keys_time#control de tiempo
+key_spell#TODO cast a spell
 
 play_again#Presiona [ENTER] para jugar de nuevo / [ESC] para volver al menú 
 items_found#Items
@@ -463,6 +465,7 @@ congratulations_2#Te haz enfrentado a este demo y has derrotado a los jefes!
 congratulations_3#Nos veremos luego en una nueva aventura !
 by#por
 critical#CRÍTICO X2
+poison#TODO POISON
 
 merchant_speech_0#¡Los mejores precios de todo el calabozo!
 merchant_speech_1#¡Bienvenido a la tienda Pawn'n'Witches!
@@ -544,6 +547,13 @@ item_ring_fire#Anillo de rubí
 item_ring_fire_desc#Aumenta el poder del fuego
 item_manual_staff#Manual del báculo
 item_manual_staff_desc#Aumenta rango de disparo
+item_spell_teleport#TODO Spell: Teleport
+item_spell_teleport_desc#TODO Cast to teleport within the room
+item_spell_slime_explode#TODO Spell: Invoke Slime
+item_spell_slime_explode_desc#TODO Cast to invoke an explosive slime
+
+spell_teleport#TODO teleport
+spell_slime_explode#TODO invoke slime
 
 [russian]
 start_new_game#Начать новую игру
