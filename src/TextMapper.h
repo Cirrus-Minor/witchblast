@@ -46,7 +46,8 @@ namespace tools
 		static TextMapper& instance();
 
 		void setLanguage(const std::string & language);
-		inline const std::string & getText(const std::string & key) const { return textMap.find(key) != textMap.end() ? textMap.find(key)->second : key ; }
+		inline const std::string & getText(const std::string & key) const
+		{ return textMap.find(key) != textMap.end() ? textMap.find(key)->second : "[" + key + "]" ; }
 
 	private:
 		TextMapper();								// hidden ctor
@@ -88,7 +89,7 @@ namespace tools
 		TextMap textMap;
 	};
 
-	
+
 } // end namespace tools
 
 
