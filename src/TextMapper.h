@@ -35,7 +35,7 @@ namespace tools
 {
 
 	void setLanguage(const std::string & language);
-	const std::string & getLabel(const std::string & key);
+	const std::string getLabel(const std::string & key);
 
 	class TextMapper
 	{
@@ -46,7 +46,7 @@ namespace tools
 		static TextMapper& instance();
 
 		void setLanguage(const std::string & language);
-		inline const std::string & getText(const std::string & key) const
+		inline const std::string getText(const std::string & key) const
 		{ return textMap.find(key) != textMap.end() ? textMap.find(key)->second : "[" + key + "]" ; }
 
 	private:
