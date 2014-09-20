@@ -149,19 +149,21 @@ void PlayerEntity::acquireItemAfterStance()
   {
     equip[acquiredItem - FirstEquipItem] = true;
 
-    if (items[acquiredItem].familiar > FamiliarNone)
+    // familiar
+    if (items[acquiredItem].familiar != FamiliarNone)
     {
       setEquiped(acquiredItem - FirstEquipItem, true);
     }
 
+    // shot types
     if (items[acquiredItem].specialShot != (ShotTypeStandard))
       registerSpecialShot(acquiredItem);
 
     // spells
-    if (acquiredItem == ItemSpellTeleport)
-      setActiveSpell(SpellTeleport);
-    else if (acquiredItem == ItemSpellSlimeExplode)
-      setActiveSpell(SpellSlimeExplode);
+    if (items[acquiredItem].spell != SpellNone)
+    {
+      setActiveSpell(items[acquiredItem].spell);
+    }
 
     computePlayer();
   }
@@ -1286,12 +1288,17 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
   {
   case SpellTeleport:
     activeSpell.delayMax = 20.0f;
-    activeSpell.frame = ItemSpellTeleport - ItemMagicianHat;
+    activeSpell.frame = ItemSpellTeleport - FirstEquipItem;
     break;
 
   case SpellSlimeExplode:
     activeSpell.delayMax = 40.0f;
-    activeSpell.frame = ItemSpellSlimeExplode - ItemMagicianHat;
+    activeSpell.frame = ItemSpellSlimeExplode - FirstEquipItem;
+    break;
+
+  case SpellFireball:
+    activeSpell.delayMax = 20.0f;
+    activeSpell.frame = ItemSpellFireball - FirstEquipItem;
     break;
 
   case SpellNone: break;
@@ -1309,8 +1316,9 @@ void PlayerEntity::castSpell()
 
     switch (activeSpell.spell)
     {
-      case SpellTeleport: teleport(); break;
-      case SpellSlimeExplode: summonsSlimeExplode(); break;
+      case SpellTeleport: castTeleport(); break;
+      case SpellSlimeExplode: castSummonsSlimeExplode(); break;
+      case SpellFireball: castFireball(); break;
 
       default: break;
     }
@@ -1322,7 +1330,7 @@ bool PlayerEntity::canCastSpell()
   return activeSpell.spell != SpellNone && activeSpell.delay <= 0.0f;
 }
 
-void PlayerEntity::teleport()
+void PlayerEntity::castTeleport()
 {
   bool ok = false;
   int xm, ym;
@@ -1381,8 +1389,28 @@ void PlayerEntity::teleport()
   }
 }
 
-void PlayerEntity::summonsSlimeExplode()
+void PlayerEntity::castSummonsSlimeExplode()
 {
   SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeViolet, true);
   slime->makePet(facingDirection);
+}
+
+void PlayerEntity::castFireball()
+{
+  SoundManager::getInstance().playSound(SOUND_FIREBALL);
+  enumShotType boltType = ShotTypeFire;
+  unsigned int shotLevel = 2;
+
+  BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, boltType, shotLevel);
+
+  int boltDamage = fireDamages * 3;
+  bolt->setDamages(boltDamage);
+
+  float velx = 0.0f, vely = 0.0f;
+  if (facingDirection == 4) velx = -fireVelocity;
+  else if (facingDirection == 8) vely = -fireVelocity;
+  else if (facingDirection == 2) vely = fireVelocity;
+  else velx = fireVelocity;
+
+  bolt->setVelocity(Vector2D(velx, vely));
 }

@@ -37,7 +37,24 @@ enum enumFamiliar
   FamiliarFairyFire,    /**< Fire Fairy */
   FamiliarFairyTarget   /**< Target Fairy */
 };
-const int FAIRY_NUMBER = 2;
+
+// spells
+enum enumCastSpell
+{
+  SpellTeleport,
+  SpellSlimeExplode,
+  SpellFireball,
+
+  SpellNone
+};
+const int SPELL_MAX = SpellNone;
+
+const std::string spellLabel[SpellNone] =
+{
+  "spell_teleport",
+  "spell_slime_explode",
+  "spell_fireball"
+};
 
 /** Item type enum
  *  All the items and equipments.
@@ -82,6 +99,7 @@ enum enumItemType
   ItemManualStaff,
   ItemSpellTeleport,
   ItemSpellSlimeExplode,
+  ItemSpellFireball,
 
   NUMBER_ITEMS
 };
@@ -109,6 +127,7 @@ struct itemStuct
   enumAlignment alignment;      /**< Item alignment */
   int requirement;              /**< Pre-requisite item */
   enumShotType specialShot;     /**< Special shot */
+  enumCastSpell spell;          /**< Spell */
 };
 
 /** Array with all the items and data */
@@ -116,150 +135,154 @@ const itemStuct items[NUMBER_ITEMS] =
 {
   {
     ItemCopperCoin, "item_copper", "item_copper_desc",
-    1, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    1, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemSilverCoin, "item_silver", "item_silver_desc",
-    5, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    5, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemGoldCoin, "item_gold", "item_gold_desc",
-    20, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, false, FamiliarNone, false, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBossHeart, "item_titan_heart", "item_titan_heart_desc",
-    250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBonusHealth, "item_elven_cookie", "item_elven_cookie_desc",
-    250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },{
     ItemHealthVerySmall, "item_apple", "item_apple_desc",
-    2, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    2, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemHealthSmall, "item_bread", "item_bread_desc",
-    4, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    4, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemHealthSmall, "item_cheese", "item_cheese_desc",
-    8, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    8, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemMagicianHat, "item_sorcerer_hat", "item_sorcerer_hat_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemLeatherBoots, "item_velvet_boots", "item_velvet_boots_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBookDualShots, "item_spell_dual", "item_spell_dual_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemRageAmulet, "item_rage_amulet", "item_rage_amulet_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBossKey, "item_boss_key", "item_boss_key_desc",
-    200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemVibrationGloves, "item_vibration_gloves", "item_vibration_gloves_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemMahoganyStaff, "item_staff", "item_staff_desc",
-    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemFairy, "item_fairy", "item_fairy_desc",
-    20, true, FamiliarFairy, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarFairy, false, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemLeatherBelt, "item_leather_belt", "item_leather_belt_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBloodSnake, "item_blood_snake", "item_blood_snake_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemGemIce, "item_gem_ice", "item_gem_ice_desc",
-    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeIce
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeIce, SpellNone
   },
   {
     ItemGemIllusion, "item_gem_illusion", "item_gem_illusion_desc",
-    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, -1, ShotTypeIllusion
+    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, -1, ShotTypeIllusion, SpellNone
   },
   {
     ItemGemStone, "item_gem_stone", "item_gem_stone_desc",
-    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStone
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStone, SpellNone
   },
   {
     ItemGemLightning, "item_gem_lightning", "item_gem_lightning_desc",
-    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeLightning
+    25, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeLightning, SpellNone
   },
   {
     ItemFairyIce, "item_fairy_ice", "item_fairy_ice_desc",
-    40, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemRingIce, "item_ring_ice", "item_ring_ice_desc",
-    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemIce, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemIce, ShotTypeStandard, SpellNone
   },
   {
     ItemRingStone, "item_ring_stone", "item_ring_stone_desc",
-    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemStone, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemStone, ShotTypeStandard, SpellNone
   },
   {
     ItemRingLightning, "item_ring_lightning", "item_ring_lightning_desc",
-    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemLightning, ShotTypeStandard
+    45, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, ItemGemLightning, ShotTypeStandard, SpellNone
   },
   {
     ItemRingIllusion, "item_ring_illusion", "item_ring_illusion_desc",
-    50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, ItemGemIllusion, ShotTypeStandard
+    50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentDark, ItemGemIllusion, ShotTypeStandard, SpellNone
   },
   {
     ItemBookTripleShots, "item_spell_triple", "item_spell_triple_desc",
-    50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard
+    50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard, SpellNone
   },
   {
     ItemBroochStar, "item_brooch_star", "item_brooch_star_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemFairyFire, "item_fairy_fire", "item_fairy_fire_desc",
-    40, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemFairyTarget, "item_fairy_target", "item_fairy_target_desc",
-    40, true, FamiliarFairyTarget, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard
+    40, true, FamiliarFairyTarget, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemMagicianRobe, "item_robe_magician", "item_robe_magician_desc",
-    25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    25, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemGemFire, "item_gem_fire", "item_gem_fire_desc",
-    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, -1, ShotTypeFire
+    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, -1, ShotTypeFire, SpellNone
   },
   {
     ItemRingStone, "item_ring_fire", "item_ring_fire_desc",
-    50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, ItemGemFire, ShotTypeStandard
+    50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, ItemGemFire, ShotTypeStandard, SpellNone
   },
   {
     ItemManualStaff, "item_manual_staff", "item_manual_staff_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemSpellTeleport, "item_spell_teleport", "item_spell_teleport_desc",
-    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellTeleport
   },
   {
     ItemSpellSlimeExplode, "item_spell_slime_explode", "item_spell_slime_explode_desc",
-    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellSlimeExplode
+  },
+  {
+    ItemSpellFireball, "item_spell_fireball", "item_spell_fireball_desc",
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellFireball
   }
 };
 
@@ -295,7 +318,7 @@ enum item_equip_enum {
   EQUIP_RING_FIRE,
   EQUIP_MANUAL_STAFF,
   EQUIP_SPELL_TELEPORT,
-  EQUIP_SPELL_SLIME_EXPLODE,
+  EQUIP_SPELL_FIREBALL,
 
   NUMBER_EQUIP_ITEMS
   };

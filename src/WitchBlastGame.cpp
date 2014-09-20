@@ -133,6 +133,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/cauldron.ogg",       "media/sound/cauldron_die.ogg",
     "media/sound/critical.ogg",       "media/sound/gong.ogg",
     "media/sound/teleport.ogg",       "media/sound/spell_charge.ogg",
+    "media/sound/fireball.ogg",
   };
 
   for (const char *const filename : sounds) {
@@ -1937,15 +1938,6 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
   return (item_equip_enum) bonusType;
 }
 
-enumCastSpell WitchBlastGame::generateRandomSpell()
-{
-  // TODO
-  if (rand() % 2 == 0)
-    return SpellTeleport;
-  else
-    return SpellSlimeExplode;
-}
-
 enumItemType WitchBlastGame::getItemSpell()
 {
   int n = rand() % SPELL_MAX;
@@ -1957,6 +1949,7 @@ enumItemType WitchBlastGame::getItemSpell()
     case SpellNone:
     case SpellTeleport: item = ItemSpellTeleport; break;
     case SpellSlimeExplode: item = ItemSpellSlimeExplode; break;
+    case SpellFireball: item = ItemSpellFireball; break;
   }
   return item;
 }
@@ -1986,7 +1979,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   }
 
   // sound
-    SoundManager::getInstance().playSound(SOUND_GONG);
+  SoundManager::getInstance().playSound(SOUND_GONG);
 
   // text
   float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;

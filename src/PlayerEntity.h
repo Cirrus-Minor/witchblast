@@ -436,9 +436,6 @@ class PlayerEntity : public BaseCreatureEntity
     float getPercentSpellDelay();
     bool canCastSpell();
 
-    void teleport();
-    void summonsSlimeExplode();
-
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
@@ -497,6 +494,10 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void initShotType();
     castSpellStruct activeSpell;
+
+    void castTeleport();
+    void castSummonsSlimeExplode();
+    void castFireball();
 };
 
 #endif // PLAYERSPRITE_H

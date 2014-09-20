@@ -179,7 +179,8 @@ enum sound_resources {
   SOUND_CRITICAL,
   SOUND_GONG,
   SOUND_TELEPORT,
-  SOUND_SPELL_CHARGE
+  SOUND_SPELL_CHARGE,
+  SOUND_FIREBALL
 };
 
 enum corpses_ressources{
@@ -278,22 +279,6 @@ const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Air resistance
     = { 0.01, 0.015f, 0.02f };
 const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
     = { 1.15f, 1.3f, 1.45f };
-
-// spells
-enum enumCastSpell
-{
-  SpellTeleport,
-  SpellSlimeExplode,
-
-  SpellNone
-};
-const int SPELL_MAX = SpellNone;
-
-const std::string spellLabel[SpellNone] =
-{
-  "spell_teleport",
-  "spell_slime_explode"
-};
 
 // entity type
 const int ENTITY_PLAYER = 1;
