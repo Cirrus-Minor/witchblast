@@ -74,6 +74,10 @@ void EnemyEntity::animate(float delay)
     BaseCreatureEntity::animate(delay);
   else
     age += delay;
+
+  // FIX enemy not on map
+  if (x < TILE_WIDTH / 2 || x > MAP_WIDTH * TILE_WIDTH || y < TILE_HEIGHT / 2 || y > MAP_HEIGHT * TILE_HEIGHT)
+    isDying = true;
 }
 
 void EnemyEntity::calculateBB()
