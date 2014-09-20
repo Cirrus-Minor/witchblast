@@ -38,7 +38,6 @@ keys_fire#fire
 keys_select_1#fire
 keys_select_2#selector
 keys_time#time control
-
 play_again#Press [ENTER] to play again / [ESC] to go back to the menu
 items_found#Items
 monsters_killed#Monsters
@@ -48,17 +47,14 @@ congratulations_3#See you soon for new adventures !
 by#by
 critical#CRITICAL X2
 poison#POISON
-
 merchant_speech_0#Best price in the entire dungeon!
 merchant_speech_1#Welcome to the Pawn'n'Witches shop!
 merchant_speech_2#Have a look at our merchandise!
-
 enemy_butcher#Pigman Butcher
 enemy_cyclops#Cimmerian Cyclops
 enemy_giant_slime#Giant Slime
 enemy_giant_spider#Giant Spider
 enemy_rat_king#Rat King
-
 item_copper#Copper coin
 item_copper_desc#A copper coin (value 1)
 item_silver#Silver coin
@@ -133,9 +129,12 @@ item_spell_teleport#Spell: Teleport
 item_spell_teleport_desc#Cast to teleport within the room
 item_spell_slime_explode#Spell: Invoke Slime
 item_spell_slime_explode_desc#Cast to invoke an explosive slime
-
 spell_teleport#teleport
 spell_slime_explode#invoke slime
+
+item_spell_fireball#Spell: Fireball
+item_spell_fireball_desc#Cast to launch a fireball
+spell_fireball#fireball
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
@@ -450,12 +449,14 @@ config_lang_desc#Elije usando las teclas izquierda y derecha
 english#Inglés
 french#Francés
 german#Alemán
+spanish#Español
+russian#Ruso
 keys_move#mover
 keys_fire#disparar
 keys_select_1#disparo
 keys_select_2#selector
 keys_time#control de tiempo
-key_spell#TODO cast a spell
+key_spell#invocar un conjuro
 
 play_again#Presiona [ENTER] para jugar de nuevo / [ESC] para volver al menú 
 items_found#Items
@@ -465,7 +466,7 @@ congratulations_2#Te haz enfrentado a este demo y has derrotado a los jefes!
 congratulations_3#Nos veremos luego en una nueva aventura !
 by#por
 critical#CRÍTICO X2
-poison#TODO POISON
+poison#VENENO
 
 merchant_speech_0#¡Los mejores precios de todo el calabozo!
 merchant_speech_1#¡Bienvenido a la tienda Pawn'n'Witches!
@@ -547,13 +548,12 @@ item_ring_fire#Anillo de rubí
 item_ring_fire_desc#Aumenta el poder del fuego
 item_manual_staff#Manual del báculo
 item_manual_staff_desc#Aumenta rango de disparo
-item_spell_teleport#TODO Spell: Teleport
-item_spell_teleport_desc#TODO Cast to teleport within the room
-item_spell_slime_explode#TODO Spell: Invoke Slime
-item_spell_slime_explode_desc#TODO Cast to invoke an explosive slime
-
-spell_teleport#TODO teleport
-spell_slime_explode#TODO invoke slime
+item_spell_teleport#Conjuro: Teletransportación
+item_spell_teleport_desc#Invoca teletransportarse dentro de la habitación
+item_spell_slime_explode#Conjuro: Invocar baba
+item_spell_slime_explode_desc#Invoca una baba explosiva
+spell_teleport#Teletransportación
+spell_slime_explode#Invocar baba
 
 [russian]
 start_new_game#Начать новую игру
