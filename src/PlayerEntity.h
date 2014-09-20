@@ -486,6 +486,10 @@ class PlayerEntity : public BaseCreatureEntity
     void renderFeet(sf::RenderTarget* app);
     void renderStaff(sf::RenderTarget* app);
 
+    void fallRock();
+    void initFallingGrid();
+    bool fallingGrid[MAP_WIDTH][MAP_HEIGHT];
+
     /*!
      *  \brief init the current shot type.
      *
@@ -499,6 +503,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castSummonsSlimeExplode();
     void castFireball();
     void castFreeze();
+    void castEarthquake();
 };
 
 #endif // PLAYERSPRITE_H

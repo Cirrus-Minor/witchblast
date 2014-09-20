@@ -45,6 +45,7 @@ enum enumCastSpell
   SpellSlimeExplode,
   SpellFireball,
   SpellFreeze,
+  SpellEarthquake,
 
   SpellNone
 };
@@ -55,7 +56,8 @@ const std::string spellLabel[SpellNone] =
   "spell_teleport",
   "spell_slime_explode",
   "spell_fireball",
-  "spell_freeze"
+  "spell_freeze",
+  "spell_earthquake"
 };
 
 /** Item type enum
@@ -103,6 +105,7 @@ enum enumItemType
   ItemSpellSlimeExplode,
   ItemSpellFireball,
   ItemSpellFreeze,
+  ItemSpellEarthquake,
 
   NUMBER_ITEMS
 };
@@ -291,6 +294,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemSpellFireball, "item_spell_freeze", "item_spell_freeze_desc",
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellFreeze
   },
+  {
+    ItemSpellFireball, "item_spell_earthquake", "item_spell_earthquake_desc",
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellEarthquake
+  },
 };
 
 /** Item equipment type enum
@@ -325,8 +332,10 @@ enum item_equip_enum {
   EQUIP_RING_FIRE,
   EQUIP_MANUAL_STAFF,
   EQUIP_SPELL_TELEPORT,
+  EQUIP_SPELL_SLIME_EXPLODE,
   EQUIP_SPELL_FIREBALL,
   EQUIP_SPELL_FREEZE,
+  EQUIP_SPELL_EARTHQUAKE,
 
   NUMBER_EQUIP_ITEMS
   };

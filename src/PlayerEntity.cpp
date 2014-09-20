@@ -1,5 +1,6 @@
 #include "PlayerEntity.h"
 #include "SlimeEntity.h"
+#include "FallingRockEntity.h"
 #include "BoltEntity.h"
 #include "EnnemyBoltEntity.h"
 #include "ItemEntity.h"
@@ -1315,6 +1316,11 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
     activeSpell.frame = ItemSpellFreeze - FirstEquipItem;
     break;
 
+  case SpellEarthquake:
+    activeSpell.delayMax = 40.0f;
+    activeSpell.frame = ItemSpellEarthquake - FirstEquipItem;
+    break;
+
   case SpellNone: break;
   }
   activeSpell.delay = activeSpell.delayMax;
@@ -1334,8 +1340,9 @@ void PlayerEntity::castSpell()
       case SpellSlimeExplode: castSummonsSlimeExplode(); break;
       case SpellFireball: castFireball(); break;
       case SpellFreeze: castFreeze(); break;
+      case SpellEarthquake: castEarthquake(); break;
 
-      default: break;
+      case SpellNone: break;
     }
   }
 }
@@ -1404,6 +1411,30 @@ void PlayerEntity::castTeleport()
   }
 }
 
+void PlayerEntity::initFallingGrid()
+{
+  for (int i = 0; i < MAP_WIDTH; i++)
+    for (int j = 0; j < MAP_HEIGHT; j++)
+      fallingGrid[i][j] = false;
+}
+
+void PlayerEntity::fallRock()
+{
+  int rx, ry;
+  do
+  {
+    rx = 1 + rand() % (MAP_WIDTH - 2);
+    ry = 1 + rand() % (MAP_HEIGHT - 2);
+  }
+  while (fallingGrid[rx][ry]);
+
+  fallingGrid[rx][ry] = true;
+  new FallingRockEntity(rx * TILE_WIDTH + OFFSET_X + TILE_WIDTH / 2,
+                        ry * TILE_HEIGHT + OFFSET_Y + TILE_HEIGHT / 2,
+                        rand() % 3,
+                        true);
+}
+
 void PlayerEntity::castSummonsSlimeExplode()
 {
   SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeViolet, true);
@@ -1452,4 +1483,12 @@ void PlayerEntity::castFreeze()
       bolt2->setVelocity(Vector2D(velx, vely));
   }
   SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+}
+
+void PlayerEntity::castEarthquake()
+{
+  initFallingGrid();
+  for (int i = 0; i < 22; i++) fallRock();
+  //SoundManager::getInstance().playSound(SOUND_TRAP);
+  game().makeShake(0.25f);
 }
