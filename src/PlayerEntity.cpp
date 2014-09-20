@@ -465,6 +465,9 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
     case ShotTypeFire:
       sprite.setColor(sf::Color(255, 180, 0, 255));
       break;
+
+    default:
+      std::cout << "[WARNING] Can not render shot type: " << getShotType() << std::endl;
     }
 
     sprite.setTextureRect(sf::IntRect( xStone, yStone, width, height));
@@ -731,6 +734,9 @@ void PlayerEntity::generateBolt(float velx, float vely)
     boltType = getShotType();
     shotLevel = getShotLevel();
     break;
+  default:
+      std::cout << "[WARNING] Can not generate shot type: " << getShotType() << std::endl;
+
   }
 
   BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, boltType, shotLevel);
@@ -1257,6 +1263,9 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
 
       case ShotTypeStandard:
         break;
+
+      default:
+        std::cout << "[WARNING] Can not register shot type: " << getShotType() << std::endl;
     }
   }
 
@@ -1370,7 +1379,7 @@ void PlayerEntity::castTeleport()
         GameEntity *e = *it;
         it++;
 
-        if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX || e->getType() == ENTITY_ENNEMY_BOLT)
+        if ((e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX) || e->getType() == ENTITY_ENNEMY_BOLT)
           isBad = Vector2D(xNew, yNew).distance2(Vector2D(e->getX(), e->getY())) < distanceMin;
       }
 
