@@ -384,7 +384,7 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 
 bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
 {
-  if (armor > 0.01f)
+  if (armor > 0.01f && hurtingType != ShotTypeDeterministic)
   {
     int absorbedHp = damages * armor;
     if (absorbedHp == 0) absorbedHp = 1;
