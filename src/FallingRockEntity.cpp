@@ -6,7 +6,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
+FallingRockEntity::FallingRockEntity(float x, float y, int rockType, bool hurtAll)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_CYCLOP), x, y)
 {
   imagesProLine = 20;
@@ -21,6 +21,8 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType)
   hVelocity = 0.0f;
 
   this->rockType = rockType;
+  this->hurtAll = hurtAll;
+  hasHurted = false;
   enemyType = EnemyTypeRockFalling;
 
   switch (rockType)
@@ -51,6 +53,25 @@ void FallingRockEntity::animate(float delay)
     }
   }
 
+}
+
+void FallingRockEntity::collideWithEnnemy(GameEntity* collidingEntity)
+{
+  if (hasHurted) return;
+
+  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
+  if (entity->hurt(meleeDamages, meleeType, meleeDamages, false))
+  {
+    float xs = (x + entity->getX()) / 2;
+    float ys = (y + entity->getY()) / 2;
+    SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
+    star->setFading(true);
+    star->setZ(y+ 100);
+    star->setLifetime(0.7f);
+    star->setType(ENTITY_EFFECT);
+    star->setSpin(400.0f);
+    hasHurted = true;
+  }
 }
 
 void FallingRockEntity::render(sf::RenderTarget* app)

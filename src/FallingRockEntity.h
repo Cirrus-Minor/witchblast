@@ -6,7 +6,7 @@
 class FallingRockEntity : public EnemyEntity
 {
   public:
-    FallingRockEntity(float x, float y, int rockType);
+    FallingRockEntity(float x, float y, int rockType, bool hurtAll);
     virtual void animate(float delay);
     virtual void calculateBB();
     virtual void render(sf::RenderTarget* app);
@@ -14,12 +14,15 @@ class FallingRockEntity : public EnemyEntity
 
   protected:
 	  virtual void dying();
+	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
 
   private:
     int rockType;
     int h;
     bool jumping;
     float hVelocity;
+    bool hurtAll;
+    bool hasHurted;
 };
 
 #endif // FALLINGROCKENTITY_H

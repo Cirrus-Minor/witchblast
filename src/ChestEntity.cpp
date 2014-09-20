@@ -180,6 +180,7 @@ void ChestEntity::fallRock()
   fallingGrid[rx][ry] = true;
   new FallingRockEntity(rx * TILE_WIDTH + OFFSET_X + TILE_WIDTH / 2,
                         ry * TILE_HEIGHT + OFFSET_Y + TILE_HEIGHT / 2,
-                        rand() % 3);
+                        rand() % 3,
+                        true);
 }
 
