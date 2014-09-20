@@ -10,7 +10,7 @@ namespace tools
 		TextMapper::instance().setLanguage(language);
 	}
 
-	const std::string & getLabel(const std::string & key)
+	const std::string getLabel(const std::string & key)
 	{
 		return TextMapper::instance().getText(key);
 	}
