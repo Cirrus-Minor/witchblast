@@ -1950,6 +1950,8 @@ enumItemType WitchBlastGame::getItemSpell()
     case SpellTeleport: item = ItemSpellTeleport; break;
     case SpellSlimeExplode: item = ItemSpellSlimeExplode; break;
     case SpellFireball: item = ItemSpellFireball; break;
+    case SpellFreeze: item = ItemSpellFreeze; break;
+    case SpellEarthquake: item = ItemSpellEarthquake; break;
   }
   return item;
 }
