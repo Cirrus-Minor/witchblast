@@ -291,11 +291,11 @@ const itemStuct items[NUMBER_ITEMS] =
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellFireball
   },
   {
-    ItemSpellFireball, "item_spell_freeze", "item_spell_freeze_desc",
+    ItemSpellFreeze, "item_spell_freeze", "item_spell_freeze_desc",
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellFreeze
   },
   {
-    ItemSpellFireball, "item_spell_earthquake", "item_spell_earthquake_desc",
+    ItemSpellEarthquake, "item_spell_earthquake", "item_spell_earthquake_desc",
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellEarthquake
   },
 };
