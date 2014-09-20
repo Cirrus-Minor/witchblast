@@ -57,7 +57,7 @@ namespace tools
 		void LoadTextFile(const std::string & language);
 
 		/* tools funcs */
-		// std::isspace function fail with some chars (à,é,è, etc.)
+		// std::isspace function fail with some chars (Ã ,Ã©,Ã¨, etc.)
 		inline static bool my_isspace(char c) { return (c == ' ' || c == '\t'); }
 
 		// trim from start
