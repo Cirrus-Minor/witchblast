@@ -134,9 +134,14 @@ spell_slime_explode#invoke slime
 
 item_spell_fireball#Spell: Fireball
 item_spell_fireball_desc#Cast to launch a fireball
+item_spell_freeze#Spell: Freeze monsters
+item_spell_freeze_desc#Cast to freeze monsters
+item_spell_earthquake#Spell: Earthquake
+item_spell_earthquake_desc#Cast to make the dungeon shake
 spell_fireball#fireball
-
 spell_freeze#freeze monsters
+spell_earthquake#earthquake
+
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
