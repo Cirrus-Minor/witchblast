@@ -498,6 +498,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castTeleport();
     void castSummonsSlimeExplode();
     void castFireball();
+    void castFreeze();
 };
 
 #endif // PLAYERSPRITE_H

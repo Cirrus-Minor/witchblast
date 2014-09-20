@@ -135,6 +135,8 @@ spell_slime_explode#invoke slime
 item_spell_fireball#Spell: Fireball
 item_spell_fireball_desc#Cast to launch a fireball
 spell_fireball#fireball
+
+spell_freeze#freeze monsters
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue

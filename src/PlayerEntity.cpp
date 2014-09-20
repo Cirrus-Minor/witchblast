@@ -1310,6 +1310,11 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
     activeSpell.frame = ItemSpellFireball - FirstEquipItem;
     break;
 
+  case SpellFreeze:
+    activeSpell.delayMax = 40.0f;
+    activeSpell.frame = ItemSpellFreeze - FirstEquipItem;
+    break;
+
   case SpellNone: break;
   }
   activeSpell.delay = activeSpell.delayMax;
@@ -1328,6 +1333,7 @@ void PlayerEntity::castSpell()
       case SpellTeleport: castTeleport(); break;
       case SpellSlimeExplode: castSummonsSlimeExplode(); break;
       case SpellFireball: castFireball(); break;
+      case SpellFreeze: castFreeze(); break;
 
       default: break;
     }
@@ -1422,4 +1428,28 @@ void PlayerEntity::castFireball()
   else velx = fireVelocity;
 
   bolt->setVelocity(Vector2D(velx, vely));
+}
+
+void PlayerEntity::castFreeze()
+{
+  for (int i = -1; i <= 1; i += 2)
+    for (int j = -1; j <= 1; j += 2)
+    {
+      BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, 1);
+      bolt1->setDamages(1);
+      float velx = fireVelocity * i * 0.84f;
+      float vely = fireVelocity * j * 0.84f;
+      bolt1->setVelocity(Vector2D(velx, vely));
+
+      BoltEntity* bolt2 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, 1);
+      bolt2->setDamages(1);
+      velx = 0.0f;
+      vely = 0.0f;
+      if (i == -1 && j == -1) velx = -fireVelocity * i * 1.2f;
+      else if (i == -1 && j == 1) velx = fireVelocity * i * 1.2f;
+      else if (i == 1 && j == -1) vely= -fireVelocity * i * 1.2f;
+      else if (i == 1 && j == 1) vely = fireVelocity * i * 1.2f;
+      bolt2->setVelocity(Vector2D(velx, vely));
+  }
+  SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
 }
