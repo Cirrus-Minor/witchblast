@@ -271,7 +271,7 @@ const itemStuct items[NUMBER_ITEMS] =
     30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, -1, ShotTypeFire, SpellNone
   },
   {
-    ItemRingStone, "item_ring_fire", "item_ring_fire_desc",
+    ItemRingFire, "item_ring_fire", "item_ring_fire_desc",
     50, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, ItemGemFire, ShotTypeStandard, SpellNone
   },
   {
