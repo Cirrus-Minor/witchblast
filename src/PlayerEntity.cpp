@@ -907,6 +907,7 @@ bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool c
 
       hurtingDelay = HURTING_DELAY * 2.0f;
       game().generateBlood(x, y, bloodColor);
+      game().proceedEvent(EventBeingHurted);
 
       return true;
     }
@@ -987,11 +988,13 @@ void PlayerEntity::acquireItem(enumItemType type)
       gold++;
       displayAcquiredGold(1);
       SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
+      game().proceedEvent(EventGetCoin);
       break;
     case ItemSilverCoin:
       gold = gold + 5;
       displayAcquiredGold(5);
       SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
+      game().proceedEvent(EventGetCoin);
       break;
     case ItemGoldCoin:
       gold = gold + 10;

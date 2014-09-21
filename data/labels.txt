@@ -142,6 +142,29 @@ spell_fireball#fireball
 spell_freeze#freeze monsters
 spell_earthquake#earthquake
 
+msg_intro_0#Your quest begins !
+msg_intro_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
+msg_intro_2#I have to recover her !"
+msg_rats_bats_0#Monsters
+msg_rats_bats_1#"Hey! Why do we always have to exterminate rats or bats
+msg_rats_bats_2#in these Rogue games ?"
+msg_gold_0#Gold
+msg_gold_1#"♫ Money, it's a hit ♫
+msg_gold_2#I wonder if I can buy useful items in this dungeon..."
+msg_butcher_0#The Pigman Butcher
+msg_butcher_1#"Wow this one is a big guy !
+msg_butcher_2#I hope I won't end up in sausages..."
+msg_level2_0#The Archmage's daughter
+msg_level2_1#"I'm coming right now to rescue you !
+msg_level2_2#Hopefully, she's safe and sound..."
+msg_tuto_intro_0#Tutorial: Basics
+msg_tuto_intro_1#Uses WASD (standard) to move around the dungeon.
+msg_tuto_intro_2#Fires with the arrows (standard).
+msg_tuto_heal_0#Tutorial: Health
+msg_tuto_heal_1#You've lost some hit points.
+msg_tuto_heal_2#Find something to heal you before you reach 0.
+
+
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue

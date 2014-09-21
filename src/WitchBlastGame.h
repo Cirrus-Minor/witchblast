@@ -25,6 +25,8 @@
 #include "GameFloor.h"
 #include "Config.h"
 
+#include <queue>
+
 const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
 const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
@@ -258,6 +260,8 @@ public:
 
   void addKilledEnemy(enemyTypeEnum enemyType);
   void displayKilledEnemies();
+
+  void proceedEvent(EnumWorldEvents event);
 
 protected:
   /*!
@@ -624,6 +628,13 @@ private:
   void checkFallingEntities();
 
   void resetKilledEnemies();
+
+  std::queue <messageStruct> messagesQueue;
+
+  void addMessageToQueue(EnumMessages type);
+
+  bool worldEvent[NB_EVENTS];
+  void initEvents();
 };
 
 /*!

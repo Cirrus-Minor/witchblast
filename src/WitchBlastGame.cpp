@@ -44,6 +44,7 @@
 #include "PnjEntity.h"
 #include "TextEntity.h"
 #include "StandardRoomGenerator.h"
+#include "MessageGenerator.h"
 #include "TextMapper.h"
 
 #include <iostream>
@@ -59,7 +60,6 @@ static std::string intToString(int n)
   oss << n;
   return oss.str();
 }
-
 namespace
 {
 WitchBlastGame* gameptr;
@@ -92,8 +92,8 @@ WitchBlastGame::WitchBlastGame():
     "media/star.png",          "media/star2.png",
     "media/interface.png",     "media/hud_shots.png",
     "media/boom64.png",        "media/keys_qwer.png",
-    "media/keys_azer.png",     "media/pnj.png",
-    "media/fairy.png",
+    "media/keys_azer.png",     "media/message_icons.png",
+    "media/pnj.png",            "media/fairy.png",
   };
 
   for (const char *const filename : images) {
@@ -247,6 +247,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 {
   gameState = gameStateInit;
   level = 1;
+  initEvents();
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -301,6 +302,9 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
     startNewLevel();
+
+    addMessageToQueue(MsgIntro);
+    addMessageToQueue(MsgTutoIntro);
   }
 }
 
@@ -336,6 +340,8 @@ void WitchBlastGame::startNewLevel()
   bossRoomOpened = false;
   // to test
   displayKilledEnemies();
+
+  if (level == 2) addMessageToQueue(MsgInfoLevel2);
 
   playLevel();
 }
@@ -505,6 +511,13 @@ void WitchBlastGame::updateRunningGame()
     {
       xGameState = xGameStateFadeOut;
       xGameTimer = FADE_OUT_DELAY;
+    }
+
+    // message queue
+    if (!messagesQueue.empty())
+    {
+      messagesQueue.front().timer -= deltaTime;
+      if (messagesQueue.front().timer < 0.0f) messagesQueue.pop();
     }
   }
 
@@ -677,6 +690,50 @@ void WitchBlastGame::renderRunningGame()
       rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
+    }
+  }
+
+  // message queue
+  if (!messagesQueue.empty())
+  {
+
+    int xf = 10;
+    int yf = OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT + 10;
+    int ySize = SCREEN_HEIGHT - (OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT) - 10;
+    int xm = xf;
+    int ym = yf;
+
+    if (messagesQueue.front().timer < 0.5f)
+    {
+      ym += (1.0f - 2 * messagesQueue.front().timer) * ySize;
+    }
+    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
+    {
+      ym += (1.0f - 2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * ySize;
+    }
+
+    //rectangle.setFillColor(sf::Color(20, 20, 20, 255));
+    rectangle.setFillColor(sf::Color(236, 222, 194, 255));
+    rectangle.setOutlineThickness(2.0f);
+    //rectangle.setOutlineColor(sf::Color(220,220,220,255));
+    rectangle.setOutlineColor(sf::Color(201, 145, 95,255));
+    rectangle.setPosition(sf::Vector2f(xm, ym));
+    rectangle.setSize(sf::Vector2f(SCREEN_WIDTH - 20, ySize));
+    app->draw(rectangle);
+
+    sf::Sprite iconSprite;
+    iconSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MESSAGE_ICONS));
+    iconSprite.setPosition(xm + 12, ym + 32);
+    iconSprite.setTextureRect(sf::IntRect((messagesQueue.front().icon % 10) * 64, (messagesQueue.front().icon / 10) * 64, 64, 64));
+    app->draw(iconSprite);
+
+    for (int i = 0; i < 3; i++)
+    {
+      int fontSize = i == 0 ? 18 : 16;
+      if (!messagesQueue.front().message[i].empty())
+      {
+        write(messagesQueue.front().message[i], fontSize, xm + 100, ym + ((i == 0 ) ? 15 : 20) + i * 30, ALIGN_LEFT, sf::Color::Black, app, 0,0);
+      }
     }
   }
 }
@@ -1706,8 +1763,12 @@ void WitchBlastGame::generateMap()
     currentMap->generateRoomWithoutHoles(0);
 
     if (level == 1)
+    {
       new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMessageToQueue(MsgInfoButcher);
+    }
+
     else if (level == 2)
       new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
@@ -1778,6 +1839,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   {
   case EnemyTypeRat:
     new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal, false);
+    proceedEvent(EventRatsOrBats);
     break;
   case EnemyTypeRatBlack:
     new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeNormal);
@@ -1790,6 +1852,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeBat:
     new BatEntity(xm, ym, false);
+    proceedEvent(EventRatsOrBats);
     break;
   case EnemyTypeSnake:
     new SnakeEntity(xm, ym, SnakeEntity::SnakeTypeNormal, false);
@@ -2635,6 +2698,32 @@ void WitchBlastGame::registerLanguage()
   input[KeySpell]  = sf::Keyboard::Space;
 
   saveConfigurationToFile();
+}
+
+void WitchBlastGame::addMessageToQueue(EnumMessages type)
+{
+  // TODO test tuto
+  messagesQueue.push(getMessage(type));
+}
+
+void WitchBlastGame::initEvents()
+{
+  for (int i = 0; i < NB_EVENTS; i++)
+    worldEvent[i] = false;
+}
+
+void WitchBlastGame::proceedEvent(EnumWorldEvents event)
+{
+  if (worldEvent[event]) return;
+
+  worldEvent[event] = true;
+
+  addMessageToQueue(eventToMessage[event]);
+
+  /*switch (event)
+  {
+    case EventRatsOrBats: addMessageToQueue(MsgInfoRatsBats); break;
+  };*/
 }
 
 WitchBlastGame &game()

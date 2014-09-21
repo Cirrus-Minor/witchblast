@@ -109,6 +109,7 @@ enum item_images {
   IMAGE_EXPLOSION64,
   IMAGE_KEYS_QWER,
   IMAGE_KEYS_AZER,
+  IMAGE_MESSAGE_ICONS,
 
   IMAGE_PNJ,
   IMAGE_FAIRY
@@ -424,5 +425,52 @@ const int GIANT_SPIDER_DAMAGE = 8;
 // EFFECTS
 const float HURTING_DELAY = 0.4f;
 const float HEART_BEAT_DELAY = 1.2f;
+
+// messages
+const int NB_MSG_LINES = 3;
+enum EnumMessages
+{
+  MsgIntro,
+  MsgInfoRatsBats,
+  MsgInfoGold,
+  MsgInfoButcher,
+  MsgInfoLevel2,
+
+  MsgTutoIntro,
+  MsgTutoHeal,
+};
+
+enum MessagesType
+{
+  MessageTypeInfo,
+  MessageTypeTutorial,
+};
+
+struct messageStruct
+{
+  int icon;
+  MessagesType messageType;
+  EnumMessages type;
+  std::string message[NB_MSG_LINES];
+  float timer;
+  float timerMax;
+};
+
+enum EnumWorldEvents
+{
+  EventRatsOrBats,
+  EventGetCoin,
+
+  EventBeingHurted,
+
+  NB_EVENTS
+};
+
+const EnumMessages eventToMessage[NB_EVENTS] = {
+  MsgInfoRatsBats,
+  MsgInfoGold,
+
+  MsgTutoHeal,
+};
 
 #endif // CONSTANTS_H_INCLUDED
