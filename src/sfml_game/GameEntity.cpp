@@ -1,17 +1,17 @@
-/**  This file is part of sfmlGame.
+/**  This file is part of Witch Blast.
   *
-  *  FreeTumble is free software: you can redistribute it and/or modify
+  *  Witch Blast is free software: you can redistribute it and/or modify
   *  it under the terms of the GNU General Public License as published by
   *  the Free Software Foundation, either version 3 of the License, or
   *  (at your option) any later version.
   *
-  *  FreeTumble is distributed in the hope that it will be useful,
+  *  Witch Blast is distributed in the hope that it will be useful,
   *  but WITHOUT ANY WARRANTY; without even the implied warranty of
   *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   *  GNU General Public License for more details.
   *
   *  You should have received a copy of the GNU General Public License
-  *  along with FreeTumble.  If not, see <http://www.gnu.org/licenses/>.
+  *  along with Witch Blast.  If not, see <http://www.gnu.org/licenses/>.
   */
 
 #include "GameEntity.h"
@@ -74,8 +74,8 @@ void GameEntity::setAge(float age) { this->age = age; }
 void GameEntity::setLifetime(float lifetime) { this->lifetime = lifetime; }
 void GameEntity::setVelocity(Vector2D velocity)
 {
-    this->velocity.x = velocity.x;
-    this->velocity.y = velocity.y;
+  this->velocity.x = velocity.x;
+  this->velocity.y = velocity.y;
 }
 void GameEntity::setDying(bool dying) { isDying = dying; }
 void GameEntity::setType(int type) { this->type = type; }
@@ -94,9 +94,8 @@ void GameEntity::animate(float delay)
 	x += velocity.x * delay;
 	y += velocity.y * delay;
 
-
-    age += delay;
-	if (lifetime > 0)
+  age += delay;
+	if (lifetime > -0.1f)
 	{
 		if (age >= lifetime) isDying = true;
 	}
