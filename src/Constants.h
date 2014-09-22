@@ -470,13 +470,4 @@ enum EnumWorldEvents
   NB_EVENTS
 };
 
-const EnumMessages eventToMessage[NB_EVENTS] = {
-  MsgInfoRatsBats,
-  MsgInfoGold,
-
-  MsgTutoHeal,
-  MsgTutoShots,
-  MsgTutoSpell
-};
-
 #endif // CONSTANTS_H_INCLUDED

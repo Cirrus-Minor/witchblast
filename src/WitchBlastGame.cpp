@@ -60,6 +60,16 @@ static std::string intToString(int n)
   oss << n;
   return oss.str();
 }
+
+std::map<EnumWorldEvents, EnumMessages> eventToMessage =
+{
+  { EventRatsOrBats,    MsgInfoRatsBats },
+  { EventGetCoin,       MsgInfoGold },
+  { EventBeingHurted,   MsgTutoHeal },
+  { EventSpecialShot,   MsgTutoShots },
+  { EventSpell,         MsgTutoSpell },
+};
+
 namespace
 {
 WitchBlastGame* gameptr;
