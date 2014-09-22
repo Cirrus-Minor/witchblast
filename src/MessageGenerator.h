@@ -22,6 +22,31 @@
 #include "TextMapper.h"
 
 #include <sstream>
+#include <map>
+
+struct messageBuilderStruct
+{
+  EnumMessagesType type;
+  int icon;
+  std::string key;
+  int nbLines;
+};
+
+const float MESSAGE_DURATION = 6.0f;
+
+std::map<EnumMessages, messageBuilderStruct> msgMap =
+{
+  { MsgIntro,         { MessageTypeInfo, 1, "msg_intro",            3} },
+  { MsgInfoRatsBats,  { MessageTypeInfo, 1, "msg_rats_bats",        3} },
+  { MsgInfoGold,      { MessageTypeInfo, 1, "msg_gold",             3} },
+  { MsgInfoButcher,   { MessageTypeInfo, 1, "msg_butcher",          3} },
+  { MsgInfoLevel2,    { MessageTypeInfo, 1, "msg_level2",           3} },
+
+  { MsgTutoIntro,     { MessageTypeTutorial, 0, "msg_tuto_intro",   3} },
+  { MsgTutoHeal,      { MessageTypeTutorial, 0, "msg_tuto_heal",    3} },
+  { MsgTutoShots,     { MessageTypeTutorial, 0, "msg_tuto_shots",   3} },
+  { MsgTutoSpell,     { MessageTypeTutorial, 0, "msg_tuto_spell",   3} },
+};
 
 static void loadMessageData(std::string msg_array[NB_MSG_LINES], std::string key, int nbLines)
 {
@@ -36,70 +61,17 @@ static void loadMessageData(std::string msg_array[NB_MSG_LINES], std::string key
 static messageStruct getMessage(EnumMessages type)
 {
   messageStruct msg;
-
+  messageBuilderStruct msgBuilder = msgMap[type];
   // init
-  msg.icon = -1;
-  msg.messageType = MessageTypeInfo;
+  msg.icon = msgBuilder.icon; //-1;
+  msg.messageType = msgBuilder.type; //MessageTypeInfo;
   msg.type = type;
-  msg.timer = 6.0f;
+  msg.timer = MESSAGE_DURATION;
+  msg.timerMax = msg.timer;
   msg.message[0] = "";
   msg.message[1] = "";
   msg.message[2] = "";
-
-  // treatment
-  switch (type)
-  {
-  case MsgIntro:
-    loadMessageData(msg.message, "msg_intro", 3);
-    break;
-
-  case MsgInfoRatsBats:
-    loadMessageData(msg.message, "msg_rats_bats", 3);
-    break;
-
-  case MsgInfoGold:
-    loadMessageData(msg.message, "msg_gold", 3);
-    break;
-
-  case MsgInfoButcher:
-    loadMessageData(msg.message, "msg_butcher", 3);
-    break;
-
-  case MsgInfoLevel2:
-    loadMessageData(msg.message, "msg_level2", 3);
-    break;
-
-  case MsgTutoIntro:
-    loadMessageData(msg.message, "msg_tuto_intro", 3);
-    msg.messageType = MessageTypeTutorial;
-    break;
-
-  case MsgTutoHeal:
-    loadMessageData(msg.message, "msg_tuto_heal", 3);
-    msg.messageType = MessageTypeTutorial;
-    break;
-
-  case MsgTutoShots:
-    loadMessageData(msg.message, "msg_tuto_shots", 3);
-    msg.messageType = MessageTypeTutorial;
-    break;
-
-  case MsgTutoSpell:
-    loadMessageData(msg.message, "msg_tuto_spell", 3);
-    msg.messageType = MessageTypeTutorial;
-    break;
-  };
-
-  // finalize
-  msg.timerMax = msg.timer;
-  if (msg.icon < 0)
-  {
-    switch (msg.messageType)
-    {
-      case MessageTypeInfo: msg.icon = 1; break;
-      case MessageTypeTutorial: msg.icon = 0; break;
-    }
-  }
+  loadMessageData(msg.message, msgBuilder.key, msgBuilder.nbLines);
 
   return msg;
 }

@@ -442,7 +442,7 @@ enum EnumMessages
   MsgTutoSpell
 };
 
-enum MessagesType
+enum EnumMessagesType
 {
   MessageTypeInfo,
   MessageTypeTutorial,
@@ -451,7 +451,7 @@ enum MessagesType
 struct messageStruct
 {
   int icon;
-  MessagesType messageType;
+  EnumMessagesType messageType;
   EnumMessages type;
   std::string message[NB_MSG_LINES];
   float timer;
