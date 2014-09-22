@@ -438,6 +438,8 @@ enum EnumMessages
 
   MsgTutoIntro,
   MsgTutoHeal,
+  MsgTutoShots,
+  MsgTutoSpell
 };
 
 enum MessagesType
@@ -462,6 +464,8 @@ enum EnumWorldEvents
   EventGetCoin,
 
   EventBeingHurted,
+  EventSpecialShot,
+  EventSpell,
 
   NB_EVENTS
 };
@@ -471,6 +475,8 @@ const EnumMessages eventToMessage[NB_EVENTS] = {
   MsgInfoGold,
 
   MsgTutoHeal,
+  MsgTutoShots,
+  MsgTutoSpell
 };
 
 #endif // CONSTANTS_H_INCLUDED

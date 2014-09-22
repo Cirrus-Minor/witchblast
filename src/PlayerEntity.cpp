@@ -158,12 +158,16 @@ void PlayerEntity::acquireItemAfterStance()
 
     // shot types
     if (items[acquiredItem].specialShot != (ShotTypeStandard))
+    {
       registerSpecialShot(acquiredItem);
+      game().proceedEvent(EventSpecialShot);
+    }
 
     // spells
     if (items[acquiredItem].spell != SpellNone)
     {
       setActiveSpell(items[acquiredItem].spell);
+      game().proceedEvent(EventSpell);
     }
 
     computePlayer();

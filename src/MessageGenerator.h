@@ -78,6 +78,16 @@ static messageStruct getMessage(EnumMessages type)
     loadMessageData(msg.message, "msg_tuto_heal", 3);
     msg.messageType = MessageTypeTutorial;
     break;
+
+  case MsgTutoShots:
+    loadMessageData(msg.message, "msg_tuto_shots", 3);
+    msg.messageType = MessageTypeTutorial;
+    break;
+
+  case MsgTutoSpell:
+    loadMessageData(msg.message, "msg_tuto_spell", 3);
+    msg.messageType = MessageTypeTutorial;
+    break;
   };
 
   // finalize

@@ -162,8 +162,13 @@ msg_tuto_intro_1#Uses WASD (standard) to move around the dungeon.
 msg_tuto_intro_2#Fires with the arrows (standard).
 msg_tuto_heal_0#Tutorial: Health
 msg_tuto_heal_1#You've lost some hit points.
-msg_tuto_heal_2#Find something to heal you before you reach 0.
-
+msg_tuto_heal_2#Find something to heal you before you die.
+msg_tuto_shots_0#Tutorial: Shot types
+msg_tuto_shots_1#You've found a new shot type.
+msg_tuto_shots_2#Press [fire select] (standard: tab) to switch between your shot types.
+msg_tuto_spell_0#Tutorial: Spells
+msg_tuto_spell_1#You've found a magic spell.
+msg_tuto_spell_2#Press the spell key (standard: space) to cast the spell.
 
 [french]
 start_new_game#Nouvelle partie
