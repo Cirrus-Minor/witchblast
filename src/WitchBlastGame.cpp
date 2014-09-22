@@ -436,6 +436,15 @@ void WitchBlastGame::updateRunningGame()
       {
         showLogical = !showLogical;
       }
+
+      if (event.key.code == sf::Keyboard::Return)
+      {
+        if (!messagesQueue.empty())
+        {
+          if (messagesQueue.front().timer > 0.5f)
+            messagesQueue.front().timer = 0.5f;
+        }
+      }
     }
 
     if (event.type == sf::Event::LostFocus && !player->isDead())
