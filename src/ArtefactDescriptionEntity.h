@@ -14,7 +14,6 @@ class ArtefactDescriptionEntity : public SpriteEntity
     virtual void render(sf::RenderTarget* app);
   private:
     sf::RectangleShape rectangle;
-    sf::RectangleShape rectangleBorder;
 
     std::string artefactName;
     std::string artefactDescription;

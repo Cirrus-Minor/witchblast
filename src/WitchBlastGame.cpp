@@ -738,10 +738,8 @@ void WitchBlastGame::renderRunningGame()
       ym += (1.0f - 2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * ySize;
     }
 
-    //rectangle.setFillColor(sf::Color(20, 20, 20, 255));
     rectangle.setFillColor(sf::Color(236, 222, 194, 255));
     rectangle.setOutlineThickness(2.0f);
-    //rectangle.setOutlineColor(sf::Color(220,220,220,255));
     rectangle.setOutlineColor(sf::Color(201, 145, 95,255));
     rectangle.setPosition(sf::Vector2f(xm, ym));
     rectangle.setSize(sf::Vector2f(SCREEN_WIDTH - 20, ySize));

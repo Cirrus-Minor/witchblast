@@ -242,10 +242,10 @@ enum chest_type_enum {
   CHEST_FAIRY
 };
 // Artefact Info
-const float ARTEFACT_RECT_WIDTH = 600.0f;
+const float ARTEFACT_RECT_WIDTH = 650.0f;
 const float ARTEFACT_RECT_HEIGHT = 100.0f;
 const float ARTEFACT_POS_Y = 450.0f;
-const float ARTEFACT_BORDER = 8.0f;
+const float ARTEFACT_BORDER = 3.0f;
 const float ARTEFACT_ZOOM_TIME = 0.5f;
 
 // shot types
