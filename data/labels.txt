@@ -144,22 +144,24 @@ spell_earthquake#earthquake
 
 msg_level1_0#Your quest begins!
 msg_level1_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
-msg_level1_2#I have to recover her!"
+msg_level1_2#I have to go in the heart of darkness and recover her!"
 msg_level2_0#The Archmage's daughter
 msg_level2_1#"I'm coming right now to rescue you !
 msg_level2_2#Hopefully, she's safe and sound..."
 msg_level3_0#The Archmage's daughter
 msg_level3_1#"Did I ever tell you?
-msg_level3_2#The Archmage's daughter is the prettiest girl of the entire kingdom!"
+msg_level3_2#The Archmage's daughter is the sweetest girl of the Magic Academy!"
 msg_level4_0#The Archmage
-msg_level4_1#"The Archmage is a wise and powerful man.
-msg_level4_2#I hope he'll be proud of me, if I set his daughter free."
+msg_level4_1#"The Archmage is a very wise man, and also my mentor.
+msg_level4_2#He's taught me we live in the best of the worlds."
 msg_level5_0#The Archmage's daughter
-msg_level5_1#"I remember the Archmage's daughter and me, back in the Maginarium.
+msg_level5_1#"I remember the Archmage's daughter and me, back in the Magic Academy.
 msg_level5_2#We use to play at the healer mage, hi hi !"
 msg_rats_bats_0#Monsters
 msg_rats_bats_1#"Hey! Why do we always have to exterminate rats or bats
 msg_rats_bats_2#in these Rogue games ?"
+msg_snakes_0#Snakes
+msg_snakes_1#"I HATE snakes!"
 msg_gold_0#Gold
 msg_gold_1#"♫ Money money money ♫
 msg_gold_2#I wonder if I can buy useful items in this dungeon..."
@@ -190,6 +192,9 @@ msg_tuto_items_2#Find or buy as many as you can.
 msg_tuto_heal_0#Tutorial: Health
 msg_tuto_heal_1#You've lost some hit points.
 msg_tuto_heal_2#Find something to heal you before you die.
+msg_tuto_shops_0#Tutorial: Shops
+msg_tuto_shops_1#You can find many shops in the dungeon.
+msg_tuto_shops_2#Here can you spend money to buy items or food.
 msg_tuto_shots_0#Tutorial: Shot types
 msg_tuto_shots_1#You've found a new shot type.
 msg_tuto_shots_2#Press [fire select] (standard: tab) to switch between your shot types.

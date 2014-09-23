@@ -64,9 +64,11 @@ static std::string intToString(int n)
 std::map<EnumWorldEvents, EnumMessages> eventToMessage =
 {
   { EventMeetRatsOrBats,    MsgInfoRatsBats },
+  { EventMeetSnakes,        MsgInfoSnakes },
   { EventGetCoin,           MsgInfoGold },
   { EventGetFamiliar,       MsgInfoFamiliar },
   { EventBeingHurted,       MsgTutoHeal },
+  { EventFindShop,          MsgTutoShops },
   { EventGetItem,           MsgTutoItems },
   { EventGetSpecialShot,    MsgTutoShots },
   { EventGetSpell,          MsgTutoSpell },
@@ -145,7 +147,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/cauldron.ogg",       "media/sound/cauldron_die.ogg",
     "media/sound/critical.ogg",       "media/sound/gong.ogg",
     "media/sound/teleport.ogg",       "media/sound/spell_charge.ogg",
-    "media/sound/fireball.ogg",
+    "media/sound/fireball.ogg",       "media/sound/message.ogg",
   };
 
   for (const char *const filename : sounds) {
@@ -537,7 +539,11 @@ void WitchBlastGame::updateRunningGame()
     if (!messagesQueue.empty())
     {
       messagesQueue.front().timer -= deltaTime;
-      if (messagesQueue.front().timer < 0.0f) messagesQueue.pop();
+      if (messagesQueue.front().timer < 0.0f)
+      {
+        messagesQueue.pop();
+        if (!messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
+      }
     }
   }
 
@@ -1464,9 +1470,12 @@ void WitchBlastGame::refreshMap()
   else
   {
     if (currentMap->getRoomType() == roomTypeMerchant)
+    {
       new PnjEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                     OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
                     0);
+      proceedEvent(EventFindShop);
+    }
   }
 
   // check doors
@@ -2738,6 +2747,7 @@ void WitchBlastGame::registerLanguage()
 
 void WitchBlastGame::addMessageToQueue(EnumMessages type)
 {
+  if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
   // TODO test tuto
   messagesQueue.push(getMessage(type));
 }
@@ -2755,11 +2765,6 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
   worldEvent[event] = true;
 
   addMessageToQueue(eventToMessage[event]);
-
-  /*switch (event)
-  {
-    case EventRatsOrBats: addMessageToQueue(MsgInfoRatsBats); break;
-  };*/
 }
 
 WitchBlastGame &game()

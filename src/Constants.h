@@ -181,7 +181,8 @@ enum sound_resources {
   SOUND_GONG,
   SOUND_TELEPORT,
   SOUND_SPELL_CHARGE,
-  SOUND_FIREBALL
+  SOUND_FIREBALL,
+  SOUND_MESSAGE
 };
 
 enum corpses_ressources{
@@ -436,6 +437,7 @@ enum EnumMessages
   MsgInfoLevel4,
   MsgInfoLevel5,
   MsgInfoRatsBats,
+  MsgInfoSnakes,
   MsgInfoGold,
   MsgInfoFamiliar,
   MsgInfoButcher,
@@ -447,6 +449,7 @@ enum EnumMessages
 
   MsgTutoBasics,
   MsgTutoItems,
+  MsgTutoShops,
   MsgTutoHeal,
   MsgTutoShots,
   MsgTutoSpell
@@ -470,10 +473,14 @@ struct messageStruct
 
 enum EnumWorldEvents
 {
+  // info
   EventMeetRatsOrBats,
+  EventMeetSnakes,
   EventGetCoin,
 
+  // tuto
   EventBeingHurted,
+  EventFindShop,
   EventGetItem,
   EventGetSpecialShot,
   EventGetFamiliar,

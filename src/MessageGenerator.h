@@ -44,6 +44,7 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoLevel5,    { MessageTypeInfo, 1, "msg_level5",           3} },
 
   { MsgInfoRatsBats,  { MessageTypeInfo, 1, "msg_rats_bats",        3} },
+  { MsgInfoSnakes,    { MessageTypeInfo, 1, "msg_snakes",           3} },
   { MsgInfoGold,      { MessageTypeInfo, 1, "msg_gold",             3} },
   { MsgInfoFamiliar,  { MessageTypeInfo, 1, "msg_familiar",         3} },
 
@@ -56,6 +57,7 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
 
   { MsgTutoBasics,    { MessageTypeTutorial, 0, "msg_tuto_intro",   3} },
   { MsgTutoItems,     { MessageTypeTutorial, 0, "msg_tuto_items",   3} },
+  { MsgTutoShops,     { MessageTypeTutorial, 0, "msg_tuto_shops",   3} },
   { MsgTutoHeal,      { MessageTypeTutorial, 0, "msg_tuto_heal",    3} },
   { MsgTutoShots,     { MessageTypeTutorial, 0, "msg_tuto_shots",   3} },
   { MsgTutoSpell,     { MessageTypeTutorial, 0, "msg_tuto_spell",   3} },
