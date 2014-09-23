@@ -237,7 +237,7 @@ void PlayerEntity::animate(float delay)
     canFirePlayer = (currentFireDelay <= 0.0f);
   }
   // spells
-  if (activeSpell.delay > 0.0f)
+  if (activeSpell.spell != SpellNone && activeSpell.delay > 0.0f)
   {
     if (game().getCurrentMap()->isCleared())
       activeSpell.delay -= 40 * delay;
