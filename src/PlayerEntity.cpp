@@ -150,24 +150,27 @@ void PlayerEntity::acquireItemAfterStance()
   {
     equip[acquiredItem - FirstEquipItem] = true;
 
+    if (acquiredItem != ItemBossKey) game().proceedEvent(EventGetItem);
+
     // familiar
     if (items[acquiredItem].familiar != FamiliarNone)
     {
       setEquiped(acquiredItem - FirstEquipItem, true);
+      game().proceedEvent(EventGetFamiliar);
     }
 
     // shot types
     if (items[acquiredItem].specialShot != (ShotTypeStandard))
     {
       registerSpecialShot(acquiredItem);
-      game().proceedEvent(EventSpecialShot);
+      game().proceedEvent(EventGetSpecialShot);
     }
 
     // spells
     if (items[acquiredItem].spell != SpellNone)
     {
       setActiveSpell(items[acquiredItem].spell);
-      game().proceedEvent(EventSpell);
+      game().proceedEvent(EventGetSpell);
     }
 
     computePlayer();

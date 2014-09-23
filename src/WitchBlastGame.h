@@ -263,6 +263,8 @@ public:
 
   void proceedEvent(EnumWorldEvents event);
 
+  void addMessageToQueue(EnumMessages type);
+
 protected:
   /*!
    *  \brief Rendering method
@@ -630,8 +632,6 @@ private:
   void resetKilledEnemies();
 
   std::queue <messageStruct> messagesQueue;
-
-  void addMessageToQueue(EnumMessages type);
 
   bool worldEvent[NB_EVENTS];
   void initEvents();

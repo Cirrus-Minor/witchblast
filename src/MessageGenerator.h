@@ -33,16 +33,29 @@ struct messageBuilderStruct
 };
 
 const float MESSAGE_DURATION = 6.0f;
+const float MESSAGE_DURATION_SHORT = 3.0f;
 
 std::map<EnumMessages, messageBuilderStruct> msgMap =
 {
-  { MsgIntro,         { MessageTypeInfo, 1, "msg_intro",            3} },
+  { MsgInfoLevel1,    { MessageTypeInfo, 1, "msg_level1",           3} },
+  { MsgInfoLevel2,    { MessageTypeInfo, 1, "msg_level2",           3} },
+  { MsgInfoLevel3,    { MessageTypeInfo, 1, "msg_level3",           3} },
+  { MsgInfoLevel4,    { MessageTypeInfo, 1, "msg_level4",           3} },
+  { MsgInfoLevel5,    { MessageTypeInfo, 1, "msg_level5",           3} },
+
   { MsgInfoRatsBats,  { MessageTypeInfo, 1, "msg_rats_bats",        3} },
   { MsgInfoGold,      { MessageTypeInfo, 1, "msg_gold",             3} },
-  { MsgInfoButcher,   { MessageTypeInfo, 1, "msg_butcher",          3} },
-  { MsgInfoLevel2,    { MessageTypeInfo, 1, "msg_level2",           3} },
+  { MsgInfoFamiliar,  { MessageTypeInfo, 1, "msg_familiar",         3} },
 
-  { MsgTutoIntro,     { MessageTypeTutorial, 0, "msg_tuto_intro",   3} },
+  { MsgInfoButcher,           { MessageTypeInfo, 1, "msg_butcher",              3} },
+  { MsgInfoGiantSlime,        { MessageTypeInfo, 1, "msg_giant_slime",          3} },
+  { MsgInfoCyclops,           { MessageTypeInfo, 1, "msg_cyclops",              3} },
+  { MsgInfoWererat,           { MessageTypeInfo, 1, "msg_wererat",              2} },
+  { MsgInfoGiantSpiderBefore, { MessageTypeInfo, 1, "msg_giant_spider_before",  2} },
+  { MsgInfoGiantSpiderAfter,  { MessageTypeInfo, 1, "msg_giant_spider_after",   2} },
+
+  { MsgTutoBasics,    { MessageTypeTutorial, 0, "msg_tuto_intro",   3} },
+  { MsgTutoItems,     { MessageTypeTutorial, 0, "msg_tuto_items",   3} },
   { MsgTutoHeal,      { MessageTypeTutorial, 0, "msg_tuto_heal",    3} },
   { MsgTutoShots,     { MessageTypeTutorial, 0, "msg_tuto_shots",   3} },
   { MsgTutoSpell,     { MessageTypeTutorial, 0, "msg_tuto_spell",   3} },
@@ -66,7 +79,7 @@ static messageStruct getMessage(EnumMessages type)
   msg.icon = msgBuilder.icon; //-1;
   msg.messageType = msgBuilder.type; //MessageTypeInfo;
   msg.type = type;
-  msg.timer = MESSAGE_DURATION;
+  msg.timer = msgBuilder.nbLines == 3 ? MESSAGE_DURATION : MESSAGE_DURATION_SHORT;
   msg.timerMax = msg.timer;
   msg.message[0] = "";
   msg.message[1] = "";

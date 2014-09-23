@@ -63,11 +63,13 @@ static std::string intToString(int n)
 
 std::map<EnumWorldEvents, EnumMessages> eventToMessage =
 {
-  { EventRatsOrBats,    MsgInfoRatsBats },
-  { EventGetCoin,       MsgInfoGold },
-  { EventBeingHurted,   MsgTutoHeal },
-  { EventSpecialShot,   MsgTutoShots },
-  { EventSpell,         MsgTutoSpell },
+  { EventMeetRatsOrBats,    MsgInfoRatsBats },
+  { EventGetCoin,           MsgInfoGold },
+  { EventGetFamiliar,       MsgInfoFamiliar },
+  { EventBeingHurted,       MsgTutoHeal },
+  { EventGetItem,           MsgTutoItems },
+  { EventGetSpecialShot,    MsgTutoShots },
+  { EventGetSpell,          MsgTutoSpell },
 };
 
 namespace
@@ -313,8 +315,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
     resetKilledEnemies();
     startNewLevel();
 
-    addMessageToQueue(MsgIntro);
-    addMessageToQueue(MsgTutoIntro);
+    addMessageToQueue(MsgTutoBasics);
   }
 }
 
@@ -351,7 +352,7 @@ void WitchBlastGame::startNewLevel()
   // to test
   displayKilledEnemies();
 
-  if (level == 2) addMessageToQueue(MsgInfoLevel2);
+  if (level <= 5) addMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
 
   playLevel();
 }
@@ -1789,17 +1790,33 @@ void WitchBlastGame::generateMap()
     }
 
     else if (level == 2)
+    {
       new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMessageToQueue(MsgInfoGiantSlime);
+    }
+
     else if (level == 3)
+    {
       new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMessageToQueue(MsgInfoCyclops);
+    }
+
     else if (level == 4)
+    {
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMessageToQueue(MsgInfoWererat);
+    }
+
     else //if (level == 5)
+    {
       new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                             OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMessageToQueue(MsgInfoGiantSpiderBefore);
+    }
+
 
     playMusic(MusicBoss);
   }
@@ -1858,7 +1875,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   {
   case EnemyTypeRat:
     new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal, false);
-    proceedEvent(EventRatsOrBats);
+    proceedEvent(EventMeetRatsOrBats);
     break;
   case EnemyTypeRatBlack:
     new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeNormal);
@@ -1871,7 +1888,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeBat:
     new BatEntity(xm, ym, false);
-    proceedEvent(EventRatsOrBats);
+    proceedEvent(EventMeetRatsOrBats);
     break;
   case EnemyTypeSnake:
     new SnakeEntity(xm, ym, SnakeEntity::SnakeTypeNormal, false);

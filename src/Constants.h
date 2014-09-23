@@ -430,13 +430,23 @@ const float HEART_BEAT_DELAY = 1.2f;
 const int NB_MSG_LINES = 3;
 enum EnumMessages
 {
-  MsgIntro,
+  MsgInfoLevel1,
+  MsgInfoLevel2,
+  MsgInfoLevel3,
+  MsgInfoLevel4,
+  MsgInfoLevel5,
   MsgInfoRatsBats,
   MsgInfoGold,
+  MsgInfoFamiliar,
   MsgInfoButcher,
-  MsgInfoLevel2,
+  MsgInfoGiantSlime,
+  MsgInfoCyclops,
+  MsgInfoWererat,
+  MsgInfoGiantSpiderBefore,
+  MsgInfoGiantSpiderAfter,
 
-  MsgTutoIntro,
+  MsgTutoBasics,
+  MsgTutoItems,
   MsgTutoHeal,
   MsgTutoShots,
   MsgTutoSpell
@@ -460,12 +470,14 @@ struct messageStruct
 
 enum EnumWorldEvents
 {
-  EventRatsOrBats,
+  EventMeetRatsOrBats,
   EventGetCoin,
 
   EventBeingHurted,
-  EventSpecialShot,
-  EventSpell,
+  EventGetItem,
+  EventGetSpecialShot,
+  EventGetFamiliar,
+  EventGetSpell,
 
   NB_EVENTS
 };

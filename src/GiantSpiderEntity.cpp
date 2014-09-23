@@ -39,6 +39,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
   h = 2000;
   state = 0;
   hurtLevel = 0;
+  labelHasChanged = false;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
@@ -63,7 +64,12 @@ void GiantSpiderEntity::animate(float delay)
         h = 0;
         state = 1;
         timer = 1.0f;
-        creatureName = tools::getLabel("enemy_giant_spider");
+        if (!labelHasChanged)
+        {
+          labelHasChanged = true;
+          creatureName = tools::getLabel("enemy_giant_spider");
+          game().addMessageToQueue(MsgInfoGiantSpiderAfter);
+        }
       }
     }
     else if (state == 1) // wait after falling

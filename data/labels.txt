@@ -142,24 +142,51 @@ spell_fireball#fireball
 spell_freeze#freeze monsters
 spell_earthquake#earthquake
 
-msg_intro_0#Your quest begins !
-msg_intro_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
-msg_intro_2#I have to recover her !"
+msg_level1_0#Your quest begins!
+msg_level1_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
+msg_level1_2#I have to recover her!"
+msg_level2_0#The Archmage's daughter
+msg_level2_1#"I'm coming right now to rescue you !
+msg_level2_2#Hopefully, she's safe and sound..."
+msg_level3_0#The Archmage's daughter
+msg_level3_1#"Did I ever tell you?
+msg_level3_2#The Archmage's daughter is the prettiest girl of the entire kingdom!"
+msg_level4_0#The Archmage
+msg_level4_1#"The Archmage is a wise and powerful man.
+msg_level4_2#I hope he'll be proud of me, if I set his daughter free."
+msg_level5_0#The Archmage's daughter
+msg_level5_1#"I remember the Archmage's daughter and me, back in the Maginarium.
+msg_level5_2#We use to play at the healer mage, hi hi !"
 msg_rats_bats_0#Monsters
 msg_rats_bats_1#"Hey! Why do we always have to exterminate rats or bats
 msg_rats_bats_2#in these Rogue games ?"
 msg_gold_0#Gold
-msg_gold_1#"♫ Money, it's a hit ♫
+msg_gold_1#"♫ Money money money ♫
 msg_gold_2#I wonder if I can buy useful items in this dungeon..."
+msg_familiar_0#Fairies
+msg_familiar_1#"Oh! I've got company!
+msg_familiar_2#I hope I'll find others allies in the dungeon."
 msg_butcher_0#The Pigman Butcher
-msg_butcher_1#"Wow this one is a big guy !
+msg_butcher_1#"Wow this one is a big guy!
 msg_butcher_2#I hope I won't end up in sausages..."
-msg_level2_0#The Archmage's daughter
-msg_level2_1#"I'm coming right now to rescue you !
-msg_level2_2#Hopefully, she's safe and sound..."
+msg_giant_slime_0#The Giant Slime
+msg_giant_slime_1#"I am green, huge and I stink.
+msg_giant_slime_2#What I am ?"
+msg_cyclops_0#The Barbarian Cyclops
+msg_cyclops_1#"How did it go in the room?
+msg_cyclops_2#It's bigger and large as the gate!"
+msg_wererat_0#The Wererat
+msg_wererat_1#"Looks like my old aunt..."
+msg_giant_spider_before_0#The empty room
+msg_giant_spider_before_1#"Is there anybody in there? "
+msg_giant_spider_after_0#The Giant Spider
+msg_giant_spider_after_1#"I HATE spiders"
 msg_tuto_intro_0#Tutorial: Basics
 msg_tuto_intro_1#Uses WASD (standard) to move around the dungeon.
 msg_tuto_intro_2#Fires with the arrows (standard).
+msg_tuto_items_0#Tutorial: Items
+msg_tuto_items_1#Items enhance your character or give you new powers.
+msg_tuto_items_2#Find or buy as many as you can.
 msg_tuto_heal_0#Tutorial: Health
 msg_tuto_heal_1#You've lost some hit points.
 msg_tuto_heal_2#Find something to heal you before you die.

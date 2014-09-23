@@ -25,6 +25,7 @@ class GiantSpiderEntity : public EnemyEntity
     int getHealthLevel();
   private:
     int state;
+    bool labelHasChanged;
     float timer;
     float fireDelay;
     float walkingSoundDelay;
