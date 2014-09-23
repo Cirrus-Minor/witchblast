@@ -1474,7 +1474,6 @@ void WitchBlastGame::refreshMap()
       new PnjEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                     OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
                     0);
-      proceedEvent(EventFindShop);
     }
   }
 
@@ -1769,6 +1768,7 @@ void WitchBlastGame::generateMap()
                   0);
 
     currentMap->setCleared(true);
+    proceedEvent(EventFindShop);
   }
   else if (currentMap->getRoomType() == roomTypeChallenge)
   {
@@ -1901,6 +1901,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeSnake:
     new SnakeEntity(xm, ym, SnakeEntity::SnakeTypeNormal, false);
+    proceedEvent(EventMeetSnakes);
     break;
   case EnemyTypeEvilFlower:
     new EvilFlowerEntity(xm, ym - 2);
@@ -2314,7 +2315,8 @@ void WitchBlastGame::saveGame()
     file << player->getX() << " " << player->getY() << std::endl;
     file << player->getShotIndex();
     for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
-    file << player->getActiveSpell().spell;
+    file << player->getActiveSpell().spell << std::endl;
+    for (i = 0; i < NB_EVENTS; i++) file << worldEvent[i] << " ";
     file.close();
   }
   else
@@ -2460,6 +2462,13 @@ bool WitchBlastGame::loadGame()
 
     file >> n;
     player->setActiveSpell((enumCastSpell)n);
+
+    for (i = 0; i < NB_EVENTS; i++)
+    {
+      bool event;
+      file >> event;
+      worldEvent[i] = event;
+    }
 
     player->computePlayer();
     file.close();

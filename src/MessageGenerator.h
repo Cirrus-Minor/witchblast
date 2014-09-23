@@ -44,7 +44,7 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoLevel5,    { MessageTypeInfo, 1, "msg_level5",           3} },
 
   { MsgInfoRatsBats,  { MessageTypeInfo, 1, "msg_rats_bats",        3} },
-  { MsgInfoSnakes,    { MessageTypeInfo, 1, "msg_snakes",           3} },
+  { MsgInfoSnakes,    { MessageTypeInfo, 1, "msg_snakes",           2} },
   { MsgInfoGold,      { MessageTypeInfo, 1, "msg_gold",             3} },
   { MsgInfoFamiliar,  { MessageTypeInfo, 1, "msg_familiar",         3} },
 
