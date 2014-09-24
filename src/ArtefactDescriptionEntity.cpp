@@ -89,8 +89,7 @@ void ArtefactDescriptionEntity::render(sf::RenderTarget* app)
     }
 
     app->draw(rectangle);
-    app->draw(sprite);
-
     game().write(artefactName, 22, 315.0f, ARTEFACT_POS_Y + 15.0f, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
     game().write(artefactDescription, 19, 315.0f, ARTEFACT_POS_Y + 55.0f, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+    app->draw(sprite);
 }
