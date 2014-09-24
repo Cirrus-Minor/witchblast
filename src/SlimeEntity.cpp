@@ -368,8 +368,7 @@ void SlimeEntity::fire()
 
 void SlimeEntity::explode()
 {
-  ExplosionEntity* expl = new ExplosionEntity(x, y, isPet ? 18 : 12);
-
+  new ExplosionEntity(x, y, isPet ? 18 : 12);
   game().makeShake(1.0f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }
