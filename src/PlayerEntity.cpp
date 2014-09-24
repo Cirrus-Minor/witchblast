@@ -382,7 +382,7 @@ void PlayerEntity::renderBody(sf::RenderTarget* app)
 
 void PlayerEntity::renderHands(sf::RenderTarget* app)
 {
-  if (equip[EQUIP_VIBRATION_GLOVES] && playerStatus != playerStatusDead)
+  if (equip[EQUIP_DISPLACEMENT_GLOVES] && playerStatus != playerStatusDead)
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
 
   sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
@@ -743,7 +743,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
     shotLevel = getShotLevel();
     break;
   default:
-      std::cout << "[WARNING] Can not generate shot type: " << getShotType() << std::endl;
+    std::cout << "[WARNING] Can not generate shot type: " << getShotType() << std::endl;
 
   }
 
@@ -756,6 +756,13 @@ void PlayerEntity::generateBolt(float velx, float vely)
       bolt->setCritical(true);
     }
   bolt->setDamages(boltDamage);
+
+  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  {
+    velx += velocity.x * 0.66f;
+    vely += velocity.y * 0.66f;
+  }
+
   bolt->setVelocity(Vector2D(velx, vely));
 }
 
@@ -821,8 +828,6 @@ void PlayerEntity::fire(int direction)
       else if (!equip[EQUIP_BOOK_TRIPLE])
         shoot_angle = 0.1f;
 
-      if (equip[EQUIP_VIBRATION_GLOVES]) shoot_angle += (1000 - rand() % 2000) * 0.0001f;
-
       switch(direction)
       {
       case 4:
@@ -845,42 +850,20 @@ void PlayerEntity::fire(int direction)
     }
     if (!equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE])
     {
-      if (equip[EQUIP_VIBRATION_GLOVES])
+      switch(direction)
       {
-        float shoot_angle = (1000 - rand() % 2000) * 0.0001f;
-        switch(direction)
-        {
-        case 4:
-          generateBolt(-fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
-          break;
-        case 6:
-          generateBolt(fireVelocity * cos(shoot_angle), fireVelocity * sin(shoot_angle));
-          break;
-        case 8:
-          generateBolt(fireVelocity * sin(shoot_angle), -fireVelocity * cos(shoot_angle));
-          break;
-        case 2:
-          generateBolt(fireVelocity * sin(shoot_angle), fireVelocity * cos(shoot_angle));
-          break;
-        }
-      }
-      else
-      {
-        switch(direction)
-        {
-        case 4:
-          generateBolt(-fireVelocity, 0.0f);
-          break;
-        case 6:
-          generateBolt(fireVelocity, 0.0f);
-          break;
-        case 8:
-          generateBolt(0.0f, -fireVelocity);
-          break;
-        case 2:
-          generateBolt(0.0f, fireVelocity);
-          break;
-        }
+      case 4:
+        generateBolt(-fireVelocity, 0.0f);
+        break;
+      case 6:
+        generateBolt(fireVelocity, 0.0f);
+        break;
+      case 8:
+        generateBolt(0.0f, -fireVelocity);
+        break;
+      case 2:
+        generateBolt(0.0f, fireVelocity);
+        break;
       }
     }
 
@@ -1038,7 +1021,7 @@ void PlayerEntity::computePlayer()
   armor = 0.0f;
   criticalChance = 0;
 
-  if (equip[EQUIP_VIBRATION_GLOVES]) fireDelayBonus -= 0.10f;
+  if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
@@ -1261,22 +1244,22 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
   {
     switch (specialShots[i])
     {
-      case ShotTypeIce:
-      case ShotTypeStone:
-      case ShotTypeLightning:
-        nbSpecial++;
-        break;
+    case ShotTypeIce:
+    case ShotTypeStone:
+    case ShotTypeLightning:
+      nbSpecial++;
+      break;
 
-      case ShotTypeFire:
-      case ShotTypeIllusion:
-        nbAdvanced++;
-        break;
+    case ShotTypeFire:
+    case ShotTypeIllusion:
+      nbAdvanced++;
+      break;
 
-      case ShotTypeStandard:
-        break;
+    case ShotTypeStandard:
+      break;
 
-      default:
-        std::cout << "[WARNING] Can not register shot type: " << getShotType() << std::endl;
+    default:
+      std::cout << "[WARNING] Can not register shot type: " << getShotType() << std::endl;
     }
   }
 
@@ -1331,7 +1314,8 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
     activeSpell.frame = ItemSpellEarthquake - FirstEquipItem;
     break;
 
-  case SpellNone: break;
+  case SpellNone:
+    break;
   }
   activeSpell.delay = activeSpell.delayMax;
 }
@@ -1346,13 +1330,24 @@ void PlayerEntity::castSpell()
 
     switch (activeSpell.spell)
     {
-      case SpellTeleport: castTeleport(); break;
-      case SpellSlimeExplode: castSummonsSlimeExplode(); break;
-      case SpellFireball: castFireball(); break;
-      case SpellFreeze: castFreeze(); break;
-      case SpellEarthquake: castEarthquake(); break;
+    case SpellTeleport:
+      castTeleport();
+      break;
+    case SpellSlimeExplode:
+      castSummonsSlimeExplode();
+      break;
+    case SpellFireball:
+      castFireball();
+      break;
+    case SpellFreeze:
+      castFreeze();
+      break;
+    case SpellEarthquake:
+      castEarthquake();
+      break;
 
-      case SpellNone: break;
+    case SpellNone:
+      break;
     }
   }
 }
@@ -1491,7 +1486,7 @@ void PlayerEntity::castFreeze()
       else if (i == 1 && j == -1) vely= -fireVelocity * i * 1.2f;
       else if (i == 1 && j == 1) vely = fireVelocity * i * 1.2f;
       bolt2->setVelocity(Vector2D(velx, vely));
-  }
+    }
   SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
 }
 

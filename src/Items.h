@@ -79,7 +79,7 @@ enum enumItemType
   ItemBookDualShots,
   ItemRageAmulet,
   ItemBossKey,
-  ItemVibrationGloves,
+  ItemDisplacementGloves,
   ItemMahoganyStaff,
   ItemFairy,
   ItemLeatherBelt,
@@ -191,7 +191,7 @@ const itemStuct items[NUMBER_ITEMS] =
     200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
-    ItemVibrationGloves, "item_vibration_gloves", "item_vibration_gloves_desc",
+    ItemDisplacementGloves, "item_displacement_gloves", "item_displacement_gloves_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
@@ -309,7 +309,7 @@ enum item_equip_enum {
   EQUIP_BOOK_DUAL,
   EQUIP_CONCENTRATION_AMULET,
   EQUIP_BOSS_KEY,
-  EQUIP_VIBRATION_GLOVES,
+  EQUIP_DISPLACEMENT_GLOVES,
   EQUIP_MAHOGANY_STAFF,
   EQUIP_FAIRY,
   EQUIP_LEATHER_BELT,

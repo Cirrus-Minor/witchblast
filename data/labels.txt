@@ -81,8 +81,6 @@ item_spell_dual#Spell : Dual bolts
 item_spell_dual_desc#Shoots two bolts
 item_rage_amulet#Rage Amulet
 item_rage_amulet_desc#Retaliates
-item_vibration_gloves#Vibration Gloves
-item_vibration_gloves_desc#Increases bolt's speed rate and vibrates
 item_staff#Mahogany Staff
 item_staff_desc#Increases bolt's speed and damage
 item_fairy#Fairy Lilly
@@ -132,6 +130,9 @@ item_spell_slime_explode_desc#Cast to invoke an explosive slime
 spell_teleport#teleport
 spell_slime_explode#invoke slime
 
+item_displacement_gloves#Vibration Gloves
+item_displacement_gloves_desc#Increases bolt's speed rate and "displace"
+
 item_spell_fireball#Spell: Fireball
 item_spell_fireball_desc#Cast to launch a fireball
 item_spell_freeze#Spell: Freeze monsters
@@ -141,10 +142,9 @@ item_spell_earthquake_desc#Cast to make the dungeon shake
 spell_fireball#fireball
 spell_freeze#freeze monsters
 spell_earthquake#earthquake
-
 msg_level1_0#Your quest begins!
 msg_level1_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
-msg_level1_2#I have to go in the heart of darkness and recover her!"
+msg_level1_2#I have to recover her!"
 msg_level2_0#The Archmage's daughter
 msg_level2_1#"I'm coming right now to rescue you !
 msg_level2_2#Hopefully, she's safe and sound..."
@@ -289,8 +289,8 @@ item_spell_dual#Sort: double-tir
 item_spell_dual_desc#Tire deux projectiles
 item_rage_amulet#Amulette de rage
 item_rage_amulet_desc#Contre-attaque
-item_vibration_gloves#Gants de vibration
-item_vibration_gloves_desc#Vibre et augmente la cadence de tir
+item_displacement_gloves#Gants de vibration
+item_displacement_gloves_desc#Vibre et augmente la cadence de tir
 item_staff#Bâton d'acajou
 item_staff_desc#Augmente les dégâts et la vitesse de tir
 item_fairy#La fée Lilly
@@ -429,8 +429,8 @@ item_spell_dual#Zauber : Doppelter Schuss
 item_spell_dual_desc#Schießt zwei Schüsse
 item_rage_amulet#Wutamulett
 item_rage_amulet_desc#Revanchiert sich bei Kontakt
-item_vibration_gloves#Vibrationshandschuhe
-item_vibration_gloves_desc#Erhöht die Feuerrate und vibriert
+item_displacement_gloves#Vibrationshandschuhe
+item_displacement_gloves_desc#Erhöht die Feuerrate und vibriert
 item_staff#Mahagoni-Stab
 item_staff_desc#Erhöht Schussgeschwindigkeit und Schaden
 item_fairy#Lilly-Fee
@@ -571,8 +571,8 @@ item_spell_dual#Conjuro : Rayo doble
 item_spell_dual_desc#Dispara dos rayos
 item_rage_amulet#Amuleto de furia
 item_rage_amulet_desc#Contraataca
-item_vibration_gloves#Guantes de vibración
-item_vibration_gloves_desc#Aumenta la velocidad del rayo y además vibra
+item_displacement_gloves#Guantes de vibración
+item_displacement_gloves_desc#Aumenta la velocidad del rayo y además vibra
 item_staff#Báculo Mahogany
 item_staff_desc#Aumenta la velocidad y el daño del rayo
 item_fairy#Hada Lilly
@@ -708,8 +708,8 @@ item_spell_dual#Заклинание : Двойной выстрел
 item_spell_dual_desc#Позволяет стрелять двойным снарядом
 item_rage_amulet#Амулет ярости
 item_rage_amulet_desc#Месть
-item_vibration_gloves#Перчатки вибрации
-item_vibration_gloves_desc#Увеличивает скорость снаряда
+item_displacement_gloves#Перчатки вибрации
+item_displacement_gloves_desc#Увеличивает скорость снаряда
 item_staff#Посох красного дерева
 item_staff_desc#Увеличивает скорость снаряда и урон
 item_fairy#Фея Лилли

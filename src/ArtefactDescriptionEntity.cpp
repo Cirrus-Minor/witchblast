@@ -25,7 +25,7 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
   rectangle.setOutlineThickness(ARTEFACT_BORDER);
   rectangle.setOutlineColor(sf::Color(201, 145, 95,255));
 
-  this->x = x0 + 50.0f;
+  this->x = x0 + 40.0f;
   this->y = 500.0f;
   sprite.setScale(3.5f, 3.5f);
 
@@ -73,7 +73,7 @@ void ArtefactDescriptionEntity::render(sf::RenderTarget* app)
         ny = frame / imagesProLine;
     }
 
-    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, /*(nx + 1) **/ width, /*(ny + 1) */ height));
+    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
 
     sprite.setPosition(x, y);
     sprite.setRotation(angle);
