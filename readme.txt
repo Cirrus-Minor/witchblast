@@ -80,6 +80,7 @@ Ruth (for the english corrections)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
 AFS (for the Spanish translation)
+Lord Archibald (who helps me writing the story)
 
 Changes
 -------
@@ -87,10 +88,14 @@ Next release
 - ADD New monsters (snakes)
 - ADD New items (spell orbs)
 - ADD Poison
-- ADD Spells
+- ADD Spells (5 different ones)
 - ADD Translations: Spanish and Russian
 - ADD New art for bats
+- ADD Texts "widgets" for story and tutorial
+- MOD Items presentation windows colour has changed
 - FIX Texts are now in UTF-8
+- FIX Monsters out of the game zone
+- FIX Persistent particles on some machines/systems
 
 v0.3.3
 - ADD German version
