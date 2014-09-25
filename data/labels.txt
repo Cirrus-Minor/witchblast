@@ -195,6 +195,12 @@ msg_tuto_heal_2#Find something to heal you before you die.
 msg_tuto_shops_0#Tutorial: Shops
 msg_tuto_shops_1#You can find many shops in the dungeon.
 msg_tuto_shops_2#Here can you spend money to buy items or food.
+msg_tuto_boss_door_0#Tutorial: Boss gate
+msg_tuto_boss_door_1#From here, you can see a closed golden door.
+msg_tuto_boss_door_2#Here is the boss of the floor, but you need the golden key to enter.
+msg_tuto_challenge_door_0#Tutorial: Challenge room
+msg_tuto_challenge_door_1#Look at the decorative door. It is a challenge room.
+msg_tuto_challenge_door_2#You can obtain valuable rewards here, but enter with caution!
 msg_tuto_shots_0#Tutorial: Shot types
 msg_tuto_shots_1#You've found a new shot type.
 msg_tuto_shots_2#Press [fire select] (standard: tab) to switch between your shot types.

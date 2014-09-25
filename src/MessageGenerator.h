@@ -55,12 +55,14 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoGiantSpiderBefore, { MessageTypeInfo, 1, "msg_giant_spider_before",  2} },
   { MsgInfoGiantSpiderAfter,  { MessageTypeInfo, 1, "msg_giant_spider_after",   2} },
 
-  { MsgTutoBasics,    { MessageTypeTutorial, 0, "msg_tuto_intro",   3} },
-  { MsgTutoItems,     { MessageTypeTutorial, 0, "msg_tuto_items",   3} },
-  { MsgTutoShops,     { MessageTypeTutorial, 0, "msg_tuto_shops",   3} },
-  { MsgTutoHeal,      { MessageTypeTutorial, 0, "msg_tuto_heal",    3} },
-  { MsgTutoShots,     { MessageTypeTutorial, 0, "msg_tuto_shots",   3} },
-  { MsgTutoSpell,     { MessageTypeTutorial, 0, "msg_tuto_spell",   3} },
+  { MsgTutoBasics,            { MessageTypeTutorial, 0, "msg_tuto_intro",           3} },
+  { MsgTutoItems,             { MessageTypeTutorial, 0, "msg_tuto_items",           3} },
+  { MsgTutoShops,             { MessageTypeTutorial, 0, "msg_tuto_shops",           3} },
+  { MsgTutoBossDoor,          { MessageTypeTutorial, 0, "msg_tuto_boss_door",       3} },
+  { MsgTutoChallengeDoor,     { MessageTypeTutorial, 0, "msg_tuto_challenge_door",  3} },
+  { MsgTutoHeal,              { MessageTypeTutorial, 0, "msg_tuto_heal",            3} },
+  { MsgTutoShots,             { MessageTypeTutorial, 0, "msg_tuto_shots",           3} },
+  { MsgTutoSpell,             { MessageTypeTutorial, 0, "msg_tuto_spell",           3} },
 };
 
 static void loadMessageData(std::string msg_array[NB_MSG_LINES], std::string key, int nbLines)
@@ -77,6 +79,7 @@ static messageStruct getMessage(EnumMessages type)
 {
   messageStruct msg;
   messageBuilderStruct msgBuilder = msgMap[type];
+
   // init
   msg.icon = msgBuilder.icon; //-1;
   msg.messageType = msgBuilder.type; //MessageTypeInfo;

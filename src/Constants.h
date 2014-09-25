@@ -450,6 +450,8 @@ enum EnumMessages
   MsgTutoBasics,
   MsgTutoItems,
   MsgTutoShops,
+  MsgTutoBossDoor,
+  MsgTutoChallengeDoor,
   MsgTutoHeal,
   MsgTutoShots,
   MsgTutoSpell
@@ -481,6 +483,8 @@ enum EnumWorldEvents
   // tuto
   EventBeingHurted,
   EventFindShop,
+  EventFindBossDoor,
+  EventFindChallengeDoor,
   EventGetItem,
   EventGetSpecialShot,
   EventGetFamiliar,

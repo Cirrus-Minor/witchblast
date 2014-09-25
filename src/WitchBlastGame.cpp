@@ -63,15 +63,17 @@ static std::string intToString(int n)
 
 std::map<EnumWorldEvents, EnumMessages> eventToMessage =
 {
-  { EventMeetRatsOrBats,    MsgInfoRatsBats },
-  { EventMeetSnakes,        MsgInfoSnakes },
-  { EventGetCoin,           MsgInfoGold },
-  { EventGetFamiliar,       MsgInfoFamiliar },
-  { EventBeingHurted,       MsgTutoHeal },
-  { EventFindShop,          MsgTutoShops },
-  { EventGetItem,           MsgTutoItems },
-  { EventGetSpecialShot,    MsgTutoShots },
-  { EventGetSpell,          MsgTutoSpell },
+  { EventMeetRatsOrBats,      MsgInfoRatsBats },
+  { EventMeetSnakes,          MsgInfoSnakes },
+  { EventGetCoin,             MsgInfoGold },
+  { EventGetFamiliar,         MsgInfoFamiliar },
+  { EventBeingHurted,         MsgTutoHeal },
+  { EventFindShop,            MsgTutoShops },
+  { EventFindBossDoor,        MsgTutoBossDoor },
+  { EventFindChallengeDoor,   MsgTutoChallengeDoor },
+  { EventGetItem,             MsgTutoItems },
+  { EventGetSpecialShot,      MsgTutoShots },
+  { EventGetSpell,            MsgTutoSpell },
 };
 
 namespace
@@ -1510,9 +1512,15 @@ void WitchBlastGame::refreshMinimap()
       else if (n > 0 && currentFloor->getMap(i, j)->isKnown())
       {
         if (currentFloor->getRoom(i, j) == roomTypeBoss)
+        {
           miniMap->setTile(i, j, 7);
+          proceedEvent(EventFindBossDoor);
+        }
         else if (currentFloor->getRoom(i, j) == roomTypeChallenge)
+        {
           miniMap->setTile(i, j, 10);
+          proceedEvent(EventFindChallengeDoor);
+        }
         else
           miniMap->setTile(i, j, 9);
       }
