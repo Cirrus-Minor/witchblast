@@ -20,12 +20,14 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   this->boltType = boltType;
   switch (boltType)
   {
+    case ShotTypeDeterministic:
     case ShotTypeStandard:  frame = 0; break;
     case ShotTypeIce:       frame = 2; break;
     case ShotTypeStone:     frame = 4; break;
     case ShotTypeLightning: frame = 5; break;
     case ShotTypeIllusion:  frame = 3; break;
     case ShotTypeFire:      frame = 6; break;
+    case ShotTypePoison:    frame = 7; break;
     case ShotTypeBomb:      frame = 8; damages = 0; sprite.setScale(1.0f, 1.0f); break;
   }
   testWallsCollision = false;
