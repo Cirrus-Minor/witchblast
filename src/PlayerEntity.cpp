@@ -1496,4 +1496,5 @@ void PlayerEntity::castEarthquake()
   for (int i = 0; i < 22; i++) fallRock();
   //SoundManager::getInstance().playSound(SOUND_TRAP);
   game().makeShake(0.25f);
+  SoundManager::getInstance().playSound(SOUND_EARTHQUAKE);
 }

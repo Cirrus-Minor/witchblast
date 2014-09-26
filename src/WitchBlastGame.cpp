@@ -150,6 +150,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/critical.ogg",       "media/sound/gong.ogg",
     "media/sound/teleport.ogg",       "media/sound/spell_charge.ogg",
     "media/sound/fireball.ogg",       "media/sound/message.ogg",
+    "media/sound/earthquake.ogg",
   };
 
   for (const char *const filename : sounds) {

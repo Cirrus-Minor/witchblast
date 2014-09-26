@@ -182,7 +182,8 @@ enum sound_resources {
   SOUND_TELEPORT,
   SOUND_SPELL_CHARGE,
   SOUND_FIREBALL,
-  SOUND_MESSAGE
+  SOUND_MESSAGE,
+  SOUND_EARTHQUAKE
 };
 
 enum corpses_ressources{
