@@ -57,10 +57,10 @@ void FallingRockEntity::animate(float delay)
 
 void FallingRockEntity::collideWithEnnemy(GameEntity* collidingEntity)
 {
-  if (hasHurted) return;
+  if (!hurtAll || hasHurted) return;
 
   EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
-  if (entity->hurt(meleeDamages, meleeType, meleeDamages, false))
+  if (entity->hurt(meleeDamages * 1.5f, meleeType, 0, false))
   {
     float xs = (x + entity->getX()) / 2;
     float ys = (y + entity->getY()) / 2;
