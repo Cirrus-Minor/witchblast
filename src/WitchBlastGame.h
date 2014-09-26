@@ -31,6 +31,9 @@ const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
 const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
 
+const int X_GAME_FADE_IN  = 0;
+const int X_GAME_FADE_OUT = 1;
+
 unsigned const int NumberKeys = 12;
 const std::string inputKeyString[NumberKeys] =
 {
@@ -354,15 +357,20 @@ private:
   /** Special game states enum
    *  Used for effects such as fade in...
    */
-  enum xGameStateEnum
+  enum xGameTypeEnum
   {
-    xGameStateNone,     /**< No effect */
-    xGameStateFadeIn,   /**< Fade in effect - usually when starting a level */
-    xGameStateFadeOut,  /**< Fade out effect - usually when leaving a level */
-    xGameStateShake     /**< Shake effect */
+    xGameTypeFade,        /**< Fade effect */
+    xGameTypeShake,       /**< Shake effect */
+    xGameTypeFadeColor,   /**< Color fade effect */
+    NB_X_GAME
   };
-  xGameStateEnum xGameState; /*!< Store the effect game state */
-  float xGameTimer;          /*!< Effect game timer */
+
+  struct xGameStruct
+  {
+    bool active;
+    int param;
+    float timer;
+  } xGame[NB_X_GAME];
 
   /** Input Keys enum
    *  Used for the input binding

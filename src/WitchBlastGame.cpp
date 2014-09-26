@@ -166,7 +166,9 @@ WitchBlastGame::WitchBlastGame():
   menuMap = NULL;
   currentMap = NULL;
   currentFloor = NULL;
-  xGameState = xGameStateNone;
+
+  for (int i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
+
   isPausing = false;
   showLogical = false;
 
@@ -228,24 +230,25 @@ void WitchBlastGame::onUpdate()
     else
       SoundManager::getInstance().stopSound(SOUND_VIB);
 
-    if (xGameState != xGameStateNone)
+    for (int i = 0; i < NB_X_GAME; i++)
     {
-      xGameTimer -= deltaTime;
-      if (xGameTimer <= 0.0f)
+      if (xGame[i].active)
       {
-        if (xGameState == xGameStateFadeOut)
+        xGame[i].timer -= deltaTime;
+        if (xGame[i].timer <= 0.0f)
         {
-          if (player->getPlayerStatus() == PlayerEntity::playerStatusGoingUp)
+          xGame[i].active = false;
+          if (i == (int)xGameTypeFade && xGame[i].param == X_GAME_FADE_OUT)
           {
-            level++;
-            startNewLevel();
+            if (player->getPlayerStatus() == PlayerEntity::playerStatusGoingUp)
+            {
+              level++;
+              startNewLevel();
+            }
+            else
+              startNewGame(false);
           }
-          else
-            startNewGame(false);
         }
-
-        else
-          xGameState = xGameStateNone;
       }
     }
 
@@ -383,8 +386,9 @@ void WitchBlastGame::playLevel()
   playMusic(MusicDungeon);
 
   // fade in
-  xGameState = xGameStateFadeIn;
-  xGameTimer = FADE_IN_DELAY;
+  xGame[xGameTypeFade].active = true;
+  xGame[xGameTypeFade].param = X_GAME_FADE_IN;
+  xGame[xGameTypeFade].timer = FADE_IN_DELAY;
 
   float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
   float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
@@ -532,10 +536,11 @@ void WitchBlastGame::updateRunningGame()
       }
     }
 
-    if (player->isDead() && xGameState == xGameStateNone && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+    if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
-      xGameState = xGameStateFadeOut;
-      xGameTimer = FADE_OUT_DELAY;
+      xGame[xGameTypeFade].active = true;
+      xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
+      xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
     }
 
     // message queue
@@ -570,7 +575,7 @@ void WitchBlastGame::updateRunningGame()
 void WitchBlastGame::renderRunningGame()
 {
   EntityManager::getInstance().sortByZ();
-  if (xGameState == xGameStateShake)
+  if (xGame[xGameTypeShake].active)
   {
     sf::View view = app->getDefaultView();
     sf::View viewSave = app->getDefaultView();
@@ -704,18 +709,18 @@ void WitchBlastGame::renderRunningGame()
       app->draw(rectangle, r);
     }
 
-    if (xGameState == xGameStateFadeIn)
+    if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_IN)
     {
       // fade in
-      rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
+      rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
       rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
     }
-    else if (xGameState == xGameStateFadeOut)
+    else if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_OUT)
     {
       // fade out
-      rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGameTimer) / FADE_IN_DELAY) * 255));
+      rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
       rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
@@ -1585,8 +1590,9 @@ void WitchBlastGame::moveToOtherMap(int direction)
     if (player->getPlayerStatus() != PlayerEntity::playerStatusGoingUp)
     {
       player->setLeavingLevel();
-      xGameState = xGameStateFadeOut;
-      xGameTimer = FADE_OUT_DELAY;
+      xGame[xGameTypeFade].active = true;
+      xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
+      xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
       player->setVelocity(Vector2D(0.0f, - INITIAL_PLAYER_SPEED / 2));
     }
   }
@@ -2191,8 +2197,8 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
 void WitchBlastGame::makeShake(float duration)
 {
-  xGameState = xGameStateShake;
-  xGameTimer = duration;
+  xGame[xGameTypeShake].active = true;
+  xGame[xGameTypeShake].timer = duration;
 }
 
 void WitchBlastGame::saveGame()
