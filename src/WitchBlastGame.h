@@ -34,6 +34,12 @@ const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
 const int X_GAME_FADE_IN  = 0;
 const int X_GAME_FADE_OUT = 1;
 
+const int X_GAME_COLOR_RED    = 0;
+const int X_GAME_COLOR_GREEN  = 1;
+const int X_GAME_COLOR_BLUE   = 2;
+const int X_GAME_COLOR_VIOLET = 3;
+const int X_GAME_COLOR_BROWN  = 4;
+
 unsigned const int NumberKeys = 12;
 const std::string inputKeyString[NumberKeys] =
 {
@@ -197,6 +203,13 @@ public:
    *  \param duration : duration of the effect
    */
   void makeShake(float duration);
+
+  /*!
+   *  \brief Make a "color fade" effet
+   *  \param color : the color of the effect
+   *  \param duration : duration of the effect
+   */
+  void makeColorEffect(int color, float duration);
 
   void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow);
 
@@ -370,6 +383,7 @@ private:
     bool active;
     int param;
     float timer;
+    float duration;
   } xGame[NB_X_GAME];
 
   /** Input Keys enum

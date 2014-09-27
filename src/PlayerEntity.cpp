@@ -1364,6 +1364,7 @@ void PlayerEntity::castTeleport()
   float xNew = x, yNew = y;
   invincibleDelay = 2.0f;
   SoundManager::getInstance().playSound(SOUND_TELEPORT);
+  game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.3f);
 
   for(int i=0; i < 6; i++)
   {
@@ -1444,11 +1445,13 @@ void PlayerEntity::castSummonsSlimeExplode()
 {
   SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeViolet, true);
   slime->makePet(facingDirection);
+  game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.3f);
 }
 
 void PlayerEntity::castFireball()
 {
   SoundManager::getInstance().playSound(SOUND_FIREBALL);
+  game().makeColorEffect(X_GAME_COLOR_RED, 0.3f);
   enumShotType boltType = ShotTypeFire;
   unsigned int shotLevel = 2;
 
@@ -1468,25 +1471,16 @@ void PlayerEntity::castFireball()
 
 void PlayerEntity::castFreeze()
 {
-  for (int i = -1; i <= 1; i += 2)
-    for (int j = -1; j <= 1; j += 2)
-    {
+  for (float i = 0.0f; i < 2 * PI; i +=  PI / 8)
+  {
       BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, 1);
       bolt1->setDamages(1);
-      float velx = fireVelocity * i * 0.84f;
-      float vely = fireVelocity * j * 0.84f;
+      float velx = fireVelocity * cos(i);
+      float vely = fireVelocity * sin(i);
       bolt1->setVelocity(Vector2D(velx, vely));
+  }
 
-      BoltEntity* bolt2 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, 1);
-      bolt2->setDamages(1);
-      velx = 0.0f;
-      vely = 0.0f;
-      if (i == -1 && j == -1) velx = -fireVelocity * i * 1.2f;
-      else if (i == -1 && j == 1) velx = fireVelocity * i * 1.2f;
-      else if (i == 1 && j == -1) vely= -fireVelocity * i * 1.2f;
-      else if (i == 1 && j == 1) vely = fireVelocity * i * 1.2f;
-      bolt2->setVelocity(Vector2D(velx, vely));
-    }
+  game().makeColorEffect(X_GAME_COLOR_BLUE, 0.3f);
   SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
 }
 
@@ -1494,7 +1488,8 @@ void PlayerEntity::castEarthquake()
 {
   initFallingGrid();
   for (int i = 0; i < 22; i++) fallRock();
-  //SoundManager::getInstance().playSound(SOUND_TRAP);
+
   game().makeShake(0.25f);
+  game().makeColorEffect(X_GAME_COLOR_BROWN, 0.3f);
   SoundManager::getInstance().playSound(SOUND_EARTHQUAKE);
 }

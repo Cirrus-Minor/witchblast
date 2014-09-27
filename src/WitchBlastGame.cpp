@@ -725,6 +725,26 @@ void WitchBlastGame::renderRunningGame()
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
     }
+
+    if (xGame[xGameTypeFadeColor].active)
+    {
+      // color fade
+      unsigned int r = 0, g = 0, b = 0;
+      switch (xGame[xGameTypeFadeColor].param)
+      {
+        case X_GAME_COLOR_RED: r = 255;g = 100; break;
+        case X_GAME_COLOR_GREEN: g = 255; break;
+        case X_GAME_COLOR_BLUE: b = 255; break;
+        case X_GAME_COLOR_VIOLET: r = 255; b = 200; break;
+        case X_GAME_COLOR_BROWN: r = 200; b = 100; g = 150; break;
+      }
+      int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
+
+      rectangle.setFillColor(sf::Color(r, g, b, alpha));
+      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+      app->draw(rectangle, sf::BlendAdd);
+    }
   }
 
   // message queue
@@ -2199,6 +2219,14 @@ void WitchBlastGame::makeShake(float duration)
 {
   xGame[xGameTypeShake].active = true;
   xGame[xGameTypeShake].timer = duration;
+}
+
+void WitchBlastGame::makeColorEffect(int color, float duration)
+{
+  xGame[xGameTypeFadeColor].active = true;
+  xGame[xGameTypeFadeColor].param = color;
+  xGame[xGameTypeFadeColor].timer = duration;
+  xGame[xGameTypeFadeColor].duration = duration;
 }
 
 void WitchBlastGame::saveGame()
