@@ -328,8 +328,19 @@ void PlayerEntity::renderHead(sf::RenderTarget* app)
 {
   if (playerStatus != playerStatusDead)
   {
-    sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
-    app->draw(sprite);
+    if (isPoisoned())
+    {
+      sf::Color savedColor = sprite.getColor();
+      sprite.setColor(sf::Color(180, 255, 180, 255));
+      sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
+      app->draw(sprite);
+      sprite.setColor(savedColor);
+    }
+    else
+    {
+      sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
+      app->draw(sprite);
+    }
 
     if (equip[EQUIP_ENCHANTER_HAT])
     {
@@ -382,22 +393,52 @@ void PlayerEntity::renderBody(sf::RenderTarget* app)
 
 void PlayerEntity::renderHands(sf::RenderTarget* app)
 {
+  bool hasGloves = false;
   if (equip[EQUIP_DISPLACEMENT_GLOVES] && playerStatus != playerStatusDead)
+  {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
+    hasGloves = true;
+  }
 
-  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
-  app->draw(sprite);
+  if (isPoisoned() && !hasGloves)
+  {
+    sf::Color savedColor = sprite.getColor();
+    sprite.setColor(sf::Color(180, 255, 180, 255));
+    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
+    app->draw(sprite);
+    sprite.setColor(savedColor);
+  }
+  else
+  {
+    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
+    app->draw(sprite);
+  }
 
-  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
+  if (hasGloves) sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
 }
 
 void PlayerEntity::renderFeet(sf::RenderTarget* app)
 {
+  bool hasBoots = false;
   if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
+  {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
+    hasBoots = true;
+  }
 
-  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
-  app->draw(sprite);
+  if (isPoisoned() && !hasBoots)
+  {
+    sf::Color savedColor = sprite.getColor();
+    sprite.setColor(sf::Color(180, 255, 180, 255));
+    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
+    app->draw(sprite);
+    sprite.setColor(savedColor);
+  }
+  else
+  {
+    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
+    app->draw(sprite);
+  }
 
   sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
 }
