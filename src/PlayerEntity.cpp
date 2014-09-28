@@ -772,7 +772,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
         shotLevel = getShotLevel();
         needInitShotType = true;
       }
-      else boltType = ShotTypeStandard;
+      else boltType = ShotTypeCold;
     }
     break;
   case ShotTypeStandard:

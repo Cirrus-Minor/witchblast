@@ -259,6 +259,7 @@ enum enumShotType {
   ShotTypeFire,
   ShotTypePoison,
   ShotTypeBomb,
+  ShotTypeCold,
 
   ShotTypeDeterministic
   };

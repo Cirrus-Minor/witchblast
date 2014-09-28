@@ -59,7 +59,6 @@ void ParticleGenerator::RandomizeColor(SpriteEntity* particle)
 void ParticleGenerator::GenerateBoltParticle(int frame, const Vector2D & velocity, float posX, float posY, float lifeTime, float scale)
 {
   float particleScale = scale - 0.2f;
-  if (frame == ShotTypeIce) particleScale = scale;
 
   // "background" particle
   if (frame != ShotTypeIce && frame != ShotTypeIllusion)

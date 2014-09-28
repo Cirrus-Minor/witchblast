@@ -22,6 +22,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   {
     case ShotTypeDeterministic:
     case ShotTypeStandard:  frame = 0; break;
+    case ShotTypeCold:
     case ShotTypeIce:       frame = 2; break;
     case ShotTypeStone:     frame = 4; break;
     case ShotTypeLightning: frame = 5; break;
@@ -94,7 +95,8 @@ void BoltEntity::animate(float delay)
 {
   if (boltType != ShotTypeBomb)
     particleGenerator.GenerateParticles(frame, IMAGE_BOLT, x, y, BOLT_WIDTH, BOLT_HEIGHT,
-                        boltType == ShotTypeLightning ? Vector2D(20.0f) : Vector2D(0.0f, 0.0f), 10, renderScale);
+                        boltType == ShotTypeLightning ? Vector2D(20.0f) : Vector2D(0.0f, 0.0f),
+                        10, boltType == ShotTypeIce ? renderScale * 1.3f : renderScale);
 
   z = y + height;
 

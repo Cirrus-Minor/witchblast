@@ -128,7 +128,7 @@ void BaseCreatureEntity::animateColors(float delay)
     {
       int fadeColor = (sf::Uint8)((HURTING_DELAY - hurtingDelay) * 255);
       if (hurtingDelay > HURTING_DELAY) fadeColor = 0;
-      if (hurtingType == ShotTypeIce)
+      if (hurtingType == ShotTypeIce || hurtingType == ShotTypeCold)
         sprite.setColor(sf::Color(fadeColor, fadeColor, 255, 255 )); // blue
       else
         sprite.setColor(sf::Color(255, fadeColor, fadeColor, 255 )); // red
@@ -438,7 +438,7 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
   }
 
   // damages bonus
-  if (hurtingType == ShotTypeIce)
+  if (hurtingType == ShotTypeIce || hurtingType == ShotTypeCold)
     damages += (damages * determineDamageBonus(resistance[ResistanceIce], level)) / 100;
   else if (hurtingType == ShotTypeFire)
     damages += (damages * determineDamageBonus(resistance[ResistanceFire], level)) / 100;
