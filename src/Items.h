@@ -180,7 +180,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBookDualShots, "item_spell_dual", "item_spell_dual_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    20, true, FamiliarNone, true, true, true, 1, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemRageAmulet, "item_rage_amulet", "item_rage_amulet_desc",
