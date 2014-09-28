@@ -20,7 +20,7 @@ void ParticleGenerator::GenerateParticles(int frame, int imageId, float posX, fl
 
 	for (int i = 0; i < nOfParticles; ++i)
 	{
-		int sizeFactor = sizeDistribution(randomGenerator);
+		//int sizeFactor = sizeDistribution(randomGenerator);
 		Vector2D newVelocity = velocity;
 		RandomizeVelocity(newVelocity);
 		float lifeTime = lifetimeDistribution(randomGenerator);
@@ -32,7 +32,7 @@ void ParticleGenerator::GenerateParticles(int frame, int imageId, float posX, fl
 void ParticleGenerator::RandomShuffle(float & val1, float & val2)
 {
 	float factor1 = velocityDistribution(randomGenerator) * 15.0f;
-	float factor2 = driftDistribution(randomGenerator);
+	//float factor2 = driftDistribution(randomGenerator);
 	val1 += factor1;
 	val2 += velocityDistribution(randomGenerator) * 15.0f;
 }
