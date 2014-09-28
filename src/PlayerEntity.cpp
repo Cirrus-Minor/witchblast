@@ -800,8 +800,10 @@ void PlayerEntity::generateBolt(float velx, float vely)
 
   if (equip[EQUIP_DISPLACEMENT_GLOVES])
   {
-    velx += velocity.x * 0.66f;
-    vely += velocity.y * 0.66f;
+    if (firingDirection == 2 || firingDirection == 8)
+      velx += velocity.x * 0.7f;
+    else if (firingDirection == 4 || firingDirection == 6)
+      vely += velocity.y * 0.7f;
   }
 
   bolt->setVelocity(Vector2D(velx, vely));
