@@ -139,9 +139,12 @@ item_spell_freeze#Spell: Freeze monsters
 item_spell_freeze_desc#Cast to freeze monsters
 item_spell_earthquake#Spell: Earthquake
 item_spell_earthquake_desc#Cast to make the dungeon shake
+item_spell_protection#Spell: Magic shield
+item_spell_protection_desc#Cast tu summon a magic shield
 spell_fireball#fireball
 spell_freeze#freeze monsters
 spell_earthquake#earthquake
+spell_protection#magic shield
 msg_level1_0#Your quest begins!
 msg_level1_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
 msg_level1_2#I have to recover her!"

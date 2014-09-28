@@ -499,11 +499,19 @@ class PlayerEntity : public BaseCreatureEntity
     void initShotType();
     castSpellStruct activeSpell;
 
+    struct protectionStruct
+    {
+      bool active;
+      float value;
+      float timer;
+    } protection;
+
     void castTeleport();
     void castSummonsSlimeExplode();
     void castFireball();
     void castFreeze();
     void castEarthquake();
+    void castProtection();
 };
 
 #endif // PLAYERSPRITE_H

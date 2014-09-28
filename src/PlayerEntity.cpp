@@ -55,6 +55,8 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   sprite.setOrigin(40, 104);
 
+  protection.active = false;
+
   activeSpell.delay = -1.0f;
   activeSpell.spell = SpellNone;
 }
@@ -243,7 +245,21 @@ void PlayerEntity::animate(float delay)
       activeSpell.delay -= 40 * delay;
     else
       activeSpell.delay -= delay;
+
+    if (activeSpell.spell == SpellProtection && protection.active)
+      activeSpell.delay = activeSpell.delayMax;
+
     if (activeSpell.delay <= 0.0f) SoundManager::getInstance().playSound(SOUND_SPELL_CHARGE);
+  }
+  // protection
+  if (protection.active)
+  {
+    protection.timer -= delay;
+    if (protection.timer <= 0.0f)
+    {
+      protection.active = false;
+      computePlayer();
+    }
   }
   // acquisition animation
   if (playerStatus == playerStatusAcquire)
@@ -622,6 +638,17 @@ void PlayerEntity::render(sf::RenderTarget* app)
     sprite.setPosition(x, y);
     sprite.setColor(savedColor);
   }
+
+  // shield
+  if (protection.active)
+  {
+    sf::Color savedColor = sprite.getColor();
+    sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * 10) * 30 ));
+    sprite.setTextureRect(sf::IntRect( 17 * width, 0, width, height));
+    app->draw(sprite);
+    sprite.setColor(savedColor);
+  }
+
 
   if (game().getShowLogical() && playerStatus != playerStatusDead)
   {
@@ -1103,6 +1130,9 @@ void PlayerEntity::computePlayer()
   }
   if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
   else if (getShotType() == ShotTypeFire) fireDamages *= FIRE_DAMAGE_INCREASE[getShotLevel()];
+
+  // spells
+  if (protection.active) armor += protection.value;
 }
 
 void PlayerEntity::acquireStance(enumItemType type)
@@ -1357,6 +1387,11 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
     activeSpell.frame = ItemSpellEarthquake - FirstEquipItem;
     break;
 
+  case SpellProtection:
+    activeSpell.delayMax = 40.0f;
+    activeSpell.frame = ItemSpellProtection- FirstEquipItem;
+    break;
+
   case SpellNone:
     break;
   }
@@ -1387,6 +1422,9 @@ void PlayerEntity::castSpell()
       break;
     case SpellEarthquake:
       castEarthquake();
+      break;
+    case SpellProtection:
+      castProtection();
       break;
 
     case SpellNone:
@@ -1535,4 +1573,13 @@ void PlayerEntity::castEarthquake()
   game().makeShake(0.25f);
   game().makeColorEffect(X_GAME_COLOR_BROWN, 0.3f);
   SoundManager::getInstance().playSound(SOUND_EARTHQUAKE);
+}
+
+void PlayerEntity::castProtection()
+{
+  protection.active = true;
+  protection.value = 0.5f;
+  protection.timer = 10.0f;
+  computePlayer();
+  game().makeColorEffect(X_GAME_COLOR_BLUE, 0.3f);
 }
