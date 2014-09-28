@@ -128,8 +128,8 @@ item_spell_slime_explode_desc#Cast to invoke an explosive slime
 spell_teleport#teleport
 spell_slime_explode#invoke slime
 
-item_displacement_gloves#Vibration Gloves
-item_displacement_gloves_desc#Increases bolt's speed rate and "displace"
+item_displacement_gloves#Displacement Gloves
+item_displacement_gloves_desc#Player's velocity impacts bolt's one. Speed rate +
 enemy_cyclops#Barbarian Cyclops
 enemy_rat_king#Wererat King
 
@@ -157,6 +157,9 @@ msg_level4_2#He's taught me we live in the best of the worlds."
 msg_level5_0#The Archmage's daughter
 msg_level5_1#"I remember the Archmage's daughter and me, back in the Magic Academy.
 msg_level5_2#We use to play at the healer mage, hi hi !"
+msg_level6_0#The Archmage
+msg_level6_1#"My parents died when I was a baby.
+msg_level6_2#The Archmage has raised me as I were his son."
 msg_rats_bats_0#Monsters
 msg_rats_bats_1#"Hey! Why do we always have to exterminate rats or bats
 msg_rats_bats_2#in these Rogue games ?"
