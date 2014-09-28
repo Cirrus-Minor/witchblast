@@ -51,10 +51,8 @@ merchant_speech_0#Best price in the entire dungeon!
 merchant_speech_1#Welcome to the Pawn'n'Witches shop!
 merchant_speech_2#Have a look at our merchandise!
 enemy_butcher#Pigman Butcher
-enemy_cyclops#Cimmerian Cyclops
 enemy_giant_slime#Giant Slime
 enemy_giant_spider#Giant Spider
-enemy_rat_king#Rat King
 item_copper#Copper coin
 item_copper_desc#A copper coin (value 1)
 item_silver#Silver coin
@@ -132,6 +130,8 @@ spell_slime_explode#invoke slime
 
 item_displacement_gloves#Vibration Gloves
 item_displacement_gloves_desc#Increases bolt's speed rate and "displace"
+enemy_cyclops#Barbarian Cyclops
+enemy_rat_king#Wererat King
 
 item_spell_fireball#Spell: Fireball
 item_spell_fireball_desc#Cast to launch a fireball
@@ -162,6 +162,8 @@ msg_rats_bats_1#"Hey! Why do we always have to exterminate rats or bats
 msg_rats_bats_2#in these Rogue games ?"
 msg_snakes_0#Snakes
 msg_snakes_1#"I HATE snakes!"
+msg_snakes_0#Witches
+msg_snakes_1#"B... Witches !!!"
 msg_gold_0#Gold
 msg_gold_1#"♫ Money money money ♫
 msg_gold_2#I wonder if I can buy useful items in this dungeon..."

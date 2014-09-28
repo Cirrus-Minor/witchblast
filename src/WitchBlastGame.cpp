@@ -65,6 +65,7 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
 {
   { EventMeetRatsOrBats,      MsgInfoRatsBats },
   { EventMeetSnakes,          MsgInfoSnakes },
+  { EventMeetWitches,         MsgInfoWitches },
   { EventGetCoin,             MsgInfoGold },
   { EventGetFamiliar,         MsgInfoFamiliar },
   { EventBeingHurted,         MsgTutoHeal },
@@ -1960,9 +1961,11 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeWitch:
     new WitchEntity(xm, ym, WitchEntity::WitchTypeNormal);
+    proceedEvent(EventMeetWitches);
     break;
   case EnemyTypeWitchRed:
     new WitchEntity(xm, ym, WitchEntity::WitchTypeRed);
+    proceedEvent(EventMeetWitches);
     break;
   case EnemyTypeCauldron:
     new CauldronEntity(xm, ym);

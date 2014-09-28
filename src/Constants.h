@@ -439,6 +439,7 @@ enum EnumMessages
   MsgInfoLevel5,
   MsgInfoRatsBats,
   MsgInfoSnakes,
+  MsgInfoWitches,
   MsgInfoGold,
   MsgInfoFamiliar,
   MsgInfoButcher,
@@ -479,6 +480,7 @@ enum EnumWorldEvents
   // info
   EventMeetRatsOrBats,
   EventMeetSnakes,
+  EventMeetWitches,
   EventGetCoin,
 
   // tuto
