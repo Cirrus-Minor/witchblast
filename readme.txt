@@ -75,7 +75,7 @@ Thanks
 Thanks to
 
 Billx (who suggested me the title "Witch Blast")
-Mika Attila (for his contribution concerning the Linux version)
+Mika Attila (for his "coding" contribution during the development)
 Ruth (for the english corrections)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
@@ -88,10 +88,12 @@ Next release
 - ADD New monsters (snakes)
 - ADD New items (spell orbs)
 - ADD Poison
+- ADD Cold bolt (generated with an unloaded ice shot)
 - ADD Spells (5 different ones)
 - ADD Translations: Spanish and Russian
 - ADD New art for bats
 - ADD Texts "widgets" for story and tutorial
+- MOD Vibration Gloves are now Displacement Glove (player's velocity impacts bolt velocity)
 - MOD Items presentation windows colour has changed
 - FIX Texts are now in UTF-8
 - FIX Monsters out of the game zone
