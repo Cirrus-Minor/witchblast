@@ -129,7 +129,7 @@ spell_teleport#teleport
 spell_slime_explode#invoke slime
 
 item_displacement_gloves#Displacement Gloves
-item_displacement_gloves_desc#Player's velocity impacts bolt's one. Speed rate +
+item_displacement_gloves_desc#Player's velocity impacts bolt's one. +speed rate
 enemy_cyclops#Barbarian Cyclops
 enemy_rat_king#Wererat King
 
