@@ -168,8 +168,8 @@ msg_rats_bats_1#"Hey! Why do we always have to exterminate rats or bats
 msg_rats_bats_2#in these Rogue games ?"
 msg_snakes_0#Snakes
 msg_snakes_1#"I HATE snakes!"
-msg_snakes_0#Witches
-msg_snakes_1#"B... Witches !!!"
+msg_witches_0#Witches
+msg_witches_1#"B... Witches !!!"
 msg_gold_0#Gold
 msg_gold_1#"♫ Money money money ♫
 msg_gold_2#I wonder if I can buy useful items in this dungeon..."
@@ -389,8 +389,8 @@ msg_rats_bats_1#"Hey! Pourquoi faut-il toujours exterminer des rats et chauve-so
 msg_rats_bats_2#dans les Roguelikes ?"
 msg_snakes_0#Les serpents
 msg_snakes_1#"Je DETESTE les serpents!"
-msg_snakes_0#Les sorcières
-msg_snakes_1#"S.. Sorcières !!!"
+msg_witches_0#Les sorcières
+msg_witches_1#"S.. Sorcières !!!"
 msg_gold_0#Or
 msg_gold_1#"♫ Money money money ♫
 msg_gold_2#Je me demande si je peux acheter des trucs intéressants dans ce donjon..."
