@@ -129,7 +129,7 @@ spell_teleport#teleport
 spell_slime_explode#invoke slime
 
 item_displacement_gloves#Displacement Gloves
-item_displacement_gloves_desc#Player's velocity impacts bolt's one. +speed rate
+item_displacement_gloves_desc#Player's velocity impacts bolt's one
 enemy_cyclops#Barbarian Cyclops
 enemy_rat_king#Wererat King
 
@@ -272,10 +272,10 @@ merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
 merchant_speech_2#Jetez un oeil à nos produits !
 
 enemy_butcher#Boucher porcin
-enemy_cyclops#Cyclope Cimmérien
+enemy_cyclops#Cyclope barbare
 enemy_giant_slime#Slime géant
 enemy_giant_spider#Araignée géante
-enemy_rat_king#Roi des rats
+enemy_rat_king#Roi des Rats-garous
 
 item_copper#Pièce de cuivre
 item_copper_desc#Une pièce de cuivre (1)
@@ -303,8 +303,8 @@ item_spell_dual#Sort: double-tir
 item_spell_dual_desc#Tire deux projectiles
 item_rage_amulet#Amulette de rage
 item_rage_amulet_desc#Contre-attaque
-item_displacement_gloves#Gants de vibration
-item_displacement_gloves_desc#Vibre et augmente la cadence de tir
+item_displacement_gloves#Gants de déplacement
+item_displacement_gloves_desc#La vitesse du porteur impacte la trajectoire
 item_staff#Bâton d'acajou
 item_staff_desc#Augmente les dégâts et la vitesse de tir
 item_fairy#La fée Lilly
@@ -349,12 +349,93 @@ item_manual_staff#Manuel du bâton
 item_manual_staff_desc#Augmente la portée
 item_spell_teleport#Sort : Téléportation
 item_spell_teleport_desc#Permet de se téléporter dans la pièce
-item_spell_slime_explode#Spell: Invoquer Slime
+item_spell_slime_explode#Sort: Invoquer Slime
 item_spell_slime_explode_desc#Invoque un slime explosif
-
-
 spell_teleport#téléportation
 spell_slime_explode#invoquer slime
+
+item_spell_fireball#Sort: Boule de feu
+item_spell_fireball_desc#Envoie une boule de feu
+item_spell_freeze#Sort: Geler monstres
+item_spell_freeze_desc#Gele les monstres
+item_spell_earthquake#Sort: Séisme
+item_spell_earthquake_desc#Fait trembler le donjon
+item_spell_protection#Sort: Protection
+item_spell_protection_desc#Invoque un bouclier magique
+spell_fireball#boule de feu
+spell_freeze#geler monstres
+spell_earthquake#séisme
+spell_protection#protection
+msg_level1_0#Votre quête commence !
+msg_level1_1#"Les sorcières ont enlevé la fille de l'Archimage.
+msg_level1_2#Je dois descendre dans leur antre et la secourir !"
+msg_level2_0#La fille de l'Archimage
+msg_level2_1#"J'arrive, je vais te sortir de là !
+msg_level2_2#J'espère qu'elle est saine et sauve..."
+msg_level3_0#La fille de l'Archimage
+msg_level3_1#"Vous l'ai-je déjà dit ?
+msg_level3_2#La fille de l'Archimage est la plus douce de l'Académie de Magie !"
+msg_level4_0#L'Archimage
+msg_level4_1#"L'Archimage est très sage, et est aussi mon mentor.
+msg_level4_2#Il m'a appris que nous vivons dans le meilleur des monde."
+msg_level5_0#La fille de l'Archimage
+msg_level5_1#"Je me souviens d'elle et de moi, à l'Académie de Magie.
+msg_level5_2#Enfants, nous jouions au mage guérisseur, hi hi !"
+msg_level6_0#L'Archimage
+msg_level6_1#"Mes parents sont décédés quand j'étais bébé.
+msg_level6_2#L'Archimage m'a élevé comme si j'étais des siens."
+msg_rats_bats_0#La vermine
+msg_rats_bats_1#"Hey! Pourquoi faut-il toujours exterminer des rats et chauve-souris
+msg_rats_bats_2#dans les Roguelikes ?"
+msg_snakes_0#Les serpents
+msg_snakes_1#"Je DETESTE les serpents!"
+msg_snakes_0#Les sorcières
+msg_snakes_1#"S.. Sorcières !!!"
+msg_gold_0#Or
+msg_gold_1#"♫ Money money money ♫
+msg_gold_2#Je me demande si je peux acheter des trucs intéressants dans ce donjon..."
+msg_familiar_0#Les fées
+msg_familiar_1#"Oh ! De la compagnie !
+msg_familiar_2#J'espère trouver d'autres alliés dans le donjon."
+msg_butcher_0#Le Boucher porcin
+msg_butcher_1#"Wow, ce gars est balèze ! 
+msg_butcher_2#J'espère ne pas terminer en saucisses..."
+msg_giant_slime_0#Le Slime géant
+msg_giant_slime_1#"Je suis vert, énorme et je pue.
+msg_giant_slime_2#Qui suis-je ?"
+msg_cyclops_0#Le Cyclope barbare
+msg_cyclops_1#"Comment est-il entré dans cette pièce ?
+msg_cyclops_2#Il est plus large que les portes !"
+msg_wererat_0#Le Roi des Rats-garous
+msg_wererat_1#"Il ressemble à ma vieille tante..."
+msg_giant_spider_before_0#Une pièce vide
+msg_giant_spider_before_1#"Y'a quelqu'un ? "
+msg_giant_spider_after_0#L'Araignée géante
+msg_giant_spider_after_1#"Je DETESTE les araignées"
+msg_tuto_intro_0#Tutorial: Bases
+msg_tuto_intro_1#Utilisez ZQSD (standard) pour se déplacer dans le donjon.
+msg_tuto_intro_2#Tirez avec les flêches (standard).
+msg_tuto_items_0#Tutorial: Objets
+msg_tuto_items_1#Les objets améliorent le personnage ou lui octroient de nouveaux pouvoirs.
+msg_tuto_items_2#trouvez ou achetez-en autant que possible.
+msg_tuto_heal_0#Tutorial: Santé
+msg_tuto_heal_1#Vous avez perdu des points de vie.
+msg_tuto_heal_2#Trouvez des moyens de guérir avant de mourir.
+msg_tuto_shops_0#Tutorial: Boutique
+msg_tuto_shops_1#Vous pouvez trouver plusieurs boutiques dans le donjon.
+msg_tuto_shops_2#Ici, vous dépenserez votre argent en objets et nourriture.
+msg_tuto_boss_door_0#Tutorial: Porte du Boss
+msg_tuto_boss_door_1#D'ici, vous apercevez une porte dorée vérouillée.
+msg_tuto_boss_door_2#Elle protège le Boss, trouvez la clef adéquate pour l'ouvrir.
+msg_tuto_challenge_door_0#Tutorial: Salle de Challenge
+msg_tuto_challenge_door_1#Regardez la porte décorée ? C'est une salle de challenge.
+msg_tuto_challenge_door_2#Vous pouvez y gagner des objets de valeur mais attention !
+msg_tuto_shots_0#Tutorial: Types de tir
+msg_tuto_shots_1#Vous avez trouvé un nouveau type de tir.
+msg_tuto_shots_2#Appuyez sur [sélection de tir] (standard: tab) pour changer de type de tir.
+msg_tuto_spell_0#Tutorial: Magie
+msg_tuto_spell_1#Vous avez trouvé un nouveau sort.
+msg_tuto_spell_2#Appuyez sur la touche de sort (standard: espace) pour le lancer.
 [german]
 start_new_game#Neues Spiel starten
 start_desc#Alter Speicherstand wird überschrieben !
