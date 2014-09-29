@@ -183,7 +183,8 @@ enum sound_resources {
   SOUND_SPELL_CHARGE,
   SOUND_FIREBALL,
   SOUND_MESSAGE,
-  SOUND_EARTHQUAKE
+  SOUND_EARTHQUAKE,
+  SOUND_SPELL_FREEZE
 };
 
 enum corpses_ressources{

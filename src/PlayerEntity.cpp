@@ -1562,7 +1562,7 @@ void PlayerEntity::castFreeze()
   }
 
   game().makeColorEffect(X_GAME_COLOR_BLUE, 0.3f);
-  SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+  SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
 }
 
 void PlayerEntity::castEarthquake()
