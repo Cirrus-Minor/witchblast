@@ -556,7 +556,15 @@ void BaseCreatureEntity::giveRecoil(bool stun, Vector2D velocity, float timer)
   {
     recoil.active = true;
     recoil.stun = stun;
-    recoil.velocity = velocity;
+
+    if (this->velocity.x > 1.0f && velocity.x > 1.0f) recoil.velocity.x = velocity.x + this->velocity.x;
+    else if (this->velocity.x < -1.0f && velocity.x < -1.0f) recoil.velocity.x = velocity.x + this->velocity.x;
+    else recoil.velocity.x = velocity.x;
+
+    if (this->velocity.y > 1.0f && velocity.y > 1.0f) recoil.velocity.y = velocity.y + this->velocity.y;
+    else if (this->velocity.y < -1.0f && velocity.y < -1.0f) recoil.velocity.y = velocity.y + this->velocity.y;
+    else recoil.velocity.y = velocity.y;
+
     recoil.timer = timer;
   }
 }
