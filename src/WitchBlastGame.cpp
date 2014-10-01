@@ -110,7 +110,7 @@ WitchBlastGame::WitchBlastGame():
     "media/interface.png",     "media/hud_shots.png",
     "media/boom64.png",        "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
-    "media/pnj.png",            "media/fairy.png",
+    "media/pnj.png",           "media/fairy.png",
   };
 
   for (const char *const filename : images) {
@@ -148,7 +148,8 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/witch_die_00.ogg",   "media/sound/witch_die_01.ogg",
     "media/sound/witch_02.ogg",       "media/sound/invoke.ogg",
     "media/sound/cauldron.ogg",       "media/sound/cauldron_die.ogg",
-    "media/sound/critical.ogg",       "media/sound/gong.ogg",
+    "media/sound/snake_die.ogg",      "media/sound/critical.ogg",
+    "media/sound/gong.ogg",
     "media/sound/teleport.ogg",       "media/sound/spell_charge.ogg",
     "media/sound/fireball.ogg",       "media/sound/message.ogg",
     "media/sound/earthquake.ogg",     "media/sound/spell_freeze.ogg",
