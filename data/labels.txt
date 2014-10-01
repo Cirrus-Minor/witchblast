@@ -140,7 +140,7 @@ item_spell_freeze_desc#Cast to freeze monsters
 item_spell_earthquake#Spell: Earthquake
 item_spell_earthquake_desc#Cast to make the dungeon shake
 item_spell_protection#Spell: Magic shield
-item_spell_protection_desc#Cast tu summon a magic shield
+item_spell_protection_desc#Cast to summon a magic shield
 spell_fireball#fireball
 spell_freeze#freeze monsters
 spell_earthquake#earthquake
@@ -162,7 +162,7 @@ msg_level5_1#"I remember the Archmage's daughter and me, back in the Magic Acade
 msg_level5_2#We use to play at the healer mage, hi hi !"
 msg_level6_0#The Archmage
 msg_level6_1#"My parents died when I was a baby.
-msg_level6_2#The Archmage has raised me as I were his son."
+msg_level6_2#The Archmage has raised me as like his own son."
 msg_rats_bats_0#Monsters
 msg_rats_bats_1#"Hey! Why do we always have to exterminate rats or bats
 msg_rats_bats_2#in these Rogue games ?"
