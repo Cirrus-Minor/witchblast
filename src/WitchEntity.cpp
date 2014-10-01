@@ -71,8 +71,12 @@ void WitchEntity::animate(float delay)
         {
           // invoke
           int x0 = ((x - OFFSET_X) / TILE_WIDTH);
+          if (x0 < 1) x0 = 1;
+          else if(x0 > MAP_WIDTH - 2) x0 = MAP_WIDTH - 2;
           x0 = x0 * TILE_WIDTH + TILE_WIDTH / 2;
           int y0 = ((y - OFFSET_Y) / TILE_HEIGHT);
+          if (y0 < 1) y0 = 1;
+          else if(y0 > MAP_HEIGHT - 2) y0 = MAP_HEIGHT - 2;
           y0 = y0 * TILE_HEIGHT + TILE_HEIGHT / 2;
           if (witchType == WitchTypeNormal) new RatEntity(x0, y0, RatEntity::RatTypeNormal, true);
           else new BatEntity(x0, y0, true);
