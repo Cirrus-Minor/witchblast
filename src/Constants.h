@@ -185,7 +185,8 @@ enum sound_resources {
   SOUND_FIREBALL,
   SOUND_MESSAGE,
   SOUND_EARTHQUAKE,
-  SOUND_SPELL_FREEZE
+  SOUND_SPELL_FREEZE,
+  SOUND_SPELL_SHIELD
 };
 
 enum corpses_ressources{

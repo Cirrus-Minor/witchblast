@@ -149,10 +149,10 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/witch_02.ogg",       "media/sound/invoke.ogg",
     "media/sound/cauldron.ogg",       "media/sound/cauldron_die.ogg",
     "media/sound/snake_die.ogg",      "media/sound/critical.ogg",
-    "media/sound/gong.ogg",
-    "media/sound/teleport.ogg",       "media/sound/spell_charge.ogg",
-    "media/sound/fireball.ogg",       "media/sound/message.ogg",
-    "media/sound/earthquake.ogg",     "media/sound/spell_freeze.ogg",
+    "media/sound/gong.ogg",           "media/sound/teleport.ogg",
+    "media/sound/spell_charge.ogg",   "media/sound/fireball.ogg",
+    "media/sound/message.ogg",        "media/sound/earthquake.ogg",
+    "media/sound/spell_freeze.ogg",   "media/sound/spell_shield.ogg",
   };
 
   for (const char *const filename : sounds) {

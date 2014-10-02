@@ -1582,4 +1582,5 @@ void PlayerEntity::castProtection()
   protection.timer = 10.0f;
   computePlayer();
   game().makeColorEffect(X_GAME_COLOR_BLUE, 0.3f);
+  SoundManager::getInstance().playSound(SOUND_SPELL_SHIELD);
 }
