@@ -1298,7 +1298,7 @@ void WitchBlastGame::renderMenu()
       write(tools::getLabel("keys_move"), 16, xKeys + 190, yKeys + 10, ALIGN_LEFT, sf::Color::White, app, 1, 1);
       write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1);
       write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-      write(tools::getLabel("keys_fire"), 16, xKeys + 124, yKeys + 110, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+      write(tools::getLabel("key_spell"), 16, xKeys + 148, yKeys + 184, ALIGN_CENTER, sf::Color::White, app, 1, 1);
       std::ostringstream oss;
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
       write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
@@ -2112,6 +2112,7 @@ enumItemType WitchBlastGame::getItemSpell()
     case SpellFireball: item = ItemSpellFireball; break;
     case SpellFreeze: item = ItemSpellFreeze; break;
     case SpellEarthquake: item = ItemSpellEarthquake; break;
+    case SpellProtection: item = ItemSpellProtection; break;
   }
   return item;
 }
