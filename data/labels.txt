@@ -496,7 +496,7 @@ enemy_butcher#Schweinemetzger
 enemy_cyclops#Barbarischer Zyklop
 enemy_giant_slime#Gigantischer Schleim
 enemy_giant_spider#Gigantische Spinne
-enemy_rat_king#Rattenkönig
+enemy_rat_king#Werrattenkönig
 
 item_copper#Kupfermünze
 item_copper_desc#Eine Kupfermünze (Wert 1)
@@ -524,8 +524,8 @@ item_spell_dual#Zauber : Doppelter Schuss
 item_spell_dual_desc#Schießt zwei Schüsse
 item_rage_amulet#Wutamulett
 item_rage_amulet_desc#Revanchiert sich bei Kontakt
-item_displacement_gloves#Vibrationshandschuhe
-item_displacement_gloves_desc#Erhöht die Feuerrate und vibriert
+item_displacement_gloves#Verschiebungs-Handschuhe
+item_displacement_gloves_desc#Die Geschwindigkeit des Spielers beeinflusst die der Schüsse
 item_staff#Mahagoni-Stab
 item_staff_desc#Erhöht Schussgeschwindigkeit und Schaden
 item_fairy#Lilly-Fee
@@ -576,6 +576,88 @@ item_spell_slime_explode_desc#Cast to invoke an explosive slime
 spell_teleport#Teleportation
 spell_slime_explode#invoke slime
 
+item_spell_fireball#Zauber: Feuerball
+item_spell_fireball_desc#Zauber, um einen Feuerball zu beschwören
+item_spell_freeze#Zauber: Monster einfrieren
+item_spell_freeze_desc#Zauber, um Monster einzufrieren
+item_spell_earthquake#Zauber: Erdbeben
+item_spell_earthquake_desc#Zauber, um das Verlies durchzuschütteln
+item_spell_protection#Zauber: Magisches Schild
+item_spell_protection_desc#Zauber, um ein magisches Schild zu beschwören
+spell_fireball#Feuerball
+spell_freeze#Monster einfrieren
+spell_earthquake#Erdbeben
+spell_protection#Magisches Schild
+msg_level1_0#Deine Aufgabe beginnt!
+msg_level1_1#"Hexen haben die Tochter des Erzmagiers entführt und sie in ihr Lager gebracht.
+msg_level1_2#Ich muss sie retten!"
+msg_level2_0#Die Tochter des Erzmagiers
+msg_level2_1#"Ich komme sofort, um dich zu befreien !
+msg_level2_2#Hoffentlich ist sie wohlbehalten..."
+msg_level3_0#Die Tochter des Erzmagiers
+msg_level3_1#"Hab ich es dir je erzählt?
+msg_level3_2#Die Tochter des Erzmagiers ist das süßeste Mädchen der magischen Akademie!"
+msg_level4_0#Der Erzmagier
+msg_level4_1#"Der Erzmagier ist ein sehr weiser Mann, und zugleich mein Mentor.
+msg_level4_2#Er hat mich gelehrt, dass wir auf der besten Welt leben."
+msg_level5_0#Die Tochter des Erzmagiers
+msg_level5_1#"Ich erinnere mich an die Tochter des Erzmagiers und mich, damals auf der magischen Akademie.
+msg_level5_2#Wir haben beim Heilmagier gespielt, hi hi !"
+msg_level6_0#Der Erzmagier
+msg_level6_1#"Meine Eltern starben, als ich noch ein Baby war.
+msg_level6_2#Der Erzmagier hat mich wie seinen eigenen Sohn aufgezogen."
+msg_rats_bats_0#Monster
+msg_rats_bats_1#"Hey! Warum müssen wir immer Ratten und Fledermäuse ausrotten
+msg_rats_bats_2#in diesen Schurken Spielen ?"
+msg_snakes_0#Schlangen
+msg_snakes_1#"Ich HASSE Schlangen!"
+msg_witches_0#Hexen
+msg_witches_1#"S... Hexen !!!"
+msg_gold_0#Gold
+msg_gold_1#"♫ Money money money ♫
+msg_gold_2#Ich frage mich, ob ich nützliche Gegenstände in diesem Verlies kaufen kann..."
+msg_familiar_0#Feen
+msg_familiar_1#"Oh! Ich habe Gesellschaft!
+msg_familiar_2#Ich hoffe ich finde noch andere Verbündete im Verlies."
+msg_butcher_0#Der Schweinemetzger
+msg_butcher_1#"Wow, das ist ein großer Typ!
+msg_butcher_2#Ich hoffe ich werde kein Hackfleisch..."
+msg_giant_slime_0#Der gigantische Schleim
+msg_giant_slime_1#"Ich bin grün, riesig und stinke.
+msg_giant_slime_2#Was ich bin ?"
+msg_cyclops_0#Der barbarische Zyklop
+msg_cyclops_1#"Wie ist es in dem Raum gelaufen?
+msg_cyclops_2#Es ist größer und länger als das Tor!"
+msg_wererat_0#Die Werratte
+msg_wererat_1#"Sieht aus wie meine alte Tante..."
+msg_giant_spider_before_0#Der leere Raum
+msg_giant_spider_before_1#"Ist hier jemand? "
+msg_giant_spider_after_0#Die riesige Spinne
+msg_giant_spider_after_1#"Ich HASSE Spinnen"
+msg_tuto_intro_0#Tutorial: Wesentliches
+msg_tuto_intro_1#Benutze WASD (Standard), um dich im Verlies zu bewegen.
+msg_tuto_intro_2#Feuere mit den Pfeiltasten (Standard).
+msg_tuto_items_0#Tutorial: Gegenstände
+msg_tuto_items_1#Gegenstände verbessern deinen Charakter oder geben dir neue Kräfte.
+msg_tuto_items_2#Finde oder kaufe so viele du kannst.
+msg_tuto_heal_0#Tutorial: Leben
+msg_tuto_heal_1#Du hast einige Trefferpunkte verloren.
+msg_tuto_heal_2#Finde etwas um dich zu heilen, bevor du stirbst.
+msg_tuto_shops_0#Tutorial: Geschäfte
+msg_tuto_shops_1#Du kannst viele Geschäfte im Verlies finden.
+msg_tuto_shops_2#Hier kannst du Geld ausgeben, um Gegenstände oder Essen zu kaufen.
+msg_tuto_boss_door_0#Tutorial: Boss-Tür
+msg_tuto_boss_door_1#Von hier aus kannst du eine geschlossene, goldene Tür sehen.
+msg_tuto_boss_door_2#Hier ist der Boss von dieser Etage, aber du brauchst den goldenen Schlüssel, um die Tür zu öffnen.
+msg_tuto_challenge_door_0#Tutorial: Raum der Herausforderung
+msg_tuto_challenge_door_1#Schau auf die dekorative Tür. Es ist ein Raum der Herausforderung.
+msg_tuto_challenge_door_2#Du kannst hier wertvolle Belohnungen erhalten, aber sei vorsichtig!
+msg_tuto_shots_0#Tutorial: Schussarten
+msg_tuto_shots_1#Du hast eine neue Schussart gefunden.
+msg_tuto_shots_2#Drücke [Waffe wechseln] (Standard: Tab), um zwischen den Schussarten zu wechseln.
+msg_tuto_spell_0#Tutorial: Zauber
+msg_tuto_spell_1#Du hast einen magischen Zauber gefunden.
+msg_tuto_spell_2#Drücke die Zaubertaste (Standard: Leertaste), um einen Zauber zu beschwören.
 [spanish]
 start_new_game#Empezar nueva partida
 start_desc#La partida anterior se perderá
