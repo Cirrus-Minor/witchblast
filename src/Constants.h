@@ -20,12 +20,12 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.3.5";
+const std::string APP_VERSION =   "0.3.6";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
 
-const std::string SAVE_VERSION =  "SAVE_0.3.5";
+const std::string SAVE_VERSION =  "SAVE_0.3.6";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
