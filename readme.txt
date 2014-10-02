@@ -61,9 +61,10 @@ Features
 
 Credits
 -------
-Sideous: the main character design and graphics
-R0d: particles system and multilingual support coding
 Seby: code, music and 2D art
+Sideous: the main character design and graphics
+Portoss01: bats and snake graphics
+R0d: particles system and multilingual support coding
 
 The sound used in the game come from:
 - http://www.freesound.org/
@@ -95,6 +96,7 @@ Next release
 - ADD Texts "widgets" for story and tutorial
 - MOD Vibration Gloves are now Displacement Glove (player's velocity impacts bolt velocity)
 - MOD Items presentation windows colour has changed
+- MOD Repulsion improved
 - FIX Texts are now in UTF-8
 - FIX Monsters out of the game zone
 - FIX Persistent particles on some machines/systems
