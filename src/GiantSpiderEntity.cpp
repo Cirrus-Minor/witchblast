@@ -288,7 +288,7 @@ void GiantSpiderEntity::render(sf::RenderTarget* app)
   sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
   app->draw(sprite);
 
-  displayLifeBar(creatureName, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT, app);
+  renderLifeBar(app, creatureName);
 
   if (game().getShowLogical())
   {

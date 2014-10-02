@@ -55,7 +55,7 @@ void KingRatEntity::animate(float delay)
     return;
   }
 
- if (isAgonising)
+  if (isAgonising)
   {
     if (h < -0.01f)
     {
@@ -167,10 +167,10 @@ void KingRatEntity::animate(float delay)
 
       if (game().getPlayer()->getY() > y)
         setVelocity(Vector2D(sin(angle) * KING_RAT_RUNNING_SPEED,
-                                       cos(angle) * KING_RAT_RUNNING_SPEED));
+                             cos(angle) * KING_RAT_RUNNING_SPEED));
       else
         setVelocity(Vector2D(-sin(angle) * KING_RAT_RUNNING_SPEED,
-                                       -cos(angle) * KING_RAT_RUNNING_SPEED));
+                             -cos(angle) * KING_RAT_RUNNING_SPEED));
     }
     else if (state == 5) // wall impact
     {
@@ -252,30 +252,30 @@ bool KingRatEntity::hurt(int damages, enumShotType hurtingType, int level, bool 
   if (state == 6)
     newDamages = damages / 4;
 
-   return EnemyEntity::hurt(newDamages, hurtingType, level, critical);
+  return EnemyEntity::hurt(newDamages, hurtingType, level, critical);
 }
 
 void KingRatEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + 25;
-    boundingBox.width = width - 50;
-    boundingBox.top = (int)y - height / 2 + 25;
-    boundingBox.height =  height - 35;
+  boundingBox.left = (int)x - width / 2 + 25;
+  boundingBox.width = width - 50;
+  boundingBox.top = (int)y - height / 2 + 25;
+  boundingBox.height =  height - 35;
 }
 
 
 void KingRatEntity::afterWallCollide()
 {
-    if (state == 4)
-    {
-      state = 5;
-      timer = 1.4f;
-      velocity.x *= 0.75f;
-      velocity.y *= 0.75f;
+  if (state == 4)
+  {
+    state = 5;
+    timer = 1.4f;
+    velocity.x *= 0.75f;
+    velocity.y *= 0.75f;
 
-      SoundManager::getInstance().playSound(SOUND_BIG_WALL_IMPACT);
-      game().makeShake(0.75f);
-    }
+    SoundManager::getInstance().playSound(SOUND_BIG_WALL_IMPACT);
+    game().makeShake(0.75f);
+  }
 }
 void KingRatEntity::collideMapRight()
 {
@@ -331,41 +331,23 @@ void KingRatEntity::generateGreenRats()
 
 void KingRatEntity::render(sf::RenderTarget* app)
 {
-    EnemyEntity::render(app);
+  EnemyEntity::render(app);
 
-    if (state == 6)
-    {
-      int r = ((int)(age *12.0f)) % 2;
-      if (r == 0)
-        sprite.setTextureRect(sf::IntRect(1 * width, 1 * height,  width,  height));
-      else
-        sprite.setTextureRect(sf::IntRect(2 * width, 1 * height,  -width,  height));
+  if (state == 6)
+  {
+    int r = ((int)(age *12.0f)) % 2;
+    if (r == 0)
+      sprite.setTextureRect(sf::IntRect(1 * width, 1 * height,  width,  height));
+    else
+      sprite.setTextureRect(sf::IntRect(2 * width, 1 * height,  -width,  height));
 
-      sprite.setPosition(x, y);
-      sprite.setColor(sf::Color(255, 255, 255, 190));
-      app->draw(sprite);
-      sprite.setColor(sf::Color(255, 255, 255, 255));
-    }
+    sprite.setPosition(x, y);
+    sprite.setColor(sf::Color(255, 255, 255, 190));
+    app->draw(sprite);
+    sprite.setColor(sf::Color(255, 255, 255, 255));
+  }
 
-    float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / KING_RAT_HP;
-
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
-    rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
-
-    rectangle.setSize(sf::Vector2f(l, 25));
-    rectangle.setFillColor(sf::Color(190, 20, 20));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
-
-    game().write(           tools::getLabel("enemy_rat_king"),
-                            18,
-                            OFFSET_X + TILE_WIDTH / 2 + 10.0f,
-                            OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
-                            ALIGN_LEFT,
-                            sf::Color(255, 255, 255),
-                            app, 0 , 0);
+  renderLifeBar(app, tools::getLabel("enemy_rat_king"));
 }
 
 void KingRatEntity::collideWithEnnemy(GameEntity* collidingEntity)

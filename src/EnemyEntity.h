@@ -60,17 +60,20 @@ public:
   virtual void animate(float delay);
   virtual void calculateBB();
   virtual void render(sf::RenderTarget* app);
-  void displayLifeBar(std::string name, float posY, sf::RenderTarget* app);
   virtual bool hurt(int damages, enumShotType hurtingType, int level, bool critical) override;
 
   virtual bool canCollide();
   enemyTypeEnum getEnemyType();
+
+  void setLabelDy(float label_dy);
 
 protected:
   virtual void collideMapRight();
   virtual void collideMapLeft();
   virtual void collideMapTop();
   virtual void collideMapBottom();
+
+  void renderLifeBar(sf::RenderTarget* app, std::string label);
 
   virtual void readCollidingEntity(CollidingSpriteEntity* entity);
   virtual void dying();
@@ -85,6 +88,8 @@ protected:
 
   float h;
   float hVelocity;
+
+  float label_dy;   /* dy of the bar label for bosses */
 
   int dyingFrame;
   int deathFrame;

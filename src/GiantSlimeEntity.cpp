@@ -81,10 +81,10 @@ void GiantSlimeEntity::changeToState(int n)
 
       if (game().getPlayer()->getY() > y)
         setVelocity(Vector2D(sin(angle) * randVel,
-                                     cos(angle) * randVel));
+                             cos(angle) * randVel));
       else
         setVelocity(Vector2D(-sin(angle) * randVel,
-                                     -cos(angle) * randVel));
+                             -cos(angle) * randVel));
     }
     else
       velocity = Vector2D(randVel);
@@ -128,10 +128,18 @@ void GiantSlimeEntity::animate(float delay)
   {
     switch (slimeCounter)
     {
-      case 0: new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true); break;
-      case 1: new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true); break;
-      case 2: new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true); break;
-      case 3: new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true); break;
+    case 0:
+      new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
+      break;
+    case 1:
+      new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
+      break;
+    case 2:
+      new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
+      break;
+    case 3:
+      new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
+      break;
     }
     slimeTimer = 7.0f;
     slimeCounter ++;
@@ -317,10 +325,10 @@ void GiantSlimeEntity::animate(float delay)
 
 void GiantSlimeEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + GIANT_SLIME_BB_LEFT;
-    boundingBox.width = width - GIANT_SLIME_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + 40;
-    boundingBox.height =  height - 76;
+  boundingBox.left = (int)x - width / 2 + GIANT_SLIME_BB_LEFT;
+  boundingBox.width = width - GIANT_SLIME_BB_WIDTH_DIFF;
+  boundingBox.top = (int)y - height / 2 + 40;
+  boundingBox.height =  height - 76;
 }
 
 
@@ -387,36 +395,18 @@ void GiantSlimeEntity::dying()
 
 void GiantSlimeEntity::render(sf::RenderTarget* app)
 {
-    if (!isDying)
-    {
-      // shadow
-      sprite.setPosition(x, y);
-      sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
-      app->draw(sprite);
-    }
-    sprite.setPosition(x, y - h);
-    sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
+  if (!isDying)
+  {
+    // shadow
+    sprite.setPosition(x, y);
+    sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
     app->draw(sprite);
+  }
+  sprite.setPosition(x, y - h);
+  sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
+  app->draw(sprite);
 
-    float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / GIANT_SLIME_HP;
-
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
-    rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
-
-    rectangle.setSize(sf::Vector2f(l, 25));
-    rectangle.setFillColor(sf::Color(190, 20, 20));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
-
-    game().write(           tools::getLabel("enemy_giant_slime"),
-                            18,
-                            OFFSET_X + TILE_WIDTH / 2 + 10.0f,
-                            OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
-                            ALIGN_LEFT,
-                            sf::Color(255, 255, 255),
-                            app, 0, 0);
+  renderLifeBar(app, tools::getLabel("enemy_giant_slime"));
 
   if (game().getShowLogical())
   {
@@ -458,12 +448,12 @@ BaseCreatureEntity::enumMovingStyle GiantSlimeEntity::getMovingStyle()
 
 void GiantSlimeEntity::fire()
 {
-    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
-    EnnemyBoltEntity* bolt = new EnnemyBoltEntity
-          (x, y + 10, ShotTypeStandard, 0);
-    bolt->setFrame(1);
-    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
+  EnnemyBoltEntity* bolt = new EnnemyBoltEntity
+  (x, y + 10, ShotTypeStandard, 0);
+  bolt->setFrame(1);
+  bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
-    bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(),GIANT_SLIME_FIRE_VELOCITY ));
+  bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(),GIANT_SLIME_FIRE_VELOCITY ));
 }
 

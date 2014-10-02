@@ -126,25 +126,7 @@ void ButcherEntity::render(sf::RenderTarget* app)
 {
     EnemyEntity::render(app);
 
-    float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
-
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
-    rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
-
-    rectangle.setSize(sf::Vector2f(l, 25));
-    rectangle.setFillColor(sf::Color(190, 20, 20));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
-
-    game().write(           tools::getLabel("enemy_butcher"),
-                            18,
-                            OFFSET_X + TILE_WIDTH / 2 + 10.0f,
-                            OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
-                            ALIGN_LEFT,
-                            sf::Color(255, 255, 255),
-                            app, 0 , 0);
+    renderLifeBar(app, tools::getLabel("enemy_butcher"));
 }
 
 bool ButcherEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
