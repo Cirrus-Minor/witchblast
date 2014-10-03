@@ -1861,7 +1861,7 @@ void WitchBlastGame::generateMap()
                             OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       addMessageToQueue(MsgInfoGiantSpiderBefore);
     }
-    else // level > 5
+    else if (level == 6)
     {
       GiantSpiderEntity* b1 = new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
@@ -1874,6 +1874,28 @@ void WitchBlastGame::generateMap()
       KingRatEntity* b3 = new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b3->setLabelDy(-20);
+    }
+
+    else // level > 6
+    {
+      GiantSpiderEntity* b1 = new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      b1->setLabelDy(10);
+
+      GiantSlimeEntity* b2 = new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      b2->setLabelDy(-510);
+
+      KingRatEntity* b3 = new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      b3->setLabelDy(-20);
+
+      CyclopsEntity* b4 = new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      b4->setLabelDy(-540);
+
+      findPlaceMonsters(EnemyTypeCauldron, 2);
+      findPlaceMonsters(EnemyTypeImpBlue, 4);
     }
 
     playMusic(MusicBoss);
