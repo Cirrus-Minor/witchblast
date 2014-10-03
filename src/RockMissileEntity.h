@@ -16,6 +16,7 @@ class RockMissileEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
 
 	  virtual void dying();
   private:

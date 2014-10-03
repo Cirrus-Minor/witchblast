@@ -26,14 +26,14 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
   if (rockType == 0)
   {
     creatureSpeed = 500.0f;
-    hp = 12;
+    hp = 8;
     meleeDamages = 8;
     frame = 18;
   }
   else
   {
     creatureSpeed = 450.0f;
-    hp = 24;
+    hp = 14;
     meleeDamages = 10;
     frame = 38;
   }
@@ -129,5 +129,19 @@ void RockMissileEntity::dying()
       blood->setVelocity(Vector2D(blood->getVelocity().x, -blood->getVelocity().y * 0.25f));
     else if ((collisionDirection == DIRECTION_BOTTOM) && (blood->getVelocity().y > 0.0f))
       blood->setVelocity(Vector2D(blood->getVelocity().x, -blood->getVelocity().y * 0.25f));
+  }
+}
+
+void RockMissileEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+{
+  PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(targetEntity);
+
+  if (playerEntity != NULL && !playerEntity->isDead())
+  {
+    //Vector2D recoilVector = Vector2D(targetEntity->getX(), targetEntity->getY()).vectorTo(Vector2D(x, y), 600.0f);
+    //targetEntity->giveRecoil(true, recoilVector, 0.5f);
+
+    Vector2D recoilVector = Vector2D(0, 0).vectorTo(getVelocity(), 600.0f );
+    targetEntity->giveRecoil(true, recoilVector, 0.5f);
   }
 }
