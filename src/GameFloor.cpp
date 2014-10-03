@@ -1,4 +1,6 @@
 #include "GameFloor.h"
+#include "Items.h"
+#include "WitchBlastGame.h"
 #include <time.h>
 #include <cstdlib>
 #include <stdio.h>
@@ -211,11 +213,14 @@ bool GameFloor::finalize()
   floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeKey;
   isolatedVector.erase(isolatedVector.begin() + index);
 
-  if (nbIsolatedRooms < 3)
-  {
-    if (forceShop) return false;
-    else return true;
-  }
+  int nbIsolatedRoomsMin = 3;
+  if (level == 1) nbIsolatedRoomsMin = 2;
+  if (level > 2 && game().getPlayer()->getActiveSpell().spell == SpellNone) nbIsolatedRoomsMin = 4;
+
+  if (nbIsolatedRooms < nbIsolatedRoomsMin) return false;
+
+  if (nbIsolatedRooms < 3) return true;
+
   // shop
   index = rand() % isolatedVector.size();
   floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeMerchant;
