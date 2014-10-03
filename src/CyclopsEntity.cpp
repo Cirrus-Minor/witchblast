@@ -356,4 +356,12 @@ void CyclopsEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 void CyclopsEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
 {
+  PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(targetEntity);
+
+  if (playerEntity != NULL && !playerEntity->isDead())
+  {
+    //Vector2D recoilVector = Vector2D(targetEntity->getX(), targetEntity->getY()).vectorTo(Vector2D(x, y), 450.0f);
+    Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 450.0f);
+    targetEntity->giveRecoil(true, recoilVector, 0.5f);
+  }
 }
