@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.3.6";
+const std::string APP_VERSION =   "0.3.6B";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
@@ -395,7 +395,7 @@ const int BUTCHER_DAMAGES = 8;
 const int BUTCHER_VELOCITY = 80;
 
 // Giant Slime
-const int GIANT_SLIME_HP = 550;
+const int GIANT_SLIME_HP = 400;
 const int GIANT_SLIME_DAMAGES = 8;
 const int GIANT_SLIME_MISSILE_DAMAGES = 6;
 const float GIANT_SLIME_MISSILE_DELAY = 0.33f;
@@ -419,7 +419,7 @@ const float CYCLOP_SPEED[4] = { 120, 130, 140, 150};
 const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
 const float CYCLOP_FIRE_DELAY[4] = { 0.3f, 0.26f, 0.23f, 0.2f};
 const int CYCLOP_HP = 700;
-const int CYCLOP_DAMAGES = 10;
+const int CYCLOP_DAMAGES = 8;
 
 // Giant Spider
 const float GIANT_SPIDER_SPEED[4] = { 230, 235, 240, 245 };
