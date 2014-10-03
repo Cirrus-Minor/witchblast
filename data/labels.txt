@@ -261,7 +261,7 @@ play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
 items_found#Objets
 monsters_killed#Monstres
 congratulations_1#FELICITATIONS !
-congratulations_2#Vous êtes brillament arrivé au terme de cette démo !
+congratulations_2#Vous êtes brillamment arrivé au terme de cette démo !
 congratulations_3#A bientôt pour de nouvelles aventures !
 by#par
 critical#CRITIQUE X2
@@ -297,7 +297,7 @@ item_boss_key#Clef du boss
 item_boss_key_desc#Ouvre la porte du boss
 item_sorcerer_hat#Chapeau d'enchanteur
 item_sorcerer_hat_desc#Augmente la cadence de tir
-item_velvet_boots#Bottes de velour
+item_velvet_boots#Bottes de velours
 item_velvet_boots_desc#Augmente la vitesse
 item_spell_dual#Sort: double-tir
 item_spell_dual_desc#Tire deux projectiles
@@ -414,7 +414,7 @@ msg_giant_spider_after_0#L'Araignée géante
 msg_giant_spider_after_1#"Je DETESTE les araignées"
 msg_tuto_intro_0#Tutorial: Bases
 msg_tuto_intro_1#Utilisez ZQSD (standard) pour se déplacer dans le donjon.
-msg_tuto_intro_2#Tirez avec les flêches (standard).
+msg_tuto_intro_2#Tirez avec les flèches (standard).
 msg_tuto_items_0#Tutorial: Objets
 msg_tuto_items_1#Les objets améliorent le personnage ou lui octroient de nouveaux pouvoirs.
 msg_tuto_items_2#trouvez ou achetez-en autant que possible.
@@ -425,7 +425,7 @@ msg_tuto_shops_0#Tutorial: Boutique
 msg_tuto_shops_1#Vous pouvez trouver plusieurs boutiques dans le donjon.
 msg_tuto_shops_2#Ici, vous dépenserez votre argent en objets et nourriture.
 msg_tuto_boss_door_0#Tutorial: Porte du Boss
-msg_tuto_boss_door_1#D'ici, vous apercevez une porte dorée vérouillée.
+msg_tuto_boss_door_1#D'ici, vous apercevez une porte dorée verrouillée.
 msg_tuto_boss_door_2#Elle protège le Boss, trouvez la clef adéquate pour l'ouvrir.
 msg_tuto_challenge_door_0#Tutorial: Salle de Challenge
 msg_tuto_challenge_door_1#Regardez la porte décorée ? C'est une salle de challenge.
@@ -854,10 +854,10 @@ merchant_speech_1#Добро пожаловать в магазин "Ведьм�
 merchant_speech_2#Да вы только взгляните на наш товар!
 
 enemy_butcher#Свин-мясник
-enemy_cyclops#Киммерийский циклоп
+enemy_cyclops#Циклоп-варвар
 enemy_giant_slime#Гигантский слизень
 enemy_giant_spider#Гигантский паук
-enemy_rat_king#Король крыс
+enemy_rat_king#Король веркрыс
 
 item_copper#Медная монета
 item_copper_desc#Медная монета (ценность 1)
@@ -885,8 +885,8 @@ item_spell_dual#Заклинание : Двойной выстрел
 item_spell_dual_desc#Позволяет стрелять двойным снарядом
 item_rage_amulet#Амулет ярости
 item_rage_amulet_desc#Месть
-item_displacement_gloves#Перчатки вибрации
-item_displacement_gloves_desc#Увеличивает скорость снаряда
+item_displacement_gloves#Перчатки перемещения
+item_displacement_gloves_desc#Скорость персонажа влияет на скорость снарядов
 item_staff#Посох красного дерева
 item_staff_desc#Увеличивает скорость снаряда и урон
 item_fairy#Фея Лилли
@@ -936,3 +936,85 @@ item_spell_slime_explode_desc#Произнесите, чтобы призват�
 
 spell_teleport#Телепорт
 spell_slime_explode#Призвать слизня
+item_spell_fireball#Заклинание: Огненный шар
+item_spell_fireball_desc#Произнесите, чтобы вызвать огненный шар
+item_spell_freeze#Заклинание: Заморозка монстров
+item_spell_freeze_desc#Произнесите, чтобы заморозить монстров
+item_spell_earthquake#Заклинание: землетрясение
+item_spell_earthquake_desc#Произнесите, чтобы сотрясти все подземелье
+item_spell_protection#Заклинание: Магический щит
+item_spell_protection_desc#Произнесите, чтобы призвать магический щит
+spell_fireball#огненный шар
+spell_freeze#заморозка монстров
+spell_earthquake#землетрясение
+spell_protection#магический щит
+msg_level1_0#Ваше приключение началось!
+msg_level1_1#"Ведьмы похитили дочь архимага и утащили ее в свое логово.
+msg_level1_2#Мне нужно ее вернуть!"
+msg_level2_0#Дочь архимага
+msg_level2_1#"Я пришел чтобы спасти тебя!
+msg_level2_2#Надеюсь, она жива..."
+msg_level3_0#Дочь архимага
+msg_level3_1#"Я когда-нибудь рассказывал тебе?
+msg_level3_2#Дочь архимага - приятнейшая девушка во всей магической академии!"
+msg_level4_0#Архимаг
+msg_level4_1#"Архимаг - очень мудрый человек... А так же мой наставник.
+msg_level4_2#Он показал мне, что мы живем в лучшем из миров."
+msg_level5_0#Дочь архимага
+msg_level5_1#"Я помню нас с дочерью архимага в магической академии.
+msg_level5_2#Мы игрались с магией лечения, хи-хи !"
+msg_level6_0#Архимаг
+msg_level6_1#"Мои родители погибли, когда я был совсем крохой.
+msg_level6_2#И архимаг растил меня как своего собственного сына."
+msg_rats_bats_0#Монстры
+msg_rats_bats_1#"Эй! Почему мы постоянно должны истреблять крыс и летучих мышей
+msg_rats_bats_2#в рогаликах ?"
+msg_snakes_0#Змеи
+msg_snakes_1#"Я НЕНАВИЖУ ЗМЕЙ!"
+msg_witches_0#Ведьмы
+msg_witches_1#"Бл... Ведьмы !!!"
+msg_gold_0#Золото
+msg_gold_1#"♫ Money money money ♫
+msg_gold_2#Я удивлюсь, если смогу купить хоть что-то полезное в этом подземелье..."
+msg_familiar_0#Феи
+msg_familiar_1#"Ох! Наконец-то я буду не один!
+msg_familiar_2#Надеюсь, мне удастся найти больше союзников в этом подземелье."
+msg_butcher_0#Свиночел-мясник
+msg_butcher_1#"Эй, смотри какой здоровяк!
+msg_butcher_2#Надеюсь, удастся порубить его на колбасу..."
+msg_giant_slime_0#Гигантский слизень
+msg_giant_slime_1#"Я зеленый, большой... И я воняю.
+msg_giant_slime_2#Что же я такое?"
+msg_cyclops_0#Циклоп-варвар
+msg_cyclops_1#"Как он прошел в комнату?
+msg_cyclops_2#Он же гораздо больше двери!"
+msg_wererat_0#Король веркрыс
+msg_wererat_1#"Выглядит как моя старая тетка..."
+msg_giant_spider_before_0#Пустая комната
+msg_giant_spider_before_1#"Здесь есть кто-нибудь? "
+msg_giant_spider_after_0#Гигантский паук
+msg_giant_spider_after_1#"Я НЕНАВИЖУ ПАУКОВ"
+msg_tuto_intro_0#Обучение: Основы
+msg_tuto_intro_1#Используйте WASD (по умолчанию) для перемещения по подземелью.
+msg_tuto_intro_2#Стреляйте клавишами со стрелочками (по умолчанию).
+msg_tuto_items_0#Обучение: Предметы
+msg_tuto_items_1#Предметы предоставляют вашему персонажу больше возможностей.
+msg_tuto_items_2#Найдите или купите столько, сколько сможете.
+msg_tuto_heal_0#Обучение: Здоровье
+msg_tuto_heal_1#Вы потеряли немного очков здоровья.
+msg_tuto_heal_2#Найдите способ вылечиться до того, как умрете.
+msg_tuto_shops_0#Обучение: Магазины
+msg_tuto_shops_1#Вы можете найти множество магазинов в подземелье.
+msg_tuto_shops_2#В магазине вы сможете купить предметы или еду.
+msg_tuto_boss_door_0#Обучение: Врата босса
+msg_tuto_boss_door_1#Здесь вы видите закрытую золотую дверь.
+msg_tuto_boss_door_2#За ней находится босс этого этажа, но вам нужен ключ, чтобы попасть внутрь.
+msg_tuto_challenge_door_0#Обучение: Поле битвы
+msg_tuto_challenge_door_1#Посмотрите на эту красивую дверь. За ней находится поле битвы
+msg_tuto_challenge_door_2#Вы можете найти там ценную награду. Но входите с осторожностью!
+msg_tuto_shots_0#Обучение: Типы выстрелов
+msg_tuto_shots_1#Вы нашли новвое оружие.
+msg_tuto_shots_2#Нажмите [выбор оружия] (по умолчанию: tab) чтобы переключаться между различными оружиями.
+msg_tuto_spell_0#Обучение: Заклинания
+msg_tuto_spell_1#Вы нашли магическое заклинание.
+msg_tuto_spell_2#Нажмите на клавишу заклинания (по умолчанию: space) чтобы произнести его.
