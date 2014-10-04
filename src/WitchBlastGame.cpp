@@ -2647,8 +2647,8 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireDown]  = sf::Keyboard::Down;
   input[KeyFireLeft]  = sf::Keyboard::Left;
   input[KeyFireRight] = sf::Keyboard::Right;
-  input[KeyFire] = sf::Keyboard::Space;
-  input[KeySpell] = sf::Keyboard::Q;
+  input[KeyFire] = sf::Keyboard::RControl;
+  input[KeySpell] = sf::Keyboard::Space;
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
 
