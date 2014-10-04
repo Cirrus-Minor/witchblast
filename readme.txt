@@ -85,7 +85,7 @@ Lord Archibald (who helps me writing the story)
 
 Changes
 -------
-Next release
+v0.3.7
 - ADD New monsters (snakes)
 - ADD New items (spell orbs)
 - ADD Poison
@@ -97,6 +97,10 @@ Next release
 - MOD Vibration Gloves are now Displacement Glove (player's velocity impacts bolt velocity)
 - MOD Items presentation windows colour has changed
 - MOD Repulsion improved
+- MOD Giant Slime HP decreased
+- MOD Cyclops melee and missile damage decreased, now repulse
+- MOD A merchant on each floor > 1 now
+- MOD Force Challenge room for each floor > 2 if no spell is equipped
 - FIX Texts are now in UTF-8
 - FIX Monsters out of the game zone
 - FIX Persistent particles on some machines/systems
