@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.3.6B";
+const std::string APP_VERSION =   "0.3.7";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
@@ -414,7 +414,7 @@ const float KING_RAT_RUNNING_RECOIL = 750.0f;
 const int KING_RAT_HP = 700;
 const int KING_RAT_DAMAGES = 8;
 
-// Cyclop
+// Cyclops
 const float CYCLOP_SPEED[4] = { 120, 130, 140, 150};
 const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
 const float CYCLOP_FIRE_DELAY[4] = { 0.3f, 0.26f, 0.23f, 0.2f};
