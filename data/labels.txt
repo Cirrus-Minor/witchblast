@@ -52,6 +52,8 @@ merchant_speech_1#Welcome to the Pawn'n'Witches shop!
 merchant_speech_2#Have a look at our merchandise!
 enemy_butcher#Pigman Butcher
 enemy_giant_slime#Giant Slime
+enemy_cyclops#Barbarian Cyclops
+enemy_rat_king#Wererat King
 enemy_giant_spider#Giant Spider
 item_copper#Copper coin
 item_copper_desc#A copper coin (value 1)
@@ -79,6 +81,8 @@ item_spell_dual#Spell : Dual bolts
 item_spell_dual_desc#Shoots two bolts
 item_rage_amulet#Rage Amulet
 item_rage_amulet_desc#Retaliates
+item_displacement_gloves#Displacement Gloves
+item_displacement_gloves_desc#Player's velocity impacts bolt's one
 item_staff#Mahogany Staff
 item_staff_desc#Increases bolt's speed and damage
 item_fairy#Fairy Lilly
@@ -125,14 +129,6 @@ item_spell_teleport#Spell: Teleport
 item_spell_teleport_desc#Cast to teleport within the room
 item_spell_slime_explode#Spell: Invoke Slime
 item_spell_slime_explode_desc#Cast to invoke an explosive slime
-spell_teleport#teleport
-spell_slime_explode#invoke slime
-
-item_displacement_gloves#Displacement Gloves
-item_displacement_gloves_desc#Player's velocity impacts bolt's one
-enemy_cyclops#Barbarian Cyclops
-enemy_rat_king#Wererat King
-
 item_spell_fireball#Spell: Fireball
 item_spell_fireball_desc#Cast to launch a fireball
 item_spell_freeze#Spell: Freeze monsters
@@ -141,6 +137,8 @@ item_spell_earthquake#Spell: Earthquake
 item_spell_earthquake_desc#Cast to make the dungeon shake
 item_spell_protection#Spell: Magic shield
 item_spell_protection_desc#Cast to summon a magic shield
+spell_teleport#teleport
+spell_slime_explode#invoke slime
 spell_fireball#fireball
 spell_freeze#freeze monsters
 spell_earthquake#earthquake
@@ -256,7 +254,6 @@ keys_fire#tirer
 keys_select_1#sélecteur
 keys_select_2#de tir
 keys_time#accélerer
-
 play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
 items_found#Objets
 monsters_killed#Monstres
@@ -266,17 +263,14 @@ congratulations_3#A bientôt pour de nouvelles aventures !
 by#par
 critical#CRITIQUE X2
 poison#POISON
-
 merchant_speech_0#Les meilleurs affaires du donjon !
 merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
 merchant_speech_2#Jetez un oeil à nos produits !
-
 enemy_butcher#Boucher porcin
-enemy_cyclops#Cyclope barbare
 enemy_giant_slime#Slime géant
-enemy_giant_spider#Araignée géante
+enemy_cyclops#Cyclope barbare
 enemy_rat_king#Roi des Rats-garous
-
+enemy_giant_spider#Araignée géante
 item_copper#Pièce de cuivre
 item_copper_desc#Une pièce de cuivre (1)
 item_silver#Pièce d'argent
@@ -351,9 +345,6 @@ item_spell_teleport#Sort : Téléportation
 item_spell_teleport_desc#Permet de se téléporter dans la pièce
 item_spell_slime_explode#Sort: Invoquer Slime
 item_spell_slime_explode_desc#Invoque un slime explosif
-spell_teleport#téléportation
-spell_slime_explode#invoquer slime
-
 item_spell_fireball#Sort: Boule de feu
 item_spell_fireball_desc#Envoie une boule de feu
 item_spell_freeze#Sort: Geler monstres
@@ -362,6 +353,8 @@ item_spell_earthquake#Sort: Séisme
 item_spell_earthquake_desc#Fait trembler le donjon
 item_spell_protection#Sort: Protection
 item_spell_protection_desc#Invoque un bouclier magique
+spell_teleport#téléportation
+spell_slime_explode#invoquer slime
 spell_fireball#boule de feu
 spell_freeze#geler monstres
 spell_earthquake#séisme
@@ -436,6 +429,7 @@ msg_tuto_shots_2#Appuyez sur [sélection de tir] (standard: tab) pour changer de
 msg_tuto_spell_0#Tutorial: Magie
 msg_tuto_spell_1#Vous avez trouvé un nouveau sort.
 msg_tuto_spell_2#Appuyez sur la touche de sort (standard: espace) pour le lancer.
+
 [german]
 start_new_game#Neues Spiel starten
 start_desc#Alter Speicherstand wird überschrieben !
@@ -477,7 +471,6 @@ keys_fire#Schießen
 keys_select_1#Waffe
 keys_select_2#wechseln
 keys_time#Zeitsteuerung
-
 play_again#Drücke [ENTER], um nochmal zu spielen / [ESC], um ins Hauptmenü zurückzukehren
 items_found#Items
 monsters_killed#Monster
@@ -487,17 +480,14 @@ congratulations_3#Bis bald für neue Abenteuer !
 by#von
 critical#KRITISCH X2
 poison#GIFT
-
 merchant_speech_0#Bester Preis im gesamten Verlies!
 merchant_speech_1#Willkommen im Pawn'n'Witches Shop!
 merchant_speech_2#Schau dir unsere Waren an!
-
 enemy_butcher#Schweinemetzger
-enemy_cyclops#Barbarischer Zyklop
 enemy_giant_slime#Gigantischer Schleim
-enemy_giant_spider#Gigantische Spinne
+enemy_cyclops#Barbarischer Zyklop
 enemy_rat_king#Werrattenkönig
-
+enemy_giant_spider#Gigantische Spinne
 item_copper#Kupfermünze
 item_copper_desc#Eine Kupfermünze (Wert 1)
 item_silver#Silbermünze
@@ -568,6 +558,7 @@ item_ring_fire#Rubin Ring
 item_ring_fire_desc#Erhöht die Feuerkraft
 item_manual_staff#Handbuch des Zauberstabes
 item_manual_staff_desc#Erhöht die Reichweite
+
 item_spell_teleport#Spell: Teleport
 item_spell_teleport_desc#Cast to teleport within the room
 item_spell_slime_explode#Spell: Invoke Slime
@@ -658,6 +649,7 @@ msg_tuto_shots_2#Drücke [Waffe wechseln] (Standard: Tab), um zwischen den Schus
 msg_tuto_spell_0#Tutorial: Zauber
 msg_tuto_spell_1#Du hast einen magischen Zauber gefunden.
 msg_tuto_spell_2#Drücke die Zaubertaste (Standard: Leertaste), um einen Zauber zu beschwören.
+
 [spanish]
 start_new_game#Empezar nueva partida
 start_desc#La partida anterior se perderá
@@ -701,7 +693,6 @@ keys_select_1#disparo
 keys_select_2#selector
 keys_time#control de tiempo
 key_spell#invocar un conjuro
-
 play_again#Presiona [ENTER] para jugar de nuevo / [ESC] para volver al menú 
 items_found#Items
 monsters_killed#Monstruos
@@ -711,17 +702,14 @@ congratulations_3#Nos veremos luego en una nueva aventura !
 by#por
 critical#CRÍTICO X2
 poison#VENENO
-
 merchant_speech_0#¡Los mejores precios de todo el calabozo!
 merchant_speech_1#¡Bienvenido a la tienda Pawn'n'Witches!
 merchant_speech_2#¡Echa una mirada a nuestra mercancía!
-
 enemy_butcher#Cerdo Carnicero
-enemy_cyclops#Cíclope Cimeriano
 enemy_giant_slime#Baba Gigante
+enemy_cyclops#Cíclope Bárbaro
+enemy_rat_king#Hombre Rata Rey
 enemy_giant_spider#Araña gigante
-enemy_rat_king#Rey Ratón
-
 item_copper#Moneda de cobre
 item_copper_desc#Una moneda de cobre (valor 1)
 item_silver#Moneda de plata
@@ -748,8 +736,8 @@ item_spell_dual#Conjuro : Rayo doble
 item_spell_dual_desc#Dispara dos rayos
 item_rage_amulet#Amuleto de furia
 item_rage_amulet_desc#Contraataca
-item_displacement_gloves#Guantes de vibración
-item_displacement_gloves_desc#Aumenta la velocidad del rayo y además vibra
+item_displacement_gloves#Guantes de desplazamiento
+item_displacement_gloves_desc#La velocidad del jugador afecta la velocidad del proyectil
 item_staff#Báculo Mahogany
 item_staff_desc#Aumenta la velocidad y el daño del rayo
 item_fairy#Hada Lilly
@@ -798,6 +786,88 @@ item_spell_slime_explode#Conjuro: Invocar baba
 item_spell_slime_explode_desc#Invoca una baba explosiva
 spell_teleport#Teletransportación
 spell_slime_explode#Invocar baba
+spell_fireball#bola de fuego
+spell_freeze#congelar monstruos
+spell_earthquake#terremoto
+spell_protection#escudo mágico
+item_spell_fireball#Conjuro: Bola de fuego
+item_spell_fireball_desc#Invocar para lanzar una bola de fuego
+item_spell_freeze#Conjuro: Congelar monstruos.
+item_spell_freeze_desc#Invocar para congelar a los monstruos.
+item_spell_earthquake#Conjuro: Terremoto
+item_spell_earthquake_desc#Invocar para hacer que el calabozo tiemble
+item_spell_protection#Conjuro: Escudo mágico
+item_spell_protection_desc#Invocar para crear un escudo mágico
+msg_level1_0#Tu expedición comienza!
+msg_level1_1#"Brujos han abducido a la hija del Archimago y la han llevado a la guarida.
+msg_level1_2#Yo debo rescatarla!"
+msg_level2_0#La hija del Archimago
+msg_level2_1#"¡Voy ahora mismo a rescatarte!
+msg_level2_2#Esperemos que ella esté sana y salva..."
+msg_level3_0#La hija del Archimago
+msg_level3_1#"¿No te lo he contado?
+msg_level3_2#La hija del Archimago es la mujer más dulce de la Academia de Magia!"
+msg_level4_0#El Archimago
+msg_level4_1#"El Archimago es un hombre muy sabio, y además es mi mentor.
+msg_level4_2#Él me ha enseñado que vivimos en lo mejor del mundo."
+msg_level5_0#La hija del Archimago
+msg_level5_1#"Recuerdo a la hija del Archimago conmigo, de vuelta en la Academia de Magia.
+msg_level5_2#Solíamos jugar cerca del mago sanador."
+msg_level6_0#El Archimago
+msg_level6_1#"Mis padres fallecieron cuando yo era un bebé.
+msg_level6_2#El Archimago me crió como si fuera su propio hijo."
+msg_rats_bats_0#Monstruos
+msg_rats_bats_1#"¡Oye! ¿Por qué siempre tenemos que matar ratas
+msg_rats_bats_2#o murciélagos en estos juegos tipo Rogue?"
+msg_snakes_0#Serpientes
+msg_snakes_1#"ODIO a las serpientes!"
+msg_witches_0#Brujas
+msg_witches_1#"Pu... Brujas !!!"
+msg_gold_0#Oro
+msg_gold_1#"♫ Money money money ♫
+msg_gold_2#Me pregunto si puedo comprar cosas útiles en este calabozo..."
+msg_familiar_0#Hadas
+msg_familiar_1#"¡Oh, tengo compañía!
+msg_familiar_2#Ojalá encuentre a más aliados en este calabozo."
+msg_butcher_0#El Cerdo Carnicero
+msg_butcher_1#"¡Wow, este tipo si que es grandote!
+msg_butcher_2#Espero no terminar hecho salchichas..."
+msg_giant_slime_0#La Baba Gigante
+msg_giant_slime_1#"Soy verde, grande y apesto.
+msg_giant_slime_2#¿Qué soy?"
+msg_cyclops_0#El Cíclope Bárbaro
+msg_cyclops_1#"¿Cómo se pudo meter en la habitación?
+msg_cyclops_2#¡Es más grande que la puerta!"
+msg_wererat_0#El Hombre Rata
+msg_wererat_1#"Se parece a mi vieja tía..."
+msg_giant_spider_before_0#La habitación vacía
+msg_giant_spider_before_1#"¿Hay alguien ahí? "
+msg_giant_spider_after_0#La Araña Gigante
+msg_giant_spider_after_1#"ODIO a las arañas"
+msg_tuto_intro_0#Tutorial: Cosas básicas
+msg_tuto_intro_1#Usa WASD (por defecto) para moverse dentr del calabozo.
+msg_tuto_intro_2#Dispara usando las flechas (por defecto).
+msg_tuto_items_0#Tutorial: Ítems
+msg_tuto_items_1#Ítems mejoran a tu personaje o te dan nuevos poderes.
+msg_tuto_items_2#Encuentra o compra la mayor cantidad que puedas.
+msg_tuto_heal_0#Tutorial: Puntos de vida
+msg_tuto_heal_1#Haz perdido algunos puntos de vida.
+msg_tuto_heal_2#Encuentra algo para curarte antes de que mueras.
+msg_tuto_shops_0#Tutorial: Tiendas
+msg_tuto_shops_1#Puedes encontrar varias tiendas en el calabozo.
+msg_tuto_shops_2#Aquí puedes gastar dinero para comprar ítems o comida.
+msg_tuto_boss_door_0#Tutorial: Puerta del Jefe
+msg_tuto_boss_door_1#Desde aquí puedes ver la puerta dorada cerrada.
+msg_tuto_boss_door_2#Esa es la habitación del jefe, pero necesitas la llave dorada para entrar.
+msg_tuto_challenge_door_0#Tutorial: Habitación de Desafíos
+msg_tuto_challenge_door_1#Mira la puerta decorada. Es una habitación de desafíos.
+msg_tuto_challenge_door_2#Puedes obtener buenas recompenzas ahí, ¡Pero entra con precaución!
+msg_tuto_shots_0#Tutorial: Tipos de disparo
+msg_tuto_shots_1#Haz encontrado un nuevo tipo de disparo.
+msg_tuto_shots_2#Presiona la tecla de seleccionar disparos (por defecto: Tab) para cambiar entre tipos de disparo.
+msg_tuto_spell_0#Tutorial: Conjuros
+msg_tuto_spell_1#Haz encontrado un conjuro mágico.
+msg_tuto_spell_2#Presiona la tecla de conjuros (por defecto: Espacio) para realizar el conjuro.
 
 [russian]
 start_new_game#Начать новую игру
@@ -838,7 +908,6 @@ keys_fire#выстрел
 keys_select_1#выбор
 keys_select_2#оружия
 keys_time#ускорение
-
 play_again#Нажмите [ENTER] чтобы сыграть снова / [ESC] чтобы выйти в меню
 items_found#Предметы
 monsters_killed#Монстры
@@ -848,17 +917,14 @@ congratulations_3#Скоро увидимся с новыми приключен
 by#by
 critical#КРИТИЧЕСКИЙ УДАР X2
 poison#ЯД
-
 merchant_speech_0#Лучшие цены во всем подземелье!
 merchant_speech_1#Добро пожаловать в магазин "Ведьмы и пешки"!
 merchant_speech_2#Да вы только взгляните на наш товар!
-
 enemy_butcher#Свин-мясник
-enemy_cyclops#Циклоп-варвар
 enemy_giant_slime#Гигантский слизень
-enemy_giant_spider#Гигантский паук
+enemy_cyclops#Циклоп-варвар
 enemy_rat_king#Король веркрыс
-
+enemy_giant_spider#Гигантский паук
 item_copper#Медная монета
 item_copper_desc#Медная монета (ценность 1)
 item_silver#Серебряная монета
@@ -933,9 +999,6 @@ item_spell_teleport#Заклинание: Телепорт
 item_spell_teleport_desc#Произнесите, чтобы телепортироваться в любое место комнаты
 item_spell_slime_explode#Spell: Призыв слизня
 item_spell_slime_explode_desc#Произнесите, чтобы призвать взрывного слизня
-
-spell_teleport#Телепорт
-spell_slime_explode#Призвать слизня
 item_spell_fireball#Заклинание: Огненный шар
 item_spell_fireball_desc#Произнесите, чтобы вызвать огненный шар
 item_spell_freeze#Заклинание: Заморозка монстров
@@ -944,6 +1007,8 @@ item_spell_earthquake#Заклинание: землетрясение
 item_spell_earthquake_desc#Произнесите, чтобы сотрясти все подземелье
 item_spell_protection#Заклинание: Магический щит
 item_spell_protection_desc#Произнесите, чтобы призвать магический щит
+spell_teleport#Телепорт
+spell_slime_explode#Призвать слизня
 spell_fireball#огненный шар
 spell_freeze#заморозка монстров
 spell_earthquake#землетрясение
