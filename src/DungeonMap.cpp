@@ -496,7 +496,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         map[x0 + 1][MAP_HEIGHT - 1] = 64;
       }
     }
-    if (roomType == roomTypeBoss && game().getLevel() == 2) // giant slime
+    if (roomType == roomTypeBoss && (game().getLevel() == 2 || game().getLevel() > 5) ) // giant slime
     {
       map[1][1] = MAP_GRID;
       map[1][MAP_HEIGHT -2] = MAP_GRID;
