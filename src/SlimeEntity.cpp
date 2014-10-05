@@ -121,7 +121,7 @@ void SlimeEntity::animate(float delay)
 
       float randVel = 250.0f + rand() % 250;
 
-      if (rand() % 2 == 0)
+      if (!game().getPlayer()->isEquiped(EQUIP_MANUAL_SLIMES) && rand() % 2 == 0)
       {
         float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
         float angle = atan(tan);
