@@ -1062,17 +1062,17 @@ void PlayerEntity::acquireItem(enumItemType type)
       SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
       break;
     case ItemHealthVerySmall:
-      hp += 3;
+      hp += equip[EQUIP_MANUAL_HEALTH] ? 5 : 3;
       SoundManager::getInstance().playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
     case ItemHealthSmall:
-      hp += 7;
+      hp += equip[EQUIP_MANUAL_HEALTH] ? 10 : 7;
       SoundManager::getInstance().playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
     case ItemHealth:
-      hp += 15;
+      hp += equip[EQUIP_MANUAL_HEALTH] ? 22 : 15;
       SoundManager::getInstance().playSound(SOUND_EAT);
       if (hp > hpMax) hp = hpMax;
       break;
