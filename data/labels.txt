@@ -214,6 +214,15 @@ msg_tuto_spell_0#Tutorial: Spells
 msg_tuto_spell_1#You've found a magic spell.
 msg_tuto_spell_2#Press the spell key (standard: space) to cast the spell.
 
+item_manual_slime#Manual of Slime Mastery
+item_manual_slime_desc#Slimes don't aim at you anymore
+item_spell_dual_quick#Spellbook of Quick Dual bolts
+item_spell_dual_quick_desc#Shoots two bolts (quick)
+item_spell_triple_quick#Spellbook of Quick Triple bolts
+item_spell_triple_quick_desc#Shoots three bolts (quick)
+item_manual_health#Health's Manual
+item_manual_health_desc#Health items give more HP
+
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue

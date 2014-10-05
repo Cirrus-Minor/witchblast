@@ -109,6 +109,10 @@ enum enumItemType
   ItemSpellFreeze,
   ItemSpellEarthquake,
   ItemSpellProtection,
+  ItemManualSlime,
+  ItemBookDualShotsQuick,
+  ItemBookTripleShotsQuick,
+  ItemManualHealth,
 
   NUMBER_ITEMS
 };
@@ -305,6 +309,22 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemSpellProtection, "item_spell_protection", "item_spell_protection_desc",
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellProtection
   },
+  {
+    ItemManualSlime, "item_manual_slime", "item_manual_slime_desc",
+    30, true, FamiliarNone, true, true, true, 3, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemBookDualShotsQuick, "item_spell_dual_quick", "item_spell_dual_quick_desc",
+    20, true, FamiliarNone, true, true, true, 1, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemBookTripleShotsQuick, "item_spell_triple_quick", "item_spell_triple_quick_desc",
+    50, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemManualHealth, "item_manual_health", "item_manual_health_desc",
+    20, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -343,6 +363,10 @@ enum item_equip_enum {
   EQUIP_SPELL_FIREBALL,
   EQUIP_SPELL_FREEZE,
   EQUIP_SPELL_EARTHQUAKE,
+  EQUIP_MANUAL_SLIMES,
+  EQUIP_BOOK_DUAL_QUICK,
+  EQUIP_BOOK_TRIPLE_QUICK,
+  EQUIP_MANUAL_HEALTH,
 
   NUMBER_EQUIP_ITEMS
   };
