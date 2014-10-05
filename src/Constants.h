@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.3.7";
+const std::string APP_VERSION =   "0.3.8";
 
 const std::string CONFIG_FILE =   "config.dat";
 const std::string SAVE_FILE =     "game.sav";
@@ -210,6 +210,7 @@ enum corpses_ressources{
   FRAME_CORPSE_WITCH_RED,
   FRAME_CORPSE_CAULDRON,
   FRAME_CORPSE_SNAKE,
+  FRAME_CORPSE_SNAKE_BLOOD,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -360,6 +361,9 @@ const float EVIL_FLOWER_FIRE_VELOCITY = 220.0f;
 const float SNAKE_SPEED = 120.0f;
 const int SNAKE_HP = 16;
 const int SNAKE_DAMAGE = 5;
+const float SNAKE_BLOOD_SPEED = 150.0f;
+const int SNAKE_BLOOD_HP = 32;
+const int SNAKE_BLOOD_DAMAGE = 8;
 
 // Slime
 const int SLIME_HP = 16;

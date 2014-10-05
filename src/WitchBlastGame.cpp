@@ -893,6 +893,12 @@ void WitchBlastGame::renderDeathScreen()
           dy = 2;
           break;
 
+        case EnemyTypeSnakeBlood:
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SNAKE));
+          monsterSprite.setTextureRect(sf::IntRect(0, 74, 64, 54));
+          dy = 2;
+          break;
+
         case EnemyTypeSlime:
           monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
           monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 44));
@@ -1972,6 +1978,10 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeSnake:
     new SnakeEntity(xm, ym, SnakeEntity::SnakeTypeNormal, false);
+    proceedEvent(EventMeetSnakes);
+    break;
+  case EnemyTypeSnakeBlood:
+    new SnakeEntity(xm, ym, SnakeEntity::SnakeTypeBlood, false);
     proceedEvent(EventMeetSnakes);
     break;
   case EnemyTypeEvilFlower:

@@ -6,7 +6,7 @@
 class SnakeEntity : public EnemyEntity
 {
   public:
-    enum snakeTypeEnum { SnakeTypeNormal };
+    enum snakeTypeEnum { SnakeTypeNormal, SnakeTypeBlood };
     SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocated);
     virtual void animate(float delay);
     virtual void calculateBB();
@@ -17,6 +17,7 @@ class SnakeEntity : public EnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
+    virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     virtual void collideWithEnnemy(GameEntity* collidingEntity);
     virtual void drop();
   private:

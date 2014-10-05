@@ -14,7 +14,7 @@ SnakeEntity::SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocat
   imagesProLine = 10;
   this->invocated = invocated;
 
-  //if (snakeType == snakeTypeNormal)
+  if (snakeType == SnakeTypeNormal)
   {
     frame = 0;
     dyingFrame = 8;
@@ -23,13 +23,24 @@ SnakeEntity::SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocat
     else enemyType = EnemyTypeSnake;
     hp = SNAKE_HP;
     creatureSpeed = SNAKE_SPEED;
+    meleeDamages = SNAKE_DAMAGE;
+    meleeType = ShotTypePoison;
+  }
+  else // snake blood
+  {
+    frame = 10;
+    dyingFrame = 18;
+    deathFrame = FRAME_CORPSE_SNAKE_BLOOD;
+    if (invocated) enemyType = EnemyTypeSnakeBlood_invocated;
+    else enemyType = EnemyTypeSnakeBlood;
+    hp = SNAKE_BLOOD_HP;
+    creatureSpeed = SNAKE_BLOOD_SPEED;
+
+    meleeDamages = SNAKE_BLOOD_DAMAGE;
   }
 
   velocity = Vector2D(creatureSpeed);
   computeFacingDirection();
-
-  meleeDamages = SNAKE_DAMAGE;
-  meleeType = ShotTypePoison;
 
   type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
@@ -63,6 +74,7 @@ void SnakeEntity::animate(float delay)
       case 8: frame = 6; break;
     }
     frame += ((int)(age * 3.0f)) % 2;
+    if (snakeType == SnakeTypeBlood) frame += 10;
   }
 
   EnemyEntity::animate(delay);
@@ -116,6 +128,63 @@ void SnakeEntity::collideWithEnnemy(GameEntity* collidingEntity)
     giveRecoil(false, vel, 0.3f);
 
     computeFacingDirection();
+  }
+}
+
+void SnakeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
+{
+  if (!isDying && !isAgonising && collideWithEntity(entity))
+  {
+    if (entity->getType() == ENTITY_PLAYER || entity->getType() == ENTITY_BOLT )
+    {
+      PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
+      BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
+
+      if (playerEntity != NULL && !playerEntity->isDead())
+      {
+        if (snakeType == SnakeTypeBlood)
+        {
+          if (rand() % 3 == 0)
+          {
+            meleeType = ShotTypePoison;
+            meleeDamages = 4;
+          }
+          else
+          {
+            meleeType = ShotTypeStandard;
+            meleeDamages = 8;
+          }
+        }
+        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false))
+        {
+          float xs = (x + playerEntity->getX()) / 2;
+          float ys = (y + playerEntity->getY()) / 2;
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
+          star->setFading(true);
+          star->setZ(y+ 100);
+          star->setLifetime(0.7f);
+          star->setType(ENTITY_EFFECT);
+          star->setSpin(400.0f);
+        }
+        inflictsRecoilTo(playerEntity);
+      }
+
+      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
+      {
+        collideWithBolt(boltEntity);
+      }
+    }
+    else // collision with other enemy ?
+    {
+      if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
+      {
+        if (this != entity)
+        {
+          EnemyEntity* ennemyEntity = static_cast<EnemyEntity*>(entity);
+          if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
+        }
+      }
+    }
   }
 }
 
