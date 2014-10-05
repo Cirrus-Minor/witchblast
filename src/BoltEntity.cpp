@@ -54,7 +54,8 @@ void BoltEntity::setDamages(int damages)
 {
   this->damages = damages;
 
-  if (damages <= 4)  renderScale = 0.8f;
+  if (damages <= 4)  renderScale = 0.7f;
+  else if (damages <= 6)  renderScale = 0.78f;
   else if (damages <= 8)  renderScale = 0.85f;
   else if (damages <= 12) renderScale = 0.9f;
   else if (damages <= 16) renderScale = 1.0f;
