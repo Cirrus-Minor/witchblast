@@ -319,7 +319,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBookTripleShotsQuick, "item_spell_triple_quick", "item_spell_triple_quick_desc",
-    50, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    50, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, ItemBookDualShotsQuick, ShotTypeStandard, SpellNone
   },
   {
     ItemManualHealth, "item_manual_health", "item_manual_health_desc",

@@ -2089,6 +2089,11 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     if (itemOk && (items[eq].specialShot != ShotTypeStandard && items[eq].level >= 3) && player->canGetNewShot(true))
       itemOk = false;
 
+    if (itemOk && eq == EQUIP_BOOK_DUAL && player->isEquiped(EQUIP_BOOK_DUAL_QUICK))
+      itemOk = false;
+
+    if (itemOk && eq == EQUIP_BOOK_DUAL_QUICK && player->isEquiped(EQUIP_BOOK_DUAL))
+      itemOk = false;
 
     if (itemOk && noFairy && items[eq].familiar != FamiliarNone) itemOk = false;
 

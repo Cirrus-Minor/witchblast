@@ -885,7 +885,8 @@ void PlayerEntity::fire(int direction)
   {
     SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
 
-    if (equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE])
+    if (equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE]
+        || equip[EQUIP_BOOK_DUAL_QUICK] || equip[EQUIP_BOOK_TRIPLE_QUICK])
     {
       float shoot_angle = 0.2f;
 
@@ -894,8 +895,8 @@ void PlayerEntity::fire(int direction)
         shoot_angle = 0.1f;
       else if ((direction == 6 && velocity.x < -1.0f) || (direction == 4 && velocity.x > 1.0f)
                || (direction == 2 && velocity.y < -1.0f) || (direction == 8 && velocity.y > 1.0f))
-        shoot_angle = equip[EQUIP_BOOK_TRIPLE] ? 0.35f : 0.2f;
-      else if (!equip[EQUIP_BOOK_TRIPLE])
+        shoot_angle = (equip[EQUIP_BOOK_TRIPLE] || equip[EQUIP_BOOK_TRIPLE_QUICK]) ? 0.35f : 0.2f;
+      else if (!equip[EQUIP_BOOK_TRIPLE] && !equip[EQUIP_BOOK_TRIPLE_QUICK])
         shoot_angle = 0.1f;
 
       switch(direction)
@@ -918,7 +919,7 @@ void PlayerEntity::fire(int direction)
         break;
       }
     }
-    if (!equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE])
+    if (!(equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_DUAL_QUICK]) || (equip[EQUIP_BOOK_TRIPLE] || equip[EQUIP_BOOK_TRIPLE_QUICK]))
     {
       switch(direction)
       {
@@ -1097,6 +1098,8 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
+  if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamagesBonus -= 0.35f;
+  else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamagesBonus -= 0.25f;
   if (equip[EQUIP_BROOCH_STAR]) criticalChance += 5;
   if (equip[EQUIP_MANUAL_STAFF]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
