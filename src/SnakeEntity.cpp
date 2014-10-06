@@ -190,5 +190,22 @@ void SnakeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
 void SnakeEntity::drop()
 {
-  if (!invocated) EnemyEntity::drop();
+  if (!invocated)
+  {
+    if (rand() % 5 == 0)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
+      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+    }
+
+    if (rand() % 25 == 0)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemHealthVerySmallPoison, x, y);
+      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+    }
+  }
 }

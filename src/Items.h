@@ -75,6 +75,7 @@ enum enumItemType
   ItemHealthVerySmall,
   ItemHealthSmall,
   ItemHealth,
+  ItemHealthVerySmallPoison,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
@@ -165,7 +166,8 @@ const itemStuct items[NUMBER_ITEMS] =
   {
     ItemBonusHealth, "item_elven_cookie", "item_elven_cookie_desc",
     250, false, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
-  },{
+  },
+  {
     ItemHealthVerySmall, "item_apple", "item_apple_desc",
     2, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
@@ -177,6 +179,11 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemHealthSmall, "item_cheese", "item_cheese_desc",
     8, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemHealthVerySmallPoison, "item_apple_green", "item_apple_green_desc",
+    2, false, FamiliarNone, true, false, false, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
+
   {
     ItemMagicianHat, "item_sorcerer_hat", "item_sorcerer_hat_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone

@@ -1062,6 +1062,8 @@ void PlayerEntity::acquireItem(enumItemType type)
       displayAcquiredGold(10);
       SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
       break;
+    case ItemHealthVerySmallPoison:
+      specialState[SpecialStatePoison].active = false;
     case ItemHealthVerySmall:
       hp += equip[EQUIP_MANUAL_HEALTH] ? 5 : 3;
       SoundManager::getInstance().playSound(SOUND_EAT);

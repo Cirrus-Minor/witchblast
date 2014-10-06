@@ -214,6 +214,9 @@ msg_tuto_spell_0#Tutorial: Spells
 msg_tuto_spell_1#You've found a magic spell.
 msg_tuto_spell_2#Press the spell key (standard: space) to cast the spell.
 
+
+item_apple_green#Green apple
+item_apple_green_desc#Restores 3 HP and cures poison
 item_manual_slime#Manual of Slime Mastery
 item_manual_slime_desc#Slimes don't aim at you anymore
 item_spell_dual_quick#Spellbook of Quick Dual bolts
