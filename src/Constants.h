@@ -316,8 +316,8 @@ const float DOOR_CLOSE_TIME = 1.0f;
 // Rat
 const float RAT_SPEED = 160.0f;
 const float RAT_SPEED_HELMET = 130.0f;
-const int RAT_HP = 24;
-const int RAT_HP_HELMET = 32;
+const int RAT_HP = 16;
+const int RAT_HP_HELMET = 24;
 const int RAT_DAMAGES = 5;
 const int RAT_BB_LEFT = 14;
 const int RAT_BB_WIDTH_DIFF = 28;
