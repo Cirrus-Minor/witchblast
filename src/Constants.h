@@ -341,10 +341,6 @@ const int BLACK_RAT_DAMAGES = 5;
 const float BAT_SPEED = 250.0f;
 const int BAT_HP = 8;
 const int BAT_DAMAGES = 5;
-const int BAT_BB_LEFT = 5;
-const int BAT_BB_WIDTH_DIFF = 10;
-const int BAT_BB_TOP = 2;
-const int BAT_BB_HEIGHT_DIFF = 32;
 
 // Evl Flower
 const int EVIL_FLOWER_HP = 16;
@@ -379,10 +375,6 @@ const float IMP_SPEED = 180.0f;
 const int IMP_HP = 20;
 const int IMP_MELEE_DAMAGES = 5;
 const int IMP_MISSILE_DAMAGES = 8;
-const int IMP_BB_LEFT = 5;
-const int IMP_BB_WIDTH_DIFF = 10;
-const int IMP_BB_TOP = 2;
-const int IMP_BB_HEIGHT_DIFF = 32;
 const float IMP_FIRE_VELOCITY = 250.0f;
 
 // Witch
