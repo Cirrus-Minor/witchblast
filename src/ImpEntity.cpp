@@ -88,13 +88,8 @@ void ImpEntity::animate(float delay)
 
       }
 
-      switch (((int)(age * 5.0f)) % 4)
-      {
-        case 0:
-        case 2: frame = 0; break;
-        case 1: frame = 1; break;
-        case 3: frame = 2; break;
-      }
+      frame = ((int)(age * 5.0f)) % 4;
+      if (frame == 3) frame = 1;
     }
     if (impType == ImpTypeBlue) frame += 5;
   }
@@ -104,10 +99,10 @@ void ImpEntity::animate(float delay)
 
 void ImpEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + IMP_BB_LEFT;
-    boundingBox.width = width - IMP_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + IMP_BB_TOP;
-    boundingBox.height =  height - IMP_BB_HEIGHT_DIFF;
+    boundingBox.left = (int)x - 14;
+    boundingBox.width = 28;
+    boundingBox.top = (int)y - 14;
+    boundingBox.height =  28;
 }
 
 void ImpEntity::collideMapRight()
