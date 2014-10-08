@@ -24,7 +24,7 @@ BatEntity::BatEntity(float x, float y, bool invocated)
   dyingFrame = 8;
   deathFrame = FRAME_CORPSE_BAT;
   agonizingSound = SOUND_BAT_DYING;
-  sprite.setOrigin(32.0f, 20.0f);
+  sprite.setOrigin(32.0f, 26.0f);
 
   enemyType = invocated ? EnemyTypeBat_invocated : EnemyTypeBat;
 }
@@ -60,7 +60,7 @@ void BatEntity::calculateBB()
 {
     boundingBox.left = (int)x - 12;
     boundingBox.width = 24;
-    boundingBox.top = (int)y - 11;
+    boundingBox.top = (int)y - 8;
     boundingBox.height =  22;
 }
 
