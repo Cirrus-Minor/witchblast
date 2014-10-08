@@ -333,8 +333,8 @@ const float GREEN_RAT_FADE = 1.0f;
 // Black Rat
 const float BLACK_RAT_SPEED = 160.0f;
 const float BLACK_RAT_SPEED_HELMET = 120.0f;
-const int BLACK_RAT_HP = 24;
-const int BLACK_RAT_HP_HELMET = 32;
+const int BLACK_RAT_HP = 16;
+const int BLACK_RAT_HP_HELMET = 24;
 const int BLACK_RAT_DAMAGES = 5;
 
 // Bat
