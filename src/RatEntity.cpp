@@ -11,13 +11,13 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_RAT), x, y)
 {
   this->ratType = ratType;
-  imagesProLine = 8;
+  imagesProLine = 10;
   this->invocated = invocated;
 
   if (ratType == RatTypeNormal)
   {
-    frame = 0;
-    dyingFrame = 6;
+    frame = 1;
+    dyingFrame = 9;
     deathFrame = FRAME_CORPSE_RAT;
     if (invocated) enemyType = EnemyTypeRat_invocated;
     else enemyType = EnemyTypeRat;
@@ -26,8 +26,8 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
   }
   else //(ratType == RatTypeHelmet)
   {
-    frame = 24;
-    dyingFrame = 30;
+    frame = 31;
+    dyingFrame = 39;
     deathFrame = FRAME_CORPSE_RAT_HELMET;
     if (invocated) enemyType = EnemyTypeRatHelmet_invocated;
     else enemyType = EnemyTypeRatHelmet;
@@ -41,31 +41,34 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
 
   type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
-  shadowFrame = 7;
+  shadowFrame = -1;
 
   agonizingSound = SOUND_RAT_DYING;
+  sprite.setOrigin(32.0f, 38.0f);
 }
 
 void RatEntity::animate(float delay)
 {
   if (age > 0.0f && !isAgonising)
   {
-    frame = ((int)(age * 5.0f)) % 2;
-    if (facingDirection == 4 || facingDirection == 6) frame += 2;
-    isMirroring = (facingDirection == 4 );
-    if (facingDirection == 8) frame += 4;
-    if (ratType == RatTypeHelmet) frame += 24;
+    frame = ((int)(age * 5.0f)) % 4;
+    if (frame == 3) frame = 1;
+    if (facingDirection == 4 || facingDirection == 6) frame += 3;
+    isMirroring = (facingDirection == 6 );
+    if (facingDirection == 8) frame += 6;
+    if (ratType == RatTypeHelmet) frame += 30;
   }
 
   EnemyEntity::animate(delay);
+  z = y + 17;
 }
 
 void RatEntity::calculateBB()
 {
   boundingBox.left = (int)x - width / 2 + RAT_BB_LEFT;
   boundingBox.width = width - RAT_BB_WIDTH_DIFF;
-  boundingBox.top = (int)y - height / 2 + RAT_BB_TOP;
-  boundingBox.height =  height - RAT_BB_HEIGHT_DIFF;
+  boundingBox.top = (int)y - 13;
+  boundingBox.height =  31;
 }
 
 void RatEntity::collideMapRight()

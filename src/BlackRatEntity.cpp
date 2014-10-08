@@ -13,12 +13,12 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
   targetTile(0, 0)
 {
   this->ratType = ratType;
-  imagesProLine = 8;
+  imagesProLine = 10;
 
   if (ratType == RatBlackTypeNormal)
   {
-    frame = 16;
-    dyingFrame = 22;
+    frame = 21;
+    dyingFrame = 29;
     deathFrame = FRAME_CORPSE_BLACK_RAT;
     enemyType = EnemyTypeRatBlack;
     hp = BLACK_RAT_HP;
@@ -26,8 +26,8 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
   }
   else //(ratType == RatBlackTypeHelmet)
   {
-    frame = 32;
-    dyingFrame = 38;
+    frame = 41;
+    dyingFrame = 49;
     deathFrame = FRAME_CORPSE_BLACK_RAT_HELMET;
     enemyType = EnemyTypeRatBlackHelmet;
     hp = BLACK_RAT_HP_HELMET;
@@ -38,10 +38,11 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
 
   type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
-  shadowFrame = 7;
+  shadowFrame = -1;
   agonizingSound = SOUND_RAT_DYING;
 
   currentDirection = 0;
+  sprite.setOrigin(32.0f, 38.0f);
 
   findNextGoal();
 }
@@ -56,24 +57,25 @@ void BlackRatEntity::animate(float delay)
     else if (currentDirection == 2 && y > (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
     else if (currentDirection == 8 && y < (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
 
-    frame = 16 + ((int)(age * 5.0f)) % 2;
-    if (facingDirection == 4 || facingDirection == 6) frame += 2;
-    isMirroring = (facingDirection == 4 );
-    if (facingDirection == 8) frame += 4;
-
-    if (ratType == RatBlackTypeHelmet)
-      frame += 16;
+    frame = ((int)(age * 5.0f)) % 4;
+    if (frame == 3) frame = 1;
+    if (facingDirection == 4 || facingDirection == 6) frame += 3;
+    isMirroring = (facingDirection == 6 );
+    if (facingDirection == 8) frame += 6;
+    if (ratType == RatBlackTypeHelmet) frame += 40;
+    else frame += 20;
   }
 
   EnemyEntity::animate(delay);
+  z = y + 17;
 }
 
 void BlackRatEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + RAT_BB_LEFT;
-    boundingBox.width = width - RAT_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + RAT_BB_TOP;
-    boundingBox.height =  height - RAT_BB_HEIGHT_DIFF;
+  boundingBox.left = (int)x - width / 2 + RAT_BB_LEFT;
+  boundingBox.width = width - RAT_BB_WIDTH_DIFF;
+  boundingBox.top = (int)y - 13;
+  boundingBox.height =  31;
 }
 
 void BlackRatEntity::collideMapRight()

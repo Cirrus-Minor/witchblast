@@ -10,7 +10,7 @@
 GreenRatEntity::GreenRatEntity(float x, float y)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_RAT), x, y)
 {
-  imagesProLine = 8;
+  imagesProLine = 10;
   creatureSpeed = GREEN_RAT_SPEED;
   velocity = Vector2D(creatureSpeed);
   computeFacingDirection();
@@ -20,14 +20,15 @@ GreenRatEntity::GreenRatEntity(float x, float y)
   type = ENTITY_ENNEMY_INVOCATED;
   enemyType = EnemyTypeRatGreen;
   bloodColor = BloodRed;
-  shadowFrame = 7;
-  dyingFrame = 14;
+  shadowFrame = -1;
+  dyingFrame = 19;
   deathFrame = FRAME_CORPSE_GREEN_RAT;
   agonizingSound = SOUND_RAT_DYING;
 
   timer = (rand() % 50) / 10.0f;
   age = -GREEN_RAT_FADE;
-  frame = 8;
+  frame = 11;
+  sprite.setOrigin(32.0f, 38.0f);
 }
 
 void GreenRatEntity::animate(float delay)
@@ -51,6 +52,13 @@ void GreenRatEntity::animate(float delay)
     if (facingDirection == 4 || facingDirection == 6) frame += 2;
     isMirroring = (facingDirection == 4 );
     if (facingDirection == 8) frame += 4;
+
+    frame = ((int)(age * 5.0f)) % 4;
+    if (frame == 3) frame = 1;
+    if (facingDirection == 4 || facingDirection == 6) frame += 3;
+    isMirroring = (facingDirection == 6 );
+    if (facingDirection == 8) frame += 6;
+    frame += 10;
   }
   else if (!isAgonising)
   {
@@ -68,14 +76,15 @@ void GreenRatEntity::animate(float delay)
   }
 
   EnemyEntity::animate(delay);
+  z = y + 17;
 }
 
 void GreenRatEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + RAT_BB_LEFT;
-    boundingBox.width = width - RAT_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + RAT_BB_TOP;
-    boundingBox.height =  height - RAT_BB_HEIGHT_DIFF;
+  boundingBox.left = (int)x - width / 2 + RAT_BB_LEFT;
+  boundingBox.width = width - RAT_BB_WIDTH_DIFF;
+  boundingBox.top = (int)y - 13;
+  boundingBox.height =  31;
 }
 
 void GreenRatEntity::collideMapRight()
