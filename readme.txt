@@ -61,9 +61,8 @@ Features
 
 Credits
 -------
-Seby: code, music and 2D art
-Sideous: the main character design and graphics
-Portoss01: bats and snake graphics
+Seby: code and music 
+Vetea: 2D art
 R0d: particles system and multilingual support coding
 
 The sound used in the game come from:
@@ -75,6 +74,7 @@ Thanks
 --------
 Thanks to
 
+Sideous and Portoss01 (they provide me 2D art in earlier versions)
 Billx (who suggested me the title "Witch Blast")
 Mika Attila (for his "coding" contribution during the development)
 Ruth (for the english corrections)
@@ -85,6 +85,11 @@ Lord Archibald (who helps me writing the story)
 
 Changes
 -------
+Next release
+- ADD New monsters
+- ADD New items
+- ADD New art for sprites
+
 v0.3.7
 - ADD New monsters (snakes)
 - ADD New items (spell orbs)
