@@ -40,6 +40,8 @@
 #include "WitchEntity.h"
 #include "CauldronEntity.h"
 #include "SnakeEntity.h"
+#include "LittleSpiderEntity.h"
+#include "SpiderEggEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -458,6 +460,58 @@ void WitchBlastGame::updateRunningGame()
       {
         showLogical = !showLogical;
       }
+
+      // DEBUG
+      #ifdef TEST_MODE
+      if (event.key.code == sf::Keyboard::F5)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeRat, 1);
+        findPlaceMonsters(EnemyTypeRatBlack, 1);
+        findPlaceMonsters(EnemyTypeRatGreen, 1);
+        findPlaceMonsters(EnemyTypeRatHelmet, 1);
+        findPlaceMonsters(EnemyTypeRatBlackHelmet, 1);
+      }
+      if (event.key.code == sf::Keyboard::F6)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeBat, 2);
+        findPlaceMonsters(EnemyTypeImpBlue, 1);
+        findPlaceMonsters(EnemyTypeImpRed, 1);
+      }
+      if (event.key.code == sf::Keyboard::F7)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeEvilFlower, 2);
+      }
+      if (event.key.code == sf::Keyboard::F8)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeSlime, 1);
+        findPlaceMonsters(EnemyTypeSlimeBlue, 1);
+        findPlaceMonsters(EnemyTypeSlimeRed, 1);
+        findPlaceMonsters(EnemyTypeSlimeViolet, 1);
+      }
+      if (event.key.code == sf::Keyboard::F9)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeSnake, 2);
+        findPlaceMonsters(EnemyTypeSnakeBlood, 2);
+      }
+      if (event.key.code == sf::Keyboard::F10)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeWitch, 1);
+        findPlaceMonsters(EnemyTypeWitchRed, 1);
+        findPlaceMonsters(EnemyTypeCauldron, 1);
+      }
+      if (event.key.code == sf::Keyboard::F11)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
+        findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+      }
+      #endif // TEST_MODE
 
       if (event.key.code == sf::Keyboard::Return)
       {
@@ -1963,6 +2017,10 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     new RatEntity(xm, ym - 2, RatEntity::RatTypeNormal, false);
     proceedEvent(EventMeetRatsOrBats);
     break;
+  case EnemyTypeRatGreen:
+    new GreenRatEntity(xm, ym - 2);
+    proceedEvent(EventMeetRatsOrBats);
+    break;
   case EnemyTypeRatBlack:
     new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeNormal);
     break;
@@ -2015,6 +2073,13 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeCauldron:
     new CauldronEntity(xm, ym);
+    break;
+
+  case EnemyTypeSpiderEgg_invocated:
+    new SpiderEggEntity(xm, ym);
+    break;
+  case EnemyTypeSpiderLittle_invocated:
+    new LittleSpiderEntity(xm, ym);
     break;
 
   default:

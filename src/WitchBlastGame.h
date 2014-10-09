@@ -27,6 +27,9 @@
 
 #include <queue>
 
+// for tests
+//#define TEST_MODE
+
 const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
 const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
