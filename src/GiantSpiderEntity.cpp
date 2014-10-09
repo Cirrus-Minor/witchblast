@@ -1,5 +1,5 @@
 #include "GiantSpiderEntity.h"
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 #include "PlayerEntity.h"
 #include "SpiderEggEntity.h"
 #include "SpiderWebEntity.h"
@@ -306,9 +306,9 @@ void GiantSpiderEntity::fire(int fireType)
 {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
 
-    EnnemyBoltEntity* bolt;
+    EnemyBoltEntity* bolt;
 
-    bolt = new EnnemyBoltEntity(x, y, ShotTypeStandard, 0);
+    bolt = new EnemyBoltEntity(x, y, ShotTypeStandard, 0);
     bolt->setDamages(5);
 
     float fireVelocity = 180.0f;

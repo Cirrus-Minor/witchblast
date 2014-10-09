@@ -1,9 +1,9 @@
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 #include "Constants.h"
 #include "sfml_game/ImageManager.h"
 #include "WitchBlastGame.h"
 
-EnnemyBoltEntity::EnnemyBoltEntity(float x, float y, enumShotType boltType, int level) :
+EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int level) :
   BoltEntity(x, y, -1, boltType, level)
 {
   damages = INITIAL_BOLT_DAMAGES;
@@ -19,9 +19,9 @@ EnnemyBoltEntity::EnnemyBoltEntity(float x, float y, enumShotType boltType, int 
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 }
 
-void EnnemyBoltEntity::animate(float delay)
+void EnemyBoltEntity::animate(float delay)
 {
-  if (boltType != ShotTypeBomb)
+  /*if (boltType != ShotTypeBomb)
   {
     SpriteEntity* trace = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
     trace->setFading(true);
@@ -30,7 +30,11 @@ void EnnemyBoltEntity::animate(float delay)
     trace->setShrinking(true, renderScale, renderScale);
     trace->setType(ENTITY_EFFECT);
     trace->setFrame(frame);
-  }
+  }*/
+  if (boltType != ShotTypeBomb)
+    particleGenerator.GenerateParticles(frame, IMAGE_BOLT, x, y, BOLT_WIDTH, BOLT_HEIGHT,
+                        boltType == ShotTypeLightning ? Vector2D(20.0f) : Vector2D(0.0f, 0.0f),
+                        10, boltType == ShotTypeIce ? renderScale * 1.3f : renderScale);
 
   z = y + height;
   CollidingSpriteEntity::animate(delay);

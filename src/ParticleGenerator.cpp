@@ -61,7 +61,7 @@ void ParticleGenerator::GenerateBoltParticle(int frame, const Vector2D & velocit
   float particleScale = scale - 0.2f;
 
   // "background" particle
-  if (frame != ShotTypeIce && frame != ShotTypeIllusion)
+  //if (frame != ShotTypeIce && frame != ShotTypeIllusion)
   {
     SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), posX, posY, BOLT_WIDTH, BOLT_HEIGHT);
     particle->setFading(true);

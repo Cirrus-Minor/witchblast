@@ -1,6 +1,6 @@
 #include "WitchEntity.h"
 #include "BoltEntity.h"
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 #include "PlayerEntity.h"
 #include "RatEntity.h"
 #include "BatEntity.h"
@@ -185,7 +185,7 @@ void WitchEntity::fire()
   if (witchType == WitchTypeNormal)
   {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
-    EnnemyBoltEntity* bolt = new EnnemyBoltEntity
+    EnemyBoltEntity* bolt = new EnemyBoltEntity
           (x, y + 10, ShotTypeStandard, 0);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
@@ -196,7 +196,7 @@ void WitchEntity::fire()
   else
   {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
-    EnnemyBoltEntity* bolt = new EnnemyBoltEntity
+    EnemyBoltEntity* bolt = new EnemyBoltEntity
           (x, y + 10, ShotTypeBomb, 0);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 

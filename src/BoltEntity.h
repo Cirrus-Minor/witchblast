@@ -45,13 +45,14 @@ class BoltEntity : public CollidingSpriteEntity
     int damages;
     float renderScale;
     enumShotType boltType;
+
+    ParticleGenerator particleGenerator;
+
   private:
     bool testWallsCollision;
     bool flying;
     bool critical;
     unsigned int level;
-
-    ParticleGenerator particleGenerator;
 };
 
 #endif // BOLTENTITY_H

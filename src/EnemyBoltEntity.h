@@ -4,10 +4,10 @@
 #include "BoltEntity.h"
 
 
-class EnnemyBoltEntity : public BoltEntity
+class EnemyBoltEntity : public BoltEntity
 {
   public:
-    EnnemyBoltEntity(float x, float y, enumShotType boltType, int level);
+    EnemyBoltEntity(float x, float y, enumShotType boltType, int level);
     virtual void animate(float delay);
 };
 

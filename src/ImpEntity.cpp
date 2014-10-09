@@ -5,7 +5,7 @@
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
 #include "WitchBlastGame.h"
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 
 ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_IMP), x, y)
@@ -158,15 +158,15 @@ void ImpEntity::fire()
 {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
 
-    EnnemyBoltEntity* bolt;
+    EnemyBoltEntity* bolt;
     if (impType == ImpTypeBlue)
     {
-      bolt = new EnnemyBoltEntity(x, y, ShotTypeIce, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeIce, 0);
       bolt->setDamages(5);
     }
     else
     {
-      bolt = new EnnemyBoltEntity(x, y, ShotTypeFire, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeFire, 0);
       bolt->setDamages(8);
     }
     bolt->setFlying(true);

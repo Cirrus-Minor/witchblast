@@ -1,6 +1,6 @@
 #include "SlimeEntity.h"
 #include "PlayerEntity.h"
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 #include "ExplosionEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
@@ -340,16 +340,16 @@ void SlimeEntity::fire()
 {
   for (int i = 0; i < 4; i++)
   {
-    EnnemyBoltEntity* bolt;
+    EnemyBoltEntity* bolt;
 
     if (slimeType == SlimeTypeBlue)
     {
-      bolt = new EnnemyBoltEntity(x, y, ShotTypeIce, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeIce, 0);
       bolt->setDamages(5);
     }
     else if (slimeType == SlimeTypeRed)
     {
-      bolt = new EnnemyBoltEntity(x, y, ShotTypeFire, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeFire, 0);
       bolt->setDamages(8);
     }
     else

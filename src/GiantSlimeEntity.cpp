@@ -1,6 +1,6 @@
 #include "GiantSlimeEntity.h"
 #include "BoltEntity.h"
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 #include "PlayerEntity.h"
 #include "SlimeEntity.h"
 #include "sfml_game/SpriteEntity.h"
@@ -449,7 +449,7 @@ BaseCreatureEntity::enumMovingStyle GiantSlimeEntity::getMovingStyle()
 void GiantSlimeEntity::fire()
 {
   SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
-  EnnemyBoltEntity* bolt = new EnnemyBoltEntity
+  EnemyBoltEntity* bolt = new EnemyBoltEntity
   (x, y + 10, ShotTypeStandard, 0);
   bolt->setFrame(1);
   bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);

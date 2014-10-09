@@ -1,6 +1,6 @@
 #include "EvilFlowerEntity.h"
 #include "BoltEntity.h"
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 #include "PlayerEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
@@ -74,7 +74,7 @@ void EvilFlowerEntity::dying()
 void EvilFlowerEntity::fire()
 {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
-    EnnemyBoltEntity* bolt = new EnnemyBoltEntity
+    EnemyBoltEntity* bolt = new EnemyBoltEntity
           (x, y + 10, ShotTypeStandard, 0);
     bolt->setFrame(1);
     bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);

@@ -2,7 +2,7 @@
 #include "SlimeEntity.h"
 #include "FallingRockEntity.h"
 #include "BoltEntity.h"
-#include "EnnemyBoltEntity.h"
+#include "EnemyBoltEntity.h"
 #include "ItemEntity.h"
 #include "FairyEntity.h"
 #include "sfml_game/ImageManager.h"
@@ -675,7 +675,7 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
   if (playerStatus == playerStatusDead) return;
 
-  EnnemyBoltEntity* boltEntity = dynamic_cast<EnnemyBoltEntity*>(entity);
+  EnemyBoltEntity* boltEntity = dynamic_cast<EnemyBoltEntity*>(entity);
 
   if (collideWithEntity(entity))
   {
