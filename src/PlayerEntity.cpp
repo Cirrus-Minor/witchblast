@@ -25,6 +25,11 @@ PlayerEntity::PlayerEntity(float x, float y)
   imagesProLine = 8;
   playerStatus = playerStatusPlaying;
   hp = INITIAL_PLAYER_HP;
+
+  #ifdef TEST_MODE
+  hp = INITIAL_PLAYER_HP * 100;
+  #endif // TEST_MODE
+
   hpDisplay = hp;
   hpMax = hp;
   gold = 0;
