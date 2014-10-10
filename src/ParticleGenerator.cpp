@@ -61,7 +61,8 @@ void ParticleGenerator::GenerateBoltParticle(int frame, const Vector2D & velocit
   float particleScale = scale - 0.2f;
 
   // "background" particle
-  //if (frame != ShotTypeIce && frame != ShotTypeIllusion)
+  // not for ice shots
+  if (frame != 2)
   {
     SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), posX, posY, BOLT_WIDTH, BOLT_HEIGHT);
     particle->setFading(true);
@@ -75,7 +76,8 @@ void ParticleGenerator::GenerateBoltParticle(int frame, const Vector2D & velocit
   }
 
   // "blend" particle
-  particleScale -= 0.1f;
+  // same size for illusion shots
+  if (frame != 3) particleScale -= 0.1f;
 
   SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), posX, posY, BOLT_WIDTH, BOLT_HEIGHT);
   particle->setFading(true);
