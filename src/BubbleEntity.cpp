@@ -144,8 +144,21 @@ void BubbleEntity::dying()
 
   if (bubbleSize < 4)
   {
-    new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
-    new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
+    BubbleEntity* b1 = new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
+    BubbleEntity* b2 = new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
+    if (specialState[SpecialStateIce].active)
+    {
+      b1->setSpecialState(SpecialStateIce,
+                          true,
+                          specialState[SpecialStateIce].timer,
+                          specialState[SpecialStateIce].param1,
+                          specialState[SpecialStateIce].param2);
+      b2->setSpecialState(SpecialStateIce,
+                          true,
+                          specialState[SpecialStateIce].timer,
+                          specialState[SpecialStateIce].param1,
+                          specialState[SpecialStateIce].param2);
+    }
   }
   else
   {
