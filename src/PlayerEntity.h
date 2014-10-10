@@ -451,6 +451,7 @@ class PlayerEntity : public BaseCreatureEntity
     float fireVelocity;
     float fireDelay;
     float currentFireDelay;
+    float randomFireDelay;
     float boltLifeTime;
     int gold;
     int criticalChance;

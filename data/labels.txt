@@ -225,6 +225,10 @@ item_spell_triple_quick#Spellbook of Quick Triple bolts
 item_spell_triple_quick_desc#Shoots three bolts (quick)
 item_manual_health#Health's Manual
 item_manual_health_desc#Health items give more HP
+item_book_rear_shot#Spellbook of Rear Shot
+item_book_rear_shot_desc#Shots a rear bolt
+item_book_random_shot#Spellbook of Random Shot
+item_book_random_shot_desc#Shots a bolt in a random direction
 
 [french]
 start_new_game#Nouvelle partie

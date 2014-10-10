@@ -18,6 +18,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
 {
   currentFireDelay = -1.0f;
+  randomFireDelay = -1.0f;
   invincibleDelay = -1.0f;
   canFirePlayer = true;
   type = ENTITY_PLAYER;
@@ -243,6 +244,7 @@ void PlayerEntity::animate(float delay)
     currentFireDelay -= delay;
     canFirePlayer = (currentFireDelay <= 0.0f);
   }
+  if (randomFireDelay >= 0.0f) randomFireDelay -= delay;
   // spells
   if (activeSpell.spell != SpellNone && activeSpell.delay > 0.0f)
   {
@@ -941,6 +943,31 @@ void PlayerEntity::fire(int direction)
         generateBolt(0.0f, fireVelocity);
         break;
       }
+    }
+
+    if (equip[EQUIP_BOOK_REAR])
+    {
+      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
+      bolt->setDamages(fireDamages / 2);
+      float velx = 0.0f;
+      float vely = 0.0f;
+      switch (direction)
+      {
+        case 4: velx = fireVelocity * 0.75f; break;
+        case 6: velx = -fireVelocity * 0.75f; break;
+        case 2: vely = -fireVelocity * 0.75f; break;
+        case 8: vely = fireVelocity * 0.75f; break;
+      }
+      bolt->setVelocity(Vector2D(velx, vely));
+    }
+
+    if (equip[EQUIP_BOOK_RANDOM] && randomFireDelay <= 0.0f)
+    {
+      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
+      bolt->setDamages(fireDamages);
+      float shotAngle = rand() % 360;
+      bolt->setVelocity(Vector2D(fireVelocity * 0.75f * cos(shotAngle), fireVelocity * 0.75f * sin(shotAngle)));
+      randomFireDelay = fireDelay * 1.5f;
     }
 
     canFirePlayer = false;

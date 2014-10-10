@@ -114,6 +114,8 @@ enum enumItemType
   ItemBookDualShotsQuick,
   ItemBookTripleShotsQuick,
   ItemManualHealth,
+  ItemBookRearShot,
+  ItemBookRandomShot,
 
   NUMBER_ITEMS
 };
@@ -332,6 +334,14 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemManualHealth, "item_manual_health", "item_manual_health_desc",
     20, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemBookRearShot, "item_book_rear_shot", "item_book_rear_shot_desc",
+    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemBookRandomShot, "item_book_random_shot", "item_book_random_shot_desc",
+    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -375,6 +385,8 @@ enum item_equip_enum {
   EQUIP_BOOK_DUAL_QUICK,
   EQUIP_BOOK_TRIPLE_QUICK,
   EQUIP_MANUAL_HEALTH,
+  EQUIP_BOOK_REAR,
+  EQUIP_BOOK_RANDOM,
 
   NUMBER_EQUIP_ITEMS
   };
