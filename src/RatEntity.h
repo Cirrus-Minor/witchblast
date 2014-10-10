@@ -23,6 +23,12 @@ class RatEntity : public EnemyEntity
   private:
     ratTypeEnum ratType;
     bool invocated;
+    int direction;
+    bool clockTurn;
+
+    float timer;
+
+    void compute(bool turn);
 };
 
 #endif // RATENTITY_H

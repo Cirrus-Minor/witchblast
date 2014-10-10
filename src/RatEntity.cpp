@@ -35,8 +35,11 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
     creatureSpeed = RAT_SPEED_HELMET;
   }
 
-  velocity = Vector2D(creatureSpeed);
-  computeFacingDirection();
+  direction = rand() % 4;
+  clockTurn = rand() % 2 == 0;
+  compute(false);
+  timer = 5 + rand() % 6;
+
   meleeDamages = RAT_DAMAGES;
 
   type = ENTITY_ENNEMY;
@@ -51,6 +54,14 @@ void RatEntity::animate(float delay)
 {
   if (age > 0.0f && !isAgonising)
   {
+    timer -= delay;
+    if (timer < 0.0f)
+    {
+      timer = 5 + rand() % 6;
+      if (rand() % 3 == 0) clockTurn = !clockTurn;
+      compute(true);
+    }
+
     frame = ((int)(age * 5.0f)) % 4;
     if (frame == 3) frame = 1;
     if (facingDirection == 4 || facingDirection == 6) frame += 3;
@@ -63,6 +74,50 @@ void RatEntity::animate(float delay)
   z = y + 17;
 }
 
+void RatEntity::compute(bool turn)
+{
+  if (turn)
+  {
+    if (clockTurn)
+    {
+      direction++;
+      if (direction == 4) direction = 0;
+    }
+    else
+    {
+      direction--;
+      if (direction < 0) direction = 3;
+    }
+  }
+
+  switch (direction)
+  {
+  case 0:
+    velocity.x = 0;
+    velocity.y = -creatureSpeed;
+    facingDirection = 8;
+    break;
+
+  case 1:
+    velocity.x = creatureSpeed;
+    velocity.y = 0;
+    facingDirection = 6;
+    break;
+
+  case 2:
+    velocity.x = 0;
+    velocity.y = creatureSpeed;
+    facingDirection = 2;
+    break;
+
+  case 3:
+    velocity.x = -creatureSpeed;
+    velocity.y = 0;
+    facingDirection = 4;
+    break;
+  }
+}
+
 void RatEntity::calculateBB()
 {
   boundingBox.left = (int)x - width / 2 + RAT_BB_LEFT;
@@ -73,30 +128,29 @@ void RatEntity::calculateBB()
 
 void RatEntity::collideMapRight()
 {
-  velocity.x = -velocity.x;
   if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else computeFacingDirection();
+  else compute(true);
 }
 
 void RatEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
   if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else computeFacingDirection();
+  else compute(true);
 }
 
 void RatEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else computeFacingDirection();
+  else compute(true);
 }
 
 void RatEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else computeFacingDirection();
+  else compute(true);
 }
 
 void RatEntity::collideWithEnnemy(GameEntity* collidingEntity)
@@ -104,8 +158,11 @@ void RatEntity::collideWithEnnemy(GameEntity* collidingEntity)
   EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
-    setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
-    computeFacingDirection();
+    Vector2D recoilVector = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 50.0f);
+    giveRecoil(false, recoilVector, 0.2f);
+    //setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
+    //computeFacingDirection();
+    compute(true);
   }
 }
 
