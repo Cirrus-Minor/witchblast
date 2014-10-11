@@ -84,8 +84,8 @@ void WitchEntity::animate(float delay)
 
           for(int i=0; i < 6; i++)
           {
-            generateStar(sf::Color(120, 50, 120, 255));
-            generateStar(sf::Color(120, 0, 120, 255));
+            generateStar(sf::Color(200, 50, 200, 255));
+            generateStar(sf::Color(255, 255, 255, 255));
           }
         }
         else
