@@ -182,6 +182,8 @@ void ImpEntity::teleport()
   int xm, ym;
   float xMonster, yMonster;
 
+  SoundManager::getInstance().playSound(SOUND_TELEPORT);
+
   for(int i=0; i < 6; i++)
   {
     if (impType == ImpTypeBlue)
