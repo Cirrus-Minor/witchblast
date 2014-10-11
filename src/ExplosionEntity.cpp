@@ -7,16 +7,21 @@
 
 #include <iostream>
 
-ExplosionEntity::ExplosionEntity(float x, float y, int damage)
-  : SpriteEntity(ImageManager::getInstance().getImage(IMAGE_EXPLOSION64), x, y, 100, 100)
+ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage)
+  : SpriteEntity(ImageManager::getInstance().getImage(IMAGE_EXPLOSION), x, y, 100, 100)
 {
   type = ENTITY_EXPLOSION;
-  frame = 0;
-  imagesProLine = 14;
-  lifetime = 1.0f;
-  spin = 900.0f;
+  this->explosionType = explosionType;
+  imagesProLine = 6;
+  lifetime = 0.8f;
 
   this->damage = damage;
+
+  switch (explosionType)
+  {
+    case ExplosionTypeStandard: frame = 0; break;
+    case ExplosionTypeViolet: frame = 6; break;
+  }
 
   sprite.setOrigin(50, 50);
   testCollisions();
@@ -29,17 +34,22 @@ void ExplosionEntity::animate(float delay)
     if (age >= lifetime) isDying = true;
   }
   age += delay;
-  //angle += spin * delay;
 
   z = y + height / 2;
 
-  if (age > lifetime - 0.5f)
+  /*if (age > lifetime - 0.5f)
   {
     float f = (lifetime - age) * 2.0f;
     sprite.setScale(f, f);
-  }
+  }*/
 
-  frame = age / lifetime * 14;
+  frame = age / lifetime * 6;
+  if (frame > 5) frame = 5;
+  switch (explosionType)
+  {
+    case ExplosionTypeStandard: break;
+    case ExplosionTypeViolet: frame += 6; break;
+  }
 }
 
 void ExplosionEntity::render(sf::RenderTarget* app)
@@ -77,7 +87,7 @@ void ExplosionEntity::testCollisions()
 
         if (bb.intersects(entity->getBoundingBox()))
         {
-          entity->hurt(damage, ShotTypeFire, 0, false);
+          if (damage > 0) entity->hurt(damage, ShotTypeFire, 0, false);
 
           Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 800.0f );
           entity->giveRecoil(true, recoilVector, 1.0f);

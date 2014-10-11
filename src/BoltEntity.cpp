@@ -311,7 +311,7 @@ void BoltEntity::collideMapBottom()
 void BoltEntity::explode()
 {
   isDying = true;
-  new ExplosionEntity(x, y, 12);
+  new ExplosionEntity(x, y, ExplosionTypeStandard, 12);
   game().makeShake(0.5f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 

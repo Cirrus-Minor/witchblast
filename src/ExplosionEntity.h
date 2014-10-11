@@ -3,10 +3,12 @@
 
 #include "sfml_game/SpriteEntity.h"
 
+enum explosionTypeEnum { ExplosionTypeStandard, ExplosionTypeViolet };
+
 class ExplosionEntity : public SpriteEntity
 {
   public:
-    ExplosionEntity(float x, float y, int damage);
+    ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage);
 
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
@@ -17,6 +19,7 @@ class ExplosionEntity : public SpriteEntity
 
   private:
     int damage;
+    explosionTypeEnum explosionType;
 };
 
 #endif // EXPLOSIONENTITY_H

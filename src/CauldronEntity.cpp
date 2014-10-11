@@ -1,5 +1,6 @@
 #include "CauldronEntity.h"
 #include "SlimeEntity.h"
+#include "ExplosionEntity.h"
 #include "PlayerEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
@@ -31,37 +32,51 @@ CauldronEntity::CauldronEntity(float x, float y)
 
 void CauldronEntity::animate(float delay)
 {
-  SoundManager::getInstance().playSound(SOUND_CAULDRON);
-
-  invokeDelay -= delay;
-  if (invokeDelay < 0.0f)
+  if (isAgonising)
   {
-    new SlimeEntity(x, y, SlimeTypeViolet, true);
-    invokeDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
-  }
-
-  bubbleDelay -= delay;
-  if (bubbleDelay < 0.0f)
-  {
-    bubbleDelay = 0.3f;
-
-    for (int i=0; i < 2; i++)
+    agonizingDelay -= delay;
+    if (agonizingDelay <= 0.0f)
     {
-      float xBub = x - 16 + rand() % 32;
-      SpriteEntity* bubble = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CAULDRON), xBub, y - 20, 8, 8);
-      bubble->setZ(z);
-      bubble->setFrame(32);
-      bubble->setType(ENTITY_EFFECT);
-      bubble->setWeight(-20 - rand() % 40);
-      bubble->setLifetime(2.0f);
-      float bloodScale = 0.3f + (rand() % 20) * 0.1f;
-      bubble->setScale(bloodScale, bloodScale);
+      isDying = true;
+      SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
+      corpse->setZ(OFFSET_Y);
+      corpse->setImagesProLine(10);
+      corpse->setFrame(deathFrame);
+      corpse->setType(ENTITY_CORPSE);
     }
   }
+  else
+  {
+    SoundManager::getInstance().playSound(SOUND_CAULDRON);
 
-  frame = hp > hpMax / 2 ? 0 : 1;
+    invokeDelay -= delay;
+    if (invokeDelay < 0.0f)
+    {
+      new SlimeEntity(x, y, SlimeTypeViolet, true);
+      invokeDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
+    }
 
-  EnemyEntity::animate(delay);
+    bubbleDelay -= delay;
+    if (bubbleDelay < 0.0f)
+    {
+      bubbleDelay = 0.3f;
+
+      for (int i=0; i < 2; i++)
+      {
+        float xBub = x - 16 + rand() % 32;
+        SpriteEntity* bubble = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CAULDRON), xBub, y - 20, 8, 8);
+        bubble->setZ(z);
+        bubble->setFrame(32);
+        bubble->setType(ENTITY_EFFECT);
+        bubble->setWeight(-20 - rand() % 40);
+        bubble->setLifetime(2.0f);
+        float bloodScale = 0.3f + (rand() % 20) * 0.1f;
+        bubble->setScale(bloodScale, bloodScale);
+      }
+    }
+    frame = hp > hpMax / 2 ? 0 : 1;
+    EnemyEntity::animate(delay);
+  }
 }
 
 void CauldronEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -140,7 +155,13 @@ void CauldronEntity::collideWithEnnemy(GameEntity* collidingEntity)
 
 void CauldronEntity::dying()
 {
-  EnemyEntity::dying();
+  new ExplosionEntity(x, y, ExplosionTypeViolet, 0);
+
+  SoundManager::getInstance().playSound(dyingSound);
+  isAgonising = true;
+  agonizingDelay = 0.7f;
+  drop();
+  game().addKilledEnemy(enemyType);
 }
 
 void CauldronEntity::drop()

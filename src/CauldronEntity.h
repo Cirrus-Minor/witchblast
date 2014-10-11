@@ -22,7 +22,9 @@ class CauldronEntity : public EnemyEntity
 	  virtual void dying();
 	  virtual void drop();
   private:
-    float invokeDelay, bubbleDelay;
+    float invokeDelay;
+    float bubbleDelay;
+    float agonizingDelay;
 };
 
 #endif // CAULDRON_ENTITY_H

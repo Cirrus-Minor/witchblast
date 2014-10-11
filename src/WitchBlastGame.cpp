@@ -110,7 +110,7 @@ WitchBlastGame::WitchBlastGame():
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
     "media/interface.png",     "media/hud_shots.png",
-    "media/boom64.png",        "media/keys_qwer.png",
+    "media/explosion.png",        "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
     "media/pnj.png",           "media/fairy.png",
   };
