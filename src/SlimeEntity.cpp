@@ -78,6 +78,8 @@ void SlimeEntity::animate(float delay)
 
     h += hVelocity * slimeDelay;
 
+    bool firstTimeGround = false;
+
     if (h <= 0.0f)
     {
       if (hp <= 0)
@@ -88,6 +90,7 @@ void SlimeEntity::animate(float delay)
         if (isFirstJumping)
         {
           isFirstJumping = false;
+          firstTimeGround = true;
           hVelocity = 160.0f;
           SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT);
           if (slimeType == SlimeTypeBlue || slimeType == SlimeTypeRed)
@@ -106,8 +109,9 @@ void SlimeEntity::animate(float delay)
         }
       }
     }
-    if (hVelocity > 0.0f) frame = 2;
-    else frame = 0;
+    if (firstTimeGround) frame = 0;
+    else if (hVelocity > -190.0f) frame = 2;
+    else frame = 1;
   }
   else
   {
@@ -123,20 +127,12 @@ void SlimeEntity::animate(float delay)
 
       if (!game().getPlayer()->isEquiped(EQUIP_MANUAL_SLIMES) && rand() % 2 == 0)
       {
-        float tan = (game().getPlayer()->getX() - x) / (game().getPlayer()->getY() - y);
-        float angle = atan(tan);
-
-        if (game().getPlayer()->getY() > y)
-          setVelocity(Vector2D(sin(angle) * randVel,
-                                     cos(angle) * randVel));
-        else
-          setVelocity(Vector2D(-sin(angle) * randVel,
-                                     -cos(angle) * randVel));
+        setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), randVel ));
       }
       else
         velocity = Vector2D(randVel);
     }
-    else if (jumpingDelay < 0.25f)
+    else if (jumpingDelay < 0.1f)
       frame = 1;
     else frame = 0;
   }
