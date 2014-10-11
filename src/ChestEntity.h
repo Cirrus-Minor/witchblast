@@ -13,6 +13,7 @@ class ChestEntity : public CollidingSpriteEntity
     virtual void calculateBB();
 
     void open();
+    void makeAppear();
     bool getOpened();
     int getChestType();
 
@@ -23,10 +24,13 @@ class ChestEntity : public CollidingSpriteEntity
   private:
     bool isOpen;
     int chestType;
+    float appearTimer;
 
     float timer;
     void fallRock();
     void initFallingGrid();
+    void generateStar(sf::Color starColor);
+
     bool fallingGrid[MAP_WIDTH][MAP_HEIGHT];
 };
 

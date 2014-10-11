@@ -42,6 +42,7 @@ const int X_GAME_COLOR_GREEN  = 1;
 const int X_GAME_COLOR_BLUE   = 2;
 const int X_GAME_COLOR_VIOLET = 3;
 const int X_GAME_COLOR_BROWN  = 4;
+const int X_GAME_COLOR_WHITE  = 5;
 
 unsigned const int NumberKeys = 12;
 const std::string inputKeyString[NumberKeys] =

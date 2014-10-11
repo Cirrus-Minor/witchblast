@@ -241,11 +241,15 @@ const int FAIRY_BOLT_DAMAGES = 8;
 const int FAIRY_FIRE_DAMAGES = 12;
 const float FAIRY_BOLT_VELOCITY = 700.0f;
 
+// chests
 enum chest_type_enum {
-  CHEST_BASIC,
-  CHEST_EXIT,
-  CHEST_FAIRY
+  ChestBasic,
+  ChestExit,
+  ChestChallenge,
+  ChestFairy,
 };
+const float CHEST_APPEAR_DELAY = 1.5f;
+
 // Artefact Info
 const float ARTEFACT_RECT_WIDTH = 650.0f;
 const float ARTEFACT_RECT_HEIGHT = 100.0f;

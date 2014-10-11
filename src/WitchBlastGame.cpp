@@ -621,7 +621,17 @@ void WitchBlastGame::updateRunningGame()
       currentMap->setCleared(true);
       openDoors();
       if (currentMap->getRoomType() == roomTypeBoss)
+      {
         playMusic(MusicDungeon);
+      }
+      else if (currentMap->getRoomType() == roomTypeChallenge)
+      {
+        ChestEntity* chest = new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
+                    OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                    ChestChallenge, false);
+        chest->makeAppear();
+        makeColorEffect(X_GAME_COLOR_GREEN, 0.3f);
+      }
     }
   }
 
@@ -793,6 +803,7 @@ void WitchBlastGame::renderRunningGame()
         case X_GAME_COLOR_BLUE: b = 255; break;
         case X_GAME_COLOR_VIOLET: r = 255; b = 200; break;
         case X_GAME_COLOR_BROWN: r = 200; b = 100; g = 150; break;
+        case X_GAME_COLOR_WHITE: r = 255; b = 255; g = 255; break;
       }
       int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
 
@@ -1805,7 +1816,7 @@ void WitchBlastGame::generateMap()
 
     if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
     {
-      new ChestEntity(v.x, v.y, CHEST_FAIRY + items[FirstEquipItem + bonusType].familiar, false);
+      new ChestEntity(v.x, v.y, ChestFairy + items[FirstEquipItem + bonusType].familiar, false);
     }
     else
     {
@@ -1972,7 +1983,7 @@ void WitchBlastGame::generateMap()
 
     new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                     OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                    CHEST_EXIT, false);
+                    ChestExit, false);
   }
   else
     currentMap->randomize(currentMap->getRoomType());

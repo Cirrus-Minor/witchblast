@@ -42,7 +42,7 @@ void generateStandardRoom01()
   else
   {
     Vector2D v = game().getCurrentMap()->generateBonusRoom();
-    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
+    new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
 }
@@ -72,7 +72,7 @@ void generateStandardRoom02()
   else if (random < 64)
   {
     Vector2D v = game().getCurrentMap()->generateBonusRoom();
-    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
+    new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
   else if (random < 80)
@@ -113,7 +113,7 @@ void generateStandardRoom03()
   else if (random < 64)
   {
     Vector2D v = game().getCurrentMap()->generateBonusRoom();
-    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
+    new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
   else if (random < 80)
@@ -177,7 +177,7 @@ void generateStandardRoom04()
   else if (random < 64)
   {
     Vector2D v = game().getCurrentMap()->generateBonusRoom();
-    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
+    new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
   else if (random < 80)
@@ -255,7 +255,7 @@ void generateStandardRoom05()
   else if (random < 64)
   {
     Vector2D v = game().getCurrentMap()->generateBonusRoom();
-    new ChestEntity(v.x, v.y, CHEST_BASIC, false);
+    new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
   else if (random < 80)

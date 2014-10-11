@@ -160,14 +160,6 @@ void BubbleEntity::dying()
                           specialState[SpecialStateIce].param2);
     }
   }
-  else
-  {
-    // the last one should drop
-    if (game().getEnnemyCount() == 1)
-    {
-      game().generateChallengeBonus(x, y);
-    }
-  }
 
   for (int i = 0; i < 5 - bubbleSize; i++)
   {
