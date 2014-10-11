@@ -584,12 +584,14 @@ void BaseCreatureEntity::generateStar(sf::Color starColor)
                            ImageManager::getInstance().getImage(IMAGE_STAR_2),
                             x, y);
   spriteStar->setScale(0.8f, 0.8f);
-  spriteStar->setZ(z-1.0f);
-  spriteStar->setLifetime(0.8f);
+  spriteStar->setZ(/*z-1.0f*/ 1000.0f);
+  spriteStar->setLifetime(0.9f + (rand() % 100) * 0.003f );
   spriteStar->setSpin(-100 + rand()%200);
   spriteStar->setVelocity(Vector2D(10 + rand()%40));
   spriteStar->setWeight(-150);
   spriteStar->setFading(true);
+  spriteStar->setAge(-0.8f);
+  spriteStar->setLifetime(0.1f + (rand() % 100) * 0.003f );
   spriteStar->setColor(starColor);
   spriteStar->setType(ENTITY_EFFECT);
 }
