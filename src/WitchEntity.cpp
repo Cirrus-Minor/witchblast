@@ -44,7 +44,7 @@ WitchEntity::WitchEntity(float x, float y, witchTypeEnum witchType)
 
   height = 96;
 
-  sprite.setOrigin(32, 75);
+  sprite.setOrigin(32, 71);
 
   timer = 3.0f;
   escapeTimer = -1.0f;
@@ -133,8 +133,8 @@ void WitchEntity::calculateBB()
 {
   boundingBox.left = (int)x - 16;
   boundingBox.width = 32;
-  boundingBox.top = (int)y - 20;
-  boundingBox.height = 40;
+  boundingBox.top = (int)y - 25;
+  boundingBox.height = 45;
 }
 
 void WitchEntity::collideMapRight()
