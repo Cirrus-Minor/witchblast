@@ -2297,6 +2297,14 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
     ItemEntity* newItem = new ItemEntity(getItemSpell(), x, y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
+
+    ItemEntity* healthItem1 = new ItemEntity(ItemHealthVerySmall, x, y);
+    healthItem1->setVelocity(Vector2D(100.0f + rand()% 250));
+    healthItem1->setViscosity(0.96f);
+
+    ItemEntity* healthItem2 = new ItemEntity(ItemHealthVerySmallPoison, x, y);
+    healthItem2->setVelocity(Vector2D(100.0f + rand()% 250));
+    healthItem2->setViscosity(0.96f);
   }
   else
   {
