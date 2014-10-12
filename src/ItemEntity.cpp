@@ -133,7 +133,10 @@ void ItemEntity::render(sf::RenderTarget* app)
   {
     std::ostringstream oss;
     oss << getPrice() << " $";
-    game().write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app, 0 , 0);
+    sf::Color fontColor;
+    if (getPrice() > game().getPlayer()->getGold()) fontColor = sf::Color(215, 20, 20);
+    else fontColor = sf::Color(255, 255, 255);
+    game().write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, fontColor, app, 1 , 1);
   }
 
   CollidingSpriteEntity::render(app);
@@ -170,7 +173,7 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       if (playerEntity->getHp() == playerEntity->getHpMax())
       {
         // don't use health item if you don't need it
-        if (itemType >= ItemHealthVerySmall && itemType <= ItemHealth) return;
+        if (itemType >= ItemHealthVerySmall && itemType <= ItemHealthVerySmallPoison) return;
       }
       if (isMerchandise == false || playerEntity->getGold() >= getPrice())
       {
