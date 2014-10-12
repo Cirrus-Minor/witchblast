@@ -463,45 +463,93 @@ void WitchBlastGame::updateRunningGame()
       #ifdef TEST_MODE
       if (event.key.code == sf::Keyboard::F5)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeRat, 1);
-        findPlaceMonsters(EnemyTypeRatBlack, 1);
-        findPlaceMonsters(EnemyTypeRatGreen, 1);
-        findPlaceMonsters(EnemyTypeRatHelmet, 1);
-        findPlaceMonsters(EnemyTypeRatBlackHelmet, 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeRat, 1);
+          findPlaceMonsters(EnemyTypeRatBlack, 1);
+          findPlaceMonsters(EnemyTypeRatGreen, 1);
+          findPlaceMonsters(EnemyTypeRatHelmet, 1);
+          findPlaceMonsters(EnemyTypeRatBlackHelmet, 1);
+        }
       }
       if (event.key.code == sf::Keyboard::F6)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeBat, 2);
-        findPlaceMonsters(EnemyTypeImpBlue, 1);
-        findPlaceMonsters(EnemyTypeImpRed, 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeBat, 2);
+          findPlaceMonsters(EnemyTypeImpBlue, 1);
+          findPlaceMonsters(EnemyTypeImpRed, 1);
+        }
       }
       if (event.key.code == sf::Keyboard::F7)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeEvilFlower, 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeEvilFlower, 2);
+        }
       }
       if (event.key.code == sf::Keyboard::F8)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeSlime, 1);
-        findPlaceMonsters(EnemyTypeSlimeBlue, 1);
-        findPlaceMonsters(EnemyTypeSlimeRed, 1);
-        findPlaceMonsters(EnemyTypeSlimeViolet, 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeSlime, 1);
+          findPlaceMonsters(EnemyTypeSlimeBlue, 1);
+          findPlaceMonsters(EnemyTypeSlimeRed, 1);
+          findPlaceMonsters(EnemyTypeSlimeViolet, 1);
+        }
       }
       if (event.key.code == sf::Keyboard::F9)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeSnake, 2);
-        findPlaceMonsters(EnemyTypeSnakeBlood, 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeSnake, 2);
+          findPlaceMonsters(EnemyTypeSnakeBlood, 2);
+        }
       }
       if (event.key.code == sf::Keyboard::F10)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeWitch, 1);
-        findPlaceMonsters(EnemyTypeWitchRed, 1);
-        findPlaceMonsters(EnemyTypeCauldron, 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeWitch, 1);
+          findPlaceMonsters(EnemyTypeWitchRed, 1);
+          findPlaceMonsters(EnemyTypeCauldron, 1);
+        }
       }
       if (event.key.code == sf::Keyboard::F11)
       {
