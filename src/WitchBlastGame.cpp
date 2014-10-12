@@ -180,8 +180,6 @@ WitchBlastGame::WitchBlastGame():
 
   configureFromFile();
   srand(time(NULL));
-
-  //tools::setLanguage("french");
 }
 
 WitchBlastGame::~WitchBlastGame()
@@ -631,6 +629,19 @@ void WitchBlastGame::updateRunningGame()
                     ChestChallenge, false);
         chest->makeAppear();
         makeColorEffect(X_GAME_COLOR_GREEN, 0.3f);
+
+        // sound
+        SoundManager::getInstance().playSound(SOUND_GONG);
+
+        // text
+        float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
+        float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
+        TextEntity* text = new TextEntity("COMPLETE !", 30, x0, y0);
+        text->setAlignment(ALIGN_CENTER);
+        text->setLifetime(2.5f);
+        text->setWeight(-36.0f);
+        text->setZ(1000);
+        text->setColor(TextEntity::COLOR_FADING_WHITE);
       }
     }
   }
@@ -2253,19 +2264,6 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
       newItem->setViscosity(0.96f);
     }
   }
-
-  // sound
-  SoundManager::getInstance().playSound(SOUND_GONG);
-
-  // text
-  float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
-  float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
-  TextEntity* text = new TextEntity("COMPLETE !", 30, x0, y0);
-  text->setAlignment(ALIGN_CENTER);
-  text->setLifetime(2.5f);
-  text->setWeight(-36.0f);
-  text->setZ(1000);
-  text->setColor(TextEntity::COLOR_FADING_WHITE);
 }
 
 void WitchBlastGame::verifyDoorUnlocking()
