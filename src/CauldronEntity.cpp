@@ -22,6 +22,7 @@ CauldronEntity::CauldronEntity(float x, float y)
   invokeDelay = 2.5f;
   bubbleDelay = 0.0f;
   shadowFrame = 2;
+  sprite.setOrigin(32, 28);
 
   deathFrame = FRAME_CORPSE_CAULDRON;
   dyingSound = SOUND_CAULDRON_DIE;
