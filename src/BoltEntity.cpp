@@ -34,6 +34,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   testWallsCollision = false;
   flying = false;
   critical = false;
+  goThrough = false;
 
   // avoid starting in wall
   if (y > (OFFSET_Y + (MAP_HEIGHT - 1) * TILE_HEIGHT - 16))
@@ -67,6 +68,12 @@ void BoltEntity::setDamages(int damages)
   sprite.scale(renderScale, renderScale);
 }
 
+void BoltEntity::loseDamages(int damages)
+{
+  if (this->damages > damages) setDamages(this->damages - damages);
+  else setDamages(0);
+}
+
 enumShotType BoltEntity::getBoltType()
 {
   return boltType;
@@ -91,6 +98,12 @@ void BoltEntity::setCritical(bool critical)
 {
   this->critical = critical;
 }
+
+void BoltEntity::setGoThrough(bool goThrough)
+{
+  this->goThrough = goThrough;
+}
+
 
 void BoltEntity::animate(float delay)
 {
@@ -138,6 +151,11 @@ void BoltEntity::calculateBB()
 
 void BoltEntity::collide()
 {
+  if (goThrough)
+  {
+    if (damages > 0) return;
+  }
+
   isDying = true;
   if (boltType == ShotTypeBomb)
     explode();

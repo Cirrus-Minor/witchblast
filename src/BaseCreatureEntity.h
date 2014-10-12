@@ -26,7 +26,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual bool collideWithMap(int direction);
-    virtual bool hurt(int damages, enumShotType hurtingType, int level, bool critical);
+    virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType);
     virtual void prepareDying();
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};

@@ -55,6 +55,12 @@ enum enemyTypeEnum
   NB_ENEMY // = no enemy
 };
 
+enum sourceTypeEnum
+{
+  SourceTypePlayer,
+  SourceTypePlayerBolt,
+};
+
 class EnemyEntity : public BaseCreatureEntity
 {
 public:
@@ -62,7 +68,7 @@ public:
   virtual void animate(float delay);
   virtual void calculateBB();
   virtual void render(sf::RenderTarget* app);
-  virtual bool hurt(int damages, enumShotType hurtingType, int level, bool critical) override;
+  virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType) override;
 
   virtual bool canCollide();
   enemyTypeEnum getEnemyType();

@@ -109,7 +109,8 @@ float BaseCreatureEntity::animateStates(float delay)
     if (specialState[SpecialStatePoison].param3 <= 0.0f)
     {
       specialState[SpecialStatePoison].param3 += specialState[SpecialStatePoison].param2;
-      hurt(specialState[SpecialStatePoison].param1, ShotTypeDeterministic, 0, false);
+      // TODO
+      hurt(specialState[SpecialStatePoison].param1, ShotTypeDeterministic, 0, false, -1);
     }
   }
 
@@ -382,7 +383,7 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 	return false;
 }
 
-bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
+int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
 {
   if (armor > 0.01f && hurtingType != ShotTypeDeterministic)
   {
@@ -504,10 +505,8 @@ bool BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, 
     }
 
     if (critical) SoundManager::getInstance().playSound(SOUND_CRITICAL);
-
-    return true;
   }
-  return false;
+  return damages;
 }
 
 void BaseCreatureEntity::prepareDying()

@@ -152,7 +152,7 @@ void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false))
+        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, enemyType))
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;

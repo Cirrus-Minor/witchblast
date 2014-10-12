@@ -126,7 +126,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false))
+        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, enemyType) > 0)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
@@ -166,7 +166,16 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
 
   boltEntity->collide();
 
-  hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical());
+  int maxDamages = hp;
+  int boltDamages = hurt(boltEntity->getDamages(),
+                         boltEntity->getBoltType(),
+                         boltEntity->getLevel(),
+                         boltEntity->isCritical(),
+                         SourceTypePlayerBolt);
+
+  if (hp > 0) boltEntity->loseDamages(boltEntity->getDamages());
+  else boltEntity->loseDamages(maxDamages >= boltDamages ? boltDamages : maxDamages);
+
   if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
   SoundManager::getInstance().playSound(SOUND_IMPACT);
 
@@ -233,12 +242,12 @@ void EnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
   // To implement the behaviour when colliding with another ennemy
 }
 
-bool EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
+int EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
 {
-  bool hurted = BaseCreatureEntity::hurt(damages, hurtingType, level, critical);
-  if (hurted && hurtingSound != SOUND_NONE && hp > 0)
+  int hurtedHp = BaseCreatureEntity::hurt(damages, hurtingType, level, critical, sourceType);
+  if (hurtedHp > 0 && hurtingSound != SOUND_NONE && hp > 0)
     SoundManager::getInstance().playSound(hurtingSound);
-  return hurted;
+  return hurtedHp;
 }
 
 void EnemyEntity::dying()

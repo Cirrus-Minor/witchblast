@@ -18,7 +18,7 @@ class CyclopsEntity : public EnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
     void afterWallCollide();
-    virtual bool hurt(int damages, enumShotType hurtingType, int level, bool critical) override;
+    virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType) override;
 
 	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
 	  virtual void drop();

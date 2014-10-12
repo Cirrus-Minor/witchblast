@@ -689,7 +689,8 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     if (boltEntity != NULL && !boltEntity->getDying())
     {
       boltEntity->collide();
-      hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical());
+      // TODO bolt source
+      hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(), -1);
       game().generateBlood(x, y, bloodColor);
 
       float xs = (x + boltEntity->getX()) / 2;
@@ -982,14 +983,14 @@ bool PlayerEntity::canMove()
           || (playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2));
 }
 
-bool PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
+int PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
 {
   if (playerStatus == playerStatusDead) return false;
 
   if (invincibleDelay <= 0.0f || hurtingType == ShotTypeDeterministic)
   {
     SoundManager::getInstance().playSound(SOUND_PLAYER_HIT);
-    if (BaseCreatureEntity::hurt(damages, hurtingType, level, critical))
+    if (BaseCreatureEntity::hurt(damages, hurtingType, level, critical, sourceType) > 0)
     {
       if (hurtingType != ShotTypeDeterministic)
       {
@@ -1577,6 +1578,7 @@ void PlayerEntity::castFireball()
 
   int boltDamage = fireDamages * 3;
   bolt->setDamages(boltDamage);
+  bolt->setGoThrough(true);
 
   float velx = 0.0f, vely = 0.0f;
   if (facingDirection == 4) velx = -fireVelocity;

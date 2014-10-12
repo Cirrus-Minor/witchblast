@@ -134,9 +134,9 @@ void ImpEntity::collideWithEnnemy(GameEntity* collidingEntity)
   }
 }
 
-bool ImpEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical)
+int ImpEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
 {
-  bool result = EnemyEntity::hurt(damages, hurtingType, level, critical);
+  int result = EnemyEntity::hurt(damages, hurtingType, level, critical, sourceType);
 
   if (!isDying && !isAgonising)
   {

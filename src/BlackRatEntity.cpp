@@ -245,6 +245,8 @@ void BlackRatEntity::collideWithBolt(BoltEntity* boltEntity)
       star->setType(ENTITY_EFFECT);
       star->setSpin(400.0f);
       SoundManager::getInstance().playSound(SOUND_CLANG_00);
+
+      boltEntity->loseDamages(boltEntity->getDamages());
     }
   }
   else EnemyEntity::collideWithBolt(boltEntity);
