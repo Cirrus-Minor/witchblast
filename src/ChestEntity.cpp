@@ -39,10 +39,12 @@ void ChestEntity::makeAppear()
 {
   appearTimer = CHEST_APPEAR_DELAY;
 
-  for(int i=0; i < 6; i++)
+  for(int i=0; i < 8; i++)
   {
     generateStar(sf::Color(50, 50, 255, 255));
-    generateStar(sf::Color(200, 200, 255, 255));
+    generateStar(sf::Color(255, 50, 50, 255));
+    generateStar(sf::Color(50, 255, 50, 255));
+    generateStar(sf::Color(255, 255, 255, 255));
   }
 }
 
@@ -214,14 +216,16 @@ void ChestEntity::generateStar(sf::Color starColor)
 {
   SpriteEntity* spriteStar = new SpriteEntity(
                            ImageManager::getInstance().getImage(IMAGE_STAR_2),
-                            x, y);
+                            x - 15 + rand() % 30, y - 10 + rand() % 30);
   spriteStar->setScale(0.8f, 0.8f);
-  spriteStar->setZ(z-1.0f);
-  spriteStar->setLifetime(0.8f);
+  spriteStar->setZ(1000.0f);
   spriteStar->setSpin(-100 + rand()%200);
-  spriteStar->setVelocity(Vector2D(10 + rand()%40));
-  spriteStar->setWeight(-150);
+  spriteStar->setVelocity(Vector2D(50 + rand()%40));
+  spriteStar->setWeight(-130);
   spriteStar->setFading(true);
+  spriteStar->setAge(-0.8f);
+  spriteStar->setLifetime(0.2f + (rand() % 100) * 0.005f );
   spriteStar->setColor(starColor);
   spriteStar->setType(ENTITY_EFFECT);
+  spriteStar->setRenderAdd();
 }

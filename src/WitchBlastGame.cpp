@@ -676,7 +676,6 @@ void WitchBlastGame::updateRunningGame()
                     OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
                     ChestChallenge, false);
         chest->makeAppear();
-        makeColorEffect(X_GAME_COLOR_GREEN, 0.3f);
 
         // sound
         SoundManager::getInstance().playSound(SOUND_GONG);
