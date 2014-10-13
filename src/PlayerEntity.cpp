@@ -650,7 +650,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
   if (protection.active)
   {
     sf::Color savedColor = sprite.getColor();
-    sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * 10) * 30 ));
+    sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (protection.timer < 2.0f ? 25 : 10)) * 30 ));
     sprite.setTextureRect(sf::IntRect( 17 * width, 0, width, height));
     app->draw(sprite);
     sprite.setColor(savedColor);
