@@ -1574,7 +1574,7 @@ void PlayerEntity::castFireball()
   enumShotType boltType = ShotTypeFire;
   unsigned int shotLevel = 2;
 
-  BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, boltType, shotLevel);
+  BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime + 0.5f, boltType, shotLevel);
 
   int boltDamage = fireDamages * 3;
   bolt->setDamages(boltDamage);
