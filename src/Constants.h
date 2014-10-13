@@ -318,7 +318,7 @@ const float DOOR_OPEN_TIME = 1.0f;
 const float DOOR_CLOSE_TIME = 1.0f;
 
 // Rat
-const float RAT_SPEED = 160.0f;
+const float RAT_SPEED = 185.0f;
 const float RAT_SPEED_HELMET = 130.0f;
 const int RAT_HP = 16;
 const int RAT_HP_HELMET = 24;
@@ -335,7 +335,7 @@ const int GREEN_RAT_DAMAGES = 5;
 const float GREEN_RAT_FADE = 1.0f;
 
 // Black Rat
-const float BLACK_RAT_SPEED = 160.0f;
+const float BLACK_RAT_SPEED = 170.0f;
 const float BLACK_RAT_SPEED_HELMET = 120.0f;
 const int BLACK_RAT_HP = 16;
 const int BLACK_RAT_HP_HELMET = 24;
