@@ -229,6 +229,9 @@ item_book_rear_shot#Spellbook of Rear Shot
 item_book_rear_shot_desc#Shots a rear bolt
 item_book_random_shot#Spellbook of Random Shot
 item_book_random_shot_desc#Shots a bolt in a random direction
+item_spell_web#Spell: Spider Web
+item_spell_web_desc#Cast to throw spider webs
+spell_web#spider web
 
 [french]
 start_new_game#Nouvelle partie

@@ -1427,7 +1427,12 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
 
   case SpellProtection:
     activeSpell.delayMax = 40.0f;
-    activeSpell.frame = ItemSpellProtection- FirstEquipItem;
+    activeSpell.frame = ItemSpellProtection - FirstEquipItem;
+    break;
+
+  case SpellWeb:
+    activeSpell.delayMax = 25.0f;
+    activeSpell.frame = ItemSpellWeb - FirstEquipItem;
     break;
 
   case SpellNone:
@@ -1463,6 +1468,9 @@ void PlayerEntity::castSpell()
       break;
     case SpellProtection:
       castProtection();
+      break;
+    case SpellWeb:
+      castWeb();
       break;
 
     case SpellNone:
@@ -1622,4 +1630,10 @@ void PlayerEntity::castProtection()
   computePlayer();
   game().makeColorEffect(X_GAME_COLOR_BLUE, 0.3f);
   SoundManager::getInstance().playSound(SOUND_SPELL_SHIELD);
+}
+
+void PlayerEntity::castWeb()
+{
+  // TODO : Implementation
+  SoundManager::getInstance().playSound(SOUND_SPIDER_WEB);
 }

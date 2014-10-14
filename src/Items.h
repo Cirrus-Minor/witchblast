@@ -47,6 +47,7 @@ enum enumCastSpell
   SpellFreeze,
   SpellEarthquake,
   SpellProtection,
+  SpellWeb,
 
   SpellNone
 };
@@ -60,6 +61,7 @@ const std::string spellLabel[SpellNone] =
   "spell_freeze",
   "spell_earthquake",
   "spell_protection",
+  "spell_web",
 };
 
 /** Item type enum
@@ -116,6 +118,7 @@ enum enumItemType
   ItemManualHealth,
   ItemBookRearShot,
   ItemBookRandomShot,
+  ItemSpellWeb,
 
   NUMBER_ITEMS
 };
@@ -342,6 +345,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemBookRandomShot, "item_book_random_shot", "item_book_random_shot_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemSpellWeb, "item_spell_web", "item_spell_web_desc",
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellWeb
+  },
 };
 
 /** Item equipment type enum
@@ -387,6 +394,7 @@ enum item_equip_enum {
   EQUIP_MANUAL_HEALTH,
   EQUIP_BOOK_REAR,
   EQUIP_BOOK_RANDOM,
+  EQUIP_SPELL_WEB,
 
   NUMBER_EQUIP_ITEMS
   };

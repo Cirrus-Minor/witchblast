@@ -513,6 +513,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castFreeze();
     void castEarthquake();
     void castProtection();
+    void castWeb();
 };
 
 #endif // PLAYERSPRITE_H
