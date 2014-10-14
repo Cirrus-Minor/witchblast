@@ -13,7 +13,7 @@ ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionTy
   type = ENTITY_EXPLOSION;
   this->explosionType = explosionType;
   imagesProLine = 6;
-  lifetime = 0.8f;
+  lifetime = 0.6f;
 
   this->damage = damage;
 
