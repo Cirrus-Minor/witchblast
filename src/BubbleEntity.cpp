@@ -61,6 +61,7 @@ BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
   width = 128;
   height = 128;
   sprite.setOrigin(64, 64);
+  canExplode = false;
 }
 
 int BubbleEntity::getBubbleSize()

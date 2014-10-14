@@ -1,5 +1,6 @@
 #include "EnemyEntity.h"
 #include "PlayerEntity.h"
+#include "ExplosionEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -26,6 +27,7 @@ EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   enemyType = NB_ENEMY;
   meleeLevel = 0;
   meleeType = ShotTypeStandard;
+  canExplode = true;
 
   label_dy = 0;
 }
@@ -250,8 +252,28 @@ int EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool cri
   return hurtedHp;
 }
 
+void EnemyEntity::makeExplode()
+{
+  new ExplosionEntity(x, y, ExplosionTypeStandard, 16);
+  isDying = true;
+
+  SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
+  corpse->setZ(OFFSET_Y);
+  corpse->setImagesProLine(10);
+  corpse->setFrame(deathFrame);
+  corpse->setType(ENTITY_CORPSE);
+  SoundManager::getInstance().playSound(SOUND_BOOM_00);
+}
+
 void EnemyEntity::dying()
 {
+  // TODO Explode condition
+  //if (game().getPlayer()->)
+  //{
+  //  makeExplode();
+  //}
+  //else
+
   if (dyingFrame == -1)
   {
     isDying = true;

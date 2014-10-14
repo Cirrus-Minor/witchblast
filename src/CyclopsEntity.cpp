@@ -45,6 +45,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  canExplode = false;
 }
 
 int CyclopsEntity::getHealthLevel()

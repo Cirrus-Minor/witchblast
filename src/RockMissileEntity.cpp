@@ -39,6 +39,7 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
   }
 
   setVelocity(Vector2D(x, y).vectorNearlyTo(targetPos, creatureSpeed, 0.4f));
+  canExplode = false;
 }
 
 void RockMissileEntity::animate(float delay)

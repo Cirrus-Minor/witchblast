@@ -38,6 +38,7 @@ ButcherEntity::ButcherEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceHigh;
   resistance[ResistanceRecoil] = ResistanceHigh;
+  canExplode = false;
 }
 
 void ButcherEntity::animate(float delay)

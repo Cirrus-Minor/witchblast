@@ -43,6 +43,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
 
   sprite.setOrigin(64, 84);
+  canExplode = false;
 }
 
 void GiantSlimeEntity::changeToState(int n)

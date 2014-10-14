@@ -29,6 +29,7 @@ CauldronEntity::CauldronEntity(float x, float y)
 
   enemyType = EnemyTypeCauldron;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  canExplode = false;
 }
 
 void CauldronEntity::animate(float delay)

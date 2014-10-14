@@ -82,6 +82,7 @@ protected:
   virtual void collideMapBottom();
 
   void renderLifeBar(sf::RenderTarget* app, std::string label);
+  void makeExplode();
 
   virtual void readCollidingEntity(CollidingSpriteEntity* entity);
   virtual void dying();
@@ -105,6 +106,8 @@ protected:
   sound_resources hurtingSound;
   sound_resources dyingSound;
   sound_resources agonizingSound;
+
+  bool canExplode;
 
   enemyTypeEnum enemyType;
 

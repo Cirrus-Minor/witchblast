@@ -46,6 +46,7 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
   else if (slimeType == SlimeTypeViolet)
   {
     enemyType = invocated ? EnemyTypeSlimeViolet_invocated : EnemyTypeSlimeViolet;
+    canExplode = false;
   }
   else
   {

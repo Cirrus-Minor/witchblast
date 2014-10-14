@@ -46,6 +46,8 @@ SpiderWebEntity::SpiderWebEntity(float x, float y)
   resistance[ResistanceRecoil] = ResistanceImmune;
   resistance[ResistanceFire] = ResistanceVeryLow;
   resistance[ResistanceStone] = ResistanceVeryLow;
+
+  canExplode = false;
 }
 
 void SpiderWebEntity::animate(float delay)

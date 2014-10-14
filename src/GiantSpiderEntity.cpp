@@ -44,6 +44,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
   creatureName = "???";
+  canExplode = false;
 }
 
 void GiantSpiderEntity::animate(float delay)

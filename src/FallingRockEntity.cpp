@@ -31,6 +31,7 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType, bool hurtAl
   case 1: meleeDamages = 10; frame = 38; break;
   case 2: meleeDamages = 12; frame = 58; break;
   }
+  canExplode = false;
 }
 
 void FallingRockEntity::animate(float delay)
