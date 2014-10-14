@@ -404,6 +404,15 @@ void WitchBlastGame::playLevel()
   text->setWeight(-36.0f);
   text->setZ(1000);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
+
+  #ifdef TEST_MODE
+  if (level == 1)
+  {
+    player->setY(player->getY() + 150);
+    for (int i = 0; i < NUMBER_ITEMS; i++)
+      new ItemEntity((enumItemType)i, 100 + (i % 14) * 60, 100 + (i / 14) * 60);
+  }
+  #endif
 }
 
 void WitchBlastGame::updateRunningGame()
