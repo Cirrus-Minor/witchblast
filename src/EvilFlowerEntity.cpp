@@ -21,6 +21,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y)
   type = ENTITY_ENNEMY;
   bloodColor = BloodGreen;
   enemyType = EnemyTypeEvilFlower;
+  deathFrame = FRAME_CORPSE_FLOWER;
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;
   age = -1.0f + (rand() % 2500) * 0.001f;
@@ -55,20 +56,6 @@ void EvilFlowerEntity::calculateBB()
     boundingBox.width = width - EVIL_FLOWER_BB_WIDTH_DIFF;
     boundingBox.top = (int)y - height / 2 + EVIL_FLOWER_BB_TOP;
     boundingBox.height =  height - EVIL_FLOWER_BB_HEIGHT_DIFF;
-}
-
-void EvilFlowerEntity::dying()
-{
-  isDying = true;
-  game().addKilledEnemy(enemyType);
-  SpriteEntity* deadFlower = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-  deadFlower->setZ(OFFSET_Y);
-  deadFlower->setFrame(FRAME_CORPSE_FLOWER);
-  deadFlower->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-  drop();
-  SoundManager::getInstance().playSound(SOUND_ENNEMY_DYING);
 }
 
 void EvilFlowerEntity::fire()

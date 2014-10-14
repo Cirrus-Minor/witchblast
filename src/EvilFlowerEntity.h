@@ -12,8 +12,7 @@ class EvilFlowerEntity : public EnemyEntity
     virtual void calculateBB();
     virtual void render(sf::RenderTarget* app);
     void fire();
-  protected:
-	  virtual void dying();
+
   private:
     float fireDelay;
 };
