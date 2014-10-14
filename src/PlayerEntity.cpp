@@ -66,8 +66,6 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   activeSpell.delay = -1.0f;
   activeSpell.spell = SpellNone;
-
-  setActiveSpell(SpellWeb);
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
