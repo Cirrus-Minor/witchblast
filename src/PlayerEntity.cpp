@@ -2,6 +2,7 @@
 #include "SlimeEntity.h"
 #include "FallingRockEntity.h"
 #include "BoltEntity.h"
+#include "SpiderWebEntity.h"
 #include "EnemyBoltEntity.h"
 #include "ItemEntity.h"
 #include "FairyEntity.h"
@@ -65,6 +66,8 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   activeSpell.delay = -1.0f;
   activeSpell.spell = SpellNone;
+
+  setActiveSpell(SpellWeb);
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -1525,7 +1528,7 @@ void PlayerEntity::castTeleport()
         GameEntity *e = *it;
         it++;
 
-        if ((e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX) || e->getType() == ENTITY_ENNEMY_BOLT)
+        if ((e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX_COUNT) || e->getType() == ENTITY_ENEMY_BOLT)
           isBad = Vector2D(xNew, yNew).distance2(Vector2D(e->getX(), e->getY())) < distanceMin;
       }
 
@@ -1636,4 +1639,5 @@ void PlayerEntity::castWeb()
 {
   // TODO : Implementation
   SoundManager::getInstance().playSound(SOUND_SPIDER_WEB);
+  for (int i = 0; i < 3; i++) new SpiderWebEntity(x, y, true);
 }

@@ -19,7 +19,7 @@ class BubbleEntity : public EnemyEntity
     virtual void dying();
     virtual void render(sf::RenderTarget* app);
 
-    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithEnemy(EnemyEntity* entity) override;
   private:
     int bubbleSize;
 };

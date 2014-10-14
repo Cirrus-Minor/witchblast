@@ -16,7 +16,6 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   hp = IMP_HP;
   meleeDamages = IMP_MELEE_DAMAGES;
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
   changingDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
   shadowFrame = 4;
@@ -125,9 +124,8 @@ void ImpEntity::collideMapBottom()
     velocity.y = -velocity.y;
 }
 
-void ImpEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void ImpEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movFlying)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));

@@ -20,13 +20,12 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
   this->invocated = invocated;
   if (invocated)
   {
-    type = ENTITY_ENNEMY_INVOCATED;
+    type = ENTITY_ENEMY_INVOCATED;
     jumpingDelay = 0.1f;
     age = 0.0f;
   }
   else
   {
-    type = ENTITY_ENNEMY;
     jumpingDelay = 0.6f + 0.1f * (rand() % 20);
   }
 
@@ -174,12 +173,12 @@ void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     }
     else // collision with other enemy ?
     {
-      if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
+      if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX_COUNT)
       {
         if (this != entity)
         {
-          EnemyEntity* ennemyEntity = static_cast<EnemyEntity*>(entity);
-          if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
+          EnemyEntity* enemyEntity = static_cast<EnemyEntity*>(entity);
+          if (enemyEntity->canCollide()) collideWithEnemy(enemyEntity);
         }
       }
     }
@@ -238,11 +237,10 @@ void SlimeEntity::collideMapBottom()
     velocity.y = -velocity.y * 0.8f;
 }
 
-void SlimeEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void SlimeEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );

@@ -23,7 +23,7 @@ ButcherEntity::ButcherEntity(float x, float y)
   hpDisplay = BUTCHER_HP;
   meleeDamages = BUTCHER_DAMAGES;
 
-  type = ENTITY_ENNEMY_BOSS;
+  type = ENTITY_ENEMY_BOSS;
   bloodColor = BloodRed;
   shadowFrame = 5;
   dyingFrame = 3;
@@ -103,11 +103,10 @@ void ButcherEntity::collideMapBottom()
     if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
 }
 
-void ButcherEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void ButcherEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );

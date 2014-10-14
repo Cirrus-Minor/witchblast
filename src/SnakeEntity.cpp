@@ -42,7 +42,6 @@ SnakeEntity::SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocat
   velocity = Vector2D(creatureSpeed);
   computeFacingDirection();
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
   shadowFrame = 9;
 
@@ -117,11 +116,10 @@ void SnakeEntity::collideMapBottom()
   else computeFacingDirection();
 }
 
-void SnakeEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void SnakeEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 70.0f );
@@ -176,12 +174,12 @@ void SnakeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     }
     else // collision with other enemy ?
     {
-      if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
+      if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX_COUNT)
       {
         if (this != entity)
         {
-          EnemyEntity* ennemyEntity = static_cast<EnemyEntity*>(entity);
-          if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
+          EnemyEntity* enemyEntity = static_cast<EnemyEntity*>(entity);
+          if (enemyEntity->canCollide()) collideWithEnemy(enemyEntity);
         }
       }
     }

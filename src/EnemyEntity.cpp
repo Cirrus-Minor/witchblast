@@ -10,7 +10,7 @@
 EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   : BaseCreatureEntity (image, x, y, 64, 64)
 {
-  type = ENTITY_ENNEMY;
+  type = ENTITY_ENEMY;
   bloodColor = BloodRed;
 
   z = y;
@@ -149,12 +149,12 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     }
     else // collision with other enemy ?
     {
-      if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
+      if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX)
       {
         if (this != entity)
         {
-          EnemyEntity* ennemyEntity = static_cast<EnemyEntity*>(entity);
-          if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
+          EnemyEntity* enemyEntity = static_cast<EnemyEntity*>(entity);
+          if (enemyEntity->canCollide()) collideWithEnemy(enemyEntity);
         }
       }
     }
@@ -239,7 +239,7 @@ int EnemyEntity::getCollisionDirection(BoltEntity* boltEntity)
   return collisionDir;
 }
 
-void EnemyEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void EnemyEntity::collideWithEnemy(EnemyEntity* entity)
 {
   // To implement the behaviour when colliding with another ennemy
 }

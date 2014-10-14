@@ -18,7 +18,7 @@ class SnakeEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
-    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithEnemy(EnemyEntity* entity) override;
     virtual void drop();
   private:
     snakeTypeEnum snakeType;

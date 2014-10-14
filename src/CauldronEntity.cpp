@@ -17,7 +17,6 @@ CauldronEntity::CauldronEntity(float x, float y)
   hpMax = hp;
   meleeDamages = 0;
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodNone;
   invokeDelay = 2.5f;
   bubbleDelay = 0.0f;
@@ -102,12 +101,12 @@ void CauldronEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     }
     else // collision with other enemy ?
     {
-      if (entity->getType() >= ENTITY_ENNEMY && entity->getType() <= ENTITY_ENNEMY_MAX)
+      if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX)
       {
         if (this != entity)
         {
-          EnemyEntity* ennemyEntity = static_cast<EnemyEntity*>(entity);
-          if (ennemyEntity->canCollide()) collideWithEnnemy(entity);
+          EnemyEntity* enemyEntity = static_cast<EnemyEntity*>(entity);
+          if (enemyEntity->canCollide()) collideWithEnemy(enemyEntity);
         }
       }
     }
@@ -146,13 +145,10 @@ void CauldronEntity::collideMapBottom()
     if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
 }
 
-void CauldronEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void CauldronEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() != movFlying)
-  {
     inflictsRecoilTo(entity);
-  }
 }
 
 void CauldronEntity::dying()

@@ -10,7 +10,6 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType, bool hurtAl
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_CYCLOP), x, y)
 {
   imagesProLine = 20;
-  type = ENTITY_ENNEMY;
   movingStyle = movFlying;
   bloodColor = BloodNone; // stones don't bleed
 
@@ -56,11 +55,10 @@ void FallingRockEntity::animate(float delay)
 
 }
 
-void FallingRockEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void FallingRockEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (!hurtAll || hasHurted) return;
 
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->hurt(meleeDamages * 1.5f, meleeType, 0, false, enemyType))
   {
     float xs = (x + entity->getX()) / 2;

@@ -7,7 +7,7 @@ EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int le
   BoltEntity(x, y, -1, boltType, level)
 {
   damages = INITIAL_BOLT_DAMAGES;
-  type = ENTITY_ENNEMY_BOLT;
+  type = ENTITY_ENEMY_BOLT;
   viscosity = 1.0f;
   switch (boltType)
   {

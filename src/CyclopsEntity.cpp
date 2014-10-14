@@ -25,7 +25,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
   meleeDamages = CYCLOP_DAMAGES;
 
 
-  type = ENTITY_ENNEMY_BOSS;
+  type = ENTITY_ENEMY_BOSS;
   bloodColor = BloodRed;
   shadowFrame = 8;
   dyingFrame = 5;
@@ -346,13 +346,10 @@ void CyclopsEntity::render(sf::RenderTarget* app)
   renderLifeBar(app, tools::getLabel("enemy_cyclops"));
 }
 
-void CyclopsEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void CyclopsEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
-  {
     inflictsRecoilTo(entity);
-  }
 }
 
 void CyclopsEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)

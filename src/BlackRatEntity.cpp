@@ -33,10 +33,8 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
     hp = BLACK_RAT_HP_HELMET;
     creatureSpeed = BLACK_RAT_SPEED_HELMET;
   }
-
   meleeDamages = BLACK_RAT_DAMAGES;
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
   shadowFrame = -1;
   agonizingSound = SOUND_RAT_DYING;
@@ -98,9 +96,8 @@ void BlackRatEntity::collideMapBottom()
   findNextGoal();
 }
 
-void BlackRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void BlackRatEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     if (currentDirection == 6 && entity->getX() > x)

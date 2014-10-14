@@ -38,7 +38,6 @@ WitchEntity::WitchEntity(float x, float y, witchTypeEnum witchType)
   velocity = Vector2D(creatureSpeed);
   meleeDamages = WITCH_DAMAGE;
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
   shadowFrame = 4;
 
@@ -165,9 +164,8 @@ void WitchEntity::collideMapBottom()
   else computeFacingDirection();
 }
 
-void WitchEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void WitchEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));

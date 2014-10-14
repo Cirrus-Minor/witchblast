@@ -22,7 +22,7 @@ class KingRatEntity : public EnemyEntity
 
     void generateGreenRats();
 
-	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
+	  virtual void collideWithEnemy(EnemyEntity* entity) override;
 	  virtual void drop();
   private:
     float timer;

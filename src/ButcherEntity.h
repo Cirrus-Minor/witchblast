@@ -18,7 +18,7 @@ class ButcherEntity : public EnemyEntity
     virtual void collideMapBottom();
     virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType) override;
 
-    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithEnemy(EnemyEntity* entity) override;
 
 	  virtual void drop();
   private:

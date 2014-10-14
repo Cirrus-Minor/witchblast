@@ -24,7 +24,7 @@ KingRatEntity::KingRatEntity(float x, float y)
   meleeDamages = KING_RAT_DAMAGES;
   imagesProLine = 5;
 
-  type = ENTITY_ENNEMY_BOSS;
+  type = ENTITY_ENEMY_BOSS;
   enemyType = EnemyTypeRatKing;
   bloodColor = BloodRed;
   shadowFrame = 4;
@@ -351,9 +351,8 @@ void KingRatEntity::render(sf::RenderTarget* app)
   renderLifeBar(app, tools::getLabel("enemy_rat_king"));
 }
 
-void KingRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void KingRatEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     inflictsRecoilTo(entity);

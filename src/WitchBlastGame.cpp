@@ -1541,7 +1541,7 @@ int WitchBlastGame::getEnnemyCount()
     GameEntity *e = *it;
     it++;
 
-    if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX) n++;
+    if (e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX_COUNT) n++;
   }
 
   return n;
@@ -1560,7 +1560,7 @@ Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
     GameEntity *e = *it;
     it++;
 
-    if (e->getType() >= ENTITY_ENNEMY && e->getType() <= ENTITY_ENNEMY_MAX)
+    if (e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX_COUNT)
     {
       // enemy
       EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);

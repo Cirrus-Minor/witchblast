@@ -7,15 +7,18 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-SpiderWebEntity::SpiderWebEntity(float x, float y)
+SpiderWebEntity::SpiderWebEntity(float x, float y, bool isFromPlayer)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SPIDER_WEB), x, y)
 {
   imagesProLine = 20;
-  type = ENTITY_ENNEMY_INVOCATED;
+  if (isFromPlayer) type = ENTITY_ENEMY_NC;
+  else type = ENTITY_ENEMY_INVOCATED;
   enemyType = EnemyTypeSpiderWeb;
   movingStyle = movFlying;
   bloodColor = BloodNone; // web don't bleed
   deathFrame = FRAME_CORPSE_SPIDER_WEB;
+
+  this->isFromPlayer = isFromPlayer;
 
   age = 0.0f;
 
@@ -99,8 +102,20 @@ void SpiderWebEntity::collideWall()
   velocity.y = 0.0f;
 }
 
-void SpiderWebEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void SpiderWebEntity::collideWithEnemy(EnemyEntity* enemyEntity)
 {
+  if (enemyEntity->getMovingStyle() != movFlying
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderLittle_invocated
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderGiant
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderEgg_invocated
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderWeb)
+  {
+    if (!enemyEntity->isSpecialStateActive(SpecialStateSlow))
+    {
+      enemyEntity->setSpecialState(SpecialStateSlow, true, 0.15f, 0.25f, 0.0f);
+      hurt(2, ShotTypeStandard, 0, false, -1);
+    }
+  }
 }
 
 void SpiderWebEntity::drop()
@@ -116,7 +131,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
       BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
 
-      if (playerEntity != NULL && !playerEntity->isDead())
+      if (!isFromPlayer && playerEntity != NULL && !playerEntity->isDead())
       {
         if (!playerEntity->isSpecialStateActive(SpecialStateSlow))
         {
@@ -126,7 +141,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         }
       }
 
-      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
+      else if (!isFromPlayer && boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
       {
         float xs = (x + boltEntity->getX()) / 2;
         float ys = (y + boltEntity->getY()) / 2;
@@ -144,6 +159,17 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         star->setLifetime(0.7f);
         star->setType(ENTITY_EFFECT);
         star->setSpin(400.0f);
+      }
+    }
+    else // collision with other enemy ?
+    {
+      if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX)
+      {
+        if (this != entity)
+        {
+          EnemyEntity* enemyEntity = static_cast<EnemyEntity*>(entity);
+          if (enemyEntity->canCollide()) collideWithEnemy(enemyEntity);
+        }
       }
     }
   }

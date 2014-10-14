@@ -25,7 +25,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   meleeDamages = GIANT_SLIME_DAMAGES;
   missileDelay = GIANT_SLIME_MISSILE_DELAY;
 
-  type = ENTITY_ENNEMY_BOSS;
+  type = ENTITY_ENEMY_BOSS;
   enemyType = EnemyTypeSlimeBoss;
   bloodColor = BloodGreen;
   shadowFrame = 3;
@@ -416,9 +416,8 @@ void GiantSlimeEntity::render(sf::RenderTarget* app)
   }
 }
 
-void GiantSlimeEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void GiantSlimeEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     inflictsRecoilTo(entity);

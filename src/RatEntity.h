@@ -17,7 +17,7 @@ class RatEntity : public EnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
-    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithEnemy(EnemyEntity* entity) override;
     virtual void collideWithBolt(BoltEntity* boltEntity);
     virtual void drop();
   private:

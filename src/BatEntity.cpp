@@ -15,7 +15,6 @@ BatEntity::BatEntity(float x, float y, bool invocated)
   meleeDamages = BAT_DAMAGES;
   this->invocated = invocated;
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
   changingDelay = -0.5f;
   shadowFrame = 9;
@@ -92,9 +91,8 @@ void BatEntity::collideMapBottom()
   else computeFacingDirection();
 }
 
-void BatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void BatEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movFlying)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), BAT_SPEED ));

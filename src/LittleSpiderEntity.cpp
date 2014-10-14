@@ -16,7 +16,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y)
   hp = 16;
   meleeDamages = 5;
 
-  type = ENTITY_ENNEMY_INVOCATED;
+  type = ENTITY_ENEMY_INVOCATED;
   enemyType = EnemyTypeSpiderLittle_invocated;
   bloodColor = BloodGreen;
   shadowFrame = 4;
@@ -84,11 +84,10 @@ void LittleSpiderEntity::collideMapBottom()
     computeFacingDirection();
 }
 
-void LittleSpiderEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void LittleSpiderEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );

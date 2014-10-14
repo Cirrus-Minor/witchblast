@@ -42,7 +42,6 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
 
   meleeDamages = RAT_DAMAGES;
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodRed;
   shadowFrame = -1;
 
@@ -153,15 +152,12 @@ void RatEntity::collideMapBottom()
   else compute(true);
 }
 
-void RatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void RatEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D recoilVector = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 50.0f);
     giveRecoil(false, recoilVector, 0.2f);
-    //setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
-    //computeFacingDirection();
     compute(true);
   }
 }

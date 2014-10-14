@@ -14,7 +14,7 @@ class FallingRockEntity : public EnemyEntity
 
   protected:
 	  virtual void dying();
-	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
+	  virtual void collideWithEnemy(EnemyEntity* entity) override;
 
   private:
     int rockType;

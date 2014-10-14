@@ -26,7 +26,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
 
   meleeDamages = GIANT_SPIDER_DAMAGE;
 
-  type = ENTITY_ENNEMY;
+  type = ENTITY_ENEMY;
   enemyType = EnemyTypeSpiderGiant;
   bloodColor = BloodGreen;
   shadowFrame = 3;
@@ -98,7 +98,7 @@ void GiantSpiderEntity::animate(float delay)
         if (rand() % 12 == 0)
         {
           SoundManager::getInstance().playSound(SOUND_SPIDER_WEB);
-          for (int i = 0; i < 3; i++) new SpiderWebEntity(x, y);
+          for (int i = 0; i < 3; i++) new SpiderWebEntity(x, y, false);
         }
         else
         {
@@ -198,9 +198,8 @@ void GiantSpiderEntity::collideMapBottom()
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
 }
 
-void GiantSpiderEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void GiantSpiderEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D v = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 150.0f);

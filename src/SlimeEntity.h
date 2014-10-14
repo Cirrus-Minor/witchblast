@@ -24,7 +24,7 @@ class SlimeEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
-    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithEnemy(EnemyEntity* entity) override;
 
 	  virtual void dying();
 	  virtual void prepareDying();

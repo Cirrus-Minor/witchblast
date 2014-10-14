@@ -6,7 +6,7 @@
 class SpiderWebEntity : public EnemyEntity
 {
   public:
-    SpiderWebEntity(float x, float y);
+    SpiderWebEntity(float x, float y, bool isFromPlayer);
     virtual void animate(float delay);
     virtual void calculateBB();
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
@@ -16,11 +16,12 @@ class SpiderWebEntity : public EnemyEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
-    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithEnemy(EnemyEntity* entity) override;
 
 	  virtual void drop();
   private:
     void collideWall();
+    bool isFromPlayer;
 };
 
 #endif // SPIDERWEBENTITY_H

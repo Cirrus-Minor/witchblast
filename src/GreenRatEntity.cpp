@@ -17,7 +17,7 @@ GreenRatEntity::GreenRatEntity(float x, float y)
   hp = GREEN_RAT_HP;
   meleeDamages = GREEN_RAT_DAMAGES;
 
-  type = ENTITY_ENNEMY_INVOCATED;
+  type = ENTITY_ENEMY_INVOCATED;
   enemyType = EnemyTypeRatGreen;
   bloodColor = BloodRed;
   shadowFrame = -1;
@@ -120,11 +120,10 @@ bool GreenRatEntity::canCollide()
   return (age >= 0.0f);
 }
 
-void GreenRatEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void GreenRatEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (recoil.active && recoil.stun) return;
 
-  EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );

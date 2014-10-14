@@ -52,9 +52,8 @@ BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
 
   velocity = Vector2D(creatureSpeed);
   computeFacingDirection();
-  meleeDamages = RAT_DAMAGES;
+  meleeDamages = 5;
 
-  type = ENTITY_ENNEMY;
   bloodColor = BloodNone;
   shadowFrame = 1;
 
@@ -121,13 +120,12 @@ void BubbleEntity::collideMapBottom()
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
 }
 
-void BubbleEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void BubbleEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  BubbleEntity* bubbleEntity = dynamic_cast<BubbleEntity*>(collidingEntity);
+  BubbleEntity* bubbleEntity = dynamic_cast<BubbleEntity*>(entity);
 
   if (bubbleEntity == NULL)
   {
-   EnemyEntity* entity = static_cast<EnemyEntity*>(collidingEntity);
     if (entity->getMovingStyle() == movWalking)
       setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
   }

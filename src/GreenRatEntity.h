@@ -17,7 +17,7 @@ class GreenRatEntity : public EnemyEntity
     virtual void collideMapBottom();
     virtual bool canCollide();
 
-    virtual void collideWithEnnemy(GameEntity* collidingEntity);
+    virtual void collideWithEnemy(EnemyEntity* entity) override;
 
 	  virtual void drop();
   private:

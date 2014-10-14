@@ -12,8 +12,7 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
 
   Vector2D targetPos = game().getPlayerPosition();
   imagesProLine = 20;
-    collisionDirection = -1;
-  type = ENTITY_ENNEMY;
+  collisionDirection = -1;
   enemyType = EnemyTypeRockMissile;
   movingStyle = movFlying;
   bloodColor = BloodNone; // stones don't bleed
@@ -98,7 +97,7 @@ void RockMissileEntity::collideMapBottom()
   collideWall();
 }
 
-void RockMissileEntity::collideWithEnnemy(GameEntity* collidingEntity)
+void RockMissileEntity::collideWithEnemy(EnemyEntity* entity)
 {
 }
 

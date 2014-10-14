@@ -87,7 +87,7 @@ protected:
   virtual void readCollidingEntity(CollidingSpriteEntity* entity);
   virtual void dying();
   virtual void drop();
-  virtual void collideWithEnnemy(GameEntity* collidingEntity);
+  virtual void collideWithEnemy(EnemyEntity* entity);
   virtual void collideWithBolt(BoltEntity* boltEntity);
   int getCollisionDirection(BoltEntity* boltEntity);
 

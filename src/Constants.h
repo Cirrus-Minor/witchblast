@@ -302,16 +302,18 @@ const int ENTITY_CORPSE   = 12;
 const int ENTITY_EFFECT   = 13;
 const int ENTITY_FLYING_TEXT = 14;
 const int ENTITY_BOLT = 15;
-const int ENTITY_ENNEMY_BOLT = 16;
+const int ENTITY_ENEMY_BOLT = 16;
 const int ENTITY_PNJ = 17;
 const int ENTITY_CHEST = 18;
 const int ENTITY_ITEM = 19;
 const int ENTITY_EXPLOSION = 20;
-const int ENTITY_ENNEMY = 31;
-const int ENTITY_ENNEMY_INVOCATED = 32;
-const int ENTITY_ENNEMY_BOSS = 33;
+const int ENTITY_ENEMY = 31;
+const int ENTITY_ENEMY_INVOCATED = 32;
+const int ENTITY_ENEMY_BOSS = 33;
+const int ENTITY_ENEMY_NC = 34;
 
-const int ENTITY_ENNEMY_MAX = 33;
+const int ENTITY_ENEMY_MAX = ENTITY_ENEMY_NC;
+const int ENTITY_ENEMY_MAX_COUNT = ENTITY_ENEMY_BOSS;
 
 
 const float DOOR_OPEN_TIME = 1.0f;

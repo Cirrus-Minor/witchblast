@@ -12,7 +12,7 @@ SpiderEggEntity::SpiderEggEntity(float x, float y)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SPIDER_EGG), x, y)
 {
   imagesProLine = 20;
-  type = ENTITY_ENNEMY_INVOCATED;
+  type = ENTITY_ENEMY_INVOCATED;
   enemyType = EnemyTypeSpiderEgg_invocated;
   movingStyle = movFlying;
   bloodColor = BloodGreen;

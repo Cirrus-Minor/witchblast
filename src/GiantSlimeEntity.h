@@ -23,7 +23,7 @@ class GiantSlimeEntity : public EnemyEntity
 
     void changeToState(int n);
 
-	  virtual void collideWithEnnemy(GameEntity* collidingEntity);
+	  virtual void collideWithEnemy(EnemyEntity* entity) override;
 	  virtual void dying();
 
 	  virtual enumMovingStyle getMovingStyle();
