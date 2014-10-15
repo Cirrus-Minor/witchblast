@@ -104,8 +104,7 @@ void SpiderWebEntity::collideWall()
 
 void SpiderWebEntity::collideWithEnemy(EnemyEntity* enemyEntity)
 {
-  if (enemyEntity->getMovingStyle() != movFlying
-      && enemyEntity->getEnemyType() != EnemyTypeSpiderLittle_invocated
+  if (enemyEntity->getEnemyType() != EnemyTypeSpiderLittle_invocated
       && enemyEntity->getEnemyType() != EnemyTypeSpiderGiant
       && enemyEntity->getEnemyType() != EnemyTypeSpiderEgg_invocated
       && enemyEntity->getEnemyType() != EnemyTypeSpiderWeb)

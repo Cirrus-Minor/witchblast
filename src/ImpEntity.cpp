@@ -126,7 +126,7 @@ void ImpEntity::collideMapBottom()
 
 void ImpEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  if (entity->getMovingStyle() == movFlying)
+  if (entity->getEnemyType() != EnemyTypeSpiderWeb && entity->getMovingStyle() == movFlying)
   {
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed ));
   }
