@@ -2280,10 +2280,10 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
 
 enumItemType WitchBlastGame::getItemSpell()
 {
-  int n = rand() % SPELL_MAX;
-  while (player->getActiveSpell().spell == n) n = rand() % SPELL_MAX;
+  enumCastSpell n = (enumCastSpell)(rand() % SPELL_MAX);
+  while (player->getActiveSpell().spell == n) n = (enumCastSpell)(rand() % SPELL_MAX);
 
-  enumItemType item;
+  enumItemType item = ItemMagicianHat;
   switch (n)
   {
     case SpellNone:
@@ -2293,6 +2293,7 @@ enumItemType WitchBlastGame::getItemSpell()
     case SpellFreeze: item = ItemSpellFreeze; break;
     case SpellEarthquake: item = ItemSpellEarthquake; break;
     case SpellProtection: item = ItemSpellProtection; break;
+    case SpellWeb: item = ItemSpellWeb; break;
   }
   return item;
 }
