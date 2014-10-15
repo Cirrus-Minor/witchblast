@@ -27,6 +27,8 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y)
   timer = (rand() % 50) / 10.0f;
   age = 0.0f;
   frame = 8;
+
+  sprite.setOrigin(32.0f, 40.0f);
 }
 
 void LittleSpiderEntity::animate(float delay)
@@ -45,15 +47,15 @@ void LittleSpiderEntity::animate(float delay)
   }
 
   EnemyEntity::animate(delay);
-  z = y + 25;
+  z = y + 21;
 }
 
 void LittleSpiderEntity::calculateBB()
 {
-    boundingBox.left = (int)x - 20;
-    boundingBox.width = 40;
+    boundingBox.left = (int)x - 18;
+    boundingBox.width = 36;
     boundingBox.top = (int)y - 10;
-    boundingBox.height =  35;
+    boundingBox.height =  32;
 }
 
 void LittleSpiderEntity::collideMapRight()
