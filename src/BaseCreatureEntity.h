@@ -86,6 +86,9 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     int facingDirection;
     float armor;
 
+    bool canExplode;  // true if the monster can explode with a fire attack
+    bool exploding;   // true if exploding
+
     bool hurting;
     float hurtingDelay;
     enumShotType hurtingType;

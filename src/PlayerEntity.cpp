@@ -40,6 +40,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   boltLifeTime = INITIAL_BOLT_LIFE;
   specialBoltTimer = -1.0f;
   bloodColor = BloodRed;
+  canExplode = false;
 
   // init the equipment (to empty)
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equip[i] = false;
@@ -535,7 +536,7 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
       sprite.setColor(sf::Color(255, 255, 255, 0));
       break;
 
-    case ShotTypeFire:
+    case ShotTypeExplodingFire:
       sprite.setColor(sf::Color(255, 180, 0, 255));
       break;
 
@@ -816,6 +817,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
   case ShotTypeStone:
   case ShotTypeLightning:
   case ShotTypeFire:
+  case ShotTypeExplodingFire:
     boltType = getShotType();
     shotLevel = getShotLevel();
     break;
@@ -1362,7 +1364,7 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
       nbSpecial++;
       break;
 
-    case ShotTypeFire:
+    case ShotTypeExplodingFire:
     case ShotTypeIllusion:
       nbAdvanced++;
       break;
@@ -1432,7 +1434,7 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
     break;
 
   case SpellWeb:
-    activeSpell.delayMax = 25.0f;
+    activeSpell.delayMax = 35.0f;
     activeSpell.frame = ItemSpellWeb - FirstEquipItem;
     break;
 
@@ -1637,5 +1639,17 @@ void PlayerEntity::castWeb()
 {
   // TODO : Implementation
   SoundManager::getInstance().playSound(SOUND_SPIDER_WEB);
-  for (int i = 0; i < 3; i++) new SpiderWebEntity(x, y, true);
+  for (int i = 0; i < 3; i++)
+  {
+    SpiderWebEntity* web = new SpiderWebEntity(x, y, true);
+    float webVel = 100 + rand()% 500;
+    float webAngle = -60 + rand() % 120;
+    webAngle = PI * webAngle / 180.0f;
+
+    if (facingDirection == 4) webAngle += PI;
+    else if (facingDirection == 8) webAngle -= PI * 0.5;
+    else if (facingDirection == 2) webAngle += PI * 0.5;
+
+    web->setVelocity(Vector2D(webVel * cos(webAngle), webVel * sin(webAngle)));
+  }
 }

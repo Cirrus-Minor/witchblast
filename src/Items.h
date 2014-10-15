@@ -287,7 +287,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemGemFire, "item_gem_fire", "item_gem_fire_desc",
-    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, -1, ShotTypeFire, SpellNone
+    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, AlignmentLight, -1, ShotTypeExplodingFire, SpellNone
   },
   {
     ItemRingFire, "item_ring_fire", "item_ring_fire_desc",

@@ -267,14 +267,12 @@ void EnemyEntity::makeExplode()
 
 void EnemyEntity::dying()
 {
-  // TODO Explode condition
-  //if (game().getPlayer()->)
-  //{
-  //  makeExplode();
-  //}
-  //else
 
-  if (dyingFrame == -1)
+  if (exploding)
+  {
+    makeExplode();
+  }
+  else if (dyingFrame == -1)
   {
     isDying = true;
     SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);

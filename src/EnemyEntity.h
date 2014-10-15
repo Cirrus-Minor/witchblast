@@ -107,8 +107,6 @@ protected:
   sound_resources dyingSound;
   sound_resources agonizingSound;
 
-  bool canExplode;
-
   enemyTypeEnum enemyType;
 
 private:
