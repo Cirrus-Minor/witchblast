@@ -31,12 +31,12 @@ void generateStandardRoom01()
   }
   else if (random < 32)
   {
-    game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_ALL);
+    game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeBat, 2);
   }
   else if (random < 48)
   {
-    game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_ALL);
+    game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeEvilFlower, 2);
   }
   else
