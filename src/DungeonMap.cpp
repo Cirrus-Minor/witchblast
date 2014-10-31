@@ -137,6 +137,11 @@ bool DungeonMap::isFlyable(int x, int y)
   if (x >= MAP_WIDTH - 1) return false;
   if (y <= 0) return false;
   if (y >= MAP_HEIGHT - 1) return false;
+  if (map[x][y] == MAP_WALL_X) return false;
+  if (map[x][y] == MAP_WALL_11) return false;
+  if (map[x][y] == MAP_WALL_33) return false;
+  if (map[x][y] == MAP_WALL_77) return false;
+  if (map[x][y] == MAP_WALL_99) return false;
   return true;
 }
 
@@ -278,14 +283,40 @@ void DungeonMap::initRoom()
   map[0][0] = MAP_WALL_7;
   for ( i = 1 ; i < width -1 ; i++)
   {
-    map[i][0] = MAP_WALL_8;
-    map[i][height - 1] = MAP_WALL_2;
+    if (i == width / 2)
+    {
+      map[i][0] = MAP_WALL_8;
+      map[i][height - 1] = MAP_WALL_2;
+    }
+    else if (i < width / 2)
+    {
+      map[i][0] = MAP_WALL_87;
+      map[i][height - 1] = MAP_WALL_21;
+    }
+    else
+    {
+      map[i][0] = MAP_WALL_89;
+      map[i][height - 1] = MAP_WALL_23;
+    }
   }
   map[width - 1][0] = MAP_WALL_9;
   for ( int i = 1 ; i < height -1 ; i++)
   {
-    map[0][i] = MAP_WALL_4;
-    map[width - 1][i] = MAP_WALL_6;
+    if (i == height / 2)
+    {
+      map[0][i] = MAP_WALL_4;
+      map[width - 1][i] = MAP_WALL_6;
+    }
+    else if (i < height / 2)
+    {
+      map[0][i] = MAP_WALL_47;
+      map[width - 1][i] = MAP_WALL_69;
+    }
+    else
+    {
+      map[0][i] = MAP_WALL_41;
+      map[width - 1][i] = MAP_WALL_63;
+    }
   }
   map[0][height - 1] = MAP_WALL_1;
   map[width - 1][height - 1] = MAP_WALL_3;
@@ -296,7 +327,7 @@ void DungeonMap::initRoom()
     for ( j = 1 ; j < height - 1 ; j++)
     {
       map[i][j] = 0;
-      if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+      //if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
     }
 
   if (gameFloor != NULL)
@@ -464,8 +495,8 @@ void DungeonMap::generateExitRoom()
   initRoom();
   int x0 = MAP_WIDTH / 2;
   map[x0][0] = MAP_STAIRS_UP;
-  map[x0 - 1][0] = 60;
-  map[x0 + 1][0] = 61;
+  map[x0 - 1][0] = 80;
+  map[x0 + 1][0] = 81;
 
   if (rand() % 3 == 0) initPattern(PatternBorder);
 }
@@ -491,12 +522,12 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
       if (game().getLevel() > 1)
       {
-        map[x0 - 1][MAP_HEIGHT - 1] = 62;
-        map[x0][MAP_HEIGHT - 1]     = 63;
-        map[x0 + 1][MAP_HEIGHT - 1] = 64;
+        map[x0 - 1][MAP_HEIGHT - 1] = 82;
+        map[x0][MAP_HEIGHT - 1]     = 83;
+        map[x0 + 1][MAP_HEIGHT - 1] = 84;
       }
     }
-    if (roomType == roomTypeBoss && (game().getLevel() == 2 || game().getLevel() > 5) ) // giant slime
+    else if (roomType == roomTypeBoss && (game().getLevel() == 2 || game().getLevel() > 5) ) // giant slime
     {
       map[1][1] = MAP_GRID;
       map[1][MAP_HEIGHT -2] = MAP_GRID;
@@ -513,10 +544,25 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     // corner block
     if (rand() % 3 == 0) initPattern(PatternSmallChecker);
 
-    map[1][1] = MAP_WALL;
-    map[1][MAP_HEIGHT -2] = MAP_WALL;
-    map[MAP_WIDTH - 2][1] = MAP_WALL;
-    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_WALL;
+    map[0][0] = MAP_WALL_X;
+    map[0][1] = MAP_WALL_7;
+    map[1][1] = MAP_WALL_33;
+    map[1][0] = MAP_WALL_7;
+
+    map[0][MAP_HEIGHT -1] = MAP_WALL_X;
+    map[0][MAP_HEIGHT -2] = MAP_WALL_1;
+    map[1][MAP_HEIGHT -2] = MAP_WALL_99;
+    map[1][MAP_HEIGHT -1] = MAP_WALL_1;
+
+    map[MAP_WIDTH - 1][0] = MAP_WALL_X;
+    map[MAP_WIDTH - 1][1] = MAP_WALL_9;
+    map[MAP_WIDTH - 2][1] = MAP_WALL_11;
+    map[MAP_WIDTH - 2][0] = MAP_WALL_9;
+
+    map[MAP_WIDTH - 1][MAP_HEIGHT -1] = MAP_WALL_X;
+    map[MAP_WIDTH - 1][MAP_HEIGHT -2] = MAP_WALL_3;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_WALL_77;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -1] = MAP_WALL_3;
   }
   if (type == 2)
   {
@@ -584,10 +630,10 @@ void DungeonMap::generateRoomWithHoles(int type)
     // corner hole
     if (rand() % 3 == 0) initPattern(PatternSmallChecker);
 
-    map[1][1] = MAP_HOLE_7;
-    map[1][MAP_HEIGHT -2] = MAP_HOLE_1;
-    map[MAP_WIDTH - 2][1] = MAP_HOLE_9;
-    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_HOLE_3;
+    map[1][1] = MAP_HOLE_TOP;
+    map[1][MAP_HEIGHT -2] = MAP_HOLE_TOP;
+    map[MAP_WIDTH - 2][1] = MAP_HOLE_TOP;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_HOLE_TOP;
   }
   if (type == 2)
   {
@@ -598,46 +644,46 @@ void DungeonMap::generateRoomWithHoles(int type)
     for (i = x0 - r; i <= x0 + r; i++)
       for (j = y0 - 1; j <= y0 + 1; j++)
       {
-        if (i == x0 - r && j == y0 - 1) map[i][j] = MAP_HOLE_7;
-        else if (i == x0 - r && j == y0 + 1) map[i][j] = MAP_HOLE_4; //MAP_HOLE_1;
-        else if (i == x0 - r) map[i][j] = MAP_HOLE_4;
-        else if (i == x0 + r && j == y0 - 1) map[i][j] = MAP_HOLE_8; //MAP_HOLE_9;
-        else if (i == x0 + r && j == y0 + 1) map[i][j] = MAP_HOLE_5; //MAP_HOLE_3;
-        else if (i == x0 + r) map[i][j] = MAP_HOLE_5; //MAP_HOLE_6;
-        else if (j == y0 - 1) map[i][j] = MAP_HOLE_8;
-        else if (j == y0 + 1) map[i][j] = MAP_HOLE_5; //MAP_HOLE_2;
-        else map[i][j] = MAP_HOLE_5;
+        if (i == x0 - r && j == y0 - 1) map[i][j] = MAP_HOLE_TOP;
+        else if (i == x0 - r && j == y0 + 1) map[i][j] = MAP_HOLE_BOTTOM;
+        else if (i == x0 - r) map[i][j] = MAP_HOLE_BOTTOM;
+        else if (i == x0 + r && j == y0 - 1) map[i][j] = MAP_HOLE_TOP;
+        else if (i == x0 + r && j == y0 + 1) map[i][j] = MAP_HOLE_BOTTOM;
+        else if (i == x0 + r) map[i][j] = MAP_HOLE_BOTTOM;
+        else if (j == y0 - 1) map[i][j] = MAP_HOLE_TOP;
+        else if (j == y0 + 1) map[i][j] = MAP_HOLE_BOTTOM;
+        else map[i][j] = MAP_HOLE_BOTTOM;
       }
   }
   if (type == 3)
   {
     // 4 holes
-    map[2][2] = MAP_HOLE_7;
-    map[2][3] = MAP_HOLE_4;
-    map[3][2] = MAP_HOLE_8;
-    map[3][3] = MAP_HOLE_5;
+    map[2][2] = MAP_HOLE_TOP;
+    map[2][3] = MAP_HOLE_BOTTOM;
+    map[3][2] = MAP_HOLE_TOP;
+    map[3][3] = MAP_HOLE_BOTTOM;
 
-    map[MAP_WIDTH - 4][2] = MAP_HOLE_7;
-    map[MAP_WIDTH - 4][3] = MAP_HOLE_4;
-    map[MAP_WIDTH - 3][2] = MAP_HOLE_8;
-    map[MAP_WIDTH - 3][3] = MAP_HOLE_5;
+    map[MAP_WIDTH - 4][2] = MAP_HOLE_TOP;
+    map[MAP_WIDTH - 4][3] = MAP_HOLE_BOTTOM;
+    map[MAP_WIDTH - 3][2] = MAP_HOLE_TOP;
+    map[MAP_WIDTH - 3][3] = MAP_HOLE_BOTTOM;
 
-    map[2][MAP_HEIGHT - 4] = MAP_HOLE_7;
-    map[2][MAP_HEIGHT - 3] = MAP_HOLE_4;
-    map[3][MAP_HEIGHT - 4] = MAP_HOLE_8;
-    map[3][MAP_HEIGHT - 3] = MAP_HOLE_5;
+    map[2][MAP_HEIGHT - 4] = MAP_HOLE_TOP;
+    map[2][MAP_HEIGHT - 3] = MAP_HOLE_BOTTOM;
+    map[3][MAP_HEIGHT - 4] = MAP_HOLE_TOP;
+    map[3][MAP_HEIGHT - 3] = MAP_HOLE_BOTTOM;
 
-    map[MAP_WIDTH - 4][MAP_HEIGHT - 4] = MAP_HOLE_7;
-    map[MAP_WIDTH - 4][MAP_HEIGHT - 3] = MAP_HOLE_4;
-    map[MAP_WIDTH - 3][MAP_HEIGHT - 4] = MAP_HOLE_8;
-    map[MAP_WIDTH - 3][MAP_HEIGHT - 3] = MAP_HOLE_5;
+    map[MAP_WIDTH - 4][MAP_HEIGHT - 4] = MAP_HOLE_TOP;
+    map[MAP_WIDTH - 4][MAP_HEIGHT - 3] = MAP_HOLE_BOTTOM;
+    map[MAP_WIDTH - 3][MAP_HEIGHT - 4] = MAP_HOLE_TOP;
+    map[MAP_WIDTH - 3][MAP_HEIGHT - 3] = MAP_HOLE_BOTTOM;
   }
   if (type == 4)
   {
     // "checker"
     for (i = 2; i < MAP_WIDTH - 2; i = i + 2)
       for (j = 2; j < MAP_HEIGHT - 2; j = j + 2)
-        map[i][j] = MAP_HOLE_7;
+        map[i][j] = MAP_HOLE_TOP;
   }
 }
 

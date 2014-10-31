@@ -1649,6 +1649,47 @@ void WitchBlastGame::refreshMap()
   checkDoor(1, currentMap->getRoomType(), currentMap->getNeighbourLeft());
   checkDoor(2, currentMap->getRoomType(), currentMap->getNeighbourDown());
   checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
+
+  // keystones
+  if (currentMap->getNeighbourUp())
+  {
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+                                                    OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                                                    OFFSET_Y +  TILE_HEIGHT / 2, 192, 64, 1);
+    keystoneEntity->setZ(1000);
+    keystoneEntity->setFrame(6);
+    keystoneEntity->setType(ENTITY_EFFECT);
+  }
+  if (currentMap->getNeighbourDown())
+  {
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+                                                    OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                                                    OFFSET_Y + MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
+    keystoneEntity->setZ(1000);
+    keystoneEntity->setAngle(180);
+    keystoneEntity->setFrame(6);
+    keystoneEntity->setType(ENTITY_EFFECT);
+  }
+  if (currentMap->getNeighbourLeft())
+  {
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+                                                    OFFSET_X + TILE_WIDTH / 2,
+                                                    OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
+    keystoneEntity->setZ(1000);
+    keystoneEntity->setAngle(270);
+    keystoneEntity->setFrame(6);
+    keystoneEntity->setType(ENTITY_EFFECT);
+  }
+  if (currentMap->getNeighbourRight())
+  {
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+                                                    OFFSET_X + MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
+                                                    OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
+    keystoneEntity->setZ(1000);
+    keystoneEntity->setAngle(90);
+    keystoneEntity->setFrame(6);
+    keystoneEntity->setType(ENTITY_EFFECT);
+  }
 }
 
 void WitchBlastGame::refreshMinimap()
