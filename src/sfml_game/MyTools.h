@@ -43,6 +43,11 @@ public:
 	    return ( (vector.x - x) * (vector.x - x) + (vector.y - y) * (vector.y - y) );
 	}
 
+	float norm()
+	{
+	  return sqrt(x * x + y * y);
+	}
+
   float distance2(Vector2D vector, float repeatZone)
 	{
 	    float result = (vector.x - x) * (vector.x - x) + (vector.y - y) * (vector.y - y);
