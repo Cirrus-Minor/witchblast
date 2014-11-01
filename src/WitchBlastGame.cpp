@@ -33,6 +33,7 @@
 #include "BatEntity.h"
 #include "ImpEntity.h"
 #include "SlimeEntity.h"
+#include "PumpkinEntity.h"
 #include "ChestEntity.h"
 #include "EvilFlowerEntity.h"
 #include "BubbleEntity.h"
@@ -104,6 +105,7 @@ WitchBlastGame::WitchBlastGame():
     "media/spider_web.png",    "media/little_spider.png",
     "media/bubble.png",        "media/witch.png",
     "media/cauldron.png",      "media/snake.png",
+    "media/pumpkin.png",
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclop.png",
     "media/giant_spider.png",  "media/blood.png",
@@ -513,6 +515,7 @@ void WitchBlastGame::updateRunningGame()
         {
           initMonsterArray();
           findPlaceMonsters(EnemyTypeEvilFlower, 2);
+          findPlaceMonsters(EnemyTypePumpkin, 2);
         }
       }
       if (event.key.code == sf::Keyboard::F8)
@@ -1061,6 +1064,13 @@ void WitchBlastGame::renderDeathScreen()
           monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_IMP));
           monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
           dy = -2;
+          break;
+
+        case EnemyTypePumpkin:
+          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PUMPKIN));
+          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
+          monsterSprite.setScale(0.65f, 0.65);
+          dy = -1;
           break;
 
         case EnemyTypeWitch:
@@ -2181,6 +2191,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeSlimeViolet:
     new SlimeEntity(xm, ym, SlimeTypeViolet, false);
+    break;
+  case EnemyTypePumpkin:
+    new PumpkinEntity(xm, ym, false);
     break;
   case EnemyTypeWitch:
     new WitchEntity(xm, ym, WitchEntity::WitchTypeNormal);
