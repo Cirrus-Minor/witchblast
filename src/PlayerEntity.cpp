@@ -1638,7 +1638,6 @@ void PlayerEntity::castProtection()
 
 void PlayerEntity::castWeb()
 {
-  // TODO : Implementation
   SoundManager::getInstance().playSound(SOUND_SPIDER_WEB);
   for (int i = 0; i < 3; i++)
   {

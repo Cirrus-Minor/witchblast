@@ -32,13 +32,6 @@ SpiderWebEntity::SpiderWebEntity(float x, float y, bool isFromPlayer)
   hp = 40;
   hpMax = 40;
 
-  // avoid collisions
-  calculateBB();
-  float x0 = OFFSET_X + TILE_WIDTH + 1;
-  float xf = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - 1;
-  float y0 = OFFSET_Y + TILE_HEIGHT + 1;
-  float yf = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - 1;
-
   resistance[ResistanceFrozen] = ResistanceImmune;
   resistance[ResistanceRecoil] = ResistanceImmune;
   resistance[ResistanceFire] = ResistanceVeryLow;
