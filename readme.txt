@@ -88,13 +88,19 @@ Changes
 Next release
 - ADD New monsters
 - ADD New items
+- ADD New spell
 - ADD New art for sprites
+- ADD New art for dungeon tiles
+- ADD New room surfaces
 - ADD Chest for completed challenges
 - ADD Cauldron now explodes while dying
 - ADD Sound for imp's teleportation
 - MOD Standard Rat IA changes (rats now move in 4 directions)
 - MOD Frozen dividing bubbles generate frozen "children" bubbles
 - MOD Fireball (spell) now goes through monsters (if enough HP)
+- MOD Fire shot can make dead monster explode
+- MOD Cyclops' damage decreases
+- MOD Shop's items too expensive displayed in red
 
 v0.3.7
 - ADD New monsters (snakes)
