@@ -1573,7 +1573,8 @@ void PlayerEntity::fallRock()
 
 void PlayerEntity::castSummonsSlimeExplode()
 {
-  SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeViolet, true);
+  SlimeEntity* slime = new SlimeEntity( ((int)(x - OFFSET_X) / TILE_WIDTH) * TILE_WIDTH + TILE_WIDTH * 0.5f,
+                                       y - 5, SlimeTypeViolet, true);
   slime->makePet(facingDirection);
   game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.3f);
 }
