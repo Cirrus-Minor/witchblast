@@ -121,6 +121,12 @@ public:
   int getLevel();
 
   /*!
+   *  \brief accessor on the level
+   *  \return : the challenge level
+   */
+  int getChallengeLevel();
+
+  /*!
    *  \brief accessor on showLogical flag
    *  \return : the value of the flag
    */
@@ -323,6 +329,7 @@ private:
 
   // game play
   int level;                  /*!< Level (floor) */
+  int challengeLevel;         /*!< Level (challenge) */
   int floorX;                 /*!< X position of the room in the level */
   int floorY;                 /*!< Y position of the room in the level */
   bool roomClosed;            /*!< True if the room is closed */
