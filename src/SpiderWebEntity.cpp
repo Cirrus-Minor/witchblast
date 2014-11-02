@@ -39,11 +39,20 @@ SpiderWebEntity::SpiderWebEntity(float x, float y, bool isFromPlayer)
   float y0 = OFFSET_Y + TILE_HEIGHT + 1;
   float yf = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - 1;
 
-  if (boundingBox.left < x0) this->x += (x0 - boundingBox.left);
-  else if (boundingBox.left + boundingBox.width > xf) this->x -= (boundingBox.left + boundingBox.width - xf);
+  if (isCollidingWithMap())
+  {
+    if (boundingBox.left < x0) this->x += (x0 - boundingBox.left);
+    else if (boundingBox.left + boundingBox.width > xf) this->x -= (boundingBox.left + boundingBox.width - xf);
 
-  if (boundingBox.top < y0) this->y += (y0 - boundingBox.top);
-  else if (boundingBox.top + boundingBox.height > yf) this->y -= (boundingBox.top + boundingBox.height - yf);
+    if (boundingBox.top < y0) this->y += (y0 - boundingBox.top);
+    else if (boundingBox.top + boundingBox.height > yf) this->y -= (boundingBox.top + boundingBox.height - yf);
+
+    if (isCollidingWithMap())
+    {
+      stuck();
+    }
+  }
+
 
   resistance[ResistanceFrozen] = ResistanceImmune;
   resistance[ResistanceRecoil] = ResistanceImmune;
