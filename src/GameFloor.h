@@ -44,12 +44,13 @@ class GameFloor
     DungeonMap* getMap(int x, int y);
     void setMap(int x, int y, DungeonMap* map);
     DungeonMap* getAndVisitMap(int x, int y);
+
+    int neighboorCount(int x, int y);
   protected:
   private:
     int level;
     roomTypeEnum floor[FLOOR_WIDTH][FLOOR_HEIGHT];
 
-    int neighboorCount(int x, int y);
     IntCoord getFirstNeighboor(int x, int y);
 
     bool isSuperIsolated(int x, int y);

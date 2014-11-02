@@ -137,11 +137,12 @@ bool DungeonMap::isFlyable(int x, int y)
   if (x >= MAP_WIDTH - 1) return false;
   if (y <= 0) return false;
   if (y >= MAP_HEIGHT - 1) return false;
-  if (map[x][y] == MAP_WALL_X) return false;
+  /*if (map[x][y] == MAP_WALL_X) return false;
   if (map[x][y] == MAP_WALL_11) return false;
   if (map[x][y] == MAP_WALL_33) return false;
   if (map[x][y] == MAP_WALL_77) return false;
-  if (map[x][y] == MAP_WALL_99) return false;
+  if (map[x][y] == MAP_WALL_99) return false;*/
+  if (map[x][y] >= MAP_WALL_8 && map[x][y] <= MAP_WALL_X) return false;
   return true;
 }
 
@@ -536,7 +537,14 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     }
     if (roomType == roomTypeStandard)
     {
-      if (rand() % 3 == 0) initPattern((patternEnum)(rand() % 4));
+      if (rand() % 3 > 0 && gameFloor->neighboorCount(x, y) > 1)
+      {
+        generateCorridors();
+      }
+      else
+      {
+        if (rand() % 3 == 0) initPattern((patternEnum)(rand() % 4));
+      }
     }
   }
   if (type == 1)
@@ -805,6 +813,72 @@ void DungeonMap::addRandomGrids(int n)
     {
       map[rx][ry] = MAP_GRID;
       counter--;
+    }
+  }
+}
+
+void DungeonMap::generateCorridors()
+{
+  int xCor = 1 + rand()% 4;
+  int yCor = 1 + rand()% 1;
+
+  if (!hasNeighbourLeft())
+  {
+    for (int i = 0; i < xCor; i++)
+      for (int j = 0; j < MAP_HEIGHT; j++)
+        map[i][j] = MAP_WALL_X;
+  }
+  if (!hasNeighbourRight())
+  {
+    for (int i = MAP_WIDTH - 1; i > MAP_WIDTH - 1 - xCor; i--)
+      for (int j = 0; j < MAP_HEIGHT; j++)
+        map[i][j] = MAP_WALL_X;
+  }
+  if (!hasNeighbourUp())
+  {
+    for (int i = 0; i < MAP_WIDTH; i++)
+      for (int j = 0; j < yCor; j++)
+        map[i][j] = MAP_WALL_X;
+  }
+  if (!hasNeighbourDown())
+  {
+    for (int i = 0; i < MAP_WIDTH; i++)
+      for (int j = MAP_HEIGHT - 1; j > MAP_HEIGHT - 1 - yCor; j--)
+        map[i][j] = MAP_WALL_X;
+  }
+
+  //
+  for (int i = 0; i < MAP_WIDTH; i++)
+  {
+    for (int j = 0; j < MAP_HEIGHT; j++)
+    {
+      if (map[i][j] != MAP_WALL_X)
+      {
+        if (getTile(i - 1, j) == MAP_WALL_X)
+        {
+          if (j == 0 || getTile(i, j - 1) == MAP_WALL_X) map[i][j] = MAP_WALL_7;
+          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X) map[i][j] = MAP_WALL_1;
+          else map[i][j] = MAP_WALL_4;
+        }
+        else if (getTile(i + 1, j) == MAP_WALL_X)
+        {
+          if (j == 0 || getTile(i, j - 1) == MAP_WALL_X) map[i][j] = MAP_WALL_9;
+          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X) map[i][j] = MAP_WALL_3;
+          else map[i][j] = MAP_WALL_6;
+        }
+        else if (getTile(i, j - 1) == MAP_WALL_X)
+        {
+          if (i == 0) map[i][j] = MAP_WALL_7;
+          else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_9;
+          else map[i][j] = MAP_WALL_8;
+        }
+        else if (getTile(i, j + 1) == MAP_WALL_X)
+        {
+          if (i == 0) map[i][j] = MAP_WALL_1;
+          else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_3;
+          else map[i][j] = MAP_WALL_2;
+        }
+      }
     }
   }
 }

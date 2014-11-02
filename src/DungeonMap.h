@@ -142,6 +142,8 @@ class DungeonMap : public GameMap
     ItemList itemList;
     SpriteList spriteList;
     ChestList chestList;
+
+    void generateCorridors();
 };
 
 #endif // MAGICMAP_H
