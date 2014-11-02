@@ -315,6 +315,25 @@ bool BaseCreatureEntity::collideWithMap(int direction)
 
   if (boundingBox.top < 0) yTile0 = -1;
 
+    switch (direction)
+      {
+      case DIRECTION_RIGHT:
+        if (xTilef > xTile0) xTilef = xTile0;
+        break;
+
+      case DIRECTION_LEFT:
+        if (xTilef > xTile0) xTile0 = xTilef;
+        break;
+
+      case DIRECTION_TOP:
+        if (yTilef > yTile0) yTilef = yTile0;
+        break;
+
+      case DIRECTION_BOTTOM:
+        if (yTilef > yTile0) yTile0 = yTilef;
+        break;
+      }
+
   for (int xTile = xTile0; xTile <= xTilef; xTile++)
     for (int yTile = yTile0; yTile <= yTilef; yTile++)
     {
@@ -328,7 +347,7 @@ bool BaseCreatureEntity::collideWithMap(int direction)
       }
     }
 
-    return false;
+  return false;
 }
 
 bool BaseCreatureEntity::determineSatusChance(enumStateResistance resistance, int level)
