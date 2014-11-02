@@ -111,6 +111,8 @@ protected:
 
   enemyTypeEnum enemyType;
 
+  bool testEntityInMap();
+
 private:
 };
 

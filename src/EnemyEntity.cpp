@@ -373,3 +373,52 @@ void EnemyEntity::renderLifeBar(sf::RenderTarget* app, std::string label)
                             sf::Color(255, 255, 255),
                             app, 0 , 0);
 }
+
+bool EnemyEntity::testEntityInMap()
+{
+  int collideCounter = 6;
+
+  while (isCollidingWithMap() && collideCounter > 0)
+  {
+    int movCounter = 100;
+    if (collideWithMap(DIRECTION_LEFT) && !collideWithMap(DIRECTION_RIGHT))
+    {
+      x = (float)((int)x);
+      while (collideWithMap(DIRECTION_LEFT) && movCounter > 0)
+      {
+        x--;
+        movCounter--;
+      }
+    }
+    else if (collideWithMap(DIRECTION_RIGHT) && !collideWithMap(DIRECTION_LEFT))
+    {
+      x = (float)((int)x);
+      while (collideWithMap(DIRECTION_RIGHT) && movCounter > 0)
+      {
+        x++;
+        movCounter--;
+      }
+    }
+    else if (collideWithMap(DIRECTION_BOTTOM) && !collideWithMap(DIRECTION_TOP))
+    {
+      y = (float)((int)y);
+      while (collideWithMap(DIRECTION_BOTTOM) && movCounter > 0)
+      {
+        y--;
+        movCounter--;
+      }
+    }
+    else if (collideWithMap(DIRECTION_TOP) && !collideWithMap(DIRECTION_BOTTOM))
+    {
+      y = (float)((int)y);
+      while (collideWithMap(DIRECTION_TOP) && movCounter > 0)
+      {
+        y++;
+        movCounter--;
+      }
+    }
+    collideCounter--;
+  }
+
+  return (collideCounter > 0);
+}
