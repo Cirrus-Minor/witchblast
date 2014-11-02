@@ -102,7 +102,7 @@ void GiantSpiderEntity::animate(float delay)
         }
         else
         {
-          for (int i = 0; i < 3; i++) fire(i == 0 ? 1 : 0);
+          for (int i = 0; i < 4; i++) fire(i == 0 ? 1 : 0);
         }
 
         fireDelay = GIANT_SPIDER_FIRE_DELAY[hurtLevel];
@@ -308,7 +308,7 @@ void GiantSpiderEntity::fire(int fireType)
 
     EnemyBoltEntity* bolt;
 
-    bolt = new EnemyBoltEntity(x, y, ShotTypeStandard, 0);
+    bolt = new EnemyBoltEntity(x, y, ShotTypePoison, 0);
     bolt->setDamages(5);
 
     float fireVelocity = 180.0f;
