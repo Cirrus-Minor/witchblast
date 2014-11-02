@@ -215,6 +215,11 @@ int WitchBlastGame::getLevel()
   return level;
 }
 
+int WitchBlastGame::getChallengeLevel()
+{
+  return challengeLevel;
+}
+
 bool WitchBlastGame::getShowLogical()
 {
   return showLogical;
@@ -271,6 +276,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 {
   gameState = gameStateInit;
   level = 1;
+  challengeLevel = 1;
   initEvents();
 
   // cleaning all entities
@@ -682,7 +688,7 @@ void WitchBlastGame::updateRunningGame()
       {
         playMusic(MusicDungeon);
       }
-      else if (currentMap->getRoomType() == roomTypeChallenge)
+      else if (currentMap->getRoomType() == roomTypeChallenge && !player->isDead())
       {
         ChestEntity* chest = new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                     OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
@@ -701,6 +707,8 @@ void WitchBlastGame::updateRunningGame()
         text->setWeight(-36.0f);
         text->setZ(1000);
         text->setColor(TextEntity::COLOR_FADING_WHITE);
+
+        challengeLevel++;
       }
     }
   }
@@ -1661,7 +1669,7 @@ void WitchBlastGame::refreshMap()
   checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
 
   // keystones
-  if (currentMap->getNeighbourUp())
+  if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
                                                     OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
@@ -1999,7 +2007,7 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoomWithoutHoles(0);
 
-    if (level < 3)
+    if (challengeLevel == 1)
     {
       new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
@@ -2244,6 +2252,10 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
         bOk = false;
       }
       if (bOk && !isMonsterFlying && !currentMap->isWalkable(xm, ym))
+      {
+        bOk = false;
+      }
+      if (bOk && isMonsterFlying && !currentMap->isFlyable(xm, ym))
       {
         bOk = false;
       }
@@ -2511,7 +2523,7 @@ void WitchBlastGame::saveGame()
     file << (now->tm_min) << std::endl;
 
     // floor
-    file << level << std::endl;
+    file << level << " " << challengeLevel << std::endl;
 
     int nbRooms = 0;
     for (j = 0; j < FLOOR_HEIGHT; j++)
@@ -2640,6 +2652,7 @@ bool WitchBlastGame::loadGame()
 
     // floor
     file >> level;
+    file >> challengeLevel;
     currentFloor = new GameFloor(level);
     for (j = 0; j < FLOOR_HEIGHT; j++)
     {
