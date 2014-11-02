@@ -39,6 +39,8 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
 
   setVelocity(Vector2D(x, y).vectorNearlyTo(targetPos, creatureSpeed, 0.4f));
   canExplode = false;
+  if (y < TILE_HEIGHT) this->y = TILE_HEIGHT;
+  if (!testEntityInMap()) isDying = true;
 }
 
 void RockMissileEntity::animate(float delay)
