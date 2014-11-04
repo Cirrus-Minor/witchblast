@@ -35,8 +35,11 @@ class ItemEntity : public CollidingSpriteEntity
 
   private:
     float timer;
+    float jumpTimer;
     bool isBeating;
     bool isFlying;
+
+    float h, hVelocity;
 };
 
 #endif // ITEMENTITY_H

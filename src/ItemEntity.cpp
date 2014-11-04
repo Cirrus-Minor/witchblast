@@ -20,6 +20,8 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   isBeating = false;
   isFlying = false;
+  jumpTimer = 1.0f + 0.1f * (rand() % 40);
+  h = -1.0f;
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)
@@ -95,7 +97,25 @@ void ItemEntity::animate(float delay)
       isFlying = true;
     }
     else
+    {
       CollidingSpriteEntity::animate(delay);
+      if (canBePickedUp() && !isMerchandise)
+      {
+        jumpTimer -= delay;
+        if (jumpTimer <= 0.0f)
+        {
+          jumpTimer = 2.0f + 0.1f * (rand() % 40);
+          h = 0.1f;
+          hVelocity = 150.0f;
+        }
+      }
+    }
+  }
+
+  if (h > 0.0f)
+  {
+    h += hVelocity * delay;
+    hVelocity -= 1200.0f * delay;
   }
 
   if (age > 0.7f) testSpriteCollisions();
@@ -153,7 +173,22 @@ void ItemEntity::render(sf::RenderTarget* app)
     game().write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, fontColor, app, 1 , 1);
   }
 
-  CollidingSpriteEntity::render(app);
+  /*if (vibrateTimer < 0.6f && !isMerchandise && itemType != ItemBossHeart && canBePickedUp())
+  {
+    sprite.setTextureRect(sf::IntRect(frame % imagesProLine * width, frame / imagesProLine * height, width, height));
+    sprite.setPosition(x - 2 + rand() % 4, y - rand() % 3);
+    app->draw(sprite);
+  }*/
+  if (h > 0.1f)
+  {
+    sprite.setTextureRect(sf::IntRect(frame % imagesProLine * width, frame / imagesProLine * height, width, height));
+    sprite.setPosition(x, y - h);
+    app->draw(sprite);
+    sprite.setPosition(x, y);
+  }
+  else
+    CollidingSpriteEntity::render(app);
+
   if (game().getShowLogical())
   {
     displayBoundingBox(app);
