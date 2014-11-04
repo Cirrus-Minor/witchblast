@@ -36,6 +36,20 @@ int ItemEntity::getPrice()
   return (items[itemType].price);
 }
 
+bool ItemEntity::canBePickedUp()
+{
+  // don't use health item if you don't need it
+  if (game().getPlayer()->getHp() == game().getPlayer()->getHpMax())
+    if (itemType >= ItemHealthVerySmall && itemType <= ItemHealthVerySmallPoison) return false;
+
+  if (isMerchandise == true && game().getPlayer()->getGold() < getPrice()) return false;
+
+  if (itemType >= FirstEquipItem)
+    if (game().getPlayer()->isEquiped(itemType - FirstEquipItem)) return false;
+
+  return true;
+}
+
 bool ItemEntity::isOnMap()
 {
   if (x < OFFSET_X) return false;
@@ -170,12 +184,13 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   {
     if (playerEntity != NULL && !playerEntity->isDead())
     {
-      if (playerEntity->getHp() == playerEntity->getHpMax())
+      /*if (playerEntity->getHp() == playerEntity->getHpMax())
       {
         // don't use health item if you don't need it
         if (itemType >= ItemHealthVerySmall && itemType <= ItemHealthVerySmallPoison) return;
       }
-      if (isMerchandise == false || playerEntity->getGold() >= getPrice())
+      if (isMerchandise == false || playerEntity->getGold() >= getPrice())*/
+      if (canBePickedUp())
       {
         playerEntity->acquireItem(itemType);
 
