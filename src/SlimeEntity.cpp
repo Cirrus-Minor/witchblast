@@ -264,7 +264,7 @@ bool SlimeEntity::collideWithMap(int direction)
     for (int xTile = xTile0; xTile <= xTilef; xTile++)
         for (int yTile = yTile0; yTile <= yTilef; yTile++)
         {
-          if (xTile == 0 || xTile == MAP_WIDTH - 1 || yTile == 0 || yTile == MAP_HEIGHT - 1)
+          if (!game().getCurrentMap()->isFlyable(xTile, yTile))
           {
             switch (direction)
             {
