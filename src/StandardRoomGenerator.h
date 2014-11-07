@@ -243,7 +243,7 @@ void generateStandardRoom05()
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeWitch, 3);
     game().findPlaceMonsters(EnemyTypeWitchRed, 2);
-    game().findPlaceMonsters(EnemyTypeCauldron, 1 + rand() % 2);
+    game().findPlaceMonsters(EnemyTypeCauldron, 1);
   }
   else if (random < 48)
   {
