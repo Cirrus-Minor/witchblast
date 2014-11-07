@@ -21,20 +21,10 @@ EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int le
 
 void EnemyBoltEntity::animate(float delay)
 {
-  /*if (boltType != ShotTypeBomb)
-  {
-    SpriteEntity* trace = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), x, y, BOLT_WIDTH, BOLT_HEIGHT);
-    trace->setFading(true);
-    trace->setZ(y);
-    trace->setLifetime(0.2f);
-    trace->setShrinking(true, renderScale, renderScale);
-    trace->setType(ENTITY_EFFECT);
-    trace->setFrame(frame);
-  }*/
   if (boltType != ShotTypeBomb)
     particleGenerator.GenerateParticles(frame, IMAGE_BOLT, x, y, BOLT_WIDTH, BOLT_HEIGHT,
                         boltType == ShotTypeLightning ? Vector2D(20.0f) : Vector2D(0.0f, 0.0f),
-                        10, boltType == ShotTypeIce ? renderScale * 1.3f : renderScale);
+                        10, renderScale);
 
   z = y + height;
   CollidingSpriteEntity::animate(delay);
