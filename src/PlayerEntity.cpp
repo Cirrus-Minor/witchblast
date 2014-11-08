@@ -345,7 +345,7 @@ void PlayerEntity::animate(float delay)
     frame = 1;
   }
 
-  if (isMoving() || firingDirection != 5)
+  if (playerStatus == playerStatusDead || isMoving() || firingDirection != 5)
     idleAge = 0.0f;
   else
     idleAge += delay;
