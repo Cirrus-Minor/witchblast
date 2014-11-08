@@ -95,12 +95,17 @@ Next release
 - ADD Chest for completed challenges
 - ADD Cauldron now explodes while dying
 - ADD Sound for imp's teleportation
+- ADD "Jump" animation for items you can get
 - MOD Standard Rat IA changes (rats now move in 4 directions)
 - MOD Frozen dividing bubbles generate frozen "children" bubbles
 - MOD Fireball (spell) now goes through monsters (if enough HP)
 - MOD Fire shot can make dead monster explode
 - MOD Cyclops' damage decreases
+- MOD Giant Spider is more difficult to kill now
 - MOD Shop's items too expensive displayed in red
+- MOD One cauldron max in witches rooms in level 5
+- FIX Cyclops firing in the wall when too close to the north wall
+- FIX Items can fly a long time on the walls
 
 v0.3.7
 - ADD New monsters (snakes)
