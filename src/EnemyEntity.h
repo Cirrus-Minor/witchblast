@@ -13,6 +13,7 @@ enum enemyTypeEnum
   EnemyTypeRatHelmet,
   EnemyTypeRatBlackHelmet,
   EnemyTypeEvilFlower,
+  EnemyTypeEvilFlowerIce,
   EnemyTypeSnake,
   EnemyTypeSnakeBlood,
   EnemyTypeSlime,

@@ -527,8 +527,9 @@ void WitchBlastGame::updateRunningGame()
         else
         {
           initMonsterArray();
-          findPlaceMonsters(EnemyTypeEvilFlower, 2);
-          findPlaceMonsters(EnemyTypePumpkin, 2);
+          findPlaceMonsters(EnemyTypeEvilFlower, 1);
+          findPlaceMonsters(EnemyTypeEvilFlowerIce, 1);
+          findPlaceMonsters(EnemyTypePumpkin, 1);
         }
       }
       if (event.key.code == sf::Keyboard::F8)
@@ -2194,7 +2195,10 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     proceedEvent(EventMeetSnakes);
     break;
   case EnemyTypeEvilFlower:
-    new EvilFlowerEntity(xm, ym - 2);
+    new EvilFlowerEntity(xm, ym - 2, FlowerTypeStandard);
+    break;
+  case EnemyTypeEvilFlowerIce:
+    new EvilFlowerEntity(xm, ym - 2, FlowerTypeIce);
     break;
   case EnemyTypeSlime:
     new SlimeEntity(xm, ym, SlimeTypeStandard, false);

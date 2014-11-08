@@ -9,18 +9,31 @@
 #include "WitchBlastGame.h"
 #include <math.h>
 
-EvilFlowerEntity::EvilFlowerEntity(float x, float y)
+EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
     : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_FLOWER), x, y)
 {
   hp = EVIL_FLOWER_HP;
   meleeDamages = EVIL_FLOWER_MELEE_DAMAGES;
 
   setSpin(50.0f);
-  frame = 0;
+  imagesProLine = 3;
+
+  this->flowerType = flowerType;
 
   bloodColor = BloodGreen;
-  enemyType = EnemyTypeEvilFlower;
-  deathFrame = FRAME_CORPSE_FLOWER;
+
+  if (flowerType == FlowerTypeStandard)
+  {
+    frame = 0;
+    enemyType = EnemyTypeEvilFlower;
+    deathFrame = FRAME_CORPSE_FLOWER;
+  }
+  else if (flowerType == FlowerTypeIce)
+  {
+    frame = 3;
+    enemyType = EnemyTypeEvilFlowerIce;
+    deathFrame = FRAME_CORPSE_FLOWER;
+  }
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;
   age = -1.0f + (rand() % 2500) * 0.001f;
@@ -60,9 +73,12 @@ void EvilFlowerEntity::calculateBB()
 void EvilFlowerEntity::fire()
 {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
+
+    enumShotType shotType = ShotTypeStandard;
+    if (flowerType == FlowerTypeIce) shotType = ShotTypeIce;
+
     EnemyBoltEntity* bolt = new EnemyBoltEntity
-          (x, y + 10, ShotTypeStandard, 0);
-    bolt->setFrame(1);
+          (x, y + 10, shotType, 0);
     bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
