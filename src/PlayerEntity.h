@@ -479,13 +479,11 @@ class PlayerEntity : public BaseCreatureEntity
     std::vector<FairyEntity*> fairies;
 
     float deathAge;
+    float idleAge;
 
-    int spriteDx;
-    void renderHead(sf::RenderTarget* app);
-    void renderBody(sf::RenderTarget* app);
-    void renderHands(sf::RenderTarget* app);
-    void renderFeet(sf::RenderTarget* app);
-    void renderStaff(sf::RenderTarget* app);
+    int spriteDy;
+    void renderPlayer(sf::RenderTarget* app);
+    void renderHalo(sf::RenderTarget* app);
 
     void fallRock();
     void initFallingGrid();

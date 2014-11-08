@@ -15,8 +15,36 @@
 #include <iostream>
 #include <sstream>
 
+const int xHalo[10][3] =
+{
+  { 6, 6, 6},
+  { 34, 34, 32},
+  { 34, 36, 37},
+  { 5, 5, 5},
+  { 14, 14, 14},
+  { 32, 34, 37},
+  { 27, 26, 6},
+  { 14, 14, 14},
+  { 32, 34, 37},
+  { 27, 26, 6}
+};
+
+const int yHalo[10][3] =
+{
+  { 13, 13, 19},
+  { 12, 12, 12},
+  { 9, 10, 12},
+  { 13, 8, 6},
+  { 6, 8, 10},
+  { 4, 7, 10},
+  { 4, 10, 14},
+  { 6, 8, 10},
+  { 4, 7, 10},
+  { 4, 10, 14}
+};
+
 PlayerEntity::PlayerEntity(float x, float y)
-  : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 80, 128)
+  : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 42, 80)
 {
   currentFireDelay = -1.0f;
   randomFireDelay = -1.0f;
@@ -28,14 +56,15 @@ PlayerEntity::PlayerEntity(float x, float y)
   playerStatus = playerStatusPlaying;
   hp = INITIAL_PLAYER_HP;
 
-  #ifdef TEST_MODE
+#ifdef TEST_MODE
   hp = INITIAL_PLAYER_HP * 100;
-  #endif // TEST_MODE
+#endif // TEST_MODE
 
   hpDisplay = hp;
   hpMax = hp;
   gold = 0;
   deathAge = -1.0f;
+  idleAge = 0.0f;
 
   boltLifeTime = INITIAL_BOLT_LIFE;
   specialBoltTimer = -1.0f;
@@ -61,7 +90,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   firingDirection = 5;
   facingDirection = 2;
 
-  sprite.setOrigin(40, 104);
+  sprite.setOrigin(21, 60);
 
   protection.active = false;
 
@@ -302,19 +331,24 @@ void PlayerEntity::animate(float delay)
   if (firingDirection != 5)
     facingDirection = firingDirection;
 
-  if (isMoving())
+  if (isMoving() || firingDirection != 5)
   {
     frame = ((int)(age * 5.0f)) % 4;
     if (frame == 3) frame = 1;
   }
   else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
-    frame = 0;
+    frame = 3;
   else if (playerStatus == playerStatusDead)
     frame = 0;
   else // standing
   {
     frame = 1;
   }
+
+  if (isMoving() || firingDirection != 5)
+    idleAge = 0.0f;
+  else
+    idleAge += delay;
 
   if (x < OFFSET_X)
     game().moveToOtherMap(4);
@@ -343,177 +377,177 @@ void PlayerEntity::animate(float delay)
   }
   else
   {
-    z = y + 13;
+    z = y + 17;
     if (invincibleDelay >= 0.0f) invincibleDelay -= delay;
   }
-
 }
 
-void PlayerEntity::renderHead(sf::RenderTarget* app)
+void PlayerEntity::renderPlayer(sf::RenderTarget* app)
 {
-  if (playerStatus != playerStatusDead)
-  {
-    if (isPoisoned())
-    {
-      sf::Color savedColor = sprite.getColor();
-      sprite.setColor(sf::Color(180, 255, 180, 255));
-      sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
-      app->draw(sprite);
-      sprite.setColor(savedColor);
-    }
-    else
-    {
-      sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
-      app->draw(sprite);
-    }
+  sf::Color savedColor = sprite.getColor();
+  if (isPoisoned()) sprite.setColor(sf::Color(180, 255, 180, 255));
 
-    if (equip[EQUIP_ENCHANTER_HAT])
-    {
-      sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-      if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
-        sprite.setTextureRect(sf::IntRect( 0, 0, width, height));
-      else
-        sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, 0, width, height));
-      app->draw(sprite);
-      sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
-    }
-  }
-}
-
-void PlayerEntity::renderBody(sf::RenderTarget* app)
-{
-  if (equip[EQUIP_MAGICIAN_ROBE]) sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-  sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height, width, height));
+  // body
+  if (isMirroring)
+    sprite.setTextureRect(sf::IntRect( frame * width + width, spriteDy * height, -width, height));
+  else
+    sprite.setTextureRect(sf::IntRect( frame * width, spriteDy * height, width, height));
   app->draw(sprite);
-  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
+  sprite.setColor(savedColor);
 
-  if (equip[EQUIP_CONCENTRATION_AMULET] && playerStatus != playerStatusDead)
+  if (equip[EQUIP_MAGICIAN_ROBE])
   {
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_COLLAR));
-    if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
-      sprite.setTextureRect(sf::IntRect( 0, 0, width, height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width + width, spriteDy * height, -width, height));
     else
-      sprite.setTextureRect(sf::IntRect( (spriteDx / 3) * width, 0, width, height));
-
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
-  }
-
-  if (equip[EQUIP_LEATHER_BELT] && playerStatus != playerStatusDead)
-  {
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 5, width, height));
-    app->draw(sprite);
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
   }
 
   if (equip[EQUIP_BROOCH_STAR])
   {
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-    sprite.setTextureRect(sf::IntRect( (14 + spriteDx / 3) * width, 2 * height, width, height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
-  }
-}
-
-void PlayerEntity::renderHands(sf::RenderTarget* app)
-{
-  bool hasGloves = false;
-  if (equip[EQUIP_DISPLACEMENT_GLOVES] && playerStatus != playerStatusDead)
-  {
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-    hasGloves = true;
   }
 
-  if (isPoisoned() && !hasGloves)
+  if (equip[EQUIP_CONCENTRATION_AMULET])
   {
-    sf::Color savedColor = sprite.getColor();
-    sprite.setColor(sf::Color(180, 255, 180, 255));
-    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
+  }
+
+  if (equip[EQUIP_LEATHER_BELT])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (15 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  // idle ?
+  if (idleAge >= 4.0 && idleAge <= 5.0)
+  {
+    if (isPoisoned()) sprite.setColor(sf::Color(180, 255, 180, 255));
+    int faceFrame = (5.0f - idleAge) / 0.2f;
+    if (faceFrame == 3) faceFrame = 1;
+    else if (faceFrame == 4) faceFrame = 0;
+    if (spriteDy == 0)
+    {
+      sf::Sprite faceSprite;
+      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
+      faceSprite.setPosition(x - 21, y - 60);
+      faceSprite.setTextureRect(sf::IntRect( faceFrame * width, 0 , width, height / 2));
+      app->draw(faceSprite);
+    }
+    else if (spriteDy == 1)
+    {
+      sf::Sprite faceSprite;
+      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
+      faceSprite.setPosition(x - 21, y - 60);
+      if (isMirroring)
+        faceSprite.setTextureRect(sf::IntRect( faceFrame * width + width, height / 2, -width, height / 2));
+      else
+        faceSprite.setTextureRect(sf::IntRect( faceFrame * width, height / 2, width, height / 2));
+      app->draw(faceSprite);
+    }
     sprite.setColor(savedColor);
   }
-  else
+  else if (idleAge >= 9.0 && idleAge <= 10.2)
   {
-    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 3, width, height));
+    if (isPoisoned()) sprite.setColor(sf::Color(180, 255, 180, 255));
+    int faceFrame = (10.2f - idleAge) / 0.2f;
+    if (faceFrame == 5) SoundManager::getInstance().playSound(SOUND_YAWN);
+    if (faceFrame == 3) faceFrame = 2;
+    else if (faceFrame == 4) faceFrame = 1;
+    else if (faceFrame == 5) faceFrame = 0;
+    if (spriteDy == 0)
+    {
+      sf::Sprite faceSprite;
+      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
+      faceSprite.setPosition(x - 21, y - 60);
+      faceSprite.setTextureRect(sf::IntRect( faceFrame * width, height, width, height / 2));
+      app->draw(faceSprite);
+    }
+    else if (spriteDy == 1)
+    {
+      sf::Sprite faceSprite;
+      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
+      faceSprite.setPosition(x - 21, y - 60);
+      if (isMirroring)
+        faceSprite.setTextureRect(sf::IntRect( faceFrame * width + width, height + height / 2, -width, height / 2));
+      else
+        faceSprite.setTextureRect(sf::IntRect( faceFrame * width, height + height / 2, width, height / 2));
+      app->draw(faceSprite);
+    }
+    sprite.setColor(savedColor);
+  }
+  else if (idleAge > 11.0f) idleAge -= 11.0f;
+
+  // hat
+  if (equip[EQUIP_ENCHANTER_HAT] && playerStatus != playerStatusDead)
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
 
-  if (hasGloves) sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
-}
-
-void PlayerEntity::renderFeet(sf::RenderTarget* app)
-{
-  bool hasBoots = false;
+  // boots
   if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
   {
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-    hasBoots = true;
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (6 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (6 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
   }
 
-  if (isPoisoned() && !hasBoots)
-  {
-    sf::Color savedColor = sprite.getColor();
-    sprite.setColor(sf::Color(180, 255, 180, 255));
-    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
-    app->draw(sprite);
-    sprite.setColor(savedColor);
-  }
+  // staff
+  int frameDx = equip[EQUIP_MAHOGANY_STAFF] ? 27 : 3;
+  if (isMirroring)
+    sprite.setTextureRect(sf::IntRect( (frameDx + frame) * width + width, spriteDy * height, -width, height));
   else
-  {
-    sprite.setTextureRect(sf::IntRect( (frame + spriteDx) * width, height * 2, width, height));
-    app->draw(sprite);
-  }
-
-  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
-}
-
-void PlayerEntity::renderStaff(sf::RenderTarget* app)
-{
-  if (playerStatus == playerStatusDead) return;
-
-  if (equip[EQUIP_MAHOGANY_STAFF]) sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-  int xSnake, ySnake;
-  int xStone, yStone;
-
-  if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
-  {
-    sprite.setTextureRect(sf::IntRect( 12 * width, height * 4, width, height));
-    app->draw(sprite);
-    xSnake = 13 * width;
-    ySnake = height * 4;
-    xStone = 13 * width;
-    yStone = height * 4;
-  }
-  else if (isMoving() || firingDirection != 5)
-  {
-    sprite.setTextureRect(sf::IntRect( (frame / 3 + spriteDx) * width, height * 4, width, height));
-    app->draw(sprite);
-    xSnake = (frame / 3 + spriteDx + 1) * width;
-    ySnake = height * 4;
-    xStone = (frame / 3 + spriteDx + 1) * width;
-    yStone = height * 4;
-  }
-  else
-  {
-    sprite.setTextureRect(sf::IntRect( (spriteDx / 3 + 14) * width, height * 4, width, height));
-    app->draw(sprite);
-    xSnake = (spriteDx / 3 + 14) * width;
-    ySnake = 0;
-    xStone = (spriteDx / 3 + 14) * width;
-    yStone = height * 2;
-  }
+    sprite.setTextureRect(sf::IntRect( (frameDx + frame) * width, spriteDy * height, width, height));
+  app->draw(sprite);
 
   if (equip[EQUIP_BLOOD_SNAKE])
   {
-    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_EQUIP));
-    sprite.setTextureRect(sf::IntRect( xSnake, ySnake, width, height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (30 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (30 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
-  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
+
+  if (equip[EQUIP_BOOK_REAR])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (33 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (33 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  // shot type
   if (getShotType() != ShotTypeStandard)
   {
-    sf::Color savedColor = sprite.getColor();
     switch (getShotType())
     {
     case ShotTypeIce:
@@ -544,55 +578,20 @@ void PlayerEntity::renderStaff(sf::RenderTarget* app)
       std::cout << "[WARNING] Can not render shot type: " << getShotType() << std::endl;
     }
 
-    sprite.setTextureRect(sf::IntRect( xStone, yStone, width, height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (36 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (36 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
     sprite.setColor(savedColor);
   }
 }
 
-void PlayerEntity::render(sf::RenderTarget* app)
+void PlayerEntity::renderHalo(sf::RenderTarget* app)
 {
-  sprite.setPosition(x, y);
-
-  spriteDx = 0;
-  if (facingDirection == 8) spriteDx = 3;
-  if (facingDirection == 4) spriteDx = 6;
-  if (facingDirection == 6) spriteDx = 9;
-  if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking) spriteDx = 12;
-
-  if (playerStatus == playerStatusDead)
-  {
-    spriteDx = 13;
-    // blood
-    sprite.setTextureRect(sf::IntRect( width, 0, width, height));
-    app->draw(sprite);
-  }
-  else
-  {
-    // shadow
-    sprite.setTextureRect(sf::IntRect( 2 * width, 0, width, height));
-    app->draw(sprite);
-  }
-
-  if (facingDirection == 8 || facingDirection == 4)
-  {
-    renderStaff(app);
-    renderHead(app);
-    renderBody(app);
-    renderFeet(app);
-    renderHands(app);
-  }
-  else
-  {
-    renderBody(app);
-    renderHead(app);
-    renderFeet(app);
-    renderStaff(app);
-    renderHands(app);
-  }
-
+  if (frame > 2 || spriteDy > 9) return;
   // gems
-  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeFire)  && playerStatus != playerStatusDead)
+  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeExplodingFire)  && playerStatus != playerStatusDead)
   {
     int fade;
     sf::Color savedColor = sprite.getColor();
@@ -605,40 +604,17 @@ void PlayerEntity::render(sf::RenderTarget* app)
       fade = 200 + rand() % 40;
 
     if (getShotType() == ShotTypeIce)
-      sprite.setTextureRect(sf::IntRect(320, 0, 20, 20));
+      sprite.setTextureRect(sf::IntRect(3 * width, 10 * height, 20, 20));
     else if (getShotType() == ShotTypeLightning)
-      sprite.setTextureRect(sf::IntRect(340, 0, 20, 20));
-    else if (getShotType() == ShotTypeFire)
-      sprite.setTextureRect(sf::IntRect(360, 0, 20, 20));
+      sprite.setTextureRect(sf::IntRect(3 * width + 20, 10 * height, 20, 20));
+    else if (getShotType() == ShotTypeExplodingFire)
+      sprite.setTextureRect(sf::IntRect(3 * width + 40, 10 * height, 20, 20));
 
     sprite.setColor(sf::Color(255, 255, 255, fade));
-
-    if (isMoving() || firingDirection != 5)
-    {
-      if (facingDirection == 2 )
-        sprite.setPosition(x + 16, y + 36);
-      else if (facingDirection == 8 )
-        sprite.setPosition(x + 43, y + 36);
-      else if (facingDirection == 4 )
-        sprite.setPosition(x - 3 , y + 41);
-      else
-        sprite.setPosition(x + 63, y + 41);
-    }
-    else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
-    {
-      sprite.setPosition(x + 57, y + 18);
-    }
+    if (isMirroring)
+      sprite.setPosition(x - 10 + 42 - xHalo[spriteDy][frame], y - 10 + yHalo[spriteDy][frame]);
     else
-    {
-      if (facingDirection == 2 )
-        sprite.setPosition(x + 16, y + 36);
-      else if (facingDirection == 8 )
-        sprite.setPosition(x + 43, y + 29);
-      else if (facingDirection == 4 )
-        sprite.setPosition(x + 13, y + 35);
-      else
-        sprite.setPosition(x + 46, y + 35);
-    }
+      sprite.setPosition(x - 10 + xHalo[spriteDy][frame], y - 10 + yHalo[spriteDy][frame]);
 
     sf::RenderStates r;
     r.blendMode = sf::BlendAdd;
@@ -647,14 +623,92 @@ void PlayerEntity::render(sf::RenderTarget* app)
     sprite.setPosition(x, y);
     sprite.setColor(savedColor);
   }
+}
+
+void PlayerEntity::render(sf::RenderTarget* app)
+{
+  sprite.setPosition(x, y);
+
+  spriteDy = 0;
+  isMirroring = false;
+
+  if (firingDirection == 5)
+  {
+    if (facingDirection == 6) spriteDy = 1;
+    else if (facingDirection == 8) spriteDy = 2;
+    else if (facingDirection == 4)
+    {
+      spriteDy = 1;
+      isMirroring = true;
+    }
+  }
+  else
+  {
+    if (firingDirection == 2) spriteDy = 4;
+    else if (firingDirection == 6) spriteDy = 5;
+    else if (firingDirection == 8) spriteDy = 6;
+    else if (firingDirection == 4)
+    {
+      spriteDy = 5;
+      isMirroring = true;
+    }
+
+    if (!isMoving()) spriteDy += 3;
+  }
+
+  if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
+  {
+    spriteDy = 3;
+    frame = ((int)(age * 4.0f)) % 4;
+    if (frame == 3) frame = 1;
+  }
+
+  if (playerStatus == playerStatusDead)
+  {
+    int deathframe = (int)(deathAge / 0.35f);
+    switch (deathframe)
+    {
+    case 0:
+      frame = 0;
+      spriteDy = 10;
+      break;
+    case 1:
+      frame = 1;
+      spriteDy = 10;
+      break;
+    case 2:
+      frame = 2;
+      spriteDy = 10;
+      break;
+    case 3:
+      frame = 0;
+      spriteDy = 11;
+      break;
+    default:
+      frame = 1;
+      spriteDy = 11;
+      break;
+    }
+  }
+  else
+  {
+    // shadow
+    sprite.setTextureRect(sf::IntRect( 2 * width, 11 * height, width, height));
+    app->draw(sprite);
+  }
+
+  renderHalo(app);
+  renderPlayer(app);
 
   // shield
   if (protection.active)
   {
     sf::Color savedColor = sprite.getColor();
     sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (protection.timer < 2.0f ? 25 : 10)) * 30 ));
-    sprite.setTextureRect(sf::IntRect( 17 * width, 0, width, height));
+    sprite.setTextureRect(sf::IntRect( 3 * width, 11 * height, width, height));
+    sprite.setScale(1.5f, 1.5f);
     app->draw(sprite);
+    sprite.setScale(1.0f, 1.0f);
     sprite.setColor(savedColor);
   }
 
@@ -669,15 +723,10 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
 void PlayerEntity::calculateBB()
 {
-  boundingBox.left = (int)x - width / 2;
-  boundingBox.width = width;
-  boundingBox.top = (int)y - height / 2;
-  boundingBox.height =  height;
-
-  boundingBox.left += 30;
+  boundingBox.left = (int)x - 10;
   boundingBox.width = 20;
-  boundingBox.top += 45.0f;
-  boundingBox.height = 33.0;
+  boundingBox.top = (int)y - 16;
+  boundingBox.height =  33;
 }
 
 void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -957,10 +1006,18 @@ void PlayerEntity::fire(int direction)
       float vely = 0.0f;
       switch (direction)
       {
-        case 4: velx = fireVelocity * 0.75f; break;
-        case 6: velx = -fireVelocity * 0.75f; break;
-        case 2: vely = -fireVelocity * 0.75f; break;
-        case 8: vely = fireVelocity * 0.75f; break;
+      case 4:
+        velx = fireVelocity * 0.75f;
+        break;
+      case 6:
+        velx = -fireVelocity * 0.75f;
+        break;
+      case 2:
+        vely = -fireVelocity * 0.75f;
+        break;
+      case 8:
+        vely = fireVelocity * 0.75f;
+        break;
       }
       bolt->setVelocity(Vector2D(velx, vely));
     }
@@ -1021,7 +1078,7 @@ void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
   itemSprite->setFrame(itemType);
   itemSprite->setImagesProLine(10);
   itemSprite->setType(ENTITY_BLOOD);
-  itemSprite->setVelocity(Vector2D(rand()%450));
+  itemSprite->setVelocity(Vector2D(200 + rand()%450));
   itemSprite->setViscosity(0.95f);
   itemSprite->setSpin( (rand() % 700) - 350.0f);
 }
@@ -1046,9 +1103,6 @@ void PlayerEntity::dying()
         loseItem(enumItemType(i), true);
     }
   }
-
-
-  for (i = 0; i < 8; i++) game().generateBlood(x, y, bloodColor);
 
   CollidingSpriteEntity* itemSprite
     = new CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 80, 120);
@@ -1574,7 +1628,7 @@ void PlayerEntity::fallRock()
 void PlayerEntity::castSummonsSlimeExplode()
 {
   SlimeEntity* slime = new SlimeEntity( ((int)(x - OFFSET_X) / TILE_WIDTH) * TILE_WIDTH + TILE_WIDTH * 0.5f,
-                                       y - 5, SlimeTypeViolet, true);
+                                        y - 5, SlimeTypeViolet, true);
   slime->makePet(facingDirection);
   game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.3f);
 }
@@ -1605,11 +1659,11 @@ void PlayerEntity::castFreeze()
 {
   for (float i = 0.0f; i < 2 * PI; i +=  PI / 8)
   {
-      BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, 1);
-      bolt1->setDamages(1);
-      float velx = fireVelocity * cos(i);
-      float vely = fireVelocity * sin(i);
-      bolt1->setVelocity(Vector2D(velx, vely));
+    BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, 1);
+    bolt1->setDamages(1);
+    float velx = fireVelocity * cos(i);
+    float vely = fireVelocity * sin(i);
+    bolt1->setVelocity(Vector2D(velx, vely));
   }
 
   game().makeColorEffect(X_GAME_COLOR_BLUE, 0.3f);

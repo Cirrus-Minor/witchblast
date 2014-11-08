@@ -94,8 +94,8 @@ WitchBlastGame::WitchBlastGame():
 
   // loading resources
   const char *const images[] = {
-    "media/player_base.png",   "media/player_equip.png",
-    "media/player_collar.png", "media/bolt.png",
+    "media/player_base.png",   "media/player_faces.png",
+    "media/bolt.png",
     "media/tiles.png",         "media/rat.png",
     "media/minimap.png",       "media/doors.png",
     "media/items.png",         "media/items_equip.png",
@@ -112,7 +112,7 @@ WitchBlastGame::WitchBlastGame():
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
     "media/interface.png",     "media/hud_shots.png",
-    "media/explosion.png",        "media/keys_qwer.png",
+    "media/explosion.png",     "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
     "media/pnj.png",           "media/fairy.png",
   };
@@ -126,7 +126,8 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/door_closing.ogg",   "media/sound/door_opening.ogg",
     "media/sound/chest_opening.ogg",  "media/sound/impact.ogg",
     "media/sound/bonus.ogg",          "media/sound/drink.ogg",
-    "media/sound/eat.ogg",            "media/sound/player_hit.ogg",
+    "media/sound/eat.ogg",            "media/sound/yawn.ogg",
+    "media/sound/player_hit.ogg",
     "media/sound/player_die.ogg",     "media/sound/ennemy_dying.ogg",
     "media/sound/coin.ogg",           "media/sound/pay.ogg",
     "media/sound/wall_impact.ogg",    "media/sound/big_wall_impact.ogg",
@@ -152,7 +153,9 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/witch_die_00.ogg",   "media/sound/witch_die_01.ogg",
     "media/sound/witch_02.ogg",       "media/sound/invoke.ogg",
     "media/sound/cauldron.ogg",       "media/sound/cauldron_die.ogg",
-    "media/sound/snake_die.ogg",      "media/sound/critical.ogg",
+    "media/sound/snake_die.ogg",      "media/sound/pumpkin_00.ogg",
+    "media/sound/pumpkin_01.ogg",     "media/sound/pumpkin_die.ogg",
+    "media/sound/critical.ogg",
     "media/sound/gong.ogg",           "media/sound/teleport.ogg",
     "media/sound/spell_charge.ogg",   "media/sound/fireball.ogg",
     "media/sound/message.ogg",        "media/sound/earthquake.ogg",
@@ -174,6 +177,7 @@ WitchBlastGame::WitchBlastGame():
   currentFloor = NULL;
 
   for (int i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
+  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
 
   isPausing = false;
   showLogical = false;
@@ -239,6 +243,8 @@ void WitchBlastGame::onUpdate()
     else
       SoundManager::getInstance().stopSound(SOUND_VIB);
 
+    gameTime += deltaTime;
+
     for (int i = 0; i < NB_X_GAME; i++)
     {
       if (xGame[i].active)
@@ -277,6 +283,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   gameState = gameStateInit;
   level = 1;
   challengeLevel = 1;
+  gameTime = 0.0f;
   initEvents();
 
   // cleaning all entities
@@ -719,6 +726,7 @@ void WitchBlastGame::updateRunningGame()
 void WitchBlastGame::renderRunningGame()
 {
   EntityManager::getInstance().sortByZ();
+
   if (xGame[xGameTypeShake].active)
   {
     sf::View view = app->getDefaultView();
@@ -1461,8 +1469,13 @@ void WitchBlastGame::renderMenu()
     }
   }
 
+  if (menu->items[menu->index].id == MenuStartOld)
+    renderPlayer(240, 340, equipToDisplay, saveHeader.shotType, 1, 0);
+  else if (menu->items[menu->index].id == MenuStartNew)
+    renderPlayer(240, 250, equipNudeToDisplay, 0, 1, 0);
+
   std::ostringstream oss;
-  oss << APP_NAME << " v" << APP_VERSION << " " << tools::getLabel("by") << " Seby 2014";
+  oss << APP_NAME << " v" << APP_VERSION << "  - 2014 - " /*<< tools::getLabel("by")*/ << " Seby (code), Vetea (2D art)";
   write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
 }
 
@@ -2026,6 +2039,7 @@ void WitchBlastGame::generateMap()
 
     if (level == 1)
     {
+      findPlaceMonsters(EnemyTypeRat, 2);
       new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       addMessageToQueue(MsgInfoButcher);
@@ -2525,6 +2539,14 @@ void WitchBlastGame::saveGame()
     // floor
     file << level << " " << challengeLevel << std::endl;
 
+    // game age
+    file << (int)gameTime << std::endl;
+
+    // player equip
+    for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) file << player->isEquiped(i) << " ";
+    file << std::endl;
+    file << player->getShotType() << std::endl;
+
     int nbRooms = 0;
     for (j = 0; j < FLOOR_HEIGHT; j++)
     {
@@ -2653,6 +2675,15 @@ bool WitchBlastGame::loadGame()
     // floor
     file >> level;
     file >> challengeLevel;
+    file >> gameTime;
+
+    for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
+    {
+      bool eq;
+      file >> eq;
+    }
+    file >> n;
+
     currentFloor = new GameFloor(level);
     for (j = 0; j < FLOOR_HEIGHT; j++)
     {
@@ -2663,6 +2694,7 @@ bool WitchBlastGame::loadGame()
         currentFloor->setRoom(i, j, (roomTypeEnum)n);
       }
     }
+
 
     // kill stats
     for (int i = 0; i < NB_ENEMY; i++) file >> killedEnemies[i];
@@ -2812,6 +2844,14 @@ WitchBlastGame::saveHeaderStruct WitchBlastGame::loadGameHeader()
 
       // floor
       file >> saveHeader.level;
+
+      int challengeLevel;
+      file >> challengeLevel;
+      file >> saveHeader.gameTime;
+
+      for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
+        file >> equipToDisplay[i];
+      file >> saveHeader.shotType;
     }
   }
   else
@@ -2907,7 +2947,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
     menuConfig.index = 0;
   }
 
-  WitchBlastGame::saveHeaderStruct saveHeader = loadGameHeader();
+  saveHeader = loadGameHeader();
 
   if (saveHeader.ok)
   {
@@ -3079,7 +3119,190 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
   addMessageToQueue(eventToMessage[event]);
 }
 
+void WitchBlastGame::renderPlayer(float x, float y,
+                                      bool equip[NUMBER_EQUIP_ITEMS], int shotType,
+                                      int frame, int spriteDy)
+{
+  bool isMirroring = false;
+  sf::Sprite sprite;
+
+  if (equip[EQUIP_FAIRY_FIRE])
+  {
+    sprite.setPosition(x - 35, y -25);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+    sprite.setTextureRect(sf::IntRect( 0, 144, 48, 60));
+    app->draw(sprite);
+  }
+  if (equip[EQUIP_FAIRY_TARGET])
+  {
+    sprite.setPosition(x - 15, y -25);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+    sprite.setTextureRect(sf::IntRect( 0, 216, 48, 60));
+    app->draw(sprite);
+  }
+  if (equip[EQUIP_FAIRY])
+  {
+    sprite.setPosition(x - 40, y -10);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+    sprite.setTextureRect(sf::IntRect( 0, 0, 48, 60));
+    app->draw(sprite);
+  }
+  if (equip[EQUIP_FAIRY_ICE])
+  {
+    sprite.setPosition(x - 10, y -10);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+    sprite.setTextureRect(sf::IntRect( 0, 72, 48, 60));
+    app->draw(sprite);
+  }
+
+
+  sprite.setPosition(x, y);
+  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE));
+
+  int width = 42;
+  int height = 80;
+
+  // body
+  if (isMirroring)
+    sprite.setTextureRect(sf::IntRect( frame * width + width, spriteDy * height, -width, height));
+  else
+    sprite.setTextureRect(sf::IntRect( frame * width, spriteDy * height, width, height));
+  app->draw(sprite);
+
+  if (equip[EQUIP_MAGICIAN_ROBE])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  if (equip[EQUIP_BROOCH_STAR])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  if (equip[EQUIP_CONCENTRATION_AMULET])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  if (equip[EQUIP_LEATHER_BELT])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (15 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  // hat
+  if (equip[EQUIP_ENCHANTER_HAT])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  // boots
+  if (equip[EQUIP_LEATHER_BOOTS])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (6 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (6 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  // staff
+  int frameDx = equip[EQUIP_MAHOGANY_STAFF] ? 27 : 3;
+  if (isMirroring)
+    sprite.setTextureRect(sf::IntRect( (frameDx + frame) * width + width, spriteDy * height, -width, height));
+  else
+    sprite.setTextureRect(sf::IntRect( (frameDx + frame) * width, spriteDy * height, width, height));
+  app->draw(sprite);
+
+  if (equip[EQUIP_BLOOD_SNAKE])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (30 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (30 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  if (equip[EQUIP_BOOK_REAR])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (33 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (33 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+// shot type
+  if (shotType != ShotTypeStandard)
+  {
+    switch (shotType)
+    {
+    case ShotTypeIce:
+      sprite.setColor(sf::Color(100, 220, 255, 255));
+      break;
+
+    case ShotTypeStone:
+      sprite.setColor(sf::Color(120, 120, 150, 255));
+      break;
+
+    case ShotTypeLightning:
+      sprite.setColor(sf::Color(255, 255, 0, 255));
+      break;
+
+    case ShotTypeIllusion:
+      sprite.setColor(sf::Color(240, 180, 250, 255));
+      break;
+
+    case ShotTypeStandard:
+      sprite.setColor(sf::Color(255, 255, 255, 0));
+      break;
+
+    case ShotTypeExplodingFire:
+      sprite.setColor(sf::Color(255, 180, 0, 255));
+      break;
+
+    default:
+      break;
+    }
+
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (36 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (36 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+}
+
 WitchBlastGame &game()
 {
   return *gameptr;
 }
+

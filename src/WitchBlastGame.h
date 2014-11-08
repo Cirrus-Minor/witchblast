@@ -243,6 +243,8 @@ public:
   {
     bool ok;            /**< Save game OK ? */
     int level;          /**< Level the save game */
+    float gameTime;     /**< How long it has been played */
+    int shotType;       /**< Current special shot type */
     std::string date;   /**< Date of the save game */
     std::string time;   /**< Time of the save game */
   };
@@ -330,6 +332,7 @@ private:
   // game play
   int level;                  /*!< Level (floor) */
   int challengeLevel;         /*!< Level (challenge) */
+  float gameTime;             /*!< "age" of the current game */
   int floorX;                 /*!< X position of the room in the level */
   int floorY;                 /*!< Y position of the room in the level */
   bool roomClosed;            /*!< True if the room is closed */
@@ -668,6 +671,12 @@ private:
 
   bool worldEvent[NB_EVENTS];
   void initEvents();
+
+  void renderPlayer(float x, float y, bool equip[NUMBER_EQUIP_ITEMS], int shotType,
+                  int frame, int spriteDy);
+  bool equipToDisplay[NUMBER_EQUIP_ITEMS];
+  bool equipNudeToDisplay[NUMBER_EQUIP_ITEMS];
+  saveHeaderStruct saveHeader;
 };
 
 /*!
