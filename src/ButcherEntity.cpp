@@ -11,9 +11,9 @@
 ButcherEntity::ButcherEntity(float x, float y)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_BUTCHER), x, y)
 {
-  width = 128;
-  height = 128;
-  sprite.setOrigin((float)(this->width / 2), (float)(this->height / 2));
+  width = 80;
+  height = 160;
+  sprite.setOrigin(40, 115);
 
   creatureSpeed = BUTCHER_VELOCITY;
   velocity = Vector2D(creatureSpeed);
@@ -25,7 +25,7 @@ ButcherEntity::ButcherEntity(float x, float y)
 
   type = ENTITY_ENEMY_BOSS;
   bloodColor = BloodRed;
-  shadowFrame = 5;
+  shadowFrame = 4;
   dyingFrame = 3;
   deathFrame = FRAME_CORPSE_BUTCHER;
   agonizingSound = SOUND_BUTCHER_DIE;
@@ -34,7 +34,7 @@ ButcherEntity::ButcherEntity(float x, float y)
 
   timer = (rand() % 50) / 10.0f;
   age = -1.5f;
-  frame = 0;
+  frame = 1;
 
   resistance[ResistanceFrozen] = ResistanceHigh;
   resistance[ResistanceRecoil] = ResistanceHigh;
@@ -50,7 +50,7 @@ void ButcherEntity::animate(float delay)
     timer = timer - delay;
     if (timer <= 0.0f)
     {
-      creatureSpeed = BUTCHER_VELOCITY + hpMax - hp;
+      creatureSpeed = BUTCHER_VELOCITY + (hpMax - hp) * 0.8f;
       timer = (rand() % 50) / 10.0f;
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       if (rand()%2 == 0)
@@ -60,23 +60,22 @@ void ButcherEntity::animate(float delay)
     }
 
     frame = ((int)(age * creatureSpeed / 25)) % 4;
-    if (frame == 2) frame = 0;
-    else if (frame == 3) frame = 2;
+    if (frame == 3) frame = 1;
 
     if (velocity.x > 1.0f) isMirroring = true;
     else if (velocity.x < -1.0f) isMirroring = false;
   }
 
   EnemyEntity::animate(delay);
-  z = y + 55;
+  z = y + 30;
 }
 
 void ButcherEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + 45;
+    boundingBox.left = (int)x - 22;
     boundingBox.width = 44;
-    boundingBox.top = (int)y - height / 2 + 48;
-    boundingBox.height =  72;
+    boundingBox.top = (int)y - 18;
+    boundingBox.height =  48;
 }
 
 void ButcherEntity::collideMapRight()
