@@ -33,6 +33,7 @@ PumpkinEntity::PumpkinEntity(float x, float y, bool invocated)
   shadowFrame = 3;
   dyingFrame = 4;
   deathFrame = FRAME_CORPSE_PUMPKIN;
+  agonizingSound = SOUND_PUMPKIN_DIE;
 
   isJumping = false;
   h = 0.0f;
@@ -85,7 +86,10 @@ void PumpkinEntity::animate(float delay)
     jumpingDelay -= slimeDelay;
     if (jumpingDelay < 0.0f)
     {
-      SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
+      if (rand() % 2 == 0)
+        SoundManager::getInstance().playSound(SOUND_PUMPKIN_01);
+      else
+        SoundManager::getInstance().playSound(SOUND_PUMPKIN_00);
       hVelocity = 200.0f; // + rand() % 150;
       isJumping = true;
       isFirstJumping = true;
@@ -168,28 +172,11 @@ void PumpkinEntity::collideWithEnemy(EnemyEntity* entity)
 
 void PumpkinEntity::dying()
 {
-  /*isDying = true;
-  game().addKilledEnemy(enemyType);
-  SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-  deadSlime->setZ(OFFSET_Y);
-  deadSlime->setImagesProLine(10);
-  deadSlime->setFrame(FRAME_CORPSE_PUMPKIN);
-  deadSlime->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-
-  if (!invocated) drop();
-  SoundManager::getInstance().playSound(SOUND_ENNEMY_DYING);*/
   EnemyEntity::dying();
+  hVelocity = 320.0f;
 }
 
 void PumpkinEntity::prepareDying()
 {
-   // if (!isJumping)
-      dying();
-}
-
-bool PumpkinEntity::canCollide()
-{
-  return true; //h <= 70.0f;
+  dying();
 }

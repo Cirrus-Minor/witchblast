@@ -11,7 +11,6 @@ class PumpkinEntity : public EnemyEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
-	  virtual bool canCollide();
 
   protected:
     virtual void collideMapRight();
