@@ -293,6 +293,9 @@ public:
 
   void addMessageToQueue(EnumMessages type);
 
+  std::string enemyToString(enemyTypeEnum enemyType);
+  std::string sourceToString(sourceTypeEnum sourceType, enemyTypeEnum enemyType);
+
 protected:
   /*!
    *  \brief Rendering method
@@ -674,6 +677,7 @@ private:
 
   void renderPlayer(float x, float y, bool equip[NUMBER_EQUIP_ITEMS], int shotType,
                   int frame, int spriteDy);
+  void renderDeathScreen(float x, float y);
   bool equipToDisplay[NUMBER_EQUIP_ITEMS];
   bool equipNudeToDisplay[NUMBER_EQUIP_ITEMS];
   saveHeaderStruct saveHeader;

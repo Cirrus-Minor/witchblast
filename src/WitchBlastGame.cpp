@@ -243,7 +243,7 @@ void WitchBlastGame::onUpdate()
     else
       SoundManager::getInstance().stopSound(SOUND_VIB);
 
-    gameTime += deltaTime;
+    if (isPlayerAlive) gameTime += deltaTime;
 
     for (int i = 0; i < NB_X_GAME; i++)
     {
@@ -839,7 +839,17 @@ void WitchBlastGame::renderRunningGame()
 
     if (player->isDead())
     {
-      renderDeathScreen();
+      float deathAge = player->getDeathAge();
+
+      if (deathAge > 2.5f)
+      {
+        renderDeathScreen(80, 110);
+      }
+      else if (deathAge > 1.5f)
+      {
+        renderDeathScreen(80 + (2.5f - deathAge) * 1000, 110);
+      }
+
     }
     else if (currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
     {
@@ -942,6 +952,51 @@ void WitchBlastGame::renderRunningGame()
       }
     }
   }
+}
+
+void WitchBlastGame::renderDeathScreen(float x, float y)
+{
+  int xRect = 810, yRect = 300;
+  sf::RectangleShape rectangle(sf::Vector2f(810 , 300));
+  rectangle.setFillColor(sf::Color(236, 222, 194));
+  rectangle.setPosition(sf::Vector2f(x, y));
+  rectangle.setOutlineThickness(2);
+  rectangle.setOutlineColor(sf::Color::White);
+  app->draw(rectangle);
+
+  write("Death certificate", 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+
+  std::stringstream ss;
+  ss << "Killed by " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
+  ss << "Died on level " << level << " after " << (int)gameTime / 60 << ":" << (int)gameTime % 60 << " min of game." << std::endl;
+
+  int bodyCount = 0;
+  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeBat_invocated; enemyType++)
+    bodyCount += killedEnemies[enemyType];
+
+  ss << "Slayed monsters: " << bodyCount << std::endl;
+  ss << "Completed challenges: " << challengeLevel - 1 << std::endl;
+
+  write(ss.str(), 16, x + 80, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+
+  // player
+  renderPlayer(x + 14, y + 48, player->getEquipment(), player->getShotType(), 1, 0);
+
+  // items
+  write("Inventory", 16, x + 14, y + 150, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  int n = 0;
+  for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
+    {
+      if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
+      {
+        sf::Sprite itemSprite;
+        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+        itemSprite.setPosition(x + 14 + n * 32, y + 168);
+        itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
+        app->draw(itemSprite);
+        n++;
+      }
+    }
 }
 
 void WitchBlastGame::renderDeathScreen()
@@ -2326,10 +2381,10 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     if (itemOk && (items[eq].specialShot != ShotTypeStandard && items[eq].level >= 3) && player->canGetNewShot(true))
       itemOk = false;
 
-    if (itemOk && eq == EQUIP_BOOK_DUAL && player->isEquiped(EQUIP_BOOK_DUAL_QUICK))
+    if (itemOk && i == EQUIP_BOOK_DUAL && player->isEquiped(EQUIP_BOOK_DUAL_QUICK))
       itemOk = false;
 
-    if (itemOk && eq == EQUIP_BOOK_DUAL_QUICK && player->isEquiped(EQUIP_BOOK_DUAL))
+    if (itemOk && i == EQUIP_BOOK_DUAL_QUICK && player->isEquiped(EQUIP_BOOK_DUAL))
       itemOk = false;
 
     if (itemOk && noFairy && items[eq].familiar != FamiliarNone) itemOk = false;
@@ -3304,6 +3359,83 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 }
+
+std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
+{
+  std::string value = "unknown";
+
+  switch (enemyType)
+  {
+    case EnemyTypeBat_invocated:
+    case EnemyTypeBat: value = "enemy_type_bat"; break;
+    case EnemyTypeRat_invocated:
+    case EnemyTypeRat: value = "enemy_type_rat"; break;
+    case EnemyTypeRatBlack: value = "enemy_type_rat_black"; break;
+    case EnemyTypeRatHelmet_invocated:
+    case EnemyTypeRatHelmet: value = "enemy_type_rat_helmet"; break;
+    case EnemyTypeRatBlackHelmet: value = "enemy_type_rat_black_helmet"; break;
+    case EnemyTypeEvilFlower: value = "enemy_type_evil_flower"; break;
+    case EnemyTypeEvilFlowerIce: value = "enemy_type_evil_flower_ice"; break;
+    case EnemyTypeSnake_invocated:
+    case EnemyTypeSnake: value = "enemy_type_snake"; break;
+    case EnemyTypeSnakeBlood_invocated:
+    case EnemyTypeSnakeBlood: value = "enemy_type_snake_blood"; break;
+    case EnemyTypeSlime_invocated:
+    case EnemyTypeSlime: value = "enemy_type_slime"; break;
+    case EnemyTypeSlimeRed_invocated:
+    case EnemyTypeSlimeRed: value = "enemy_type_slime_red"; break;
+    case EnemyTypeSlimeBlue_invocated:
+    case EnemyTypeSlimeBlue: value = "enemy_type_slime_blue"; break;
+    case EnemyTypeSlimeViolet_invocated:
+    case EnemyTypeSlimeViolet: value = "enemy_type_slime_violet"; break;
+    case EnemyTypeImpBlue: value = "enemy_type_imp_blue"; break;
+    case EnemyTypeImpRed: value = "enemy_type_imp_red"; break;
+    case EnemyTypePumpkin_invocated:
+    case EnemyTypePumpkin: value = "enemy_type_pumpkin"; break;
+    case EnemyTypeWitch: value = "enemy_type_witch"; break;
+    case EnemyTypeWitchRed: value = "enemy_type_witch_red"; break;
+    case EnemyTypeCauldron: value = "enemy_type_cauldron"; break;
+
+    // mini boss
+    case EnemyTypeBubble: value = "enemy_type_bubble"; break;
+
+    // boss
+    case EnemyTypeButcher: value = "enemy_type_boss_butcher"; break;
+    case EnemyTypeSlimeBoss: value = "enemy_type_boss_slime_giant"; break;
+    case EnemyTypeCyclops: value = "enemy_type_boss_cyclops"; break;
+    case EnemyTypeRatKing: value = "enemy_type_boss_rat_king"; break;
+    case EnemyTypeSpiderGiant: value = "enemy_type_boss_spider_giant"; break;
+
+    // invocated
+    case EnemyTypeRatGreen: value = "enemy_type_green_rat"; break;
+    case EnemyTypeRockFalling: value = "enemy_type_rock_falling"; break;
+    case EnemyTypeRockMissile: value = "enemy_type_rock_missile"; break;
+    case EnemyTypeSpiderEgg_invocated: value = "enemy_type_spider_egg"; break;
+    case EnemyTypeSpiderLittle_invocated: value = "enemy_type_spider_little"; break;
+    case EnemyTypeSpiderWeb: value = "enemy_type_spider_web"; break;
+
+    case EnemyTypeNone: value = "enemy_type_himself"; break;
+
+    case NB_ENEMY: break;
+  }
+  return value;
+}
+
+std::string WitchBlastGame::sourceToString(sourceTypeEnum sourceType, enemyTypeEnum enemyType)
+{
+  std::string value = "unknown";
+
+  switch (sourceType)
+  {
+    case SourceTypeBolt:
+    case SourceTypeMelee: value = tools::getLabel(enemyToString(enemyType)); break;
+    case SourceTypeExplosion: value = "explosion";
+    case SourceTypePoison: value = "poison";
+  }
+
+  return value;
+}
+
 
 WitchBlastGame &game()
 {
