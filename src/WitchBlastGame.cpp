@@ -968,13 +968,14 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
 
   std::stringstream ss;
   ss << "Killed by " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
-  ss << "Died on level " << level << " after " << (int)gameTime / 60 << ":" << (int)gameTime % 60 << " min of game." << std::endl;
+  ss << "Died on level " << level << " after " << (int)gameTime / 60 /*<< ":" << (int)gameTime % 60*/ << " min of game." << std::endl;
 
   int bodyCount = 0;
-  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeBat_invocated; enemyType++)
+  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
     bodyCount += killedEnemies[enemyType];
 
   ss << "Slayed monsters: " << bodyCount << std::endl;
+  ss << "Gold: " << player->getGold() << std::endl;
   ss << "Completed challenges: " << challengeLevel - 1 << std::endl;
 
   write(ss.str(), 16, x + 80, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
@@ -983,7 +984,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   renderPlayer(x + 14, y + 48, player->getEquipment(), player->getShotType(), 1, 0);
 
   // items
-  write("Inventory", 16, x + 14, y + 150, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write("Inventory", 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
   int n = 0;
   for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
     {
@@ -991,7 +992,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
       {
         sf::Sprite itemSprite;
         itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-        itemSprite.setPosition(x + 14 + n * 32, y + 168);
+        itemSprite.setPosition(x + 14 + n * 32, y + 183);
         itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
         app->draw(itemSprite);
         n++;
@@ -1523,12 +1524,14 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
       write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
     }
+    else if (menuState == MenuStateMain)
+    {
+      if (menu->items[menu->index].id == MenuStartOld)
+        renderPlayer(620, 300, equipToDisplay, saveHeader.shotType, 1, 0);
+      else
+        renderPlayer(620, 300, equipNudeToDisplay, 0, 1, 0);
+    }
   }
-
-  if (menu->items[menu->index].id == MenuStartOld)
-    renderPlayer(240, 340, equipToDisplay, saveHeader.shotType, 1, 0);
-  else if (menu->items[menu->index].id == MenuStartNew)
-    renderPlayer(240, 250, equipNudeToDisplay, 0, 1, 0);
 
   std::ostringstream oss;
   oss << APP_NAME << " v" << APP_VERSION << "  - 2014 - " /*<< tools::getLabel("by")*/ << " Seby (code), Vetea (2D art)";
