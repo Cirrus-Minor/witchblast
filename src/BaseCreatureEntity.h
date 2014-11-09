@@ -45,8 +45,6 @@ enum enemyTypeEnum
   EnemyTypeRatHelmet_invocated,
   EnemyTypeSnake_invocated,
   EnemyTypeSnakeBlood_invocated,
-  EnemyTypeRockFalling,
-  EnemyTypeRockMissile,
   EnemyTypeSlime_invocated,
   EnemyTypeSlimeRed_invocated,
   EnemyTypeSlimeBlue_invocated,
@@ -54,6 +52,9 @@ enum enemyTypeEnum
   EnemyTypePumpkin_invocated,
   EnemyTypeSpiderEgg_invocated,
   EnemyTypeSpiderLittle_invocated,
+
+  EnemyTypeRockFalling,
+  EnemyTypeRockMissile,
   EnemyTypeSpiderWeb,
 
   EnemyTypeNone,  // player of fairy
