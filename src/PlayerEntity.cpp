@@ -699,29 +699,30 @@ void PlayerEntity::render(sf::RenderTarget* app)
       spriteDy = 11;
       break;
     }
+    sprite.setTextureRect(sf::IntRect( frame * width, spriteDy * height, width, height));
+    app->draw(sprite);
   }
   else
   {
     // shadow
     sprite.setTextureRect(sf::IntRect( 2 * width, 11 * height, width, height));
     app->draw(sprite);
+
+    renderHalo(app);
+    renderPlayer(app);
+
+    // shield
+    if (protection.active)
+    {
+      sf::Color savedColor = sprite.getColor();
+      sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (protection.timer < 2.0f ? 25 : 10)) * 30 ));
+      sprite.setTextureRect(sf::IntRect( 3 * width, 11 * height, width, height));
+      sprite.setScale(1.5f, 1.5f);
+      app->draw(sprite);
+      sprite.setScale(1.0f, 1.0f);
+      sprite.setColor(savedColor);
+    }
   }
-
-  renderHalo(app);
-  renderPlayer(app);
-
-  // shield
-  if (protection.active)
-  {
-    sf::Color savedColor = sprite.getColor();
-    sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (protection.timer < 2.0f ? 25 : 10)) * 30 ));
-    sprite.setTextureRect(sf::IntRect( 3 * width, 11 * height, width, height));
-    sprite.setScale(1.5f, 1.5f);
-    app->draw(sprite);
-    sprite.setScale(1.0f, 1.0f);
-    sprite.setColor(savedColor);
-  }
-
 
   if (game().getShowLogical() && playerStatus != playerStatusDead)
   {
