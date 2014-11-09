@@ -438,6 +438,9 @@ class PlayerEntity : public BaseCreatureEntity
     float getPercentSpellDelay();
     bool canCastSpell();
 
+    enemyTypeEnum getLastHurtingEnemy();
+    sourceTypeEnum getLastHurtingSource();
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
@@ -480,8 +483,10 @@ class PlayerEntity : public BaseCreatureEntity
 
     std::vector<FairyEntity*> fairies;
 
-    float deathAge;
     float idleAge;
+    float deathAge;
+    enemyTypeEnum lastHurtingEnemy;
+    sourceTypeEnum lastHurtingSource;
 
     int spriteDy;
     void renderPlayer(sf::RenderTarget* app);

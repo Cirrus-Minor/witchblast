@@ -161,6 +161,16 @@ bool PlayerEntity::isDead()
   return playerStatus == playerStatusDead;
 }
 
+enemyTypeEnum PlayerEntity::getLastHurtingEnemy()
+{
+  return lastHurtingEnemy;
+}
+
+sourceTypeEnum PlayerEntity::getLastHurtingSource()
+{
+  return lastHurtingSource;
+}
+
 float PlayerEntity::getDeathAge()
 {
   return deathAge;
@@ -1067,6 +1077,9 @@ int PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool cr
       hurtingDelay = HURTING_DELAY * 2.0f;
       game().generateBlood(x, y, bloodColor);
       game().proceedEvent(EventBeingHurted);
+
+      lastHurtingEnemy = enemyType;
+      lastHurtingSource = sourceType;
 
       return true;
     }
