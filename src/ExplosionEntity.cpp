@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage)
+ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage, enemyTypeEnum enemyType)
   : SpriteEntity(ImageManager::getInstance().getImage(IMAGE_EXPLOSION), x, y, 100, 100)
 {
   type = ENTITY_EXPLOSION;
@@ -88,7 +88,7 @@ void ExplosionEntity::testCollisions()
         if (bb.intersects(entity->getBoundingBox()))
         {
           // TODO explosion type
-          if (damage > 0) entity->hurt(damage, ShotTypeFire, 0, false, -1);
+          if (damage > 0) entity->hurt(damage, ShotTypeFire, 0, false, SourceTypeExplosion, enemyType);
 
           Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 800.0f );
           entity->giveRecoil(true, recoilVector, 1.0f);

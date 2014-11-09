@@ -18,6 +18,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   frame = 0;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   this->boltType = boltType;
+  enemyType = EnemyTypeNone;
   switch (boltType)
   {
     case ShotTypeDeterministic:
@@ -78,6 +79,11 @@ void BoltEntity::loseDamages(int damages)
 enumShotType BoltEntity::getBoltType()
 {
   return boltType;
+}
+
+enemyTypeEnum BoltEntity::getEnemyType()
+{
+  return enemyType;
 }
 
 bool BoltEntity::isFlying()
@@ -330,7 +336,7 @@ void BoltEntity::collideMapBottom()
 void BoltEntity::explode()
 {
   isDying = true;
-  new ExplosionEntity(x, y, ExplosionTypeStandard, 12);
+  new ExplosionEntity(x, y, ExplosionTypeStandard, 12, enemyType);
   game().makeShake(0.5f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 

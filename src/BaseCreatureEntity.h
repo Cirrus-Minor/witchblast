@@ -5,6 +5,70 @@
 #include "TextEntity.h"
 #include "Constants.h"
 
+enum enemyTypeEnum
+{
+  // normal
+  EnemyTypeBat,
+  EnemyTypeRat,
+  EnemyTypeRatBlack,
+  EnemyTypeRatHelmet,
+  EnemyTypeRatBlackHelmet,
+  EnemyTypeEvilFlower,
+  EnemyTypeEvilFlowerIce,
+  EnemyTypeSnake,
+  EnemyTypeSnakeBlood,
+  EnemyTypeSlime,
+  EnemyTypeSlimeRed,
+  EnemyTypeSlimeBlue,
+  EnemyTypeSlimeViolet,
+  EnemyTypeImpBlue,
+  EnemyTypeImpRed,
+  EnemyTypePumpkin,
+  EnemyTypeWitch,
+  EnemyTypeWitchRed,
+  EnemyTypeCauldron,
+
+  // mini boss
+  EnemyTypeBubble,
+
+  // boss
+  EnemyTypeButcher,
+  EnemyTypeSlimeBoss,
+  EnemyTypeCyclops,
+  EnemyTypeRatKing,
+  EnemyTypeSpiderGiant,
+
+  // invocated
+  EnemyTypeBat_invocated,
+  EnemyTypeRat_invocated,
+  EnemyTypeRatGreen,
+  EnemyTypeRatHelmet_invocated,
+  EnemyTypeSnake_invocated,
+  EnemyTypeSnakeBlood_invocated,
+  EnemyTypeRockFalling,
+  EnemyTypeRockMissile,
+  EnemyTypeSlime_invocated,
+  EnemyTypeSlimeRed_invocated,
+  EnemyTypeSlimeBlue_invocated,
+  EnemyTypeSlimeViolet_invocated,
+  EnemyTypePumpkin_invocated,
+  EnemyTypeSpiderEgg_invocated,
+  EnemyTypeSpiderLittle_invocated,
+  EnemyTypeSpiderWeb,
+
+  EnemyTypeNone,  // player of fairy
+
+  NB_ENEMY // = no enemy
+};
+
+enum sourceTypeEnum
+{
+  SourceTypeMelee,
+  SourceTypeBolt,
+  SourceTypeExplosion,
+  SourceTypePoison
+};
+
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
   public:
@@ -26,7 +90,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual bool collideWithMap(int direction);
-    virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType);
+    virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType);
     virtual void prepareDying();
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};

@@ -59,7 +59,7 @@ void FallingRockEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (!hurtAll || hasHurted) return;
 
-  if (entity->hurt(meleeDamages * 1.5f, meleeType, 0, false, enemyType))
+  if (entity->hurt(meleeDamages * 1.5f, meleeType, 0, false, SourceTypeMelee, enemyType))
   {
     float xs = (x + entity->getX()) / 2;
     float ys = (y + entity->getY()) / 2;

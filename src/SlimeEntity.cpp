@@ -152,7 +152,7 @@ void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, enemyType))
+        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, SourceTypeMelee, enemyType))
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
@@ -339,12 +339,12 @@ void SlimeEntity::fire()
 
     if (slimeType == SlimeTypeBlue)
     {
-      bolt = new EnemyBoltEntity(x, y, ShotTypeIce, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeIce, 0, enemyType);
       bolt->setDamages(5);
     }
     else if (slimeType == SlimeTypeRed)
     {
-      bolt = new EnemyBoltEntity(x, y, ShotTypeFire, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeFire, 0, enemyType);
       bolt->setDamages(8);
     }
     else
@@ -363,7 +363,7 @@ void SlimeEntity::fire()
 
 void SlimeEntity::explode()
 {
-  new ExplosionEntity(x, y, ExplosionTypeStandard, isPet ? 18 : 12);
+  new ExplosionEntity(x, y, ExplosionTypeStandard, isPet ? 18 : 12, enemyType);
   game().makeShake(1.0f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }

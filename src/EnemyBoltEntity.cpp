@@ -3,11 +3,12 @@
 #include "sfml_game/ImageManager.h"
 #include "WitchBlastGame.h"
 
-EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int level) :
+EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int level, enemyTypeEnum enemyType) :
   BoltEntity(x, y, -1, boltType, level)
 {
   damages = INITIAL_BOLT_DAMAGES;
   type = ENTITY_ENEMY_BOLT;
+  this->enemyType = enemyType;
   viscosity = 1.0f;
   switch (boltType)
   {

@@ -111,7 +111,7 @@ float BaseCreatureEntity::animateStates(float delay)
     {
       specialState[SpecialStatePoison].param3 += specialState[SpecialStatePoison].param2;
       // TODO
-      hurt(specialState[SpecialStatePoison].param1, ShotTypeDeterministic, 0, false, -1);
+      hurt(specialState[SpecialStatePoison].param1, ShotTypeDeterministic, 0, false, SourceTypePoison, NB_ENEMY);
     }
   }
 
@@ -403,7 +403,7 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 	return false;
 }
 
-int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
+int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
 {
   if (armor > 0.01f && hurtingType != ShotTypeDeterministic)
   {

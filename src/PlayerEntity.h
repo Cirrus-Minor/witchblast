@@ -129,6 +129,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     bool isEquiped(int eq);
 
+    bool* getEquipment();
+
 /*!
      *  \brief returns if the player is poisoned or not
      *
@@ -189,7 +191,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  \param level : damages level
      *  \return : True if the player has been hurt
      */
-    virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType) override;
+    virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType) override;
 
     /*!
      *  \brief returns if the player is dead or not

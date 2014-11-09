@@ -7,7 +7,7 @@
 class EnemyBoltEntity : public BoltEntity
 {
   public:
-    EnemyBoltEntity(float x, float y, enumShotType boltType, int level);
+    EnemyBoltEntity(float x, float y, enumShotType boltType, int level, enemyTypeEnum enemyType);
     virtual void animate(float delay);
 };
 

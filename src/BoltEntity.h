@@ -4,6 +4,7 @@
 #include "sfml_game/CollidingSpriteEntity.h"
 #include "ParticleGenerator.h"
 #include "Constants.h"
+#include "BaseCreatureEntity.h"
 
 /*! \class BoltEntity
  * \brief bolt thrown by the player
@@ -31,6 +32,8 @@ class BoltEntity : public CollidingSpriteEntity
     void setCritical(bool setCritical);
     void setGoThrough(bool goThrough);
 
+    enemyTypeEnum getEnemyType();
+
   protected:
     virtual void calculateBB();
     virtual void collideMapRight();
@@ -47,6 +50,7 @@ class BoltEntity : public CollidingSpriteEntity
     int damages;
     float renderScale;
     enumShotType boltType;
+    enemyTypeEnum enemyType;
 
     ParticleGenerator particleGenerator;
 

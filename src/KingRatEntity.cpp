@@ -246,14 +246,14 @@ void KingRatEntity::animate(float delay)
   z = y + 52;
 }
 
-int KingRatEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
+int KingRatEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
 {
   int newDamages = damages;
   // berserk state protects
   if (state == 6)
     newDamages = damages / 4;
 
-  return EnemyEntity::hurt(newDamages, hurtingType, level, critical, sourceType);
+  return EnemyEntity::hurt(newDamages, hurtingType, level, critical, sourceType, enemyType);
 }
 
 void KingRatEntity::calculateBB()

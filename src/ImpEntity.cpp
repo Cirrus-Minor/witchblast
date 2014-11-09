@@ -132,9 +132,9 @@ void ImpEntity::collideWithEnemy(EnemyEntity* entity)
   }
 }
 
-int ImpEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
+int ImpEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
 {
-  int result = EnemyEntity::hurt(damages, hurtingType, level, critical, sourceType);
+  int result = EnemyEntity::hurt(damages, hurtingType, level, critical, sourceType, enemyType);
 
   if (!isDying && !isAgonising)
   {
@@ -159,12 +159,12 @@ void ImpEntity::fire()
     EnemyBoltEntity* bolt;
     if (impType == ImpTypeBlue)
     {
-      bolt = new EnemyBoltEntity(x, y, ShotTypeIce, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeIce, 0, enemyType);
       bolt->setDamages(5);
     }
     else
     {
-      bolt = new EnemyBoltEntity(x, y, ShotTypeFire, 0);
+      bolt = new EnemyBoltEntity(x, y, ShotTypeFire, 0, enemyType);
       bolt->setDamages(8);
     }
     bolt->setFlying(true);

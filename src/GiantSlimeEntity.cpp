@@ -450,7 +450,7 @@ void GiantSlimeEntity::fire()
 {
   SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
   EnemyBoltEntity* bolt = new EnemyBoltEntity
-  (x, y + 10, ShotTypeStandard, 0);
+  (x, y + 10, ShotTypeStandard, 0, enemyType);
   bolt->setFrame(1);
   bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 

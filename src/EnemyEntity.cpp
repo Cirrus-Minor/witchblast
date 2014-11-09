@@ -128,7 +128,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, enemyType) > 0)
+        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, SourceTypeBolt, enemyType) > 0)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
@@ -173,7 +173,8 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
                          boltEntity->getBoltType(),
                          boltEntity->getLevel(),
                          boltEntity->isCritical(),
-                         SourceTypePlayerBolt);
+                         SourceTypeBolt,
+                         enemyType);
 
   if (hp > 0) boltEntity->loseDamages(boltEntity->getDamages());
   else boltEntity->loseDamages(maxDamages >= boltDamages ? boltDamages : maxDamages);
@@ -244,9 +245,9 @@ void EnemyEntity::collideWithEnemy(EnemyEntity* entity)
   // To implement the behaviour when colliding with another ennemy
 }
 
-int EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
+int EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
 {
-  int hurtedHp = BaseCreatureEntity::hurt(damages, hurtingType, level, critical, sourceType);
+  int hurtedHp = BaseCreatureEntity::hurt(damages, hurtingType, level, critical, sourceType, enemyType);
   if (hurtedHp > 0 && hurtingSound != SOUND_NONE && hp > 0)
     SoundManager::getInstance().playSound(hurtingSound);
   return hurtedHp;
@@ -254,7 +255,7 @@ int EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool cri
 
 void EnemyEntity::makeExplode()
 {
-  new ExplosionEntity(x, y, ExplosionTypeStandard, 16);
+  new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
   isDying = true;
 
   SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);

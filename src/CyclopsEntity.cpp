@@ -263,10 +263,10 @@ void CyclopsEntity::animate(float delay)
   z = OFFSET_Y + y + 46;
 }
 
-int CyclopsEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType)
+int CyclopsEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
 {
   if (destroyLevel < getHealthLevel()) damages /= 3;
-  return EnemyEntity::hurt(damages, hurtingType, level, critical, sourceType);
+  return EnemyEntity::hurt(damages, hurtingType, level, critical, sourceType, enemyType);
 }
 
 void CyclopsEntity::calculateBB()

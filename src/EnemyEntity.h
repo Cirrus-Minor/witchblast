@@ -4,66 +4,6 @@
 #include "BaseCreatureEntity.h"
 #include "BoltEntity.h"
 
-enum enemyTypeEnum
-{
-  // normal
-  EnemyTypeBat,
-  EnemyTypeRat,
-  EnemyTypeRatBlack,
-  EnemyTypeRatHelmet,
-  EnemyTypeRatBlackHelmet,
-  EnemyTypeEvilFlower,
-  EnemyTypeEvilFlowerIce,
-  EnemyTypeSnake,
-  EnemyTypeSnakeBlood,
-  EnemyTypeSlime,
-  EnemyTypeSlimeRed,
-  EnemyTypeSlimeBlue,
-  EnemyTypeSlimeViolet,
-  EnemyTypeImpBlue,
-  EnemyTypeImpRed,
-  EnemyTypePumpkin,
-  EnemyTypeWitch,
-  EnemyTypeWitchRed,
-  EnemyTypeCauldron,
-
-  // mini boss
-  EnemyTypeBubble,
-
-  // boss
-  EnemyTypeButcher,
-  EnemyTypeSlimeBoss,
-  EnemyTypeCyclops,
-  EnemyTypeRatKing,
-  EnemyTypeSpiderGiant,
-
-  // invocated
-  EnemyTypeBat_invocated,
-  EnemyTypeRat_invocated,
-  EnemyTypeRatGreen,
-  EnemyTypeRatHelmet_invocated,
-  EnemyTypeSnake_invocated,
-  EnemyTypeSnakeBlood_invocated,
-  EnemyTypeRockFalling,
-  EnemyTypeRockMissile,
-  EnemyTypeSlime_invocated,
-  EnemyTypeSlimeRed_invocated,
-  EnemyTypeSlimeBlue_invocated,
-  EnemyTypeSlimeViolet_invocated,
-  EnemyTypePumpkin_invocated,
-  EnemyTypeSpiderEgg_invocated,
-  EnemyTypeSpiderLittle_invocated,
-  EnemyTypeSpiderWeb,
-
-  NB_ENEMY // = no enemy
-};
-
-enum sourceTypeEnum
-{
-  SourceTypePlayer,
-  SourceTypePlayerBolt,
-};
-
 class EnemyEntity : public BaseCreatureEntity
 {
 public:
@@ -71,7 +11,7 @@ public:
   virtual void animate(float delay);
   virtual void calculateBB();
   virtual void render(sf::RenderTarget* app);
-  virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, int sourceType) override;
+  virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType) override;
 
   virtual bool canCollide();
   enemyTypeEnum getEnemyType();

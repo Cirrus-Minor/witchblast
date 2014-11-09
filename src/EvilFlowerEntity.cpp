@@ -78,7 +78,7 @@ void EvilFlowerEntity::fire()
     if (flowerType == FlowerTypeIce) shotType = ShotTypeIce;
 
     EnemyBoltEntity* bolt = new EnemyBoltEntity
-          (x, y + 10, shotType, 0);
+          (x, y + 10, shotType, 0, enemyType);
     bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
     bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
