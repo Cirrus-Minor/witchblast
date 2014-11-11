@@ -768,6 +768,20 @@ void WitchBlastGame::renderRunningGame()
     app->setView(viewSave);
     EntityManager::getInstance().renderAfter(app, 5000);
   }
+  else if (gameTime < 1.0f)
+  {
+    sf::View view = app->getDefaultView();
+    sf::View viewSave = app->getDefaultView();
+
+    view.zoom(0.25f + 0.75f * (gameTime));
+
+    app->setView(view);
+
+    EntityManager::getInstance().renderUnder(app, 5000);
+
+    app->setView(viewSave);
+    EntityManager::getInstance().renderAfter(app, 5000);
+  }
   else
   {
     // render the game objects
