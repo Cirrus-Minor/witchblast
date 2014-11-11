@@ -17,7 +17,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 {
   width = 128;
   height = 192;
-  creatureSpeed = CYCLOP_SPEED[0];
+  creatureSpeed = CYCLOP_SPEED[0] * 0.6f;
   velocity = Vector2D(creatureSpeed);
   hp = CYCLOP_HP;
   hpDisplay = CYCLOP_HP;
@@ -27,13 +27,12 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 
   type = ENTITY_ENEMY_BOSS;
   bloodColor = BloodRed;
-  shadowFrame = 8;
   dyingFrame = 5;
   deathFrame = FRAME_CORPSE_CYCLOP;
-  dyingSound = SOUND_CYCLOP_DIE;
+  agonizingSound = SOUND_CYCLOP_DIE;
   frame = 0;
   if (game().getPlayerPosition().x > x) isMirroring = true;
-  sprite.setOrigin(64.0f, 128.0f);
+  sprite.setOrigin(64.0f, 143.0f);
 
   nextRockMissile = 0;
   destroyLevel = 0;
@@ -59,7 +58,7 @@ int CyclopsEntity::getHealthLevel()
 
 void CyclopsEntity::fire()
 {
-  new RockMissileEntity(x, y - 62, nextRockMissile);
+  new RockMissileEntity(x, y - 27, nextRockMissile);
   SoundManager::getInstance().playSound(SOUND_THROW);
 }
 
@@ -112,7 +111,7 @@ void CyclopsEntity::computeStates(float delay)
       {
         counter--;
         timer = 0.5f;
-        creatureSpeed = CYCLOP_SPEED[getHealthLevel()];
+        creatureSpeed = CYCLOP_SPEED[getHealthLevel()] * 0.6f;
         setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       }
       else
@@ -228,13 +227,19 @@ void CyclopsEntity::animate(float delay)
   if (canCollide()) testSpriteCollisions();
   BaseCreatureEntity::animate(delay);
 
+  // old frame (for sound)
+  int oldFrame = frame;
+
   // current frame
   if (state == 0)
   {
-    int r = ((int)(age * 5.0f)) % 4;
+    int r = ((int)(age * 2.0f)) % 4;
     if (r == 2) frame = 0;
     else if (r == 3) frame = 2;
     else frame = r;
+
+    if (oldFrame == 1 && frame == 0) SoundManager::getInstance().playSound(SOUND_HEAVY_STEP_00);
+    else if (oldFrame == 2 && frame == 0) SoundManager::getInstance().playSound(SOUND_HEAVY_STEP_01);
   }
   else if (state == 1)
   {
@@ -260,7 +265,7 @@ void CyclopsEntity::animate(float delay)
   else if (velocity.x < -1.0f)
     isMirroring = false;
 
-  z = OFFSET_Y + y + 46;
+  z = OFFSET_Y + y + 36;
 }
 
 int CyclopsEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
@@ -273,7 +278,7 @@ void CyclopsEntity::calculateBB()
 {
   boundingBox.left = OFFSET_X + (int)x - 32;
   boundingBox.width = 58;
-  boundingBox.top = OFFSET_Y + (int)y - 42;
+  boundingBox.top = OFFSET_Y + (int)y - 52;
   boundingBox.height =  90;
 }
 
@@ -317,6 +322,15 @@ void CyclopsEntity::drop()
 
 void CyclopsEntity::render(sf::RenderTarget* app)
 {
+  // shadow
+  if (frame == 3 || frame == 4 || frame == 6)
+    sprite.setPosition(isMirroring ? x - 20 : x + 20, y);
+  else
+    sprite.setPosition(x, y);
+  sprite.setTextureRect(sf::IntRect(8 * width, 0, width, height));
+  app->draw(sprite);
+  sprite.setPosition(x, y);
+
   EnemyEntity::render(app);
 
   // stones
@@ -326,17 +340,17 @@ void CyclopsEntity::render(sf::RenderTarget* app)
     {
       sprite.setTextureRect(sf::IntRect(1152, 0,  64,  64));
       if (isMirroring)
-        sprite.setPosition(x + 60, y);
+        sprite.setPosition(x + 60, y + 45);
       else
-        sprite.setPosition(x + 4, y);
+        sprite.setPosition(x + 4, y + 45);
     }
     else // medium rock
     {
       sprite.setTextureRect(sf::IntRect(1152, 64,  64,  64));
       if (isMirroring)
-        sprite.setPosition(x + 60, y - 12);
+        sprite.setPosition(x + 60, y + 33);
       else
-        sprite.setPosition(x + 4, y - 12);
+        sprite.setPosition(x + 4, y + 33);
     }
 
     app->draw(sprite);
