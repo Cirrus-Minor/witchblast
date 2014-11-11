@@ -107,7 +107,7 @@ WitchBlastGame::WitchBlastGame():
     "media/cauldron.png",      "media/snake.png",
     "media/pumpkin.png",
     "media/butcher.png",       "media/giant_slime.png",
-    "media/king_rat.png",      "media/cyclop.png",
+    "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/blood.png",
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
@@ -160,6 +160,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/spell_charge.ogg",   "media/sound/fireball.ogg",
     "media/sound/message.ogg",        "media/sound/earthquake.ogg",
     "media/sound/spell_freeze.ogg",   "media/sound/spell_shield.ogg",
+    "media/sound/heavy_step_00.ogg",  "media/sound/heavy_step_01.ogg",
   };
 
   for (const char *const filename : sounds) {
@@ -740,6 +741,33 @@ void WitchBlastGame::renderRunningGame()
     app->setView(viewSave);
     EntityManager::getInstance().renderAfter(app, 5000);
   }
+  else if (!isPlayerAlive)
+  {
+    sf::View view = app->getDefaultView();
+    sf::View viewSave = app->getDefaultView();
+
+    if (player->getDeathAge() > 1.0f)
+    {
+      view.zoom(0.25f);
+      view.setCenter(player->getX(), player->getY());
+    }
+
+    else
+    {
+      view.zoom(1.0f - 0.75f * (player->getDeathAge()));
+      float xDiff = view.getCenter().x - player->getX();
+      float yDiff = view.getCenter().y - player->getY();
+      view.setCenter(view.getCenter().x - xDiff * player->getDeathAge(),
+                     view.getCenter().y - yDiff * player->getDeathAge());
+    }
+
+    app->setView(view);
+
+    EntityManager::getInstance().renderUnder(app, 5000);
+
+    app->setView(viewSave);
+    EntityManager::getInstance().renderAfter(app, 5000);
+  }
   else
   {
     // render the game objects
@@ -841,13 +869,13 @@ void WitchBlastGame::renderRunningGame()
     {
       float deathAge = player->getDeathAge();
 
-      if (deathAge > 2.5f)
+      if (deathAge > 3.5f)
       {
         renderDeathScreen(80, 110);
       }
-      else if (deathAge > 1.5f)
+      else if (deathAge > 2.5f)
       {
-        renderDeathScreen(80 + (2.5f - deathAge) * 1000, 110);
+        renderDeathScreen(80 + (3.5f - deathAge) * 1000, 110);
       }
 
     }
