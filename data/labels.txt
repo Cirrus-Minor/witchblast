@@ -215,6 +215,39 @@ msg_tuto_spell_1#You've found a magic spell.
 msg_tuto_spell_2#Press the spell key (standard: space) to cast the spell.
 
 
+enemy_type_bat#a bat
+enemy_type_rat#a rat
+enemy_type_rat_black#a black rat
+enemy_type_rat_helmet#a rat with helmet
+enemy_type_rat_black_helmet#a black rat with helmet
+enemy_type_evil_flower#an evil flower
+enemy_type_evil_flower_ice#an evil edelweiss
+enemy_type_snake#a snake
+enemy_type_snake_blood#a blood snake
+enemy_type_slime#a slime
+enemy_type_slime_red#a red slime
+enemy_type_slime_blue#a blue slime
+enemy_type_slime_violet#a violet slime
+enemy_type_imp_blue#a blue imp
+enemy_type_imp_red#a red imp
+enemy_type_pumpkin#a mad pumpkin
+enemy_type_witch#a witch
+enemy_type_witch_red#a red witch
+enemy_type_cauldron#a cauldron
+enemy_type_bubble#a bubble
+enemy_type_boss_butcher#the Pigman Butcher
+enemy_type_boss_slime_giant#the Giant Slime
+enemy_type_boss_cyclops#the Barbarian Cyclops
+enemy_type_boss_rat_king#the Wererat King
+enemy_type_boss_spider_giant#the Giant Spider
+enemy_type_green_rat#a green rat
+enemy_type_rock_falling#a falling rock
+enemy_type_rock_missile#a throwing rock
+enemy_type_spider_egg#a falling spider egg
+enemy_type_spider_little#a spider
+enemy_type_spider_web#a spider web
+enemy_type_himself#himself
+
 item_apple_green#Green apple
 item_apple_green_desc#Restores 3 HP and cures poison
 item_manual_slime#Manual of Slime Mastery
