@@ -32,7 +32,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   {
     frame = 3;
     enemyType = EnemyTypeEvilFlowerIce;
-    deathFrame = FRAME_CORPSE_FLOWER;
+    deathFrame = FRAME_CORPSE_FLOWER_ICE;
   }
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;
@@ -74,17 +74,40 @@ void EvilFlowerEntity::fire()
 {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
 
-    enumShotType shotType = ShotTypeStandard;
-    if (flowerType == FlowerTypeIce) shotType = ShotTypeIce;
+    if (flowerType == FlowerTypeIce)
+    {
+      for (int i = 0; i < 2; i++)
+      {
+        EnemyBoltEntity* bolt = new EnemyBoltEntity
+            (x, y + 10, ShotTypeIce, 0, enemyType);
+        bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
+        bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
 
-    EnemyBoltEntity* bolt = new EnemyBoltEntity
-          (x, y + 10, shotType, 0, enemyType);
-    bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
-    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+        float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
 
-    float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
-    if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
-    bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), flowerFireVelocity ));
+        float fireAngle = Vector2D(x, y).angleTo(game().getPlayerPosition());
+        std::cout << fireAngle << " - " << fireAngle * 360 / (2 * PI) << std::endl;
+        if (i == 0) fireAngle += 0.1f;
+        else fireAngle -= 0.1f;
+
+        if (game().getPlayerPosition().y > y)
+          bolt->setVelocity(Vector2D(sin(fireAngle) * flowerFireVelocity, cos(fireAngle) * flowerFireVelocity));
+        else
+          bolt->setVelocity(Vector2D(-sin(fireAngle) * flowerFireVelocity, -cos(fireAngle) * flowerFireVelocity));
+      }
+    }
+    else
+    {
+      EnemyBoltEntity* bolt = new EnemyBoltEntity
+            (x, y + 10, ShotTypeStandard, 0, enemyType);
+      bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
+      bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+
+      float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
+      if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
+      bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), flowerFireVelocity ));
+    }
+
 }
 
 void EvilFlowerEntity::render(sf::RenderTarget* app)
