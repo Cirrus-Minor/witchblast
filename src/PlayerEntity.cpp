@@ -1122,17 +1122,6 @@ void PlayerEntity::dying()
         loseItem(enumItemType(i), true);
     }
   }
-
-  CollidingSpriteEntity* itemSprite
-    = new CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 80, 120);
-  itemSprite->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
-  itemSprite->setZ(OFFSET_Y - 1);
-  itemSprite->setImagesProLine(14);
-  itemSprite->setFrame(13);
-  itemSprite->setType(ENTITY_BLOOD);
-  itemSprite->setVelocity(Vector2D(rand()%450));
-  itemSprite->setViscosity(0.95f);
-  itemSprite->setSpin( (rand() % 700) - 350.0f);
 }
 
 void PlayerEntity::displayAcquiredGold(int n)
