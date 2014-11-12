@@ -11,7 +11,7 @@
   *  GNU General Public License for more details.
   *
   *  You should have received a copy of the GNU General Public License
-  *  along with Witch Blast.  If not, see <http://www.gnu.org/licenses/>.
+  *  along with Witch Blast. If not, see <http://www.gnu.org/licenses/>.
   */
 
 #ifndef SPRITEENTITY_H_INCLUDED
@@ -34,6 +34,7 @@ public:
   void setShrinking(bool isShrinking);
   void setShrinking(bool isShrinking, float initialScaleX, float initialScaleY);
   void setVisible(bool isVisible);
+  void setMirroring(bool isMirroring);
   void setFrame(int frame);
   void setImagesProLine(int n);
   void setScale(float scx, float scy);
