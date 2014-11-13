@@ -110,6 +110,7 @@ enum item_images {
   IMAGE_KEYS_QWER,
   IMAGE_KEYS_AZER,
   IMAGE_MESSAGE_ICONS,
+  IMAGE_INTRO,
 
   IMAGE_PNJ,
   IMAGE_FAIRY
@@ -193,6 +194,8 @@ enum sound_resources {
   SOUND_SPELL_SHIELD,
   SOUND_HEAVY_STEP_00,
   SOUND_HEAVY_STEP_01,
+  SOUND_NIGHT,
+  SOUND_GRUMBLE
 };
 
 enum corpses_ressources{

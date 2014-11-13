@@ -349,8 +349,6 @@ private:
   // game objects
   PlayerEntity* player;           /*!< Pointer to the player entity */
   TileMapEntity* currentTileMap;  /*!< TileMap of the room (main game board) */
-  GameMap* menuMap;               /*!< TileMap of the menu background (logical) */
-  TileMapEntity* menuTileMap;     /*!< TileMap of the menu background (graphical) */
 
   // displaying objects
   DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */
@@ -378,6 +376,7 @@ private:
   enum gameStateEnum
   {
     gameStateInit,      /**< Game initialization */
+    gameStateIntro,     /** < Intro animation */
     gameStateMenu,      /**< Menu */
     gameStatePlaying,   /**< Playing */
     gameStateKeyConfig  /**< Key config */
@@ -586,7 +585,22 @@ private:
    */
   void renderMenu();
 
-/*!
+  /*!
+   *  \brief initialize the intro
+   */
+  void prepareIntro();
+
+  /*!
+   *  \brief Update the intro
+   */
+  void updateIntro();
+
+  /*!
+   *  \brief Render the intro
+   */
+  void renderIntro();
+
+  /*!
    *  \brief Render the death screen (when the player dies)
    */
   void renderDeathScreen();
@@ -681,6 +695,9 @@ private:
   bool equipToDisplay[NUMBER_EQUIP_ITEMS];
   bool equipNudeToDisplay[NUMBER_EQUIP_ITEMS];
   saveHeaderStruct saveHeader;
+
+  SpriteEntity* introSprites[8];
+  int introSoundState;
 };
 
 /*!

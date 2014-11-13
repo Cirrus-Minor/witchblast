@@ -114,6 +114,7 @@ WitchBlastGame::WitchBlastGame():
     "media/interface.png",     "media/hud_shots.png",
     "media/explosion.png",     "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
+    "media/night.png",
     "media/pnj.png",           "media/fairy.png",
   };
 
@@ -161,6 +162,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/message.ogg",        "media/sound/earthquake.ogg",
     "media/sound/spell_freeze.ogg",   "media/sound/spell_shield.ogg",
     "media/sound/heavy_step_00.ogg",  "media/sound/heavy_step_01.ogg",
+    "media/sound/night.ogg",          "media/sound/grumble.ogg",
   };
 
   for (const char *const filename : sounds) {
@@ -173,7 +175,6 @@ WitchBlastGame::WitchBlastGame():
   }
 
   miniMap = NULL;
-  menuMap = NULL;
   currentMap = NULL;
   currentFloor = NULL;
 
@@ -196,7 +197,6 @@ WitchBlastGame::~WitchBlastGame()
 
   // cleaning data
   if (miniMap != NULL) delete (miniMap);
-  if (menuMap != NULL) delete (menuMap);
   if (currentFloor != NULL) delete (currentFloor);
 }
 
@@ -429,6 +429,167 @@ void WitchBlastGame::playLevel()
       new ItemEntity((enumItemType)i, 100 + (i % 14) * 60, 100 + (i / 14) * 60);
   }
   #endif
+}
+
+void WitchBlastGame::prepareIntro()
+{
+  EntityManager::getInstance().clean();
+
+  introSprites[1] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_WITCH), 1100, 565, 64, 96, 3);
+  introSprites[1]->setScale(2, 2);
+  introSprites[1]->setFrame(4);
+
+  introSprites[7] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CAULDRON), 1480, 600, 64, 64, 0);
+  introSprites[7]->setScale(2, 2);
+
+  introSprites[3] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_WITCH), 1400, 580, 64, 96, 0);
+  introSprites[3]->setScale(2, 2);
+
+  introSprites[6] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_WITCH), 1550, 580, 64, 96, 0);
+  introSprites[6]->setScale(2, 2);
+
+  introSprites[0] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_WITCH), 1000, 580, 64, 96, 0);
+  introSprites[0]->setScale(2, 2);
+
+  introSprites[2] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CYCLOP), 1200, 560, 128, 192, 3);
+  introSprites[2]->setScale(2, 2);
+  introSprites[2]->setFrame(0);
+
+  introSprites[4] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), 1900, 580, 42, 80, 6);
+  introSprites[4]->setScale(2, 2);
+  introSprites[4]->setMirroring(true);
+  introSprites[5] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), 1900, 580, 42, 80, 6);
+  introSprites[5]->setScale(2, 2);
+  introSprites[5]->setMirroring(true);
+
+  gameState = gameStateIntro;
+  gameTime = 0.0f;
+  introSoundState = 0;
+}
+
+void WitchBlastGame::updateIntro()
+{
+  gameTime += deltaTime;
+
+  introSprites[0]->setX(introSprites[0]->getX() - deltaTime * 60);
+  int frame = (int)(gameTime * 4) % 4;
+  if (frame == 2) frame = 0;
+  else if (frame == 3) frame = 2;
+  introSprites[0]->setFrame(frame);
+
+  introSprites[3]->setX(introSprites[3]->getX() - deltaTime * 60);
+  introSprites[3]->setFrame(frame);
+  introSprites[6]->setX(introSprites[6]->getX() - deltaTime * 60);
+  introSprites[6]->setFrame(frame);
+  introSprites[7]->setX(introSprites[7]->getX() - deltaTime * 60);
+
+  introSprites[1]->setX(introSprites[1]->getX() - deltaTime * 60);
+  introSprites[1]->setFrame(frame + 3);
+
+  int oldFrame = introSprites[2]->getFrame();
+  introSprites[2]->setX(introSprites[2]->getX() - deltaTime * 50);
+  frame = (int)(gameTime * 2) % 4;
+  if (frame == 2) frame = 0;
+  else if (frame == 3) frame = 2;
+  introSprites[2]->setFrame(frame);
+
+  if (introSprites[2]->getX() > -200)
+  {
+    if (oldFrame == 1 && frame == 0) SoundManager::getInstance().playSound(SOUND_HEAVY_STEP_00);
+    else if (oldFrame == 2 && frame == 0) SoundManager::getInstance().playSound(SOUND_HEAVY_STEP_01);
+  }
+
+  bool grumble = false;
+  if (introSprites[4]->getX() > 485 || gameTime > 23.5f)
+  {
+    introSprites[4]->setX(introSprites[4]->getX() - deltaTime * 68);
+    frame = (int)(gameTime * 7) % 4;
+    if (frame == 3) frame = 1;
+    introSprites[4]->setFrame(6 + frame);
+    introSprites[5]->setX(introSprites[4]->getX() - deltaTime * 68);
+    introSprites[5]->setFrame(9 + frame);
+  }
+  else
+  {
+    frame = (int)(gameTime * 8) % 4;
+    if (frame == 3) frame = 1;
+    introSprites[4]->setFrame(42 + frame);
+    introSprites[5]->setFrame(45 + frame);
+    grumble = true;
+    //introSprites[4]->setFrame(48 + frame);
+    //introSprites[5]->setFrame(51 + frame);
+  }
+
+  // SOUND
+  SoundManager::getInstance().playSound(SOUND_NIGHT);
+  if (introSoundState == 0 && gameTime > 3.0f)
+  {
+    SoundManager::getInstance().playSound(SOUND_WITCH_00);
+    introSoundState++;
+  }
+  else if (introSoundState == 1 && gameTime > 5.0f)
+  {
+    SoundManager::getInstance().playSound(SOUND_WITCH_01);
+    introSoundState++;
+  }
+  else if (introSoundState == 2 && gameTime > 8.5f)
+  {
+    SoundManager::getInstance().playSound(SOUND_CYCLOP_00);
+    introSoundState++;
+  }
+  else if (introSoundState == 3 && gameTime > 10.0f)
+  {
+    SoundManager::getInstance().playSound(SOUND_WITCH_00);
+    introSoundState++;
+  }
+  else if (introSoundState == 4 && gameTime > 14.0f)
+  {
+    SoundManager::getInstance().playSound(SOUND_CYCLOP_00);
+    introSoundState++;
+  }
+  else if (introSoundState == 5 && gameTime > 17.0f)
+  {
+    SoundManager::getInstance().playSound(SOUND_WITCH_02);
+    introSoundState++;
+  }
+  else if (introSoundState == 6 && grumble)
+  {
+    SoundManager::getInstance().playSound(SOUND_GRUMBLE);
+    introSoundState++;
+  }
+
+
+  sf::Event event;
+  while (app->pollEvent(event))
+  {
+    // Close window : exit
+    if (event.type == sf::Event::Closed) app->close();
+
+    if (event.type == sf::Event::KeyPressed)
+    {
+      if (event.key.code == sf::Keyboard::Return
+          || event.key.code == sf::Keyboard::Space
+          || event.key.code == sf::Keyboard::Escape)
+      {
+        for (int i = 0; i < 8; i++)
+          introSprites[i]->setWeight(500);
+        switchToMenu();
+      }
+    }
+  }
+}
+
+void WitchBlastGame::renderIntro()
+{
+  sf::Sprite bgSprite;
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  app->draw(bgSprite);
+
+  EntityManager::getInstance().render(app);
+
+  // title
+  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
+  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 }
 
 void WitchBlastGame::updateRunningGame()
@@ -722,26 +883,14 @@ void WitchBlastGame::updateRunningGame()
     }
   }
 
-  if (backToMenu) switchToMenu();
+  if (backToMenu) prepareIntro(); // switchToMenu();
 }
 
 void WitchBlastGame::renderRunningGame()
 {
   EntityManager::getInstance().sortByZ();
 
-  if (xGame[xGameTypeShake].active)
-  {
-    sf::View view = app->getDefaultView();
-    sf::View viewSave = app->getDefaultView();
-    view.move(-4 + rand() % 9, -4 + rand() % 9);
-    app->setView(view);
-
-    EntityManager::getInstance().renderUnder(app, 5000);
-
-    app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
-  }
-  else if (!isPlayerAlive)
+  if (!isPlayerAlive)
   {
     sf::View view = app->getDefaultView();
     sf::View viewSave = app->getDefaultView();
@@ -775,6 +924,18 @@ void WitchBlastGame::renderRunningGame()
 
     view.zoom(0.25f + 0.75f * (gameTime));
 
+    app->setView(view);
+
+    EntityManager::getInstance().renderUnder(app, 5000);
+
+    app->setView(viewSave);
+    EntityManager::getInstance().renderAfter(app, 5000);
+  }
+  else if (xGame[xGameTypeShake].active)
+  {
+    sf::View view = app->getDefaultView();
+    sf::View viewSave = app->getDefaultView();
+    view.move(-4 + rand() % 9, -4 + rand() % 9);
     app->setView(view);
 
     EntityManager::getInstance().renderUnder(app, 5000);
@@ -998,7 +1159,7 @@ void WitchBlastGame::renderRunningGame()
 
 void WitchBlastGame::renderDeathScreen(float x, float y)
 {
-  int xRect = 810, yRect = 300;
+  int xRect = 810;
   sf::RectangleShape rectangle(sf::Vector2f(810 , 300));
   rectangle.setFillColor(sf::Color(236, 222, 194));
   rectangle.setPosition(sf::Vector2f(x, y));
@@ -1279,31 +1440,7 @@ void WitchBlastGame::renderDeathScreen()
 
 void WitchBlastGame::switchToMenu()
 {
-  EntityManager::getInstance().clean();
-
-  if (menuMap != NULL) delete menuMap;
-  menuMap = new GameMap(MENU_MAP_WIDTH, MENU_MAP_HEIGHT);
-  for (int i = 0; i < MENU_MAP_WIDTH; i++)
-    for (int j = 0; j < MENU_MAP_HEIGHT; j++)
-    {
-      int r = rand() % 200;
-      if (r == 0)
-        menuMap->setTile(i, j, 29);
-      else if (r == 1)
-        menuMap->setTile(i, j, 49);
-      else if (r == 2)
-        menuMap->setTile(i, j, 50);
-      else
-      {
-        if (rand() % 6 == 0)
-          menuMap->setTile(i, j, rand() %7 + 1);
-        if (rand() % 7 == 0)
-          menuMap->setTile(i, j, menuMap->getTile(i, j) + 10);
-      }
-    }
-  menuTileMap = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_TILES), menuMap, 64, 64, 10);
-  menuTileMap->setX(-30.0f);
-  menuTileMap->setY(-20.0f);
+  SoundManager::getInstance().stopSound(SOUND_NIGHT);
 
   gameState = gameStateMenu;
   buildMenu(false);
@@ -1328,37 +1465,6 @@ void WitchBlastGame::updateMenu()
     menu = &menuFirst;
 
   EntityManager::getInstance().animate(deltaTime);
-  if (menu != NULL) menu->age += deltaTime;
-  float mapY = menuTileMap->getY();
-  mapY -= 30.0f * deltaTime;
-  if (mapY < -64.0f)
-  {
-    mapY += 64.0f;
-    for (int i = 0; i < MENU_MAP_WIDTH; i++)
-    {
-      for (int j = 0; j < MENU_MAP_HEIGHT - 1; j++)
-      {
-        menuMap->setTile(i, j, menuMap->getTile(i, j+1));
-      }
-      int r = rand() % 200;
-      if (r == 0)
-        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 29);
-      else if (r == 1)
-        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 49);
-      else if (r == 2)
-        menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 50);
-      else
-      {
-        if (rand() % 6 == 0)
-          menuMap->setTile(i, MENU_MAP_HEIGHT - 1, rand() %7 + 1);
-        else
-          menuMap->setTile(i, MENU_MAP_HEIGHT - 1, 0);
-        if (rand() % 7 == 0)
-          menuMap->setTile(i, MENU_MAP_HEIGHT - 1, menuMap->getTile(i, MENU_MAP_HEIGHT - 1) + 10);
-      }
-    }
-  }
-  menuTileMap->setY(mapY);
 
   // Process events
   sf::Event event;
@@ -1473,7 +1579,10 @@ void WitchBlastGame::updateMenu()
 
 void WitchBlastGame::renderMenu()
 {
-  // rendering tiles
+  sf::Sprite bgSprite;
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  app->draw(bgSprite);
+
   EntityManager::getInstance().render(app);
 
   // title
@@ -1566,13 +1675,13 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
       write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
     }
-    else if (menuState == MenuStateMain)
+    /*else if (menuState == MenuStateMain)
     {
       if (menu->items[menu->index].id == MenuStartOld)
         renderPlayer(620, 300, equipToDisplay, saveHeader.shotType, 1, 0);
       else
         renderPlayer(620, 300, equipNudeToDisplay, 0, 1, 0);
-    }
+    }*/
   }
 
   std::ostringstream oss;
@@ -1583,7 +1692,8 @@ void WitchBlastGame::renderMenu()
 void WitchBlastGame::startGame()
 {
   lastTime = getAbsolutTime();
-  switchToMenu();
+  //switchToMenu();
+  prepareIntro();
 
   // Start game loop
   while (app->isOpen())
@@ -1597,6 +1707,9 @@ void WitchBlastGame::startGame()
     case gameStateKeyConfig:
     case gameStateMenu:
       updateMenu();
+      break;
+    case gameStateIntro:
+      updateIntro();
       break;
     case gameStatePlaying:
       updateRunningGame();
@@ -1975,6 +2088,9 @@ void WitchBlastGame::onRender()
     break;
   case gameStatePlaying:
     renderRunningGame();
+    break;
+  case gameStateIntro:
+    renderIntro();
     break;
   }
 
