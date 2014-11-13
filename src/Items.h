@@ -99,7 +99,7 @@ enum enumItemType
   ItemRingLightning,
   ItemRingIllusion,
   ItemBookTripleShots,
-  ItemBroochStar,
+  ItemBroochFinesse,
   ItemFairyFire,
   ItemFairyTarget,
   ItemMagicianRobe,
@@ -116,7 +116,7 @@ enum enumItemType
   ItemBookDualShotsQuick,
   ItemBookTripleShotsQuick,
   ItemManualHealth,
-  ItemBookRearShot,
+  ItemRearShot,
   ItemBookRandomShot,
   ItemSpellWeb,
   ItemBookMagicI,
@@ -272,7 +272,7 @@ const itemStuct items[NUMBER_ITEMS] =
     50, true, FamiliarNone, true, true, true, 4, RarityCommon, AlignmentNone, ItemBookDualShots, ShotTypeStandard, SpellNone
   },
   {
-    ItemBroochStar, "item_brooch_star", "item_brooch_star_desc",
+    ItemBroochFinesse, "item_brooch_finesse", "item_brooch_finesse_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
@@ -340,7 +340,7 @@ const itemStuct items[NUMBER_ITEMS] =
     20, true, FamiliarNone, true, true, true, 2, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
-    ItemBookRearShot, "item_book_rear_shot", "item_book_rear_shot_desc",
+    ItemRearShot, "item_rear_shot", "item_rear_shot_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
@@ -365,10 +365,10 @@ const itemStuct items[NUMBER_ITEMS] =
  *  All the equipments.
  */
 enum item_equip_enum {
-  EQUIP_ENCHANTER_HAT,
+  EQUIP_MAGICIAN_HAT,
   EQUIP_LEATHER_BOOTS,
   EQUIP_BOOK_DUAL,
-  EQUIP_CONCENTRATION_AMULET,
+  EQUIP_RAGE_AMULET,
   EQUIP_BOSS_KEY,
   EQUIP_DISPLACEMENT_GLOVES,
   EQUIP_MAHOGANY_STAFF,
@@ -385,7 +385,7 @@ enum item_equip_enum {
   EQUIP_RING_LIGHTNING,
   EQUIP_RING_ILLUSION,
   EQUIP_BOOK_TRIPLE,
-  EQUIP_BROOCH_STAR,
+  EQUIP_BROOCH_FINESSE,
   EQUIP_FAIRY_FIRE,
   EQUIP_FAIRY_TARGET,
   EQUIP_MAGICIAN_ROBE,
@@ -402,7 +402,7 @@ enum item_equip_enum {
   EQUIP_BOOK_DUAL_QUICK,
   EQUIP_BOOK_TRIPLE_QUICK,
   EQUIP_MANUAL_HEALTH,
-  EQUIP_BOOK_REAR,
+  EQUIP_REAR_SHOT,
   EQUIP_BOOK_RANDOM,
   EQUIP_SPELL_WEB,
   EQUIP_BOOK_MAGIC_I,

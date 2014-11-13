@@ -414,7 +414,7 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_BROOCH_STAR])
+  if (equip[EQUIP_BROOCH_FINESSE])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
@@ -423,7 +423,7 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_CONCENTRATION_AMULET])
+  if (equip[EQUIP_RAGE_AMULET])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (18 + frame) * width + width, spriteDy * height, -width, height));
@@ -510,7 +510,7 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
   else if (idleAge > 11.0f) idleAge -= 11.0f;
 
   // hat
-  if (equip[EQUIP_ENCHANTER_HAT] && playerStatus != playerStatusDead)
+  if (equip[EQUIP_MAGICIAN_HAT] && playerStatus != playerStatusDead)
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
@@ -546,7 +546,7 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_BOOK_REAR])
+  if (equip[EQUIP_REAR_SHOT])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (33 + frame) * width + width, spriteDy * height, -width, height));
@@ -1014,7 +1014,7 @@ void PlayerEntity::fire(int direction)
       }
     }
 
-    if (equip[EQUIP_BOOK_REAR])
+    if (equip[EQUIP_REAR_SHOT])
     {
       BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
       bolt->setDamages(fireDamages / 2);
@@ -1071,7 +1071,7 @@ int PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool cr
       if (hurtingType != ShotTypeDeterministic)
       {
         invincibleDelay = INVINCIBLE_DELAY;
-        if (equip[EQUIP_CONCENTRATION_AMULET]) rageFire();
+        if (equip[EQUIP_RAGE_AMULET]) rageFire();
         game().generateBlood(x, y, bloodColor);
       }
 
@@ -1193,14 +1193,14 @@ void PlayerEntity::computePlayer()
   criticalChance = 0;
 
   if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
-  if (equip[EQUIP_ENCHANTER_HAT]) fireDelayBonus -= 0.2f;
+  if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
   if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamagesBonus -= 0.35f;
   else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamagesBonus -= 0.25f;
-  if (equip[EQUIP_BROOCH_STAR]) criticalChance += 5;
+  if (equip[EQUIP_BROOCH_FINESSE]) criticalChance += 5;
   if (equip[EQUIP_MANUAL_STAFF]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
   {

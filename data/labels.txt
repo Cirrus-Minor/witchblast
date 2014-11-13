@@ -111,8 +111,8 @@ item_ring_illusion#Quartz Ring
 item_ring_illusion_desc#Increases illusion power
 item_spell_triple#Spell : Triple bolts
 item_spell_triple_desc#Shoots three bolts
-item_brooch_star#Star Brooch
-item_brooch_star_desc#Chance to critical shot (x2)
+
+item_brooch_finesse_desc#Chance to critical shot (x2)
 item_fairy_fire#Fairy Alicia
 item_fairy_fire_desc#Helps you in the dungeon
 item_fairy_target#Fairy Scarlett
@@ -248,6 +248,7 @@ enemy_type_spider_little#a spider
 enemy_type_spider_web#a spider web
 enemy_type_himself#himself
 
+item_brooch_finesse#Brooch of finesse
 item_apple_green#Green apple
 item_apple_green_desc#Restores 3 HP and cures poison
 item_manual_slime#Manual of Slime Mastery
@@ -258,8 +259,8 @@ item_spell_triple_quick#Spellbook of Quick Triple bolts
 item_spell_triple_quick_desc#Shoots three bolts (quick)
 item_manual_health#Health's Manual
 item_manual_health_desc#Health items give more HP
-item_book_rear_shot#Staff cap
-item_book_rear_shot_desc#Shots a rear bolt
+item_rear_shot#Staff cap
+item_rear_shot_desc#Shots a rear bolt
 item_book_random_shot#Spellbook of Random Shot
 item_book_random_shot_desc#Shots a bolt in a random direction
 item_spell_web#Spell: Spider Web
@@ -383,8 +384,8 @@ item_ring_illusion#Anneau de quartz
 item_ring_illusion_desc#Augmente le pouvoir d'illusion
 item_spell_triple#Manuel de Triple-tir
 item_spell_triple_desc#Tire trois projectiles
-item_brooch_star#Broche d'étoile
-item_brooch_star_desc#Chance de dégâts critiques (x2)
+item_brooch_finesse#Broche d'étoile
+item_brooch_finesse_desc#Chance de dégâts critiques (x2)
 item_fairy_fire#La fée Alicia
 item_fairy_fire_desc#Vous aide dans le donjon
 item_fairy_target#La fée Scarlett
@@ -600,8 +601,8 @@ item_ring_illusion#Quartz Ring
 item_ring_illusion_desc#Erhöht die Illusionskraft
 item_spell_triple#Zauber : Dreifacher Schuss
 item_spell_triple_desc#Schießt drei Schüsse
-item_brooch_star#Stern Brosche
-item_brooch_star_desc#Kritische Trefferchance (x2)
+item_brooch_finesse#Stern Brosche
+item_brooch_finesse_desc#Kritische Trefferchance (x2)
 item_fairy_fire#Alicia-Fee
 item_fairy_fire_desc#Hilft dir im Verlies
 item_fairy_target#Scarlett-Fee
@@ -822,8 +823,8 @@ item_ring_illusion#Anillo de cuarzo
 item_ring_illusion_desc#Aumenta el poder de la ilusión
 item_spell_triple#Conjuro : Rayo triple
 item_spell_triple_desc#Dispara tres rayos
-item_brooch_star#Broche de estrella
-item_brooch_star_desc#Probabilidad de disparo crítico (x2)
+item_brooch_finesse#Broche de estrella
+item_brooch_finesse_desc#Probabilidad de disparo crítico (x2)
 item_fairy_fire#Hada Alicia
 item_fairy_fire_desc#Te ayuda en el calabozo
 item_fairy_target#Hada Scarlett
@@ -1037,8 +1038,8 @@ item_ring_illusion#Кольцо с кварцем
 item_ring_illusion_desc#Увеличивает силу иллюзий
 item_spell_triple#Заклинание : Тройной выстрел
 item_spell_triple_desc#Позволяет стрелять тройным снарядом
-item_brooch_star#Нагрудная звезда
-item_brooch_star_desc#Шанс критического попадания (x2)
+item_brooch_finesse#Нагрудная звезда
+item_brooch_finesse_desc#Шанс критического попадания (x2)
 item_fairy_fire#Фея Алиса
 item_fairy_fire_desc#Помогает вам в подземелье
 item_fairy_target#Фея Скарлет

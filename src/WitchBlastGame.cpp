@@ -3401,7 +3401,7 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_BROOCH_STAR])
+  if (equip[EQUIP_BROOCH_FINESSE])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
@@ -3410,7 +3410,7 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_CONCENTRATION_AMULET])
+  if (equip[EQUIP_RAGE_AMULET])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (18 + frame) * width + width, spriteDy * height, -width, height));
@@ -3438,7 +3438,7 @@ void WitchBlastGame::renderPlayer(float x, float y,
   }
 
   // hat
-  if (equip[EQUIP_ENCHANTER_HAT])
+  if (equip[EQUIP_MAGICIAN_HAT])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
@@ -3474,7 +3474,7 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_BOOK_REAR])
+  if (equip[EQUIP_REAR_SHOT])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (33 + frame) * width + width, spriteDy * height, -width, height));
