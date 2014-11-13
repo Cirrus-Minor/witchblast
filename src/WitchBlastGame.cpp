@@ -1000,7 +1000,10 @@ void WitchBlastGame::renderRunningGame()
 
     if (player->getActiveSpell().spell != SpellNone)
     {
-      write(tools::getLabel(spellLabel[player->getActiveSpell().spell]), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      oss.str("");
+      oss << tools::getLabel(spellLabel[player->getActiveSpell().spell]);
+      if (player->isEquiped(EQUIP_BOOK_MAGIC_II)) oss << "+";
+      write(oss.str(), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
       // TODO
       sf::Sprite itemSprite;
       itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));

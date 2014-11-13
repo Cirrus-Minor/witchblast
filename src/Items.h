@@ -119,6 +119,8 @@ enum enumItemType
   ItemBookRearShot,
   ItemBookRandomShot,
   ItemSpellWeb,
+  ItemBookMagicI,
+  ItemBookMagicII,
 
   NUMBER_ITEMS
 };
@@ -349,6 +351,14 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemSpellWeb, "item_spell_web", "item_spell_web_desc",
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellWeb
   },
+  {
+    ItemBookMagicI, "item_book_magic_i", "item_book_magic_i_desc",
+    30, true, FamiliarNone, true, true, true, 1, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemBookMagicII, "item_book_magic_ii", "item_book_magic_ii_desc",
+    30, true, FamiliarNone, true, true, true, 1, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -395,6 +405,8 @@ enum item_equip_enum {
   EQUIP_BOOK_REAR,
   EQUIP_BOOK_RANDOM,
   EQUIP_SPELL_WEB,
+  EQUIP_BOOK_MAGIC_I,
+  EQUIP_BOOK_MAGIC_II,
 
   NUMBER_EQUIP_ITEMS
   };

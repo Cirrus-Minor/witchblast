@@ -258,12 +258,16 @@ item_spell_triple_quick#Spellbook of Quick Triple bolts
 item_spell_triple_quick_desc#Shoots three bolts (quick)
 item_manual_health#Health's Manual
 item_manual_health_desc#Health items give more HP
-item_book_rear_shot#Spellbook of Rear Shot
+item_book_rear_shot#Staff cap
 item_book_rear_shot_desc#Shots a rear bolt
 item_book_random_shot#Spellbook of Random Shot
 item_book_random_shot_desc#Shots a bolt in a random direction
 item_spell_web#Spell: Spider Web
 item_spell_web_desc#Cast to throw spider webs
+item_book_magic_i#Book of magic - Tome I
+item_book_magic_i_desc#Decreases spell's cooldown
+item_book_magic_ii#Book of magic - Tome II
+item_book_magic_ii_desc#Increases spell's power
 spell_web#spider web
 
 [french]

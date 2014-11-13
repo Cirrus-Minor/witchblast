@@ -1512,7 +1512,7 @@ void PlayerEntity::castSpell()
 
   if (canCastSpell())
   {
-    activeSpell.delay = activeSpell.delayMax;
+    activeSpell.delay = equip[EQUIP_BOOK_MAGIC_I] ? activeSpell.delayMax * 0.8f : activeSpell.delayMax;
 
     switch (activeSpell.spell)
     {
@@ -1554,7 +1554,7 @@ void PlayerEntity::castTeleport()
   bool ok = false;
   int xm, ym;
   float xNew = x, yNew = y;
-  invincibleDelay = 2.0f;
+  invincibleDelay = equip[EQUIP_BOOK_MAGIC_II] ? 2.5f : 2.0f;
   SoundManager::getInstance().playSound(SOUND_TELEPORT);
   game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.3f);
 
@@ -1650,7 +1650,7 @@ void PlayerEntity::castFireball()
 
   BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime + 0.5f, boltType, shotLevel);
 
-  int boltDamage = fireDamages * 3;
+  int boltDamage = fireDamages * (equip[EQUIP_BOOK_MAGIC_II] ? 4 : 3);
   bolt->setDamages(boltDamage);
   bolt->setGoThrough(true);
 
@@ -1667,7 +1667,7 @@ void PlayerEntity::castFreeze()
 {
   for (float i = 0.0f; i < 2 * PI; i +=  PI / 8)
   {
-    BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, 1);
+    BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, equip[EQUIP_BOOK_MAGIC_II] ? 2 : 1);
     bolt1->setDamages(1);
     float velx = fireVelocity * cos(i);
     float vely = fireVelocity * sin(i);
@@ -1681,7 +1681,7 @@ void PlayerEntity::castFreeze()
 void PlayerEntity::castEarthquake()
 {
   initFallingGrid();
-  for (int i = 0; i < 22; i++) fallRock();
+  for (int i = 0; i < equip[EQUIP_BOOK_MAGIC_II] ? 24 : 22; i++) fallRock();
 
   game().makeShake(0.25f);
   game().makeColorEffect(X_GAME_COLOR_BROWN, 0.3f);
@@ -1691,7 +1691,7 @@ void PlayerEntity::castEarthquake()
 void PlayerEntity::castProtection()
 {
   protection.active = true;
-  protection.value = 0.5f;
+  protection.value = equip[EQUIP_BOOK_MAGIC_II] ? 0.6f : 0.4f;
   protection.timer = 10.0f;
   computePlayer();
   game().makeColorEffect(X_GAME_COLOR_BLUE, 0.3f);
@@ -1701,7 +1701,8 @@ void PlayerEntity::castProtection()
 void PlayerEntity::castWeb()
 {
   SoundManager::getInstance().playSound(SOUND_SPIDER_WEB);
-  for (int i = 0; i < 3; i++)
+  int nbWeb = equip[EQUIP_BOOK_MAGIC_II] ? 4 : 3;
+  for (int i = 0; i < nbWeb; i++)
   {
     SpiderWebEntity* web = new SpiderWebEntity(x, y, true);
     float webVel = 100 + rand()% 500;
