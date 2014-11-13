@@ -161,7 +161,7 @@ bool DungeonMap::containsHealth()
     itemListElement ilm = *it;
     it++;
 
-    if (ilm.type >= ItemHealthVerySmall && ilm.type <= ItemHealth)
+    if (ilm.type >= ItemHealthVerySmall && ilm.type <= ItemHealthVerySmallPoison)
       return true;
 	}
 
