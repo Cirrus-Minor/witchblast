@@ -645,7 +645,7 @@ void WitchBlastGame::updateRunningGame()
         if (!isPlayerAlive && player->getDeathAge() > 3.5f)
         {
           // TODO File name
-          saveDeathScreen("MyDeath.png");
+          saveDeathScreen("DeathCertificate.png");
         }
       }
 
@@ -1634,12 +1634,6 @@ void WitchBlastGame::renderMenu()
 
   if (menuState == MenuStateKeys)
   {
-    // menu background
-    sf::RectangleShape rectangle(sf::Vector2f(470 , 400));
-    rectangle.setFillColor(sf::Color(50, 50, 50, 190));
-    rectangle.setPosition(sf::Vector2f(250, 240));
-    app->draw(rectangle);
-
     // menu keys
     if (config.configFileExists())
       write(tools::getLabel("key_configuration"), 18, xAlign, 250, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
@@ -1659,19 +1653,21 @@ void WitchBlastGame::renderMenu()
   }
   else
   {
-    // menu background
-    sf::RectangleShape rectangle(sf::Vector2f(470 , 390));
-    rectangle.setFillColor(sf::Color(50, 50, 50, 160));
-    rectangle.setPosition(sf::Vector2f(250, 240));
-    if (menu->items.size() == 3) rectangle.setSize(sf::Vector2f(470 , 310));
-    app->draw(rectangle);
-
     // menu
     for (unsigned int i = 0; i < menu->items.size(); i++)
     {
       sf::Color itemColor;
-      if (menu->index == i) itemColor = sf::Color(255, 255, 255, 255);
-      else itemColor = sf::Color(180, 180, 180, 255);
+      if (menu->index == i)
+      {
+        itemColor = sf::Color(255, 255, 255, 255);
+
+        sf::Sprite fairySprite;
+        fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setPosition(xAlign - 60, 250 + i * 90 + 5 * cos( 6 * getAbsolutTime()));
+        app->draw(fairySprite);
+      }
+      else itemColor = sf::Color(120, 120, 120, 255);
 
       std::string label = menu->items[i].label;
       if (menu->items[i].id == MenuLanguage)
