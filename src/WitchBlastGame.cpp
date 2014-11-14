@@ -640,6 +640,15 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false);
       }
 
+      if (event.key.code == sf::Keyboard::F1)
+      {
+        if (!isPlayerAlive && player->getDeathAge() > 3.5f)
+        {
+          // TODO File name
+          saveDeathScreen("MyDeath.png");
+        }
+      }
+
       if (event.key.code == sf::Keyboard::F2)
       {
         showLogical = !showLogical;
@@ -1049,10 +1058,20 @@ void WitchBlastGame::renderRunningGame()
 
       if (deathAge > 3.5f)
       {
+        rectangle.setFillColor(sf::Color(0, 0, 0, 180));
+        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+
         renderDeathScreen(80, 110);
       }
       else if (deathAge > 2.5f)
       {
+        rectangle.setFillColor(sf::Color(0, 0, 0, 180 * (deathAge - 2.5f)));
+        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+
         renderDeathScreen(80 + (3.5f - deathAge) * 1000, 110);
       }
 
@@ -1160,14 +1179,25 @@ void WitchBlastGame::renderRunningGame()
   }
 }
 
+void WitchBlastGame::saveDeathScreen(std::string fileName)
+{
+  int width = 810, height = 300, border = 4;
+  int x = 80, y = 110;
+  sf::Image screenShot(app->capture());
+  sf::Image savedImage;
+  savedImage.create(width + border * 2, height + border * 2);
+  savedImage.copy(screenShot,0 , 0, sf::IntRect( x - border, y - border, width + border * 2, height + border * 2));
+  savedImage.saveToFile(fileName);
+}
+
 void WitchBlastGame::renderDeathScreen(float x, float y)
 {
   int xRect = 810;
   sf::RectangleShape rectangle(sf::Vector2f(810 , 300));
-  rectangle.setFillColor(sf::Color(236, 222, 194));
+  rectangle.setFillColor(sf::Color(255, 255, 240));
   rectangle.setPosition(sf::Vector2f(x, y));
-  rectangle.setOutlineThickness(2);
-  rectangle.setOutlineColor(sf::Color::White);
+  rectangle.setOutlineThickness(4);
+  rectangle.setOutlineColor(sf::Color(125, 100, 170));
   app->draw(rectangle);
 
   write("Death certificate", 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
@@ -1184,10 +1214,10 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   ss << "Gold: " << player->getGold() << std::endl;
   ss << "Completed challenges: " << challengeLevel - 1 << std::endl;
 
-  write(ss.str(), 16, x + 80, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write(ss.str(), 16, x + 112, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
 
   // player
-  renderPlayer(x + 14, y + 48, player->getEquipment(), player->getShotType(), 1, 0);
+  renderPlayer(x + 40, y + 48, player->getEquipment(), player->getShotType(), 1, 0);
 
   // items
   write("Inventory", 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
