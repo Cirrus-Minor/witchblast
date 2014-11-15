@@ -122,7 +122,7 @@ void SnakeEntity::collideWithEnemy(EnemyEntity* entity)
 
   if (entity->getMovingStyle() == movWalking )
   {
-    Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 70.0f );
+    Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 10.0f );
     giveRecoil(false, vel, 0.3f);
 
     computeFacingDirection();
