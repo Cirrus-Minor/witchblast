@@ -904,12 +904,23 @@ void WitchBlastGame::renderRunningGame()
     sf::View view = app->getDefaultView();
     sf::View viewSave = app->getDefaultView();
 
-    if (player->getDeathAge() > 1.0f)
+    if (player->getDeathAge() > 4.0f)
+    {
+      // do nothing
+    }
+    else if (player->getDeathAge() > 3.0f)
+    {
+      view.zoom(1.0f - 0.75f * (4.0f - player->getDeathAge()));
+      float xDiff = view.getCenter().x - player->getX();
+      float yDiff = view.getCenter().y - player->getY();
+      view.setCenter(view.getCenter().x - xDiff * (4.0f - player->getDeathAge()),
+                     view.getCenter().y - yDiff * (4.0f - player->getDeathAge()));
+    }
+    else if (player->getDeathAge() > 1.0f)
     {
       view.zoom(0.25f);
       view.setCenter(player->getX(), player->getY());
     }
-
     else
     {
       view.zoom(1.0f - 0.75f * (player->getDeathAge()));
