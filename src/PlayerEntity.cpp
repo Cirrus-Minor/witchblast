@@ -1665,9 +1665,10 @@ void PlayerEntity::castFireball()
 
 void PlayerEntity::castFreeze()
 {
+  int iceLevel = equip[EQUIP_BOOK_MAGIC_II] ? 2 : 1;
   for (float i = 0.0f; i < 2 * PI; i +=  PI / 8)
   {
-    BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, equip[EQUIP_BOOK_MAGIC_II] ? 2 : 1);
+    BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, iceLevel);
     bolt1->setDamages(1);
     float velx = fireVelocity * cos(i);
     float vely = fireVelocity * sin(i);
