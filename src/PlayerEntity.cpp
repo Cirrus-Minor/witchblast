@@ -1681,7 +1681,8 @@ void PlayerEntity::castFreeze()
 void PlayerEntity::castEarthquake()
 {
   initFallingGrid();
-  for (int i = 0; i < equip[EQUIP_BOOK_MAGIC_II] ? 24 : 22; i++) fallRock();
+  int nbIterations = equip[EQUIP_BOOK_MAGIC_II] ? 24 : 22;
+  for (int i = 0; i < nbIterations; i++) fallRock();
 
   game().makeShake(0.25f);
   game().makeColorEffect(X_GAME_COLOR_BROWN, 0.3f);
