@@ -1602,6 +1602,9 @@ void WitchBlastGame::updateMenu()
         case MenuConfig:
           menuState = MenuStateConfig;
           break;
+        case MenuTutoReset:
+          for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
+          break;
         case MenuConfigBack:
           menuState = MenuStateMain;
           break;
@@ -3321,6 +3324,12 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemLanguage.description = tools::getLabel("config_lang_desc");
   itemLanguage.id = MenuLanguage;
   menuConfig.items.push_back(itemLanguage);
+
+  menuItemStuct itemTutoReset;
+  itemTutoReset.label = tools::getLabel("tuto_reset");
+  itemTutoReset.description = tools::getLabel("tuto_reset_desc");
+  itemTutoReset.id = MenuTutoReset;
+  menuConfig.items.push_back(itemTutoReset);
 
   menuItemStuct itemConfigBack;
   itemConfigBack.label = tools::getLabel("config_back");

@@ -624,6 +624,7 @@ private:
     MenuConfig,       /**< When configuring the game */
     MenuKeys,         /**< When configuring keys */
     MenuConfigBack,   /**< Back to the main menu */
+    MenuTutoReset,    /**< Reset the tutorials */
     MenuLanguage,     /**< When configuring the language */
     MenuExit          /**< When exiting the game */
   };
