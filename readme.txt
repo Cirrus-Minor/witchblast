@@ -81,7 +81,6 @@ Ruth (for the english corrections)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
 AFS (for the Spanish translation)
-Lord Archibald (who helps me writing the story)
 
 Changes
 -------
@@ -89,13 +88,15 @@ Next release
 - ADD New monsters
 - ADD New items
 - ADD New spell
-- ADD New art for sprites
-- ADD New art for dungeon tiles
+- ADD New art for sprites and tiles
 - ADD New room surfaces
+- ADD New intro and menu
 - ADD Chest for completed challenges
+- ADD Tutorial state save and reset
 - ADD Cauldron now explodes while dying
 - ADD Sound for imp's teleportation
 - ADD "Jump" animation for items you can get
+- ADD Zoom effect when starting / dying
 - MOD Standard Rat IA changes (rats now move in 4 directions)
 - MOD Frozen dividing bubbles generate frozen "children" bubbles
 - MOD Fireball (spell) now goes through monsters (if enough HP)
@@ -104,6 +105,7 @@ Next release
 - MOD Giant Spider is more difficult to kill now
 - MOD Shop's items too expensive displayed in red
 - MOD One cauldron max in witches rooms in level 5
+- MOD New death screen
 - FIX Cyclops firing in the wall when too close to the north wall
 - FIX Items can fly a long time on the walls
 
