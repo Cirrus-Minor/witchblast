@@ -3704,7 +3704,7 @@ std::string WitchBlastGame::sourceToString(sourceTypeEnum sourceType, enemyTypeE
   {
     case SourceTypeBolt:
     case SourceTypeMelee: value = tools::getLabel(enemyToString(enemyType)); break;
-    case SourceTypeExplosion: value = "explosion";
+    case SourceTypeExplosion: value = "explosion"; break;
     case SourceTypePoison: value = "poison";
   }
 
