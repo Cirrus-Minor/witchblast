@@ -225,19 +225,26 @@ public:
 
   /*!
    *  \brief Save the game
-   *
    *  Save the game to file : complete floor and maps, items and blood position, player current equipment and stats....
    */
   void saveGame();
 
   /*!
    *  \brief Load the game
-   *
    *  Load the game from file. After restoring the game, the file is destroy.
-   *
    *  \return true if succeeded
    */
   bool loadGame();
+
+  /*!
+   *  \brief Save the game data (general)
+   */
+  void saveGameData();
+
+  /*!
+   *  \brief Load the game data (general)
+   */
+  void loadGameData();
 
   struct saveHeaderStruct
   {
@@ -291,7 +298,7 @@ public:
 
   void proceedEvent(EnumWorldEvents event);
 
-  void addMessageToQueue(EnumMessages type);
+  void testAndAddMessageToQueue(EnumMessages type);
 
   std::string enemyToString(enemyTypeEnum enemyType);
   std::string sourceToString(sourceTypeEnum sourceType, enemyTypeEnum enemyType);
@@ -690,6 +697,7 @@ private:
 
   bool worldEvent[NB_EVENTS];
   void initEvents();
+  bool gameMessagesToSkip[NB_MESSAGES];
 
   void renderPlayer(float x, float y, bool equip[NUMBER_EQUIP_ITEMS], int shotType,
                   int frame, int spriteDy);

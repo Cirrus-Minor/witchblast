@@ -69,7 +69,7 @@ void GiantSpiderEntity::animate(float delay)
         {
           labelHasChanged = true;
           creatureName = tools::getLabel("enemy_giant_spider");
-          game().addMessageToQueue(MsgInfoGiantSpiderAfter);
+          game().testAndAddMessageToQueue(MsgInfoGiantSpiderAfter);
         }
       }
     }

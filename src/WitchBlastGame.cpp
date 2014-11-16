@@ -178,8 +178,10 @@ WitchBlastGame::WitchBlastGame():
   currentMap = NULL;
   currentFloor = NULL;
 
-  for (int i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
-  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
+  int i;
+  for (i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
+  for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
+  for (i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
 
   isPausing = false;
   showLogical = false;
@@ -187,6 +189,7 @@ WitchBlastGame::WitchBlastGame():
   shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
 
   configureFromFile();
+  loadGameData();
   srand(time(NULL));
 }
 
@@ -340,8 +343,6 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
     startNewLevel();
-
-    addMessageToQueue(MsgTutoBasics);
   }
 }
 
@@ -378,8 +379,8 @@ void WitchBlastGame::startNewLevel()
   // to test
   displayKilledEnemies();
 
-  if (level <= 5) addMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
-
+  if (level <= 5) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
+  if (level == 1) testAndAddMessageToQueue(MsgTutoBasics);
   playLevel();
 }
 
@@ -482,6 +483,7 @@ void WitchBlastGame::updateIntro()
   introSprites[6]->setX(introSprites[6]->getX() - deltaTime * 60);
   introSprites[6]->setFrame(frame);
   introSprites[7]->setX(introSprites[7]->getX() - deltaTime * 60);
+  introSprites[7]->setAngle(6.0f * cos(2 * getAbsolutTime()));
 
   introSprites[1]->setX(introSprites[1]->getX() - deltaTime * 60);
   introSprites[1]->setFrame(frame + 3);
@@ -516,8 +518,6 @@ void WitchBlastGame::updateIntro()
     introSprites[4]->setFrame(42 + frame);
     introSprites[5]->setFrame(45 + frame);
     grumble = true;
-    //introSprites[4]->setFrame(48 + frame);
-    //introSprites[5]->setFrame(51 + frame);
   }
 
   // SOUND
@@ -2299,35 +2299,35 @@ void WitchBlastGame::generateMap()
       findPlaceMonsters(EnemyTypeRat, 2);
       new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      addMessageToQueue(MsgInfoButcher);
+      testAndAddMessageToQueue(MsgInfoButcher);
     }
 
     else if (level == 2)
     {
       new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      addMessageToQueue(MsgInfoGiantSlime);
+      testAndAddMessageToQueue(MsgInfoGiantSlime);
     }
 
     else if (level == 3)
     {
       new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      addMessageToQueue(MsgInfoCyclops);
+      testAndAddMessageToQueue(MsgInfoCyclops);
     }
 
     else if (level == 4)
     {
       new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      addMessageToQueue(MsgInfoWererat);
+      testAndAddMessageToQueue(MsgInfoWererat);
     }
 
     else if (level == 5)
     {
       new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                             OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      addMessageToQueue(MsgInfoGiantSpiderBefore);
+      testAndAddMessageToQueue(MsgInfoGiantSpiderBefore);
     }
     else if (level == 6)
     {
@@ -3121,6 +3121,61 @@ WitchBlastGame::saveHeaderStruct WitchBlastGame::loadGameHeader()
   return saveHeader;
 }
 
+void WitchBlastGame::saveGameData()
+{
+  // TODO
+  std::ofstream file(SAVE_DATA_FILE.c_str(), std::ios::out | std::ios::trunc);
+
+  if (file)
+  {
+    // version (for compatibility check)
+    file << SAVE_VERSION << std::endl;
+
+    // tuto
+    for (int i = 0; i < NB_MESSAGES; i++)
+    {
+      messageStruct msg = getMessage((EnumMessages)i);
+      if (msg.messageType == MessageTypeTutorial)
+      {
+        file << gameMessagesToSkip[i] << " ";
+      }
+      else file << "0 ";
+    }
+    file << std::endl;
+
+    file.close();
+  }
+  else
+  {
+    std::cout << "[ERROR] Impossible to open save data file.\n";
+  }
+}
+
+void WitchBlastGame::loadGameData()
+{
+std::ifstream file(SAVE_DATA_FILE.c_str(), std::ios::in);
+
+  if (file)
+  {
+    // version
+    std::string v;
+    file >> v;
+
+    if (v != SAVE_VERSION)
+    {
+      file.close();
+      remove(SAVE_DATA_FILE.c_str());
+      return;
+    }
+
+    // tuto
+    for (int i = 0; i < NB_MESSAGES; i++)
+    {
+      file >> gameMessagesToSkip[i];
+    }
+  }
+}
+
 void WitchBlastGame::addKey(int logicInput, std::string key)
 {
   int iKey = config.findInt(key);
@@ -3357,11 +3412,21 @@ void WitchBlastGame::registerLanguage()
   saveConfigurationToFile();
 }
 
-void WitchBlastGame::addMessageToQueue(EnumMessages type)
+void WitchBlastGame::testAndAddMessageToQueue(EnumMessages type)
 {
+
   if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
-  // TODO test tuto
-  messagesQueue.push(getMessage(type));
+
+  if (gameMessagesToSkip[type] == false)
+  {
+    messageStruct msg = getMessage(type);
+    messagesQueue.push(msg);
+    if (msg.messageType == MessageTypeTutorial)
+    {
+      gameMessagesToSkip[type] = true;
+      saveGameData();
+    }
+  }
 }
 
 void WitchBlastGame::initEvents()
@@ -3376,7 +3441,7 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
 
   worldEvent[event] = true;
 
-  addMessageToQueue(eventToMessage[event]);
+  testAndAddMessageToQueue(eventToMessage[event]);
 }
 
 void WitchBlastGame::renderPlayer(float x, float y,

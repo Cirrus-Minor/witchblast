@@ -22,8 +22,9 @@
 const std::string APP_NAME =      "Witch Blast";
 const std::string APP_VERSION =   "0.3.8";
 
-const std::string CONFIG_FILE =   "config.dat";
-const std::string SAVE_FILE =     "game.sav";
+const std::string CONFIG_FILE =     "config.dat";
+const std::string SAVE_FILE =       "game.sav";
+const std::string SAVE_DATA_FILE =  "data/data.sav";
 
 const std::string SAVE_VERSION =  "SAVE_0.3.6";
 
@@ -476,7 +477,9 @@ enum EnumMessages
   MsgTutoChallengeDoor,
   MsgTutoHeal,
   MsgTutoShots,
-  MsgTutoSpell
+  MsgTutoSpell,
+
+  NB_MESSAGES
 };
 
 enum EnumMessagesType
