@@ -2103,7 +2103,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
       break;
     case (8):
       floorY--;
-      player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT/* - 20*/);
+      player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT);
       player->move(8);
       break;
     case (2):
@@ -2111,6 +2111,11 @@ void WitchBlastGame::moveToOtherMap(int direction)
       player->moveTo(player->getX(), OFFSET_Y);
       break;
     }
+
+    saveInFight.x = player->getX();
+    saveInFight.y = player->getY();
+    saveInFight.direction = direction;
+
     refreshMap();
     checkEntering();
     currentMap->restoreMapObjects();
@@ -2385,7 +2390,7 @@ void WitchBlastGame::generateMap()
                     OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
                     ChestExit, false);
   }
-  else
+  else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
 }
 
@@ -2422,6 +2427,7 @@ void WitchBlastGame::initMonsterArray()
 
 void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
 {
+  saveInFight.monsters[monsterType]++;
   switch (monsterType)
   {
   case EnemyTypeRat:
@@ -2559,6 +2565,7 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
 void WitchBlastGame::generateStandardMap()
 {
   initMonsterArray();
+  for (int i = 0; i < NB_ENEMY; i++) saveInFight.monsters[i] = 0;
   generateStandardRoom(level);
 }
 

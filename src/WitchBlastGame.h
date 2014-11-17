@@ -708,6 +708,18 @@ private:
   bool equipNudeToDisplay[NUMBER_EQUIP_ITEMS];
   saveHeaderStruct saveHeader;
 
+  /*!
+   *  \brief Data for "in fight" game saving
+   */
+  struct StructSaveInFight
+  {
+    float x;                              /**< Player x position */
+    float y;                              /**< Player y position */
+    int direction;                        /**< Player direction */
+    int monsters[NB_ENEMY];               /**< Monsters */
+  };
+  StructSaveInFight saveInFight;  /**< Data for "in fight" game saving */
+
   SpriteEntity* introSprites[8];
   int introSoundState;
 };
