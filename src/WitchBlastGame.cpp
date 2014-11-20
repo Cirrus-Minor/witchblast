@@ -182,6 +182,7 @@ WitchBlastGame::WitchBlastGame():
   for (i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
   for (i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
+  saveInFight.monsters.clear();
 
   isPausing = false;
   showLogical = false;
@@ -329,12 +330,13 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   doorEntity[2] = new DoorEntity(2);
   doorEntity[3] = new DoorEntity(6);
 
+  saveInFight.isFight = false;
   if (fromSaveFile)
   {
     if (!loadGame())
       fromSaveFile = false;
     else
-      playLevel();
+      playLevel(saveInFight.isFight);
   }
   if (!fromSaveFile)
   {
@@ -381,22 +383,42 @@ void WitchBlastGame::startNewLevel()
 
   if (level <= 5) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
   if (level == 1) testAndAddMessageToQueue(MsgTutoBasics);
-  playLevel();
+  playLevel(false);
 }
 
-void WitchBlastGame::playLevel()
+void WitchBlastGame::playLevel(bool isFight)
 {
   isPlayerAlive = true;
-  player->setVelocity(Vector2D(0.0f, 0.0f));
-  player->setPlayerStatus(PlayerEntity::playerStatusPlaying);
+
+  if (!isFight)
+  {
+    player->setVelocity(Vector2D(0.0f, 0.0f));
+    player->setPlayerStatus(PlayerEntity::playerStatusPlaying);
+  }
+  // first map is open
+  roomClosed = false;
 
   // generate the map
   refreshMap();
+
   // items from save
   currentMap->restoreMapObjects();
 
-  // first map is open
-  roomClosed = false;
+  if (isFight)
+  {
+    checkEntering();
+    saveMapItems();
+  }
+
+  // populate with monsters
+  if (isFight)
+  {
+    auto monsters_save = saveInFight.monsters;
+    saveInFight.monsters.clear();
+
+    for (auto monster: monsters_save)
+      addMonster(monster.id, monster.x, monster.y);
+  }
 
   // game time counter an state
   lastTime = getAbsolutTime();
@@ -602,7 +624,7 @@ void WitchBlastGame::updateRunningGame()
     // Close window : exit
     if (event.type == sf::Event::Closed)
     {
-      if (gameState == gameStatePlaying && !player->isDead() && currentMap->isCleared()) saveGame();
+      if (gameState == gameStatePlaying && !player->isDead()) saveGame();
       app->close();
     }
 
@@ -2038,6 +2060,8 @@ void WitchBlastGame::checkEntering()
 
 void WitchBlastGame::saveMapItems()
 {
+  currentMap->cleanMapObjects();
+
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
@@ -2049,18 +2073,18 @@ void WitchBlastGame::saveMapItems()
     ItemEntity* itemEntity = dynamic_cast<ItemEntity*>(e);
     ChestEntity* chestEntity = dynamic_cast<ChestEntity*>(e);
 
-    if (itemEntity != NULL)
+    if (itemEntity != NULL && !itemEntity->getDying())
     {
       currentMap->addItem(itemEntity->getItemType(), itemEntity->getX(), itemEntity->getY(), itemEntity->getMerchandise());
     } // endif
-    else if (chestEntity != NULL)
+    else if (chestEntity != NULL && !chestEntity->getDying())
     {
       currentMap->addChest(chestEntity->getChestType(), chestEntity->getOpened(), chestEntity->getX(), chestEntity->getY());
     } // endif
     else
     {
       SpriteEntity* spriteEntity = dynamic_cast<SpriteEntity*>(e);
-      if (spriteEntity != NULL && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE ) )
+      if (spriteEntity != NULL && !spriteEntity->getDying() && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE ) )
       {
         int spriteFrame = spriteEntity->getFrame();
         if (spriteEntity->getWidth() == 128) spriteFrame += FRAME_CORPSE_KING_RAT;
@@ -2112,13 +2136,14 @@ void WitchBlastGame::moveToOtherMap(int direction)
       break;
     }
 
-    saveInFight.x = player->getX();
-    saveInFight.y = player->getY();
-    saveInFight.direction = direction;
-
     refreshMap();
     checkEntering();
     currentMap->restoreMapObjects();
+
+    saveInFight.x = player->getX();
+    saveInFight.y = player->getY();
+    saveInFight.direction = direction;
+    saveMapItems();
   }
 }
 
@@ -2210,6 +2235,8 @@ void WitchBlastGame::showArtefactDescription(enumItemType itemType)
 
 void WitchBlastGame::generateMap()
 {
+  saveInFight.monsters.clear();
+
   if (currentMap->getRoomType() == roomTypeStandard)
     generateStandardMap();
   else if (currentMap->getRoomType() == roomTypeBonus)
@@ -2287,15 +2314,18 @@ void WitchBlastGame::generateMap()
 
     if (challengeLevel == 1)
     {
-      new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+      addMonster(EnemyTypeBubble,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
     else
     {
-      new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 80,
-                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
-      new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
-                       OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+      addMonster(EnemyTypeBubble,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 80,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMonster(EnemyTypeBubble,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
   }
   else if (currentMap->getRoomType() == roomTypeBoss)
@@ -2305,40 +2335,46 @@ void WitchBlastGame::generateMap()
     if (level == 1)
     {
       findPlaceMonsters(EnemyTypeRat, 2);
-      new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMonster(EnemyTypeButcher,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoButcher);
     }
 
     else if (level == 2)
     {
-      new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMonster(EnemyTypeSlimeBoss,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoGiantSlime);
     }
 
     else if (level == 3)
     {
-      new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMonster(EnemyTypeCyclops,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoCyclops);
     }
 
     else if (level == 4)
     {
-      new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMonster(EnemyTypeRatKing,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoWererat);
     }
 
     else if (level == 5)
     {
-      new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      addMonster(EnemyTypeSpiderGiant,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoGiantSpiderBefore);
     }
     else if (level == 6)
     {
+      // TODO
       GiantSpiderEntity* b1 = new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b1->setLabelDy(10);
@@ -2427,7 +2463,11 @@ void WitchBlastGame::initMonsterArray()
 
 void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
 {
-  saveInFight.monsters[monsterType]++;
+  StructMonster monster;
+  monster.id = monsterType;
+  monster.x = xm;
+  monster.y = ym;
+  saveInFight.monsters.push_back(monster);
   switch (monsterType)
   {
   case EnemyTypeRat:
@@ -2505,6 +2545,25 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     new LittleSpiderEntity(xm, ym);
     break;
 
+  case EnemyTypeBubble:
+    new BubbleEntity(xm, ym, 0);
+    break;
+  case EnemyTypeButcher:
+    new ButcherEntity(xm, ym);
+    break;
+  case EnemyTypeSlimeBoss:
+    new GiantSlimeEntity(xm, ym);
+    break;
+  case EnemyTypeCyclops:
+    new CyclopsEntity(xm, ym);
+    break;
+  case EnemyTypeRatKing:
+    new KingRatEntity(xm, ym);
+    break;
+  case EnemyTypeSpiderGiant:
+    new GiantSpiderEntity(xm, ym);
+    break;
+
   default:
     std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
   }
@@ -2565,7 +2624,7 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
 void WitchBlastGame::generateStandardMap()
 {
   initMonsterArray();
-  for (int i = 0; i < NB_ENEMY; i++) saveInFight.monsters[i] = 0;
+  saveInFight.monsters.clear();
   generateStandardRoom(level);
 }
 
@@ -2832,7 +2891,8 @@ void WitchBlastGame::saveGame()
     file << std::endl;
 
     // maps
-    saveMapItems();
+    if (currentMap->isCleared())
+      saveMapItems();
 
     file << nbRooms << std::endl;
     for (j = 0; j < FLOOR_HEIGHT; j++)
@@ -2852,7 +2912,9 @@ void WitchBlastGame::saveGame()
             {
               for (k = 0; k < MAP_WIDTH; k++)
               {
-                file << currentFloor->getMap(i, j)->getTile(k, l) << " ";
+                int tile = currentFloor->getMap(i, j)->getTile(k, l);
+                if (tile == MAP_DOOR && !(k > 0 && k < MAP_WIDTH - 1 && l > 0 && l < MAP_HEIGHT - 1)) tile = 0;
+                file << tile << " ";
               }
               file << std::endl;
             }
@@ -2901,6 +2963,22 @@ void WitchBlastGame::saveGame()
     file << floorX << " " << floorY << std::endl;
     file << bossRoomOpened << std::endl;
     // boss door !
+
+    // fight ?
+    if (currentMap->isCleared())
+    {
+      file << false << std::endl;
+    }
+    else
+    {
+      file << true << std::endl;
+      file << saveInFight.x << " " << saveInFight.y << " " << saveInFight.direction << std::endl;
+
+      file << saveInFight.monsters.size();
+      for (auto monster : saveInFight.monsters)
+        file << " " << monster.id << " " << monster.x  << " " << monster.y;
+      file << std::endl;
+    }
 
     // player
     file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << std::endl;
@@ -3036,6 +3114,27 @@ bool WitchBlastGame::loadGame()
     currentMap = currentFloor->getMap(floorX, floorY);
     file >> bossRoomOpened;
 
+    // fight ?
+    file >> saveInFight.isFight;
+    if (saveInFight.isFight)
+    {
+      currentMap->setCleared(false);
+      file >> saveInFight.x;
+      file >> saveInFight.y;
+      file >> saveInFight.direction;
+
+      file >> n;
+      for (i = 0; i < n; i++)
+      {
+        StructMonster monster;
+        file >> j;
+        monster.id = (enemyTypeEnum)j;
+        file >> monster.x;
+        file >> monster.y;
+        saveInFight.monsters.push_back(monster);
+      }
+    }
+
     // player
     int hp, hpMax, gold;
     file >> hp >> hpMax >> gold;
@@ -3053,8 +3152,14 @@ bool WitchBlastGame::loadGame()
     float x, y;
     file >> x >> y;
 
+    if (saveInFight.isFight)
+    {
+      x = saveInFight.x;
+      y = saveInFight.y;
+      player->move(saveInFight.direction);
+      player->setEntering();
+    }
     player->moveTo(x, y);
-
 
     file >> n;
     player->setShotIndex(n);

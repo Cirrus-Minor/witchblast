@@ -454,8 +454,9 @@ private:
    *
    *  Starts the level.
    *  Called after loading the game or creating a new level.
+   *  \param isFight : true if loading in fight
    */
-  void playLevel();
+  void playLevel(bool isFight);
 
   /*!
    *  \brief Creates a level
@@ -708,15 +709,23 @@ private:
   bool equipNudeToDisplay[NUMBER_EQUIP_ITEMS];
   saveHeaderStruct saveHeader;
 
+  struct StructMonster
+  {
+    enemyTypeEnum id;
+    float x;
+    float y;
+  };
+
   /*!
    *  \brief Data for "in fight" game saving
    */
   struct StructSaveInFight
   {
+    bool isFight;                         /**< True if loading during a fight */
     float x;                              /**< Player x position */
     float y;                              /**< Player y position */
     int direction;                        /**< Player direction */
-    int monsters[NB_ENEMY];               /**< Monsters */
+    std::vector<StructMonster> monsters;  /**< Monsters */
   };
   StructSaveInFight saveInFight;  /**< Data for "in fight" game saving */
 
