@@ -353,11 +353,11 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBookMagicI, "item_book_magic_i", "item_book_magic_i_desc",
-    30, true, FamiliarNone, true, true, true, 1, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 4, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBookMagicII, "item_book_magic_ii", "item_book_magic_ii_desc",
-    30, true, FamiliarNone, true, true, true, 1, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 4, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
 };
 
