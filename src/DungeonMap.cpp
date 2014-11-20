@@ -737,7 +737,6 @@ void DungeonMap::restoreItems()
     ItemEntity* itemEntity = new ItemEntity((enumItemType)(ilm.type), ilm.x, ilm.y);
     itemEntity->setMerchandise(ilm.merch);
 	}
-	itemList.clear();
 }
 
 void DungeonMap::restoreSprites()
@@ -777,7 +776,6 @@ void DungeonMap::restoreSprites()
       corpse->setType(ENTITY_CORPSE);
     }
   }
-	spriteList.clear();
 }
 
 void DungeonMap::restoreChests()
@@ -791,7 +789,6 @@ void DungeonMap::restoreChests()
 
     new ChestEntity(clm.x, clm.y, clm.type, clm.state);
 	}
-	chestList.clear();
 }
 
 void DungeonMap::restoreMapObjects()
@@ -799,6 +796,14 @@ void DungeonMap::restoreMapObjects()
   restoreItems();
   restoreSprites();
   restoreChests();
+  cleanMapObjects();
+}
+
+void DungeonMap::cleanMapObjects()
+{
+	itemList.clear();
+	spriteList.clear();
+  chestList.clear();
 }
 
 void DungeonMap::addRandomGrids(int n)

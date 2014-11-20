@@ -109,10 +109,9 @@ class DungeonMap : public GameMap
     void addItem(int itemType, float x, float y, bool merch);
     void addSprite(int spriteType, int frame,  float x, float y, float scale);
     void addChest(int chestType, bool state,  float x, float y);
-    void restoreItems();
-    void restoreSprites();
-    void restoreChests();
+
     void restoreMapObjects();
+    void cleanMapObjects();
 
     roomTypeEnum getRoomType();
     void setRoomType(roomTypeEnum roomType);
@@ -144,6 +143,10 @@ class DungeonMap : public GameMap
     ChestList chestList;
 
     void generateCorridors();
+
+    void restoreItems();
+    void restoreSprites();
+    void restoreChests();
 };
 
 #endif // MAGICMAP_H
