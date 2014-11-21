@@ -33,7 +33,7 @@ KingRatEntity::KingRatEntity(float x, float y)
   dyingSound = SOUND_KING_RAT_DIE;
   frame = 0;
   if (game().getPlayerPosition().x > x) sprite.setScale(-1.0f, 1.0f);
-  sprite.setOrigin(64.0f, 64.0f);
+  sprite.setOrigin(64.0f, 70.0f);
 
   state = 0;
   timer = 2.0f + (rand() % 40) / 10.0f;
@@ -243,7 +243,7 @@ void KingRatEntity::animate(float delay)
     else if (r == 3) frame = 2;
   }
 
-  z = y + 52;
+  z = y + 48;
 }
 
 int KingRatEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
@@ -258,10 +258,10 @@ int KingRatEntity::hurt(int damages, enumShotType hurtingType, int level, bool c
 
 void KingRatEntity::calculateBB()
 {
-  boundingBox.left = (int)x - width / 2 + 25;
-  boundingBox.width = width - 50;
-  boundingBox.top = (int)y - height / 2 + 25;
-  boundingBox.height =  height - 35;
+  boundingBox.left = (int)x - 35;
+  boundingBox.width = 70;
+  boundingBox.top = (int)y - 15;
+  boundingBox.height =  63;
 }
 
 
