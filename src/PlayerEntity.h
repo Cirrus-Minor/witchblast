@@ -433,7 +433,7 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void castSpell();
 
-    void setActiveSpell(enumCastSpell spell);
+    void setActiveSpell(enumCastSpell spell, bool fromSaveInFight);
     castSpellStruct getActiveSpell();
     float getPercentSpellDelay();
     bool canCastSpell();

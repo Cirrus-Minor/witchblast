@@ -218,7 +218,7 @@ void PlayerEntity::acquireItemAfterStance()
     // spells
     if (items[acquiredItem].spell != SpellNone)
     {
-      setActiveSpell(items[acquiredItem].spell);
+      setActiveSpell(items[acquiredItem].spell, false);
       game().proceedEvent(EventGetSpell);
     }
 
@@ -1450,7 +1450,7 @@ castSpellStruct PlayerEntity::getActiveSpell()
   return activeSpell;
 }
 
-void PlayerEntity::setActiveSpell(enumCastSpell spell)
+void PlayerEntity::setActiveSpell(enumCastSpell spell, bool fromSaveInFight)
 {
   if (activeSpell.spell != SpellNone)
   {
@@ -1503,7 +1503,8 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell)
   case SpellNone:
     break;
   }
-  activeSpell.delay = activeSpell.delayMax;
+  if (fromSaveInFight) activeSpell.delay = 1.0f;
+  else activeSpell.delay = activeSpell.delayMax;
 }
 
 void PlayerEntity::castSpell()

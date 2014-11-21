@@ -3171,7 +3171,7 @@ bool WitchBlastGame::loadGame()
     }
 
     file >> n;
-    player->setActiveSpell((enumCastSpell)n);
+    player->setActiveSpell((enumCastSpell)n, saveInFight.isFight);
 
     for (i = 0; i < NB_EVENTS; i++)
     {
