@@ -27,6 +27,7 @@ enum enemyTypeEnum
   EnemyTypeWitch,
   EnemyTypeWitchRed,
   EnemyTypeCauldron,
+  EnemyTypeGhost,
 
   // mini boss
   EnemyTypeBubble,

@@ -41,6 +41,7 @@
 #include "WitchEntity.h"
 #include "CauldronEntity.h"
 #include "SnakeEntity.h"
+#include "GhostEntity.h"
 #include "LittleSpiderEntity.h"
 #include "SpiderEggEntity.h"
 #include "ArtefactDescriptionEntity.h"
@@ -105,7 +106,7 @@ WitchBlastGame::WitchBlastGame():
     "media/spider_web.png",    "media/little_spider.png",
     "media/bubble.png",        "media/witch.png",
     "media/cauldron.png",      "media/snake.png",
-    "media/pumpkin.png",
+    "media/pumpkin.png",       "media/ghost.png",
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/blood.png",
@@ -775,6 +776,11 @@ void WitchBlastGame::updateRunningGame()
         initMonsterArray();
         findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
         findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+      }
+      if (event.key.code == sf::Keyboard::F12)
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeGhost, 2);
       }
       #endif // TEST_MODE
 
@@ -2537,6 +2543,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeCauldron:
     new CauldronEntity(xm, ym);
     break;
+  case EnemyTypeGhost:
+    new GhostEntity(xm, ym);
+    break;
 
   case EnemyTypeSpiderEgg_invocated:
     new SpiderEggEntity(xm, ym);
@@ -3782,6 +3791,7 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     case EnemyTypeWitch: value = "enemy_type_witch"; break;
     case EnemyTypeWitchRed: value = "enemy_type_witch_red"; break;
     case EnemyTypeCauldron: value = "enemy_type_cauldron"; break;
+    case EnemyTypeGhost: value = "enemy_type_ghost"; break;
 
     // mini boss
     case EnemyTypeBubble: value = "enemy_type_bubble"; break;

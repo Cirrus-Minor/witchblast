@@ -93,6 +93,7 @@ enum item_images {
   IMAGE_CAULDRON,
   IMAGE_SNAKE,
   IMAGE_PUMPKIN,
+  IMAGE_GHOST,
 
   IMAGE_BUTCHER,
   IMAGE_GIANT_SLIME,
@@ -223,6 +224,7 @@ enum corpses_ressources{
   FRAME_CORPSE_SNAKE_BLOOD,
   FRAME_CORPSE_PUMPKIN,
   FRAME_CORPSE_FLOWER_ICE,
+  FRAME_CORPSE_GHOST,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -405,6 +407,11 @@ const int WITCH_VELOCITY = 130.0f;
 
 // Cauldron
 const int CAULDRON_HP = 150;
+
+// Ghost
+const float GHOST_SPEED = 120.0f;
+const int GHOST_HP = 40;
+const int GHOST_DAMAGE = 8;
 
 // Butcher
 const int BUTCHER_HP = 150;
