@@ -90,7 +90,6 @@ void EvilFlowerEntity::fire()
         float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
 
         float fireAngle = Vector2D(x, y).angleTo(game().getPlayerPosition());
-        std::cout << fireAngle << " - " << fireAngle * 360 / (2 * PI) << std::endl;
         if (i == 0) fireAngle += 0.1f;
         else fireAngle -= 0.1f;
 
