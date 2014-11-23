@@ -3740,7 +3740,7 @@ void WitchBlastGame::renderPlayer(float x, float y,
       sprite.setColor(sf::Color(255, 255, 255, 0));
       break;
 
-    case ShotTypeExplodingFire:
+    case ShotTypeFire:
       sprite.setColor(sf::Color(255, 180, 0, 255));
       break;
 

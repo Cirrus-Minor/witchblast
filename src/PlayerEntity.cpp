@@ -580,7 +580,7 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
       sprite.setColor(sf::Color(255, 255, 255, 0));
       break;
 
-    case ShotTypeExplodingFire:
+    case ShotTypeFire:
       sprite.setColor(sf::Color(255, 180, 0, 255));
       break;
 
@@ -601,7 +601,7 @@ void PlayerEntity::renderHalo(sf::RenderTarget* app)
 {
   if (frame > 2 || spriteDy > 9) return;
   // gems
-  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeExplodingFire)  && playerStatus != playerStatusDead)
+  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeFire)  && playerStatus != playerStatusDead)
   {
     int fade;
     sf::Color savedColor = sprite.getColor();
@@ -617,7 +617,7 @@ void PlayerEntity::renderHalo(sf::RenderTarget* app)
       sprite.setTextureRect(sf::IntRect(3 * width, 10 * height, 20, 20));
     else if (getShotType() == ShotTypeLightning)
       sprite.setTextureRect(sf::IntRect(3 * width + 20, 10 * height, 20, 20));
-    else if (getShotType() == ShotTypeExplodingFire)
+    else if (getShotType() == ShotTypeFire)
       sprite.setTextureRect(sf::IntRect(3 * width + 40, 10 * height, 20, 20));
 
     sprite.setColor(sf::Color(255, 255, 255, fade));
@@ -882,7 +882,6 @@ void PlayerEntity::generateBolt(float velx, float vely)
   case ShotTypeStone:
   case ShotTypeLightning:
   case ShotTypeFire:
-  case ShotTypeExplodingFire:
     boltType = getShotType();
     shotLevel = getShotLevel();
     break;
@@ -1426,7 +1425,7 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
       nbSpecial++;
       break;
 
-    case ShotTypeExplodingFire:
+    case ShotTypeFire:
     case ShotTypeIllusion:
       nbAdvanced++;
       break;

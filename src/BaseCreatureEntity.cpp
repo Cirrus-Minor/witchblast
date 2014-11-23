@@ -463,7 +463,7 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
   // damages bonus
   if (hurtingType == ShotTypeIce || hurtingType == ShotTypeCold)
     damages += (damages * determineDamageBonus(resistance[ResistanceIce], level)) / 100;
-  else if (hurtingType == ShotTypeFire  || hurtingType == ShotTypeExplodingFire)
+  else if (hurtingType == ShotTypeFire)
     damages += (damages * determineDamageBonus(resistance[ResistanceFire], level)) / 100;
   else if (hurtingType == ShotTypeLightning)
     damages += (damages * determineDamageBonus(resistance[ResistanceLightning], level)) / 100;
@@ -485,10 +485,11 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
     {
       hp = 0;
       // exploding ?
-      if (hurtingType == ShotTypeExplodingFire && canExplode)
-      {
-        if (rand() % 100 < FIRE_EXPLODE_CHANCE[level]) willExplode = true;
-      }
+      // TODO
+      //if (SULFUR && canExplode)
+      //{
+      //  if (rand() % 100 < 25) willExplode = true;
+      //}
 
       prepareDying();
     }

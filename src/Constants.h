@@ -280,7 +280,6 @@ enum enumShotType {
   ShotTypeIllusion,
   ShotTypeStone,
   ShotTypeLightning,
-  ShotTypeExplodingFire,
   ShotTypeFire,
   ShotTypePoison,
   ShotTypeBomb,
@@ -308,8 +307,6 @@ const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Air resistance
     = { 0.01, 0.015f, 0.02f };
 const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
     = { 1.15f, 1.3f, 1.45f };
-const int FIRE_EXPLODE_CHANCE[MAX_SHOT_LEVEL]   // Fire exploding chance
-    = { 25, 30, 35 };
 
 // entity type
 const int ENTITY_PLAYER = 1;
