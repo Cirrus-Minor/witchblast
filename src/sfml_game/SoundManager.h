@@ -26,6 +26,7 @@ public:
     void addSound(const char *fileName);
     void playSound(int n);
     void stopSound(int n);
+    void setMute(bool mute);
 
 private:
     SoundManager();
@@ -33,6 +34,8 @@ private:
 
     std::vector<sf::SoundBuffer*> soundBufferArray;
     std::vector<sf::Sound*> soundArray;
+
+    bool mute;
 };
 
 #endif // SOUNDMANAGER_H_INCLUDED

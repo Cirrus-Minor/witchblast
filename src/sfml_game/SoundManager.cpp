@@ -20,49 +20,54 @@
 
 SoundManager::SoundManager()
 {
+  mute = false;
 }
 
 SoundManager::~SoundManager()
 {
-    std::cout << "Releasing audio memory... ";
-    for (unsigned int i = 0; i < soundBufferArray.size(); i++)
-    {
-        soundArray[i]->stop();
-        delete(soundArray[i]);
-        delete(soundBufferArray[i]);
-    }
-    soundArray.clear();
-    soundBufferArray.clear();
-    std::cout << "OK" << std::endl;
+  std::cout << "Releasing audio memory... ";
+  for (unsigned int i = 0; i < soundBufferArray.size(); i++)
+  {
+    soundArray[i]->stop();
+    delete(soundArray[i]);
+    delete(soundBufferArray[i]);
+  }
+  soundArray.clear();
+  soundBufferArray.clear();
+  std::cout << "OK" << std::endl;
 }
 
 SoundManager& SoundManager::getInstance()
 {
-    static SoundManager singleton;
-    return singleton;
+  static SoundManager singleton;
+  return singleton;
 }
 
 void SoundManager::addSound(const char* fileName)
 {
-    //std::cout << "Loading sound: " << fileName << "...\n";
+  sf::SoundBuffer* newSoundBuffer = new sf::SoundBuffer;
+  newSoundBuffer->loadFromFile(fileName);
+  soundBufferArray.push_back(newSoundBuffer);
 
-    sf::SoundBuffer* newSoundBuffer = new sf::SoundBuffer;
-    newSoundBuffer->loadFromFile(fileName);
-    soundBufferArray.push_back(newSoundBuffer);
-
-    sf::Sound* newSound = new sf::Sound;
-    newSound->setBuffer(*newSoundBuffer);
-    soundArray.push_back(newSound);
+  sf::Sound* newSound = new sf::Sound;
+  newSound->setBuffer(*newSoundBuffer);
+  soundArray.push_back(newSound);
 }
 
 void SoundManager::playSound(int n)
 {
-    if (soundArray[n]->getStatus() != sf::Sound::Playing)
-        soundArray[n]->play();
+  if (mute) return;
+  if (soundArray[n]->getStatus() != sf::Sound::Playing)
+    soundArray[n]->play();
 }
 
 void SoundManager::stopSound(int n)
 {
-    if (soundArray[n]->getStatus() == sf::Sound::Playing)
-        soundArray[n]->stop();
+  if (soundArray[n]->getStatus() == sf::Sound::Playing)
+    soundArray[n]->stop();
+}
+
+void SoundManager::setMute(bool mute)
+{
+  this->mute = mute;
 }
