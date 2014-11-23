@@ -270,6 +270,8 @@ item_book_magic_i#Book of magic - Tome I
 item_book_magic_i_desc#Decreases spell's cooldown
 item_book_magic_ii#Book of magic - Tome II
 item_book_magic_ii_desc#Increases spell's power
+item_sulfur#Sulfur
+item_sulfur_desc#Can make corpses explode
 spell_web#spider web
 tuto_reset#Tutorial reset
 tuto_reset_desc#Resets the tutorial

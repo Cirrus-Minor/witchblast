@@ -485,11 +485,11 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
     {
       hp = 0;
       // exploding ?
-      // TODO
-      //if (SULFUR && canExplode)
-      //{
-      //  if (rand() % 100 < 25) willExplode = true;
-      //}
+      if (game().getPlayer()->isEquiped(EQUIP_SULFUR) && canExplode)
+      {
+        int luck = hurtingType == ShotTypeFire ? 33 : 25;
+        if (rand() % 100 < luck) willExplode = true;
+      }
 
       prepareDying();
     }

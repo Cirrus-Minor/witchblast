@@ -121,6 +121,7 @@ enum enumItemType
   ItemSpellWeb,
   ItemBookMagicI,
   ItemBookMagicII,
+  ItemSulfur,
 
   NUMBER_ITEMS
 };
@@ -359,6 +360,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemBookMagicII, "item_book_magic_ii", "item_book_magic_ii_desc",
     35, true, FamiliarNone, true, true, true, 4, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemSulfur, "item_sulfur", "item_sulfur_desc",
+    35, true, FamiliarNone, true, true, true, 2, RarityRare, AlignmentNone, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -407,6 +412,7 @@ enum item_equip_enum {
   EQUIP_SPELL_WEB,
   EQUIP_BOOK_MAGIC_I,
   EQUIP_BOOK_MAGIC_II,
+  EQUIP_SULFUR,
 
   NUMBER_EQUIP_ITEMS
   };
