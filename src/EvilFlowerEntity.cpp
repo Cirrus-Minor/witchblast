@@ -45,6 +45,12 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
 
 void EvilFlowerEntity::animate(float delay)
 {
+  if (isExploding)
+  {
+    sprite.setRotation(0);
+    EnemyEntity::animate(delay);
+    return;
+  }
   float flowerDelay = delay;
   if (specialState[SpecialStateIce].active) flowerDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -115,6 +121,8 @@ void EvilFlowerEntity::fire()
 
 void EvilFlowerEntity::render(sf::RenderTarget* app)
 {
+  if (!isExploding)
+  {
     sprite.setPosition(x, y);
     float savedAngle = sprite.getRotation();
     sprite.setRotation(0.0f);
@@ -126,5 +134,7 @@ void EvilFlowerEntity::render(sf::RenderTarget* app)
     app->draw(sprite);
 
     sprite.setRotation(savedAngle);
-    EnemyEntity::render(app);
+  }
+
+  EnemyEntity::render(app);
 }

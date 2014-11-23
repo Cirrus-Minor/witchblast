@@ -50,7 +50,7 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
 
 void ImpEntity::animate(float delay)
 {
-  if (!isDying && !isAgonising)
+  if (!isDying && !isAgonising && !isExploding)
   {
     if (age < 0.0f)
       frame = 1;
@@ -136,7 +136,7 @@ int ImpEntity::hurt(int damages, enumShotType hurtingType, int level, bool criti
 {
   int result = EnemyEntity::hurt(damages, hurtingType, level, critical, sourceType, enemyType);
 
-  if (!isDying && !isAgonising)
+  if (!isDying && !isAgonising && !isExploding)
   {
     teleport();
     state = 3;

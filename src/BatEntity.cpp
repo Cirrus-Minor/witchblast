@@ -30,26 +30,29 @@ BatEntity::BatEntity(float x, float y, bool invocated)
 
 void BatEntity::animate(float delay)
 {
-  changingDelay -= delay;
-  if (changingDelay < 0.0f)
+  if (!isAgonising && !isExploding)
   {
-    velocity = Vector2D(creatureSpeed);
-    changingDelay = 0.5f + (float)(rand() % 2500) / 1000.0f;
-    computeFacingDirection();
-  }
-
-  if (age < 0.0f)
-    frame = 1;
-  else
-  {
-    switch (facingDirection)
+    changingDelay -= delay;
+    if (changingDelay < 0.0f)
     {
-      case 2: frame = 0; break;
-      case 4: frame = 2; break;
-      case 6: frame = 4; break;
-      case 8: frame = 6; break;
+      velocity = Vector2D(creatureSpeed);
+      changingDelay = 0.5f + (float)(rand() % 2500) / 1000.0f;
+      computeFacingDirection();
     }
-    frame += ((int)(age * 5.0f)) % 2;
+
+    if (age < 0.0f)
+      frame = 1;
+    else
+    {
+      switch (facingDirection)
+      {
+        case 2: frame = 0; break;
+        case 4: frame = 2; break;
+        case 6: frame = 4; break;
+        case 8: frame = 6; break;
+      }
+      frame += ((int)(age * 5.0f)) % 2;
+    }
   }
 
   EnemyEntity::animate(delay);

@@ -44,29 +44,48 @@ void EnemyEntity::setLabelDy(float label_dy)
 
 void EnemyEntity::animate(float delay)
 {
-  if (isAgonising)
+  if (isExploding)
+  {
+    explodeTimer -= delay;
+
+    if (explodeTimer <= 0.0f)
+    {
+      startExplosion();
+    }
+
+    return;
+  }
+  else if (isAgonising)
   {
     if (hpDisplay > hp) hpDisplay--;
 
     if (h < -0.01f)
     {
-      isDying = true;
-      SpriteEntity* corpse;
-      if (deathFrame >= FRAME_CORPSE_KING_RAT)
+      isAgonising = false;
+      if (willExplode)
       {
-        corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
-        corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
+        makeExplode();
       }
       else
       {
-        corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-        corpse->setFrame(deathFrame);
-        corpse->setImagesProLine(10);
-      }
+        isDying = true;
+        SpriteEntity* corpse;
+        if (deathFrame >= FRAME_CORPSE_KING_RAT)
+        {
+          corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
+          corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
+        }
+        else
+        {
+          corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
+          corpse->setFrame(deathFrame);
+          corpse->setImagesProLine(10);
+        }
 
-      corpse->setZ(OFFSET_Y);
-      corpse->setType(ENTITY_CORPSE);
-      if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
+        corpse->setZ(OFFSET_Y);
+        corpse->setType(ENTITY_CORPSE);
+        if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
+      }
     }
     else
     {
@@ -253,7 +272,7 @@ int EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool cri
   return hurtedHp;
 }
 
-void EnemyEntity::makeExplode()
+void EnemyEntity::startExplosion()
 {
   new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
   isDying = true;
@@ -266,14 +285,33 @@ void EnemyEntity::makeExplode()
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }
 
+void EnemyEntity::makeExplode()
+{
+  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CORPSES));
+  setImagesProLine(10);
+  setFrame(deathFrame);
+  shadowFrame = -1;
+  width = 64;
+  height = 64;
+  sprite.setOrigin(32, 32);
+
+  isExploding = true;
+  explodeTimer = EXPLOSION_DELAY;
+}
+
 void EnemyEntity::dying()
 {
-
-  if (exploding)
+  if (dyingFrame > -1)
+  {
+    isAgonising = true;
+    hVelocity = 200.0f;
+    if (agonizingSound != SOUND_NONE) SoundManager::getInstance().playSound(agonizingSound);
+  }
+  else if (willExplode)
   {
     makeExplode();
   }
-  else if (dyingFrame == -1)
+  else // dyingFrame == -1
   {
     isDying = true;
     SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
@@ -283,12 +321,7 @@ void EnemyEntity::dying()
     corpse->setType(ENTITY_CORPSE);
     if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
   }
-  else
-  {
-    isAgonising = true;
-    hVelocity = 200.0f;
-    if (agonizingSound != SOUND_NONE) SoundManager::getInstance().playSound(agonizingSound);
-  }
+
   if (bloodColor != BloodNone) for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
   game().addKilledEnemy(enemyType);
@@ -320,7 +353,26 @@ bool EnemyEntity::canCollide()
 
 void EnemyEntity::render(sf::RenderTarget* app)
 {
-  if (isAgonising || (isDying && dyingFrame > -1))
+  if (isExploding)
+  {
+    int nx = deathFrame;
+    int ny = 0;
+    if (imagesProLine > 0)
+    {
+      nx = deathFrame % imagesProLine;
+      ny = deathFrame / imagesProLine;
+    }
+    sprite.setPosition(x - 1 + rand() % 2, y - 1 + rand() % 2);
+    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
+    app->draw(sprite);
+
+    int fade = 128 + 127.0 * cos(explodeTimer * 4.0f);
+    sprite.setColor(sf::Color(255, fade, fade, 255));
+    renderAdd = true;
+    app->draw(sprite, sf::BlendAdd);
+    renderAdd = false;
+  }
+  else if (isAgonising || (isDying && dyingFrame > -1))
   {
     if (shadowFrame > -1)
     {

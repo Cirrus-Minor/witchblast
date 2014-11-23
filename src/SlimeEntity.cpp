@@ -35,23 +35,26 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
     resistance[ResistanceIce] = ResistanceHigh;
     resistance[ResistanceFire] = ResistanceLow;
     enemyType = invocated ? EnemyTypeSlimeBlue_invocated : EnemyTypeSlimeBlue;
+    deathFrame = FRAME_CORPSE_SLIME_BLUE;
   }
   else if (slimeType == SlimeTypeRed)
   {
     resistance[ResistanceIce] = ResistanceLow;
     resistance[ResistanceFire] = ResistanceHigh;
     enemyType = invocated ? EnemyTypeSlimeRed_invocated : EnemyTypeSlimeRed;
+    deathFrame = FRAME_CORPSE_SLIME_RED;
   }
   else if (slimeType == SlimeTypeViolet)
   {
     enemyType = invocated ? EnemyTypeSlimeViolet_invocated : EnemyTypeSlimeViolet;
     canExplode = false;
+    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
   }
   else
   {
     enemyType = invocated ? EnemyTypeSlime_invocated : EnemyTypeSlime;
+    deathFrame = FRAME_CORPSE_SLIME;
   }
-
 
   bloodColor = BloodGreen;
   frame = 0;
@@ -69,6 +72,11 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
 
 void SlimeEntity::animate(float delay)
 {
+  if (isExploding)
+  {
+    EnemyEntity::animate(delay);
+    return;
+  }
   float slimeDelay = delay;
   if (specialState[SpecialStateIce].active) slimeDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -187,7 +195,12 @@ void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
 void SlimeEntity::render(sf::RenderTarget* app)
 {
-  if (!isDying && shadowFrame > -1)
+  if (isExploding)
+  {
+    EnemyEntity::render(app);
+    return;
+  }
+  else if (!isDying && shadowFrame > -1)
   {
     // shadow
     sprite.setPosition(x, y);
@@ -292,24 +305,8 @@ bool SlimeEntity::collideWithMap(int direction)
 
 void SlimeEntity::dying()
 {
-  isDying = true;
-  game().addKilledEnemy(enemyType);
-  SpriteEntity* deadSlime = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-  deadSlime->setZ(OFFSET_Y);
-  deadSlime->setImagesProLine(10);
-  switch (slimeType)
-  {
-    case SlimeTypeStandard: deadSlime->setFrame(FRAME_CORPSE_SLIME); break;
-    case SlimeTypeRed: deadSlime->setFrame(FRAME_CORPSE_SLIME_RED); break;
-    case SlimeTypeBlue: deadSlime->setFrame(FRAME_CORPSE_SLIME_BLUE); break;
-    case SlimeTypeViolet: deadSlime->setFrame(FRAME_CORPSE_SLIME_VIOLET); explode(); break;
-  }
-  deadSlime->setType(ENTITY_CORPSE);
-
-  for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
-
-  if (!invocated) drop();
-  SoundManager::getInstance().playSound(SOUND_ENNEMY_DYING);
+  if (slimeType == SlimeTypeViolet) explode();
+  EnemyEntity::dying();
 }
 
 void SlimeEntity::prepareDying()

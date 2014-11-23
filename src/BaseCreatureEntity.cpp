@@ -18,7 +18,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   hpDisplay = 0;
   armor = 0.0f;
   movingStyle = movWalking;
-  exploding = false;
+  willExplode = false;
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
   {
     specialState[i].type = (enumSpecialState)i;
@@ -33,6 +33,8 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   }
   recoil.active = false;
   facingDirection = 2;
+  isExploding = false;
+  willExplode = false;
 }
 
 int BaseCreatureEntity::getHp()
@@ -485,7 +487,7 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
       // exploding ?
       if (hurtingType == ShotTypeExplodingFire && canExplode)
       {
-        if (rand() % 100 < FIRE_EXPLODE_CHANCE[level]) exploding = true;
+        if (rand() % 100 < FIRE_EXPLODE_CHANCE[level]) willExplode = true;
       }
 
       prepareDying();

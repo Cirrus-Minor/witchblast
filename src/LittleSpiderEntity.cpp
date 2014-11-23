@@ -33,9 +33,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y)
 
 void LittleSpiderEntity::animate(float delay)
 {
-  z = y + boundingBox.top + boundingBox.height;
-
-  if (age > 0.0f && !isAgonising)
+  if (age > 0.0f && !isAgonising && !isExploding)
   {
     timer = timer - delay;
     if (timer <= 0.0f)

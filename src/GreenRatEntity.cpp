@@ -29,6 +29,8 @@ GreenRatEntity::GreenRatEntity(float x, float y)
   age = -GREEN_RAT_FADE;
   frame = 11;
   sprite.setOrigin(32.0f, 38.0f);
+
+  canExplode = false; // TO SEE
 }
 
 void GreenRatEntity::animate(float delay)

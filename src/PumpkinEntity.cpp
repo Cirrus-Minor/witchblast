@@ -44,6 +44,12 @@ PumpkinEntity::PumpkinEntity(float x, float y, bool invocated)
 
 void PumpkinEntity::animate(float delay)
 {
+  if (isExploding)
+  {
+    EnemyEntity::animate(delay);
+    return;
+  }
+
   float slimeDelay = delay;
   if (specialState[SpecialStateIce].active) slimeDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -116,7 +122,12 @@ void PumpkinEntity::animate(float delay)
 
 void PumpkinEntity::render(sf::RenderTarget* app)
 {
-  if (!isDying && shadowFrame > -1)
+  if (isExploding)
+  {
+    EnemyEntity::render(app);
+    return;
+  }
+  else if (!isDying && shadowFrame > -1)
   {
     // shadow
     sprite.setPosition(x, y);

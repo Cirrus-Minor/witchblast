@@ -51,7 +51,7 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
 
 void RatEntity::animate(float delay)
 {
-  if (age > 0.0f && !isAgonising)
+  if (age > 0.0f && !isAgonising && !isExploding)
   {
     timer -= delay;
     if (timer < 0.0f)

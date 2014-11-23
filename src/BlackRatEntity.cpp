@@ -47,7 +47,7 @@ BlackRatEntity::BlackRatEntity(float x, float y, ratBlackTypeEnum ratType)
 
 void BlackRatEntity::animate(float delay)
 {
-  if (age > 0.0f && !isAgonising)
+  if (age > 0.0f && !isAgonising && !isExploding)
   {
       // goal reached ?
     if (currentDirection == 6 && x > (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2 + OFFSET_X) ) findNextGoal();

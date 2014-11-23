@@ -25,6 +25,7 @@ protected:
   virtual void collideMapBottom();
 
   void renderLifeBar(sf::RenderTarget* app, std::string label);
+  void startExplosion();
   void makeExplode();
 
   virtual void readCollidingEntity(CollidingSpriteEntity* entity);

@@ -70,6 +70,8 @@ const int BB_BOTTOM  = 31;
 const float FADE_IN_DELAY = 1.0f;
 const float FADE_OUT_DELAY = 1.0f;
 
+const float EXPLOSION_DELAY = 2.0f;
+
 enum item_images {
   IMAGE_PLAYER_BASE,
   IMAGE_PLAYER_FACES,

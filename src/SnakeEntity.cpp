@@ -52,7 +52,7 @@ SnakeEntity::SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocat
 
 void SnakeEntity::animate(float delay)
 {
-  if (age > 0.0f && !isAgonising)
+  if (age > 0.0f && !isAgonising && !isExploding)
   {
     sprite.setColor(sf::Color(255,255,255,255));
 

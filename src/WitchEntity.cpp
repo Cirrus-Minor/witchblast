@@ -53,7 +53,7 @@ WitchEntity::WitchEntity(float x, float y, witchTypeEnum witchType)
 
 void WitchEntity::animate(float delay)
 {
-  if (age > 0.0f && !isAgonising)
+  if (age > 0.0f && !isAgonising && !isExploding)
   {
     if (escapeTimer > 0.0f) escapeTimer -= delay;
     timer -= delay;
