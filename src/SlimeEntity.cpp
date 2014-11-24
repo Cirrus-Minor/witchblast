@@ -384,3 +384,8 @@ void SlimeEntity::makePet(int direction)
     default: velocity.y = -350.0f; velocity.x = -0; break;
   }
 }
+
+void SlimeEntity::drop()
+{
+  if (!invocated) EnemyEntity::drop();
+}

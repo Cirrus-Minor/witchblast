@@ -28,6 +28,7 @@ class SlimeEntity : public EnemyEntity
 
 	  virtual void dying();
 	  virtual void prepareDying();
+	  virtual void drop();
 	  virtual enumMovingStyle getMovingStyle();
 
   private:
