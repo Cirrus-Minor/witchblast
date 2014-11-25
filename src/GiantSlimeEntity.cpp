@@ -109,15 +109,15 @@ void GiantSlimeEntity::changeToState(int n)
     viscosity = 1.0f;
 
     SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
-    hVelocity = 1200.0f;
+    hVelocity = GIANT_SLIME_ULTRA_JUMP_VELOCITY;
   }
   else if (n == 7) // falling
   {
     isFalling = false;
     state = 7;
-    timer = 4.0f;
+    timer = GIANT_SLIME_ULTRA_JUMP_TIMER;
 
-    hVelocity = -1500.0f;
+    hVelocity = GIANT_SLIME_ULTRA_FALL_VELOCITY;
     h = 1500;
   }
 }
