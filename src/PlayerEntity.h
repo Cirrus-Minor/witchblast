@@ -423,10 +423,15 @@ class PlayerEntity : public BaseCreatureEntity
 
     /*!
      *  \brief returns time since player's death
-     *
      *  \return : time since player's death (in seconds)
      */
     float getDeathAge();
+
+    /*!
+     *  \brief mutator on the player's death age
+     *  \param deathAge : the new player's death (in seconds)
+     */
+    void setDeathAge(float deathAge);
 
     /*!
      *  \brief casts a spell (if possible)

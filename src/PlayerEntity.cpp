@@ -176,6 +176,11 @@ float PlayerEntity::getDeathAge()
   return deathAge;
 }
 
+void PlayerEntity::setDeathAge(float deathAge)
+{
+  this->deathAge = deathAge;
+}
+
 void PlayerEntity::setEntering()
 {
   playerStatus = playerStatusEntering;
