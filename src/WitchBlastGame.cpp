@@ -786,7 +786,17 @@ void WitchBlastGame::updateRunningGame()
 
       if (event.key.code == sf::Keyboard::Return)
       {
-        if (!messagesQueue.empty())
+        if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+        {
+          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
+          else
+          {
+            xGame[xGameTypeFade].active = true;
+            xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
+            xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
+          }
+        }
+        else if (!messagesQueue.empty())
         {
           if (messagesQueue.front().timer > 0.5f)
             messagesQueue.front().timer = 0.5f;
@@ -861,13 +871,6 @@ void WitchBlastGame::updateRunningGame()
         if (ym > 0) player->fire(2);
         else player->fire(8);
       }
-    }
-
-    if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-    {
-      xGame[xGameTypeFade].active = true;
-      xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
-      xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
     }
 
     // message queue
@@ -1095,7 +1098,7 @@ void WitchBlastGame::renderRunningGame()
     {
       float deathAge = player->getDeathAge();
 
-      if (deathAge > 3.5f)
+      if (deathAge > DEATH_CERTIFICATE_DELAY)
       {
         rectangle.setFillColor(sf::Color(0, 0, 0, 180));
         rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
@@ -1104,14 +1107,14 @@ void WitchBlastGame::renderRunningGame()
 
         renderDeathScreen(80, 110);
       }
-      else if (deathAge > 2.5f)
+      else if (deathAge > DEATH_CERTIFICATE_DELAY - 1.0f)
       {
         rectangle.setFillColor(sf::Color(0, 0, 0, 180 * (deathAge - 2.5f)));
         rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
         rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
         app->draw(rectangle);
 
-        renderDeathScreen(80 + (3.5f - deathAge) * 1000, 110);
+        renderDeathScreen(80 + (DEATH_CERTIFICATE_DELAY - deathAge) * 1000, 110);
       }
 
     }
