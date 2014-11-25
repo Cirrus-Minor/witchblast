@@ -3547,11 +3547,10 @@ void WitchBlastGame::registerLanguage()
 
 void WitchBlastGame::testAndAddMessageToQueue(EnumMessages type)
 {
-
-  if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
-
   if (gameMessagesToSkip[type] == false)
   {
+    if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
+
     messageStruct msg = getMessage(type);
     messagesQueue.push(msg);
     if (msg.messageType == MessageTypeTutorial)
