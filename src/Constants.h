@@ -19,6 +19,9 @@
 
 #include <string>
 
+// for turbo tests
+// #define TURBO_MODE
+
 const std::string APP_NAME =      "Witch Blast";
 const std::string APP_VERSION =   "0.3.8";
 
@@ -71,6 +74,7 @@ const float FADE_IN_DELAY = 1.0f;
 const float FADE_OUT_DELAY = 1.0f;
 
 const float EXPLOSION_DELAY = 2.0f;
+const float DEATH_CERTIFICATE_DELAY = 3.5f;
 
 enum item_images {
   IMAGE_PLAYER_BASE,
@@ -235,28 +239,6 @@ enum corpses_ressources{
   FRAME_CORPSE_GIANT_SPIDER
 };
 
-// Player game play
-const float INITIAL_PLAYER_SPEED = 180.0f;
-const int INITIAL_PLAYER_HP = 20;
-const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
-const float ACQUIRE_DELAY = 2.8f;
-const float UNLOCK_DELAY = 1.0f;
-const float INVINCIBLE_DELAY = 1.5f;
-
-const float INITIAL_BOLT_LIFE = 0.45f;
-const int INITIAL_BOLT_DAMAGES = 8;
-const float INITIAL_BOLT_VELOCITY = 700.0f;
-const float INITIAL_BOLT_VISCOSITY = 0.98f;
-
-const float FAIRY_SPEED = 180.0f;
-const float FAIRY_FIRE_DELAY = 0.8f;
-const float ICE_FAIRY_FIRE_DELAY = 1.3f;
-const float TARGET_FAIRY_FIRE_DELAY = 1.0f;
-const float FAIRY_BOLT_LIFE = 0.4f;
-const int FAIRY_BOLT_DAMAGES = 8;
-const int FAIRY_FIRE_DAMAGES = 12;
-const float FAIRY_BOLT_VELOCITY = 700.0f;
-
 // chests
 enum chest_type_enum {
   ChestBasic,
@@ -331,9 +313,172 @@ const int ENTITY_ENEMY_NC = 34;
 const int ENTITY_ENEMY_MAX = ENTITY_ENEMY_NC;
 const int ENTITY_ENEMY_MAX_COUNT = ENTITY_ENEMY_BOSS;
 
-
 const float DOOR_OPEN_TIME = 1.0f;
 const float DOOR_CLOSE_TIME = 1.0f;
+
+#ifdef TURBO_MODE
+
+// Player game play
+const float INITIAL_PLAYER_SPEED = 220.0f;
+const int INITIAL_PLAYER_HP = 20;
+const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
+const float ACQUIRE_DELAY = 2.8f;
+const float UNLOCK_DELAY = 1.0f;
+const float INVINCIBLE_DELAY = 1.5f;
+
+const float INITIAL_BOLT_LIFE = 0.45f;
+const int INITIAL_BOLT_DAMAGES = 8;
+const float INITIAL_BOLT_VELOCITY = 700.0f;
+const float INITIAL_BOLT_VISCOSITY = 0.98f;
+
+const float FAIRY_SPEED = 220.0f;
+const float FAIRY_FIRE_DELAY = 0.8f;
+const float ICE_FAIRY_FIRE_DELAY = 1.3f;
+const float TARGET_FAIRY_FIRE_DELAY = 1.0f;
+const float FAIRY_BOLT_LIFE = 0.4f;
+const int FAIRY_BOLT_DAMAGES = 8;
+const int FAIRY_FIRE_DAMAGES = 12;
+const float FAIRY_BOLT_VELOCITY = 700.0f;
+
+// Rat
+const float RAT_SPEED = 195.0f;
+const float RAT_SPEED_HELMET = 140.0f;
+const int RAT_HP = 16;
+const int RAT_HP_HELMET = 24;
+const int RAT_DAMAGES = 5;
+const int RAT_BB_LEFT = 14;
+const int RAT_BB_WIDTH_DIFF = 28;
+const int RAT_BB_TOP = 22;
+const int RAT_BB_HEIGHT_DIFF = 22;
+
+// Green Rat
+const float GREEN_RAT_SPEED = 180.0f;
+const int GREEN_RAT_HP = 16;
+const int GREEN_RAT_DAMAGES = 5;
+const float GREEN_RAT_FADE = 1.0f;
+
+// Black Rat
+const float BLACK_RAT_SPEED = 195.0f;
+const float BLACK_RAT_SPEED_HELMET = 125.0f;
+const int BLACK_RAT_HP = 16;
+const int BLACK_RAT_HP_HELMET = 24;
+const int BLACK_RAT_DAMAGES = 5;
+
+// Bat
+const float BAT_SPEED = 270.0f;
+const int BAT_HP = 8;
+const int BAT_DAMAGES = 5;
+
+// Evl Flower
+const int EVIL_FLOWER_HP = 16;
+const int EVIL_FLOWER_MELEE_DAMAGES = 6;
+const int EVIL_FLOWER_MISSILE_DAMAGES = 5;
+const int EVIL_FLOWER_BB_LEFT = 14;
+const int EVIL_FLOWER_BB_WIDTH_DIFF = 28;
+const int EVIL_FLOWER_BB_TOP = 22;
+const int EVIL_FLOWER_BB_HEIGHT_DIFF = 22;
+const float EVIL_FLOWER_FIRE_DELAY = 2.2f;
+const float EVIL_FLOWER_FIRE_VELOCITY = 230.0f;
+
+// Snake
+const float SNAKE_SPEED = 150.0f;
+const int SNAKE_HP = 16;
+const int SNAKE_DAMAGE = 5;
+const float SNAKE_BLOOD_SPEED = 170.0f;
+const int SNAKE_BLOOD_HP = 32;
+const int SNAKE_BLOOD_DAMAGE = 8;
+
+// Slime
+const int SLIME_HP = 16;
+const int SLIME_DAMAGES = 5;
+const int SLIME_BB_LEFT = 13;
+const int SLIME_BB_WIDTH_DIFF = 26;
+const int SLIME_BB_TOP = 38;
+const int SLIME_BB_HEIGHT_DIFF = 40;
+const float SLIME_FIRE_VELOCITY = 240.0f;
+
+// Imp
+const float IMP_SPEED = 190.0f;
+const int IMP_HP = 20;
+const int IMP_MELEE_DAMAGES = 5;
+const int IMP_MISSILE_DAMAGES = 8;
+const float IMP_FIRE_VELOCITY = 260.0f;
+
+// Witch
+const int WITCH_HP = 80;
+const int WITCH_DAMAGE = 5;
+const int WITCH_VELOCITY = 140.0f;
+
+// Cauldron
+const int CAULDRON_HP = 150;
+
+// Ghost
+const float GHOST_SPEED = 140.0f;
+const int GHOST_HP = 40;
+const int GHOST_DAMAGE = 8;
+
+// Butcher
+const int BUTCHER_HP = 150;
+const int BUTCHER_DAMAGES = 8;
+const int BUTCHER_VELOCITY = 100;
+
+// Giant Slime
+const int GIANT_SLIME_HP = 250;
+const int GIANT_SLIME_DAMAGES = 8;
+const int GIANT_SLIME_MISSILE_DAMAGES = 6;
+const float GIANT_SLIME_MISSILE_DELAY = 0.33f;
+const float GIANT_SLIME_FIRE_VELOCITY = 200.0f;
+const int GIANT_SLIME_BB_LEFT = 26;
+const int GIANT_SLIME_BB_WIDTH_DIFF = 52;
+const int GIANT_SLIME_BB_TOP = 64;
+const int GIANT_SLIME_BB_HEIGHT_DIFF = 12;
+const int GIANT_SLIME_SPEED = 80.0f;
+
+// KingRat
+const float KING_RAT_SPEED = 210.0f;
+const float KING_RAT_RUNNING_SPEED = 620.0f;
+const float KING_RAT_BERSERK_SPEED = 260.0f;
+const float KING_RAT_RUNNING_RECOIL = 750.0f;
+const int KING_RAT_HP = 700;
+const int KING_RAT_DAMAGES = 8;
+
+// Cyclops
+const float CYCLOP_SPEED[4] = { 140, 150, 160, 170};
+const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
+const float CYCLOP_FIRE_DELAY[4] = { 0.3f, 0.26f, 0.23f, 0.2f};
+const int CYCLOP_HP = 800;
+const int CYCLOP_DAMAGES = 8;
+
+// Giant Spider
+const float GIANT_SPIDER_SPEED[4] = { 240, 245, 250, 255 };
+const int GIANT_SPIDER_NUMBER_EGGS[4] = { 12, 14, 16, 19};
+const float GIANT_SPIDER_FIRE_DELAY[4] = { 0.8f, 0.7f, 0.6f, 0.5f};
+const int GIANT_SPIDER_HP = 800;
+const int GIANT_SPIDER_DAMAGE = 8;
+
+#else
+
+// Player game play
+const float INITIAL_PLAYER_SPEED = 180.0f;
+const int INITIAL_PLAYER_HP = 20;
+const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
+const float ACQUIRE_DELAY = 2.8f;
+const float UNLOCK_DELAY = 1.0f;
+const float INVINCIBLE_DELAY = 1.5f;
+
+const float INITIAL_BOLT_LIFE = 0.45f;
+const int INITIAL_BOLT_DAMAGES = 8;
+const float INITIAL_BOLT_VELOCITY = 700.0f;
+const float INITIAL_BOLT_VISCOSITY = 0.98f;
+
+const float FAIRY_SPEED = 180.0f;
+const float FAIRY_FIRE_DELAY = 0.8f;
+const float ICE_FAIRY_FIRE_DELAY = 1.3f;
+const float TARGET_FAIRY_FIRE_DELAY = 1.0f;
+const float FAIRY_BOLT_LIFE = 0.4f;
+const int FAIRY_BOLT_DAMAGES = 8;
+const int FAIRY_FIRE_DAMAGES = 12;
+const float FAIRY_BOLT_VELOCITY = 700.0f;
 
 // Rat
 const float RAT_SPEED = 185.0f;
@@ -450,6 +595,8 @@ const int GIANT_SPIDER_NUMBER_EGGS[4] = { 12, 14, 16, 19};
 const float GIANT_SPIDER_FIRE_DELAY[4] = { 0.8f, 0.7f, 0.6f, 0.5f};
 const int GIANT_SPIDER_HP = 800;
 const int GIANT_SPIDER_DAMAGE = 8;
+
+#endif // TURBO_MODE
 
 // EFFECTS
 const float HURTING_DELAY = 0.4f;
