@@ -122,10 +122,10 @@ void SnakeEntity::collideWithEnemy(EnemyEntity* entity)
 
   if (entity->getMovingStyle() == movWalking )
   {
-    Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 10.0f );
-    giveRecoil(false, vel, 0.3f);
-
-    computeFacingDirection();
+    Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), creatureSpeed );
+    if (velocity.x * vel.x < 0) velocity.x = vel.x;
+    if (velocity.y * vel.y < 0) velocity.y = vel.y;
+    timer = 0.05f;
   }
 }
 
