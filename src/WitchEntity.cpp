@@ -64,9 +64,10 @@ void WitchEntity::animate(float delay)
 
         state = 1;
         velocity = Vector2D(0.0f, 0.0f);
-        timer = 0.6f;
         SoundManager::getInstance().playSound(SOUND_WITCH_00 + rand() % 3);
-        if (rand() % 7 == 0)
+        timer = 0.6f;
+
+        if (rand() % 7 == 0 || !canSee(game().getPlayerPosition().x, game().getPlayerPosition().y))
         {
           // invoke
           int x0 = ((x - OFFSET_X) / TILE_WIDTH);
@@ -97,6 +98,7 @@ void WitchEntity::animate(float delay)
       else if (state == 1)
       {
         timer = 3.5f + (rand() % 25) * 0.1f;
+        if (!canSee(game().getPlayerPosition().x, game().getPlayerPosition().y)) timer += 1.2f;
         velocity = Vector2D(creatureSpeed);
         state = 0;
       }
