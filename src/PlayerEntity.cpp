@@ -348,7 +348,7 @@ void PlayerEntity::animate(float delay)
 
   if (isMoving() || firingDirection != 5)
   {
-    frame = ((int)(age * 5.0f)) % 4;
+    frame = ((int)(age * 7.0f)) % 4;
     if (frame == 3) frame = 1;
   }
   else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
