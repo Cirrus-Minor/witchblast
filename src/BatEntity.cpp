@@ -51,7 +51,7 @@ void BatEntity::animate(float delay)
         case 6: frame = 4; break;
         case 8: frame = 6; break;
       }
-      frame += ((int)(age * 5.0f)) % 2;
+      frame += ((int)(age * 7.0f)) % 2;
     }
   }
 
