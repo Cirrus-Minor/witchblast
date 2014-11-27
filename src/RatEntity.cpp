@@ -61,7 +61,7 @@ void RatEntity::animate(float delay)
       compute(true);
     }
 
-    frame = ((int)(age * 5.0f)) % 4;
+    frame = ((int)(age * 7.0f)) % 4;
     if (frame == 3) frame = 1;
     if (facingDirection == 4 || facingDirection == 6) frame += 3;
     isMirroring = (facingDirection == 6 );
