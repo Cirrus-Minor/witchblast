@@ -66,8 +66,13 @@ void EvilFlowerEntity::animate(float delay)
     fireDelay -= flowerDelay;
     if (fireDelay <= 0.0f)
     {
-      fireDelay = EVIL_FLOWER_FIRE_DELAY;
-      fire();
+      if (canSee(game().getPlayerPosition().x, game().getPlayerPosition().y))
+      {
+        fireDelay = EVIL_FLOWER_FIRE_DELAY;
+        fire();
+      }
+      else
+        fireDelay = 0.35f;
     }
   }
 }
