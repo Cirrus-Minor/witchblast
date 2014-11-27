@@ -143,6 +143,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void dyingFromAge();
     virtual bool canCollide();
 
+    bool canSee(float xf, float yf);
+
   protected:
     int hp;
     int hpMax;

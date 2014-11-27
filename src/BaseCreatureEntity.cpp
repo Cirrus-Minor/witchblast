@@ -622,3 +622,77 @@ void BaseCreatureEntity::generateStar(sf::Color starColor)
   spriteStar->setColor(starColor);
   spriteStar->setType(ENTITY_EFFECT);
 }
+
+static bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2)
+{
+    Vector2D b(a2.x - a1.x, a2.y - a1.y);
+    Vector2D d(b2.x - b1.x, b2.y - b1.y);
+    float bDotDPerp = b.x * d.y - b.y * d.x;
+
+    // if b dot d == 0, it means the lines are parallel so have infinite intersection points
+    if (bDotDPerp == 0) return false;
+
+    Vector2D c(b1.x - a1.x, b1.y - a1.y);
+    float t = (c.x * d.y - c.y * d.x) / bDotDPerp;
+    if (t < 0 || t > 1) return false;
+
+    float u = (c.x * b.y - c.y * b.x) / bDotDPerp;
+    if (u < 0 || u > 1) return false;
+
+    return true;
+}
+
+static bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile)
+{
+  int posX = OFFSET_X + xTile * TILE_WIDTH;
+  int posY = OFFSET_Y + yTile * TILE_HEIGHT;
+
+  if (intersectsSegments(a1, a2, Vector2D(posX, posY), Vector2D(posX + TILE_WIDTH, posY))) return true;
+  else if (intersectsSegments(a1, a2, Vector2D(posX, posY + TILE_HEIGHT), Vector2D(posX + TILE_WIDTH, posY + TILE_HEIGHT))) return true;
+  else if (intersectsSegments(a1, a2, Vector2D(posX + TILE_WIDTH, posY), Vector2D(posX + TILE_WIDTH, posY + TILE_HEIGHT))) return true;
+  else if (intersectsSegments(a1, a2, Vector2D(posX, posY), Vector2D(posX, posY + TILE_HEIGHT))) return true;
+  else
+
+  return false;
+}
+
+bool BaseCreatureEntity::canSee(float xf, float yf)
+{
+  int tileX0 = (x - OFFSET_X) / TILE_WIDTH;
+  int tileXf = (xf - OFFSET_X) / TILE_WIDTH;
+  int tileY0 = (y - OFFSET_Y) / TILE_HEIGHT;
+  int tileYf = (yf - OFFSET_Y) / TILE_HEIGHT;
+
+  int xBegin, xEnd, yBegin, yEnd;
+  if (tileXf < tileX0)
+  {
+    xBegin = tileXf;
+    xEnd = tileX0;
+  }
+  else
+  {
+    xBegin = tileX0;
+    xEnd = tileXf;
+  }
+
+  if (tileYf < tileY0)
+  {
+    yBegin = tileYf;
+    yEnd = tileY0;
+  }
+  else
+  {
+    yBegin = tileY0;
+    yEnd = tileYf;
+  }
+
+  for (int i = xBegin; i <= xEnd; i++ )
+    for (int j = yBegin; j <= yEnd; j++ )
+    {
+      if (!game().getCurrentMap()->isShootable(i, j))
+        if (intersectsTile(Vector2D(x, y), game().getPlayerPosition(), i , j))
+          return false;
+    }
+
+  return true;
+}
