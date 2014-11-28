@@ -68,8 +68,8 @@ void GhostEntity::calculateBB()
 
 int GhostEntity::getFade()
 {
-  float dist1 = 20000.f;
-  float dist2 = 32000.f;
+  float dist1 = 24000.f;
+  float dist2 = 40000.f;
   float dist = Vector2D(x, y).distance2(game().getPlayerPosition());
 
   if (dist < dist1) return 100;
@@ -98,48 +98,6 @@ void GhostEntity::render(sf::RenderTarget* app)
     sprite.setColor(color);
     EnemyEntity::render(app);
   }
-
-  /*if (isAgonising || (isDying && dyingFrame > -1))
-  {
-    if (shadowFrame > -1)
-    {
-      // shadow
-      sprite.setPosition(x, y);
-      sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
-      app->draw(sprite);
-    }
-    int nx = dyingFrame;
-    int ny = 0;
-    if (imagesProLine > 0)
-    {
-      nx = dyingFrame % imagesProLine;
-      ny = dyingFrame / imagesProLine;
-    }
-    sprite.setPosition(x, y - h);
-    if (isMirroring)
-      sprite.setTextureRect(sf::IntRect(nx * width + width, ny * height, -width, height));
-    else
-      sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
-
-    app->draw(sprite);
-  }
-
-  else
-  {
-    if (!isDying && shadowFrame > -1)
-    {
-      // shadow
-      sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
-      app->draw(sprite);
-    }
-    CollidingSpriteEntity::render(app);
-
-    if (game().getShowLogical())
-    {
-      displayBoundingBox(app);
-      displayCenterAndZ(app);
-    }
-  }*/
 }
 
 void GhostEntity::collideMapRight()
