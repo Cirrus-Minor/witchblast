@@ -20,7 +20,7 @@
 #include <string>
 
 // for turbo tests
-// #define TURBO_MODE
+#define TURBO_MODE
 
 const std::string APP_NAME =      "Witch Blast";
 const std::string APP_VERSION =   "0.3.8";
@@ -100,6 +100,7 @@ enum item_images {
   IMAGE_SNAKE,
   IMAGE_PUMPKIN,
   IMAGE_GHOST,
+  IMAGE_ZOMBIE,
 
   IMAGE_BUTCHER,
   IMAGE_GIANT_SLIME,
@@ -231,6 +232,7 @@ enum corpses_ressources{
   FRAME_CORPSE_PUMPKIN,
   FRAME_CORPSE_FLOWER_ICE,
   FRAME_CORPSE_GHOST,
+  FRAME_CORPSE_ZOMBIE,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -418,7 +420,7 @@ const int GHOST_HP = 40;
 const int GHOST_DAMAGE = 8;
 
 // Butcher
-const int BUTCHER_HP = 150;
+const int BUTCHER_HP = 120;
 const int BUTCHER_DAMAGES = 8;
 const int BUTCHER_VELOCITY = 100;
 
@@ -439,8 +441,8 @@ const float GIANT_SLIME_ULTRA_JUMP_TIMER = 2.3f;
 
 // KingRat
 const float KING_RAT_SPEED = 210.0f;
-const float KING_RAT_RUNNING_SPEED = 620.0f;
-const float KING_RAT_BERSERK_SPEED = 260.0f;
+const float KING_RAT_RUNNING_SPEED = 650.0f;
+const float KING_RAT_BERSERK_SPEED = 275.0f;
 const float KING_RAT_RUNNING_RECOIL = 750.0f;
 const int KING_RAT_HP = 700;
 const int KING_RAT_DAMAGES = 8;
@@ -449,7 +451,7 @@ const int KING_RAT_DAMAGES = 8;
 const float CYCLOP_SPEED[4] = { 140, 150, 160, 170};
 const int CYCLOP_NUMBER_ROCKS[4] = { 5, 7, 9, 12};
 const float CYCLOP_FIRE_DELAY[4] = { 0.3f, 0.26f, 0.23f, 0.2f};
-const int CYCLOP_HP = 800;
+const int CYCLOP_HP = 880;
 const int CYCLOP_DAMAGES = 8;
 
 // Giant Spider

@@ -28,6 +28,7 @@ enum enemyTypeEnum
   EnemyTypeWitchRed,
   EnemyTypeCauldron,
   EnemyTypeGhost,
+  EnemyTypeZombie,
 
   // mini boss
   EnemyTypeBubble,
@@ -53,6 +54,7 @@ enum enemyTypeEnum
   EnemyTypePumpkin_invocated,
   EnemyTypeSpiderEgg_invocated,
   EnemyTypeSpiderLittle_invocated,
+  EnemyTypeZombie_invocated,
 
   EnemyTypeRockFalling,
   EnemyTypeRockMissile,

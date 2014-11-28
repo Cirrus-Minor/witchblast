@@ -42,6 +42,7 @@
 #include "CauldronEntity.h"
 #include "SnakeEntity.h"
 #include "GhostEntity.h"
+#include "ZombieEntity.h"
 #include "LittleSpiderEntity.h"
 #include "SpiderEggEntity.h"
 #include "ArtefactDescriptionEntity.h"
@@ -107,6 +108,7 @@ WitchBlastGame::WitchBlastGame():
     "media/bubble.png",        "media/witch.png",
     "media/cauldron.png",      "media/snake.png",
     "media/pumpkin.png",       "media/ghost.png",
+    "media/zombie.png",
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/blood.png",
@@ -780,6 +782,7 @@ void WitchBlastGame::updateRunningGame()
       if (event.key.code == sf::Keyboard::F12)
       {
         initMonsterArray();
+        findPlaceMonsters(EnemyTypeZombie, 2);
         findPlaceMonsters(EnemyTypeGhost, 2);
       }
       #endif // TEST_MODE
@@ -2549,6 +2552,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeGhost:
     new GhostEntity(xm, ym);
     break;
+  case EnemyTypeZombie:
+    new ZombieEntity(xm, ym, false);
+    break;
 
   case EnemyTypeSpiderEgg_invocated:
     new SpiderEggEntity(xm, ym);
@@ -3794,6 +3800,8 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     case EnemyTypeWitchRed: value = "enemy_type_witch_red"; break;
     case EnemyTypeCauldron: value = "enemy_type_cauldron"; break;
     case EnemyTypeGhost: value = "enemy_type_ghost"; break;
+    case EnemyTypeZombie_invocated:
+    case EnemyTypeZombie: value = "enemy_type_zombie"; break;
 
     // mini boss
     case EnemyTypeBubble: value = "enemy_type_bubble"; break;

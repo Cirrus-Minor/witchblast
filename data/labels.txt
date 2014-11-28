@@ -247,6 +247,7 @@ enemy_type_spider_egg#a falling spider egg
 enemy_type_spider_little#a spider
 enemy_type_spider_web#a spider web
 enemy_type_ghost#a ghost
+enemy_type_zombie#a zombie
 enemy_type_himself#himself
 
 item_brooch_finesse#Brooch of finesse
