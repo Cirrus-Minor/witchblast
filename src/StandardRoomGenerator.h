@@ -328,6 +328,104 @@ void generateStandardRoom05()
   }
 }
 
+void generateStandardRoom06()
+{
+  int random = rand() % 110;
+
+  if (random < 10)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeZombie, 7);
+    game().findPlaceMonsters(EnemyTypeRatHelmet, 2);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
+    else game().findPlaceMonsters(EnemyTypeZombie, 2);
+  }
+  else if (random < 20)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
+    game().findPlaceMonsters(EnemyTypeBat, 2);
+    game().findPlaceMonsters(EnemyTypeGhost, 5);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 1);
+    else game().findPlaceMonsters(EnemyTypeImpBlue, 1);
+  }
+  else if (random < 32)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeWitch, 3);
+    game().findPlaceMonsters(EnemyTypeWitchRed, 2);
+    game().findPlaceMonsters(EnemyTypeCauldron, 1);
+  }
+  else if (random < 48)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
+    game().findPlaceMonsters(EnemyTypeEvilFlower, 3);
+    if (rand() % 2 == 0)
+    {
+      game().findPlaceMonsters(EnemyTypePumpkin, 2 + rand() % 4);
+      game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
+    }
+    else
+    {
+      game().findPlaceMonsters(EnemyTypeImpBlue, 3);
+      game().findPlaceMonsters(EnemyTypeEvilFlower, 2);
+    }
+  }
+  else if (random < 64)
+  {
+    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    new ChestEntity(v.x, v.y, ChestBasic, false);
+    game().getCurrentMap()->setCleared(true);
+  }
+  else if (random < 80)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    int r = rand() % 3;
+    if (r == 0)
+    {
+      game().findPlaceMonsters(EnemyTypeImpRed, 4);
+      game().findPlaceMonsters(EnemyTypeImpBlue, 4);
+    }
+    else if (r == 1)
+      game().findPlaceMonsters(EnemyTypeImpRed, 8);
+    else
+      game().findPlaceMonsters(EnemyTypeImpBlue, 8);
+    if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
+  }
+  else if (random < 90)
+  {
+    game().getCurrentMap()->generateRoomRandom(ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeZombieDark, 5);
+    game().findPlaceMonsters(EnemyTypeRatBlackHelmet, 4);
+  }
+  else if (random < 100)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    for (int i = rand() % 2; i < 6; i++)
+      game().findPlaceMonsters(rand() % 3 == 0 ? EnemyTypeSnake : EnemyTypeSnakeBlood, 1);
+    for (int i = 0; i < 2; i++)
+      if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
+      else game().findPlaceMonsters(EnemyTypeWitch, 1);
+  }
+  else
+  {
+    game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
+    game().getCurrentMap()->addRandomGrids(4);
+    int r = 9 + rand() % 5;
+    for (int i = 0; i < r; i++)
+    {
+      int rtype = rand() % 5;
+      switch (rtype)
+      {
+        case 0: case 4: game().findPlaceMonsters(EnemyTypeSlime,1); break;
+        case 1: game().findPlaceMonsters(EnemyTypeSlimeBlue,1); break;
+        case 2: game().findPlaceMonsters(EnemyTypeSlimeRed,1); break;
+        case 3: game().findPlaceMonsters(EnemyTypeSlimeViolet,1); break;
+      }
+    }
+    if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
+  }
+}
+
 void generateStandardRoom(int level)
 {
   switch (level)
@@ -337,7 +435,8 @@ void generateStandardRoom(int level)
     case 3: generateStandardRoom03(); break;
     case 4: generateStandardRoom04(); break;
     case 5: generateStandardRoom05(); break;
-    default: generateStandardRoom05(); break;
+    case 6: generateStandardRoom06(); break;
+    default: generateStandardRoom06(); break;
   }
 }
 
