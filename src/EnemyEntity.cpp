@@ -294,6 +294,7 @@ void EnemyEntity::makeExplode()
   width = 64;
   height = 64;
   sprite.setOrigin(32, 32);
+  type = ENTITY_ENEMY_NC;
 
   isExploding = true;
   explodeTimer = EXPLOSION_DELAY;

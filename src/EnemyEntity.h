@@ -39,10 +39,10 @@ protected:
   int meleeLevel;
   enumShotType meleeType;
 
-  float h;
-  float hVelocity;
+  float h;            /*!< Vertical position */
+  float hVelocity;    /*!< Vertical velocity */
 
-  float label_dy;   /* dy of the bar label for bosses */
+  float label_dy;     /*!< dy of the bar label for bosses */
 
   int dyingFrame;
   int deathFrame;
