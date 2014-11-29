@@ -43,6 +43,7 @@
 #include "SnakeEntity.h"
 #include "GhostEntity.h"
 #include "ZombieEntity.h"
+#include "ZombieDarkEntity.h"
 #include "LittleSpiderEntity.h"
 #include "SpiderEggEntity.h"
 #include "ArtefactDescriptionEntity.h"
@@ -58,6 +59,8 @@
 #include <ctime>
 
 #include <extlib/utf8/utf8.h>
+
+//#define START_LEVEL 6
 
 static std::string intToString(int n)
 {
@@ -347,6 +350,34 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
     player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
                               OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
+
+  #ifdef START_LEVEL
+
+  for (int i = 1; i < START_LEVEL; i++)
+  {
+    level = i;
+
+    if (level == 3)
+    {
+      player->acquireItem(getItemSpell());
+      player->acquireItemAfterStance();
+    }
+
+    player->setHpMax(player->getHpMax() + 2 + rand() % 4);
+    item_equip_enum item = getRandomEquipItem(false, false);
+    player->acquireItem((enumItemType)(item + FirstEquipItem));
+    player->acquireItemAfterStance();
+    item = getRandomEquipItem(true, true);
+    player->acquireItem((enumItemType)(item + FirstEquipItem));
+    player->acquireItemAfterStance();
+  }
+  level++;
+
+  player->setHp(player->getHpMax());
+  player->setGold(8 + rand() % 45);
+
+  #endif // START_LEVEL
+
     startNewLevel();
   }
 }
@@ -783,6 +814,7 @@ void WitchBlastGame::updateRunningGame()
       {
         initMonsterArray();
         findPlaceMonsters(EnemyTypeZombie, 2);
+        findPlaceMonsters(EnemyTypeZombieDark, 2);
         findPlaceMonsters(EnemyTypeGhost, 2);
       }
       #endif // TEST_MODE
@@ -2555,6 +2587,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeZombie:
     new ZombieEntity(xm, ym, false);
     break;
+  case EnemyTypeZombieDark:
+    new ZombieDarkEntity(xm, ym);
+    break;
 
   case EnemyTypeSpiderEgg_invocated:
     new SpiderEggEntity(xm, ym);
@@ -3802,6 +3837,7 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     case EnemyTypeGhost: value = "enemy_type_ghost"; break;
     case EnemyTypeZombie_invocated:
     case EnemyTypeZombie: value = "enemy_type_zombie"; break;
+    case EnemyTypeZombieDark: value = "enemy_type_zombie_dark"; break;
 
     // mini boss
     case EnemyTypeBubble: value = "enemy_type_bubble"; break;

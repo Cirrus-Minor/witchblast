@@ -230,6 +230,7 @@ enum corpses_ressources{
   FRAME_CORPSE_FLOWER_ICE,
   FRAME_CORPSE_GHOST,
   FRAME_CORPSE_ZOMBIE,
+  FRAME_CORPSE_ZOMBIE_DARK,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -365,6 +366,11 @@ const int BLACK_RAT_DAMAGES = 5;
 const float BAT_SPEED = 270.0f;
 const int BAT_HP = 8;
 const int BAT_DAMAGES = 5;
+
+// Zombie
+const float ZOMBIE_SPEED = 80.0f;
+const int ZOMBIE_HP = 80;
+const int ZOMBIE_DAMAGE = 10;
 
 // Evl Flower
 const int EVIL_FLOWER_HP = 16;

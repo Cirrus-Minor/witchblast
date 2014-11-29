@@ -29,6 +29,7 @@ enum enemyTypeEnum
   EnemyTypeCauldron,
   EnemyTypeGhost,
   EnemyTypeZombie,
+  EnemyTypeZombieDark,
 
   // mini boss
   EnemyTypeBubble,
