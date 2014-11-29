@@ -20,8 +20,8 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
   deathFrame = FRAME_CORPSE_ZOMBIE;
   if (invocated) enemyType = EnemyTypeZombie_invocated;
   else enemyType = EnemyTypeZombie;
-  hp = 48;
-  creatureSpeed = 80;
+  hp = ZOMBIE_HP;
+  creatureSpeed = ZOMBIE_SPEED;
 
   direction = rand() % 4;
   clockTurn = rand() % 2 == 0;
@@ -29,7 +29,7 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
   timer = 5 + rand() % 6;
   attackTimer = 2.0f;
 
-  meleeDamages = 12;
+  meleeDamages = ZOMBIE_DAMAGE;
 
   agonizingSound = SOUND_RAT_DYING;
   height = 80;
