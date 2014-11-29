@@ -206,6 +206,8 @@ enum sound_resources {
   SOUND_ZOMBIE_01,
   SOUND_ZOMBIE_ATTACKING,
   SOUND_ZOMBIE_DYING,
+  SOUND_GHOST,
+  SOUND_GHOST_DYING,
 };
 
 enum corpses_ressources{

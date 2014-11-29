@@ -26,7 +26,7 @@ GhostEntity::GhostEntity(float x, float y)
   bloodColor = BloodNone;
   shadowFrame = 3;
 
-  //agonizingSound = SOUND_SNAKE_DIE;
+  agonizingSound = SOUND_GHOST_DYING;
 }
 
 void GhostEntity::animate(float delay)
@@ -84,6 +84,7 @@ int GhostEntity::getFade()
 void GhostEntity::render(sf::RenderTarget* app)
 {
   int fade = getFade();
+  if (fade == 100) SoundManager::getInstance().playSound(SOUND_GHOST);
   if (fade == 100 || isAgonising || isExploding)
   {
     sf::Color color = sprite.getColor();

@@ -172,6 +172,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/night.ogg",          "media/sound/grumble.ogg",
     "media/sound/zombie_00.ogg",      "media/sound/zombie_01.ogg",
     "media/sound/zombie_attack.ogg",  "media/sound/zombie_die.ogg",
+    "media/sound/ghost.ogg",          "media/sound/ghost_die.ogg",
   };
 
   for (const char *const filename : sounds)
@@ -1706,7 +1707,7 @@ void WitchBlastGame::renderMenu()
   write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
   write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
-  menuStuct* menu;
+  menuStuct* menu = nullptr;
   if (menuState == MenuStateMain)
     menu = &menuMain;
   else if (menuState == MenuStateConfig)
