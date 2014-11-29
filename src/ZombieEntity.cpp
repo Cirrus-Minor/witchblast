@@ -31,7 +31,7 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
 
   meleeDamages = ZOMBIE_DAMAGE;
 
-  agonizingSound = SOUND_RAT_DYING;
+  agonizingSound = SOUND_ZOMBIE_DYING;
   height = 80;
   sprite.setOrigin(32.0f, 60.0f);
 }
@@ -82,6 +82,7 @@ void ZombieEntity::animate(float delay)
       attackTimer -= delay;
       if (timer < 0.0f)
       {
+        SoundManager::getInstance().playSound(SOUND_ZOMBIE_00 + rand() % 2);
         timer = 5 + rand() % 6;
         if (rand() % 3 == 0) clockTurn = !clockTurn;
         compute(true);
@@ -102,6 +103,7 @@ void ZombieEntity::animate(float delay)
 bool ZombieEntity::attack()
 {
   Vector2D playerPos = game().getPlayerPosition();
+  bool attacking = false;
 
   // left ?
   if (playerPos.x < x && playerPos.y > y - 15 && playerPos.y < y + 15 && canSee(playerPos.x, playerPos.y))
@@ -110,7 +112,7 @@ bool ZombieEntity::attack()
     velocity.x = -creatureSpeed;
     velocity.y = 0;
     facingDirection = 4;
-    return true;
+    attacking = true;
   }
   // right ?
   else if (playerPos.x > x && playerPos.y > y - 15 && playerPos.y < y + 15 && canSee(playerPos.x, playerPos.y))
@@ -119,7 +121,7 @@ bool ZombieEntity::attack()
     velocity.x = creatureSpeed;
     velocity.y = 0;
     facingDirection = 6;
-    return true;
+    attacking = true;
   }
   // down ?
   else if (playerPos.y > y && playerPos.x > x - 15 && playerPos.x < x + 15 && canSee(playerPos.x, playerPos.y))
@@ -128,7 +130,7 @@ bool ZombieEntity::attack()
     velocity.x = 0;
     velocity.y = creatureSpeed;
     facingDirection = 2;
-    return true;
+    attacking = true;
   }
   // up ?
   else if (playerPos.y < y && playerPos.x > x - 15 && playerPos.x < x + 15 && canSee(playerPos.x, playerPos.y))
@@ -137,9 +139,12 @@ bool ZombieEntity::attack()
     velocity.x = 0;
     velocity.y = -creatureSpeed;
     facingDirection = 8;
-    return true;
+    attacking = true;
   }
-  return false;
+
+  if (attacking) SoundManager::getInstance().playSound(SOUND_ZOMBIE_ATTACKING);
+
+  return attacking;
 }
 
 void ZombieEntity::compute(bool turn)

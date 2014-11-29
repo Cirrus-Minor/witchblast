@@ -24,7 +24,7 @@ ZombieDarkEntity::ZombieDarkEntity(float x, float y)
   creatureSpeed = ZOMBIE_SPEED;
   meleeDamages = ZOMBIE_DAMAGE;
 
-  agonizingSound = SOUND_RAT_DYING;
+  agonizingSound = SOUND_ZOMBIE_DYING;
 
   currentDirection = 2 + 2 * rand()%4;
   height = 80;
@@ -217,7 +217,10 @@ void ZombieDarkEntity::findNextGoal()
   {
     giveRecoil(false, Vector2D(velocity.x * 2.0f, velocity.y * 2.0f), 1.5f);
     attackTimer = 2.0f;
+    SoundManager::getInstance().playSound(SOUND_ZOMBIE_ATTACKING);
   }
+  else
+    SoundManager::getInstance().playSound(SOUND_ZOMBIE_00 + rand() % 2);
 }
 
 void ZombieDarkEntity::findNextRandomGoal()

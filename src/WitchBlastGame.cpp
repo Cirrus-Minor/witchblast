@@ -124,7 +124,8 @@ WitchBlastGame::WitchBlastGame():
     "media/pnj.png",           "media/fairy.png",
   };
 
-  for (const char *const filename : images) {
+  for (const char *const filename : images)
+  {
     ImageManager::getInstance().addImage(filename);
   }
 
@@ -169,9 +170,12 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/spell_freeze.ogg",   "media/sound/spell_shield.ogg",
     "media/sound/heavy_step_00.ogg",  "media/sound/heavy_step_01.ogg",
     "media/sound/night.ogg",          "media/sound/grumble.ogg",
+    "media/sound/zombie_00.ogg",      "media/sound/zombie_01.ogg",
+    "media/sound/zombie_attack.ogg",  "media/sound/zombie_die.ogg",
   };
 
-  for (const char *const filename : sounds) {
+  for (const char *const filename : sounds)
+  {
     SoundManager::getInstance().addSound(filename);
   }
 
