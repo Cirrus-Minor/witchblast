@@ -53,6 +53,7 @@ void GhostEntity::animate(float delay)
     frame = ((int)(age * 3.0f)) % 4;
     if (frame == 3) frame = 1;
   }
+  isMirroring = x > game().getPlayerPosition().x;
 
   EnemyEntity::animate(delay);
   z = y + 32;
