@@ -372,6 +372,7 @@ void EnemyEntity::render(sf::RenderTarget* app)
     renderAdd = true;
     app->draw(sprite, sf::BlendAdd);
     renderAdd = false;
+    SoundManager::getInstance().playSound(SOUND_FUSE);
   }
   else if (isAgonising || (isDying && dyingFrame > -1))
   {
