@@ -290,7 +290,15 @@ void BaseCreatureEntity::render(sf::RenderTarget* app)
   if (!isDying && shadowFrame > -1)
   {
     // shadow
-    sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
+    int nx = shadowFrame;
+    int ny = 0;
+
+    if (shadowFrame >= imagesProLine)
+    {
+      nx = shadowFrame % imagesProLine;
+      ny = shadowFrame / imagesProLine;
+    }
+    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
     app->draw(sprite);
   }
   CollidingSpriteEntity::render(app);
