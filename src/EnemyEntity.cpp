@@ -382,7 +382,7 @@ void EnemyEntity::render(sf::RenderTarget* app)
       int nx = shadowFrame;
       int ny = 0;
 
-      if (shadowFrame >= imagesProLine)
+      if (imagesProLine > 0 && shadowFrame >= imagesProLine)
       {
         nx = shadowFrame % imagesProLine;
         ny = shadowFrame / imagesProLine;
