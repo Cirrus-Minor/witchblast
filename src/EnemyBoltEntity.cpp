@@ -13,6 +13,7 @@ EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int le
   switch (boltType)
   {
     case ShotTypeIce: frame = 2; break;
+    case ShotTypeLightning: frame = 3; break;
     case ShotTypeFire: frame = 6; break;
     case ShotTypeBomb: frame = 8; break;
     default: frame = 1; break;
