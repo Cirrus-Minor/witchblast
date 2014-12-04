@@ -12,8 +12,9 @@ SpiderEggEntity::SpiderEggEntity(float x, float y, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SPIDER_EGG), x, y)
 {
   imagesProLine = 20;
-  type = ENTITY_ENEMY_INVOCATED;
+  type = invocated ? ENTITY_ENEMY_INVOCATED : ENTITY_ENEMY;
   enemyType = invocated ? EnemyTypeSpiderEgg_invocated : EnemyTypeSpiderEgg;
+  this->invocated = invocated;
   movingStyle = movFlying;
   bloodColor = BloodGreen;
   deathFrame = FRAME_CORPSE_SPIDER_EGG;
@@ -72,7 +73,7 @@ void SpiderEggEntity::animate(float delay)
 
 void SpiderEggEntity::dyingFromAge()
 {
-  new LittleSpiderEntity(x, y);
+  new LittleSpiderEntity(x, y, invocated);
 
   for (int i = 0; i < 4; i++)
   {

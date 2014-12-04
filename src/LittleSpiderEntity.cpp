@@ -7,7 +7,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-LittleSpiderEntity::LittleSpiderEntity(float x, float y)
+LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_LITTLE_SPIDER), x, y)
 {
   imagesProLine = 8;
@@ -16,8 +16,8 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y)
   hp = 16;
   meleeDamages = 5;
 
-  type = ENTITY_ENEMY_INVOCATED;
-  enemyType = EnemyTypeSpiderLittle_invocated;
+  type = invocated ? ENTITY_ENEMY_INVOCATED : ENTITY_ENEMY;
+  enemyType = invocated ? EnemyTypeSpiderLittle_invocated : EnemyTypeSpiderLittle;
   bloodColor = BloodGreen;
   shadowFrame = 4;
   dyingFrame = 3;

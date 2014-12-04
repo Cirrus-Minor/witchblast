@@ -7,7 +7,7 @@
 class LittleSpiderEntity : public EnemyEntity
 {
   public:
-    LittleSpiderEntity(float x, float y);
+    LittleSpiderEntity(float x, float y, bool invocated);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
