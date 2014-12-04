@@ -251,6 +251,8 @@ enemy_type_zombie#a zombie
 enemy_type_zombie_dark#a dark zombie
 enemy_type_francky#the Thing
 enemy_type_himself#himself
+source_explosion#explosion
+source_poison#poison
 enemy_francky#the Thing
 enemy_francky_head#the Thing's head
 item_brooch_finesse#Brooch of finesse
