@@ -6,7 +6,7 @@
 class SpiderEggEntity : public EnemyEntity
 {
   public:
-    SpiderEggEntity(float x, float y);
+    SpiderEggEntity(float x, float y, bool invocated );
     virtual void animate(float delay);
     virtual void calculateBB();
     virtual void render(sf::RenderTarget* app);

@@ -2597,6 +2597,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeCauldron:
     new CauldronEntity(xm, ym);
     break;
+  case EnemyTypeSpiderEgg:
+    new SpiderEggEntity(xm, ym, false);
+    break;
   case EnemyTypeGhost:
     new GhostEntity(xm, ym);
     break;
@@ -2608,7 +2611,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
 
   case EnemyTypeSpiderEgg_invocated:
-    new SpiderEggEntity(xm, ym);
+    new SpiderEggEntity(xm, ym, true);
     break;
   case EnemyTypeSpiderLittle_invocated:
     new LittleSpiderEntity(xm, ym);
@@ -3876,6 +3879,7 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     case EnemyTypeRatGreen: value = "enemy_type_green_rat"; break;
     case EnemyTypeRockFalling: value = "enemy_type_rock_falling"; break;
     case EnemyTypeRockMissile: value = "enemy_type_rock_missile"; break;
+    case EnemyTypeSpiderEgg:
     case EnemyTypeSpiderEgg_invocated: value = "enemy_type_spider_egg"; break;
     case EnemyTypeSpiderLittle_invocated: value = "enemy_type_spider_little"; break;
     case EnemyTypeSpiderWeb: value = "enemy_type_spider_web"; break;

@@ -27,6 +27,8 @@ enum enemyTypeEnum
   EnemyTypeWitch,
   EnemyTypeWitchRed,
   EnemyTypeCauldron,
+  EnemyTypeSpiderEgg,
+  EnemyTypeSpiderLittle,
   EnemyTypeGhost,
   EnemyTypeZombie,
   EnemyTypeZombieDark,

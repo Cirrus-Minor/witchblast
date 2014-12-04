@@ -8,12 +8,12 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-SpiderEggEntity::SpiderEggEntity(float x, float y)
+SpiderEggEntity::SpiderEggEntity(float x, float y, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SPIDER_EGG), x, y)
 {
   imagesProLine = 20;
   type = ENTITY_ENEMY_INVOCATED;
-  enemyType = EnemyTypeSpiderEgg_invocated;
+  enemyType = invocated ? EnemyTypeSpiderEgg_invocated : EnemyTypeSpiderEgg;
   movingStyle = movFlying;
   bloodColor = BloodGreen;
   deathFrame = FRAME_CORPSE_SPIDER_EGG;
