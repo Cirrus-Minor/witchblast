@@ -46,6 +46,7 @@
 #include "ZombieDarkEntity.h"
 #include "LittleSpiderEntity.h"
 #include "SpiderEggEntity.h"
+#include "FranckyEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -114,7 +115,8 @@ WitchBlastGame::WitchBlastGame():
     "media/zombie.png",
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
-    "media/giant_spider.png",  "media/blood.png",
+    "media/giant_spider.png",  "media/francky.png",
+    "media/blood.png",
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
     "media/interface.png",     "media/hud_shots.png",
@@ -173,7 +175,8 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/zombie_00.ogg",      "media/sound/zombie_01.ogg",
     "media/sound/zombie_attack.ogg",  "media/sound/zombie_die.ogg",
     "media/sound/ghost.ogg",          "media/sound/ghost_die.ogg",
-    "media/sound/fuse.ogg",
+    "media/sound/fuse.ogg",           "media/sound/electricity.ogg",
+    "media/sound/electric_blast.ogg"
   };
 
   for (const char *const filename : sounds)
@@ -2424,12 +2427,19 @@ void WitchBlastGame::generateMap()
     }
     else if (level == 6)
     {
+      addMonster(EnemyTypeFrancky,
+                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      testAndAddMessageToQueue(MsgInfoFranky);
+    }
+    else if (level == 7)
+    {
       // TODO
       GiantSpiderEntity* b1 = new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b1->setLabelDy(10);
 
-      GiantSlimeEntity* b2 = new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+      FranckyEntity* b2 = new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b2->setLabelDy(-530);
 
@@ -2621,6 +2631,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
   case EnemyTypeSpiderGiant:
     new GiantSpiderEntity(xm, ym);
+    break;
+  case EnemyTypeFrancky:
+    new FranckyEntity(xm, ym);
     break;
 
   default:
@@ -3854,6 +3867,10 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     case EnemyTypeCyclops: value = "enemy_type_boss_cyclops"; break;
     case EnemyTypeRatKing: value = "enemy_type_boss_rat_king"; break;
     case EnemyTypeSpiderGiant: value = "enemy_type_boss_spider_giant"; break;
+    case EnemyTypeFranckyHand:
+    case EnemyTypeFranckyHead:
+    case EnemyTypeFranckyFoot:
+    case EnemyTypeFrancky: value = "enemy_type_francky"; break;
 
     // invocated
     case EnemyTypeRatGreen: value = "enemy_type_green_rat"; break;

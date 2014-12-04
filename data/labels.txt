@@ -249,8 +249,10 @@ enemy_type_spider_web#a spider web
 enemy_type_ghost#a ghost
 enemy_type_zombie#a zombie
 enemy_type_zombie_dark#a dark zombie
+enemy_type_francky#the Thing
 enemy_type_himself#himself
-
+enemy_francky#the Thing
+enemy_francky_head#the Thing's head
 item_brooch_finesse#Brooch of finesse
 item_apple_green#Green apple
 item_apple_green_desc#Restores 3 HP and cures poison
@@ -277,6 +279,8 @@ item_sulfur_desc#Can make corpses explode
 spell_web#spider web
 tuto_reset#Tutorial reset
 tuto_reset_desc#Resets the tutorial
+msg_francky_0#The... Thing
+msg_francky_1#Yuk... It looks like made with various body parts !
 
 [french]
 start_new_game#Nouvelle partie

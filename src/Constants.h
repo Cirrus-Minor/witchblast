@@ -104,6 +104,7 @@ enum item_images {
   IMAGE_KING_RAT,
   IMAGE_CYCLOP,
   IMAGE_GIANT_SPIDER,
+  IMAGE_FRANCKY,
 
   IMAGE_BLOOD,
   IMAGE_CORPSES,
@@ -209,6 +210,8 @@ enum sound_resources {
   SOUND_GHOST,
   SOUND_GHOST_DYING,
   SOUND_FUSE,
+  SOUND_ELECTRICITY,
+  SOUND_ELECTRIC_BLAST,
 };
 
 enum corpses_ressources{
@@ -238,6 +241,10 @@ enum corpses_ressources{
   FRAME_CORPSE_GHOST,
   FRAME_CORPSE_ZOMBIE,
   FRAME_CORPSE_ZOMBIE_DARK,
+  FRAME_CORPSE_FRANCKY_TORSO,
+  FRAME_CORPSE_FRANCKY_HEAD,
+  FRAME_CORPSE_FRANCKY_HAND,
+  FRAME_CORPSE_FRANCKY_FOOT,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -493,6 +500,7 @@ enum EnumMessages
   MsgInfoWererat,
   MsgInfoGiantSpiderBefore,
   MsgInfoGiantSpiderAfter,
+  MsgInfoFranky,
 
   MsgTutoBasics,
   MsgTutoItems,

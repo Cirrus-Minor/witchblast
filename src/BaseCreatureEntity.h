@@ -40,6 +40,10 @@ enum enemyTypeEnum
   EnemyTypeCyclops,
   EnemyTypeRatKing,
   EnemyTypeSpiderGiant,
+  EnemyTypeFrancky,
+  EnemyTypeFranckyHand,
+  EnemyTypeFranckyHead,
+  EnemyTypeFranckyFoot,
 
   // invocated
   EnemyTypeBat_invocated,

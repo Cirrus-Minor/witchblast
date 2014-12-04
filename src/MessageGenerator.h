@@ -55,6 +55,7 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoWererat,           { MessageTypeInfo, 1, "msg_wererat",              2} },
   { MsgInfoGiantSpiderBefore, { MessageTypeInfo, 1, "msg_giant_spider_before",  2} },
   { MsgInfoGiantSpiderAfter,  { MessageTypeInfo, 1, "msg_giant_spider_after",   2} },
+  { MsgInfoFranky,            { MessageTypeInfo, 1, "msg_francky",              2} },
 
   { MsgTutoBasics,            { MessageTypeTutorial, 0, "msg_tuto_intro",           3} },
   { MsgTutoItems,             { MessageTypeTutorial, 0, "msg_tuto_items",           3} },
