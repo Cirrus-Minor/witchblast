@@ -27,6 +27,9 @@ GhostEntity::GhostEntity(float x, float y)
   shadowFrame = 3;
 
   agonizingSound = SOUND_GHOST_DYING;
+
+  resistance[ResistanceFrozen] = ResistanceHigh;
+  resistance[ResistanceRecoil] = ResistanceHigh;
 }
 
 void GhostEntity::animate(float delay)
