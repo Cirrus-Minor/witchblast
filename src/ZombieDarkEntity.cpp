@@ -31,6 +31,9 @@ ZombieDarkEntity::ZombieDarkEntity(float x, float y)
   sprite.setOrigin(32.0f, 60.0f);
   attackTimer = 2.0f;
 
+  resistance[ResistanceFrozen] = ResistanceHigh;
+  resistance[ResistanceRecoil] = ResistanceHigh;
+
   findNextGoal();
 }
 

@@ -34,6 +34,9 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
   agonizingSound = SOUND_ZOMBIE_DYING;
   height = 80;
   sprite.setOrigin(32.0f, 60.0f);
+
+  resistance[ResistanceFrozen] = ResistanceHigh;
+  resistance[ResistanceRecoil] = ResistanceHigh;
 }
 
 void ZombieEntity::animate(float delay)
