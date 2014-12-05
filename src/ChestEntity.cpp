@@ -179,7 +179,7 @@ void ChestEntity::open()
         newItem = new ItemEntity( (enumItemType)(ItemBonusHealth), x ,y);
       else
         newItem = new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), x ,y);
-      newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+      newItem->setVelocity(Vector2D(160.0f + rand()% 80));
       newItem->setViscosity(0.96f);
     }
   }
