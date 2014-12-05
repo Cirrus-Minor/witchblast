@@ -596,6 +596,11 @@ private:
   void renderMenu();
 
   /*!
+   *  \brief Render the menu
+   */
+  void renderInGameMenu();
+
+  /*!
    *  \brief initialize the intro
    */
   void prepareIntro();
@@ -627,7 +632,10 @@ private:
     MenuConfigBack,   /**< Back to the main menu */
     MenuTutoReset,    /**< Reset the tutorials */
     MenuLanguage,     /**< When configuring the language */
-    MenuExit          /**< When exiting the game */
+    MenuExit,         /**< When exiting the game */
+
+    MenuContinue,     /**< Continue the game */
+    MenuSaveAndQuit,  /**< Save and return to main */
   };
 
   /** Menu states enum
@@ -665,12 +673,18 @@ private:
   menuStuct menuMain;
   menuStuct menuFirst;
   menuStuct menuConfig;
+  menuStuct menuInGame;
   unsigned int menuKeyIndex;
 
   /*!
    *  \brief Build the menu items
    */
   void buildMenu(bool rebuild);
+
+  /*!
+   *  \brief Build the menu items (in game)
+   */
+  void buildInGameMenu();
 
   /*!
    *  \brief Switch to the menu

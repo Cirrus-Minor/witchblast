@@ -301,6 +301,7 @@ void WitchBlastGame::onUpdate()
 void WitchBlastGame::startNewGame(bool fromSaveFile)
 {
   gameState = gameStateInit;
+  isPausing = false;
   level = 1;
   challengeLevel = 1;
   gameTime = 0.0f;
@@ -314,6 +315,9 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   if (currentFloor != NULL) delete (currentFloor);
   miniMap = NULL;
   currentFloor = NULL;
+
+  // init in game menu
+  buildInGameMenu();
 
   // current map (tiles)
   currentTileMap = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_TILES), currentMap, 64, 64, 10);
@@ -695,9 +699,77 @@ void WitchBlastGame::updateRunningGame()
         if (gameState == gameStatePlaying && !isPausing) player->castSpell();
       }
 
+      if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
+      {
+        // in game menu ?
+        if (gameState == gameStatePlaying && isPausing)
+        {
+          menuInGame.index++;
+          if (menuInGame.index == menuInGame.items.size()) menuInGame.index = 0;
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        }
+      }
+      else if (event.key.code == input[KeyUp] || event.key.code == sf::Keyboard::Up)
+      {
+        // in game menu ?
+        if (gameState == gameStatePlaying && isPausing)
+        {
+          if (menuInGame.index == 0) menuInGame.index = menuInGame.items.size() - 1;
+          else menuInGame.index--;
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        }
+      }
+      else if (event.key.code == sf::Keyboard::Return)
+      {
+        switch (menuInGame.items[menuInGame.index].id)
+        {
+        case MenuStartNew:
+        case MenuStartOld:
+        case MenuKeys:
+        case MenuConfig:
+        case MenuTutoReset:
+        case MenuConfigBack:
+        case MenuLanguage:
+          std::cout << "[ERROR] Bad Menu ID\n";
+          break;
+
+        case MenuExit:
+          backToMenu = true;
+          break;
+
+        case MenuContinue:
+          isPausing = false;
+          break;
+
+        case MenuSaveAndQuit:
+          saveGame();
+          backToMenu = true;
+          break;
+        }
+      }
+
       if (event.key.code == input[KeyFire])
       {
         if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
+      }
+
+      if (event.key.code == sf::Keyboard::Return)
+      {
+        if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+        {
+          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
+          else
+          {
+            xGame[xGameTypeFade].active = true;
+            xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
+            xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
+          }
+        }
+        else if (!messagesQueue.empty())
+        {
+          if (messagesQueue.front().timer > 0.5f)
+            messagesQueue.front().timer = 0.5f;
+        }
       }
 
       if (event.key.code == sf::Keyboard::X)
@@ -827,25 +899,6 @@ void WitchBlastGame::updateRunningGame()
         findPlaceMonsters(EnemyTypeGhost, 2);
       }
       #endif // TEST_MODE
-
-      if (event.key.code == sf::Keyboard::Return)
-      {
-        if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-        {
-          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
-          else
-          {
-            xGame[xGameTypeFade].active = true;
-            xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
-            xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
-          }
-        }
-        else if (!messagesQueue.empty())
-        {
-          if (messagesQueue.front().timer > 0.5f)
-            messagesQueue.front().timer = 0.5f;
-        }
-      }
     }
 
     if (event.type == sf::Event::LostFocus && !player->isDead())
@@ -1144,7 +1197,7 @@ void WitchBlastGame::renderRunningGame()
 
     if (isPausing)
     {
-      rectangle.setFillColor(sf::Color(0, 0, 0, 160));
+      rectangle.setFillColor(sf::Color(0, 0, 0, 200));
       rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
@@ -1154,8 +1207,10 @@ void WitchBlastGame::renderRunningGame()
       myText.setColor(sf::Color(255, 255, 255, fade));
       myText.setCharacterSize(40);
       myText.setString("PAUSE");
-      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 300);
+      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 100);
       app->draw(myText);
+
+      renderInGameMenu();
     }
 
     if (player->isDead())
@@ -1713,6 +1768,10 @@ void WitchBlastGame::updateMenu()
         case MenuExit:
           app->close();
           break;
+                case MenuContinue:
+        case MenuSaveAndQuit:
+          std::cout << "[ERROR] Bad Menu ID\n";
+          break;
         }
       }
     }
@@ -1813,24 +1872,47 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
       write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
     }
-    /*else if (menuState == MenuStateMain)
-    {
-      if (menu->items[menu->index].id == MenuStartOld)
-        renderPlayer(620, 300, equipToDisplay, saveHeader.shotType, 1, 0);
-      else
-        renderPlayer(620, 300, equipNudeToDisplay, 0, 1, 0);
-    }*/
   }
 
   std::ostringstream oss;
-  oss << APP_NAME << " v" << APP_VERSION << "  - 2014 - " /*<< tools::getLabel("by")*/ << " Seby (code), Vetea (2D art)";
+  oss << APP_NAME << " v" << APP_VERSION << "  - 2014 - " << " Seby (code), Vetea (2D art)";
   write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+}
+
+void WitchBlastGame::renderInGameMenu()
+{
+  menuStuct* menu = &menuInGame;
+
+  int xAlign = 290;
+
+  {
+    // menu
+    for (unsigned int i = 0; i < menu->items.size(); i++)
+    {
+      sf::Color itemColor;
+      if (menu->index == i)
+      {
+        itemColor = sf::Color(255, 255, 255, 255);
+
+        sf::Sprite fairySprite;
+        fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setPosition(xAlign - 60, 250 + i * 90 + 5 * cos( 6 * getAbsolutTime()));
+        app->draw(fairySprite);
+      }
+      else itemColor = sf::Color(120, 120, 120, 255);
+
+      std::string label = menu->items[i].label;
+      write(label, 23, xAlign, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(menu->items[i].description, 15, xAlign, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+    }
+  }
 }
 
 void WitchBlastGame::startGame()
 {
   lastTime = getAbsolutTime();
-  //switchToMenu();
+
   prepareIntro();
 
   // Start game loop
@@ -3549,6 +3631,31 @@ void WitchBlastGame::buildMenu(bool rebuild)
 
   //first time screen
   menuFirst.items.push_back(itemLanguage);
+}
+
+void WitchBlastGame::buildInGameMenu()
+{
+  menuInGame.items.clear();
+
+  menuItemStuct itemContinue;
+  itemContinue.label = tools::getLabel("menu_continue");
+  itemContinue.description = tools::getLabel("menu_continue_desc");
+  itemContinue.id = MenuContinue;
+  menuInGame.items.push_back(itemContinue);
+
+  menuItemStuct itemSaveQuit;
+  itemSaveQuit.label = tools::getLabel("menu_save_quit");
+  itemSaveQuit.description = tools::getLabel("menu_save_quit_desc");
+  itemSaveQuit.id = MenuSaveAndQuit;
+  menuInGame.items.push_back(itemSaveQuit);
+
+  menuItemStuct itemQuit;
+  itemQuit.label = tools::getLabel("menu_quit");
+  itemQuit.description = tools::getLabel("menu_quit_desc");
+  itemQuit.id = MenuExit;
+  menuInGame.items.push_back(itemQuit);
+
+  menuInGame.index = 0;
 }
 
 void WitchBlastGame::checkFallingEntities()

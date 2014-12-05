@@ -283,6 +283,12 @@ tuto_reset#Tutorial reset
 tuto_reset_desc#Resets the tutorial
 msg_francky_0#The... Thing
 msg_francky_1#Yuk... It looks like made with various body parts !
+menu_continue#Continue
+menu_continue_desc#Continue the game
+menu_save_quit#Save and quit
+menu_save_quit_desc#Save and return to main screen
+menu_quit#Quit without saving
+menu_quit_desc#Return to main screen without saving
 
 [french]
 start_new_game#Nouvelle partie
