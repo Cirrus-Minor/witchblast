@@ -289,6 +289,7 @@ menu_save_quit#Save and quit
 menu_save_quit_desc#Save and return to main screen
 menu_quit#Quit without saving
 menu_quit_desc#Return to main screen without saving
+inventory#Inventory
 
 [french]
 start_new_game#Nouvelle partie

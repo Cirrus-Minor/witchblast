@@ -1210,6 +1210,24 @@ void WitchBlastGame::renderRunningGame()
       myText.setPosition(x0 - myText.getLocalBounds().width / 2, 100);
       app->draw(myText);
 
+      float x = 200;
+      float y = 480;
+      // items
+      write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      int n = 0;
+      for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
+        {
+          if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
+          {
+            sf::Sprite itemSprite;
+            itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+            itemSprite.setPosition(x + n * 32, y + 20);
+            itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
+            app->draw(itemSprite);
+            n++;
+          }
+        }
+
       renderInGameMenu();
     }
 
@@ -1381,7 +1399,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   renderPlayer(x + 40, y + 48, player->getEquipment(), player->getShotType(), 1, 0);
 
   // items
-  write("Inventory", 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write(tools::getLabel("inventory"), 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
   int n = 0;
   for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
     {
@@ -1884,6 +1902,7 @@ void WitchBlastGame::renderInGameMenu()
   menuStuct* menu = &menuInGame;
 
   int xAlign = 290;
+  int yAlign = 200;
 
   {
     // menu
@@ -1897,14 +1916,14 @@ void WitchBlastGame::renderInGameMenu()
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
         fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
-        fairySprite.setPosition(xAlign - 60, 250 + i * 90 + 5 * cos( 6 * getAbsolutTime()));
+        fairySprite.setPosition(xAlign - 60, yAlign + i * 90 + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
       else itemColor = sf::Color(120, 120, 120, 255);
 
       std::string label = menu->items[i].label;
-      write(label, 23, xAlign, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu->items[i].description, 15, xAlign, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(label, 23, xAlign, yAlign + 10 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(menu->items[i].description, 15, xAlign, yAlign + i * 90 + 50, ALIGN_LEFT, itemColor, app, 0, 0);
     }
   }
 }
