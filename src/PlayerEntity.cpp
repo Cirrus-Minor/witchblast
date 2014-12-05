@@ -118,6 +118,12 @@ int PlayerEntity::getFacingDirection()
   return facingDirection;
 }
 
+void PlayerEntity::setFacingDirection(int facingDirection)
+{
+  if (facingDirection == 4 || facingDirection == 6 || facingDirection == 2  || facingDirection == 8)
+  this->facingDirection = facingDirection;
+}
+
 float PlayerEntity::getPercentFireDelay()
 {
   if (canFirePlayer) return 1.0f;

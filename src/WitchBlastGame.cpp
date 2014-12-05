@@ -917,6 +917,26 @@ void WitchBlastGame::updateRunningGame()
       }
     }
 
+    // spell (right click)
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && (gameState == gameStatePlaying && !isPausing))
+    {
+      sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
+      int xm = mousePosition.x - player->getX();
+      int ym = mousePosition.y - player->getY();
+
+      if (abs(xm) >= abs(ym))
+      {
+        if (xm > 0) player->setFacingDirection(6);
+        else player->setFacingDirection(4);
+      }
+      else
+      {
+        if (ym > 0) player->setFacingDirection(2);
+        else player->setFacingDirection(8);
+      }
+      player->castSpell();
+    }
+
     // message queue
     if (!messagesQueue.empty())
     {

@@ -74,6 +74,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     int getFacingDirection();
 
+    void setFacingDirection(int facingDirection);
+
      /*!
      *  \brief update the bounding box
      *
