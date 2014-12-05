@@ -18,7 +18,7 @@
 #ifndef STANDARDROOMGENERATOR_H_INCLUDED
 #define STANDARDROOMGENERATOR_H_INCLUDED
 
-const int LAST_LEVEL = 5;
+const int LAST_LEVEL = 6;
 
 void generateStandardRoom01()
 {
@@ -330,33 +330,7 @@ void generateStandardRoom05()
 
 void generateStandardRoom06()
 {
-  int random = rand() % 110;
-
-  /*// TEST
-  if (random < 36)
-  {
-    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeZombie, 7);
-    game().findPlaceMonsters(EnemyTypeRatHelmet, 2);
-    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
-    else game().findPlaceMonsters(EnemyTypeZombie, 2);
-  }
-  else if (random < 72)
-  {
-    game().getCurrentMap()->generateRoomRandom(ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeZombieDark, 5);
-    game().findPlaceMonsters(EnemyTypeRatBlackHelmet, 4);
-  }
-  else if (random > 1)
-  {
-    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
-    game().findPlaceMonsters(EnemyTypeBat, 2);
-    game().findPlaceMonsters(EnemyTypeGhost, 5);
-    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 1);
-    else game().findPlaceMonsters(EnemyTypeImpBlue, 1);
-  }
-  else
-  // END TEST*/
+  int random = rand() % 100;
 
   if (random < 10)
   {
@@ -374,35 +348,21 @@ void generateStandardRoom06()
     if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 1);
     else game().findPlaceMonsters(EnemyTypeImpBlue, 1);
   }
-  else if (random < 32)
+  else if (random < 30)
   {
     game().getCurrentMap()->generateRoomWithoutHoles(2 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeWitch, 3);
-    game().findPlaceMonsters(EnemyTypeWitchRed, 2);
+    game().findPlaceMonsters(EnemyTypeWitchRed, 3);
     game().findPlaceMonsters(EnemyTypeCauldron, 1);
   }
-  else if (random < 48)
+  else if (random < 40)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
     game().findPlaceMonsters(EnemyTypeEvilFlower, 3);
-    if (rand() % 2 == 0)
-    {
-      game().findPlaceMonsters(EnemyTypePumpkin, 2 + rand() % 4);
-      game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
-    }
-    else
-    {
-      game().findPlaceMonsters(EnemyTypeImpBlue, 3);
-      game().findPlaceMonsters(EnemyTypeEvilFlower, 2);
-    }
+    game().findPlaceMonsters(EnemyTypePumpkin, 3 + rand() % 4);
+    game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
   }
-  else if (random < 64)
-  {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
-    new ChestEntity(v.x, v.y, ChestBasic, false);
-    game().getCurrentMap()->setCleared(true);
-  }
-  else if (random < 80)
+  else if (random < 50)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
     int r = rand() % 3;
@@ -417,13 +377,13 @@ void generateStandardRoom06()
       game().findPlaceMonsters(EnemyTypeImpBlue, 8);
     if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
-  else if (random < 90)
+  else if (random < 60)
   {
     game().getCurrentMap()->generateRoomRandom(ROOM_TYPE_CHECKER);
     game().findPlaceMonsters(EnemyTypeZombieDark, 5);
     game().findPlaceMonsters(EnemyTypeRatBlackHelmet, 4);
   }
-  else if (random < 100)
+  else if (random < 70)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
     for (int i = rand() % 2; i < 6; i++)
@@ -432,7 +392,13 @@ void generateStandardRoom06()
       if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
       else game().findPlaceMonsters(EnemyTypeWitch, 1);
   }
-  else
+  else if (random < 80)
+  {
+    game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
+    game().findPlaceMonsters(EnemyTypeSpiderLittle, 8);
+    game().findPlaceMonsters(EnemyTypeSpiderEgg, 14);
+  }
+  else if (random < 90)
   {
     game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
     game().getCurrentMap()->addRandomGrids(4);
@@ -449,6 +415,12 @@ void generateStandardRoom06()
       }
     }
     if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
+  }
+  else
+  {
+    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    new ChestEntity(v.x, v.y, ChestBasic, false);
+    game().getCurrentMap()->setCleared(true);
   }
 }
 
