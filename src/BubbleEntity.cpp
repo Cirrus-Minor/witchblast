@@ -44,7 +44,7 @@ BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
   }
   else if (bubbleSize == 4)
   {
-    hp = 8;
+    hp = 5;
     creatureSpeed = 240.0f;
     sprite.setScale(0.2, 0.2);
     age = 0.0f;
