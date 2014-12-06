@@ -378,7 +378,7 @@ const int BLACK_RAT_DAMAGES = 5;
 
 // Bat
 const float BAT_SPEED = 270.0f;
-const int BAT_HP = 8;
+const int BAT_HP = 5;
 const int BAT_DAMAGES = 5;
 
 // Zombie
