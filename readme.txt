@@ -85,18 +85,24 @@ AFS (for the Spanish translation)
 Changes
 -------
 Next release
+- ADD New level
 - ADD New monsters
 - ADD New items
 - ADD New spell
 - ADD New art for sprites and tiles
 - ADD New room surfaces
 - ADD New intro and menu
+- ADD In-game menu (pause)
+- ADD Inventory display in the in-game menu
 - ADD Chest for completed challenges
 - ADD Tutorial state save and reset
 - ADD Cauldron now explodes while dying
 - ADD Sound for imp's teleportation
 - ADD "Jump" animation for items you can get
 - ADD Zoom effect when starting / dying
+- ADD In-fight save game
+- ADD Mouse right click support (spell)
+- MOD Game is faster now
 - MOD Standard Rat IA changes (rats now move in 4 directions)
 - MOD Frozen dividing bubbles generate frozen "children" bubbles
 - MOD Fireball (spell) now goes through monsters (if enough HP)
@@ -106,6 +112,12 @@ Next release
 - MOD Shop's items too expensive displayed in red
 - MOD One cauldron max in witches rooms in level 5
 - MOD New death screen
+- MOD Exploding fire shot replaced with sulfur item
+- MOD Exploding corpse with timer now
+- MOD Snake AI changes (no more "group attack)
+- MOD Witches and Flowers use ray casting to fire or not
+- MOD Cauldron + Witches only on rooms with walls
+- MOD Bats and little slime HP-
 - FIX Cyclops firing in the wall when too close to the north wall
 - FIX Items can fly a long time on the walls
 
