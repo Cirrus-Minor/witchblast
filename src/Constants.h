@@ -456,8 +456,8 @@ const float GIANT_SLIME_ULTRA_JUMP_TIMER = 2.3f;
 
 // KingRat
 const float KING_RAT_SPEED = 210.0f;
-const float KING_RAT_RUNNING_SPEED = 650.0f;
-const float KING_RAT_BERSERK_SPEED = 275.0f;
+const float KING_RAT_RUNNING_SPEED = 750.0f;
+const float KING_RAT_BERSERK_SPEED = 300.0f;
 const float KING_RAT_RUNNING_RECOIL = 750.0f;
 const int KING_RAT_HP = 700;
 const int KING_RAT_DAMAGES = 8;
