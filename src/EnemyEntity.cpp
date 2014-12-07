@@ -185,11 +185,6 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
   float xs = (x + boltEntity->getX()) / 2;
   float ys = (y + boltEntity->getY()) / 2;
 
-  if (boltEntity->getBoltType() == ShotTypeLightning)
-    std::cout << "[ELEK] boltDamages=" << boltEntity->getDamages();
-
-  //boltEntity->collide();
-
   int maxDamages = hp;
   int boltDamages = hurt(getHurtParams
                            (boltEntity->getDamages(),
@@ -198,10 +193,6 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
                            boltEntity->isCritical(),
                            SourceTypeBolt,
                            enemyType, boltEntity->getGoThrough()));
-
-  if (boltEntity->getBoltType() == ShotTypeLightning)
-    std::cout << " - MaxDam=" << maxDamages << " - boltDamages=" << boltDamages << std::endl;
-
   if (hp > 0)
   {
     boltEntity->loseDamages(boltEntity->getDamages());

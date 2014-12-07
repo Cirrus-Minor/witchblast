@@ -415,9 +415,11 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 
 int BaseCreatureEntity::hurt(StructHurt hurtParam)
 {
+  int oldHp = hp;
+  int absorbedHp = 0;
   if (armor > 0.01f && hurtParam.hurtingType != ShotTypeDeterministic)
   {
-    int absorbedHp = hurtParam.damage * armor;
+    absorbedHp = hurtParam.damage * armor;
     if (absorbedHp == 0) absorbedHp = 1;
     hurtParam.damage -= absorbedHp;
   }
@@ -502,11 +504,21 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
       prepareDying();
     }
 
+    int displayedDamage = hurtParam.damage;
+    if (hurtParam.goThrough)
+    {
+      if (hp == 0)
+      {
+        hurtParam.damage = oldHp + absorbedHp;
+        displayedDamage = oldHp;
+      }
+    }
+
     std::ostringstream oss;
-    oss << "-" << hurtParam.damage;
+    oss << "-" << displayedDamage;
     int textSize;
-    if (hurtParam.damage < 8) textSize = 17;
-    else textSize = 17 + (hurtParam.damage - 3) / 5;
+    if (displayedDamage < 8) textSize = 17;
+    else textSize = 17 + (displayedDamage - 3) / 5;
     TextEntity* text = new TextEntity(oss.str(), textSize, x, y - 20.0f);
     text->setColor(TextEntity::COLOR_FADING_RED);
     text->setAge(-0.6f);

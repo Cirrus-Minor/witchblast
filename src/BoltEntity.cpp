@@ -28,7 +28,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
     case ShotTypeCold:
     case ShotTypeIce:       frame = 2; break;
     case ShotTypeStone:     frame = 4; break;
-    case ShotTypeLightning: frame = 5; break;
+    case ShotTypeLightning: frame = 5; goThrough = true; break;
     case ShotTypeIllusion:  frame = 3; break;
     case ShotTypeFire:      frame = 6; break;
     case ShotTypePoison:    frame = 7; break;
