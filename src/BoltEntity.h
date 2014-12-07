@@ -31,6 +31,7 @@ class BoltEntity : public CollidingSpriteEntity
     bool isCritical();
     void setCritical(bool setCritical);
     void setGoThrough(bool goThrough);
+    bool getGoThrough();
 
     enemyTypeEnum getEnemyType();
 

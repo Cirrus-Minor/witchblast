@@ -101,7 +101,7 @@ void SpiderWebEntity::collideWithEnemy(EnemyEntity* enemyEntity)
     if (!enemyEntity->isSpecialStateActive(SpecialStateSlow))
     {
       enemyEntity->setSpecialState(SpecialStateSlow, true, 0.15f, 0.25f, 0.0f);
-      hurt(2, ShotTypeStandard, 0, false, SourceTypeMelee, enemyEntity->getEnemyType());
+      hurt(getHurtParams(2, ShotTypeStandard, 0, false, SourceTypeMelee, enemyEntity->getEnemyType(), false));
     }
   }
 }
@@ -125,7 +125,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         {
           playerEntity->setSpecialState(SpecialStateSlow, true, 0.1f, 0.33f, 0.0f);
           // TODO
-          hurt(2, ShotTypeStandard, 0, false, SourceTypeMelee, EnemyTypeNone);
+          hurt(getHurtParams(2, ShotTypeStandard, 0, false, SourceTypeMelee, EnemyTypeNone, false));
         }
       }
 
@@ -137,7 +137,9 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         boltEntity->collide();
 
         // TODO
-        hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(), SourceTypeBolt, EnemyTypeNone);
+        hurt(getHurtParams(
+          boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(),
+          SourceTypeBolt, EnemyTypeNone, boltEntity->getGoThrough()));
         if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
         SoundManager::getInstance().playSound(SOUND_IMPACT);
 

@@ -60,7 +60,7 @@ void FallingRockEntity::collideWithEnemy(EnemyEntity* entity)
   if (!hurtAll || hasHurted) return;
 
   int damage = game().getPlayer()->isEquiped(EQUIP_BOOK_MAGIC_II) ? meleeDamages * 2.0f : meleeDamages * 1.5f;
-  if (entity->hurt(damage, meleeType, 0, false, SourceTypeMelee, enemyType))
+  if (entity->hurt(getHurtParams(damage, meleeType, 0, false, SourceTypeMelee, enemyType, false)))
   {
     float xs = (x + entity->getX()) / 2;
     float ys = (y + entity->getY()) / 2;

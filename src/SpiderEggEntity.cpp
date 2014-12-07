@@ -151,7 +151,7 @@ void SpiderEggEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (movingStyle == movFlying && playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(meleeDamages, ShotTypeStandard, 0, false, SourceTypeMelee, enemyType))
+        if (playerEntity->hurt(getHurtParams(meleeDamages, ShotTypeStandard, 0, false, SourceTypeMelee, enemyType, false)))
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
@@ -173,7 +173,9 @@ void SpiderEggEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         boltEntity->collide();
 
         // TODO
-        hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(), SourceTypeBolt, EnemyTypeNone);
+        hurt(getHurtParams(
+          boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(),
+          SourceTypeBolt, EnemyTypeNone, boltEntity->getGoThrough()));
         if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
         SoundManager::getInstance().playSound(SOUND_IMPACT);
 

@@ -763,7 +763,13 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     {
       boltEntity->collide();
       // TODO bolt source
-      hurt(boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(), SourceTypeBolt, boltEntity->getEnemyType());
+      hurt(getHurtParams(boltEntity->getDamages(),
+                         boltEntity->getBoltType(),
+                         boltEntity->getLevel(),
+                         boltEntity->isCritical(),
+                         SourceTypeBolt,
+                         boltEntity->getEnemyType(),
+                         false));
       game().generateBlood(x, y, bloodColor);
 
       float xs = (x + boltEntity->getX()) / 2;
@@ -1069,16 +1075,16 @@ bool PlayerEntity::canMove()
           || (playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2));
 }
 
-int PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
+int PlayerEntity::hurt(StructHurt hurtParam)
 {
   if (playerStatus == playerStatusDead) return false;
 
   if (invincibleDelay <= 0.0f || hurtingType == ShotTypeDeterministic)
   {
     SoundManager::getInstance().playSound(SOUND_PLAYER_HIT);
-    if (BaseCreatureEntity::hurt(damages, hurtingType, level, critical, sourceType, enemyType) > 0)
+    if (BaseCreatureEntity::hurt(hurtParam) > 0)
     {
-      if (hurtingType != ShotTypeDeterministic)
+      if (hurtParam.hurtingType != ShotTypeDeterministic)
       {
         invincibleDelay = INVINCIBLE_DELAY;
         if (equip[EQUIP_RAGE_AMULET]) rageFire();
@@ -1089,8 +1095,8 @@ int PlayerEntity::hurt(int damages, enumShotType hurtingType, int level, bool cr
       game().generateBlood(x, y, bloodColor);
       game().proceedEvent(EventBeingHurted);
 
-      lastHurtingEnemy = enemyType;
-      lastHurtingSource = sourceType;
+      lastHurtingEnemy = hurtParam.enemyType;
+      lastHurtingSource = hurtParam.sourceType;
 
       return true;
     }

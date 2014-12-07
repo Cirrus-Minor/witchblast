@@ -153,7 +153,7 @@ void SnakeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
             meleeDamages = 8;
           }
         }
-        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, SourceTypeMelee, enemyType))
+        if (playerEntity->hurt(getHurtParams(meleeDamages, meleeType, meleeDamages, false, SourceTypeMelee, enemyType, false)))
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;

@@ -11,7 +11,7 @@ public:
   virtual void animate(float delay);
   virtual void calculateBB();
   virtual void render(sf::RenderTarget* app);
-  virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType) override;
+  virtual int hurt(StructHurt hurtParam) override;
 
   virtual bool canCollide();
   enemyTypeEnum getEnemyType();

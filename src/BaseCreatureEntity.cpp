@@ -113,7 +113,7 @@ float BaseCreatureEntity::animateStates(float delay)
     {
       specialState[SpecialStatePoison].param3 += specialState[SpecialStatePoison].param2;
       // TODO
-      hurt(specialState[SpecialStatePoison].param1, ShotTypeDeterministic, 0, false, SourceTypePoison, NB_ENEMY);
+      hurt(getHurtParams(specialState[SpecialStatePoison].param1, ShotTypeDeterministic, 0, false, SourceTypePoison, NB_ENEMY, false));
     }
   }
 
@@ -413,17 +413,17 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 	return false;
 }
 
-int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
+int BaseCreatureEntity::hurt(StructHurt hurtParam)
 {
-  if (armor > 0.01f && hurtingType != ShotTypeDeterministic)
+  if (armor > 0.01f && hurtParam.hurtingType != ShotTypeDeterministic)
   {
-    int absorbedHp = damages * armor;
+    int absorbedHp = hurtParam.damage * armor;
     if (absorbedHp == 0) absorbedHp = 1;
-    damages -= absorbedHp;
+    hurtParam.damage -= absorbedHp;
   }
 
-  if (hurtingType == ShotTypeIce
-      && determineSatusChance(resistance[ResistanceFrozen], level))
+  if (hurtParam.hurtingType == ShotTypeIce
+      && determineSatusChance(resistance[ResistanceFrozen], hurtParam.level))
   {
     // frozen ?
     specialState[SpecialStateIce].active = true;
@@ -431,7 +431,7 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
     float frozenMultAdd = 0.0f;
     if (resistance[ResistanceFrozen] == ResistanceHigh)
     {
-      if (level == 0)
+      if (hurtParam.level == 0)
       {
         frozenDelayMult = 0.8f;
         frozenMultAdd = 0.2f;
@@ -444,7 +444,7 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
     }
     else if (resistance[ResistanceFrozen] == ResistanceVeryHigh)
     {
-      if (level < 2)
+      if (hurtParam.level < 2)
       {
         frozenDelayMult = 0.7f;
         frozenMultAdd = 0.25f;
@@ -455,11 +455,11 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
         frozenMultAdd = 0.2f;
       }
     }
-    specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[level] * frozenDelayMult;
-    specialState[SpecialStateIce].param1 = STATUS_FROZEN_MULT[level] + frozenMultAdd;
+    specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[hurtParam.level] * frozenDelayMult;
+    specialState[SpecialStateIce].param1 = STATUS_FROZEN_MULT[hurtParam.level] + frozenMultAdd;
   }
   else if (hurtingType == ShotTypePoison
-      /*&& determineSatusChance(resistance[ResistanceFrozen], level)*/)
+      /*&& determineSatusChance(resistance[ResistanceFrozen], hurtParam.level)*/)
   {
     specialState[SpecialStatePoison].active = true;
     specialState[SpecialStatePoison].timer = 10.5f;
@@ -468,27 +468,27 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
     specialState[SpecialStatePoison].param3 = 2.0f;
   }
 
-  // damages bonus
+  // damage bonus
   if (hurtingType == ShotTypeIce || hurtingType == ShotTypeCold)
-    damages += (damages * determineDamageBonus(resistance[ResistanceIce], level)) / 100;
+    hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistanceIce], hurtParam.level)) / 100;
   else if (hurtingType == ShotTypeFire)
-    damages += (damages * determineDamageBonus(resistance[ResistanceFire], level)) / 100;
+    hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistanceFire], hurtParam.level)) / 100;
   else if (hurtingType == ShotTypeLightning)
-    damages += (damages * determineDamageBonus(resistance[ResistanceLightning], level)) / 100;
+    hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistanceLightning], hurtParam.level)) / 100;
   else if (hurtingType == ShotTypeStone)
-    damages += (damages * determineDamageBonus(resistance[ResistanceStone], level)) / 100;
+    hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistanceStone], hurtParam.level)) / 100;
   else if (hurtingType == ShotTypeIllusion)
-    damages += (damages * determineDamageBonus(resistance[ResistanceIllusion], level)) / 100;
+    hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistanceIllusion], hurtParam.level)) / 100;
   else if (hurtingType == ShotTypePoison)
-    damages += (damages * determineDamageBonus(resistance[ResistancePoison], level)) / 100;
+    hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistancePoison], hurtParam.level)) / 100;
 
-  if (damages > 0)
+  if (hurtParam.damage > 0)
   {
     hurting = true;
     hurtingDelay = HURTING_DELAY;
     this->hurtingType = hurtingType;
 
-    hp -= damages;
+    hp -= hurtParam.damage;
     if (hp <= 0)
     {
       hp = 0;
@@ -503,10 +503,10 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
     }
 
     std::ostringstream oss;
-    oss << "-" << damages;
+    oss << "-" << hurtParam.damage;
     int textSize;
-    if (damages < 8) textSize = 17;
-    else textSize = 17 + (damages - 3) / 5;
+    if (hurtParam.damage < 8) textSize = 17;
+    else textSize = 17 + (hurtParam.damage - 3) / 5;
     TextEntity* text = new TextEntity(oss.str(), textSize, x, y - 20.0f);
     text->setColor(TextEntity::COLOR_FADING_RED);
     text->setAge(-0.6f);
@@ -517,7 +517,7 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
     text->setType(ENTITY_FLYING_TEXT);
     while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
 
-    if (critical)
+    if (hurtParam.critical)
     {
       TextEntity* textCrit = new TextEntity(tools::getLabel("critical"), 16, x, text->getY() - 16.0f);
       textCrit->setColor(TextEntity::COLOR_FADING_RED);
@@ -541,9 +541,9 @@ int BaseCreatureEntity::hurt(int damages, enumShotType hurtingType, int level, b
       textCrit->setType(ENTITY_FLYING_TEXT);
     }
 
-    if (critical) SoundManager::getInstance().playSound(SOUND_CRITICAL);
+    if (hurtParam.critical) SoundManager::getInstance().playSound(SOUND_CRITICAL);
   }
-  return damages;
+  return hurtParam.damage;
 }
 
 void BaseCreatureEntity::prepareDying()

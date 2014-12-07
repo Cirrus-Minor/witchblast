@@ -19,6 +19,8 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
   this->boltType = boltType;
   enemyType = EnemyTypeNone;
+  goThrough = false;
+
   switch (boltType)
   {
     case ShotTypeDeterministic:
@@ -35,7 +37,6 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   testWallsCollision = false;
   flying = false;
   critical = false;
-  goThrough = false;
 
   // avoid starting in wall
   if (y > (OFFSET_Y + (MAP_HEIGHT - 1) * TILE_HEIGHT - 16))
@@ -110,6 +111,10 @@ void BoltEntity::setGoThrough(bool goThrough)
   this->goThrough = goThrough;
 }
 
+bool BoltEntity::getGoThrough()
+{
+  return goThrough;
+}
 
 void BoltEntity::animate(float delay)
 {

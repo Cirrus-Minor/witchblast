@@ -193,7 +193,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  \param level : damages level
      *  \return : True if the player has been hurt
      */
-    virtual int hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType) override;
+    virtual int hurt(StructHurt hurtParam) override;
 
     /*!
      *  \brief returns if the player is dead or not

@@ -1,4 +1,5 @@
 #include "ExplosionEntity.h"
+#include "BaseCreatureEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include "sfml_game/SpriteEntity.h"
@@ -88,7 +89,7 @@ void ExplosionEntity::testCollisions()
         if (bb.intersects(entity->getBoundingBox()))
         {
           // TODO explosion type
-          if (damage > 0) entity->hurt(damage, ShotTypeFire, 0, false, SourceTypeExplosion, enemyType);
+          if (damage > 0) entity->hurt(BaseCreatureEntity::getHurtParams(damage, ShotTypeFire, 0, false, SourceTypeExplosion, enemyType, false));
 
           Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 800.0f );
           entity->giveRecoil(true, recoilVector, 1.0f);

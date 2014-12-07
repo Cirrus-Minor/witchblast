@@ -147,7 +147,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(meleeDamages, meleeType, meleeDamages, false, SourceTypeBolt, enemyType) > 0)
+        if (playerEntity->hurt(getHurtParams(meleeDamages, meleeType, meleeDamages, false, SourceTypeBolt, enemyType, false)) > 0)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
@@ -185,18 +185,31 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
   float xs = (x + boltEntity->getX()) / 2;
   float ys = (y + boltEntity->getY()) / 2;
 
-  boltEntity->collide();
+  if (boltEntity->getBoltType() == ShotTypeLightning)
+    std::cout << "[ELEK] boltDamages=" << boltEntity->getDamages();
+
+  //boltEntity->collide();
 
   int maxDamages = hp;
-  int boltDamages = hurt(boltEntity->getDamages(),
-                         boltEntity->getBoltType(),
-                         boltEntity->getLevel(),
-                         boltEntity->isCritical(),
-                         SourceTypeBolt,
-                         enemyType);
+  int boltDamages = hurt(getHurtParams
+                           (boltEntity->getDamages(),
+                           boltEntity->getBoltType(),
+                           boltEntity->getLevel(),
+                           boltEntity->isCritical(),
+                           SourceTypeBolt,
+                           enemyType, boltEntity->getGoThrough()));
 
-  if (hp > 0) boltEntity->loseDamages(boltEntity->getDamages());
-  else boltEntity->loseDamages(maxDamages >= boltDamages ? boltDamages : maxDamages);
+  if (boltEntity->getBoltType() == ShotTypeLightning)
+    std::cout << " - MaxDam=" << maxDamages << " - boltDamages=" << boltDamages << std::endl;
+
+  if (hp > 0)
+  {
+    boltEntity->loseDamages(boltEntity->getDamages());
+  }
+  else
+  {
+    boltEntity->loseDamages(maxDamages >= boltDamages ? boltDamages : maxDamages);
+  }
 
   if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
   SoundManager::getInstance().playSound(SOUND_IMPACT);
@@ -217,6 +230,8 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
                             recoilVelocity );
     giveRecoil(true, recoilVector, recoilDelay);
   }
+
+  boltEntity->collide();
 }
 
 int EnemyEntity::getCollisionDirection(BoltEntity* boltEntity)
@@ -264,9 +279,9 @@ void EnemyEntity::collideWithEnemy(EnemyEntity* entity)
   // To implement the behaviour when colliding with another ennemy
 }
 
-int EnemyEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
+int EnemyEntity::hurt(StructHurt hurtParam)
 {
-  int hurtedHp = BaseCreatureEntity::hurt(damages, hurtingType, level, critical, sourceType, enemyType);
+  int hurtedHp = BaseCreatureEntity::hurt(hurtParam);
   if (hurtedHp > 0 && hurtingSound != SOUND_NONE && hp > 0)
     SoundManager::getInstance().playSound(hurtingSound);
   return hurtedHp;

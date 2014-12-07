@@ -132,9 +132,9 @@ void ImpEntity::collideWithEnemy(EnemyEntity* entity)
   }
 }
 
-int ImpEntity::hurt(int damages, enumShotType hurtingType, int level, bool critical, sourceTypeEnum sourceType, enemyTypeEnum enemyType)
+int ImpEntity::hurt(StructHurt hurtParam)
 {
-  int result = EnemyEntity::hurt(damages, hurtingType, level, critical, sourceType, enemyType);
+  int result = EnemyEntity::hurt(hurtParam);
 
   if (!isDying && !isAgonising && !isExploding)
   {
