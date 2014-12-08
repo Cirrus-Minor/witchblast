@@ -74,6 +74,7 @@ void BoltEntity::loseDamages(int damages)
 {
   if (this->damages > damages) setDamages(this->damages - damages);
   else setDamages(0);
+  critical = false;
 }
 
 enumShotType BoltEntity::getBoltType()
