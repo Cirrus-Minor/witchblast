@@ -2,7 +2,7 @@
 #include "Constants.h"
 #include "sfml_game/ImageManager.h"
 
-DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_DOOR))
+DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_TILES))
 {
   this->direction = direction;
   isOpen = true;
@@ -47,235 +47,237 @@ void DoorEntity::openDoor()
 void DoorEntity::render(sf::RenderTarget* app)
 {
   if (!isVisible) return;
-    float xl, yl, xr, yr;
 
-    if (direction == 8)
+  float xl, yl, xr, yr;
+  float yTranslate = 11 * TILE_HEIGHT;
+
+  if (direction == 8)
+  {
+    yl = OFFSET_Y;
+    yr = OFFSET_Y;
+    if (isOpen)
     {
-      yl = OFFSET_Y;
-      yr = OFFSET_Y;
-      if (isOpen)
+      if (timer > 0.0f)
       {
-        if (timer > 0.0f)
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
-            - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
-            + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
-        }
-        else
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH * 1.2f;
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH * 1.2f;
-        }
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
+             - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
+             + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
       }
       else
       {
-        if (timer > 0.0f)
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
-            - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
-            + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
-        }
-        else
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH /2;;
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH /2;
-        }
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH * 1.2f;
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH * 1.2f;
       }
-
-      // back
-      sprite.setTextureRect(sf::IntRect(3 * width, doorType * height, width * 3, height));
-      sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
-      app->draw(sprite);
-
-      // door
-      sprite.setTextureRect(sf::IntRect(0.5f * width, doorType * height,  width,  height));
-      sprite.setPosition(xl, yl);
-      app->draw(sprite);
-
-      sprite.setTextureRect(sf::IntRect(1.5f * width, doorType * height,  width,  height));
-      sprite.setPosition(xr, yr);
-      app->draw(sprite);
-
-      // front
-      sprite.setTextureRect(sf::IntRect(6 * width, doorType * height, width * 3, height));
-      sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
-      app->draw(sprite);
+    }
+    else
+    {
+      if (timer > 0.0f)
+      {
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
+             - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
+             + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
+      }
+      else
+      {
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH /2;;
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH /2;
+      }
     }
 
-    if (direction == 4)
+    // back
+    sprite.setTextureRect(sf::IntRect(3 * width, yTranslate + doorType * height, width * 3, height));
+    sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
+    app->draw(sprite);
+
+    // door
+    sprite.setTextureRect(sf::IntRect(0.5f * width, yTranslate + doorType * height,  width,  height));
+    sprite.setPosition(xl, yl);
+    app->draw(sprite);
+
+    sprite.setTextureRect(sf::IntRect(1.5f * width, yTranslate + doorType * height,  width,  height));
+    sprite.setPosition(xr, yr);
+    app->draw(sprite);
+
+    // front
+    sprite.setTextureRect(sf::IntRect(6 * width, yTranslate + doorType * height, width * 3, height));
+    sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
+    app->draw(sprite);
+  }
+
+  if (direction == 4)
+  {
+    xl = OFFSET_X;
+    xr = OFFSET_X;
+    if (isOpen)
     {
-      xl = OFFSET_X;
-      xr = OFFSET_X;
-      if (isOpen)
+      if (timer > 0.0f)
       {
-        if (timer > 0.0f)
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
-            - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
-            + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
-        }
-        else
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT * 1.2f;
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT * 1.2f;
-        }
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
+             - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
+             + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
       }
       else
       {
-
-        if (timer > 0.0f)
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
-            - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
-            + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
-        }
-        else
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT /2;
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT /2;
-        }
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT * 1.2f;
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT * 1.2f;
       }
+    }
+    else
+    {
 
-      // back
-      sprite.setTextureRect(sf::IntRect(width + (3 * width * doorType), 3 * height,  width , height* 3));
-      sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
-      sprite.setPosition(OFFSET_X,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
-      app->draw(sprite);
-
-
-      // door
-      sprite.setTextureRect(sf::IntRect( 3 * width * doorType, 3.5 * height,  width,  height));
-      sprite.setPosition(xl, yl);
-      app->draw(sprite);
-
-      sprite.setTextureRect(sf::IntRect( 3 * width * doorType, 4.5 * height,  width,  height));
-      sprite.setPosition(xr, yr);
-      app->draw(sprite);
-
-      // front
-      sprite.setTextureRect(sf::IntRect(2 * width + (3 * width * doorType), 3 * height,  width , height* 3));
-      sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
-      sprite.setPosition(OFFSET_X,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
-      app->draw(sprite);
+      if (timer > 0.0f)
+      {
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
+             - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
+             + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
+      }
+      else
+      {
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT /2;
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT /2;
+      }
     }
 
-    if (direction == 2)
-    {
-      sprite.setRotation(0.0f);
+    // back
+    sprite.setTextureRect(sf::IntRect(width + (3 * width * doorType), yTranslate + 3 * height,  width , height* 3));
+    sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
+    sprite.setPosition(OFFSET_X,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
+    app->draw(sprite);
 
-      yl = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1);
-      yr = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1);
-      if (isOpen)
+
+    // door
+    sprite.setTextureRect(sf::IntRect( 3 * width * doorType, yTranslate + 3.5 * height,  width,  height));
+    sprite.setPosition(xl, yl);
+    app->draw(sprite);
+
+    sprite.setTextureRect(sf::IntRect( 3 * width * doorType, yTranslate + 4.5 * height,  width,  height));
+    sprite.setPosition(xr, yr);
+    app->draw(sprite);
+
+    // front
+    sprite.setTextureRect(sf::IntRect(2 * width + (3 * width * doorType), yTranslate + 3 * height,  width , height* 3));
+    sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
+    sprite.setPosition(OFFSET_X,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
+    app->draw(sprite);
+  }
+
+  if (direction == 2)
+  {
+    sprite.setRotation(0.0f);
+
+    yl = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1);
+    yr = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1);
+    if (isOpen)
+    {
+      if (timer > 0.0f)
       {
-        if (timer > 0.0f)
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
-            - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
-            + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
-        }
-        else
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH * 1.2f;
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH * 1.2f;
-        }
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
+             - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
+             + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_WIDTH / 2);
       }
       else
       {
-          if (timer > 0.0f)
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
-            - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
-            + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
-        }
-        else
-        {
-          xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH /2;;
-          xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH /2;
-        }
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH * 1.2f;
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH * 1.2f;
       }
+    }
+    else
+    {
+      if (timer > 0.0f)
+      {
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH / 2
+             - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH / 2
+             + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_WIDTH / 2);
+      }
+      else
+      {
+        xl = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH - TILE_WIDTH /2;;
+        xr = OFFSET_X + (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH /2;
+      }
+    }
 
-      // back
-      sprite.setTextureRect(sf::IntRect(3 * width, (1 + doorType) * height,  width * 3,  -height));
-      sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, yl);
-      app->draw(sprite);
+    // back
+    sprite.setTextureRect(sf::IntRect(3 * width, yTranslate + (1 + doorType) * height,  width * 3,  -height));
+    sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, yl);
+    app->draw(sprite);
 
-      // door
-      sprite.setTextureRect(sf::IntRect(0.5f * width, (1 + doorType) * height,  width,  -height));
-      sprite.setPosition(xl, yl);
-      app->draw(sprite);
+    // door
+    sprite.setTextureRect(sf::IntRect(0.5f * width, yTranslate + (1 + doorType) * height,  width,  -height));
+    sprite.setPosition(xl, yl);
+    app->draw(sprite);
 
-      sprite.setTextureRect(sf::IntRect(1.5f * width,  (1 + doorType) * height,  width, -height));
-      sprite.setPosition(xr, yr);
-      app->draw(sprite);
+    sprite.setTextureRect(sf::IntRect(1.5f * width,  yTranslate + (1 + doorType) * height,  width, -height));
+    sprite.setPosition(xr, yr);
+    app->draw(sprite);
 
-      // front
-      sprite.setTextureRect(sf::IntRect(6 * width, (1 + doorType) * height, width * 3,  -height));
-      sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, yl);
+    // front
+    sprite.setTextureRect(sf::IntRect(6 * width, yTranslate + (1 + doorType) * height, width * 3,  -height));
+    sprite.setPosition(OFFSET_X + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, yl);
     //sprite.setRotation(angle);
-      app->draw(sprite);
-    }
+    app->draw(sprite);
+  }
 
-    if (direction == 6)
+  if (direction == 6)
+  {
+    xl = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1);
+    xr = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1);
+    if (isOpen)
     {
-      xl = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1);
-      xr = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1);
-      if (isOpen)
+      if (timer > 0.0f)
       {
-        if (timer > 0.0f)
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
-            - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
-            + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
-        }
-        else
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT * 1.2f;
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT * 1.2f;
-        }
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
+             - 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
+             + 1.2f * ((1.0f - (timer / DOOR_OPEN_TIME)) * TILE_HEIGHT / 2);
       }
       else
       {
-        if (timer > 0.0f)
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
-            - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
-            + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
-        }
-        else
-        {
-          yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT /2;
-          yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT /2;
-        }
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT * 1.2f;
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT * 1.2f;
       }
-
-      // back
-      sprite.setTextureRect(sf::IntRect(width * 2  + (3 * width * doorType), 3 * height,  -width , height* 3));
-      sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
-      sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
-      app->draw(sprite);
-
-
-      // door
-      sprite.setTextureRect(sf::IntRect(1 * width + (3 * width * doorType), 3.5 * height,  -width,  height));
-      sprite.setPosition(xl, yl);
-      app->draw(sprite);
-
-      sprite.setTextureRect(sf::IntRect(1* width + (3 * width * doorType), 4.5 * height,  -width,  height));
-      sprite.setPosition(xr, yr);
-      app->draw(sprite);
-
-      // front
-      sprite.setTextureRect(sf::IntRect(3 * width + (3 * width * doorType), 3 * height,  -width , height* 3));
-      sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
-      sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
-      app->draw(sprite);
     }
+    else
+    {
+      if (timer > 0.0f)
+      {
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT / 2
+             - 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT / 2
+             + 1.2f * ((timer / DOOR_OPEN_TIME) * TILE_HEIGHT / 2);
+      }
+      else
+      {
+        yl = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT - TILE_HEIGHT /2;
+        yr = OFFSET_Y + (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT /2;
+      }
+    }
+
+    // back
+    sprite.setTextureRect(sf::IntRect(width * 2  + (3 * width * doorType), yTranslate + 3 * height,  -width , height* 3));
+    sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
+    sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
+    app->draw(sprite);
+
+
+    // door
+    sprite.setTextureRect(sf::IntRect(1 * width + (3 * width * doorType), yTranslate + 3.5 * height,  -width,  height));
+    sprite.setPosition(xl, yl);
+    app->draw(sprite);
+
+    sprite.setTextureRect(sf::IntRect(1* width + (3 * width * doorType), yTranslate + 4.5 * height,  -width,  height));
+    sprite.setPosition(xr, yr);
+    app->draw(sprite);
+
+    // front
+    sprite.setTextureRect(sf::IntRect(3 * width + (3 * width * doorType), yTranslate + 3 * height,  -width , height* 3));
+    sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, OFFSET_Y);
+    sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + OFFSET_Y);
+    app->draw(sprite);
+  }
 }

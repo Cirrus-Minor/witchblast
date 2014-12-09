@@ -101,9 +101,8 @@ WitchBlastGame::WitchBlastGame():
   // loading resources
   const char *const images[] = {
     "media/player_base.png",   "media/player_faces.png",
-    "media/bolt.png",
-    "media/tiles.png",         "media/rat.png",
-    "media/minimap.png",       "media/doors.png",
+    "media/bolt.png",          "media/tiles01.png",
+    "media/rat.png",           "media/minimap.png",
     "media/items.png",         "media/items_equip.png",
     "media/chest.png",         "media/bat.png",
     "media/evil_flower.png",   "media/slime.png",
@@ -430,11 +429,19 @@ void WitchBlastGame::startNewLevel()
 
   if (level <= 5) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
   if (level == 1) testAndAddMessageToQueue(MsgTutoBasics);
+
   playLevel(false);
 }
 
 void WitchBlastGame::playLevel(bool isFight)
 {
+    if (level % 3 == 1)
+    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles01.png");
+  else if (level % 3 == 2)
+    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles02.png");
+  else
+    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles03.png");
+
   isPlayerAlive = true;
 
   if (!isFight)
@@ -2137,41 +2144,41 @@ void WitchBlastGame::refreshMap()
   // keystones
   if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
   {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
                                                     OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                                                     OFFSET_Y +  TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
-    keystoneEntity->setFrame(6);
+    keystoneEntity->setFrame(17);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourDown())
   {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
                                                     OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                                                     OFFSET_Y + MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(180);
-    keystoneEntity->setFrame(6);
+    keystoneEntity->setFrame(17);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourLeft())
   {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
                                                     OFFSET_X + TILE_WIDTH / 2,
                                                     OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(270);
-    keystoneEntity->setFrame(6);
+    keystoneEntity->setFrame(17);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourRight())
   {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOOR),
+    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
                                                     OFFSET_X + MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
                                                     OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(90);
-    keystoneEntity->setFrame(6);
+    keystoneEntity->setFrame(17);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
 }

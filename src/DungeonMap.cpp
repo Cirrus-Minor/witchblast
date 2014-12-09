@@ -10,7 +10,6 @@
 
 DungeonMap::DungeonMap(int width, int height) : GameMap(width, height)
 {
-
 }
 
 DungeonMap::DungeonMap(GameFloor* gameFloor, int x, int y) : GameMap(MAP_WIDTH, MAP_HEIGHT)
@@ -25,7 +24,6 @@ DungeonMap::DungeonMap(GameFloor* gameFloor, int x, int y) : GameMap(MAP_WIDTH, 
 
 DungeonMap::~DungeonMap()
 {
-  //dtor
 }
 
 bool DungeonMap::isVisited()
@@ -137,11 +135,6 @@ bool DungeonMap::isFlyable(int x, int y)
   if (x >= MAP_WIDTH - 1) return false;
   if (y <= 0) return false;
   if (y >= MAP_HEIGHT - 1) return false;
-  /*if (map[x][y] == MAP_WALL_X) return false;
-  if (map[x][y] == MAP_WALL_11) return false;
-  if (map[x][y] == MAP_WALL_33) return false;
-  if (map[x][y] == MAP_WALL_77) return false;
-  if (map[x][y] == MAP_WALL_99) return false;*/
   if (map[x][y] >= MAP_WALL_8 && map[x][y] <= MAP_WALL_X) return false;
   return true;
 }
@@ -328,7 +321,7 @@ void DungeonMap::initRoom()
     for ( j = 1 ; j < height - 1 ; j++)
     {
       map[i][j] = 0;
-      //if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+      if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
     }
 
   if (gameFloor != NULL)

@@ -34,7 +34,7 @@ const int MAP_WALL_63       =   75;
 
 const int MAP_WALL_X        =   89;
 
-const int MAP_GRID          =   29;
+const int MAP_GRID          =   9;
 const int MAP_HOLE          =   90;
 const int MAP_HOLE_TOP      =   MAP_HOLE;
 const int MAP_HOLE_BOTTOM   =   MAP_HOLE + 1;
