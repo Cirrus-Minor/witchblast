@@ -167,46 +167,7 @@ void SpiderEggEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
       {
-        float xs = (x + boltEntity->getX()) / 2;
-        float ys = (y + boltEntity->getY()) / 2;
-
-        boltEntity->collide();
-
-        // TODO
-        hurt(getHurtParams(
-          boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(),
-          SourceTypeBolt, EnemyTypeNone, boltEntity->getGoThrough()));
-        if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
-        SoundManager::getInstance().playSound(SOUND_IMPACT);
-
-        SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
-        star->setFading(true);
-        star->setZ(y+ 100);
-        star->setLifetime(0.7f);
-        star->setType(ENTITY_EFFECT);
-        star->setSpin(400.0f);
-
-        if (boltEntity->getBoltType() == ShotTypeStone)
-        {
-          float recoilVelocity = STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
-          float recoilDelay = STONE_DECOIL_DELAY[boltEntity->getLevel()];
-
-          if (resistance[ResistanceRecoil] == ResistanceHigh)
-          {
-            recoilVelocity *= 0.75f;
-            recoilDelay *= 0.75f;
-          }
-          else if (resistance[ResistanceRecoil] == ResistanceVeryHigh)
-          {
-            recoilVelocity *= 0.5f;
-            recoilDelay *= 0.5f;
-          }
-
-          Vector2D recoilVector = Vector2D(boltEntity->getX(),
-                                           boltEntity->getY()).vectorTo(Vector2D(x, y),
-                                           recoilVelocity );
-          giveRecoil(true, recoilVector, recoilDelay);
-        }
+        EnemyEntity::collideWithBolt(boltEntity);
       }
     }
   }
