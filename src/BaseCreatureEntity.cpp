@@ -417,14 +417,15 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
 {
   int oldHp = hp;
   int absorbedHp = 0;
-  if (armor > 0.01f && hurtParam.hurtingType != ShotTypeDeterministic)
+  hurtingType = hurtParam.hurtingType;
+  if (armor > 0.01f && hurtingType != ShotTypeDeterministic)
   {
     absorbedHp = hurtParam.damage * armor;
     if (absorbedHp == 0) absorbedHp = 1;
     hurtParam.damage -= absorbedHp;
   }
 
-  if (hurtParam.hurtingType == ShotTypeIce
+  if (hurtingType == ShotTypeIce
       && determineSatusChance(resistance[ResistanceFrozen], hurtParam.level))
   {
     // frozen ?
@@ -491,6 +492,9 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
     this->hurtingType = hurtingType;
 
     hp -= hurtParam.damage;
+
+    std::cout << "HP=" << hp << " - damages=" << hurtParam.damage << std::endl;
+
     if (hp <= 0)
     {
       hp = 0;
@@ -505,13 +509,10 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
     }
 
     int displayedDamage = hurtParam.damage;
-    if (hurtParam.goThrough)
+    if (hurtParam.goThrough && hp == 0)
     {
-      if (hp == 0)
-      {
-        hurtParam.damage = oldHp + absorbedHp;
-        displayedDamage = oldHp;
-      }
+      hurtParam.damage = oldHp + absorbedHp;
+      displayedDamage = oldHp;
     }
 
     std::ostringstream oss;
