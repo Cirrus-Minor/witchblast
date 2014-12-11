@@ -493,8 +493,6 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
 
     hp -= hurtParam.damage;
 
-    std::cout << "HP=" << hp << " - damages=" << hurtParam.damage << std::endl;
-
     if (hp <= 0)
     {
       hp = 0;
