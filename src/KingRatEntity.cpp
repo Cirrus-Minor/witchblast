@@ -150,7 +150,7 @@ void KingRatEntity::animate(float delay)
     {
       state = 3;
       // angry
-      timer = 2.0f;
+      timer = 1.0f;
 
       velocity.x = 0.0f;
       velocity.y = 0.0f;
@@ -206,7 +206,7 @@ void KingRatEntity::animate(float delay)
 
     if (berserkDelay <= 0.0f)
     {
-      berserkDelay = 0.8f + (rand()%10) / 10.0f;
+      berserkDelay = 0.6f + (rand()%10) / 20.0f;
       SoundManager::getInstance().playSound(SOUND_KING_RAT_2);
 
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(),KING_RAT_BERSERK_SPEED ));
