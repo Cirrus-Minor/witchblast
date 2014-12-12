@@ -175,7 +175,9 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/zombie_attack.ogg",  "media/sound/zombie_die.ogg",
     "media/sound/ghost.ogg",          "media/sound/ghost_die.ogg",
     "media/sound/fuse.ogg",           "media/sound/electricity.ogg",
-    "media/sound/electric_blast.ogg"
+    "media/sound/electric_blast.ogg", "media/sound/francky_00.ogg",
+    "media/sound/francky_01.ogg",     "media/sound/francky_02.ogg",
+    "media/sound/francky_die.ogg",
   };
 
   for (const char *const filename : sounds)

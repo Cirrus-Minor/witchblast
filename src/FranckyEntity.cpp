@@ -23,12 +23,11 @@ FranckyEntity::FranckyEntity(float x, float y)
   hpMax = hp;
   meleeDamages = 16;
 
-
   type = ENTITY_ENEMY_BOSS;
   bloodColor = BloodRed;
   deathFrame = FRAME_CORPSE_FRANCKY_TORSO;
   shadowFrame = 5;
-  //agonizingSound = SOUND_CYCLOP_DIE;
+  agonizingSound = SOUND_FRANCKY_DYING;
   frame = 0;
   if (game().getPlayerPosition().x > x) isMirroring = true;
   sprite.setOrigin(64.0f, 143.0f);
@@ -71,11 +70,13 @@ void FranckyEntity::animate(float delay)
       health = ((100 * hp) / hpMax);
       if (health <= 33) timer = 4.5f;
       else if (health <= 66) timer = 5.25f;
+      SoundManager::getInstance().playSound(SOUND_FRANCKY_00);
       break;
     case 1:
       timer = 1.0f;
       velocity.x = 0.0f;
       velocity.y = 0.0f;
+      SoundManager::getInstance().playSound(SOUND_FRANCKY_01);
       break;
     case 3: timer = 0.2f; break;
     case 2:
@@ -338,7 +339,7 @@ FranckyEntityHead::FranckyEntityHead(float x, float y)
   shadowFrame = 3 * imagesProLine + 2;
 
   deathFrame = FRAME_CORPSE_FRANCKY_HEAD;
-  //agonizingSound = SOUND_PUMPKIN_DIE;
+  agonizingSound = SOUND_FRANCKY_DYING;
 
   isJumping = false;
   h = 0.0f;
@@ -384,6 +385,8 @@ void FranckyEntityHead::animate(float delay)
           jumpingDelay = 0.05f;
           isJumping = false;
           SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_WEAK);
+          int r = rand() % 4;
+          if (r <= 1) SoundManager::getInstance().playSound(SOUND_FRANCKY_01 + r);
           fire();
           game().generateBlood(x, y, BloodRed);
         }
@@ -398,20 +401,15 @@ void FranckyEntityHead::animate(float delay)
     jumpingDelay -= slimeDelay;
     if (jumpingDelay < 0.0f)
     {
-      //if (rand() % 2 == 0)
-      //  SoundManager::getInstance().playSound(SOUND_PUMPKIN_01);
-      //else
-      //  SoundManager::getInstance().playSound(SOUND_PUMPKIN_00);
-      hVelocity = 180.0f; // + rand() % 150;
+      hVelocity = 180.0f;
       isJumping = true;
       isFirstJumping = true;
 
-      float randVel = 280.0f; // + rand() % 250;
+      float randVel = 280.0f;
 
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), randVel ));
     }
   }
-
 
   frame = imagesProLine * 3 + (int)(age * 3) % 2;
   isMirroring = velocity.x > 1.0f;

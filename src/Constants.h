@@ -211,6 +211,10 @@ enum sound_resources {
   SOUND_FUSE,
   SOUND_ELECTRICITY,
   SOUND_ELECTRIC_BLAST,
+  SOUND_FRANCKY_00,
+  SOUND_FRANCKY_01,
+  SOUND_FRANCKY_02,
+  SOUND_FRANCKY_DYING,
 };
 
 enum corpses_ressources{
