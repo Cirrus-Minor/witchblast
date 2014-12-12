@@ -429,7 +429,7 @@ void WitchBlastGame::startNewLevel()
   // to test
   displayKilledEnemies();
 
-  if (level <= 5) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
+  if (level <= 6) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
   if (level == 1) testAndAddMessageToQueue(MsgTutoBasics);
 
   playLevel(false);

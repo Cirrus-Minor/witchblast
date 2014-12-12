@@ -492,6 +492,7 @@ enum EnumMessages
   MsgInfoLevel3,
   MsgInfoLevel4,
   MsgInfoLevel5,
+  MsgInfoLevel6,
   MsgInfoRatsBats,
   MsgInfoSnakes,
   MsgInfoWitches,
