@@ -27,6 +27,7 @@ public:
     void playSound(int n);
     void stopSound(int n);
     void setMute(bool mute);
+    void setVolume(int volume);
 
 private:
     SoundManager();
@@ -36,6 +37,7 @@ private:
     std::vector<sf::Sound*> soundArray;
 
     bool mute;
+    int volume;
 };
 
 #endif // SOUNDMANAGER_H_INCLUDED

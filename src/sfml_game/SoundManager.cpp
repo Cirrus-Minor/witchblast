@@ -51,6 +51,7 @@ void SoundManager::addSound(const char* fileName)
 
   sf::Sound* newSound = new sf::Sound;
   newSound->setBuffer(*newSoundBuffer);
+  newSound->setVolume(volume);
   soundArray.push_back(newSound);
 }
 
@@ -70,4 +71,11 @@ void SoundManager::stopSound(int n)
 void SoundManager::setMute(bool mute)
 {
   this->mute = mute;
+}
+
+void SoundManager::setVolume(int volume)
+{
+  this->volume = volume;
+  for (sf::Sound* s: soundArray)
+    s->setVolume(volume);
 }
