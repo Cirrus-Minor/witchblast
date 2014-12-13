@@ -92,6 +92,7 @@ Next release
 - ADD New art for sprites and tiles
 - ADD New room surfaces
 - ADD New intro and menu
+- ADD Levels have different tilesets now 
 - ADD In-game menu (pause)
 - ADD Inventory display in the in-game menu
 - ADD Chest for completed challenges
@@ -102,11 +103,12 @@ Next release
 - ADD Zoom effect when starting / dying
 - ADD In-fight save game
 - ADD Mouse right click support (spell)
+- ADD Show selected key in key configuration
 - MOD Game is faster now
 - MOD Standard Rat IA changes (rats now move in 4 directions)
 - MOD Frozen dividing bubbles generate frozen "children" bubbles
 - MOD Fireball (spell) now goes through monsters (if enough HP)
-- MOD Fire shot can make dead monster explode
+- MOD Lightning bolt now goes through monsters (if enough HP)
 - MOD Cyclops' damage decreases
 - MOD Giant Spider is more difficult to kill now
 - MOD Shop's items too expensive displayed in red
