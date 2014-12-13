@@ -70,6 +70,47 @@ static std::string intToString(int n)
   return oss.str();
 }
 
+static std::string keyToString(sf::Keyboard::Key key)
+{
+  std::string s = "Unknown";
+
+  if (key >= sf::Keyboard::A && key <= sf::Keyboard::Z)
+  {
+    char c = 'A' + key - sf::Keyboard::A;
+    std::ostringstream oss;
+    oss << c;
+    s = oss.str();
+  }
+  else if (key >= sf::Keyboard::Num0 && key <= sf::Keyboard::Num9)
+  {
+    char c = '0' + key - sf::Keyboard::Num0;
+    std::ostringstream oss;
+    oss << c;
+    s = oss.str();
+  }
+  else if (key >= sf::Keyboard::Numpad0 && key <= sf::Keyboard::Numpad9)
+  {
+    char c = '0' + key - sf::Keyboard::Num0;
+    std::ostringstream oss;
+    oss << c << " (numpad)";
+    s = oss.str();
+  }
+  else if (key == sf::Keyboard::LControl) s = "Left Control";
+  else if (key == sf::Keyboard::LShift) s = "Left Shift";
+  else if (key == sf::Keyboard::LAlt) s = "Left Alt";
+  else if (key == sf::Keyboard::RControl) s = "Right Control";
+  else if (key == sf::Keyboard::RShift) s = "Right Shift";
+  else if (key == sf::Keyboard::RAlt) s = "Right Alt";
+  else if (key == sf::Keyboard::Space) s = "Space";
+  else if (key == sf::Keyboard::Tab) s = "Tab";
+  else if (key == sf::Keyboard::Left) s = "Left arrow";
+  else if (key == sf::Keyboard::Right) s = "Right arrow";
+  else if (key == sf::Keyboard::Up) s = "Up arrow";
+  else if (key == sf::Keyboard::Down) s = "Down arrow";
+
+  return s;
+}
+
 std::map<EnumWorldEvents, EnumMessages> eventToMessage =
 {
   { EventMeetRatsOrBats,      MsgInfoRatsBats },
@@ -1846,7 +1887,7 @@ void WitchBlastGame::renderMenu()
       std::ostringstream oss;
       oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menuKeyIndex == i) oss << tools::getLabel("key_configuration_insert");
-      else if (menuKeyIndex > i) oss << tools::getLabel("key_configuration_done");
+      else if (menuKeyIndex > i) oss << keyToString(input[i]);
       write(oss.str(), 16, xAlign, 285 + i * 28, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
