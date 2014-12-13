@@ -507,6 +507,7 @@ enum EnumMessages
   MsgInfoFranky,
 
   MsgTutoBasics,
+  MsgTutoTips,
   MsgTutoItems,
   MsgTutoShops,
   MsgTutoBossDoor,

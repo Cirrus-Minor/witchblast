@@ -430,7 +430,11 @@ void WitchBlastGame::startNewLevel()
   displayKilledEnemies();
 
   if (level <= 6) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
-  if (level == 1) testAndAddMessageToQueue(MsgTutoBasics);
+  if (level == 1)
+  {
+    testAndAddMessageToQueue(MsgTutoBasics);
+    testAndAddMessageToQueue(MsgTutoTips);
+  }
 
   playLevel(false);
 }
@@ -1388,19 +1392,19 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   rectangle.setOutlineColor(sf::Color(125, 100, 170));
   app->draw(rectangle);
 
-  write("Death certificate", 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+  write(tools::getLabel("dc_certificate"), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
 
   std::stringstream ss;
-  ss << "Killed by " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
-  ss << "Died on level " << level << " after " << (int)gameTime / 60 /*<< ":" << (int)gameTime % 60*/ << " min of game." << std::endl;
+  ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
+  ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << (int)gameTime / 60 << tools::getLabel("dc_after") << "." << std::endl;
 
   int bodyCount = 0;
   for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
     bodyCount += killedEnemies[enemyType];
 
-  ss << "Slayed monsters: " << bodyCount << std::endl;
-  ss << "Gold: " << player->getGold() << std::endl;
-  ss << "Completed challenges: " << challengeLevel - 1 << std::endl;
+  ss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount << std::endl;
+  ss << tools::getLabel("dc_gold") << ": " << player->getGold() << std::endl;
+  ss << tools::getLabel("dc_challenges") << ": " << challengeLevel - 1 << std::endl;
 
   write(ss.str(), 16, x + 112, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
 

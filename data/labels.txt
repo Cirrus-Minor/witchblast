@@ -283,6 +283,9 @@ tuto_reset#Tutorial reset
 tuto_reset_desc#Resets the tutorial
 msg_francky_0#The... Thing
 msg_francky_1#Yuk... It looks like made with various body parts !
+msg_tuto_tips_0#Tutorial: Tips
+msg_tuto_tips_1#Use Time Control (standard: RShift) to travel faster.
+msg_tuto_tips_2#Press [Enter] to close the message box immediately.
 menu_continue#Continue
 menu_continue_desc#Continue the game
 menu_save_quit#Save and quit
@@ -290,6 +293,14 @@ menu_save_quit_desc#Save and return to main screen
 menu_quit#Quit without saving
 menu_quit_desc#Return to main screen without saving
 inventory#Inventory
+dc_certificate#Death certificate
+dc_killed_by#Killed by
+dc_died_level#Died on level
+dc_after#after
+dc_minutes#min. of game
+dc_killed_monsters#Slayed monsters
+dc_gold#Gold
+dc_challenges#Completed challenges
 
 [french]
 start_new_game#Nouvelle partie
