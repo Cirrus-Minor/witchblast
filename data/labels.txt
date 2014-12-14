@@ -253,8 +253,8 @@ enemy_type_francky#the Thing
 enemy_type_himself#himself
 source_explosion#explosion
 source_poison#poison
-enemy_francky#the Thing
-enemy_francky_head#the Thing's head
+enemy_francky#The Thing
+enemy_francky_head#The Thing's head
 item_brooch_finesse#Brooch of finesse
 item_apple_green#Green apple
 item_apple_green_desc#Restores 3 HP and cures poison
