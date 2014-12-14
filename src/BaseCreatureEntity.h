@@ -43,9 +43,6 @@ enum enemyTypeEnum
   EnemyTypeRatKing,
   EnemyTypeSpiderGiant,
   EnemyTypeFrancky,
-  EnemyTypeFranckyHand,
-  EnemyTypeFranckyHead,
-  EnemyTypeFranckyFoot,
 
   // invocated
   EnemyTypeBat_invocated,
@@ -66,6 +63,10 @@ enum enemyTypeEnum
   EnemyTypeRockFalling,
   EnemyTypeRockMissile,
   EnemyTypeSpiderWeb,
+
+  EnemyTypeFranckyHead,
+  EnemyTypeFranckyHand,
+  EnemyTypeFranckyFoot,
 
   EnemyTypeNone,  // player of fairy
 
