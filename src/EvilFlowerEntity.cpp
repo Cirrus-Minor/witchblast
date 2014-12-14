@@ -35,8 +35,8 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
     deathFrame = FRAME_CORPSE_FLOWER_ICE;
 
     resistance[ResistanceFrozen] = ResistanceImmune;
-    resistance[ResistanceIce] = ResistanceHigh;
-    resistance[ResistanceFire] = ResistanceLow;
+    resistance[ResistanceIce] = ResistanceVeryHigh;
+    resistance[ResistanceFire] = ResistanceVeryLow;
   }
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;
