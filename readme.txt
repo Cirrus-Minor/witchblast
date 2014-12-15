@@ -65,6 +65,13 @@ Seby: code and music
 Vetea: 2D art
 R0d: particles system and multilingual support coding
 
+Music
+Marching United from JappeJ - http://jappejj.bandcamp.com/
+Fanatsy- Theme of Elvarim from SteveSyz - http://stevesyz.newgrounds.com/
+PubStomp Deluxe from CinTer - http://cinter.newgrounds.com/
+The Spider Machine from cazok - http://cazok.newgrounds.com/
+Under Siege from ET16 - http://et16.newgrounds.com/
+
 The sound used in the game come from:
 - http://www.freesound.org/
 - http://www.freesfx.co.uk/
@@ -120,6 +127,7 @@ Next release
 - MOD Witches and Flowers use ray casting to fire or not
 - MOD Cauldron + Witches only on rooms with walls
 - MOD Bats and little slime HP-
+- MOD "Elemental" monsters resistance or weakness increase
 - FIX Cyclops firing in the wall when too close to the north wall
 - FIX Items can fly a long time on the walls
 
