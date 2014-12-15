@@ -700,6 +700,8 @@ private:
   struct parameterStruct
   {
     int language;
+    int musicVolume;
+    int soundVolume;
   } parameters;
 
 

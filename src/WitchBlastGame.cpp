@@ -61,7 +61,7 @@
 
 #include <extlib/utf8/utf8.h>
 
-#define START_LEVEL 6
+//#define START_LEVEL 6
 
 static std::string intToString(int n)
 {
@@ -221,7 +221,10 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/francky_die.ogg",
   };
 
-  SoundManager::getInstance().setVolume(75);
+  parameters.musicVolume = 100;
+  parameters.soundVolume = 75;
+
+  SoundManager::getInstance().setVolume(parameters.soundVolume);
   for (const char *const filename : sounds)
   {
     SoundManager::getInstance().addSound(filename);
@@ -3048,7 +3051,11 @@ void WitchBlastGame::verifyDoorUnlocking()
 void WitchBlastGame::playMusic(musicEnum musicChoice)
 {
   music.stop();
+
+  if (parameters.musicVolume <= 0) return;
+
   music.setLoop(true);
+  music.setVolume(parameters.musicVolume);
   bool ok = false;
 
   switch (musicChoice)
@@ -3070,7 +3077,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   case MusicEnding:
     ok = music.openFromFile("media/sound/track_ending.ogg");
-    music.setVolume(35);
+    music.setVolume(parameters.musicVolume * 35 / 100);
     break;
 
   case MusicBoss:
@@ -3094,7 +3101,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   case MusicIntro:
     ok = music.openFromFile("media/sound/track_intro.ogg");
-    music.setVolume(90);
+    music.setVolume(parameters.musicVolume * 90 / 100);
     break;
   }
 
