@@ -61,7 +61,7 @@
 
 #include <extlib/utf8/utf8.h>
 
-//#define START_LEVEL 6
+#define START_LEVEL 6
 
 static std::string intToString(int n)
 {
@@ -221,6 +221,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/francky_die.ogg",
   };
 
+  SoundManager::getInstance().setVolume(75);
   for (const char *const filename : sounds)
   {
     SoundManager::getInstance().addSound(filename);
@@ -519,13 +520,17 @@ void WitchBlastGame::playLevel(bool isFight)
 
     for (auto monster: monsters_save)
       addMonster(monster.id, monster.x, monster.y);
+
+    if (currentMap->getRoomType() == roomTypeBoss) playMusic(MusicBoss);
+    else if (currentMap->getRoomType() == roomTypeChallenge) playMusic(MusicChallenge);
+    else playMusic(MusicDungeon);
   }
+  else
+    playMusic(MusicDungeon);
 
   // game time counter an state
   lastTime = getAbsolutTime();
   gameState = gameStatePlaying;
-
-  playMusic(MusicDungeon);
 
   // fade in
   xGame[xGameTypeFade].active = true;
@@ -1078,6 +1083,7 @@ void WitchBlastGame::updateRunningGame()
 
         // sound
         SoundManager::getInstance().playSound(SOUND_GONG);
+        playMusic(MusicDungeon);
 
         // text
         float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
@@ -1437,7 +1443,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
 
   std::stringstream ss;
   ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
-  ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << (int)gameTime / 60 << tools::getLabel("dc_after") << "." << std::endl;
+  ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << (int)gameTime / 60 << tools::getLabel("dc_minutes") << "." << std::endl;
 
   int bodyCount = 0;
   for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
@@ -2555,6 +2561,7 @@ void WitchBlastGame::generateMap()
                  OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
                  OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
+    playMusic(MusicChallenge);
   }
   else if (currentMap->getRoomType() == roomTypeBoss)
   {
@@ -3047,8 +3054,18 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
   switch (musicChoice)
   {
   case MusicDungeon:
-    ok = music.openFromFile("media/sound/track00.ogg");
-    music.setVolume(75);
+
+    if (rand() % 2 == 0)
+    {
+      std::cout << "media/sound/game_Fantasy_Theme_Of_Elvarim.ogg\n";
+      ok = music.openFromFile("media/sound/game_Fantasy_Theme_Of_Elvarim.ogg");
+    }
+    else
+    {
+      std::cout << "media/sound/game_Marching_United.ogg\n";
+      ok = music.openFromFile("media/sound/game_Marching_United.ogg");
+    }
+
     break;
 
   case MusicEnding:
@@ -3057,8 +3074,22 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
     break;
 
   case MusicBoss:
-    ok = music.openFromFile("media/sound/track_boss.ogg");
-    music.setVolume(90);
+    if (rand() % 2 == 0)
+    {
+      std::cout << "media/sound/boss_The_Spider_Machine.ogg\n";
+      ok = music.openFromFile("media/sound/boss_The_Spider_Machine.ogg");
+    }
+    else
+    {
+      std::cout << "media/sound/boss_Pub_Stomp_Deluxe.ogg\n";
+      ok = music.openFromFile("media/sound/boss_Pub_Stomp_Deluxe.ogg");
+    }
+
+    break;
+
+  case MusicChallenge:
+    std::cout << "media/sound/challenge_Four_Flights.ogg\n";
+    ok = music.openFromFile("media/sound/challenge_Under_Siege.ogg");
     break;
 
   case MusicIntro:
