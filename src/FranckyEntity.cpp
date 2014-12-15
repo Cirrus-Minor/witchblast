@@ -199,6 +199,7 @@ void FranckyEntity::dying()
   star->setType(ENTITY_EFFECT);
   star->setSpin(400.0f);
 
+  SoundManager::getInstance().playSound(SOUND_SLIME_SMASH);
   EnemyEntity::dying();
 }
 
