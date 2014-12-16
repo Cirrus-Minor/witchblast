@@ -356,6 +356,10 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   // cleaning all entities
   EntityManager::getInstance().clean();
 
+  // cleaning the message queue
+  std::queue<messageStruct> empty;
+  std::swap( messagesQueue, empty );
+
   // cleaning data
   if (miniMap != NULL) delete (miniMap);
   if (currentFloor != NULL) delete (currentFloor);
