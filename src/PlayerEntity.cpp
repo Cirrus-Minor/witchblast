@@ -392,15 +392,11 @@ void PlayerEntity::animate(float delay)
     }
   }
 
-  if (playerStatus == playerStatusDead)
+  if (playerStatus != playerStatusDead)
   {
-    z = OFFSET_Y - 2;
-  }
-  else
-  {
-    z = y + 17;
     if (invincibleDelay >= 0.0f) invincibleDelay -= delay;
   }
+  z = y + 17;
 }
 
 void PlayerEntity::renderPlayer(sf::RenderTarget* app)
