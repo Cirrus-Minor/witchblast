@@ -430,9 +430,17 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
     item_equip_enum item = getRandomEquipItem(false, false);
     player->acquireItem((enumItemType)(item + FirstEquipItem));
     player->acquireItemAfterStance();
+
     item = getRandomEquipItem(true, true);
     player->acquireItem((enumItemType)(item + FirstEquipItem));
     player->acquireItemAfterStance();
+
+    if (i % 2 == 0)
+    {
+      item = getRandomEquipItem(false, false);
+      player->acquireItem((enumItemType)(item + FirstEquipItem));
+      player->acquireItemAfterStance();
+    }
   }
   level++;
 
@@ -601,6 +609,8 @@ void WitchBlastGame::prepareIntro()
   gameState = gameStateIntro;
   gameTime = 0.0f;
   introSoundState = 0;
+
+  playMusic(MusicIntro);
 }
 
 void WitchBlastGame::updateIntro()
@@ -1730,7 +1740,6 @@ void WitchBlastGame::switchToMenu()
     menuFirst.index = 0;
     menuKeyIndex = 0;
   }
-  playMusic(MusicIntro);
 }
 
 void WitchBlastGame::updateMenu()
@@ -3068,43 +3077,38 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
     if (rand() % 2 == 0)
     {
-      std::cout << "media/sound/game_Fantasy_Theme_Of_Elvarim.ogg\n";
       ok = music.openFromFile("media/sound/game_Fantasy_Theme_Of_Elvarim.ogg");
     }
     else
     {
-      std::cout << "media/sound/game_Marching_United.ogg\n";
       ok = music.openFromFile("media/sound/game_Marching_United.ogg");
     }
 
     break;
 
   case MusicEnding:
-    ok = music.openFromFile("media/sound/track_ending.ogg");
-    music.setVolume(parameters.musicVolume * 35 / 100);
+    ok = music.openFromFile("media/sound/ending_Music_Is_His_Only_Friend.ogg");
+    music.setVolume(parameters.musicVolume * 90 / 100);
     break;
 
   case MusicBoss:
     if (rand() % 2 == 0)
     {
-      std::cout << "media/sound/boss_The_Spider_Machine.ogg\n";
       ok = music.openFromFile("media/sound/boss_The_Spider_Machine.ogg");
     }
     else
     {
-      std::cout << "media/sound/boss_Pub_Stomp_Deluxe.ogg\n";
       ok = music.openFromFile("media/sound/boss_Pub_Stomp_Deluxe.ogg");
     }
 
     break;
 
   case MusicChallenge:
-    std::cout << "media/sound/challenge_Four_Flights.ogg\n";
     ok = music.openFromFile("media/sound/challenge_Under_Siege.ogg");
     break;
 
   case MusicIntro:
-    ok = music.openFromFile("media/sound/track_intro.ogg");
+    ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
     music.setVolume(parameters.musicVolume * 90 / 100);
     break;
   }

@@ -66,6 +66,8 @@ Vetea: 2D art
 R0d: particles system and multilingual support coding
 
 Music
+Our Ship To Candletown from Michael Ghelfi - https://www.youtube.com/user/MichaelGhelfi
+Music Is His Only Friend from Michael Ghelfi
 Marching United from JappeJ - http://jappejj.bandcamp.com/
 Fanatsy- Theme of Elvarim from SteveSyz - http://stevesyz.newgrounds.com/
 PubStomp Deluxe from CinTer - http://cinter.newgrounds.com/
