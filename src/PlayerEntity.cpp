@@ -1210,8 +1210,6 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
-  if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamagesBonus -= 0.35f;
-  else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamagesBonus -= 0.25f;
   if (equip[EQUIP_BROOCH_FINESSE]) criticalChance += 5;
   if (equip[EQUIP_MANUAL_STAFF]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
@@ -1245,6 +1243,10 @@ void PlayerEntity::computePlayer()
   }
   if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
   else if (getShotType() == ShotTypeFire) fireDamages *= FIRE_DAMAGE_INCREASE[getShotLevel()];
+
+  // post-computation
+  if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamages *= 0.65f;
+  else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamages *= 0.75f;
 
   // spells
   if (protection.active) armor += protection.value;
