@@ -3088,7 +3088,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   case MusicEnding:
     ok = music.openFromFile("media/sound/ending_Music_Is_His_Only_Friend.ogg");
-    music.setVolume(parameters.musicVolume * 90 / 100);
+    music.setVolume(parameters.musicVolume * 50 / 100);
     break;
 
   case MusicBoss:
@@ -3109,7 +3109,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   case MusicIntro:
     ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
-    music.setVolume(parameters.musicVolume * 90 / 100);
+    music.setVolume(parameters.musicVolume * 60 / 100);
     break;
   }
 
