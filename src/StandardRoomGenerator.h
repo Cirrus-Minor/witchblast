@@ -434,6 +434,7 @@ void generateStandardRoom(int level)
     case 4: generateStandardRoom04(); break;
     case 5: generateStandardRoom05(); break;
     case 6: generateStandardRoom06(); break;
+
     default: generateStandardRoom06(); break;
   }
 }

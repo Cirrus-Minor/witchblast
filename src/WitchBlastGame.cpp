@@ -2619,11 +2619,21 @@ void WitchBlastGame::generateMap()
       findPlaceMonsters(EnemyTypeRat, 2);
       findPlaceMonsters(EnemyTypeBat, 2);
     }
-    else
+    else if (level < 6)
     {
       findPlaceMonsters(EnemyTypeRat, 5);
       findPlaceMonsters(EnemyTypeBat, 5);
       for (int i = 2; i < level; i++)
+      {
+        if (rand()%2 == 0)findPlaceMonsters(EnemyTypeImpBlue, 1);
+        else findPlaceMonsters(EnemyTypeImpRed, 1);
+      }
+    }
+    else
+    {
+      findPlaceMonsters(EnemyTypeZombie, 5);
+      findPlaceMonsters(EnemyTypeBat, 5);
+      for (int i = 5; i < level; i++)
       {
         if (rand()%2 == 0)findPlaceMonsters(EnemyTypeImpBlue, 1);
         else findPlaceMonsters(EnemyTypeImpRed, 1);
