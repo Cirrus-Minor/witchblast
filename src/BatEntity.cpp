@@ -60,10 +60,10 @@ void BatEntity::animate(float delay)
 
 void BatEntity::calculateBB()
 {
-    boundingBox.left = (int)x - 12;
-    boundingBox.width = 24;
-    boundingBox.top = (int)y - 8;
-    boundingBox.height =  22;
+    boundingBox.left = (int)x - 16;
+    boundingBox.width = 32;
+    boundingBox.top = (int)y - 10;
+    boundingBox.height =  25;
 }
 
 void BatEntity::collideMapRight()
