@@ -1855,6 +1855,7 @@ void WitchBlastGame::updateMenu()
             break;
           case MenuTutoReset:
             for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
+            SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
             break;
           case MenuConfigBack:
             menuState = MenuStateMain;
