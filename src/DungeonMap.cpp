@@ -856,25 +856,46 @@ void DungeonMap::generateCorridors()
         {
           if (j == 0 || getTile(i, j - 1) == MAP_WALL_X) map[i][j] = MAP_WALL_7;
           else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X) map[i][j] = MAP_WALL_1;
-          else map[i][j] = MAP_WALL_4;
+          else
+          {
+            if (j < MAP_HEIGHT / 2) map[i][j] = MAP_WALL_47;
+            else if (j > MAP_HEIGHT / 2) map[i][j] = MAP_WALL_41;
+            else map[i][j] = MAP_WALL_4;
+          }
+
         }
         else if (getTile(i + 1, j) == MAP_WALL_X)
         {
           if (j == 0 || getTile(i, j - 1) == MAP_WALL_X) map[i][j] = MAP_WALL_9;
           else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X) map[i][j] = MAP_WALL_3;
-          else map[i][j] = MAP_WALL_6;
+          else
+          {
+            if (j < MAP_HEIGHT / 2) map[i][j] = MAP_WALL_69;
+            else if (j > MAP_HEIGHT / 2) map[i][j] = MAP_WALL_63;
+            else map[i][j] = MAP_WALL_6;
+          }
         }
         else if (getTile(i, j - 1) == MAP_WALL_X)
         {
           if (i == 0) map[i][j] = MAP_WALL_7;
           else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_9;
-          else map[i][j] = MAP_WALL_8;
+          else
+          {
+            if (i < MAP_WIDTH / 2) map[i][j] = MAP_WALL_87;
+            else if (i > MAP_WIDTH / 2) map[i][j] = MAP_WALL_89;
+            else map[i][j] = MAP_WALL_8;
+          }
         }
         else if (getTile(i, j + 1) == MAP_WALL_X)
         {
           if (i == 0) map[i][j] = MAP_WALL_1;
           else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_3;
-          else map[i][j] = MAP_WALL_2;
+          else
+          {
+            if (i < MAP_WIDTH / 2) map[i][j] = MAP_WALL_21;
+            else if (i > MAP_WIDTH / 2) map[i][j] = MAP_WALL_23;
+            else map[i][j] = MAP_WALL_2;
+          }
         }
       }
     }
