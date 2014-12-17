@@ -79,6 +79,11 @@ The sound used in the game come from:
 - http://www.freesfx.co.uk/
 - http://www.universal-soundbank.com/
 
+Licenses
+--------
+Code: GPLv3
+Art (2D and music): CC BY-NC-SA
+
 Thanks
 --------
 Thanks to

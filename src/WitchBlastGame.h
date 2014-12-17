@@ -61,6 +61,35 @@ const std::string inputKeyString[NumberKeys] =
   "key_fire"
 };
 
+const std::string creditsCode[]  =
+{
+  "Seby",
+  "END"
+};
+const std::string credits2D[]  =
+{
+  "Vetea",
+  "Pierre",
+  "END"
+};
+const std::string creditsSound[]  =
+{
+  "www.freesound.org/",
+  "www.freesfx.co.uk/",
+  "www.universal-soundbank.com/",
+  "END"
+};
+const std::string creditsMusic[]  =
+{
+  "Michael Ghelfi",
+  "JappeJ",
+  "SteveSyz",
+  "CinTer",
+  "cazok",
+  "ET16",
+  "END"
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -617,6 +646,11 @@ private:
   void renderIntro();
 
   /*!
+   *  \brief Render the credits screen
+   */
+  void renderCredits();
+
+  /*!
    *  \brief Render the death screen (when the player dies)
    */
   void renderDeathScreen();
@@ -634,6 +668,7 @@ private:
     MenuTutoReset,    /**< Reset the tutorials */
     MenuLanguage,     /**< When configuring the language */
     MenuExit,         /**< When exiting the game */
+    MenuCredits,      /**< Display the credits screen */
 
     MenuContinue,     /**< Continue the game */
     MenuSaveAndQuit,  /**< Save and return to main */
@@ -647,6 +682,7 @@ private:
     MenuStateMain,
     MenuStateConfig,
     MenuStateKeys,
+    MenuStateCredits,
     MenuStateFirst    /**< First time, we choose language and keyboard */
   };
   menuStateEnum menuState;

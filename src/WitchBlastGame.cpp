@@ -222,7 +222,7 @@ WitchBlastGame::WitchBlastGame():
   };
 
   parameters.musicVolume = 100;
-  parameters.soundVolume = 75;
+  parameters.soundVolume = 80;
 
   SoundManager::getInstance().setVolume(parameters.soundVolume);
   for (const char *const filename : sounds)
@@ -806,6 +806,7 @@ void WitchBlastGame::updateRunningGame()
         case MenuTutoReset:
         case MenuConfigBack:
         case MenuLanguage:
+        case MenuCredits:
           std::cout << "[ERROR] Bad Menu ID\n";
           break;
 
@@ -1787,7 +1788,7 @@ void WitchBlastGame::updateMenu()
     {
       if (event.key.code == sf::Keyboard::Escape)
       {
-        if (menuState == MenuStateConfig) menuState = MenuStateMain;
+        if (menuState == MenuStateConfig || menuState == MenuStateCredits) menuState = MenuStateMain;
         else app->close();
       }
       else if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
@@ -1830,42 +1831,49 @@ void WitchBlastGame::updateMenu()
       }
       else if (event.key.code == sf::Keyboard::Return)
       {
-        switch (menu->items[menu->index].id)
+        if (menuState == MenuStateCredits) menuState = MenuStateMain;
+        else
         {
-        case MenuStartNew:
-          startNewGame(false);
-          remove(SAVE_FILE.c_str());
-          break;
-        case MenuStartOld:
-          startNewGame(true);
-          break;
-        case MenuKeys:
-          menuState = MenuStateKeys;
-          menuKeyIndex = 0;
-          break;
-        case MenuConfig:
-          menuState = MenuStateConfig;
-          break;
-        case MenuTutoReset:
-          for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
-          break;
-        case MenuConfigBack:
-          menuState = MenuStateMain;
-          break;
-        case MenuLanguage:
-          if (menuState == MenuStateFirst)
+          switch (menu->items[menu->index].id)
           {
-            registerLanguage();
+          case MenuStartNew:
+            startNewGame(false);
+            remove(SAVE_FILE.c_str());
+            break;
+          case MenuStartOld:
+            startNewGame(true);
+            break;
+          case MenuKeys:
+            menuState = MenuStateKeys;
+            menuKeyIndex = 0;
+            break;
+          case MenuCredits:
+            menuState = MenuStateCredits;
+            break;
+          case MenuConfig:
+            menuState = MenuStateConfig;
+            break;
+          case MenuTutoReset:
+            for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
+            break;
+          case MenuConfigBack:
             menuState = MenuStateMain;
+            break;
+          case MenuLanguage:
+            if (menuState == MenuStateFirst)
+            {
+              registerLanguage();
+              menuState = MenuStateMain;
+            }
+            break;
+          case MenuExit:
+            app->close();
+            break;
+          case MenuContinue:
+          case MenuSaveAndQuit:
+            std::cout << "[ERROR] Bad Menu ID\n";
+            break;
           }
-          break;
-        case MenuExit:
-          app->close();
-          break;
-                case MenuContinue:
-        case MenuSaveAndQuit:
-          std::cout << "[ERROR] Bad Menu ID\n";
-          break;
         }
       }
     }
@@ -1874,6 +1882,12 @@ void WitchBlastGame::updateMenu()
 
 void WitchBlastGame::renderMenu()
 {
+  if (menuState == MenuStateCredits)
+  {
+    renderCredits();
+    return;
+  }
+
   sf::Sprite bgSprite;
   bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
   app->draw(bgSprite);
@@ -1893,6 +1907,7 @@ void WitchBlastGame::renderMenu()
     menu = &menuFirst;
 
   int xAlign = 290;
+  int yStep = 80;
 
   if (menuState == MenuStateKeys)
   {
@@ -1926,7 +1941,7 @@ void WitchBlastGame::renderMenu()
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
         fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
-        fairySprite.setPosition(xAlign - 60, 250 + i * 90 + 5 * cos( 6 * getAbsolutTime()));
+        fairySprite.setPosition(xAlign - 60, 250 + i * yStep + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
       else itemColor = sf::Color(120, 120, 120, 255);
@@ -1939,8 +1954,8 @@ void WitchBlastGame::renderMenu()
         label = oss.str();
       }
 
-      write(label, 23, xAlign, 260 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu->items[i].description, 15, xAlign, 260 + i * 90 + 40, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(label, 23, xAlign, 260 + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(menu->items[i].description, 15, xAlign, 260 + i * yStep + 38, ALIGN_LEFT, itemColor, app, 0, 0);
     }
 
     // Keys
@@ -1971,6 +1986,93 @@ void WitchBlastGame::renderMenu()
   std::ostringstream oss;
   oss << APP_NAME << " v" << APP_VERSION << "  - 2014 - " << " Seby (code), Vetea (2D art)";
   write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+}
+
+void WitchBlastGame::renderCredits()
+{
+  sf::Sprite bgSprite;
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  app->draw(bgSprite);
+
+  // title
+  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
+  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+
+  // credits
+  write("Credits", 30, 485, 230, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+
+  /*std::stringstream creditsLeft;
+  creditsLeft << " * CODE *" << std::endl;
+  creditsLeft << "Seby" << std::endl << std::endl;
+  creditsLeft << " * 2d ART *" << std::endl;
+  creditsLeft << "Vetea" << std::endl;
+  creditsLeft << "Pierre (intro background, \nthe Thing, bubbles)" << std::endl;
+
+  std::stringstream creditsRight;
+  creditsRight << " * MUSIC *" << std::endl;
+  creditsRight << "Michael Ghelfi" << std::endl;
+  creditsRight << "JappeJ" << std::endl;
+  creditsRight << "SteveSyz" << std::endl;
+  creditsRight << "CinTer" << std::endl;
+  creditsRight << "cazok" << std::endl;
+  creditsRight << "ET16" << std::endl;
+
+  write(creditsLeft.str(), 18, 20, 280, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+  write(creditsRight.str(), 18, 400, 280, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);*/
+
+  int yCursorInit = 340;
+  int yStep = 30;
+  int xLeft = 30;
+  int xRight = 470;
+  int xMarging = 20;
+
+  int yCursor = yCursorInit;
+  write("Code", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  yCursor += yStep;
+  int i = 0;
+  while (creditsCode[i] != "END")
+  {
+    write(creditsCode[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    yCursor += yStep;
+    i++;
+  }
+  yCursor += yStep;
+
+  write("2D Art", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  yCursor += yStep;
+  i = 0;
+  while (credits2D[i] != "END")
+  {
+    write(credits2D[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    yCursor += yStep;
+    i++;
+  }
+  yCursor += yStep;
+
+  write("Sound", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  yCursor += yStep;
+  i = 0;
+  while (creditsSound[i] != "END")
+  {
+    write(creditsSound[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    yCursor += yStep;
+    i++;
+  }
+  yCursor += yStep;
+
+
+  ////// RIGHT
+
+  yCursor = yCursorInit + yStep;
+  write("Music", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  yCursor += yStep;
+  i = 0;
+  while (creditsMusic[i] != "END")
+  {
+    write(creditsMusic[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    yCursor += yStep;
+    i++;
+  }
 }
 
 void WitchBlastGame::renderInGameMenu()
@@ -3722,6 +3824,12 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemExit.description = tools::getLabel("return_to_desktop");
   itemExit.id = MenuExit;
   menuMain.items.push_back(itemExit);
+
+  menuItemStuct itemCredits;
+  itemCredits.label = "Credits";
+  itemCredits.description = "";
+  itemCredits.id = MenuCredits;
+  menuMain.items.push_back(itemCredits);
 
   // configuration
   menuItemStuct itemKeys;
