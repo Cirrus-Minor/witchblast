@@ -118,6 +118,7 @@ Next release
 - ADD In-fight save game
 - ADD Mouse right click support (spell)
 - ADD Show selected key in key configuration
+- ADD Credits screen
 - MOD Game is faster now
 - MOD Standard Rat IA changes (rats now move in 4 directions)
 - MOD Frozen dividing bubbles generate frozen "children" bubbles
@@ -135,8 +136,10 @@ Next release
 - MOD Cauldron + Witches only on rooms with walls
 - MOD Bats and little slime HP-
 - MOD "Elemental" monsters resistance or weakness increase
+- MOD Double and triple quick shots don't do so much damage when cumulated with damage items
 - FIX Cyclops firing in the wall when too close to the north wall
 - FIX Items can fly a long time on the walls
+- FIX Clean message queue while starting a new game
 
 v0.3.7
 - ADD New monsters (snakes)
