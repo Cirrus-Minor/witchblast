@@ -18,7 +18,7 @@ FranckyEntity::FranckyEntity(float x, float y)
   height = 192;
   creatureSpeed = 140;
   velocity = Vector2D(creatureSpeed);
-  hp = 800;
+  hp = 900;
   hpDisplay = hp;
   hpMax = hp;
   meleeDamages = 16;
@@ -326,7 +326,7 @@ FranckyEntityHead::FranckyEntityHead(float x, float y)
 {
   creatureSpeed = 0.0f;
   velocity = Vector2D(0.0f, 0.0f);
-  hp = 120;
+  hp = 150;
   hpMax = hp;
   hpDisplay = hp;
   meleeDamages = 5;
