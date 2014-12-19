@@ -98,7 +98,7 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next release
+v0.4.0
 - ADD New level
 - ADD New monsters
 - ADD New items
