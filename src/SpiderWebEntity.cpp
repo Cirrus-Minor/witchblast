@@ -131,24 +131,7 @@ void SpiderWebEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       else if (!isFromPlayer && boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
       {
-        float xs = (x + boltEntity->getX()) / 2;
-        float ys = (y + boltEntity->getY()) / 2;
-
-        boltEntity->collide();
-
-        // TODO
-        hurt(getHurtParams(
-          boltEntity->getDamages(), boltEntity->getBoltType(), boltEntity->getLevel(), boltEntity->isCritical(),
-          SourceTypeBolt, EnemyTypeNone, boltEntity->getGoThrough()));
-        if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
-        SoundManager::getInstance().playSound(SOUND_IMPACT);
-
-        SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
-        star->setFading(true);
-        star->setZ(y+ 100);
-        star->setLifetime(0.7f);
-        star->setType(ENTITY_EFFECT);
-        star->setSpin(400.0f);
+        EnemyEntity::collideWithBolt(boltEntity);
       }
     }
     else // collision with other enemy ?
