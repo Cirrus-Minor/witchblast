@@ -718,7 +718,7 @@ item_ring_illusion#Quartz Ring
 item_ring_illusion_desc#Erhöht die Illusionskraft
 item_spell_triple#Zauber : Dreifacher Schuss
 item_spell_triple_desc#Schießt drei Schüsse
-item_brooch_finesse#Stern Brosche
+item_brooch_finesse#Brosche der Raffinesse
 item_brooch_finesse_desc#Kritische Trefferchance (x2)
 item_fairy_fire#Alicia-Fee
 item_fairy_fire_desc#Hilft dir im Verlies
@@ -824,6 +824,91 @@ msg_tuto_spell_0#Tutorial: Zauber
 msg_tuto_spell_1#Du hast einen magischen Zauber gefunden.
 msg_tuto_spell_2#Drücke die Zaubertaste (Standard: Leertaste), um einen Zauber zu beschwören.
 
+enemy_type_bat#eine Fledermaus
+enemy_type_rat#eine Ratte
+enemy_type_rat_black#eine schwarze Ratte
+enemy_type_rat_helmet#eine Ratte mit Helm
+enemy_type_rat_black_helmet#eine schwarze Ratte mit Helm
+enemy_type_evil_flower#eine böse Blume
+enemy_type_evil_flower_ice#eine böse Edelweiß
+enemy_type_snake#eine Schlange
+enemy_type_snake_blood#eine Blutschlange
+enemy_type_slime#ein Schleim
+enemy_type_slime_red#ein roter Schleim
+enemy_type_slime_blue#ein blauer Schleim
+enemy_type_slime_violet#ein violetter Schleim
+enemy_type_imp_blue#ein blauer Imp
+enemy_type_imp_red#ein roter Imp
+enemy_type_pumpkin#ein verrückter Kürbis
+enemy_type_witch#eine Hexe
+enemy_type_witch_red#eine rote Hexe
+enemy_type_cauldron#ein großer Kessel
+enemy_type_bubble#eine Blase
+enemy_type_boss_butcher#der Schweinemetzger
+enemy_type_boss_slime_giant#der Gigantische Schleim
+enemy_type_boss_cyclops#der Barbarische Zyklop
+enemy_type_boss_rat_king#der Werrattenkönig
+enemy_type_boss_spider_giant#die Gigantische Spinne
+enemy_type_green_rat#eine grüne Ratte
+enemy_type_rock_falling#ein fallender Fels
+enemy_type_rock_missile#ein geworfener Fels
+enemy_type_spider_egg#ein fallendes Spinnenei
+enemy_type_spider_little#eine Spinne
+enemy_type_spider_web#ein Spinnennetz
+enemy_type_ghost#ein Geist
+enemy_type_zombie#ein Zombie
+enemy_type_zombie_dark#ein dunkler Zombie
+enemy_type_francky#das Ding
+enemy_type_himself#selbst
+source_explosion#Explosion
+source_poison#Gift
+enemy_francky#Das Ding
+enemy_francky_head#Ding's Kopf
+item_apple_green#Grüner Apfel
+item_apple_green_desc#Regeneriert 3 TP und heilt Vergiftungen
+item_manual_slime#Handbuch der Schleimbeherrschung
+item_manual_slime_desc#Schleime zielen nicht mehr auf dich
+item_spell_dual_quick#Zauberbuch der schnellen Doppelschüsse
+item_spell_dual_quick_desc#Schießt zwei Schüsse (schnell)
+item_spell_triple_quick#Zauberbuch der schnellen Dreifachschüsse
+item_spell_triple_quick_desc#Schießt drei Schüsse (schnell)
+item_manual_health#Gesundheitshandbuch
+item_manual_health_desc#Gesunde Gegenstände bringen mehr TP
+item_rear_shot#Mitarbeiter Kappe
+item_rear_shot_desc#Schießt einen Rückwärtsschuss
+item_book_random_shot#Zauberbuch der Zufallschüsse
+item_book_random_shot_desc#Schießt einen Schuss in eine zufällige Richtung
+item_spell_web#Zauber: Spinnennetz
+item_spell_web_desc#Zaubere um ein Spinnennetz zu werfen
+item_book_magic_i#Zauberbuch - Wälzer I
+item_book_magic_i_desc#Verringert die Abklingzeit der Zauber
+item_book_magic_ii#Zauberbuch - Wälzer II
+item_book_magic_ii_desc#Erhöht die Kraft der Zauber
+item_sulfur#Schwefel
+item_sulfur_desc#Kann Leichen zum Explodieren bringen
+spell_web#Spinnennetz
+tuto_reset#Tutorial zurücksetzen
+tuto_reset_desc#Setzt das Tutorial zurück
+msg_francky_0#Das... Ding
+msg_francky_1#Ihh... Es sieht aus als wäre es aus verschiedenen Körperteilen gemacht !
+msg_tuto_tips_0#Tutorial: Tipps
+msg_tuto_tips_1#Benutze die Zeitkontrolle (Standard: RShift) um schneller zu reisen.
+msg_tuto_tips_2#Drücke [Enter] um Nachrichtenboxen sofort zu schließen.
+menu_continue#Fortfahren
+menu_continue_desc#Mit dem Spiel fortfahren
+menu_save_quit#Speichern und beenden
+menu_save_quit_desc#Speichern und zum Hauptbildschirm zurückkehren
+menu_quit#Beenden ohne speichern
+menu_quit_desc#Zum Hauptbildschirm zurückkehren ohne speichern
+inventory#Inventar
+dc_certificate#Todeszertifikat
+dc_killed_by#Getötet hat dich
+dc_died_level#Gestorben auf Level
+dc_after#nach
+dc_minutes#Min. vom Spiel
+dc_killed_monsters#Besiegte Monster
+dc_gold#Gold
+dc_challenges#Abgeschlossene Herausforderungen
 [spanish]
 start_new_game#Empezar nueva partida
 start_desc#La partida anterior se perderá
