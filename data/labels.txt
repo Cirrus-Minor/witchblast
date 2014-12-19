@@ -326,7 +326,7 @@ key_fire_down#Tir bas
 key_fire_left#Tir gauche
 key_fire_right#Tir droite
 key_fire_select#Sélecteur de tir
-key_time#Accélerer le temps
+key_time#Accélérer le temps
 key_fire#Tir (un bouton)
 key_spell#Lancer un sort
 configure_game#Configuration
@@ -351,7 +351,7 @@ congratulations_3#A bientôt pour de nouvelles aventures !
 by#par
 critical#CRITIQUE X2
 poison#POISON
-merchant_speech_0#Les meilleurs affaires du donjon !
+merchant_speech_0#Les meilleures affaires du donjon !
 merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
 merchant_speech_2#Jetez un oeil à nos produits !
 enemy_butcher#Boucher porcin
@@ -436,7 +436,7 @@ item_spell_slime_explode_desc#Invoque un slime explosif
 item_spell_fireball#Sort: Boule de feu
 item_spell_fireball_desc#Envoie une boule de feu
 item_spell_freeze#Sort: Geler monstres
-item_spell_freeze_desc#Gele les monstres
+item_spell_freeze_desc#Gèle les monstres
 item_spell_earthquake#Sort: Séisme
 item_spell_earthquake_desc#Fait trembler le donjon
 item_spell_protection#Sort: Protection
@@ -560,7 +560,7 @@ enemy_francky#La Chose
 enemy_francky_head#La tête de la Chose
 item_apple_green#Pomme verte
 item_apple_green_desc#Guérit le poison et 3 PV
-item_manual_slime#Manuel de maitrise des slimes
+item_manual_slime#Manuel de maîtrise  des slimes
 item_manual_slime_desc#Les slimes ne vous visent plus
 item_spell_dual_quick#Sort: Double-tir (rapide)
 item_spell_dual_quick_desc#Tire deux projectiles (rapide)
