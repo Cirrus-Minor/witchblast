@@ -342,6 +342,16 @@ keys_fire#tirer
 keys_select_1#sélecteur
 keys_select_2#de tir
 keys_time#accélerer
+tuto_reset#RAZ des tutoriels
+tuto_reset_desc#Réinitialisation des tutoriels
+menu_continue#Continuer
+menu_continue_desc#Continuer le jeu
+menu_save_quit#Sauvegarder et quitter
+menu_save_quit_desc#Sauvegarder et retourner au menu principal
+menu_quit#Quitter sans sauvegarder
+menu_quit_desc#Retourner au menu principal sans sauvegarder
+inventory#Equipement
+
 play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
 items_found#Objets
 monsters_killed#Monstres
@@ -359,6 +369,8 @@ enemy_giant_slime#Slime géant
 enemy_cyclops#Cyclope barbare
 enemy_rat_king#Roi des Rats-garous
 enemy_giant_spider#Araignée géante
+enemy_francky#La Chose
+enemy_francky_head#La tête de la Chose
 item_copper#Pièce de cuivre
 item_copper_desc#Une pièce de cuivre (1)
 item_silver#Pièce d'argent
@@ -371,6 +383,8 @@ item_elven_cookie#Biscuit elfique
 item_elven_cookie_desc#Guérit et augmente les PV
 item_apple#Pomme
 item_apple_desc#Guérit 3 PV
+item_apple_green#Pomme verte
+item_apple_green_desc#Guérit le poison et 3 PV
 item_bread#Pain
 item_bread_desc#Guérit 7 HP
 item_cheese#Fromage
@@ -441,12 +455,33 @@ item_spell_earthquake#Sort: Séisme
 item_spell_earthquake_desc#Fait trembler le donjon
 item_spell_protection#Sort: Protection
 item_spell_protection_desc#Invoque un bouclier magique
+item_manual_slime#Manuel de maîtrise  des slimes
+item_manual_slime_desc#Les slimes ne vous visent plus
+item_spell_dual_quick#Sort: Double-tir (rapide)
+item_spell_dual_quick_desc#Tire deux projectiles (rapide)
+item_spell_triple_quick#Sort: Triple-tir (rapide)
+item_spell_triple_quick_desc#Tire trois projectiles (rapide)
+item_manual_health#Manuel de santé
+item_manual_health_desc#Gain de PV augmenté
+item_rear_shot#Embout de bâton
+item_rear_shot_desc#Tir arrière
+item_book_random_shot#Sort: Tir aléatoire
+item_book_random_shot_desc#Tire dans une direction aléatoire
+item_spell_web#Sort: Toile d'araignée
+item_spell_web_desc#Tire des toiles d'araignée
+item_book_magic_i#Grimoire - Tome I
+item_book_magic_i_desc#Réduit le délai entre deux sorts
+item_book_magic_ii#Grimoire - Tome II
+item_book_magic_ii_desc#Augmente la puissance du sort
+item_sulfur#Soufre
+item_sulfur_desc#Chance de faire exploser les cadavres
 spell_teleport#téléportation
 spell_slime_explode#invoquer slime
 spell_fireball#boule de feu
 spell_freeze#geler monstres
 spell_earthquake#séisme
 spell_protection#protection
+spell_web#toile d'araignée
 msg_level1_0#Votre quête commence !
 msg_level1_1#"Les sorcières ont enlevé la fille de l'Archimage.
 msg_level1_2#Je dois descendre dans leur antre et la secourir !"
@@ -517,6 +552,11 @@ msg_tuto_shots_2#Appuyez sur [sélection de tir] (standard: tab) pour changer de
 msg_tuto_spell_0#Tutorial: Magie
 msg_tuto_spell_1#Vous avez trouvé un nouveau sort.
 msg_tuto_spell_2#Appuyez sur la touche de sort (standard: espace) pour le lancer.
+msg_francky_0#La... Chose
+msg_francky_1#Beurk... Il a l'air "fabriqué" à partir de morceaux de cadavres !
+msg_tuto_tips_0#Tutoriel: Astuces
+msg_tuto_tips_1#Le contrôle du temps (standard: Shift droit) permet de se déplacer plus vite.
+msg_tuto_tips_2#Appuyez sur [Enter] pour fermer les boites de message.
 
 enemy_type_bat#une chauve-souris
 enemy_type_rat#un rat
@@ -556,45 +596,7 @@ enemy_type_francky#la Chose
 enemy_type_himself#lui-même
 source_explosion#une explosion
 source_poison#du poison
-enemy_francky#La Chose
-enemy_francky_head#La tête de la Chose
-item_apple_green#Pomme verte
-item_apple_green_desc#Guérit le poison et 3 PV
-item_manual_slime#Manuel de maîtrise  des slimes
-item_manual_slime_desc#Les slimes ne vous visent plus
-item_spell_dual_quick#Sort: Double-tir (rapide)
-item_spell_dual_quick_desc#Tire deux projectiles (rapide)
-item_spell_triple_quick#Sort: Triple-tir (rapide)
-item_spell_triple_quick_desc#Tire trois projectiles (rapide)
-item_manual_health#Manuel de santé
-item_manual_health_desc#Gain de PV augmenté
-item_rear_shot#Embout de bâton
-item_rear_shot_desc#Tir arrière
-item_book_random_shot#Sort: Tir aléatoire
-item_book_random_shot_desc#Tire dans une direction aléatoire
-item_spell_web#Sort: Toile d'araignée
-item_spell_web_desc#Tire des toiles d'araignée
-item_book_magic_i#Grimoire - Tome I
-item_book_magic_i_desc#Réduit le délai entre deux sorts
-item_book_magic_ii#Grimoire - Tome II
-item_book_magic_ii_desc#Augmente la puissance du sort
-item_sulfur#Soufre
-item_sulfur_desc#Chance de faire exploser les cadavres
-spell_web#toile d'araignée
-tuto_reset#RAZ des tutoriels
-tuto_reset_desc#Réinitialisation des tutoriels
-msg_francky_0#La... Chose
-msg_francky_1#Beurk... Il a l'air "fabriqué" à partir de morceaux de cadavres !
-msg_tuto_tips_0#Tutoriel: Astuces
-msg_tuto_tips_1#Le contrôle du temps (standard: Shift droit) permet de se déplacer plus vite.
-msg_tuto_tips_2#Appuyez sur [Enter] pour fermer les boites de message.
-menu_continue#Continuer
-menu_continue_desc#Continuer le jeu
-menu_save_quit#Sauvegarder et quitter
-menu_save_quit_desc#Sauvegarder et retourner au menu principal
-menu_quit#Quitter sans sauvegarder
-menu_quit_desc#Retourner au menu principal sans sauvegarder
-inventory#Equipement
+
 dc_certificate#Certificat de décès
 dc_killed_by#Tué par
 dc_died_level#Mort au niveau
@@ -1173,7 +1175,7 @@ monsters_killed#Монстры
 congratulations_1#ПОЗДРАВЛЯЕМ !
 congratulations_2#Вы прошли демо и победили всех боссов !
 congratulations_3#Скоро увидимся с новыми приключениями !
-by#by
+by#
 critical#КРИТИЧЕСКИЙ УДАР X2
 poison#ЯД
 merchant_speech_0#Лучшие цены во всем подземелье!
@@ -1216,7 +1218,7 @@ item_staff#Посох красного дерева
 item_staff_desc#Увеличивает скорость снаряда и урон
 item_fairy#Фея Лилли
 item_fairy_desc#Помогает вам в подземелье
-item_leather_belt#Коданый ремень
+item_leather_belt#Кожаный ремень
 item_leather_belt_desc#Увеличивает скорость стрельбы
 item_blood_snake#Кровавый змей
 item_blood_snake_desc#Увеличивает урон
@@ -1240,7 +1242,7 @@ item_ring_illusion#Кольцо с кварцем
 item_ring_illusion_desc#Увеличивает силу иллюзий
 item_spell_triple#Заклинание : Тройной выстрел
 item_spell_triple_desc#Позволяет стрелять тройным снарядом
-item_brooch_finesse#Нагрудная звезда
+item_brooch_finesse#Брошь изящества
 item_brooch_finesse_desc#Шанс критического попадания (x2)
 item_fairy_fire#Фея Алиса
 item_fairy_fire_desc#Помогает вам в подземелье
@@ -1342,3 +1344,89 @@ msg_tuto_shots_2#Нажмите [выбор оружия] (по умолчани
 msg_tuto_spell_0#Обучение: Заклинания
 msg_tuto_spell_1#Вы нашли магическое заклинание.
 msg_tuto_spell_2#Нажмите на клавишу заклинания (по умолчанию: space) чтобы произнести его.
+enemy_type_bat#летучей мышью
+enemy_type_rat#крысой
+enemy_type_rat_black#черной крысой
+enemy_type_rat_helmet#крысой в шлеме
+enemy_type_rat_black_helmet#черной крысой в шлеме
+enemy_type_evil_flower#цветком зла
+enemy_type_evil_flower_ice#эдельвейсом зла
+enemy_type_snake#змеей
+enemy_type_snake_blood#змеей крови
+enemy_type_slime#слизнем
+enemy_type_slime_red#красным слизнем
+enemy_type_slime_blue#синим слизнем
+enemy_type_slime_violet#фиолетовым слизнем
+enemy_type_imp_blue#синим чертом
+enemy_type_imp_red#красным чертом
+enemy_type_pumpkin#сумасшедшей тыквой
+enemy_type_witch#ведьмой
+enemy_type_witch_red#красной ведьмой
+enemy_type_cauldron#котлом
+enemy_type_bubble#пузырем
+enemy_type_boss_butcher#Свином-мясником
+enemy_type_boss_slime_giant#Гигантским слизнем
+enemy_type_boss_cyclops#Циклопом-варваром
+enemy_type_boss_rat_king#Королем веркрысом
+enemy_type_boss_spider_giant#Гигантским пауком
+enemy_type_green_rat#зеленой крысой
+enemy_type_rock_falling#падающим камнем
+enemy_type_rock_missile#летящим камнем
+enemy_type_spider_egg#упавшим паучьм яйцом
+enemy_type_spider_little#пауком
+enemy_type_spider_web#паучьей сетью
+enemy_type_ghost#призраком
+enemy_type_zombie#зомби
+enemy_type_zombie_dark#темным зомби
+enemy_type_francky#нечто
+enemy_type_himself#по глупости
+source_explosion#взрывом
+source_poison#ядом
+enemy_francky#Нечто
+enemy_francky_head#Голова нечто
+item_apple_green#Зеленое яблоко
+item_apple_green_desc#Восстанавливает 3 HP и исцеляет яд
+item_manual_slime#Руководство мастера слизней
+item_manual_slime_desc#Слизни больше не охотятся на вас
+item_spell_dual_quick#Книга быстрого двойного выстрела
+item_spell_dual_quick_desc#Стреляет двумя снарядами (быстро)
+item_spell_triple_quick#Книга быстрого тройного выстрела
+item_spell_triple_quick_desc#Стреляет тремя снарядами (быстро)
+item_manual_health#Руководство здоровья
+item_manual_health_desc#Увеличенное лечение предметами
+item_rear_shot#Наконечник для посоха
+item_rear_shot_desc#Выстрел назад
+item_book_random_shot#Книга случайного выстрела
+item_book_random_shot_desc#Стреляет в случайном направлении
+item_spell_web#Заклинание: Паучья сеть
+item_spell_web_desc#Произнесите, чтобы метнуть паучьи сети
+item_book_magic_i#Книга магии - Том первый
+item_book_magic_i_desc#Уменьшает время восстановления заклинаний
+item_book_magic_ii#Книга магии - Том второй
+item_book_magic_ii_desc#Увеличивает силу заклинаний
+item_sulfur#Сера
+item_sulfur_desc#Позволяет взрывать трупы
+spell_web#паучья сеть
+tuto_reset#Сброс обучения
+tuto_reset_desc#Сбрасывает обучение
+msg_francky_0#Это.... Нечто...
+msg_francky_1#Тьфу... Оно выглядит, слово сделано из нескольких трупов !
+msg_tuto_tips_0#Обучение: Подсказки
+msg_tuto_tips_1#Используйте управление временем (по умолчанию: RShift)
+чтобы путешествовать быстрее.
+msg_tuto_tips_2#Нажмите [Enter] чтобы немедленно закрыть окно сообщений.
+menu_continue#Продолжить
+menu_continue_desc#Продолжить игру
+menu_save_quit#Сохранить и выйти
+menu_save_quit_desc#Сохранить и вернуться в меню игры
+menu_quit#Выход без сохранения
+menu_quit_desc#Вернуться в главное меню без сохранения
+inventory#Инвентарь
+dc_certificate#Свидетельство о смерти
+dc_killed_by#Убит
+dc_died_level#Умер на уровне
+dc_after#после
+dc_minutes# минут игры
+dc_killed_monsters#Убитые монстры
+dc_gold#Золото
+dc_challenges#Завершено битв
