@@ -421,7 +421,7 @@ Vector2D DungeonMap::generateBonusRoom()
   map[x0 + 1][y0 - 1] = MAP_WALL;
   map[x0 + 1][y0 + 1] = MAP_WALL;
 
-  return (Vector2D(OFFSET_X + x0 * TILE_WIDTH + TILE_WIDTH / 2, OFFSET_Y + y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
+  return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
 
 void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
@@ -459,7 +459,7 @@ Vector2D DungeonMap::generateMerchantRoom()
   generateCarpet(3, 3, 9, 3, 20);
 
 
-  return (Vector2D(OFFSET_X + x0 * TILE_WIDTH + TILE_WIDTH / 2, OFFSET_Y + y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
+  return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
 
 Vector2D DungeonMap::generateKeyRoom()
@@ -481,7 +481,7 @@ Vector2D DungeonMap::generateKeyRoom()
     else initPattern(PatternSmallStar);
   }
 
-  return (Vector2D(OFFSET_X + x0 * TILE_WIDTH + TILE_WIDTH / 2, OFFSET_Y + y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
+  return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
 
 void DungeonMap::generateExitRoom()
@@ -744,7 +744,7 @@ void DungeonMap::restoreSprites()
     if (ilm.type == ENTITY_BLOOD)
     {
       SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), ilm.x, ilm.y, 16, 16, 6);
-      blood->setZ(OFFSET_Y - 1);
+      blood->setZ(-1);
       blood->setFrame(ilm.frame);
       blood->setType(ENTITY_BLOOD);
       blood->setScale(ilm.scale, ilm.scale);
@@ -765,7 +765,7 @@ void DungeonMap::restoreSprites()
         corpse->setImagesProLine(10);
       }
 
-      corpse->setZ(OFFSET_Y);
+      corpse->setZ(0);
       corpse->setType(ENTITY_CORPSE);
     }
   }

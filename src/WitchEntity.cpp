@@ -70,11 +70,11 @@ void WitchEntity::animate(float delay)
         if (rand() % 7 == 0 || !canSee(game().getPlayerPosition().x, game().getPlayerPosition().y))
         {
           // invoke
-          int x0 = ((x - OFFSET_X) / TILE_WIDTH);
+          int x0 = x / TILE_WIDTH;
           if (x0 < 1) x0 = 1;
           else if(x0 > MAP_WIDTH - 2) x0 = MAP_WIDTH - 2;
           x0 = x0 * TILE_WIDTH + TILE_WIDTH / 2;
-          int y0 = ((y - OFFSET_Y) / TILE_HEIGHT);
+          int y0 = y / TILE_HEIGHT;
           if (y0 < 1) y0 = 1;
           else if(y0 > MAP_HEIGHT - 2) y0 = MAP_HEIGHT - 2;
           y0 = y0 * TILE_HEIGHT + TILE_HEIGHT / 2;
@@ -187,7 +187,7 @@ void WitchEntity::fire()
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
     EnemyBoltEntity* bolt = new EnemyBoltEntity
           (x, y + 10, ShotTypeStandard, 0, enemyType);
-    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
     float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
     if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.7f;
@@ -198,7 +198,7 @@ void WitchEntity::fire()
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
     EnemyBoltEntity* bolt = new EnemyBoltEntity
           (x, y + 10, ShotTypeBomb, 0, enemyType);
-    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
     float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY * 0.9f;
     if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;

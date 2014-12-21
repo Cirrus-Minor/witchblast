@@ -134,8 +134,8 @@ void GiantSpiderEntity::animate(float delay)
         timer = 6.0f;
         for (int i = 0; i < GIANT_SPIDER_NUMBER_EGGS[hurtLevel]; i++)
         {
-          new SpiderEggEntity(OFFSET_X + TILE_WIDTH * 1.5f + rand() % (TILE_WIDTH * 12),
-                              OFFSET_Y + TILE_HEIGHT * 1.5f + rand() % (TILE_HEIGHT * 6), true);
+          new SpiderEggEntity(TILE_WIDTH * 1.5f + rand() % (TILE_WIDTH * 12),
+                              TILE_HEIGHT * 1.5f + rand() % (TILE_HEIGHT * 6), true);
         }
       }
     }

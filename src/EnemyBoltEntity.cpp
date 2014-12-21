@@ -18,7 +18,7 @@ EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int le
     case ShotTypeBomb: frame = 8; break;
     default: frame = 1; break;
   }
-  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
 }
 
 void EnemyBoltEntity::animate(float delay)

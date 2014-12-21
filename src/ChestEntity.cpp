@@ -19,7 +19,7 @@ ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
   frame = chestType * imagesProLine;
   if (chestType > ChestFairy) frame = ChestFairy * imagesProLine;
   frame += (isOpen ? 1 : 0);
-  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
   timer = -1.0f;
   appearTimer = -1.0f;
@@ -206,8 +206,8 @@ void ChestEntity::fallRock()
   while (fallingGrid[rx][ry]);
 
   fallingGrid[rx][ry] = true;
-  new FallingRockEntity(rx * TILE_WIDTH + OFFSET_X + TILE_WIDTH / 2,
-                        ry * TILE_HEIGHT + OFFSET_Y + TILE_HEIGHT / 2,
+  new FallingRockEntity(rx * TILE_WIDTH + TILE_WIDTH / 2,
+                        ry * TILE_HEIGHT + TILE_HEIGHT / 2,
                         rand() % 3,
                         true);
 }

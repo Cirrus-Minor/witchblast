@@ -127,6 +127,43 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
   { EventGetSpell,            MsgTutoSpell },
 };
 
+// author: AFS
+// source: https://github.com/LaurentGomila/SFML/wiki/Source:-Letterbox-effect-using-a-view
+static sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight) {
+
+    // Compares the aspect ratio of the window to the aspect ratio of the view,
+    // and sets the view's viewport accordingly in order to archieve a letterbox effect.
+    // A new view (with a new viewport set) is returned.
+
+    float windowRatio = windowWidth / (float) windowHeight;
+    float viewRatio = view.getSize().x / (float) view.getSize().y;
+    float sizeX = 1;
+    float sizeY = 1;
+    float posX = 0;
+    float posY = 0;
+
+    bool horizontalSpacing = true;
+    if (windowRatio < viewRatio)
+        horizontalSpacing = false;
+
+    // If horizontalSpacing is true, the black bars will appear on the left and right side.
+    // Otherwise, the black bars will appear on the top and bottom.
+
+    if (horizontalSpacing) {
+        sizeX = viewRatio / windowRatio;
+        posX = (1 - sizeX) / 2.0;
+    }
+
+    else {
+        sizeY = windowRatio / viewRatio;
+        posY = (1 - sizeY) / 2.0;
+    }
+
+    view.setViewport( sf::FloatRect(posX, posY, sizeX, sizeY) );
+
+    return view;
+}
+
 namespace
 {
 WitchBlastGame* gameptr;
@@ -223,6 +260,10 @@ WitchBlastGame::WitchBlastGame():
 
   parameters.musicVolume = 100;
   parameters.soundVolume = 80;
+
+  // game main client position in the UI
+  xOffset = OFFSET_X;
+  yOffset = OFFSET_Y;
 
   SoundManager::getInstance().setVolume(parameters.soundVolume);
   for (const char *const filename : sounds)
@@ -371,8 +412,8 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
   // current map (tiles)
   currentTileMap = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_TILES), currentMap, 64, 64, 10);
-  currentTileMap->setX(OFFSET_X);
-  currentTileMap->setY(OFFSET_Y);
+  currentTileMap->setX(0);
+  currentTileMap->setY(0);
 
   // the interface
   SpriteEntity* interface = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_INTERFACE));
@@ -410,8 +451,8 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   if (!fromSaveFile)
   {
     // the player
-    player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+    player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
+                              (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
 
   #ifdef START_LEVEL
@@ -475,11 +516,11 @@ void WitchBlastGame::startNewLevel()
 
   // move the player
   if (level == 1)
-    player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                   OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+    player->moveTo((TILE_WIDTH * MAP_WIDTH * 0.5f),
+                   (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
   else
-    player->moveTo(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                   OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT - 3 * TILE_HEIGHT));
+    player->moveTo((TILE_WIDTH * MAP_WIDTH * 0.5f),
+                   (TILE_HEIGHT * MAP_HEIGHT - 3 * TILE_HEIGHT));
 
   // the boss room is closed
   bossRoomOpened = false;
@@ -552,8 +593,8 @@ void WitchBlastGame::playLevel(bool isFight)
   xGame[xGameTypeFade].param = X_GAME_FADE_IN;
   xGame[xGameTypeFade].timer = FADE_IN_DELAY;
 
-  float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
-  float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
+  float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
+  float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
 
   std::ostringstream oss;
   oss << tools::getLabel("level") << " " << level;
@@ -710,6 +751,14 @@ void WitchBlastGame::updateIntro()
     // Close window : exit
     if (event.type == sf::Event::Closed) app->close();
 
+    if (event.type == sf::Event::Resized)
+    {
+      sf::View view = app->getDefaultView();
+      view = getLetterboxView( view, event.size.width, event.size.height );
+      app->setView(view);
+    }
+
+
     if (event.type == sf::Event::KeyPressed)
     {
       if (event.key.code == sf::Keyboard::Return
@@ -749,6 +798,13 @@ void WitchBlastGame::updateRunningGame()
     {
       if (gameState == gameStatePlaying && !player->isDead()) saveGame();
       app->close();
+    }
+
+    if (event.type == sf::Event::Resized)
+    {
+      sf::View view = app->getDefaultView();
+      view = getLetterboxView( view, event.size.width, event.size.height );
+      app->setView(view);
     }
 
     if (event.type == sf::Event::MouseWheelMoved)
@@ -1094,8 +1150,8 @@ void WitchBlastGame::updateRunningGame()
       }
       else if (currentMap->getRoomType() == roomTypeChallenge && !player->isDead())
       {
-        ChestEntity* chest = new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                    OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+        ChestEntity* chest = new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
+                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
                     ChestChallenge, false);
         chest->makeAppear();
 
@@ -1104,8 +1160,8 @@ void WitchBlastGame::updateRunningGame()
         playMusic(MusicDungeon);
 
         // text
-        float x0 = OFFSET_X + MAP_WIDTH * 0.5f * TILE_WIDTH;
-        float y0 = OFFSET_Y + MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
+        float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
+        float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
         TextEntity* text = new TextEntity("COMPLETE !", 30, x0, y0);
         text->setAlignment(ALIGN_CENTER);
         text->setLifetime(2.5f);
@@ -1127,8 +1183,8 @@ void WitchBlastGame::renderRunningGame()
 
   if (!isPlayerAlive)
   {
-    sf::View view = app->getDefaultView();
-    sf::View viewSave = app->getDefaultView();
+    sf::View view = app->getView(); //app->getDefaultView();
+    sf::View viewSave = app->getView(); //app->getDefaultView();
 
     if (player->getDeathAge() > 4.0f)
     {
@@ -1156,6 +1212,7 @@ void WitchBlastGame::renderRunningGame()
                      view.getCenter().y - yDiff * player->getDeathAge());
     }
 
+    view.move(-5, -5);
     app->setView(view);
 
     EntityManager::getInstance().renderUnder(app, 5000);
@@ -1165,11 +1222,12 @@ void WitchBlastGame::renderRunningGame()
   }
   else if (gameTime < 1.0f)
   {
-    sf::View view = app->getDefaultView();
-    sf::View viewSave = app->getDefaultView();
+    sf::View view = app->getView(); //app->getDefaultView();
+    sf::View viewSave = app->getView(); //app->getDefaultView();
 
     view.zoom(0.25f + 0.75f * (gameTime));
 
+    view.move(-5, -5);
     app->setView(view);
 
     EntityManager::getInstance().renderUnder(app, 5000);
@@ -1192,7 +1250,18 @@ void WitchBlastGame::renderRunningGame()
   else
   {
     // render the game objects
-    EntityManager::getInstance().render(app);
+    //EntityManager::getInstance().render(app);
+
+    sf::View view = app->getView(); //app->getDefaultView();
+    sf::View viewSave = app->getView(); //app->getDefaultView();
+
+    view.move(-5, -5);
+    app->setView(view);
+
+    EntityManager::getInstance().renderUnder(app, 5000);
+
+    app->setView(viewSave);
+    EntityManager::getInstance().renderAfter(app, 5000);
   }
 
   myText.setColor(sf::Color(255, 255, 255, 255));
@@ -1276,11 +1345,11 @@ void WitchBlastGame::renderRunningGame()
     if (isPausing)
     {
       rectangle.setFillColor(sf::Color(0, 0, 0, 200));
-      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
 
-      float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+      float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
       int fade = 50 + 205 * (1.0f + cos(3.0f * getAbsolutTime())) * 0.5f;
       myText.setColor(sf::Color(255, 255, 255, fade));
       myText.setCharacterSize(40);
@@ -1316,7 +1385,7 @@ void WitchBlastGame::renderRunningGame()
       if (deathAge > DEATH_CERTIFICATE_DELAY)
       {
         rectangle.setFillColor(sf::Color(0, 0, 0, 180));
-        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+        rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
         rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
         app->draw(rectangle);
 
@@ -1325,7 +1394,7 @@ void WitchBlastGame::renderRunningGame()
       else if (deathAge > DEATH_CERTIFICATE_DELAY - 1.0f)
       {
         rectangle.setFillColor(sf::Color(0, 0, 0, 180 * (deathAge - 2.5f)));
-        rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+        rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
         rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
         app->draw(rectangle);
 
@@ -1335,7 +1404,7 @@ void WitchBlastGame::renderRunningGame()
     }
     else if (currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
     {
-      float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+      float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
 
       write(tools::getLabel("congratulations_1"), 25, x0, 220, ALIGN_CENTER, sf::Color::White, app, 2, 2);
       write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2);
@@ -1347,7 +1416,7 @@ void WitchBlastGame::renderRunningGame()
       // effect
       int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
       rectangle.setFillColor(sf::Color(0, 255, 255, effectFade));
-      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       sf::RenderStates r;
       r.blendMode = sf::BlendAlpha ;
@@ -1358,7 +1427,7 @@ void WitchBlastGame::renderRunningGame()
     {
       // fade in
       rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
-      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
     }
@@ -1366,7 +1435,7 @@ void WitchBlastGame::renderRunningGame()
     {
       // fade out
       rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
-      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
     }
@@ -1387,7 +1456,7 @@ void WitchBlastGame::renderRunningGame()
       int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
 
       rectangle.setFillColor(sf::Color(r, g, b, alpha));
-      rectangle.setPosition(sf::Vector2f(OFFSET_X, OFFSET_Y));
+      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle, sf::BlendAdd);
     }
@@ -1398,8 +1467,8 @@ void WitchBlastGame::renderRunningGame()
   {
 
     int xf = 10;
-    int yf = OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT + 10;
-    int ySize = SCREEN_HEIGHT - (OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT) - 10;
+    int yf = MAP_HEIGHT * TILE_HEIGHT + 10;
+    int ySize = SCREEN_HEIGHT - (MAP_HEIGHT * TILE_HEIGHT) - 10;
     int xm = xf;
     int ym = yf;
 
@@ -1721,7 +1790,7 @@ void WitchBlastGame::renderDeathScreen()
   }
 
   // Game over text
-  float x0 = OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
+  float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
   int fade = 255 * (1.0f + cos(2.0f * getAbsolutTime())) * 0.5f;
 
   write("GAME OVER", 32, x0, 40, ALIGN_CENTER, sf::Color::White, app, 2, 2);
@@ -1763,6 +1832,13 @@ void WitchBlastGame::updateMenu()
     if (event.type == sf::Event::Closed)
     {
       app->close();
+    }
+
+    if (event.type == sf::Event::Resized)
+    {
+      sf::View view = app->getDefaultView();
+      view = getLetterboxView( view, event.size.width, event.size.height );
+      app->setView(view);
     }
 
     if (event.type == sf::Event::KeyPressed && menuState == MenuStateKeys)
@@ -2292,7 +2368,7 @@ void WitchBlastGame::refreshMap()
 
   // load the map
   currentTileMap->setMap(currentMap);
-  player->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  player->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, 0, 0);
   refreshMinimap();
 
   if(generateMap)
@@ -2301,8 +2377,8 @@ void WitchBlastGame::refreshMap()
   {
     if (currentMap->getRoomType() == roomTypeMerchant)
     {
-      new PnjEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                    OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
+      new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                    (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
                     0);
     }
   }
@@ -2317,8 +2393,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                                                    OFFSET_Y +  TILE_HEIGHT / 2, 192, 64, 1);
+                                                    (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                                                    TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setFrame(17);
     keystoneEntity->setType(ENTITY_EFFECT);
@@ -2326,8 +2402,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourDown())
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                                                    OFFSET_Y + MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
+                                                    (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                                                    MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(180);
     keystoneEntity->setFrame(17);
@@ -2336,8 +2412,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourLeft())
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    OFFSET_X + TILE_WIDTH / 2,
-                                                    OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
+                                                    TILE_WIDTH / 2,
+                                                    (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(270);
     keystoneEntity->setFrame(17);
@@ -2346,8 +2422,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourRight())
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    OFFSET_X + MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
-                                                    OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
+                                                    MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
+                                                    (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(90);
     keystoneEntity->setFrame(17);
@@ -2470,22 +2546,22 @@ void WitchBlastGame::moveToOtherMap(int direction)
     {
     case (4):
       floorX--;
-      player->moveTo((OFFSET_X + MAP_WIDTH * TILE_WIDTH), player->getY());
+      player->moveTo((MAP_WIDTH * TILE_WIDTH), player->getY());
       player->move(4);
       break;
     case (6):
       floorX++;
-      player->moveTo(OFFSET_X, player->getY());
+      player->moveTo(0, player->getY());
       player->move(6);
       break;
     case (8):
       floorY--;
-      player->moveTo(player->getX(), OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT);
+      player->moveTo(player->getX(), MAP_HEIGHT * TILE_HEIGHT);
       player->move(8);
       break;
     case (2):
       floorY++;
-      player->moveTo(player->getX(), OFFSET_Y);
+      player->moveTo(player->getX(), 0);
       break;
     }
 
@@ -2503,7 +2579,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
 void WitchBlastGame::onRender()
 {
   // clear the view
-  app->clear(sf::Color(32, 32, 32));
+  app->clear(sf::Color::Black);
 
   switch (gameState)
   {
@@ -2568,7 +2644,7 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
   for (int i=0; i < nbIt; i++)
   {
     SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
-    blood->setZ(OFFSET_Y - 1);
+    blood->setZ(-1);
     int b0 = 0;
     if (bloodColor == BaseCreatureEntity::BloodGreen) b0 += 6;
     blood->setFrame(b0 + rand()%6);
@@ -2647,25 +2723,25 @@ void WitchBlastGame::generateMap()
 
     ItemEntity* item1 = new ItemEntity(
       ItemHealth,
-      OFFSET_X + (MAP_WIDTH / 2 - 3) * TILE_WIDTH + TILE_WIDTH / 2,
-      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
+      (MAP_WIDTH / 2 - 3) * TILE_WIDTH + TILE_WIDTH / 2,
+      (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item1->setMerchandise(true);
 
     ItemEntity* item3 = new ItemEntity(
       ItemHealthSmall,
-      OFFSET_X + (MAP_WIDTH / 2 + 3) * TILE_WIDTH + TILE_WIDTH / 2,
-      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
+      (MAP_WIDTH / 2 + 3) * TILE_WIDTH + TILE_WIDTH / 2,
+      (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item3->setMerchandise(true);
 
     int bonusType = getRandomEquipItem(true, true);
     ItemEntity* item2 = new ItemEntity(
       (enumItemType)(FirstEquipItem + bonusType),
-      OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-      OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT);
+      (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+      (MAP_HEIGHT / 2) * TILE_HEIGHT);
     item2->setMerchandise(true);
 
-    new PnjEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                  OFFSET_Y + (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
+    new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                  (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
                   0);
 
     currentMap->setCleared(true);
@@ -2678,17 +2754,17 @@ void WitchBlastGame::generateMap()
     if (challengeLevel == 1)
     {
       addMonster(EnemyTypeBubble,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
     else
     {
       addMonster(EnemyTypeBubble,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 80,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 80,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       addMonster(EnemyTypeBubble,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
     playMusic(MusicChallenge);
   }
@@ -2700,81 +2776,81 @@ void WitchBlastGame::generateMap()
     {
       findPlaceMonsters(EnemyTypeRat, 2);
       addMonster(EnemyTypeButcher,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoButcher);
     }
 
     else if (level == 2)
     {
       addMonster(EnemyTypeSlimeBoss,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoGiantSlime);
     }
 
     else if (level == 3)
     {
       addMonster(EnemyTypeCyclops,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoCyclops);
     }
 
     else if (level == 4)
     {
       addMonster(EnemyTypeRatKing,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoWererat);
     }
 
     else if (level == 5)
     {
       addMonster(EnemyTypeSpiderGiant,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoGiantSpiderBefore);
     }
     else if (level == 6)
     {
       addMonster(EnemyTypeFrancky,
-                 OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                 OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       testAndAddMessageToQueue(MsgInfoFranky);
     }
     else if (level == 7)
     {
       // TODO
-      GiantSpiderEntity* b1 = new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      GiantSpiderEntity* b1 = new GiantSpiderEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
+                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b1->setLabelDy(10);
 
-      FranckyEntity* b2 = new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      FranckyEntity* b2 = new FranckyEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b2->setLabelDy(-530);
 
-      KingRatEntity* b3 = new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      KingRatEntity* b3 = new KingRatEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
+                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b3->setLabelDy(-20);
     }
 
     else // level > 6
     {
-      GiantSpiderEntity* b1 = new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      GiantSpiderEntity* b1 = new GiantSpiderEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
+                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b1->setLabelDy(10);
 
-      GiantSlimeEntity* b2 = new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      GiantSlimeEntity* b2 = new GiantSlimeEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b2->setLabelDy(-510);
 
-      KingRatEntity* b3 = new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      KingRatEntity* b3 = new KingRatEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
+                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b3->setLabelDy(-20);
 
-      CyclopsEntity* b4 = new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      CyclopsEntity* b4 = new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b4->setLabelDy(-540);
 
       findPlaceMonsters(EnemyTypeCauldron, 2);
@@ -2793,8 +2869,8 @@ void WitchBlastGame::generateMap()
     currentMap->generateExitRoom();
     currentMap->setCleared(true);
 
-    new ChestEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                    OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+    new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
+                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
                     ChestExit, false);
   }
   else  // "normal" room
@@ -2992,8 +3068,8 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
       }
       if (bOk)
       {
-        xMonster = OFFSET_X + xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
-        yMonster = OFFSET_Y + ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
+        xMonster = xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
+        yMonster = ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
 
         float dist2 = (xMonster - player->getX())*(xMonster - player->getX()) + (yMonster - player->getY())*(yMonster - player->getY());
         if ( dist2 < 75000.0f)
@@ -3135,8 +3211,8 @@ void WitchBlastGame::verifyDoorUnlocking()
 
   if (collidingDirection > 0 && currentMap->isCleared() && !bossRoomOpened && player->isEquiped(EQUIP_BOSS_KEY))
   {
-    int xt = (player->getX() - OFFSET_X) / TILE_WIDTH;
-    int yt = (player->getY() - OFFSET_Y) / TILE_HEIGHT;
+    int xt = (player->getX()) / TILE_WIDTH;
+    int yt = (player->getY()) / TILE_HEIGHT;
 
     if (yt <= 1 && xt >= MAP_WIDTH / 2 - 1 && xt <= MAP_WIDTH / 2 + 1 && currentMap->hasNeighbourUp() == 2)
     {
@@ -3550,8 +3626,8 @@ bool WitchBlastGame::loadGame()
     // player
     int hp, hpMax, gold;
     file >> hp >> hpMax >> gold;
-    player = new PlayerEntity(OFFSET_X + (TILE_WIDTH * MAP_WIDTH * 0.5f),
-                              OFFSET_Y + (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+    player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
+                              (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     player->setHp(hp);
     player->setHpMax(hpMax);
     player->setGold(gold);
@@ -3908,8 +3984,8 @@ void WitchBlastGame::checkFallingEntities()
 
     if (e->getLifetime() < 0.8f && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE))
     {
-      int tilex = (e->getX() - OFFSET_X) / TILE_WIDTH;
-      int tiley = (e->getY() - OFFSET_Y) / TILE_HEIGHT;
+      int tilex = (e->getX()) / TILE_WIDTH;
+      int tiley = (e->getY()) / TILE_HEIGHT;
 
       if (currentMap->getTile(tilex, tiley) >= MAP_HOLE)
       {

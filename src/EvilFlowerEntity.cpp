@@ -96,7 +96,7 @@ void EvilFlowerEntity::fire()
         EnemyBoltEntity* bolt = new EnemyBoltEntity
             (x, y + 10, ShotTypeIce, 0, enemyType);
         bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
-        bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+        bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
         float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
 
@@ -115,7 +115,7 @@ void EvilFlowerEntity::fire()
       EnemyBoltEntity* bolt = new EnemyBoltEntity
             (x, y + 10, ShotTypeStandard, 0, enemyType);
       bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
-      bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+      bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
       float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
       if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;

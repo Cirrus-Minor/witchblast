@@ -117,14 +117,14 @@ void FranckyEntity::animate(float delay)
     frame =  3 +((int)(age * 7.0f)) % 2;
     isMirroring = game().getPlayer()->getX() > x;
   }
-  z = OFFSET_Y + y + 36;
+  z = y + 36;
 }
 
 void FranckyEntity::calculateBB()
 {
-  boundingBox.left = OFFSET_X + (int)x - 32;
+  boundingBox.left = (int)x - 32;
   boundingBox.width = 58;
-  boundingBox.top = OFFSET_Y + (int)y - 52;
+  boundingBox.top = (int)y - 52;
   boundingBox.height =  90;
 }
 
@@ -487,7 +487,7 @@ void FranckyEntityHead::fire()
             (x, y + 10, ShotTypeLightning, 0, enemyType);
   bolt->setDamages(8);
   bolt->setLifetime(1.5f);
-  bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
   bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), 400 ));
 }
 

@@ -80,8 +80,8 @@ void CyclopsEntity::fallRock()
   while (fallingGrid[rx][ry]);
 
   fallingGrid[rx][ry] = true;
-  new FallingRockEntity(rx * TILE_WIDTH + OFFSET_X + TILE_WIDTH / 2,
-                        ry * TILE_HEIGHT + OFFSET_Y + TILE_HEIGHT / 2,
+  new FallingRockEntity(rx * TILE_WIDTH + TILE_WIDTH / 2,
+                        ry * TILE_HEIGHT + TILE_HEIGHT / 2,
                         rand() % 3,
                         false);
 }
@@ -203,7 +203,7 @@ void CyclopsEntity::animate(float delay)
       corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
       corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
 
-      corpse->setZ(OFFSET_Y);
+      corpse->setZ(0);
       corpse->setType(ENTITY_CORPSE);
       if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
@@ -265,7 +265,7 @@ void CyclopsEntity::animate(float delay)
   else if (velocity.x < -1.0f)
     isMirroring = false;
 
-  z = OFFSET_Y + y + 36;
+  z = y + 36;
 }
 
 int CyclopsEntity::hurt(StructHurt hurtParam)
@@ -276,9 +276,9 @@ int CyclopsEntity::hurt(StructHurt hurtParam)
 
 void CyclopsEntity::calculateBB()
 {
-  boundingBox.left = OFFSET_X + (int)x - 32;
+  boundingBox.left = (int)x - 32;
   boundingBox.width = 58;
-  boundingBox.top = OFFSET_Y + (int)y - 52;
+  boundingBox.top = (int)y - 52;
   boundingBox.height =  90;
 }
 

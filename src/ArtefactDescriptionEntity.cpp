@@ -17,7 +17,7 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
     this->setFrame(itemType);
   this->setType(ENTITY_ARTIFACT_DESCRIPTION);
 
-  float x0 = OFFSET_X + MAP_WIDTH * TILE_WIDTH * 0.5f - ARTEFACT_RECT_WIDTH * 0.5f;
+  float x0 = MAP_WIDTH * TILE_WIDTH * 0.5f - ARTEFACT_RECT_WIDTH * 0.5f;
 
   rectangle.setSize(sf::Vector2f(ARTEFACT_RECT_WIDTH, ARTEFACT_RECT_HEIGHT));
   rectangle.setPosition(sf::Vector2f(x0, ARTEFACT_POS_Y));

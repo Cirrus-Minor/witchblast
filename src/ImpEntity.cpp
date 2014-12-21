@@ -203,8 +203,8 @@ void ImpEntity::teleport()
     xm = 1 +rand() % (MAP_WIDTH - 3);
     ym = 1 +rand() % (MAP_HEIGHT - 3);
 
-    xMonster = OFFSET_X + xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
-    yMonster = OFFSET_Y + ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
+    xMonster = xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
+    yMonster = ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
 
     ok = game().getCurrentMap()->isFlyable(xm, ym) && (game().getPlayerPosition().distance2(Vector2D(xMonster, yMonster)) > 40000);
   }

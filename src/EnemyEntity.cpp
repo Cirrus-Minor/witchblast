@@ -82,7 +82,7 @@ void EnemyEntity::animate(float delay)
           corpse->setImagesProLine(10);
         }
 
-        corpse->setZ(OFFSET_Y);
+        corpse->setZ(0);
         corpse->setType(ENTITY_CORPSE);
         if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
       }
@@ -284,7 +284,7 @@ void EnemyEntity::startExplosion()
   isDying = true;
 
   SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-  corpse->setZ(OFFSET_Y);
+  corpse->setZ(0);
   corpse->setImagesProLine(10);
   corpse->setFrame(deathFrame);
   corpse->setType(ENTITY_CORPSE);
@@ -322,7 +322,7 @@ void EnemyEntity::dying()
   {
     isDying = true;
     SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-    corpse->setZ(OFFSET_Y);
+    corpse->setZ(0);
     corpse->setImagesProLine(10);
     corpse->setFrame(deathFrame);
     corpse->setType(ENTITY_CORPSE);
@@ -339,7 +339,7 @@ void EnemyEntity::drop()
   if (rand() % 5 == 0)
   {
     ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
-    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
   }
@@ -347,7 +347,7 @@ void EnemyEntity::drop()
   if (rand() % 25 == 0)
   {
     ItemEntity* newItem = new ItemEntity(ItemHealthVerySmall, x, y);
-    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
   }
@@ -423,7 +423,7 @@ void EnemyEntity::renderLifeBar(sf::RenderTarget* app, std::string label)
 
     sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
     rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, label_dy + OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
     rectangle.setOutlineThickness(1);
     rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
     app->draw(rectangle);
@@ -431,13 +431,13 @@ void EnemyEntity::renderLifeBar(sf::RenderTarget* app, std::string label)
     rectangle.setSize(sf::Vector2f(l, 25));
     rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setOutlineThickness(0);
-    rectangle.setPosition(sf::Vector2f(OFFSET_X + TILE_WIDTH / 2, label_dy + OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
     app->draw(rectangle);
 
     game().write(           label,
                             18,
-                            OFFSET_X + TILE_WIDTH / 2 + 10.0f,
-                            label_dy + OFFSET_Y + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
+                            TILE_WIDTH / 2 + 10.0f,
+                            label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
                             app, 0 , 0);

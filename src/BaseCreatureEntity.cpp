@@ -14,7 +14,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   hurting = false;
   hurtingType = ShotTypeStandard;
   shadowFrame = -1;
-  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
   hpDisplay = 0;
   armor = 0.0f;
   movingStyle = movWalking;
@@ -69,8 +69,8 @@ float BaseCreatureEntity::getCreatureSpeed()
 
 IntCoord BaseCreatureEntity::getCurrentTile()
 {
-  int xMap = (x - OFFSET_X) / TILE_WIDTH;
-  int yMap = (y - OFFSET_Y) / TILE_HEIGHT;
+  int xMap = (x) / TILE_WIDTH;
+  int yMap = (y) / TILE_HEIGHT;
   return (IntCoord(xMap, yMap));
 }
 
@@ -665,8 +665,8 @@ static bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b
 
 static bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile)
 {
-  int posX = OFFSET_X + xTile * TILE_WIDTH;
-  int posY = OFFSET_Y + yTile * TILE_HEIGHT;
+  int posX = xTile * TILE_WIDTH;
+  int posY = yTile * TILE_HEIGHT;
 
   if (intersectsSegments(a1, a2, Vector2D(posX, posY), Vector2D(posX + TILE_WIDTH, posY))) return true;
   else if (intersectsSegments(a1, a2, Vector2D(posX, posY + TILE_HEIGHT), Vector2D(posX + TILE_WIDTH, posY + TILE_HEIGHT))) return true;
@@ -679,10 +679,10 @@ static bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile)
 
 bool BaseCreatureEntity::canSee(float xf, float yf)
 {
-  int tileX0 = (x - OFFSET_X) / TILE_WIDTH;
-  int tileXf = (xf - OFFSET_X) / TILE_WIDTH;
-  int tileY0 = (y - OFFSET_Y) / TILE_HEIGHT;
-  int tileYf = (yf - OFFSET_Y) / TILE_HEIGHT;
+  int tileX0 = x / TILE_WIDTH;
+  int tileXf = xf / TILE_WIDTH;
+  int tileY0 = y / TILE_HEIGHT;
+  int tileYf = yf / TILE_HEIGHT;
 
   int xBegin, xEnd, yBegin, yEnd;
   if (tileXf < tileX0)

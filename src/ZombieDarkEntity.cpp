@@ -42,10 +42,10 @@ void ZombieDarkEntity::animate(float delay)
   if (age > 0.0f && !isAgonising && !isExploding)
   {
       // goal reached ?
-    if (currentDirection == 6 && x > (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2 + OFFSET_X) ) findNextGoal();
-    else if (currentDirection == 4 && x < (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2 + OFFSET_X) ) findNextGoal();
-    else if (currentDirection == 2 && y > (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
-    else if (currentDirection == 8 && y < (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 + OFFSET_Y - 5) ) findNextGoal();
+    if (currentDirection == 6 && x > (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2) ) findNextGoal();
+    else if (currentDirection == 4 && x < (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2) ) findNextGoal();
+    else if (currentDirection == 2 && y > (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 - 5) ) findNextGoal();
+    else if (currentDirection == 8 && y < (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 - 5) ) findNextGoal();
 
     frame = ((int)(age * 4.0f)) % 4;
     if (frame == 3) frame = 1;

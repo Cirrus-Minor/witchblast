@@ -65,7 +65,7 @@ void KingRatEntity::animate(float delay)
       corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y + 48, 128, 128);
       corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
 
-      corpse->setZ(OFFSET_Y);
+      corpse->setZ(0);
       corpse->setType(ENTITY_CORPSE);
       if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
@@ -319,8 +319,8 @@ void KingRatEntity::generateGreenRats()
     float xr = x + -100 + rand() % 200;
     float yr = y + -100 + rand() % 200;
 
-    if (xr > OFFSET_X + TILE_WIDTH * 1.5f && xr < OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2)
-        && yr > OFFSET_Y + TILE_HEIGHT * 1.5f && yr < OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2))
+    if (xr > TILE_WIDTH * 1.5f && xr < TILE_WIDTH * (MAP_WIDTH - 2)
+        && yr > TILE_HEIGHT * 1.5f && yr < TILE_HEIGHT * (MAP_HEIGHT - 2))
     {
       new GreenRatEntity(xr, yr);
     }

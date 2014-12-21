@@ -371,21 +371,21 @@ void PlayerEntity::animate(float delay)
   else
     idleAge += delay;
 
-  if (x < OFFSET_X)
+  if (x < 0)
     game().moveToOtherMap(4);
-  else if (x > OFFSET_X + MAP_WIDTH * TILE_WIDTH)
+  else if (x > MAP_WIDTH * TILE_WIDTH)
     game().moveToOtherMap(6);
-  else if (y < OFFSET_Y)
+  else if (y < 0)
     game().moveToOtherMap(8);
-  else if (y > OFFSET_Y + MAP_HEIGHT * TILE_HEIGHT)
+  else if (y > MAP_HEIGHT * TILE_HEIGHT)
     game().moveToOtherMap(2);
 
   if (playerStatus == playerStatusEntering)
   {
-    if (boundingBox.left > OFFSET_X + TILE_WIDTH
-        && (boundingBox.left + boundingBox.width) < OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1)
-        && boundingBox.top > OFFSET_Y + TILE_HEIGHT
-        && (boundingBox.top + boundingBox.height) < OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1))
+    if (boundingBox.left > TILE_WIDTH
+        && (boundingBox.left + boundingBox.width) < TILE_WIDTH * (MAP_WIDTH - 1)
+        && boundingBox.top > TILE_HEIGHT
+        && (boundingBox.top + boundingBox.height) < TILE_HEIGHT * (MAP_HEIGHT - 1))
     {
       playerStatus = playerStatusPlaying;
       game().closeDoors();
@@ -1104,8 +1104,8 @@ void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
 {
   CollidingSpriteEntity* itemSprite
     = new CollidingSpriteEntity(ImageManager::getInstance().getImage(isEquip ? IMAGE_ITEMS_EQUIP : IMAGE_ITEMS), x, y, 32, 32);
-  itemSprite->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
-  itemSprite->setZ(OFFSET_Y - 1);
+  itemSprite->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+  itemSprite->setZ(-1);
   itemSprite->setFrame(itemType);
   itemSprite->setImagesProLine(10);
   itemSprite->setType(ENTITY_BLOOD);
@@ -1597,8 +1597,8 @@ void PlayerEntity::castTeleport()
       EntityManager::EntityList::iterator it;
 
       bool isBad = false;
-      xNew = OFFSET_X + xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
-      yNew = OFFSET_Y + ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
+      xNew = xm * TILE_WIDTH + TILE_WIDTH * 0.5f;
+      yNew = ym * TILE_HEIGHT+ TILE_HEIGHT * 0.5f;
 
       for (it = entityList->begin (); !isBad && it != entityList->end ();)
       {
@@ -1642,15 +1642,15 @@ void PlayerEntity::fallRock()
   while (fallingGrid[rx][ry]);
 
   fallingGrid[rx][ry] = true;
-  new FallingRockEntity(rx * TILE_WIDTH + OFFSET_X + TILE_WIDTH / 2,
-                        ry * TILE_HEIGHT + OFFSET_Y + TILE_HEIGHT / 2,
+  new FallingRockEntity(rx * TILE_WIDTH + TILE_WIDTH / 2,
+                        ry * TILE_HEIGHT + TILE_HEIGHT / 2,
                         rand() % 3,
                         true);
 }
 
 void PlayerEntity::castSummonsSlimeExplode()
 {
-  SlimeEntity* slime = new SlimeEntity( ((int)(x - OFFSET_X) / TILE_WIDTH) * TILE_WIDTH + TILE_WIDTH * 0.5f,
+  SlimeEntity* slime = new SlimeEntity( ((int)(x) / TILE_WIDTH) * TILE_WIDTH + TILE_WIDTH * 0.5f,
                                         y - 5, SlimeTypeViolet, true);
   slime->makePet(facingDirection);
   game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.3f);

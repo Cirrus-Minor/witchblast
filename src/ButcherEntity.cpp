@@ -116,7 +116,7 @@ void ButcherEntity::collideWithEnemy(EnemyEntity* entity)
 void ButcherEntity::drop()
 {
   ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
-  newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
 }

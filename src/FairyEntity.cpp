@@ -78,19 +78,19 @@ void FairyEntity::animate(float delay)
 
   if (velocity.x < 50.0f && velocity.x > -50.0f && velocity.y < 50.0f && velocity.y > -50.0f)
   {
-    if (x < OFFSET_X + TILE_WIDTH * 1.3)
+    if (x < TILE_WIDTH * 1.3)
     {
       velocity.x = FAIRY_SPEED;
     }
-    else if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3)
+    else if (x > TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3)
     {
       velocity.x = -FAIRY_SPEED;
     }
-    if (y < OFFSET_Y + TILE_HEIGHT * 1.3)
+    if (y < TILE_HEIGHT * 1.3)
     {
       velocity.y = FAIRY_SPEED;
     }
-    else if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3)
+    else if (y > TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3)
     {
       velocity.y = -FAIRY_SPEED;
     }
@@ -121,10 +121,10 @@ void FairyEntity::animate(float delay)
 
 void FairyEntity::fire(int dir)
 {
-  if (x < OFFSET_X + TILE_WIDTH * 1.3) return;
-  if (y < OFFSET_Y + TILE_HEIGHT * 1.3) return;
-  if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3) return;
-  if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3) return;
+  if (x < TILE_WIDTH * 1.3) return;
+  if (y < TILE_HEIGHT * 1.3) return;
+  if (x > TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3) return;
+  if (y > TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3) return;
 
   if (fireDelay <= 0.0f)
   {
@@ -189,10 +189,10 @@ void FairyEntity::fire(int dir)
 
 void FairyEntity::tryToFire()
 {
-  if (x < OFFSET_X + TILE_WIDTH * 1.3) return;
-  if (y < OFFSET_Y + TILE_HEIGHT * 1.3) return;
-  if (x > OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3) return;
-  if (y > OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3) return;
+  if (x < TILE_WIDTH * 1.3) return;
+  if (y < TILE_HEIGHT * 1.3) return;
+  if (x > TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3) return;
+  if (y > TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3) return;
 
   if (fireDelay <= 0.0f)
   {

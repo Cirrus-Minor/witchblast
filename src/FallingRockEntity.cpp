@@ -130,7 +130,7 @@ void FallingRockEntity::dying()
   for (int i = 0; i < 4; i++)
   {
     SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
-    blood->setZ(OFFSET_Y - 1);
+    blood->setZ(-1);
 
     blood->setFrame(12 + rand()%6);
     blood->setType(ENTITY_BLOOD);

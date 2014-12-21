@@ -395,6 +395,8 @@ private:
   sf::Font font;              /*!< The font used for displaying text */
   sf::Text myText;            /*!< The text to be displayed */
 
+  float xOffset, yOffset;     /*!< Main game client position in the GUI */
+
   sf::Music music;            /*!< Current game music */
 
   /** Music enum

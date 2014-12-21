@@ -16,7 +16,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   this->level = level;
   if (boltType == ShotTypeLightning) viscosity += LIGHTNING_VISCOSITY_INCREASE[level];
   frame = 0;
-  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
   this->boltType = boltType;
   enemyType = EnemyTypeNone;
   goThrough = false;
@@ -39,8 +39,8 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   critical = false;
 
   // avoid starting in wall
-  if (y > (OFFSET_Y + (MAP_HEIGHT - 1) * TILE_HEIGHT - 16))
-    this->y = OFFSET_Y + (MAP_HEIGHT - 1) * TILE_HEIGHT - 16;
+  if (y > ((MAP_HEIGHT - 1) * TILE_HEIGHT - 16))
+    this->y = (MAP_HEIGHT - 1) * TILE_HEIGHT - 16;
 }
 
 int BoltEntity::getDamages()
@@ -348,6 +348,6 @@ void BoltEntity::explode()
   SpriteEntity* corpse= new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
   corpse->setFrame(FRAME_CORPSE_SLIME_VIOLET);
   corpse->setImagesProLine(10);
-  corpse->setZ(OFFSET_Y);
+  corpse->setZ(0);
   corpse->setType(ENTITY_CORPSE);
 }

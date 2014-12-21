@@ -17,7 +17,7 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   if (itemType >= FirstEquipItem) frame = itemType - FirstEquipItem;
   isMerchandise = false;
   imagesProLine = 10;
-  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
   isBeating = false;
   isFlying = false;
   jumpTimer = 1.0f + 0.1f * (rand() % 40);
@@ -56,10 +56,10 @@ bool ItemEntity::canBePickedUp()
 
 bool ItemEntity::isOnMap()
 {
-  if (x < OFFSET_X) return false;
-  if (x > OFFSET_X + TILE_WIDTH * MAP_WIDTH) return false;
-  if (y < OFFSET_Y) return false;
-  if (y > OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT) return false;
+  if (x < 0) return false;
+  if (x > TILE_WIDTH * MAP_WIDTH) return false;
+  if (y < 0) return false;
+  if (y > TILE_HEIGHT * MAP_HEIGHT) return false;
   return true;
 }
 
@@ -77,10 +77,10 @@ void ItemEntity::animate(float delay)
       if (velocity.x < -10 || velocity.x > 10 || velocity.y < -10 || velocity.y > 10) // moving
       {
         // stay in the map
-        if (velocity.x < 40 && x < OFFSET_X + TILE_WIDTH) velocity.x = 220.0f;
-        else if (velocity.x > -40 && x > OFFSET_X + (TILE_WIDTH - 1) * MAP_WIDTH) velocity.x = -220.0f;
-        if (velocity.y < 40 && y < OFFSET_Y + TILE_HEIGHT) velocity.y = 220.0f;
-        else if (velocity.y > -40 && y > OFFSET_Y + (TILE_HEIGHT - 1) * MAP_HEIGHT) velocity.y = -220.0f;
+        if (velocity.x < 40 && x < TILE_WIDTH) velocity.x = 220.0f;
+        else if (velocity.x > -40 && x > (TILE_WIDTH - 1) * MAP_WIDTH) velocity.x = -220.0f;
+        if (velocity.y < 40 && y < TILE_HEIGHT) velocity.y = 220.0f;
+        else if (velocity.y > -40 && y > (TILE_HEIGHT - 1) * MAP_HEIGHT) velocity.y = -220.0f;
       }
       else // not moving
       {

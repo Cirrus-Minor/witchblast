@@ -58,7 +58,7 @@ void ZombieEntity::animate(float delay)
         SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y - 28, 64, 64);
         corpse->setFrame(deathFrame);
         corpse->setImagesProLine(10);
-        corpse->setZ(OFFSET_Y);
+        corpse->setZ(0);
         corpse->setType(ENTITY_CORPSE);
         if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
       }

@@ -130,16 +130,16 @@ void GiantSlimeEntity::animate(float delay)
     switch (slimeCounter)
     {
     case 0:
-      new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * 1.5f, TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
       break;
     case 1:
-      new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
       break;
     case 2:
-      new SlimeEntity(OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
       break;
     case 3:
-      new SlimeEntity(OFFSET_X + TILE_WIDTH * 1.5f, OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * 1.5f, TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
       break;
     }
     slimeTimer = 7.0f;
@@ -282,10 +282,10 @@ void GiantSlimeEntity::animate(float delay)
       x = game().getPlayer()->getX();
       y = game().getPlayer()->getY();
       // to prevent collisions
-      float x0 = OFFSET_X + TILE_WIDTH + 1;
-      float xf = OFFSET_X + TILE_WIDTH * (MAP_WIDTH - 1) - 1;
-      float y0 = OFFSET_Y + TILE_HEIGHT + 1;
-      float yf = OFFSET_Y + TILE_HEIGHT * (MAP_HEIGHT - 1) - 1;
+      float x0 = TILE_WIDTH + 1;
+      float xf = TILE_WIDTH * (MAP_WIDTH - 1) - 1;
+      float y0 = TILE_HEIGHT + 1;
+      float yf = TILE_HEIGHT * (MAP_HEIGHT - 1) - 1;
 
       calculateBB();
 
@@ -359,17 +359,17 @@ void GiantSlimeEntity::dying()
   isDying = true;
   game().addKilledEnemy(enemyType);
   SpriteEntity* deadRat = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
-  deadRat->setZ(OFFSET_Y);
+  deadRat->setZ(0);
   deadRat->setFrame(FRAME_CORPSE_GIANT_SLIME - FRAME_CORPSE_KING_RAT);
   deadRat->setType(ENTITY_CORPSE);
 
   float xSlime = x;
   float ySlime = y;
 
-  if (x <= OFFSET_X + 1.5 * TILE_WIDTH) x = OFFSET_X + 1.5f * TILE_WIDTH + 2;
-  else if (x >= OFFSET_X + TILE_WIDTH * MAP_WIDTH - 1.5f * TILE_WIDTH) x = OFFSET_X + TILE_WIDTH * MAP_WIDTH - 1.5f * TILE_WIDTH -3;
-  if (y <= OFFSET_Y + 1.5 * TILE_HEIGHT) y = OFFSET_Y + 1.5 * TILE_HEIGHT + 2;
-  else if (y >= OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT) x = OFFSET_Y + TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT -3;
+  if (x <= 1.5 * TILE_WIDTH) x = 1.5f * TILE_WIDTH + 2;
+  else if (x >= TILE_WIDTH * MAP_WIDTH - 1.5f * TILE_WIDTH) x = TILE_WIDTH * MAP_WIDTH - 1.5f * TILE_WIDTH -3;
+  if (y <= 1.5 * TILE_HEIGHT) y = 1.5 * TILE_HEIGHT + 2;
+  else if (y >= TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT) x = TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT -3;
 
   for (int i = 0; i < 9; i++)
   {
@@ -452,7 +452,7 @@ void GiantSlimeEntity::fire()
   EnemyBoltEntity* bolt = new EnemyBoltEntity
   (x, y + 10, ShotTypeStandard, 0, enemyType);
   bolt->setFrame(1);
-  bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, OFFSET_X, OFFSET_Y);
+  bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
   bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(),GIANT_SLIME_FIRE_VELOCITY ));
 }
