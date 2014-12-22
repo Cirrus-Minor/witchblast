@@ -176,6 +176,14 @@ WitchBlastGame::WitchBlastGame():
 {
   gameptr = this;
 
+  configureFromFile();
+
+  if (parameters.vsync == false)
+  {
+    app->setVerticalSyncEnabled(true);
+    app->setFramerateLimit(60);
+  }
+
   // loading resources
   const char *const images[] = {
     "media/player_base.png",   "media/player_faces.png",
@@ -258,9 +266,6 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/francky_die.ogg",
   };
 
-  parameters.musicVolume = 100;
-  parameters.soundVolume = 80;
-
   // game main client position in the UI
   xOffset = OFFSET_X;
   yOffset = OFFSET_Y;
@@ -291,7 +296,6 @@ WitchBlastGame::WitchBlastGame():
 
   shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
 
-  configureFromFile();
   loadGameData();
   srand(time(NULL));
 }
@@ -605,15 +609,6 @@ void WitchBlastGame::playLevel(bool isFight)
   text->setWeight(-36.0f);
   text->setZ(1000);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
-
-  #ifdef TEST_MODE
-  if (level == 1)
-  {
-    player->setY(player->getY() + 150);
-    for (int i = 0; i < NUMBER_ITEMS; i++)
-      new ItemEntity((enumItemType)i, 100 + (i % 14) * 60, 100 + (i / 14) * 60);
-  }
-  #endif
 }
 
 void WitchBlastGame::prepareIntro()
@@ -1020,9 +1015,17 @@ void WitchBlastGame::updateRunningGame()
       }
       if (event.key.code == sf::Keyboard::F11)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
-        findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
+          findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+        }
       }
       if (event.key.code == sf::Keyboard::F12)
       {
@@ -1030,6 +1033,11 @@ void WitchBlastGame::updateRunningGame()
         findPlaceMonsters(EnemyTypeZombie, 2);
         findPlaceMonsters(EnemyTypeZombieDark, 2);
         findPlaceMonsters(EnemyTypeGhost, 2);
+      }
+      if (event.key.code == sf::Keyboard::F4)
+      {
+        for (int i = 0; i < NUMBER_ITEMS; i++)
+          new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
       }
       #endif // TEST_MODE
     }
@@ -1186,7 +1194,7 @@ void WitchBlastGame::renderRunningGame()
     sf::View view = app->getView(); //app->getDefaultView();
     sf::View viewSave = app->getView(); //app->getDefaultView();
 
-    if (player->getDeathAge() > 4.0f)
+    if (!parameters.zoom || player->getDeathAge() > 4.0f)
     {
       // do nothing
     }
@@ -1220,10 +1228,10 @@ void WitchBlastGame::renderRunningGame()
     app->setView(viewSave);
     EntityManager::getInstance().renderAfter(app, 5000);
   }
-  else if (gameTime < 1.0f)
+  else if (parameters.zoom && gameTime < 1.0f)
   {
-    sf::View view = app->getView(); //app->getDefaultView();
-    sf::View viewSave = app->getView(); //app->getDefaultView();
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
 
     view.zoom(0.25f + 0.75f * (gameTime));
 
@@ -1237,8 +1245,9 @@ void WitchBlastGame::renderRunningGame()
   }
   else if (xGame[xGameTypeShake].active)
   {
-    sf::View view = app->getDefaultView();
-    sf::View viewSave = app->getDefaultView();
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
+
     view.move(-4 + rand() % 9, -4 + rand() % 9);
     app->setView(view);
 
@@ -1249,13 +1258,10 @@ void WitchBlastGame::renderRunningGame()
   }
   else
   {
-    // render the game objects
-    //EntityManager::getInstance().render(app);
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
 
-    sf::View view = app->getView(); //app->getDefaultView();
-    sf::View viewSave = app->getView(); //app->getDefaultView();
-
-    view.move(-5, -5);
+    view.move(-OFFSET_X, -OFFSET_Y);
     app->setView(view);
 
     EntityManager::getInstance().renderUnder(app, 5000);
@@ -1972,8 +1978,8 @@ void WitchBlastGame::renderMenu()
   EntityManager::getInstance().render(app);
 
   // title
-  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
-  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  //write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
+  //write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   menuStuct* menu = nullptr;
   if (menuState == MenuStateMain)
@@ -3796,6 +3802,13 @@ void WitchBlastGame::saveConfigurationToFile()
   // parameters
   newMap["language"] = intToString(parameters.language);
 
+  // audio volume
+  newMap["volume_sound"] = intToString(parameters.soundVolume);
+  newMap["volume_music"] = intToString(parameters.musicVolume);
+
+  newMap["zoom_enabled"] = parameters.zoom ? "1" : "0";
+  newMap["vsync_enabled"] = parameters.vsync ? "1" : "0";
+
   // Keys
   newMap["keyboard_move_up"] = intToString(input[KeyUp]);
   newMap["keyboard_move_down"] = intToString(input[KeyDown]);
@@ -3817,6 +3830,8 @@ void WitchBlastGame::configureFromFile()
 {
   // default
   parameters.language = 0;  // english
+  parameters.zoom = true;
+  parameters.vsync = true;
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
@@ -3845,8 +3860,18 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyTimeControl, "keyboard_time_control");
   addKey(KeyFireSelect, "keyboard_fire_select");
 
-  int iLang = config.findInt("language");
-  if (iLang >= 0) parameters.language = iLang;
+  int i = config.findInt("language");
+  if (i >= 0) parameters.language = i;
+
+  i = config.findInt("volume_sound");
+  if (i >= 0) parameters.soundVolume = i;
+  i = config.findInt("volume_music");
+  if (i >= 0) parameters.musicVolume = i;
+
+  i = config.findInt("vsync_enabled");
+  if (i >= 0) parameters.vsync = i;
+  i = config.findInt("zoom_enabled");
+  if (i >= 0) parameters.zoom = i;
 
   tools::setLanguage(languageString[parameters.language]);
 }
