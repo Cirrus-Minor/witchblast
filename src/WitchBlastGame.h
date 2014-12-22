@@ -740,6 +740,8 @@ private:
     int language;
     int musicVolume;
     int soundVolume;
+    bool zoom;
+    bool vsync;
   } parameters;
 
 
