@@ -38,6 +38,14 @@ keys_fire#fire
 keys_select_1#fire
 keys_select_2#selector
 keys_time#time control
+tuto_reset#Tutorial reset
+tuto_reset_desc#Resets the tutorial
+menu_continue#Continue
+menu_continue_desc#Continue the game
+menu_save_quit#Save and quit
+menu_save_quit_desc#Save and return to main screen
+menu_quit#Quit without saving
+menu_quit_desc#Return to main screen without saving
 play_again#Press [ENTER] to play again / [ESC] to go back to the menu
 items_found#Items
 monsters_killed#Monsters
@@ -67,6 +75,8 @@ item_elven_cookie#Elven Cookie
 item_elven_cookie_desc#Restores and increases Max HP
 item_apple#Apple
 item_apple_desc#Restores 3 HP
+item_apple_green#Green apple
+item_apple_green_desc#Restores 3 HP and cures poison
 item_bread#Bread
 item_bread_desc#Restores 7 HP
 item_cheese#Cheese
@@ -111,7 +121,7 @@ item_ring_illusion#Quartz Ring
 item_ring_illusion_desc#Increases illusion power
 item_spell_triple#Spell : Triple bolts
 item_spell_triple_desc#Shoots three bolts
-
+item_brooch_finesse#Brooch of finesse
 item_brooch_finesse_desc#Chance to critical shot (x2)
 item_fairy_fire#Fairy Alicia
 item_fairy_fire_desc#Helps you in the dungeon
@@ -137,12 +147,33 @@ item_spell_earthquake#Spell: Earthquake
 item_spell_earthquake_desc#Cast to make the dungeon shake
 item_spell_protection#Spell: Magic shield
 item_spell_protection_desc#Cast to summon a magic shield
+item_manual_slime#Manual of Slime Mastery
+item_manual_slime_desc#Slimes don't aim at you anymore
+item_spell_dual_quick#Spellbook of Quick Dual bolts
+item_spell_dual_quick_desc#Shoots two bolts (quick)
+item_spell_triple_quick#Spellbook of Quick Triple bolts
+item_spell_triple_quick_desc#Shoots three bolts (quick)
+item_manual_health#Health's Manual
+item_manual_health_desc#Health items give more HP
+item_rear_shot#Staff cap
+item_rear_shot_desc#Shots a rear bolt
+item_book_random_shot#Spellbook of Random Shot
+item_book_random_shot_desc#Shots a bolt in a random direction
+item_spell_web#Spell: Spider Web
+item_spell_web_desc#Cast to throw spider webs
+item_book_magic_i#Book of magic - Tome I
+item_book_magic_i_desc#Decreases spell's cooldown
+item_book_magic_ii#Book of magic - Tome II
+item_book_magic_ii_desc#Increases spell's power
+item_sulfur#Sulfur
+item_sulfur_desc#Can make corpses explode
 spell_teleport#teleport
 spell_slime_explode#invoke slime
 spell_fireball#fireball
 spell_freeze#freeze monsters
 spell_earthquake#earthquake
 spell_protection#magic shield
+spell_web#spider web
 msg_level1_0#Your quest begins!
 msg_level1_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
 msg_level1_2#I have to recover her!"
@@ -213,7 +244,11 @@ msg_tuto_shots_2#Press [fire select] (standard: tab) to switch between your shot
 msg_tuto_spell_0#Tutorial: Spells
 msg_tuto_spell_1#You've found a magic spell.
 msg_tuto_spell_2#Press the spell key (standard: space) to cast the spell.
-
+msg_francky_0#The... Thing
+msg_francky_1#Yuk... It looks like made with various body parts !
+msg_tuto_tips_0#Tutorial: Tips
+msg_tuto_tips_1#Use Time Control (standard: RShift) to travel faster.
+msg_tuto_tips_2#Press [Enter] to close the message box immediately.
 
 enemy_type_bat#a bat
 enemy_type_rat#a rat
@@ -255,43 +290,7 @@ source_explosion#explosion
 source_poison#poison
 enemy_francky#The Thing
 enemy_francky_head#The Thing's head
-item_brooch_finesse#Brooch of finesse
-item_apple_green#Green apple
-item_apple_green_desc#Restores 3 HP and cures poison
-item_manual_slime#Manual of Slime Mastery
-item_manual_slime_desc#Slimes don't aim at you anymore
-item_spell_dual_quick#Spellbook of Quick Dual bolts
-item_spell_dual_quick_desc#Shoots two bolts (quick)
-item_spell_triple_quick#Spellbook of Quick Triple bolts
-item_spell_triple_quick_desc#Shoots three bolts (quick)
-item_manual_health#Health's Manual
-item_manual_health_desc#Health items give more HP
-item_rear_shot#Staff cap
-item_rear_shot_desc#Shots a rear bolt
-item_book_random_shot#Spellbook of Random Shot
-item_book_random_shot_desc#Shots a bolt in a random direction
-item_spell_web#Spell: Spider Web
-item_spell_web_desc#Cast to throw spider webs
-item_book_magic_i#Book of magic - Tome I
-item_book_magic_i_desc#Decreases spell's cooldown
-item_book_magic_ii#Book of magic - Tome II
-item_book_magic_ii_desc#Increases spell's power
-item_sulfur#Sulfur
-item_sulfur_desc#Can make corpses explode
-spell_web#spider web
-tuto_reset#Tutorial reset
-tuto_reset_desc#Resets the tutorial
-msg_francky_0#The... Thing
-msg_francky_1#Yuk... It looks like made with various body parts !
-msg_tuto_tips_0#Tutorial: Tips
-msg_tuto_tips_1#Use Time Control (standard: RShift) to travel faster.
-msg_tuto_tips_2#Press [Enter] to close the message box immediately.
-menu_continue#Continue
-menu_continue_desc#Continue the game
-menu_save_quit#Save and quit
-menu_save_quit_desc#Save and return to main screen
-menu_quit#Quit without saving
-menu_quit_desc#Return to main screen without saving
+
 inventory#Inventory
 dc_certificate#Death certificate
 dc_killed_by#Killed by
@@ -1027,7 +1026,7 @@ item_ring_illusion#Anillo de cuarzo
 item_ring_illusion_desc#Aumenta el poder de la ilusión
 item_spell_triple#Conjuro : Rayo triple
 item_spell_triple_desc#Dispara tres rayos
-item_brooch_finesse#Broche de estrella
+item_brooch_finesse#Broche de la agudeza
 item_brooch_finesse_desc#Probabilidad de disparo crítico (x2)
 item_fairy_fire#Hada Alicia
 item_fairy_fire_desc#Te ayuda en el calabozo
@@ -1129,6 +1128,92 @@ msg_tuto_shots_2#Presiona la tecla de seleccionar disparos (por defecto: Tab) pa
 msg_tuto_spell_0#Tutorial: Conjuros
 msg_tuto_spell_1#Haz encontrado un conjuro mágico.
 msg_tuto_spell_2#Presiona la tecla de conjuros (por defecto: Espacio) para realizar el conjuro.
+
+enemy_type_bat#un murciélago
+enemy_type_rat#una rata
+enemy_type_rat_black#una rata negra
+enemy_type_rat_helmet#una rata con casco
+enemy_type_rat_black_helmet#una rata negra con casco
+enemy_type_evil_flower#una flor malvada
+enemy_type_evil_flower_ice#una flor de las nieves malvada
+enemy_type_snake#una serpiente
+enemy_type_snake_blood#una serpiente ensangrentada
+enemy_type_slime#una baba
+enemy_type_slime_red#una baba roja
+enemy_type_slime_blue#una baba azul
+enemy_type_slime_violet#una baba violeta
+enemy_type_imp_blue#un diablillo azul
+enemy_type_imp_red#un diablillo rojo
+enemy_type_pumpkin#una calabaza loca
+enemy_type_witch#una bruja
+enemy_type_witch_red#una bruja roja
+enemy_type_cauldron#un caldero
+enemy_type_bubble#una burbuja
+enemy_type_boss_butcher#el Cerdo Carnicero
+enemy_type_boss_slime_giant#la Baba Gigante
+enemy_type_boss_cyclops#el Cíclope Bárbaro
+enemy_type_boss_rat_king#el Rey Hombre-Rata
+enemy_type_boss_spider_giant#la Araña Gigante
+enemy_type_green_rat#una rata verde
+enemy_type_rock_falling#una roca cayendo
+enemy_type_rock_missile#una roca lanzable
+enemy_type_spider_egg#un huevo de araña cayendo
+enemy_type_spider_little#una araña
+enemy_type_spider_web#una tela-araña
+enemy_type_ghost#un fantasma
+enemy_type_zombie#un zombie
+enemy_type_zombie_dark#un zombie oscuro
+enemy_type_francky#la Cosa
+enemy_type_himself#él mismo
+source_explosion#explosión
+source_poison#veneno
+enemy_francky#La Cosa
+enemy_francky_head#La cabeza de La Cosa
+item_apple_green#Manzana verde
+item_apple_green_desc#Restaura 3 PV y cura el veneno
+item_manual_slime#Manual de Maestría de Baba
+item_manual_slime_desc#Las babas ya no te atacan directamente
+item_spell_dual_quick#El libro de los rayos rápidos dobles
+item_spell_dual_quick_desc#Dispara dos rayos (rápido)
+item_spell_triple_quick#El libro de los rayos rápidos triples
+item_spell_triple_quick_desc#Dispara tres rayos (rápido)
+item_manual_health#Manual de Salud
+item_manual_health_desc#Los objetos de salud dan más PV
+item_rear_shot#Gorra del váculo
+item_rear_shot_desc#Dispara un rayo hacia trás
+item_book_random_shot#Libro del disparo al azar
+item_book_random_shot_desc#Dispara un rayo en una dirección al azar
+item_spell_web#Conjuro: Telaraña
+item_spell_web_desc#Invocar para lanzar telarañas
+item_book_magic_i#Libro de magia - Tomo I
+item_book_magic_i_desc#Disminuye el tiempo de espera de los conjuros
+item_book_magic_ii#Libro de magia - Tomo II
+item_book_magic_ii_desc#Aumenta el poder de los conjuros
+item_sulfur#Sulfuro
+item_sulfur_desc#Puede hacer que los cadáveres exploten
+spell_web#telaraña
+tuto_reset#Resetear tutorial
+tuto_reset_desc#Resetea el tutorial
+msg_francky_0#La... Cosa
+msg_francky_1#Yuck... ¡Parece como si estuviera hecho con partes de distintos cuerpos!
+msg_tuto_tips_0#Tutorial: Consejos
+msg_tuto_tips_1#Usa el Control del Tiempo (por defecto: RShift) para viajar rápidamente.
+msg_tuto_tips_2#Presiona [Enter] para cerrar el cuadro de mensajes inmediatamente.
+menu_continue#Continuar
+menu_continue_desc#Continúa con el juego
+menu_save_quit#Guardar y salir
+menu_save_quit_desc#Guarda la partida y se vuelve al menú principal
+menu_quit#Salir sin guardar
+menu_quit_desc#Vuelve al menú principal sin guardar la partida
+inventory#Inventario
+dc_certificate#Certificado de defunción
+dc_killed_by#Matado por
+dc_died_level#Muerto en nivel
+dc_after#tras
+dc_minutes#mins. de juego
+dc_killed_monsters#Monstruos asesinados
+dc_gold#Oro
+dc_challenges#Desafíos completados
 
 [russian]
 start_new_game#Начать новую игру
