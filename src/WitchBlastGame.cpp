@@ -1194,7 +1194,7 @@ void WitchBlastGame::renderRunningGame()
     sf::View view = app->getView(); //app->getDefaultView();
     sf::View viewSave = app->getView(); //app->getDefaultView();
 
-    if (player->getDeathAge() > 4.0f)
+    if (!parameters.zoom || player->getDeathAge() > 4.0f)
     {
       // do nothing
     }
@@ -1228,10 +1228,10 @@ void WitchBlastGame::renderRunningGame()
     app->setView(viewSave);
     EntityManager::getInstance().renderAfter(app, 5000);
   }
-  else if (gameTime < 1.0f)
+  else if (parameters.zoom && gameTime < 1.0f)
   {
-    sf::View view = app->getView(); //app->getDefaultView();
-    sf::View viewSave = app->getView(); //app->getDefaultView();
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
 
     view.zoom(0.25f + 0.75f * (gameTime));
 
@@ -1245,8 +1245,9 @@ void WitchBlastGame::renderRunningGame()
   }
   else if (xGame[xGameTypeShake].active)
   {
-    sf::View view = app->getDefaultView();
-    sf::View viewSave = app->getDefaultView();
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
+
     view.move(-4 + rand() % 9, -4 + rand() % 9);
     app->setView(view);
 
@@ -1257,13 +1258,10 @@ void WitchBlastGame::renderRunningGame()
   }
   else
   {
-    // render the game objects
-    //EntityManager::getInstance().render(app);
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
 
-    sf::View view = app->getView(); //app->getDefaultView();
-    sf::View viewSave = app->getView(); //app->getDefaultView();
-
-    view.move(-5, -5);
+    view.move(-OFFSET_X, -OFFSET_Y);
     app->setView(view);
 
     EntityManager::getInstance().renderUnder(app, 5000);
