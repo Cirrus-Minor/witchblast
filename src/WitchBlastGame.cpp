@@ -129,39 +129,42 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
 
 // author: AFS
 // source: https://github.com/LaurentGomila/SFML/wiki/Source:-Letterbox-effect-using-a-view
-static sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight) {
+static sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeight)
+{
 
-    // Compares the aspect ratio of the window to the aspect ratio of the view,
-    // and sets the view's viewport accordingly in order to archieve a letterbox effect.
-    // A new view (with a new viewport set) is returned.
+  // Compares the aspect ratio of the window to the aspect ratio of the view,
+  // and sets the view's viewport accordingly in order to archieve a letterbox effect.
+  // A new view (with a new viewport set) is returned.
 
-    float windowRatio = windowWidth / (float) windowHeight;
-    float viewRatio = view.getSize().x / (float) view.getSize().y;
-    float sizeX = 1;
-    float sizeY = 1;
-    float posX = 0;
-    float posY = 0;
+  float windowRatio = windowWidth / (float) windowHeight;
+  float viewRatio = view.getSize().x / (float) view.getSize().y;
+  float sizeX = 1;
+  float sizeY = 1;
+  float posX = 0;
+  float posY = 0;
 
-    bool horizontalSpacing = true;
-    if (windowRatio < viewRatio)
-        horizontalSpacing = false;
+  bool horizontalSpacing = true;
+  if (windowRatio < viewRatio)
+    horizontalSpacing = false;
 
-    // If horizontalSpacing is true, the black bars will appear on the left and right side.
-    // Otherwise, the black bars will appear on the top and bottom.
+  // If horizontalSpacing is true, the black bars will appear on the left and right side.
+  // Otherwise, the black bars will appear on the top and bottom.
 
-    if (horizontalSpacing) {
-        sizeX = viewRatio / windowRatio;
-        posX = (1 - sizeX) / 2.0;
-    }
+  if (horizontalSpacing)
+  {
+    sizeX = viewRatio / windowRatio;
+    posX = (1 - sizeX) / 2.0;
+  }
 
-    else {
-        sizeY = windowRatio / viewRatio;
-        posY = (1 - sizeY) / 2.0;
-    }
+  else
+  {
+    sizeY = windowRatio / viewRatio;
+    posY = (1 - sizeY) / 2.0;
+  }
 
-    view.setViewport( sf::FloatRect(posX, posY, sizeX, sizeY) );
+  view.setViewport( sf::FloatRect(posX, posY, sizeX, sizeY) );
 
-    return view;
+  return view;
 }
 
 namespace
@@ -185,7 +188,8 @@ WitchBlastGame::WitchBlastGame():
   }
 
   // loading resources
-  const char *const images[] = {
+  const char *const images[] =
+  {
     "media/player_base.png",   "media/player_faces.png",
     "media/bolt.png",          "media/tiles01.png",
     "media/rat.png",           "media/minimap.png",
@@ -216,7 +220,8 @@ WitchBlastGame::WitchBlastGame():
     ImageManager::getInstance().addImage(filename);
   }
 
-  const char *const sounds[] = {
+  const char *const sounds[] =
+  {
     "media/sound/blast00.ogg",        "media/sound/blast01.ogg",
     "media/sound/door_closing.ogg",   "media/sound/door_opening.ogg",
     "media/sound/chest_opening.ogg",  "media/sound/impact.ogg",
@@ -459,40 +464,40 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
 
-  #ifdef START_LEVEL
+#ifdef START_LEVEL
 
-  for (int i = 1; i < START_LEVEL; i++)
-  {
-    level = i;
-
-    if (level == 3)
+    for (int i = 1; i < START_LEVEL; i++)
     {
-      player->acquireItem(getItemSpell());
-      player->acquireItemAfterStance();
-    }
+      level = i;
 
-    player->setHpMax(player->getHpMax() + 2 + rand() % 4);
-    item_equip_enum item = getRandomEquipItem(false, false);
-    player->acquireItem((enumItemType)(item + FirstEquipItem));
-    player->acquireItemAfterStance();
+      if (level == 3)
+      {
+        player->acquireItem(getItemSpell());
+        player->acquireItemAfterStance();
+      }
 
-    item = getRandomEquipItem(true, true);
-    player->acquireItem((enumItemType)(item + FirstEquipItem));
-    player->acquireItemAfterStance();
-
-    if (i % 2 == 0)
-    {
-      item = getRandomEquipItem(false, false);
+      player->setHpMax(player->getHpMax() + 2 + rand() % 4);
+      item_equip_enum item = getRandomEquipItem(false, false);
       player->acquireItem((enumItemType)(item + FirstEquipItem));
       player->acquireItemAfterStance();
+
+      item = getRandomEquipItem(true, true);
+      player->acquireItem((enumItemType)(item + FirstEquipItem));
+      player->acquireItemAfterStance();
+
+      if (i % 2 == 0)
+      {
+        item = getRandomEquipItem(false, false);
+        player->acquireItem((enumItemType)(item + FirstEquipItem));
+        player->acquireItemAfterStance();
+      }
     }
-  }
-  level++;
+    level++;
 
-  player->setHp(player->getHpMax());
-  player->setGold(8 + rand() % 45);
+    player->setHp(player->getHpMax());
+    player->setGold(8 + rand() % 45);
 
-  #endif // START_LEVEL
+#endif // START_LEVEL
 
     startNewLevel();
   }
@@ -543,7 +548,7 @@ void WitchBlastGame::startNewLevel()
 
 void WitchBlastGame::playLevel(bool isFight)
 {
-    if (level % 3 == 1)
+  if (level % 3 == 1)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles01.png");
   else if (level % 3 == 2)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles02.png");
@@ -920,13 +925,13 @@ void WitchBlastGame::updateRunningGame()
       }
 
       // DEBUG
-      #ifdef TEST_MODE
+#ifdef TEST_MODE
       if (event.key.code == sf::Keyboard::F5)
       {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
           new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
         }
         else
         {
@@ -943,7 +948,7 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
           new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
         }
         else
         {
@@ -958,7 +963,7 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
           new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                               OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
         }
         else
         {
@@ -973,7 +978,7 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
           new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
         }
         else
         {
@@ -989,7 +994,7 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
           new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
         }
         else
         {
@@ -1003,7 +1008,7 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
           new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                                OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
         }
         else
         {
@@ -1018,7 +1023,7 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
           new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
         }
         else
         {
@@ -1039,7 +1044,7 @@ void WitchBlastGame::updateRunningGame()
         for (int i = 0; i < NUMBER_ITEMS; i++)
           new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
       }
-      #endif // TEST_MODE
+#endif // TEST_MODE
     }
 
     if (event.type == sf::Event::LostFocus && !player->isDead())
@@ -1159,8 +1164,8 @@ void WitchBlastGame::updateRunningGame()
       else if (currentMap->getRoomType() == roomTypeChallenge && !player->isDead())
       {
         ChestEntity* chest = new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
-                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
-                    ChestChallenge, false);
+                                             (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                                             ChestChallenge, false);
         chest->makeAppear();
 
         // sound
@@ -1369,17 +1374,17 @@ void WitchBlastGame::renderRunningGame()
       write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0);
       int n = 0;
       for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
+      {
+        if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
         {
-          if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
-          {
-            sf::Sprite itemSprite;
-            itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-            itemSprite.setPosition(x + n * 32, y + 20);
-            itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
-            app->draw(itemSprite);
-            n++;
-          }
+          sf::Sprite itemSprite;
+          itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+          itemSprite.setPosition(x + n * 32, y + 20);
+          itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
+          app->draw(itemSprite);
+          n++;
         }
+      }
 
       renderInGameMenu();
     }
@@ -1452,12 +1457,30 @@ void WitchBlastGame::renderRunningGame()
       unsigned int r = 0, g = 0, b = 0;
       switch (xGame[xGameTypeFadeColor].param)
       {
-        case X_GAME_COLOR_RED: r = 255;g = 100; break;
-        case X_GAME_COLOR_GREEN: g = 255; break;
-        case X_GAME_COLOR_BLUE: b = 255; break;
-        case X_GAME_COLOR_VIOLET: r = 255; b = 200; break;
-        case X_GAME_COLOR_BROWN: r = 200; b = 100; g = 150; break;
-        case X_GAME_COLOR_WHITE: r = 255; b = 255; g = 255; break;
+      case X_GAME_COLOR_RED:
+        r = 255;
+        g = 100;
+        break;
+      case X_GAME_COLOR_GREEN:
+        g = 255;
+        break;
+      case X_GAME_COLOR_BLUE:
+        b = 255;
+        break;
+      case X_GAME_COLOR_VIOLET:
+        r = 255;
+        b = 200;
+        break;
+      case X_GAME_COLOR_BROWN:
+        r = 200;
+        b = 100;
+        g = 150;
+        break;
+      case X_GAME_COLOR_WHITE:
+        r = 255;
+        b = 255;
+        g = 255;
+        break;
       }
       int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
 
@@ -1555,17 +1578,17 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   write(tools::getLabel("inventory"), 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
   int n = 0;
   for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
+  {
+    if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
     {
-      if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
-      {
-        sf::Sprite itemSprite;
-        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-        itemSprite.setPosition(x + 14 + n * 32, y + 183);
-        itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
-        app->draw(itemSprite);
-        n++;
-      }
+      sf::Sprite itemSprite;
+      itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+      itemSprite.setPosition(x + 14 + n * 32, y + 183);
+      itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
+      app->draw(itemSprite);
+      n++;
     }
+  }
 }
 
 void WitchBlastGame::renderDeathScreen()
@@ -1868,9 +1891,13 @@ void WitchBlastGame::updateMenu()
     }
     else if (event.type == sf::Event::KeyPressed)
     {
-      if (event.key.code == sf::Keyboard::Escape)
+      if (menuState == MenuStateCredits)
       {
-        if (menuState == MenuStateConfig || menuState == MenuStateCredits) menuState = MenuStateMain;
+        menuState = MenuStateMain;
+      }
+      else if (event.key.code == sf::Keyboard::Escape)
+      {
+        if (menuState == MenuStateConfig) menuState = MenuStateMain;
         else app->close();
       }
       else if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
@@ -1913,51 +1940,49 @@ void WitchBlastGame::updateMenu()
       }
       else if (event.key.code == sf::Keyboard::Return)
       {
-        if (menuState == MenuStateCredits) menuState = MenuStateMain;
-        else
+
+        switch (menu->items[menu->index].id)
         {
-          switch (menu->items[menu->index].id)
+        case MenuStartNew:
+          startNewGame(false);
+          remove(SAVE_FILE.c_str());
+          break;
+        case MenuStartOld:
+          startNewGame(true);
+          break;
+        case MenuKeys:
+          menuState = MenuStateKeys;
+          menuKeyIndex = 0;
+          break;
+        case MenuCredits:
+          menuState = MenuStateCredits;
+          break;
+        case MenuConfig:
+          menuState = MenuStateConfig;
+          break;
+        case MenuTutoReset:
+          for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
+          SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
+          break;
+        case MenuConfigBack:
+          menuState = MenuStateMain;
+          break;
+        case MenuLanguage:
+          if (menuState == MenuStateFirst)
           {
-          case MenuStartNew:
-            startNewGame(false);
-            remove(SAVE_FILE.c_str());
-            break;
-          case MenuStartOld:
-            startNewGame(true);
-            break;
-          case MenuKeys:
-            menuState = MenuStateKeys;
-            menuKeyIndex = 0;
-            break;
-          case MenuCredits:
-            menuState = MenuStateCredits;
-            break;
-          case MenuConfig:
-            menuState = MenuStateConfig;
-            break;
-          case MenuTutoReset:
-            for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
-            SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
-            break;
-          case MenuConfigBack:
+            registerLanguage();
             menuState = MenuStateMain;
-            break;
-          case MenuLanguage:
-            if (menuState == MenuStateFirst)
-            {
-              registerLanguage();
-              menuState = MenuStateMain;
-            }
-            break;
-          case MenuExit:
-            app->close();
-            break;
-          case MenuContinue:
-          case MenuSaveAndQuit:
-            std::cout << "[ERROR] Bad Menu ID\n";
-            break;
           }
+          break;
+        case MenuExit:
+          app->close();
+          break;
+        case MenuContinue:
+        case MenuSaveAndQuit:
+          std::cout << "[ERROR] Bad Menu ID\n";
+          break;
         }
+
       }
     }
   }
@@ -2399,8 +2424,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                                                    TILE_HEIGHT / 2, 192, 64, 1);
+        (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+        TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setFrame(17);
     keystoneEntity->setType(ENTITY_EFFECT);
@@ -2408,8 +2433,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourDown())
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                                                    MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
+        (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+        MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(180);
     keystoneEntity->setFrame(17);
@@ -2418,8 +2443,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourLeft())
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    TILE_WIDTH / 2,
-                                                    (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
+        TILE_WIDTH / 2,
+        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(270);
     keystoneEntity->setFrame(17);
@@ -2428,8 +2453,8 @@ void WitchBlastGame::refreshMap()
   if (currentMap->getNeighbourRight())
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
-                                                    (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
+        MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
+        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(90);
     keystoneEntity->setFrame(17);
@@ -2829,34 +2854,34 @@ void WitchBlastGame::generateMap()
     {
       // TODO
       GiantSpiderEntity* b1 = new GiantSpiderEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b1->setLabelDy(10);
 
       FranckyEntity* b2 = new FranckyEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                                            (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b2->setLabelDy(-530);
 
       KingRatEntity* b3 = new KingRatEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                                            (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b3->setLabelDy(-20);
     }
 
     else // level > 6
     {
       GiantSpiderEntity* b1 = new GiantSpiderEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b1->setLabelDy(10);
 
       GiantSlimeEntity* b2 = new GiantSlimeEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b2->setLabelDy(-510);
 
       KingRatEntity* b3 = new KingRatEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                                            (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b3->setLabelDy(-20);
 
       CyclopsEntity* b4 = new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+                                            (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b4->setLabelDy(-540);
 
       findPlaceMonsters(EnemyTypeCauldron, 2);
@@ -3166,14 +3191,28 @@ enumItemType WitchBlastGame::getItemSpell()
   enumItemType item = ItemMagicianHat;
   switch (n)
   {
-    case SpellNone:
-    case SpellTeleport: item = ItemSpellTeleport; break;
-    case SpellSlimeExplode: item = ItemSpellSlimeExplode; break;
-    case SpellFireball: item = ItemSpellFireball; break;
-    case SpellFreeze: item = ItemSpellFreeze; break;
-    case SpellEarthquake: item = ItemSpellEarthquake; break;
-    case SpellProtection: item = ItemSpellProtection; break;
-    case SpellWeb: item = ItemSpellWeb; break;
+  case SpellNone:
+  case SpellTeleport:
+    item = ItemSpellTeleport;
+    break;
+  case SpellSlimeExplode:
+    item = ItemSpellSlimeExplode;
+    break;
+  case SpellFireball:
+    item = ItemSpellFireball;
+    break;
+  case SpellFreeze:
+    item = ItemSpellFreeze;
+    break;
+  case SpellEarthquake:
+    item = ItemSpellEarthquake;
+    break;
+  case SpellProtection:
+    item = ItemSpellProtection;
+    break;
+  case SpellWeb:
+    item = ItemSpellWeb;
+    break;
   }
   return item;
 }
@@ -3762,7 +3801,7 @@ void WitchBlastGame::saveGameData()
 
 void WitchBlastGame::loadGameData()
 {
-std::ifstream file(SAVE_DATA_FILE.c_str(), std::ios::in);
+  std::ifstream file(SAVE_DATA_FILE.c_str(), std::ios::in);
 
   if (file)
   {
@@ -4109,8 +4148,8 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
 }
 
 void WitchBlastGame::renderPlayer(float x, float y,
-                                      bool equip[NUMBER_EQUIP_ITEMS], int shotType,
-                                      int frame, int spriteDy)
+                                  bool equip[NUMBER_EQUIP_ITEMS], int shotType,
+                                  int frame, int spriteDy)
 {
   bool isMirroring = false;
   sf::Sprite sprite;
@@ -4296,67 +4335,140 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
 
   switch (enemyType)
   {
-    case EnemyTypeBat_invocated:
-    case EnemyTypeBat: value = "enemy_type_bat"; break;
-    case EnemyTypeRat_invocated:
-    case EnemyTypeRat: value = "enemy_type_rat"; break;
-    case EnemyTypeRatBlack: value = "enemy_type_rat_black"; break;
-    case EnemyTypeRatHelmet_invocated:
-    case EnemyTypeRatHelmet: value = "enemy_type_rat_helmet"; break;
-    case EnemyTypeRatBlackHelmet: value = "enemy_type_rat_black_helmet"; break;
-    case EnemyTypeEvilFlower: value = "enemy_type_evil_flower"; break;
-    case EnemyTypeEvilFlowerIce: value = "enemy_type_evil_flower_ice"; break;
-    case EnemyTypeSnake_invocated:
-    case EnemyTypeSnake: value = "enemy_type_snake"; break;
-    case EnemyTypeSnakeBlood_invocated:
-    case EnemyTypeSnakeBlood: value = "enemy_type_snake_blood"; break;
-    case EnemyTypeSlime_invocated:
-    case EnemyTypeSlime: value = "enemy_type_slime"; break;
-    case EnemyTypeSlimeRed_invocated:
-    case EnemyTypeSlimeRed: value = "enemy_type_slime_red"; break;
-    case EnemyTypeSlimeBlue_invocated:
-    case EnemyTypeSlimeBlue: value = "enemy_type_slime_blue"; break;
-    case EnemyTypeSlimeViolet_invocated:
-    case EnemyTypeSlimeViolet: value = "enemy_type_slime_violet"; break;
-    case EnemyTypeImpBlue: value = "enemy_type_imp_blue"; break;
-    case EnemyTypeImpRed: value = "enemy_type_imp_red"; break;
-    case EnemyTypePumpkin_invocated:
-    case EnemyTypePumpkin: value = "enemy_type_pumpkin"; break;
-    case EnemyTypeWitch: value = "enemy_type_witch"; break;
-    case EnemyTypeWitchRed: value = "enemy_type_witch_red"; break;
-    case EnemyTypeCauldron: value = "enemy_type_cauldron"; break;
-    case EnemyTypeGhost: value = "enemy_type_ghost"; break;
-    case EnemyTypeZombie_invocated:
-    case EnemyTypeZombie: value = "enemy_type_zombie"; break;
-    case EnemyTypeZombieDark: value = "enemy_type_zombie_dark"; break;
+  case EnemyTypeBat_invocated:
+  case EnemyTypeBat:
+    value = "enemy_type_bat";
+    break;
+  case EnemyTypeRat_invocated:
+  case EnemyTypeRat:
+    value = "enemy_type_rat";
+    break;
+  case EnemyTypeRatBlack:
+    value = "enemy_type_rat_black";
+    break;
+  case EnemyTypeRatHelmet_invocated:
+  case EnemyTypeRatHelmet:
+    value = "enemy_type_rat_helmet";
+    break;
+  case EnemyTypeRatBlackHelmet:
+    value = "enemy_type_rat_black_helmet";
+    break;
+  case EnemyTypeEvilFlower:
+    value = "enemy_type_evil_flower";
+    break;
+  case EnemyTypeEvilFlowerIce:
+    value = "enemy_type_evil_flower_ice";
+    break;
+  case EnemyTypeSnake_invocated:
+  case EnemyTypeSnake:
+    value = "enemy_type_snake";
+    break;
+  case EnemyTypeSnakeBlood_invocated:
+  case EnemyTypeSnakeBlood:
+    value = "enemy_type_snake_blood";
+    break;
+  case EnemyTypeSlime_invocated:
+  case EnemyTypeSlime:
+    value = "enemy_type_slime";
+    break;
+  case EnemyTypeSlimeRed_invocated:
+  case EnemyTypeSlimeRed:
+    value = "enemy_type_slime_red";
+    break;
+  case EnemyTypeSlimeBlue_invocated:
+  case EnemyTypeSlimeBlue:
+    value = "enemy_type_slime_blue";
+    break;
+  case EnemyTypeSlimeViolet_invocated:
+  case EnemyTypeSlimeViolet:
+    value = "enemy_type_slime_violet";
+    break;
+  case EnemyTypeImpBlue:
+    value = "enemy_type_imp_blue";
+    break;
+  case EnemyTypeImpRed:
+    value = "enemy_type_imp_red";
+    break;
+  case EnemyTypePumpkin_invocated:
+  case EnemyTypePumpkin:
+    value = "enemy_type_pumpkin";
+    break;
+  case EnemyTypeWitch:
+    value = "enemy_type_witch";
+    break;
+  case EnemyTypeWitchRed:
+    value = "enemy_type_witch_red";
+    break;
+  case EnemyTypeCauldron:
+    value = "enemy_type_cauldron";
+    break;
+  case EnemyTypeGhost:
+    value = "enemy_type_ghost";
+    break;
+  case EnemyTypeZombie_invocated:
+  case EnemyTypeZombie:
+    value = "enemy_type_zombie";
+    break;
+  case EnemyTypeZombieDark:
+    value = "enemy_type_zombie_dark";
+    break;
 
-    // mini boss
-    case EnemyTypeBubble: value = "enemy_type_bubble"; break;
+  // mini boss
+  case EnemyTypeBubble:
+    value = "enemy_type_bubble";
+    break;
 
-    // boss
-    case EnemyTypeButcher: value = "enemy_type_boss_butcher"; break;
-    case EnemyTypeSlimeBoss: value = "enemy_type_boss_slime_giant"; break;
-    case EnemyTypeCyclops: value = "enemy_type_boss_cyclops"; break;
-    case EnemyTypeRatKing: value = "enemy_type_boss_rat_king"; break;
-    case EnemyTypeSpiderGiant: value = "enemy_type_boss_spider_giant"; break;
-    case EnemyTypeFranckyHand:
-    case EnemyTypeFranckyHead:
-    case EnemyTypeFranckyFoot:
-    case EnemyTypeFrancky: value = "enemy_type_francky"; break;
+  // boss
+  case EnemyTypeButcher:
+    value = "enemy_type_boss_butcher";
+    break;
+  case EnemyTypeSlimeBoss:
+    value = "enemy_type_boss_slime_giant";
+    break;
+  case EnemyTypeCyclops:
+    value = "enemy_type_boss_cyclops";
+    break;
+  case EnemyTypeRatKing:
+    value = "enemy_type_boss_rat_king";
+    break;
+  case EnemyTypeSpiderGiant:
+    value = "enemy_type_boss_spider_giant";
+    break;
+  case EnemyTypeFranckyHand:
+  case EnemyTypeFranckyHead:
+  case EnemyTypeFranckyFoot:
+  case EnemyTypeFrancky:
+    value = "enemy_type_francky";
+    break;
 
-    // invocated
-    case EnemyTypeRatGreen: value = "enemy_type_green_rat"; break;
-    case EnemyTypeRockFalling: value = "enemy_type_rock_falling"; break;
-    case EnemyTypeRockMissile: value = "enemy_type_rock_missile"; break;
-    case EnemyTypeSpiderEgg:
-    case EnemyTypeSpiderEgg_invocated: value = "enemy_type_spider_egg"; break;
-    case EnemyTypeSpiderLittle:
-    case EnemyTypeSpiderLittle_invocated: value = "enemy_type_spider_little"; break;
-    case EnemyTypeSpiderWeb: value = "enemy_type_spider_web"; break;
+  // invocated
+  case EnemyTypeRatGreen:
+    value = "enemy_type_green_rat";
+    break;
+  case EnemyTypeRockFalling:
+    value = "enemy_type_rock_falling";
+    break;
+  case EnemyTypeRockMissile:
+    value = "enemy_type_rock_missile";
+    break;
+  case EnemyTypeSpiderEgg:
+  case EnemyTypeSpiderEgg_invocated:
+    value = "enemy_type_spider_egg";
+    break;
+  case EnemyTypeSpiderLittle:
+  case EnemyTypeSpiderLittle_invocated:
+    value = "enemy_type_spider_little";
+    break;
+  case EnemyTypeSpiderWeb:
+    value = "enemy_type_spider_web";
+    break;
 
-    case EnemyTypeNone: value = "enemy_type_himself"; break;
+  case EnemyTypeNone:
+    value = "enemy_type_himself";
+    break;
 
-    case NB_ENEMY: break;
+  case NB_ENEMY:
+    break;
   }
   return value;
 }
@@ -4367,10 +4479,15 @@ std::string WitchBlastGame::sourceToString(sourceTypeEnum sourceType, enemyTypeE
 
   switch (sourceType)
   {
-    case SourceTypeBolt:
-    case SourceTypeMelee: value = tools::getLabel(enemyToString(enemyType)); break;
-    case SourceTypeExplosion: value = tools::getLabel("source_explosion"); break;
-    case SourceTypePoison: value = tools::getLabel("source_poison");
+  case SourceTypeBolt:
+  case SourceTypeMelee:
+    value = tools::getLabel(enemyToString(enemyType));
+    break;
+  case SourceTypeExplosion:
+    value = tools::getLabel("source_explosion");
+    break;
+  case SourceTypePoison:
+    value = tools::getLabel("source_poison");
   }
 
   return value;
@@ -4381,4 +4498,3 @@ WitchBlastGame &game()
 {
   return *gameptr;
 }
-

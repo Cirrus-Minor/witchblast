@@ -98,6 +98,12 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next version
+- ADD Sound and music volume in config file
+- ADD Option to enable/disable zoom in config file
+- ADD Option to enable/disable vsync in config file
+- MOD Don't distort game screen when resizing the window
+
 v0.4.0
 - ADD New level
 - ADD New monsters
