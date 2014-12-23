@@ -2003,8 +2003,8 @@ void WitchBlastGame::renderMenu()
   EntityManager::getInstance().render(app);
 
   // title
-  //write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
-  //write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
+  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   menuStuct* menu = nullptr;
   if (menuState == MenuStateMain)
