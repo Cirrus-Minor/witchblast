@@ -194,7 +194,7 @@ void PlayerEntity::setEntering()
 
 void PlayerEntity::setLeavingLevel()
 {
-  playerStatus = playerStatusGoingUp;
+  playerStatus = playerStatusGoingNext;
 }
 
 void PlayerEntity::pay(int price)

@@ -297,7 +297,8 @@ class PlayerEntity : public BaseCreatureEntity
       playerStatusEntering,   /**< Player is entering a not yet cleared room (walking is forced) */
       playerStatusAcquire,    /**< Player is under acquiring stance */
       playerStatusUnlocking,  /**< Player is under unlocking stance */
-      playerStatusGoingUp,    /**< Player goes to next level */
+      playerStatusStairs,     /**< Player walk the stairs */
+      playerStatusGoingNext,  /**< Player goes to next level */
       playerStatusDead        /**< Player RIP */
     };
 

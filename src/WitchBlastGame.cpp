@@ -371,7 +371,7 @@ void WitchBlastGame::onUpdate()
           xGame[i].active = false;
           if (i == (int)xGameTypeFade && xGame[i].param == X_GAME_FADE_OUT)
           {
-            if (player->getPlayerStatus() == PlayerEntity::playerStatusGoingUp)
+            if (player->getPlayerStatus() == PlayerEntity::playerStatusGoingNext)
             {
               level++;
               startNewLevel();
@@ -529,7 +529,7 @@ void WitchBlastGame::startNewLevel()
                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
   else
     player->moveTo((TILE_WIDTH * MAP_WIDTH * 0.5f),
-                   (TILE_HEIGHT * MAP_HEIGHT - 3 * TILE_HEIGHT));
+                   (TILE_HEIGHT * MAP_HEIGHT - 2 * TILE_HEIGHT));
 
   // the boss room is closed
   bossRoomOpened = false;
@@ -2003,8 +2003,8 @@ void WitchBlastGame::renderMenu()
   EntityManager::getInstance().render(app);
 
   // title
-  //write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
-  //write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
+  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   menuStuct* menu = nullptr;
   if (menuState == MenuStateMain)
@@ -2560,7 +2560,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
   // stairs to next level
   if (direction == 8 && currentMap->getRoomType() == roomTypeExit)
   {
-    if (player->getPlayerStatus() != PlayerEntity::playerStatusGoingUp)
+    if (player->getPlayerStatus() != PlayerEntity::playerStatusGoingNext)
     {
       player->setLeavingLevel();
       xGame[xGameTypeFade].active = true;
@@ -3871,6 +3871,8 @@ void WitchBlastGame::configureFromFile()
   parameters.language = 0;  // english
   parameters.zoom = true;
   parameters.vsync = true;
+  parameters.musicVolume = 100;
+  parameters.soundVolume = 80;
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
