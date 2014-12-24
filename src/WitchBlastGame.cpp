@@ -3871,6 +3871,8 @@ void WitchBlastGame::configureFromFile()
   parameters.language = 0;  // english
   parameters.zoom = true;
   parameters.vsync = true;
+  parameters.musicVolume = 100;
+  parameters.soundVolume = 80;
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
