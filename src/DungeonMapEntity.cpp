@@ -18,7 +18,19 @@ void DungeonMapEntity::animate(float delay)
   bool needCompute = getChanged() || game().getCurrentMap()->getChanged();
   if (needCompute) computeVertices();
 
-  for (unsigned int i = 0; i < blood.size(); i++) animateParticle(blood[i], delay);
+  // blood
+  bool moving = false;
+  for (unsigned int i = 0; i < blood.size(); i++)
+  {
+    if (blood[i].moving)
+    {
+      moving = true;
+      animateParticle(blood[i], delay);
+    }
+  }
+  if (moving) computeBloodVertices();
+
+
 }
 
 void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float delay)
@@ -26,8 +38,14 @@ void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float dela
   particle.velocity.x *= 0.95f;
   particle.velocity.y *= 0.95f;
 
-  particle.x += delay * particle.velocity.x;
-  particle.y += delay * particle.velocity.y;
+  if (particle.velocity.x < -5 || particle.velocity.x > 5
+      || particle.velocity.y < -5 || particle.velocity.y > 5)
+  {
+    particle.x += delay * particle.velocity.x;
+    particle.y += delay * particle.velocity.y;
+  }
+  else
+    particle.moving = false;
 }
 
 bool DungeonMapEntity::getChanged()
@@ -51,29 +69,6 @@ std::vector <displayEntityStruct> DungeonMapEntity::getBlood()
 
 void DungeonMapEntity::displayBlood(sf::RenderTarget* app)
 {
-  bloodVertices.setPrimitiveType(sf::Quads);
-  bloodVertices.resize(blood.size() * 4);
-
-  for (unsigned int i = 0; i < blood.size(); i++)
-  {
-    auto particle = blood[i];
-
-    sf::Vertex* quad = &bloodVertices[i * 4];
-
-    float middle = 8.0f * particle.scale;
-    int nx = particle.frame % 6;
-    int ny = particle.frame / 6;
-
-    quad[0].position = sf::Vector2f(particle.x - middle, particle.y - middle);
-    quad[1].position = sf::Vector2f(particle.x + middle, particle.y - middle);
-    quad[2].position = sf::Vector2f(particle.x + middle, particle.y + middle);
-    quad[3].position = sf::Vector2f(particle.x - middle, particle.y + middle);
-
-    quad[0].texCoords = sf::Vector2f(nx * 16, ny * 16);
-    quad[1].texCoords = sf::Vector2f((nx + 1) * 16, ny * 16);
-    quad[2].texCoords = sf::Vector2f((nx + 1) * 16, (ny + 1) * 16);
-    quad[3].texCoords = sf::Vector2f(nx * 16, (ny + 1) * 16);
-  }
   app->draw(bloodVertices, ImageManager::getInstance().getImage(IMAGE_BLOOD));
 }
 
@@ -82,6 +77,7 @@ void DungeonMapEntity::refreshMap()
   hasChanged = true;
 
   blood.clear();
+  computeBloodVertices();
 }
 
 void DungeonMapEntity::computeVertices()
@@ -116,6 +112,33 @@ void DungeonMapEntity::computeVertices()
     }
 }
 
+void DungeonMapEntity::computeBloodVertices()
+{
+  bloodVertices.setPrimitiveType(sf::Quads);
+  bloodVertices.resize(blood.size() * 4);
+
+  for (unsigned int i = 0; i < blood.size(); i++)
+  {
+    auto particle = blood[i];
+
+    sf::Vertex* quad = &bloodVertices[i * 4];
+
+    float middle = 8.0f * particle.scale;
+    int nx = particle.frame % 6;
+    int ny = particle.frame / 6;
+
+    quad[0].position = sf::Vector2f(particle.x - middle, particle.y - middle);
+    quad[1].position = sf::Vector2f(particle.x + middle, particle.y - middle);
+    quad[2].position = sf::Vector2f(particle.x + middle, particle.y + middle);
+    quad[3].position = sf::Vector2f(particle.x - middle, particle.y + middle);
+
+    quad[0].texCoords = sf::Vector2f(nx * 16, ny * 16);
+    quad[1].texCoords = sf::Vector2f((nx + 1) * 16, ny * 16);
+    quad[2].texCoords = sf::Vector2f((nx + 1) * 16, (ny + 1) * 16);
+    quad[3].texCoords = sf::Vector2f(nx * 16, (ny + 1) * 16);
+  }
+}
+
 void DungeonMapEntity::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
 {
   displayEntityStruct bloodEntity;
@@ -126,6 +149,8 @@ void DungeonMapEntity::generateBlood(float x, float y, BaseCreatureEntity::enumB
   bloodEntity.x = x;
   bloodEntity.y = y;
   bloodEntity.scale = 1.0f + (rand() % 10) * 0.1f;
+
+  bloodEntity.moving = true;
 
   blood.push_back(bloodEntity);
 }
@@ -140,6 +165,8 @@ void DungeonMapEntity::addBlood(float x, float y, int frame, float scale)
   bloodEntity.velocity.x = 0;
   bloodEntity.velocity.y = 0;
   bloodEntity.scale = scale;
+
+  bloodEntity.moving = true;
 
   blood.push_back(bloodEntity);
 }

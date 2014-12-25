@@ -6,6 +6,7 @@
 
 struct displayEntityStruct
 {
+  bool moving;
   int frame;
   float x;
   float y;
@@ -45,6 +46,7 @@ private:
 
   bool getChanged();
   void computeVertices();
+  void computeBloodVertices();
 
   void animateParticle(displayEntityStruct &particle, float delay);
 
