@@ -320,6 +320,11 @@ DungeonMap* WitchBlastGame::getCurrentMap()
   return currentMap;
 }
 
+DungeonMapEntity* WitchBlastGame::getCurrentMapEntity()
+{
+  return dungeonEntity;
+}
+
 PlayerEntity* WitchBlastGame::getPlayer()
 {
   return player;
@@ -418,11 +423,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
   // init in game menu
   buildInGameMenu();
-
-  // current map (tiles)
-  currentTileMap = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_TILES), currentMap, 64, 64, 10);
-  currentTileMap->setX(0);
-  currentTileMap->setY(0);
+  dungeonEntity = new DungeonMapEntity();
 
   // the interface
   SpriteEntity* interface = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_INTERFACE));
@@ -2398,7 +2399,8 @@ void WitchBlastGame::refreshMap()
   currentMap = currentFloor->getAndVisitMap(floorX, floorY);
 
   // load the map
-  currentTileMap->setMap(currentMap);
+  dungeonEntity->refreshMap();
+
   player->setMap(currentMap, TILE_WIDTH, TILE_HEIGHT, 0, 0);
   refreshMinimap();
 
@@ -2521,6 +2523,13 @@ void WitchBlastGame::checkEntering()
 void WitchBlastGame::saveMapItems()
 {
   currentMap->cleanMapObjects();
+
+  // blood
+  std::vector <displayEntityStruct> blood = dungeonEntity->getBlood();
+  for (auto particle: blood)
+  {
+    currentMap->addSprite(ENTITY_BLOOD, particle.frame, particle.x, particle.y, particle.scale);
+  }
 
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
@@ -2665,27 +2674,9 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
 
 void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
 {
+  dungeonEntity->generateBlood(x, y, bloodColor);
   // double blood if the "Blood Snake3 object is equipped
-  int nbIt;
-  if (player->isEquiped(EQUIP_BLOOD_SNAKE))
-    nbIt = 2;
-  else
-    nbIt = 1;
-
-  for (int i=0; i < nbIt; i++)
-  {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
-    blood->setZ(-1);
-    int b0 = 0;
-    if (bloodColor == BaseCreatureEntity::BloodGreen) b0 += 6;
-    blood->setFrame(b0 + rand()%6);
-    blood->setType(ENTITY_BLOOD);
-    blood->setVelocity(Vector2D(rand()%250));
-    blood->setViscosity(0.95f);
-
-    float bloodScale = 1.0f + (rand() % 10) * 0.1f;
-    blood->setScale(bloodScale, bloodScale);
-  }
+  if (player->isEquiped(EQUIP_BLOOD_SNAKE)) dungeonEntity->generateBlood(x, y, bloodColor);
 }
 
 void WitchBlastGame::showArtefactDescription(enumItemType itemType)

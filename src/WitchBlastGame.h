@@ -20,6 +20,7 @@
 #include "sfml_game/Game.h"
 #include "sfml_game/TileMapEntity.h"
 #include "PlayerEntity.h"
+#include "DungeonMapEntity.h"
 #include "EnemyEntity.h"
 #include "DoorEntity.h"
 #include "GameFloor.h"
@@ -121,6 +122,13 @@ public:
   *  \return a pointer to the current dungeon map
   */
   DungeonMap* getCurrentMap();
+
+  /*!
+  *  \brief Accessor on the current dungeon map entity
+  *
+  *  \return a pointer to the current dungeon map entity
+  */
+  DungeonMapEntity* getCurrentMapEntity();
 
   /*!
    *  \brief Accessor on the player
@@ -385,8 +393,8 @@ private:
   int killedEnemies[NB_ENEMY];
 
   // game objects
-  PlayerEntity* player;           /*!< Pointer to the player entity */
-  TileMapEntity* currentTileMap;  /*!< TileMap of the room (main game board) */
+  PlayerEntity* player;             /*!< Pointer to the player entity */
+  DungeonMapEntity* dungeonEntity;  /*!< TileMap of the room (main game board) + blood, items, etc...*/
 
   // displaying objects
   DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */

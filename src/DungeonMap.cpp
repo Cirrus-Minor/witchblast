@@ -743,11 +743,7 @@ void DungeonMap::restoreSprites()
 
     if (ilm.type == ENTITY_BLOOD)
     {
-      SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), ilm.x, ilm.y, 16, 16, 6);
-      blood->setZ(-1);
-      blood->setFrame(ilm.frame);
-      blood->setType(ENTITY_BLOOD);
-      blood->setScale(ilm.scale, ilm.scale);
+      game().getCurrentMapEntity()->addBlood(ilm.x, ilm.y, ilm.frame, ilm.scale);
     }
     else if (ilm.type == ENTITY_CORPSE)
     {
