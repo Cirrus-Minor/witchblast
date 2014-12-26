@@ -1075,7 +1075,7 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 {
   if (playerStatus == playerStatusDead) return false;
 
-  if (invincibleDelay <= 0.0f || hurtingType == ShotTypeDeterministic)
+  if (invincibleDelay <= 0.0f || hurtParam.hurtingType == ShotTypeDeterministic)
   {
     SoundManager::getInstance().playSound(SOUND_PLAYER_HIT);
     if (BaseCreatureEntity::hurt(hurtParam) > 0)

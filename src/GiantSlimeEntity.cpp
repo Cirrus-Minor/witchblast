@@ -359,10 +359,7 @@ void GiantSlimeEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType);
-  SpriteEntity* deadRat = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
-  deadRat->setZ(0);
-  deadRat->setFrame(FRAME_CORPSE_GIANT_SLIME - FRAME_CORPSE_KING_RAT);
-  deadRat->setType(ENTITY_CORPSE);
+  game().addCorpse(x, y, FRAME_CORPSE_GIANT_SLIME);
 
   float xSlime = x;
   float ySlime = y;
@@ -370,7 +367,7 @@ void GiantSlimeEntity::dying()
   if (x <= 1.5 * TILE_WIDTH) x = 1.5f * TILE_WIDTH + 2;
   else if (x >= TILE_WIDTH * MAP_WIDTH - 1.5f * TILE_WIDTH) x = TILE_WIDTH * MAP_WIDTH - 1.5f * TILE_WIDTH -3;
   if (y <= 1.5 * TILE_HEIGHT) y = 1.5 * TILE_HEIGHT + 2;
-  else if (y >= TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT) x = TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT -3;
+  else if (y >= TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT) y = TILE_HEIGHT * MAP_HEIGHT - 1.5f * TILE_HEIGHT -3;
 
   for (int i = 0; i < 9; i++)
   {

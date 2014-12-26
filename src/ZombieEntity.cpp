@@ -55,11 +55,7 @@ void ZombieEntity::animate(float delay)
       else
       {
         isDying = true;
-        SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y - 28, 64, 64);
-        corpse->setFrame(deathFrame);
-        corpse->setImagesProLine(10);
-        corpse->setZ(0);
-        corpse->setType(ENTITY_CORPSE);
+        game().addCorpse(x, y, deathFrame);
         if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
       }
     }

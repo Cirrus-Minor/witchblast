@@ -344,10 +344,5 @@ void BoltEntity::explode()
   new ExplosionEntity(x, y, ExplosionTypeStandard, 12, enemyType);
   game().makeShake(0.5f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
-
-  SpriteEntity* corpse= new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-  corpse->setFrame(FRAME_CORPSE_SLIME_VIOLET);
-  corpse->setImagesProLine(10);
-  corpse->setZ(0);
-  corpse->setType(ENTITY_CORPSE);
+  game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
 }

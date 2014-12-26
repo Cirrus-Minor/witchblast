@@ -12,6 +12,7 @@ DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance(
   z = -0.5f;
   type = ENTITY_DOOR;
   doorType = DoorStandard;
+  timer = 0.0f;
 }
 
 
