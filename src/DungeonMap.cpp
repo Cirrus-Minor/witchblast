@@ -742,29 +742,10 @@ void DungeonMap::restoreSprites()
     it++;
 
     if (ilm.type == ENTITY_BLOOD)
-    {
       game().getCurrentMapEntity()->addBlood(ilm.x, ilm.y, ilm.frame, ilm.scale);
-    }
+
     else if (ilm.type == ENTITY_CORPSE)
-    {
       game().getCurrentMapEntity()->addCorpse(ilm.x, ilm.y, ilm.frame);
-      /*SpriteEntity* corpse;
-
-      if (ilm.frame >= FRAME_CORPSE_KING_RAT)
-      {
-        corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), ilm.x, ilm.y, 128, 128);
-        corpse->setFrame(ilm.frame - FRAME_CORPSE_KING_RAT);
-      }
-      else
-      {
-        corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), ilm.x, ilm.y, 64, 64);
-        corpse->setFrame(ilm.frame);
-        corpse->setImagesProLine(10);
-      }
-
-      corpse->setZ(0);
-      corpse->setType(ENTITY_CORPSE);*/
-    }
   }
 }
 

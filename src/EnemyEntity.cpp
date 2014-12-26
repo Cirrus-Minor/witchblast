@@ -69,21 +69,7 @@ void EnemyEntity::animate(float delay)
       else
       {
         isDying = true;
-        SpriteEntity* corpse;
-        if (deathFrame >= FRAME_CORPSE_KING_RAT)
-        {
-          corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y, 128, 128);
-          corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
-        }
-        else
-        {
-          corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-          corpse->setFrame(deathFrame);
-          corpse->setImagesProLine(10);
-        }
-
-        corpse->setZ(0);
-        corpse->setType(ENTITY_CORPSE);
+        game().addCorpse(x, y, deathFrame);
         if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
       }
     }
