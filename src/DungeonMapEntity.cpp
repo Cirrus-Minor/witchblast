@@ -9,6 +9,10 @@ DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
 
     type = 0;
     hasChanged = true;
+
+    DungeonMapEntityPost* post = new DungeonMapEntityPost(this);
+    post->setZ(-0.2f);
+    post->setType(0);
 }
 
 
@@ -29,8 +33,6 @@ void DungeonMapEntity::animate(float delay)
     }
   }
   if (moving) computeBloodVertices();
-
-
 }
 
 void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float delay)
@@ -58,7 +60,10 @@ bool DungeonMapEntity::getChanged()
 void DungeonMapEntity::render(sf::RenderTarget* app)
 {
   app->draw(vertices, ImageManager::getInstance().getImage(IMAGE_TILES));
+}
 
+void DungeonMapEntity::renderPost(sf::RenderTarget* app)
+{
   displayBlood(app);
 }
 
@@ -169,4 +174,22 @@ void DungeonMapEntity::addBlood(float x, float y, int frame, float scale)
   bloodEntity.moving = true;
 
   blood.push_back(bloodEntity);
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+
+
+DungeonMapEntityPost::DungeonMapEntityPost(DungeonMapEntity* parent) : GameEntity (0.0f, 0.0f)
+{
+  this->parent = parent;
+}
+
+void DungeonMapEntityPost::animate(float delay)
+{
+}
+
+void DungeonMapEntityPost::render(sf::RenderTarget* app)
+{
+  parent->renderPost(app);
 }

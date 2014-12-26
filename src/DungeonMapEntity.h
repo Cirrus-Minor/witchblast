@@ -20,6 +20,7 @@ public:
   DungeonMapEntity();
   virtual void animate(float delay);
   virtual void render(sf::RenderTarget* app);
+  void renderPost(sf::RenderTarget* app);
 
   void refreshMap();
 
@@ -53,5 +54,15 @@ private:
   void displayBlood(sf::RenderTarget* app);
 
   std::vector<displayEntityStruct> blood;
+};
+
+class DungeonMapEntityPost : public GameEntity
+{
+public:
+  DungeonMapEntityPost(DungeonMapEntity* parent);
+  virtual void animate(float delay);
+  virtual void render(sf::RenderTarget* app);
+private:
+  DungeonMapEntity* parent;
 };
 #endif // DUNGEONMAPENTITY_H
