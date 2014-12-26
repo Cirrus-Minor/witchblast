@@ -44,6 +44,14 @@ void DungeonMapEntity::animate(float delay)
       animateParticle(corpses[i], delay);
     }
   }
+  for (unsigned int i = 0; i < corpsesLarge.size(); i++)
+  {
+    if (corpsesLarge[i].moving)
+    {
+      moving = true;
+      animateParticle(corpsesLarge[i], delay);
+    }
+  }
   if (moving) computeCorpsesVertices();
 }
 
