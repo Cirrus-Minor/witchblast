@@ -61,12 +61,7 @@ void KingRatEntity::animate(float delay)
     if (h < -0.01f)
     {
       isDying = true;
-      SpriteEntity* corpse;
-      corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG), x, y + 48, 128, 128);
-      corpse->setFrame(deathFrame - FRAME_CORPSE_KING_RAT);
-
-      corpse->setZ(0);
-      corpse->setType(ENTITY_CORPSE);
+      game().addCorpse(x, y, deathFrame);
       if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
     else

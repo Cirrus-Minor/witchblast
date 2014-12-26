@@ -33,6 +33,18 @@ void DungeonMapEntity::animate(float delay)
     }
   }
   if (moving) computeBloodVertices();
+
+  // corpses
+  moving = false;
+  for (unsigned int i = 0; i < corpses.size(); i++)
+  {
+    if (corpses[i].moving)
+    {
+      moving = true;
+      animateParticle(corpses[i], delay);
+    }
+  }
+  if (moving) computeCorpsesVertices();
 }
 
 void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float delay)
@@ -65,6 +77,7 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
 void DungeonMapEntity::renderPost(sf::RenderTarget* app)
 {
   displayBlood(app);
+  displayCorpses(app);
 }
 
 std::vector <displayEntityStruct> DungeonMapEntity::getBlood()
@@ -72,9 +85,22 @@ std::vector <displayEntityStruct> DungeonMapEntity::getBlood()
   return blood;
 }
 
+std::vector <displayEntityStruct> DungeonMapEntity::getCorpses()
+{
+  auto result = corpses;
+  result.insert( result.end(), corpsesLarge.begin(), corpsesLarge.end() );
+  return result;
+}
+
 void DungeonMapEntity::displayBlood(sf::RenderTarget* app)
 {
   app->draw(bloodVertices, ImageManager::getInstance().getImage(IMAGE_BLOOD));
+}
+
+void DungeonMapEntity::displayCorpses(sf::RenderTarget* app)
+{
+  app->draw(corpsesVertices, ImageManager::getInstance().getImage(IMAGE_CORPSES));
+  app->draw(corpsesLargeVertices, ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG));
 }
 
 void DungeonMapEntity::refreshMap()
@@ -82,7 +108,11 @@ void DungeonMapEntity::refreshMap()
   hasChanged = true;
 
   blood.clear();
+  corpses.clear();
+  corpsesLarge.clear();
+
   computeBloodVertices();
+  computeCorpsesVertices();
 }
 
 void DungeonMapEntity::computeVertices()
@@ -144,6 +174,55 @@ void DungeonMapEntity::computeBloodVertices()
   }
 }
 
+void DungeonMapEntity::computeCorpsesVertices()
+{
+  corpsesVertices.setPrimitiveType(sf::Quads);
+  corpsesVertices.resize(corpses.size() * 4);
+  for (unsigned int i = 0; i < corpses.size(); i++)
+  {
+    auto particle = corpses[i];
+
+    sf::Vertex* quad = &corpsesVertices[i * 4];
+
+    float middle = 32;
+    int nx = particle.frame % 10;
+    int ny = particle.frame / 10;
+
+    quad[0].position = sf::Vector2f(particle.x - middle, particle.y - middle);
+    quad[1].position = sf::Vector2f(particle.x + middle, particle.y - middle);
+    quad[2].position = sf::Vector2f(particle.x + middle, particle.y + middle);
+    quad[3].position = sf::Vector2f(particle.x - middle, particle.y + middle);
+
+    quad[0].texCoords = sf::Vector2f(nx * 64, ny * 64);
+    quad[1].texCoords = sf::Vector2f((nx + 1) * 64, ny * 64);
+    quad[2].texCoords = sf::Vector2f((nx + 1) * 64, (ny + 1) * 64);
+    quad[3].texCoords = sf::Vector2f(nx * 64, (ny + 1) * 64);
+  }
+
+  corpsesLargeVertices.setPrimitiveType(sf::Quads);
+  corpsesLargeVertices.resize(corpsesLarge.size() * 4);
+  for (unsigned int i = 0; i < corpsesLarge.size(); i++)
+  {
+    auto particle = corpsesLarge[i];
+
+    sf::Vertex* quad = &corpsesLargeVertices[i * 4];
+
+    float middle = 64;
+    int nx = (particle.frame) % 6;
+    int ny = (particle.frame - FRAME_CORPSE_KING_RAT) / 6;
+
+    quad[0].position = sf::Vector2f(particle.x - middle, particle.y - middle);
+    quad[1].position = sf::Vector2f(particle.x + middle, particle.y - middle);
+    quad[2].position = sf::Vector2f(particle.x + middle, particle.y + middle);
+    quad[3].position = sf::Vector2f(particle.x - middle, particle.y + middle);
+
+    quad[0].texCoords = sf::Vector2f(nx * 128, ny * 128);
+    quad[1].texCoords = sf::Vector2f((nx + 1) * 128, ny * 128);
+    quad[2].texCoords = sf::Vector2f((nx + 1) * 128, (ny + 1) * 128);
+    quad[3].texCoords = sf::Vector2f(nx * 128, (ny + 1) * 128);
+  }
+}
+
 void DungeonMapEntity::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
 {
   displayEntityStruct bloodEntity;
@@ -176,7 +255,28 @@ void DungeonMapEntity::addBlood(float x, float y, int frame, float scale)
   blood.push_back(bloodEntity);
 }
 
+void DungeonMapEntity::addCorpse(float x, float y, int frame)
+{
+  displayEntityStruct corpseEntity;
 
+  corpseEntity.frame = frame;
+  corpseEntity.x = x;
+  corpseEntity.y = y;
+  corpseEntity.velocity.x = 0;
+  corpseEntity.velocity.y = 0;
+
+  corpseEntity.moving = true;
+
+  if (frame >= FRAME_CORPSE_KING_RAT)
+  {
+    corpsesLarge.push_back(corpseEntity);
+  }
+  else
+  {
+    corpses.push_back(corpseEntity);
+  }
+
+}
 /////////////////////////////////////////////////////////////////////////
 
 

@@ -747,7 +747,8 @@ void DungeonMap::restoreSprites()
     }
     else if (ilm.type == ENTITY_CORPSE)
     {
-      SpriteEntity* corpse;
+      game().getCurrentMapEntity()->addCorpse(ilm.x, ilm.y, ilm.frame);
+      /*SpriteEntity* corpse;
 
       if (ilm.frame >= FRAME_CORPSE_KING_RAT)
       {
@@ -762,7 +763,7 @@ void DungeonMap::restoreSprites()
       }
 
       corpse->setZ(0);
-      corpse->setType(ENTITY_CORPSE);
+      corpse->setType(ENTITY_CORPSE);*/
     }
   }
 }

@@ -234,6 +234,8 @@ public:
   */
   void generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
 
+  void addCorpse(float x, float y, int frame);
+
   /*!
    *  \brief Show a "popup" with artefact's description
    *

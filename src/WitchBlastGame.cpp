@@ -2527,9 +2527,12 @@ void WitchBlastGame::saveMapItems()
   // blood
   std::vector <displayEntityStruct> blood = dungeonEntity->getBlood();
   for (auto particle: blood)
-  {
     currentMap->addSprite(ENTITY_BLOOD, particle.frame, particle.x, particle.y, particle.scale);
-  }
+
+  // corpses
+  std::vector <displayEntityStruct> corpses = dungeonEntity->getCorpses();
+  for (auto particle: corpses)
+    currentMap->addSprite(ENTITY_CORPSE, particle.frame, particle.x, particle.y, particle.scale);
 
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
@@ -2677,6 +2680,11 @@ void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBlo
   dungeonEntity->generateBlood(x, y, bloodColor);
   // double blood if the "Blood Snake3 object is equipped
   if (player->isEquiped(EQUIP_BLOOD_SNAKE)) dungeonEntity->generateBlood(x, y, bloodColor);
+}
+
+void WitchBlastGame::addCorpse(float x, float y, int frame)
+{
+  dungeonEntity->addCorpse(x, y, frame);
 }
 
 void WitchBlastGame::showArtefactDescription(enumItemType itemType)

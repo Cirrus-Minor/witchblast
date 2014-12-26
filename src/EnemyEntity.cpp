@@ -283,11 +283,7 @@ void EnemyEntity::startExplosion()
   new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
   isDying = true;
 
-  SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-  corpse->setZ(0);
-  corpse->setImagesProLine(10);
-  corpse->setFrame(deathFrame);
-  corpse->setType(ENTITY_CORPSE);
+  game().addCorpse(x, y, deathFrame);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }
 
@@ -321,11 +317,7 @@ void EnemyEntity::dying()
   else // dyingFrame == -1
   {
     isDying = true;
-    SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-    corpse->setZ(0);
-    corpse->setImagesProLine(10);
-    corpse->setFrame(deathFrame);
-    corpse->setType(ENTITY_CORPSE);
+    game().addCorpse(x, y, deathFrame);
     if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
   }
 

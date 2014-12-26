@@ -39,11 +39,7 @@ void CauldronEntity::animate(float delay)
     if (agonizingDelay <= 0.0f)
     {
       isDying = true;
-      SpriteEntity* corpse = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES), x, y, 64, 64);
-      corpse->setZ(0);
-      corpse->setImagesProLine(10);
-      corpse->setFrame(deathFrame);
-      corpse->setType(ENTITY_CORPSE);
+      game().addCorpse(x, y, deathFrame);
     }
   }
   else

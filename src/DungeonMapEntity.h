@@ -34,8 +34,10 @@ public:
   void generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
 
   void addBlood(float x, float y, int frame, float scale);
+  void addCorpse(float x, float y, int frame);
 
   std::vector <displayEntityStruct> getBlood();
+  std::vector <displayEntityStruct> getCorpses();
 
 protected:
 
@@ -44,16 +46,22 @@ private:
   bool hasChanged;
 
   sf::VertexArray bloodVertices;
+  sf::VertexArray corpsesVertices;
+  sf::VertexArray corpsesLargeVertices;
 
   bool getChanged();
   void computeVertices();
   void computeBloodVertices();
+  void computeCorpsesVertices();
 
   void animateParticle(displayEntityStruct &particle, float delay);
 
   void displayBlood(sf::RenderTarget* app);
+  void displayCorpses(sf::RenderTarget* app);
 
   std::vector<displayEntityStruct> blood;
+  std::vector<displayEntityStruct> corpses;
+  std::vector<displayEntityStruct> corpsesLarge;
 };
 
 class DungeonMapEntityPost : public GameEntity
