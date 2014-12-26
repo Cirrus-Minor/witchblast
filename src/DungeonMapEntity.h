@@ -54,7 +54,9 @@ private:
   void computeBloodVertices();
   void computeCorpsesVertices();
 
-  void animateParticle(displayEntityStruct &particle, float delay);
+  void animateParticle(displayEntityStruct &particle, float delay, float viscosity);
+
+  bool collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight);
 
   void displayBlood(sf::RenderTarget* app);
   void displayCorpses(sf::RenderTarget* app);

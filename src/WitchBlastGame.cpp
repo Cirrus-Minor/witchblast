@@ -3079,9 +3079,12 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
   {
     bOk = false;
 
-    while (!bOk)
+    int watchdog = 200;
+
+    while (!bOk && watchdog > 0)
     {
       bOk = true;
+      watchdog--;
       xm = 1 +rand() % (MAP_WIDTH - 3);
       ym = 1 +rand() % (MAP_HEIGHT - 3);
       if (monsterArray[xm][ym])

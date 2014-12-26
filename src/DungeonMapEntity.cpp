@@ -15,7 +15,6 @@ DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
     post->setType(0);
 }
 
-
 void DungeonMapEntity::animate(float delay)
 {
   age += delay;
@@ -29,7 +28,7 @@ void DungeonMapEntity::animate(float delay)
     if (blood[i].moving)
     {
       moving = true;
-      animateParticle(blood[i], delay);
+      animateParticle(blood[i], delay, 0.95f);
     }
   }
   if (moving) computeBloodVertices();
@@ -41,16 +40,72 @@ void DungeonMapEntity::animate(float delay)
     if (corpses[i].moving)
     {
       moving = true;
-      animateParticle(corpses[i], delay);
+      if (corpses[i].frame != FRAME_CORPSE_SLIME_VIOLET
+          && collideWithWall(corpses[i], 48, 48))
+      {
+        if (corpses[i].velocity.x < 15.0f && corpses[i].velocity.x > -15.0f
+            && corpses[i].velocity.y < 15.0f && corpses[i].velocity.y > -15.0f)
+          corpses[i].velocity = Vector2D(200);
+
+        animateParticle(corpses[i], delay, 1.0f);
+      }
+      else
+      {
+        float oldx = corpses[i].x;
+        float oldy = corpses[i].y;
+        animateParticle(corpses[i], delay, 0.85f);
+        if (corpses[i].frame != FRAME_CORPSE_SLIME_VIOLET
+            && collideWithWall(corpses[i], 48, 48))
+        {
+          corpses[i].x = oldx;
+          corpses[i].y = oldy;
+          moving = false;
+        }
+      }
+    }
+  }
+  for (unsigned int i = 0; i < corpsesLarge.size(); i++)
+  {
+    if (corpsesLarge[i].moving)
+    {
+      moving = true;
+      if (collideWithWall(corpsesLarge[i], 96, 96))
+      {
+        if (corpsesLarge[i].velocity.x < 15.0f && corpsesLarge[i].velocity.x > -15.0f
+            && corpsesLarge[i].velocity.y < 15.0f && corpsesLarge[i].velocity.y > -15.0f)
+          corpsesLarge[i].velocity = Vector2D(200);
+
+        animateParticle(corpsesLarge[i], delay, 1.0f);
+      }
+      else
+      {
+        float oldx = corpsesLarge[i].x;
+        float oldy = corpsesLarge[i].y;
+        animateParticle(corpsesLarge[i], delay, 0.94f);
+        if (collideWithWall(corpsesLarge[i], 96, 96))
+        {
+          corpsesLarge[i].x = oldx;
+          corpsesLarge[i].y = oldy;
+          moving = false;
+        }
+      }
+    }
+  }
+  for (unsigned int i = 0; i < corpsesLarge.size(); i++)
+  {
+    if (corpsesLarge[i].moving)
+    {
+      moving = true;
+      animateParticle(corpsesLarge[i], delay, 0.95f);
     }
   }
   if (moving) computeCorpsesVertices();
 }
 
-void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float delay)
+void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float delay, float viscosity)
 {
-  particle.velocity.x *= 0.95f;
-  particle.velocity.y *= 0.95f;
+  particle.velocity.x *= viscosity;
+  particle.velocity.y *= viscosity;
 
   if (particle.velocity.x < -5 || particle.velocity.x > 5
       || particle.velocity.y < -5 || particle.velocity.y > 5)
@@ -60,6 +115,27 @@ void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float dela
   }
   else
     particle.moving = false;
+}
+
+bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight)
+{
+  float x0 = particle.x - boxWidth / 2;
+  float xf = particle.x + boxWidth / 2;
+  float y0 = particle.y - boxHeight / 2;
+  float yf = particle.y + boxHeight / 2;
+
+  if (particle.x < TILE_WIDTH && particle.velocity.x < -1.0f) particle.velocity.x = -particle.velocity.x;
+  else if (particle.x > TILE_WIDTH * (MAP_WIDTH - 2) && particle.velocity.x > 1.0f) particle.velocity.x = -particle.velocity.x;
+
+  if (particle.y < TILE_HEIGHT && particle.velocity.y < -1.0f) particle.velocity.y = -particle.velocity.y;
+  else if (particle.y > TILE_HEIGHT * (MAP_HEIGHT - 2) && particle.velocity.y > 1.0f) particle.velocity.y = -particle.velocity.y;
+
+  if (!game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, y0 / TILE_HEIGHT)) return true;
+  if (!game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, yf / TILE_HEIGHT)) return true;
+  if (!game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, y0 / TILE_HEIGHT)) return true;
+  if (!game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, yf / TILE_HEIGHT)) return true;
+
+  return false;
 }
 
 bool DungeonMapEntity::getChanged()
