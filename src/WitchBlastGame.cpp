@@ -533,8 +533,6 @@ void WitchBlastGame::startNewLevel()
 
   // the boss room is closed
   bossRoomOpened = false;
-  // to test
-  displayKilledEnemies();
 
   if (level <= 6) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
   if (level == 1)
@@ -867,6 +865,7 @@ void WitchBlastGame::updateRunningGame()
 
         case MenuExit:
           backToMenu = true;
+          remove(SAVE_FILE.c_str());
           break;
 
         case MenuContinue:
@@ -1156,6 +1155,7 @@ void WitchBlastGame::updateRunningGame()
     {
       currentMap->setCleared(true);
       openDoors();
+      remove(SAVE_FILE.c_str());
       if (currentMap->getRoomType() == roomTypeBoss)
       {
         playMusic(MusicDungeon);
@@ -2603,6 +2603,8 @@ void WitchBlastGame::moveToOtherMap(int direction)
     saveInFight.y = player->getY();
     saveInFight.direction = direction;
     saveMapItems();
+
+    if (!currentMap->isCleared()) saveGame();
   }
 }
 

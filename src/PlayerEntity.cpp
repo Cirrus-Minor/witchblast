@@ -93,6 +93,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   sprite.setOrigin(21, 60);
 
   protection.active = false;
+  armor = 0.0f;
 
   activeSpell.delay = -1.0f;
   activeSpell.spell = SpellNone;
@@ -1134,6 +1135,7 @@ void PlayerEntity::dying()
         loseItem(enumItemType(i), true);
     }
   }
+  remove(SAVE_FILE.c_str());
 }
 
 void PlayerEntity::displayAcquiredGold(int n)
