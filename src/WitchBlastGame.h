@@ -754,12 +754,6 @@ private:
     bool vsync;
   } parameters;
 
-
-  /*!
-   *  \brief Check for falling (in holes) blood or bodies
-   */
-  void checkFallingEntities();
-
   void resetKilledEnemies();
 
   std::queue <messageStruct> messagesQueue;

@@ -28,12 +28,30 @@ void DungeonMapEntity::animate(float delay)
     if (blood[i].moving)
     {
       moving = true;
-      animateParticle(blood[i], delay, 0.95f);
+      if (checkFalling(blood[i], 16, 16))
+      {
+        SpriteEntity* spriteEntity
+          = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD),
+                             blood[i].x + 8,
+                             blood[i].y + 8,
+                             16, 16, 6);
+        spriteEntity->setAge(0.0f);
+        spriteEntity->setLifetime(3.0f);
+        spriteEntity->setShrinking(true);
+        spriteEntity->setFading(true);
+        spriteEntity->setFrame(blood[i].frame);
+        spriteEntity->setScale(blood[i].scale, blood[i].scale);
+
+        blood.erase(blood.begin() + i);
+      }
+      else
+        animateParticle(blood[i], delay, 0.95f);
     }
   }
   if (moving) computeBloodVertices();
 
   // corpses
+  int CorpsesBox = 40, CorpsesLargeBox = 80;
   moving = false;
   for (unsigned int i = 0; i < corpses.size(); i++)
   {
@@ -41,11 +59,11 @@ void DungeonMapEntity::animate(float delay)
     {
       moving = true;
       if (corpses[i].frame != FRAME_CORPSE_SLIME_VIOLET
-          && collideWithWall(corpses[i], 48, 48))
+          && collideWithWall(corpses[i], CorpsesBox, CorpsesBox))
       {
         if (corpses[i].velocity.x < 15.0f && corpses[i].velocity.x > -15.0f
             && corpses[i].velocity.y < 15.0f && corpses[i].velocity.y > -15.0f)
-          corpses[i].velocity = Vector2D(200);
+          autoSpeed(corpses[i], 200);
 
         animateParticle(corpses[i], delay, 1.0f);
       }
@@ -53,9 +71,9 @@ void DungeonMapEntity::animate(float delay)
       {
         float oldx = corpses[i].x;
         float oldy = corpses[i].y;
-        animateParticle(corpses[i], delay, 0.85f);
+        animateParticle(corpses[i], delay, 0.8f);
         if (corpses[i].frame != FRAME_CORPSE_SLIME_VIOLET
-            && collideWithWall(corpses[i], 48, 48))
+            && collideWithWall(corpses[i], CorpsesBox, CorpsesBox))
         {
           corpses[i].x = oldx;
           corpses[i].y = oldy;
@@ -69,11 +87,11 @@ void DungeonMapEntity::animate(float delay)
     if (corpsesLarge[i].moving)
     {
       moving = true;
-      if (collideWithWall(corpsesLarge[i], 96, 96))
+      if (collideWithWall(corpsesLarge[i], CorpsesLargeBox, CorpsesLargeBox))
       {
         if (corpsesLarge[i].velocity.x < 15.0f && corpsesLarge[i].velocity.x > -15.0f
             && corpsesLarge[i].velocity.y < 15.0f && corpsesLarge[i].velocity.y > -15.0f)
-          corpsesLarge[i].velocity = Vector2D(200);
+          autoSpeed(corpsesLarge[i], 200);
 
         animateParticle(corpsesLarge[i], delay, 1.0f);
       }
@@ -81,8 +99,8 @@ void DungeonMapEntity::animate(float delay)
       {
         float oldx = corpsesLarge[i].x;
         float oldy = corpsesLarge[i].y;
-        animateParticle(corpsesLarge[i], delay, 0.94f);
-        if (collideWithWall(corpsesLarge[i], 96, 96))
+        animateParticle(corpsesLarge[i], delay, 0.8f);
+        if (collideWithWall(corpsesLarge[i], CorpsesLargeBox, CorpsesLargeBox))
         {
           corpsesLarge[i].x = oldx;
           corpsesLarge[i].y = oldy;
@@ -130,12 +148,66 @@ bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWid
   if (particle.y < TILE_HEIGHT && particle.velocity.y < -1.0f) particle.velocity.y = -particle.velocity.y;
   else if (particle.y > TILE_HEIGHT * (MAP_HEIGHT - 2) && particle.velocity.y > 1.0f) particle.velocity.y = -particle.velocity.y;
 
-  if (!game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, y0 / TILE_HEIGHT)) return true;
-  if (!game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, yf / TILE_HEIGHT)) return true;
-  if (!game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, y0 / TILE_HEIGHT)) return true;
-  if (!game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, yf / TILE_HEIGHT)) return true;
+  collide[NordWest] = !game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, y0 / TILE_HEIGHT);
+  collide[SudWest] = !game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, yf / TILE_HEIGHT);
+  collide[NordEast] = !game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, y0 / TILE_HEIGHT);
+  collide[SudEast] = !game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, yf / TILE_HEIGHT);
 
-  return false;
+  return collide[NordWest] || collide[SudWest] || collide[NordEast] || collide[SudEast];
+}
+
+bool DungeonMapEntity::checkFalling(displayEntityStruct &particle, int boxWidth, int boxHeight)
+{
+  int tilex = (particle.x + boxWidth / 2) / TILE_WIDTH;
+  int tiley = (particle.y + boxHeight / 2) / TILE_HEIGHT;
+
+  return (game().getCurrentMap()->getTile(tilex, tiley) >= MAP_HOLE);
+}
+
+void DungeonMapEntity::autoSpeed(displayEntityStruct &particle, float speed)
+{
+  if (!collide[NordWest] && !collide[NordEast])
+  {
+    particle.velocity.x = 0;
+    particle.velocity.y = -speed;
+  }
+  else if (!collide[SudWest] && !collide[SudEast])
+  {
+    particle.velocity.x = 0;
+    particle.velocity.y = speed;
+  }
+  else if (!collide[SudWest] && !collide[NordWest])
+  {
+    particle.velocity.x = -speed;
+    particle.velocity.y = 0;
+  }
+  else if (!collide[SudEast] && !collide[NordEast])
+  {
+    particle.velocity.x = speed;
+    particle.velocity.y = 0;
+  }
+  else if (!collide[NordWest])
+  {
+    particle.velocity.x = -speed * 0.7f;
+    particle.velocity.y = -speed * 0.7f;
+  }
+  else if (!collide[NordEast])
+  {
+    particle.velocity.x = speed * 0.7f;
+    particle.velocity.y = -speed * 0.7f;
+  }
+  else if (!collide[SudWest])
+  {
+    particle.velocity.x = -speed * 0.7f;
+    particle.velocity.y = speed * 0.7f;
+  }
+  else if (!collide[SudEast])
+  {
+    particle.velocity.x = speed * 0.7f;
+    particle.velocity.y = speed * 0.7f;
+  }
+  else
+    particle.velocity = Vector2D(speed);
 }
 
 bool DungeonMapEntity::getChanged()

@@ -354,7 +354,6 @@ void WitchBlastGame::onUpdate()
 {
   if (!isPausing)
   {
-    checkFallingEntities();
     EntityManager::getInstance().animate(deltaTime);
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
     {
@@ -776,8 +775,7 @@ void WitchBlastGame::updateIntro()
 
 void WitchBlastGame::renderIntro()
 {
-  sf::Sprite bgSprite;
-  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  sf::Sprite bgSprite(*ImageManager::getInstance().getImage(IMAGE_INTRO));
   app->draw(bgSprite);
 
   EntityManager::getInstance().render(app);
@@ -2553,17 +2551,6 @@ void WitchBlastGame::saveMapItems()
     {
       currentMap->addChest(chestEntity->getChestType(), chestEntity->getOpened(), chestEntity->getX(), chestEntity->getY());
     } // endif
-    else
-    {
-      SpriteEntity* spriteEntity = dynamic_cast<SpriteEntity*>(e);
-      if (spriteEntity != NULL && !spriteEntity->getDying() && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE ) )
-      {
-        int spriteFrame = spriteEntity->getFrame();
-        if (spriteEntity->getWidth() == 128) spriteFrame += FRAME_CORPSE_KING_RAT;
-        currentMap->addSprite(e->getType(), spriteFrame, e->getX(), e->getY(), spriteEntity->getScaleX());
-      }
-
-    }
   } // end for
 }
 
@@ -4038,33 +4025,6 @@ void WitchBlastGame::buildInGameMenu()
   menuInGame.items.push_back(itemQuit);
 
   menuInGame.index = 0;
-}
-
-void WitchBlastGame::checkFallingEntities()
-{
-  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
-  EntityManager::EntityList::iterator it;
-
-  for (it = entityList->begin (); it != entityList->end ();)
-  {
-    GameEntity *e = *it;
-    it++;
-
-    if (e->getLifetime() < 0.8f && (e->getType() == ENTITY_BLOOD || e->getType() == ENTITY_CORPSE))
-    {
-      int tilex = (e->getX()) / TILE_WIDTH;
-      int tiley = (e->getY()) / TILE_HEIGHT;
-
-      if (currentMap->getTile(tilex, tiley) >= MAP_HOLE)
-      {
-        SpriteEntity* spriteEntity = dynamic_cast<SpriteEntity*>(e);
-        spriteEntity->setAge(0.0f);
-        spriteEntity->setLifetime(3.0f);
-        spriteEntity->setShrinking(true);
-        spriteEntity->setFading(true);
-      }
-    }
-  }
 }
 
 void WitchBlastGame::resetKilledEnemies()

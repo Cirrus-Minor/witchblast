@@ -55,8 +55,9 @@ private:
   void computeCorpsesVertices();
 
   void animateParticle(displayEntityStruct &particle, float delay, float viscosity);
-
   bool collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight);
+  void autoSpeed(displayEntityStruct &particle, float speed);
+  bool checkFalling(displayEntityStruct &particle, int boxWidth, int boxHeight);
 
   void displayBlood(sf::RenderTarget* app);
   void displayCorpses(sf::RenderTarget* app);
@@ -64,6 +65,15 @@ private:
   std::vector<displayEntityStruct> blood;
   std::vector<displayEntityStruct> corpses;
   std::vector<displayEntityStruct> corpsesLarge;
+
+  bool collide[4];
+  enum enumCollisionDirection
+  {
+    NordWest,
+    NordEast,
+    SudWest,
+    SudEast
+  };
 };
 
 class DungeonMapEntityPost : public GameEntity
