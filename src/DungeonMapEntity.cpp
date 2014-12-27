@@ -49,21 +49,24 @@ void DungeonMapEntity::animate(float delay)
         animateParticle(blood[i], delay, 0.95f);
 
         // BLOOD TEST
-        if (blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y > 80
-            && rand() % 4 == 0)
+        if (blood[i].frame < 12)
         {
-          addBlood(blood[i].x, blood[i].y, blood[i].frame, blood[i].scale);
-          blood[i].scale *= 0.85f;
+          if (blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y > 80
+            && rand() % 4 == 0)
+          {
+            addBlood(blood[i].x, blood[i].y, blood[i].frame, blood[i].scale);
+            blood[i].scale *= 0.85f;
 
-          bool xPos = blood[i].velocity.x > 0;
-          bool yPos = blood[i].velocity.y > 0;
+            bool xPos = blood[i].velocity.x > 0;
+            bool yPos = blood[i].velocity.y > 0;
 
-          float norm = sqrtf(blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y);
-          blood[i].velocity = Vector2D(norm);
-          if (xPos && blood[i].velocity.x < 0)  blood[i].velocity.x = - blood[i].velocity.x;
-          else if (!xPos && blood[i].velocity.x > 0)  blood[i].velocity.x = - blood[i].velocity.x;
-          if (yPos && blood[i].velocity.y < 0)  blood[i].velocity.y = - blood[i].velocity.y;
-          else if (!yPos && blood[i].velocity.y > 0)  blood[i].velocity.y = - blood[i].velocity.y;
+            float norm = sqrtf(blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y);
+            blood[i].velocity = Vector2D(norm);
+            if (xPos && blood[i].velocity.x < 0)  blood[i].velocity.x = - blood[i].velocity.x;
+            else if (!xPos && blood[i].velocity.x > 0)  blood[i].velocity.x = - blood[i].velocity.x;
+            if (yPos && blood[i].velocity.y < 0)  blood[i].velocity.y = - blood[i].velocity.y;
+            else if (!yPos && blood[i].velocity.y > 0)  blood[i].velocity.y = - blood[i].velocity.y;
+          }
         }
       }
     }
