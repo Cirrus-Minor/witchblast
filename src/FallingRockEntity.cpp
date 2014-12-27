@@ -128,16 +128,5 @@ void FallingRockEntity::dying()
   game().makeShake(0.1f);
 
   for (int i = 0; i < 4; i++)
-  {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
-    blood->setZ(-1);
-
-    blood->setFrame(12 + rand()%6);
-    blood->setType(ENTITY_BLOOD);
-    blood->setVelocity(Vector2D(rand()%150));
-    blood->setViscosity(0.95f);
-
-    float bloodScale = 1.0f + (rand() % 10) * 0.1f;
-    blood->setScale(bloodScale, bloodScale);
-  }
+    game().getCurrentMapEntity()->generateBlood(x, y, BloodRock);
 }

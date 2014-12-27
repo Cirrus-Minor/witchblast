@@ -112,25 +112,16 @@ void RockMissileEntity::dying()
 
   for (int i = 0; i < 4; i++)
   {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
-    blood->setZ(-1);
+    displayEntityStruct& de = game().getCurrentMapEntity()->generateBlood(x, y, BloodRock);
 
-    blood->setFrame(12 + rand()%6);
-    blood->setType(ENTITY_BLOOD);
-    blood->setVelocity(Vector2D(rand()%150));
-    blood->setViscosity(0.95f);
-
-    float bloodScale = 1.0f + (rand() % 10) * 0.1f;
-    blood->setScale(bloodScale, bloodScale);
-
-    if ((collisionDirection == DIRECTION_LEFT) && (blood->getVelocity().x < 0.0f))
-      blood->setVelocity(Vector2D(-blood->getVelocity().x * 0.25f, blood->getVelocity().y));
-    else if ((collisionDirection == DIRECTION_RIGHT) && (blood->getVelocity().x > 0.0f))
-      blood->setVelocity(Vector2D(-blood->getVelocity().x * 0.25f, blood->getVelocity().y));
-    else if ((collisionDirection == DIRECTION_TOP) && (blood->getVelocity().y < 0.0f))
-      blood->setVelocity(Vector2D(blood->getVelocity().x, -blood->getVelocity().y * 0.25f));
-    else if ((collisionDirection == DIRECTION_BOTTOM) && (blood->getVelocity().y > 0.0f))
-      blood->setVelocity(Vector2D(blood->getVelocity().x, -blood->getVelocity().y * 0.25f));
+    if ((collisionDirection == DIRECTION_LEFT) && (de.velocity.x < 0.0f))
+      de.velocity.x *= -0.25f;
+    else if ((collisionDirection == DIRECTION_RIGHT) && (de.velocity.x > 0.0f))
+      de.velocity.x *= -0.25f;
+    else if ((collisionDirection == DIRECTION_TOP) && (de.velocity.y < 0.0f))
+      de.velocity.y *= -0.25f;
+    else if ((collisionDirection == DIRECTION_BOTTOM) && (de.velocity.y > 0.0f))
+      de.velocity.y *= -0.25f;
   }
 }
 

@@ -394,7 +394,7 @@ void DungeonMapEntity::computeCorpsesVertices()
   }
 }
 
-void DungeonMapEntity::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
+displayEntityStruct& DungeonMapEntity::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
 {
   displayEntityStruct bloodEntity;
 
@@ -408,6 +408,8 @@ void DungeonMapEntity::generateBlood(float x, float y, BaseCreatureEntity::enumB
   bloodEntity.moving = true;
 
   blood.push_back(bloodEntity);
+
+  return blood[blood.size() - 1];
 }
 
 void DungeonMapEntity::addBlood(float x, float y, int frame, float scale)
