@@ -360,6 +360,8 @@ public:
 
   void saveDeathScreen(std::string fileName);
 
+  void calculateScore();
+
 protected:
   /*!
    *  \brief Rendering method
@@ -398,6 +400,8 @@ private:
 
   // game play
   int level;                  /*!< Level (floor) */
+  int score;                  /*!< score (calculated at the end of the game) */
+  int bodyCount;              /*!< killed monsters (calculated at the end of the game) */
   int challengeLevel;         /*!< Level (challenge) */
   float gameTime;             /*!< "age" of the current game */
   int floorX;                 /*!< X position of the room in the level */
@@ -677,11 +681,6 @@ private:
    *  \brief Render the credits screen
    */
   void renderCredits();
-
-  /*!
-   *  \brief Render the death screen (when the player dies)
-   */
-  void renderDeathScreen();
 
   /** Menu keys enum
    *  Identify the various keys of the menu.

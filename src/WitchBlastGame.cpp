@@ -51,6 +51,7 @@
 #include "PnjEntity.h"
 #include "TextEntity.h"
 #include "StandardRoomGenerator.h"
+#include "Scoring.h"
 #include "MessageGenerator.h"
 #include "TextMapper.h"
 
@@ -1560,10 +1561,6 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
   ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << (int)gameTime / 60 << tools::getLabel("dc_minutes") << "." << std::endl;
 
-  int bodyCount = 0;
-  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
-    bodyCount += killedEnemies[enemyType];
-
   ss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount << std::endl;
   ss << tools::getLabel("dc_gold") << ": " << player->getGold() << std::endl;
   ss << tools::getLabel("dc_challenges") << ": " << challengeLevel - 1 << std::endl;
@@ -1588,241 +1585,27 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
       n++;
     }
   }
+
+  ss.str("");
+  ss.clear();
+  ss << "Score: " << score;
+  write(ss.str(), 24, x + xRect / 2, y + 240, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+
 }
-
-void WitchBlastGame::renderDeathScreen()
+void WitchBlastGame::calculateScore()
 {
-  float deathAge = player->getDeathAge();
-  if (deathAge < 1.0f) return;
+  score = 0;
+  bodyCount = 0;
 
-  int rectFade = 220;
-  if (deathAge < 2.0f) rectFade = rectFade * (deathAge - 1.0f);
-  //  background
-  sf::RectangleShape rectangle(sf::Vector2f(810 , 300));
-  rectangle.setFillColor(sf::Color(40, 40, 40, rectFade));
-  rectangle.setPosition(sf::Vector2f(80, 110));
-  rectangle.setOutlineThickness(2);
-  rectangle.setOutlineColor(sf::Color::White);
-  app->draw(rectangle);
-
-  // lines
-  sf::RectangleShape line(sf::Vector2f(810 , 1));
-  line.setFillColor(sf::Color::White);
-  line.setPosition(sf::Vector2f(80, 150));
-  app->draw(line);
-
-  line.setPosition(sf::Vector2f(205, 110));
-  line.setSize(sf::Vector2f(1 , 300));
-  line.setFillColor(sf::Color(190, 190, 190, 255));
-  //app->draw(line);
-
-  if (deathAge > 2.0f)
+  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
   {
-    int xItems = 90;
-    int yItems = 120;
-
-    int xMonsters = 85;
-    int yMonsters = 160;
-    // items
-    write(tools::getLabel("items_found"), 17, xItems, yItems, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-
-    int n = 0;
-    int nMax = 40;
-    int nMaxTime = ((deathAge - 2.0f) * 120.0f);
-    for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
-    {
-      if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
-      {
-        sf::Sprite itemSprite;
-        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-        itemSprite.setPosition(xItems + 120 + n * 32, yItems - 5);
-        itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
-        app->draw(itemSprite);
-        n++;
-      }
-    }
-
-    // monsters
-    write(tools::getLabel("monsters_killed"), 17, xMonsters, yMonsters, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-    n = 0;
-    for (int i = EnemyTypeBat; i <= EnemyTypeBubble; i++)
-    {
-      for (int j = 0; j < killedEnemies[i] && n <= nMaxTime; j++)
-      {
-        sf::Sprite monsterSprite;
-        monsterSprite.setScale(0.75f, 0.75f);
-        int dy = -5;
-        switch (i)
-        {
-        case EnemyTypeBat:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BAT));
-          monsterSprite.setTextureRect(sf::IntRect(64, 0, 64, 64));
-          dy = -1;
-          break;
-
-        case EnemyTypeRat:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 12, 64, 52));
-          break;
-
-        case EnemyTypeRatBlack:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 140, 64, 52));
-          break;
-
-        case EnemyTypeRatHelmet:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 204, 64, 52));
-          break;
-
-        case EnemyTypeRatBlackHelmet:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 268, 64, 52));
-          break;
-
-        case EnemyTypeEvilFlower:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FLOWER));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          break;
-
-        case EnemyTypeSnake:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SNAKE));
-          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 54));
-          dy = 2;
-          break;
-
-        case EnemyTypeSnakeBlood:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SNAKE));
-          monsterSprite.setTextureRect(sf::IntRect(0, 74, 64, 54));
-          dy = 2;
-          break;
-
-        case EnemyTypeSlime:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 44));
-          break;
-
-        case EnemyTypeSlimeRed:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 74, 64, 54));
-          break;
-
-        case EnemyTypeSlimeBlue:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 138, 64, 54));
-          break;
-
-        case EnemyTypeSlimeViolet:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 202, 64, 54));
-          break;
-
-        case EnemyTypeImpBlue:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_IMP));
-          monsterSprite.setTextureRect(sf::IntRect(0, 64, 64, 64));
-          dy = -2;
-          break;
-
-        case EnemyTypeImpRed:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_IMP));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          dy = -2;
-          break;
-
-        case EnemyTypePumpkin:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PUMPKIN));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          monsterSprite.setScale(0.65f, 0.65);
-          dy = -1;
-          break;
-
-        case EnemyTypeWitch:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WITCH));
-          monsterSprite.setTextureRect(sf::IntRect(0, 18, 64, 50));
-          dy = -1;
-          break;
-
-        case EnemyTypeWitchRed:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WITCH));
-          monsterSprite.setTextureRect(sf::IntRect(0, 114, 64, 50));
-          dy = -1;
-          break;
-
-        case EnemyTypeCauldron:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CAULDRON));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          monsterSprite.setScale(0.65f, 0.65);
-          dy = -1;
-          break;
-
-        case EnemyTypeBubble:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BUBBLE));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
-          monsterSprite.setScale(0.25f, 0.25f);
-          dy = -1;
-          break;
-        }
-        monsterSprite.setPosition(xMonsters + 120 + n % nMax * 16, yMonsters + dy + n / nMax * 16 );
-        app->draw(monsterSprite);
-        n++;
-      }
-    }
-
-    // bosses
-    n = (1 + (n - 1)/ nMax) * nMax;
-    for (int i = EnemyTypeButcher; i <= EnemyTypeSpiderGiant; i++)
-    {
-      for (int j = 0; j < killedEnemies[i] && n <= nMaxTime; j++)
-      {
-        sf::Sprite monsterSprite;
-        monsterSprite.setScale(0.75f, 0.75f);
-        int dy = 0;
-        switch (i)
-        {
-        case EnemyTypeButcher:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BUTCHER));
-          monsterSprite.setTextureRect(sf::IntRect(32, 0, 64, 128));
-          dy = -5;
-          break;
-
-        case EnemyTypeSlimeBoss:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_GIANT_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(7, 0, 120, 128));
-          dy = -1;
-          break;
-
-        case EnemyTypeCyclops:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CYCLOP));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 192));
-          monsterSprite.setScale(0.6f, 0.6f);
-          dy = -21;
-          break;
-
-        case EnemyTypeRatKing:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_KING_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(12, 0, 128, 116));
-          break;
-
-        case EnemyTypeSpiderGiant:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_GIANT_SPIDER));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
-          dy = 2;
-          break;
-        }
-
-        monsterSprite.setPosition(xMonsters + 120 + n % nMax * 16, yMonsters + dy + n / nMax * 16 );
-        app->draw(monsterSprite);
-        n += 3;
-      }
-    }
+    bodyCount += killedEnemies[enemyType];
+    score += killedEnemies[enemyType] * getMonsterScore((enemyTypeEnum)enemyType);
   }
 
-  // Game over text
-  float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-  int fade = 255 * (1.0f + cos(2.0f * getAbsolutTime())) * 0.5f;
+  score += getChallengeScore(challengeLevel);
 
-  write("GAME OVER", 32, x0, 40, ALIGN_CENTER, sf::Color::White, app, 2, 2);
-  write(tools::getLabel("play_again"), 20, x0, 480, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0);
+  score += getGoldScore(player->getGold());
 }
 
 void WitchBlastGame::switchToMenu()

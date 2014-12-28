@@ -1136,6 +1136,8 @@ void PlayerEntity::dying()
     }
   }
   remove(SAVE_FILE.c_str());
+
+  game().calculateScore();
 }
 
 void PlayerEntity::displayAcquiredGold(int n)
