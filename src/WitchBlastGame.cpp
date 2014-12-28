@@ -3838,6 +3838,7 @@ void WitchBlastGame::saveConfigurationToFile()
 
   newMap["zoom_enabled"] = parameters.zoom ? "1" : "0";
   newMap["vsync_enabled"] = parameters.vsync ? "1" : "0";
+  newMap["blood_spreading"] = parameters.bloodSpread ? "1" : "0";
 
   // Keys
   newMap["keyboard_move_up"] = intToString(input[KeyUp]);
@@ -3862,6 +3863,7 @@ void WitchBlastGame::configureFromFile()
   parameters.language = 0;  // english
   parameters.zoom = true;
   parameters.vsync = true;
+  parameters.bloodSpread = true;
   parameters.musicVolume = 100;
   parameters.soundVolume = 80;
 
@@ -3904,8 +3906,15 @@ void WitchBlastGame::configureFromFile()
   if (i >= 0) parameters.vsync = i;
   i = config.findInt("zoom_enabled");
   if (i >= 0) parameters.zoom = i;
+  i = config.findInt("blood_spreading");
+  if (i >= 0) parameters.bloodSpread = i;
 
   tools::setLanguage(languageString[parameters.language]);
+}
+
+parameterStruct WitchBlastGame::getParameters()
+{
+  return parameters;
 }
 
 void WitchBlastGame::buildMenu(bool rebuild)

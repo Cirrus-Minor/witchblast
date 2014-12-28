@@ -91,6 +91,16 @@ const std::string creditsMusic[]  =
   "END"
 };
 
+struct parameterStruct
+{
+  int language;
+  int musicVolume;
+  int soundVolume;
+  bool zoom;
+  bool vsync;
+  bool bloodSpread;
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -168,6 +178,12 @@ public:
    *  \return : the value of the flag
    */
   bool getShowLogical();
+
+  /*!
+   *  \brief accessor on the parameters
+   *  \return : the parameters
+   */
+  parameterStruct getParameters();
 
   /*!
    *  \brief Start the game and the game loop
@@ -745,14 +761,7 @@ private:
    */
   void registerLanguage();
 
-  struct parameterStruct
-  {
-    int language;
-    int musicVolume;
-    int soundVolume;
-    bool zoom;
-    bool vsync;
-  } parameters;
+  parameterStruct parameters;
 
   void resetKilledEnemies();
 
