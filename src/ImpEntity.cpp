@@ -16,7 +16,7 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
   hp = IMP_HP;
   meleeDamages = IMP_MELEE_DAMAGES;
 
-  bloodColor = BloodRed;
+  bloodColor = BloodNone;
   changingDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
   shadowFrame = 4;
   movingStyle = movFlying;
@@ -138,6 +138,7 @@ int ImpEntity::hurt(StructHurt hurtParam)
 
   if (!isDying && !isAgonising && !isExploding)
   {
+    game().generateBlood(x, y, BloodRed);
     teleport();
     state = 3;
     changingDelay = 0.4f;
@@ -149,6 +150,7 @@ int ImpEntity::hurt(StructHurt hurtParam)
 void ImpEntity::dying()
 {
   EnemyEntity::dying();
+  for (int i = 0; i < 4; i++) game().generateBlood(x, y, BloodRed);
   h = 25.0f;
 }
 
