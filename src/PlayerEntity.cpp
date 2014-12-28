@@ -1123,6 +1123,8 @@ void PlayerEntity::dying()
   SoundManager::getInstance().playSound(SOUND_PLAYER_DIE);
   setVelocity(Vector2D(0.0f, 0.0f));
 
+  for (int i = 0; i < 5; i++) game().generateBlood(x, y, BloodRed);
+
   int i;
   for (i = 0; i < gold && i < 10; i++) loseItem(ItemCopperCoin, false);
 
