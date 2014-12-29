@@ -1727,9 +1727,23 @@ void WitchBlastGame::updateMenu()
     }
     else if (event.type == sf::Event::KeyPressed)
     {
-      if (menuState == MenuStateCredits || menuState == MenuStateHiScores)
+      if (menuState == MenuStateCredits)
       {
-        menuState = MenuStateMain;
+        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+          menuState = MenuStateMain;
+      }
+      else if (menuState == MenuStateHiScores)
+      {
+        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+        {
+          menuState = MenuStateMain;
+          if (lastScore.level > 0)
+          {
+            lastScore.level = 0;
+            lastScore.score = 0;
+            playMusic(MusicIntro);
+          }
+        }
       }
       else if (menuState == MenuStateChangeName)
       {
