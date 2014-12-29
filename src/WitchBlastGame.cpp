@@ -51,6 +51,7 @@
 #include "PnjEntity.h"
 #include "TextEntity.h"
 #include "StandardRoomGenerator.h"
+#include "Scoring.h"
 #include "MessageGenerator.h"
 #include "TextMapper.h"
 
@@ -59,9 +60,11 @@
 #include <fstream>
 #include <ctime>
 
+#include <algorithm>
+
 #include <extlib/utf8/utf8.h>
 
-//#define START_LEVEL 6
+//#define START_LEVEL 4
 
 static std::string intToString(int n)
 {
@@ -290,6 +293,10 @@ WitchBlastGame::WitchBlastGame():
   currentMap = NULL;
   currentFloor = NULL;
 
+  lastScore.score = 0;
+  lastScore.name = "";
+  lastScore.level = 0;
+
   int i;
   for (i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
@@ -302,6 +309,7 @@ WitchBlastGame::WitchBlastGame():
   shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
 
   loadGameData();
+  loadHiScores();
   srand(time(NULL));
 }
 
@@ -860,6 +868,8 @@ void WitchBlastGame::updateRunningGame()
         case MenuConfigBack:
         case MenuLanguage:
         case MenuCredits:
+        case MenuHiScores:
+        case MenuPlayerName:
           std::cout << "[ERROR] Bad Menu ID\n";
           break;
 
@@ -888,13 +898,10 @@ void WitchBlastGame::updateRunningGame()
       {
         if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
         {
-          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
+          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY)
+            player->setDeathAge(DEATH_CERTIFICATE_DELAY);
           else
-          {
-            xGame[xGameTypeFade].active = true;
-            xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
-            xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
-          }
+            backToMenu = true;
         }
         else if (!messagesQueue.empty())
         {
@@ -1186,7 +1193,19 @@ void WitchBlastGame::updateRunningGame()
     }
   }
 
-  if (backToMenu) prepareIntro(); // switchToMenu();
+  if (backToMenu)
+  {
+    if (player->isDead())
+    {
+      EntityManager::getInstance().clean();
+      switchToMenu();
+      menuState = MenuStateHiScores;
+    }
+    else
+    {
+      prepareIntro(); // switchToMenu();
+    }
+  }
 }
 
 void WitchBlastGame::renderRunningGame()
@@ -1195,8 +1214,8 @@ void WitchBlastGame::renderRunningGame()
 
   if (!isPlayerAlive)
   {
-    sf::View view = app->getView(); //app->getDefaultView();
-    sf::View viewSave = app->getView(); //app->getDefaultView();
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
 
     if (!parameters.zoom || player->getDeathAge() > 4.0f)
     {
@@ -1554,15 +1573,14 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   rectangle.setOutlineColor(sf::Color(125, 100, 170));
   app->draw(rectangle);
 
-  write(tools::getLabel("dc_certificate"), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
-
   std::stringstream ss;
+  ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
+  write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+
+  ss.str(std::string());
+  ss.clear();
   ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
   ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << (int)gameTime / 60 << tools::getLabel("dc_minutes") << "." << std::endl;
-
-  int bodyCount = 0;
-  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
-    bodyCount += killedEnemies[enemyType];
 
   ss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount << std::endl;
   ss << tools::getLabel("dc_gold") << ": " << player->getGold() << std::endl;
@@ -1588,241 +1606,46 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
       n++;
     }
   }
+
+  ss.str("");
+  ss.clear();
+  ss << "Score: " << score;
+  write(ss.str(), 24, x + xRect / 2, y + 240, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+
 }
 
-void WitchBlastGame::renderDeathScreen()
+bool compareScores(WitchBlastGame::StructScore s1, WitchBlastGame::StructScore s2)
 {
-  float deathAge = player->getDeathAge();
-  if (deathAge < 1.0f) return;
+  return s1.score > s2.score;
+}
 
-  int rectFade = 220;
-  if (deathAge < 2.0f) rectFade = rectFade * (deathAge - 1.0f);
-  //  background
-  sf::RectangleShape rectangle(sf::Vector2f(810 , 300));
-  rectangle.setFillColor(sf::Color(40, 40, 40, rectFade));
-  rectangle.setPosition(sf::Vector2f(80, 110));
-  rectangle.setOutlineThickness(2);
-  rectangle.setOutlineColor(sf::Color::White);
-  app->draw(rectangle);
+void WitchBlastGame::calculateScore()
+{
+  score = 0;
+  bodyCount = 0;
 
-  // lines
-  sf::RectangleShape line(sf::Vector2f(810 , 1));
-  line.setFillColor(sf::Color::White);
-  line.setPosition(sf::Vector2f(80, 150));
-  app->draw(line);
-
-  line.setPosition(sf::Vector2f(205, 110));
-  line.setSize(sf::Vector2f(1 , 300));
-  line.setFillColor(sf::Color(190, 190, 190, 255));
-  //app->draw(line);
-
-  if (deathAge > 2.0f)
+  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
   {
-    int xItems = 90;
-    int yItems = 120;
-
-    int xMonsters = 85;
-    int yMonsters = 160;
-    // items
-    write(tools::getLabel("items_found"), 17, xItems, yItems, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-
-    int n = 0;
-    int nMax = 40;
-    int nMaxTime = ((deathAge - 2.0f) * 120.0f);
-    for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
-    {
-      if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
-      {
-        sf::Sprite itemSprite;
-        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-        itemSprite.setPosition(xItems + 120 + n * 32, yItems - 5);
-        itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
-        app->draw(itemSprite);
-        n++;
-      }
-    }
-
-    // monsters
-    write(tools::getLabel("monsters_killed"), 17, xMonsters, yMonsters, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-    n = 0;
-    for (int i = EnemyTypeBat; i <= EnemyTypeBubble; i++)
-    {
-      for (int j = 0; j < killedEnemies[i] && n <= nMaxTime; j++)
-      {
-        sf::Sprite monsterSprite;
-        monsterSprite.setScale(0.75f, 0.75f);
-        int dy = -5;
-        switch (i)
-        {
-        case EnemyTypeBat:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BAT));
-          monsterSprite.setTextureRect(sf::IntRect(64, 0, 64, 64));
-          dy = -1;
-          break;
-
-        case EnemyTypeRat:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 12, 64, 52));
-          break;
-
-        case EnemyTypeRatBlack:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 140, 64, 52));
-          break;
-
-        case EnemyTypeRatHelmet:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 204, 64, 52));
-          break;
-
-        case EnemyTypeRatBlackHelmet:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(0, 268, 64, 52));
-          break;
-
-        case EnemyTypeEvilFlower:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FLOWER));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          break;
-
-        case EnemyTypeSnake:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SNAKE));
-          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 54));
-          dy = 2;
-          break;
-
-        case EnemyTypeSnakeBlood:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SNAKE));
-          monsterSprite.setTextureRect(sf::IntRect(0, 74, 64, 54));
-          dy = 2;
-          break;
-
-        case EnemyTypeSlime:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 10, 64, 44));
-          break;
-
-        case EnemyTypeSlimeRed:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 74, 64, 54));
-          break;
-
-        case EnemyTypeSlimeBlue:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 138, 64, 54));
-          break;
-
-        case EnemyTypeSlimeViolet:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(0, 202, 64, 54));
-          break;
-
-        case EnemyTypeImpBlue:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_IMP));
-          monsterSprite.setTextureRect(sf::IntRect(0, 64, 64, 64));
-          dy = -2;
-          break;
-
-        case EnemyTypeImpRed:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_IMP));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          dy = -2;
-          break;
-
-        case EnemyTypePumpkin:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PUMPKIN));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          monsterSprite.setScale(0.65f, 0.65);
-          dy = -1;
-          break;
-
-        case EnemyTypeWitch:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WITCH));
-          monsterSprite.setTextureRect(sf::IntRect(0, 18, 64, 50));
-          dy = -1;
-          break;
-
-        case EnemyTypeWitchRed:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WITCH));
-          monsterSprite.setTextureRect(sf::IntRect(0, 114, 64, 50));
-          dy = -1;
-          break;
-
-        case EnemyTypeCauldron:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CAULDRON));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 64, 64));
-          monsterSprite.setScale(0.65f, 0.65);
-          dy = -1;
-          break;
-
-        case EnemyTypeBubble:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BUBBLE));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
-          monsterSprite.setScale(0.25f, 0.25f);
-          dy = -1;
-          break;
-        }
-        monsterSprite.setPosition(xMonsters + 120 + n % nMax * 16, yMonsters + dy + n / nMax * 16 );
-        app->draw(monsterSprite);
-        n++;
-      }
-    }
-
-    // bosses
-    n = (1 + (n - 1)/ nMax) * nMax;
-    for (int i = EnemyTypeButcher; i <= EnemyTypeSpiderGiant; i++)
-    {
-      for (int j = 0; j < killedEnemies[i] && n <= nMaxTime; j++)
-      {
-        sf::Sprite monsterSprite;
-        monsterSprite.setScale(0.75f, 0.75f);
-        int dy = 0;
-        switch (i)
-        {
-        case EnemyTypeButcher:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BUTCHER));
-          monsterSprite.setTextureRect(sf::IntRect(32, 0, 64, 128));
-          dy = -5;
-          break;
-
-        case EnemyTypeSlimeBoss:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_GIANT_SLIME));
-          monsterSprite.setTextureRect(sf::IntRect(7, 0, 120, 128));
-          dy = -1;
-          break;
-
-        case EnemyTypeCyclops:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CYCLOP));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 192));
-          monsterSprite.setScale(0.6f, 0.6f);
-          dy = -21;
-          break;
-
-        case EnemyTypeRatKing:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_KING_RAT));
-          monsterSprite.setTextureRect(sf::IntRect(12, 0, 128, 116));
-          break;
-
-        case EnemyTypeSpiderGiant:
-          monsterSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_GIANT_SPIDER));
-          monsterSprite.setTextureRect(sf::IntRect(0, 0, 128, 128));
-          dy = 2;
-          break;
-        }
-
-        monsterSprite.setPosition(xMonsters + 120 + n % nMax * 16, yMonsters + dy + n / nMax * 16 );
-        app->draw(monsterSprite);
-        n += 3;
-      }
-    }
+    bodyCount += killedEnemies[enemyType];
+    score += killedEnemies[enemyType] * getMonsterScore((enemyTypeEnum)enemyType);
   }
 
-  // Game over text
-  float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-  int fade = 255 * (1.0f + cos(2.0f * getAbsolutTime())) * 0.5f;
+  score += getChallengeScore(challengeLevel);
+  score += getGoldScore(player->getGold());
 
-  write("GAME OVER", 32, x0, 40, ALIGN_CENTER, sf::Color::White, app, 2, 2);
-  write(tools::getLabel("play_again"), 20, x0, 480, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0);
+  // to save
+  lastScore.name = parameters.playerName;
+  lastScore.score = score;
+  lastScore.level = level;
+  lastScore.shotType = player->getShotType();
+  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
+    lastScore.equip[i] = player->isEquiped(i);
+
+  scores.push_back(lastScore);
+
+  std::sort (scores.begin(), scores.end(), compareScores);
+
+  saveHiScores();
 }
 
 void WitchBlastGame::switchToMenu()
@@ -1869,6 +1692,20 @@ void WitchBlastGame::updateMenu()
       app->setView(view);
     }
 
+    if (event.type == sf::Event::TextEntered)
+    {
+      if (menuState == MenuStateChangeName)
+      {
+        if (event.text.unicode < 128)
+        {
+          char c = static_cast<char>(event.text.unicode);
+
+          if ( (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_')
+            parameters.playerName += static_cast<char>(event.text.unicode);
+        }
+      }
+    }
+
     if (event.type == sf::Event::KeyPressed && menuState == MenuStateKeys)
     {
       bool alreadyUsed = false;
@@ -1892,7 +1729,34 @@ void WitchBlastGame::updateMenu()
     {
       if (menuState == MenuStateCredits)
       {
-        menuState = MenuStateMain;
+        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+          menuState = MenuStateMain;
+      }
+      else if (menuState == MenuStateHiScores)
+      {
+        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+        {
+          menuState = MenuStateMain;
+          if (lastScore.level > 0)
+          {
+            lastScore.level = 0;
+            lastScore.score = 0;
+            playMusic(MusicIntro);
+          }
+        }
+      }
+      else if (menuState == MenuStateChangeName)
+      {
+        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+        {
+          saveConfigurationToFile();
+          menuState = MenuStateMain;
+        }
+        else if (event.key.code == sf::Keyboard::BackSpace)
+        {
+          if (parameters.playerName.size() > 0)
+            parameters.playerName.erase(parameters.playerName.size() - 1);
+        }
       }
       else if (event.key.code == sf::Keyboard::Escape)
       {
@@ -1956,6 +1820,12 @@ void WitchBlastGame::updateMenu()
         case MenuCredits:
           menuState = MenuStateCredits;
           break;
+        case MenuHiScores:
+          menuState = MenuStateHiScores;
+          break;
+        case MenuPlayerName:
+          menuState = MenuStateChangeName;
+          break;
         case MenuConfig:
           menuState = MenuStateConfig;
           break;
@@ -1994,6 +1864,11 @@ void WitchBlastGame::renderMenu()
     renderCredits();
     return;
   }
+  else if (menuState == MenuStateHiScores)
+  {
+    renderHiScores();
+    return;
+  }
 
   sf::Sprite bgSprite;
   bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
@@ -2006,7 +1881,7 @@ void WitchBlastGame::renderMenu()
   write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   menuStuct* menu = nullptr;
-  if (menuState == MenuStateMain)
+  if (menuState == MenuStateMain || menuState == MenuStateChangeName)
     menu = &menuMain;
   else if (menuState == MenuStateConfig)
     menu = &menuConfig;
@@ -2014,7 +1889,7 @@ void WitchBlastGame::renderMenu()
     menu = &menuFirst;
 
   int xAlign = 290;
-  int yStep = 80;
+  int yStep = 50;
 
   if (menuState == MenuStateKeys)
   {
@@ -2060,10 +1935,18 @@ void WitchBlastGame::renderMenu()
         oss << label << " : " << tools::getLabel(languageString[parameters.language]);
         label = oss.str();
       }
+      else if (menu->items[i].id == MenuPlayerName)
+      {
+        std::ostringstream oss;
+        oss << label << " : " << parameters.playerName;
+        if (menuState == MenuStateChangeName && (int)(getAbsolutTime() * 3) % 2 == 0) oss << "_";
+        label = oss.str();
+      }
 
-      write(label, 23, xAlign, 260 + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu->items[i].description, 15, xAlign, 260 + i * yStep + 38, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(label, 21, xAlign, 260 + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1);
     }
+    write(menu->items[menu->index].description, 18, xAlign,
+          260 + menu->items.size() * yStep + 8, ALIGN_LEFT, sf::Color(60, 80, 220), app, 0, 0);
 
     // Keys
     if (menuState == MenuStateFirst)
@@ -2107,25 +1990,6 @@ void WitchBlastGame::renderCredits()
 
   // credits
   write("Credits", 30, 485, 230, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
-
-  /*std::stringstream creditsLeft;
-  creditsLeft << " * CODE *" << std::endl;
-  creditsLeft << "Seby" << std::endl << std::endl;
-  creditsLeft << " * 2d ART *" << std::endl;
-  creditsLeft << "Vetea" << std::endl;
-  creditsLeft << "Pierre (intro background, \nthe Thing, bubbles)" << std::endl;
-
-  std::stringstream creditsRight;
-  creditsRight << " * MUSIC *" << std::endl;
-  creditsRight << "Michael Ghelfi" << std::endl;
-  creditsRight << "JappeJ" << std::endl;
-  creditsRight << "SteveSyz" << std::endl;
-  creditsRight << "CinTer" << std::endl;
-  creditsRight << "cazok" << std::endl;
-  creditsRight << "ET16" << std::endl;
-
-  write(creditsLeft.str(), 18, 20, 280, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
-  write(creditsRight.str(), 18, 400, 280, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);*/
 
   int yCursorInit = 340;
   int yStep = 30;
@@ -2182,6 +2046,46 @@ void WitchBlastGame::renderCredits()
   }
 }
 
+void WitchBlastGame::renderHiScores()
+{
+  sf::Sprite bgSprite;
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  app->draw(bgSprite);
+
+  // hi-scores-title
+  write("RIP", 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+
+  int x0 = 25;
+  int x1 = 70;
+  int x2 = 125;
+  int x3 = 430;
+  int y0 = 110;
+  int yStep = 100;
+  int xRight = SCREEN_WIDTH / 2;
+
+  sf::RectangleShape line(sf::Vector2f(2, 600));
+  line.setPosition(SCREEN_WIDTH / 2, 80);
+  app->draw(line);
+
+  for (unsigned int i = 0; i < scores.size() && i < SCORES_MAX; i++)
+  {
+    int index = i < SCORES_MAX / 2 ? i : i - SCORES_MAX / 2;
+    sf::Color color = sf::Color( 220, 220, 220);
+    if (scores[i].score == lastScore.score && scores[i].level == lastScore.level && scores[i].name == lastScore.name)
+    {
+      int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
+      color = sf::Color(255, 128 + fade, 255);
+    }
+
+    renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scores[i].equip, scores[i].shotType, 1, 0);
+
+    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1);
+    std::stringstream ss;
+    ss << scores[i].name << " (" << scores[i].level << ")";
+    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1);
+    write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
+  }
+}
 void WitchBlastGame::renderInGameMenu()
 {
   menuStuct* menu = &menuInGame;
@@ -2907,6 +2811,8 @@ void WitchBlastGame::write(std::string str, int size, float x, float y, int alig
 
   if (align == ALIGN_CENTER)
     xFont = x - myText.getLocalBounds().width / 2;
+  else if (align == ALIGN_RIGHT)
+    xFont = x - myText.getLocalBounds().width;
 
   if (xShadow != 0 && yShadow != 0)
   {
@@ -3831,6 +3737,7 @@ void WitchBlastGame::saveConfigurationToFile()
 
   // parameters
   newMap["language"] = intToString(parameters.language);
+  newMap["player_name"] = parameters.playerName;
 
   // audio volume
   newMap["volume_sound"] = intToString(parameters.soundVolume);
@@ -3838,6 +3745,7 @@ void WitchBlastGame::saveConfigurationToFile()
 
   newMap["zoom_enabled"] = parameters.zoom ? "1" : "0";
   newMap["vsync_enabled"] = parameters.vsync ? "1" : "0";
+  newMap["blood_spreading"] = parameters.bloodSpread ? "1" : "0";
 
   // Keys
   newMap["keyboard_move_up"] = intToString(input[KeyUp]);
@@ -3862,8 +3770,10 @@ void WitchBlastGame::configureFromFile()
   parameters.language = 0;  // english
   parameters.zoom = true;
   parameters.vsync = true;
+  parameters.bloodSpread = true;
   parameters.musicVolume = 100;
   parameters.soundVolume = 80;
+  parameters.playerName = "player";
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
@@ -3904,8 +3814,18 @@ void WitchBlastGame::configureFromFile()
   if (i >= 0) parameters.vsync = i;
   i = config.findInt("zoom_enabled");
   if (i >= 0) parameters.zoom = i;
+  i = config.findInt("blood_spreading");
+  if (i >= 0) parameters.bloodSpread = i;
+
+  std::string playerName = config.findString("player_name");
+  if (playerName.size() > 0) parameters.playerName = playerName;
 
   tools::setLanguage(languageString[parameters.language]);
+}
+
+parameterStruct WitchBlastGame::getParameters()
+{
+  return parameters;
 }
 
 void WitchBlastGame::buildMenu(bool rebuild)
@@ -3957,23 +3877,39 @@ void WitchBlastGame::buildMenu(bool rebuild)
     if (!rebuild) menuMain.index = 0;
   }
 
+  menuItemStuct itemName;
+  itemName.label = tools::getLabel("player_name");
+  itemName.description = tools::getLabel("player_name_desc");
+  itemName.id = MenuPlayerName;
+  menuMain.items.push_back(itemName);
+
   menuItemStuct itemConfig;
   itemConfig.label = tools::getLabel("configure_game");
   itemConfig.description = tools::getLabel("configure_game_desc");
   itemConfig.id = MenuConfig;
   menuMain.items.push_back(itemConfig);
 
+  if (scores.size() > 0)
+  {
+    menuItemStuct itemHiScores;
+    itemHiScores.label = tools::getLabel("hi_scores");
+    itemHiScores.description = tools::getLabel("hi_scores_desc");
+    itemHiScores.id = MenuHiScores;
+    menuMain.items.push_back(itemHiScores);
+  }
+
+
+  menuItemStuct itemCredits;
+  itemCredits.label = tools::getLabel("credits");
+  itemCredits.description = tools::getLabel("credits_desc");
+  itemCredits.id = MenuCredits;
+  menuMain.items.push_back(itemCredits);
+
   menuItemStuct itemExit;
   itemExit.label = tools::getLabel("exit_game");
   itemExit.description = tools::getLabel("return_to_desktop");
   itemExit.id = MenuExit;
   menuMain.items.push_back(itemExit);
-
-  menuItemStuct itemCredits;
-  itemCredits.label = "Credits";
-  itemCredits.description = "";
-  itemCredits.id = MenuCredits;
-  menuMain.items.push_back(itemCredits);
 
   // configuration
   menuItemStuct itemKeys;
@@ -4459,6 +4395,75 @@ std::string WitchBlastGame::sourceToString(sourceTypeEnum sourceType, enemyTypeE
   return value;
 }
 
+void WitchBlastGame::saveHiScores()
+{
+  std::ofstream file(HISCORES_FILE.c_str(), std::ios::out | std::ios::trunc);
+
+  if (file)
+  {
+    // version (for compatibility check)
+    file << SAVE_VERSION << std::endl;
+
+    file << scores.size() << std::endl;
+
+    // tuto
+    for (unsigned int i = 0; i < scores.size() && i < SCORES_MAX; i++)
+    {
+      file << scores[i].name << " ";
+      file << scores[i].level << " ";
+      file << scores[i].score << " ";
+      file << scores[i].shotType << " ";
+      // player equip
+      for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
+        file << scores[i].equip[j] << " ";
+      file << std::endl;
+    }
+    file << std::endl;
+
+    file.close();
+  }
+  else
+  {
+    std::cout << "[ERROR] Impossible to open hi-scores file.\n";
+  }
+}
+
+void WitchBlastGame::loadHiScores()
+{
+  scores.clear();
+
+  std::ifstream file(HISCORES_FILE.c_str(), std::ios::in);
+
+  if (file)
+  {
+    // version
+    std::string v;
+    file >> v;
+
+    if (v != SAVE_VERSION)
+    {
+      file.close();
+      remove(SAVE_DATA_FILE.c_str());
+      return;
+    }
+
+    int nbScores;
+    file >> nbScores;
+
+    for (int i = 0; i < nbScores; i++)
+    {
+      StructScore score;
+      file >> score.name;
+      file >> score.level;
+      file >> score.score;
+      file >> score.shotType;
+      for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
+        file >> score.equip[j];
+
+      scores.push_back(score);
+    }
+  }
+}
 
 WitchBlastGame &game()
 {

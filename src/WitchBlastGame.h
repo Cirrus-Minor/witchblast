@@ -91,6 +91,17 @@ const std::string creditsMusic[]  =
   "END"
 };
 
+struct parameterStruct
+{
+  int language;
+  int musicVolume;
+  int soundVolume;
+  bool zoom;
+  bool vsync;
+  bool bloodSpread;
+  std::string playerName;
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -168,6 +179,12 @@ public:
    *  \return : the value of the flag
    */
   bool getShowLogical();
+
+  /*!
+   *  \brief accessor on the parameters
+   *  \return : the parameters
+   */
+  parameterStruct getParameters();
 
   /*!
    *  \brief Start the game and the game loop
@@ -344,6 +361,16 @@ public:
 
   void saveDeathScreen(std::string fileName);
 
+  struct StructScore
+  {
+    std::string name;
+    int score;
+    int level;
+    int shotType;
+    bool equip[NUMBER_EQUIP_ITEMS];
+  };
+  void calculateScore();
+
 protected:
   /*!
    *  \brief Rendering method
@@ -382,6 +409,8 @@ private:
 
   // game play
   int level;                  /*!< Level (floor) */
+  int score;                  /*!< score (calculated at the end of the game) */
+  int bodyCount;              /*!< killed monsters (calculated at the end of the game) */
   int challengeLevel;         /*!< Level (challenge) */
   float gameTime;             /*!< "age" of the current game */
   int floorX;                 /*!< X position of the room in the level */
@@ -663,9 +692,9 @@ private:
   void renderCredits();
 
   /*!
-   *  \brief Render the death screen (when the player dies)
+   *  \brief Render the credits screen
    */
-  void renderDeathScreen();
+  void renderHiScores();
 
   /** Menu keys enum
    *  Identify the various keys of the menu.
@@ -681,6 +710,8 @@ private:
     MenuLanguage,     /**< When configuring the language */
     MenuExit,         /**< When exiting the game */
     MenuCredits,      /**< Display the credits screen */
+    MenuHiScores,     /**< Display the hi-scores screen */
+    MenuPlayerName,   /**< To enter/change the player name */
 
     MenuContinue,     /**< Continue the game */
     MenuSaveAndQuit,  /**< Save and return to main */
@@ -694,6 +725,8 @@ private:
     MenuStateMain,
     MenuStateConfig,
     MenuStateKeys,
+    MenuStateHiScores,
+    MenuStateChangeName,
     MenuStateCredits,
     MenuStateFirst    /**< First time, we choose language and keyboard */
   };
@@ -745,14 +778,7 @@ private:
    */
   void registerLanguage();
 
-  struct parameterStruct
-  {
-    int language;
-    int musicVolume;
-    int soundVolume;
-    bool zoom;
-    bool vsync;
-  } parameters;
+  parameterStruct parameters;
 
   void resetKilledEnemies();
 
@@ -792,6 +818,11 @@ private:
 
   SpriteEntity* introSprites[8];
   int introSoundState;
+
+  std::vector <StructScore> scores;
+  StructScore lastScore;
+  void loadHiScores();
+  void saveHiScores();
 };
 
 /*!

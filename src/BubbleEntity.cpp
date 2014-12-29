@@ -161,18 +161,7 @@ void BubbleEntity::dying()
   }
 
   for (int i = 0; i < 5 - bubbleSize; i++)
-  {
-    SpriteEntity* blood = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BLOOD), x, y, 16, 16, 6);
-    blood->setZ(- 1);
-
-    blood->setFrame(24 + rand()%6);
-    blood->setType(ENTITY_BLOOD);
-    blood->setVelocity(Vector2D(rand()%150));
-    blood->setViscosity(0.95f);
-
-    float bloodScale = 1.0f + (rand() % 10) * 0.1f;
-    blood->setScale(bloodScale, bloodScale);
-  }
+    game().generateBlood(x, y, BloodBubble);
 
   SoundManager::getInstance().playSound(SOUND_BUBBLE_00 + rand() % 2);
 }

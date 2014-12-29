@@ -31,7 +31,7 @@ public:
    *  \param y : y position of the blood
    *  \param bloodColor : color of the blood (red; green, ...)
    */
-  void generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
+  displayEntityStruct& generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
 
   void addBlood(float x, float y, int frame, float scale);
   void addCorpse(float x, float y, int frame);

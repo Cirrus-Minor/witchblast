@@ -29,6 +29,7 @@ public:
   void displayMap();
 
   int findInt(std::string key);
+  std::string findString(std::string key);
   bool configFileExists();
 
 private:

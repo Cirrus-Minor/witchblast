@@ -101,3 +101,15 @@ int Config::findInt(std::string key)
 
   return atoi(mit->second.c_str());
 }
+
+std::string Config::findString(std::string key)
+{
+  std::map<std::string, std::string>::const_iterator
+  mit(configMap.find(key)),
+      mend(configMap.end());
+  std::string result = "";
+  if(mit!=mend)
+    result = mit->second.c_str();
+
+  return result;
+}
