@@ -290,7 +290,6 @@ source_explosion#explosion
 source_poison#poison
 enemy_francky#The Thing
 enemy_francky_head#The Thing's head
-
 inventory#Inventory
 dc_certificate#Death certificate
 dc_killed_by#Killed by
@@ -303,6 +302,10 @@ dc_challenges#Completed challenges
 
 player_name#Player name
 player_name_desc#Modify player name
+hi_scores#Hall of fame
+hi_scores_desc#Best scores
+credits#Credits
+credits_desc#Credits screen
 
 [french]
 start_new_game#Nouvelle partie

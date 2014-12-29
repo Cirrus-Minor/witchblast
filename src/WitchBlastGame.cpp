@@ -3875,23 +3875,27 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemConfig.id = MenuConfig;
   menuMain.items.push_back(itemConfig);
 
+  if (scores.size() > 0)
+  {
+    menuItemStuct itemHiScores;
+    itemHiScores.label = tools::getLabel("hi_scores");
+    itemHiScores.description = tools::getLabel("hi_scores_desc");
+    itemHiScores.id = MenuHiScores;
+    menuMain.items.push_back(itemHiScores);
+  }
+
+
+  menuItemStuct itemCredits;
+  itemCredits.label = tools::getLabel("credits");
+  itemCredits.description = tools::getLabel("credits_desc");
+  itemCredits.id = MenuCredits;
+  menuMain.items.push_back(itemCredits);
+
   menuItemStuct itemExit;
   itemExit.label = tools::getLabel("exit_game");
   itemExit.description = tools::getLabel("return_to_desktop");
   itemExit.id = MenuExit;
   menuMain.items.push_back(itemExit);
-
-  menuItemStuct itemHiScores;
-  itemHiScores.label = "Cemetery";
-  itemHiScores.description = "";
-  itemHiScores.id = MenuHiScores;
-  menuMain.items.push_back(itemHiScores);
-
-  menuItemStuct itemCredits;
-  itemCredits.label = "Credits";
-  itemCredits.description = "";
-  itemCredits.id = MenuCredits;
-  menuMain.items.push_back(itemCredits);
 
   // configuration
   menuItemStuct itemKeys;
