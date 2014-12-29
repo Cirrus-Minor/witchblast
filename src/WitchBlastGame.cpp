@@ -1573,9 +1573,12 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   rectangle.setOutlineColor(sf::Color(125, 100, 170));
   app->draw(rectangle);
 
-  write(tools::getLabel("dc_certificate"), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
-
   std::stringstream ss;
+  ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
+  write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+
+  ss.str(std::string());
+  ss.clear();
   ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
   ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << (int)gameTime / 60 << tools::getLabel("dc_minutes") << "." << std::endl;
 
