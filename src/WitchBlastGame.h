@@ -99,6 +99,7 @@ struct parameterStruct
   bool zoom;
   bool vsync;
   bool bloodSpread;
+  std::string playerName;
 };
 
 /*! \class WitchBlastGame
@@ -360,6 +361,14 @@ public:
 
   void saveDeathScreen(std::string fileName);
 
+  struct StructScore
+  {
+    std::string name;
+    int score;
+    int level;
+    int shotType;
+    bool equip[NUMBER_EQUIP_ITEMS];
+  };
   void calculateScore();
 
 protected:
@@ -682,6 +691,11 @@ private:
    */
   void renderCredits();
 
+  /*!
+   *  \brief Render the credits screen
+   */
+  void renderHiScores();
+
   /** Menu keys enum
    *  Identify the various keys of the menu.
    */
@@ -696,6 +710,8 @@ private:
     MenuLanguage,     /**< When configuring the language */
     MenuExit,         /**< When exiting the game */
     MenuCredits,      /**< Display the credits screen */
+    MenuHiScores,     /**< Display the hi-scores screen */
+    MenuPlayerName,   /**< To enter/change the player name */
 
     MenuContinue,     /**< Continue the game */
     MenuSaveAndQuit,  /**< Save and return to main */
@@ -709,6 +725,8 @@ private:
     MenuStateMain,
     MenuStateConfig,
     MenuStateKeys,
+    MenuStateHiScores,
+    MenuStateChangeName,
     MenuStateCredits,
     MenuStateFirst    /**< First time, we choose language and keyboard */
   };
@@ -800,6 +818,11 @@ private:
 
   SpriteEntity* introSprites[8];
   int introSoundState;
+
+  std::vector <StructScore> scores;
+  StructScore lastScore;
+  void loadHiScores();
+  void saveHiScores();
 };
 
 /*!

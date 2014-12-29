@@ -301,6 +301,9 @@ dc_killed_monsters#Slayed monsters
 dc_gold#Gold
 dc_challenges#Completed challenges
 
+player_name#Player name
+player_name_desc#Modify player name
+
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue

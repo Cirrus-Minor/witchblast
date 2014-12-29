@@ -60,9 +60,11 @@
 #include <fstream>
 #include <ctime>
 
+#include <algorithm>
+
 #include <extlib/utf8/utf8.h>
 
-//#define START_LEVEL 6
+//#define START_LEVEL 4
 
 static std::string intToString(int n)
 {
@@ -291,6 +293,10 @@ WitchBlastGame::WitchBlastGame():
   currentMap = NULL;
   currentFloor = NULL;
 
+  lastScore.score = 0;
+  lastScore.name = "";
+  lastScore.level = 0;
+
   int i;
   for (i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
@@ -303,6 +309,7 @@ WitchBlastGame::WitchBlastGame():
   shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
 
   loadGameData();
+  loadHiScores();
   srand(time(NULL));
 }
 
@@ -861,6 +868,8 @@ void WitchBlastGame::updateRunningGame()
         case MenuConfigBack:
         case MenuLanguage:
         case MenuCredits:
+        case MenuHiScores:
+        case MenuPlayerName:
           std::cout << "[ERROR] Bad Menu ID\n";
           break;
 
@@ -889,13 +898,10 @@ void WitchBlastGame::updateRunningGame()
       {
         if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
         {
-          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
+          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY)
+            player->setDeathAge(DEATH_CERTIFICATE_DELAY);
           else
-          {
-            xGame[xGameTypeFade].active = true;
-            xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
-            xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
-          }
+            backToMenu = true;
         }
         else if (!messagesQueue.empty())
         {
@@ -1187,7 +1193,19 @@ void WitchBlastGame::updateRunningGame()
     }
   }
 
-  if (backToMenu) prepareIntro(); // switchToMenu();
+  if (backToMenu)
+  {
+    if (player->isDead())
+    {
+      EntityManager::getInstance().clean();
+      switchToMenu();
+      menuState = MenuStateHiScores;
+    }
+    else
+    {
+      prepareIntro(); // switchToMenu();
+    }
+  }
 }
 
 void WitchBlastGame::renderRunningGame()
@@ -1196,8 +1214,8 @@ void WitchBlastGame::renderRunningGame()
 
   if (!isPlayerAlive)
   {
-    sf::View view = app->getView(); //app->getDefaultView();
-    sf::View viewSave = app->getView(); //app->getDefaultView();
+    sf::View view = app->getView();
+    sf::View viewSave = app->getView();
 
     if (!parameters.zoom || player->getDeathAge() > 4.0f)
     {
@@ -1592,6 +1610,12 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   write(ss.str(), 24, x + xRect / 2, y + 240, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
 
 }
+
+bool compareScores(WitchBlastGame::StructScore s1, WitchBlastGame::StructScore s2)
+{
+  return s1.score > s2.score;
+}
+
 void WitchBlastGame::calculateScore()
 {
   score = 0;
@@ -1604,8 +1628,21 @@ void WitchBlastGame::calculateScore()
   }
 
   score += getChallengeScore(challengeLevel);
-
   score += getGoldScore(player->getGold());
+
+  // to save
+  lastScore.name = parameters.playerName;
+  lastScore.score = score;
+  lastScore.level = level;
+  lastScore.shotType = player->getShotType();
+  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
+    lastScore.equip[i] = player->isEquiped(i);
+
+  scores.push_back(lastScore);
+
+  std::sort (scores.begin(), scores.end(), compareScores);
+
+  saveHiScores();
 }
 
 void WitchBlastGame::switchToMenu()
@@ -1652,6 +1689,20 @@ void WitchBlastGame::updateMenu()
       app->setView(view);
     }
 
+    if (event.type == sf::Event::TextEntered)
+    {
+      if (menuState == MenuStateChangeName)
+      {
+        if (event.text.unicode < 128)
+        {
+          char c = static_cast<char>(event.text.unicode);
+
+          if ( (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_')
+            parameters.playerName += static_cast<char>(event.text.unicode);
+        }
+      }
+    }
+
     if (event.type == sf::Event::KeyPressed && menuState == MenuStateKeys)
     {
       bool alreadyUsed = false;
@@ -1673,9 +1724,22 @@ void WitchBlastGame::updateMenu()
     }
     else if (event.type == sf::Event::KeyPressed)
     {
-      if (menuState == MenuStateCredits)
+      if (menuState == MenuStateCredits || menuState == MenuStateHiScores)
       {
         menuState = MenuStateMain;
+      }
+      else if (menuState == MenuStateChangeName)
+      {
+        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+        {
+          saveConfigurationToFile();
+          menuState = MenuStateMain;
+        }
+        else if (event.key.code == sf::Keyboard::BackSpace)
+        {
+          if (parameters.playerName.size() > 0)
+            parameters.playerName.erase(parameters.playerName.size() - 1);
+        }
       }
       else if (event.key.code == sf::Keyboard::Escape)
       {
@@ -1739,6 +1803,12 @@ void WitchBlastGame::updateMenu()
         case MenuCredits:
           menuState = MenuStateCredits;
           break;
+        case MenuHiScores:
+          menuState = MenuStateHiScores;
+          break;
+        case MenuPlayerName:
+          menuState = MenuStateChangeName;
+          break;
         case MenuConfig:
           menuState = MenuStateConfig;
           break;
@@ -1777,6 +1847,11 @@ void WitchBlastGame::renderMenu()
     renderCredits();
     return;
   }
+  else if (menuState == MenuStateHiScores)
+  {
+    renderHiScores();
+    return;
+  }
 
   sf::Sprite bgSprite;
   bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
@@ -1789,7 +1864,7 @@ void WitchBlastGame::renderMenu()
   write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   menuStuct* menu = nullptr;
-  if (menuState == MenuStateMain)
+  if (menuState == MenuStateMain || menuState == MenuStateChangeName)
     menu = &menuMain;
   else if (menuState == MenuStateConfig)
     menu = &menuConfig;
@@ -1797,7 +1872,7 @@ void WitchBlastGame::renderMenu()
     menu = &menuFirst;
 
   int xAlign = 290;
-  int yStep = 80;
+  int yStep = 50;
 
   if (menuState == MenuStateKeys)
   {
@@ -1843,10 +1918,18 @@ void WitchBlastGame::renderMenu()
         oss << label << " : " << tools::getLabel(languageString[parameters.language]);
         label = oss.str();
       }
+      else if (menu->items[i].id == MenuPlayerName)
+      {
+        std::ostringstream oss;
+        oss << label << " : " << parameters.playerName;
+        if (menuState == MenuStateChangeName && (int)(getAbsolutTime() * 3) % 2 == 0) oss << "_";
+        label = oss.str();
+      }
 
-      write(label, 23, xAlign, 260 + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu->items[i].description, 15, xAlign, 260 + i * yStep + 38, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(label, 21, xAlign, 260 + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1);
     }
+    write(menu->items[menu->index].description, 18, xAlign,
+          260 + menu->items.size() * yStep + 8, ALIGN_LEFT, sf::Color(60, 80, 220), app, 0, 0);
 
     // Keys
     if (menuState == MenuStateFirst)
@@ -1890,25 +1973,6 @@ void WitchBlastGame::renderCredits()
 
   // credits
   write("Credits", 30, 485, 230, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
-
-  /*std::stringstream creditsLeft;
-  creditsLeft << " * CODE *" << std::endl;
-  creditsLeft << "Seby" << std::endl << std::endl;
-  creditsLeft << " * 2d ART *" << std::endl;
-  creditsLeft << "Vetea" << std::endl;
-  creditsLeft << "Pierre (intro background, \nthe Thing, bubbles)" << std::endl;
-
-  std::stringstream creditsRight;
-  creditsRight << " * MUSIC *" << std::endl;
-  creditsRight << "Michael Ghelfi" << std::endl;
-  creditsRight << "JappeJ" << std::endl;
-  creditsRight << "SteveSyz" << std::endl;
-  creditsRight << "CinTer" << std::endl;
-  creditsRight << "cazok" << std::endl;
-  creditsRight << "ET16" << std::endl;
-
-  write(creditsLeft.str(), 18, 20, 280, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
-  write(creditsRight.str(), 18, 400, 280, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);*/
 
   int yCursorInit = 340;
   int yStep = 30;
@@ -1965,6 +2029,46 @@ void WitchBlastGame::renderCredits()
   }
 }
 
+void WitchBlastGame::renderHiScores()
+{
+  sf::Sprite bgSprite;
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  app->draw(bgSprite);
+
+  // hi-scores-title
+  write("RIP", 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+
+  int x0 = 25;
+  int x1 = 70;
+  int x2 = 125;
+  int x3 = 430;
+  int y0 = 110;
+  int yStep = 100;
+  int xRight = SCREEN_WIDTH / 2;
+
+  sf::RectangleShape line(sf::Vector2f(2, 600));
+  line.setPosition(SCREEN_WIDTH / 2, 80);
+  app->draw(line);
+
+  for (unsigned int i = 0; i < scores.size() && i < SCORES_MAX; i++)
+  {
+    int index = i < SCORES_MAX / 2 ? i : i - SCORES_MAX / 2;
+    sf::Color color = sf::Color( 220, 220, 220);
+    if (scores[i].score == lastScore.score && scores[i].level == lastScore.level && scores[i].name == lastScore.name)
+    {
+      int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
+      color = sf::Color(255, 128 + fade, 255);
+    }
+
+    renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scores[i].equip, scores[i].shotType, 1, 0);
+
+    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1);
+    std::stringstream ss;
+    ss << scores[i].name << " (" << scores[i].level << ")";
+    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1);
+    write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
+  }
+}
 void WitchBlastGame::renderInGameMenu()
 {
   menuStuct* menu = &menuInGame;
@@ -2690,6 +2794,8 @@ void WitchBlastGame::write(std::string str, int size, float x, float y, int alig
 
   if (align == ALIGN_CENTER)
     xFont = x - myText.getLocalBounds().width / 2;
+  else if (align == ALIGN_RIGHT)
+    xFont = x - myText.getLocalBounds().width;
 
   if (xShadow != 0 && yShadow != 0)
   {
@@ -3614,6 +3720,7 @@ void WitchBlastGame::saveConfigurationToFile()
 
   // parameters
   newMap["language"] = intToString(parameters.language);
+  newMap["player_name"] = parameters.playerName;
 
   // audio volume
   newMap["volume_sound"] = intToString(parameters.soundVolume);
@@ -3649,6 +3756,7 @@ void WitchBlastGame::configureFromFile()
   parameters.bloodSpread = true;
   parameters.musicVolume = 100;
   parameters.soundVolume = 80;
+  parameters.playerName = "player";
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
@@ -3691,6 +3799,9 @@ void WitchBlastGame::configureFromFile()
   if (i >= 0) parameters.zoom = i;
   i = config.findInt("blood_spreading");
   if (i >= 0) parameters.bloodSpread = i;
+
+  std::string playerName = config.findString("player_name");
+  if (playerName.size() > 0) parameters.playerName = playerName;
 
   tools::setLanguage(languageString[parameters.language]);
 }
@@ -3749,6 +3860,12 @@ void WitchBlastGame::buildMenu(bool rebuild)
     if (!rebuild) menuMain.index = 0;
   }
 
+  menuItemStuct itemName;
+  itemName.label = tools::getLabel("player_name");
+  itemName.description = tools::getLabel("player_name_desc");
+  itemName.id = MenuPlayerName;
+  menuMain.items.push_back(itemName);
+
   menuItemStuct itemConfig;
   itemConfig.label = tools::getLabel("configure_game");
   itemConfig.description = tools::getLabel("configure_game_desc");
@@ -3760,6 +3877,12 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemExit.description = tools::getLabel("return_to_desktop");
   itemExit.id = MenuExit;
   menuMain.items.push_back(itemExit);
+
+  menuItemStuct itemHiScores;
+  itemHiScores.label = "Cemetery";
+  itemHiScores.description = "";
+  itemHiScores.id = MenuHiScores;
+  menuMain.items.push_back(itemHiScores);
 
   menuItemStuct itemCredits;
   itemCredits.label = "Credits";
@@ -4251,6 +4374,75 @@ std::string WitchBlastGame::sourceToString(sourceTypeEnum sourceType, enemyTypeE
   return value;
 }
 
+void WitchBlastGame::saveHiScores()
+{
+  std::ofstream file(HISCORES_FILE.c_str(), std::ios::out | std::ios::trunc);
+
+  if (file)
+  {
+    // version (for compatibility check)
+    file << SAVE_VERSION << std::endl;
+
+    file << scores.size() << std::endl;
+
+    // tuto
+    for (unsigned int i = 0; i < scores.size() && i < SCORES_MAX; i++)
+    {
+      file << scores[i].name << " ";
+      file << scores[i].level << " ";
+      file << scores[i].score << " ";
+      file << scores[i].shotType << " ";
+      // player equip
+      for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
+        file << scores[i].equip[j] << " ";
+      file << std::endl;
+    }
+    file << std::endl;
+
+    file.close();
+  }
+  else
+  {
+    std::cout << "[ERROR] Impossible to open hi-scores file.\n";
+  }
+}
+
+void WitchBlastGame::loadHiScores()
+{
+  scores.clear();
+
+  std::ifstream file(HISCORES_FILE.c_str(), std::ios::in);
+
+  if (file)
+  {
+    // version
+    std::string v;
+    file >> v;
+
+    if (v != SAVE_VERSION)
+    {
+      file.close();
+      remove(SAVE_DATA_FILE.c_str());
+      return;
+    }
+
+    int nbScores;
+    file >> nbScores;
+
+    for (int i = 0; i < nbScores; i++)
+    {
+      StructScore score;
+      file >> score.name;
+      file >> score.level;
+      file >> score.score;
+      file >> score.shotType;
+      for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
+        file >> score.equip[j];
+
+      scores.push_back(score);
+    }
+  }
+}
 
 WitchBlastGame &game()
 {
