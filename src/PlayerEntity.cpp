@@ -291,6 +291,26 @@ void PlayerEntity::animate(float delay)
       if (getShotType() == ShotTypeIce) SoundManager::getInstance().playSound(SOUND_ICE_CHARGE);
     }
   }
+  if (playerStatus == playerStatusGoingNext)
+  {
+    return;
+  }
+  if (playerStatus == playerStatusStairs)
+  {
+    x += velocity.x * delay;
+    y += velocity.y * delay;
+    age += delay;
+    frame = ((int)(age * 7.0f)) % 4;
+    if (frame == 3) frame = 1;
+
+    if (x < (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2)
+    {
+      facingDirection = 8;
+      game().moveToOtherMap(8);
+    }
+
+    return;
+  }
   // rate of fire
   if (!canFirePlayer)
   {
@@ -367,7 +387,7 @@ void PlayerEntity::animate(float delay)
     frame = 1;
   }
 
-  if (playerStatus == playerStatusDead || isMoving() || firingDirection != 5)
+  if (playerStatus != playerStatusPlaying || isMoving() || firingDirection != 5)
     idleAge = 0.0f;
   else
     idleAge += delay;
@@ -380,6 +400,24 @@ void PlayerEntity::animate(float delay)
     game().moveToOtherMap(8);
   else if (y > MAP_HEIGHT * TILE_HEIGHT)
     game().moveToOtherMap(2);
+#ifdef SPIRAL_STAIRCASE
+  else if (playerStatus == playerStatusPlaying
+           && game().getCurrentMap()->getRoomType() == roomTypeExit && y < TILE_HEIGHT * 0.41)
+  {
+    playerStatus = playerStatusStairs;
+    velocity.y = creatureSpeed / 12; //0.0f;
+    velocity.x = -creatureSpeed / 3;
+    facingDirection = 4;
+
+    SpriteEntity* doorEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
+                                                    (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
+                                                    TILE_HEIGHT / 2, 64, 64, 1);
+    doorEntity->setZ(TILE_HEIGHT);
+    doorEntity->setImagesProLine(10);
+    doorEntity->setFrame(119);
+    doorEntity->setType(ENTITY_EFFECT);
+  }
+#endif
 
   if (playerStatus == playerStatusEntering)
   {
@@ -1123,11 +1161,9 @@ void PlayerEntity::dying()
   SoundManager::getInstance().playSound(SOUND_PLAYER_DIE);
   setVelocity(Vector2D(0.0f, 0.0f));
 
-  for (int i = 0; i < 5; i++) game().generateBlood(x, y, BloodRed);
-
   int i;
   for (i = 0; i < gold && i < 10; i++) loseItem(ItemCopperCoin, false);
-
+  for (i = 0; i < 5; i++) game().generateBlood(x, y, BloodRed);
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
     if (equip[i])
