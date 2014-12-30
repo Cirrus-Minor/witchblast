@@ -1736,7 +1736,8 @@ void WitchBlastGame::updateMenu()
       }
       else if (menuState == MenuStateHiScores)
       {
-        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+        if (parameters.playerName.size() > 0
+            && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return))
         {
           menuState = MenuStateMain;
           if (lastScore.level > 0)
@@ -1874,7 +1875,13 @@ void WitchBlastGame::updateMenu()
           if (menuState == MenuStateFirst)
           {
             registerLanguage();
-            menuState = MenuStateMain;
+            if (parameters.playerName.compare("") == 0 )
+            {
+              menuMain.index = 0;
+              menuState = MenuStateChangeName;
+            }
+            else
+              menuState = MenuStateMain;
           }
           break;
         case MenuExit:
@@ -2106,13 +2113,13 @@ void WitchBlastGame::renderHiScores()
   app->draw(bgSprite);
 
   // hi-scores-title
-  write("RIP", 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("hi_scores"), 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   int x0 = 25;
   int x1 = 70;
   int x2 = 125;
   int x3 = 430;
-  int y0 = 110;
+  int y0 = 130;
   int yStep = 100;
   int xRight = SCREEN_WIDTH / 2;
 
@@ -3846,7 +3853,7 @@ void WitchBlastGame::configureFromFile()
   parameters.bloodSpread = true;
   parameters.musicVolume = 100;
   parameters.soundVolume = 80;
-  parameters.playerName = "player";
+  parameters.playerName = "";
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
@@ -3956,8 +3963,11 @@ void WitchBlastGame::buildMenu(bool rebuild)
     if (!rebuild) menuMain.index = 1;
   }
 
-  if (parameters.playerName.compare("player") == 0)
+  if (parameters.playerName.compare("") == 0 && menuState == MenuStateMain)
+  {
     menuMain.index = 0;
+    menuState = MenuStateChangeName;
+  }
 
   menuItemStuct itemConfig;
   itemConfig.label = tools::getLabel("configure_game");
