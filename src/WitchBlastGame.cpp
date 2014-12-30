@@ -3917,6 +3917,12 @@ void WitchBlastGame::buildMenu(bool rebuild)
 
   saveHeader = loadGameHeader();
 
+  menuItemStuct itemName;
+  itemName.label = tools::getLabel("player_name");
+  itemName.description = tools::getLabel("player_name_desc");
+  itemName.id = MenuPlayerName;
+  menuMain.items.push_back(itemName);
+
   if (saveHeader.ok)
   {
     menuItemStuct itemStart;
@@ -3936,7 +3942,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
     itemStart.id = MenuStartOld;
     menuMain.items.push_back(itemStart);
 
-    if (!rebuild) menuMain.index = 1;
+    if (!rebuild) menuMain.index = 2;
   }
   else
   {
@@ -3947,14 +3953,11 @@ void WitchBlastGame::buildMenu(bool rebuild)
     itemStart.id = MenuStartNew;
     menuMain.items.push_back(itemStart);
 
-    if (!rebuild) menuMain.index = 0;
+    if (!rebuild) menuMain.index = 1;
   }
 
-  menuItemStuct itemName;
-  itemName.label = tools::getLabel("player_name");
-  itemName.description = tools::getLabel("player_name_desc");
-  itemName.id = MenuPlayerName;
-  menuMain.items.push_back(itemName);
+  if (parameters.playerName.compare("player") == 0)
+    menuMain.index = 0;
 
   menuItemStuct itemConfig;
   itemConfig.label = tools::getLabel("configure_game");
