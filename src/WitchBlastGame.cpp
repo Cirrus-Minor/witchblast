@@ -870,6 +870,8 @@ void WitchBlastGame::updateRunningGame()
         case MenuCredits:
         case MenuHiScores:
         case MenuPlayerName:
+        case MenuVolumeMusic:
+        case MenuVolumeSound:
           std::cout << "[ERROR] Bad Menu ID\n";
           break;
 
@@ -1788,6 +1790,22 @@ void WitchBlastGame::updateMenu()
           tools::setLanguage(languageString[parameters.language]);
           buildMenu(true);
         }
+        else if (menu->items[menu->index].id == MenuVolumeSound)
+        {
+          parameters.soundVolume = (parameters.soundVolume / 10) * 10 + 10;
+          if (parameters.soundVolume > 100) parameters.soundVolume = 100;
+          saveConfigurationToFile();
+          SoundManager::getInstance().setVolume(parameters.soundVolume);
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        }
+        else if (menu->items[menu->index].id == MenuVolumeMusic)
+        {
+          parameters.musicVolume = (parameters.musicVolume / 10) * 10 + 10;
+          if (parameters.musicVolume > 100) parameters.musicVolume = 100;
+          saveConfigurationToFile();
+          updateMusicVolume();
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        }
       }
       else if (event.key.code == input[KeyLeft] || event.key.code == sf::Keyboard::Left)
       {
@@ -1799,6 +1817,22 @@ void WitchBlastGame::updateMenu()
           if (menuState == MenuStateConfig) saveConfigurationToFile();
           tools::setLanguage(languageString[parameters.language]);
           buildMenu(true);
+        }
+        else if (menu->items[menu->index].id == MenuVolumeSound)
+        {
+          parameters.soundVolume = (parameters.soundVolume / 10) * 10 - 10;
+          if (parameters.soundVolume < 0) parameters.soundVolume = 0;
+          saveConfigurationToFile();
+          SoundManager::getInstance().setVolume(parameters.soundVolume);
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        }
+        else if (menu->items[menu->index].id == MenuVolumeMusic)
+        {
+          parameters.musicVolume = (parameters.musicVolume / 10) * 10 - 10;
+          if (parameters.musicVolume < 0) parameters.musicVolume = 0;
+          saveConfigurationToFile();
+          updateMusicVolume();
+          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
         }
       }
       else if (event.key.code == sf::Keyboard::Return)
@@ -1845,6 +1879,9 @@ void WitchBlastGame::updateMenu()
           break;
         case MenuExit:
           app->close();
+          break;
+        case MenuVolumeSound:
+        case MenuVolumeMusic:
           break;
         case MenuContinue:
         case MenuSaveAndQuit:
@@ -1940,6 +1977,22 @@ void WitchBlastGame::renderMenu()
         std::ostringstream oss;
         oss << label << " : " << parameters.playerName;
         if (menuState == MenuStateChangeName && (int)(getAbsolutTime() * 3) % 2 == 0) oss << "_";
+        label = oss.str();
+      }
+      else if (menu->items[i].id == MenuVolumeSound)
+      {
+        std::ostringstream oss;
+        oss << label << " : ";
+        if (parameters.soundVolume == 0) oss << "OFF";
+        else oss << parameters.soundVolume;
+        label = oss.str();
+      }
+      else if (menu->items[i].id == MenuVolumeMusic)
+      {
+        std::ostringstream oss;
+        oss << label << " : ";
+        if (parameters.musicVolume == 0) oss << "OFF";
+        else oss << parameters.musicVolume;
         label = oss.str();
       }
 
@@ -3248,6 +3301,26 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
     music.play();
 }
 
+void WitchBlastGame::updateMusicVolume()
+{
+  if (music.getStatus() == sf::Music::Playing)
+  {
+    if (parameters.musicVolume == 0)
+      music.stop();
+    else
+      music.setVolume(parameters.musicVolume * 60 / 100);
+  }
+  else
+  {
+    if (parameters.musicVolume > 0)
+    {
+      bool ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
+      music.setVolume(parameters.musicVolume * 60 / 100);
+      if (ok) music.play();
+    }
+  }
+}
+
 void WitchBlastGame::makeShake(float duration)
 {
   xGame[xGameTypeShake].active = true;
@@ -3923,6 +3996,18 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemLanguage.description = tools::getLabel("config_lang_desc");
   itemLanguage.id = MenuLanguage;
   menuConfig.items.push_back(itemLanguage);
+
+  menuItemStuct itemVolumeSound;
+  itemVolumeSound.label = tools::getLabel("volume_sound");
+  itemVolumeSound.description = tools::getLabel("volume_sound_desc");
+  itemVolumeSound.id = MenuVolumeSound;
+  menuConfig.items.push_back(itemVolumeSound);
+
+  menuItemStuct itemVolumeMusic;
+  itemVolumeMusic.label = tools::getLabel("volume_music");
+  itemVolumeMusic.description = tools::getLabel("volume_sound_desc");
+  itemVolumeMusic.id = MenuVolumeMusic;
+  menuConfig.items.push_back(itemVolumeMusic);
 
   menuItemStuct itemTutoReset;
   itemTutoReset.label = tools::getLabel("tuto_reset");

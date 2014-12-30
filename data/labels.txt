@@ -306,6 +306,9 @@ hi_scores#Hall of fame
 hi_scores_desc#Best scores
 credits#Credits
 credits_desc#Credits screen
+volume_sound#Sound volume
+volume_sound_desc#Use left/right arrows to change volume
+volume_music#Music volume
 
 [french]
 start_new_game#Nouvelle partie

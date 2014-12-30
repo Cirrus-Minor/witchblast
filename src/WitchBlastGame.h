@@ -630,6 +630,11 @@ private:
   void playMusic(musicEnum musicChoice);
 
   /*!
+   *  \brief Update the music volume (with parameters.volumeMusic)
+   */
+  void updateMusicVolume();
+
+  /*!
    *  \brief Add a key to the player input map from a string key (from file)
    *  \param logicInput : input function (move left, fire up, etc...)
    *  \param key : Key as string
@@ -712,6 +717,8 @@ private:
     MenuCredits,      /**< Display the credits screen */
     MenuHiScores,     /**< Display the hi-scores screen */
     MenuPlayerName,   /**< To enter/change the player name */
+    MenuVolumeSound,
+    MenuVolumeMusic,
 
     MenuContinue,     /**< Continue the game */
     MenuSaveAndQuit,  /**< Save and return to main */
