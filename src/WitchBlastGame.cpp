@@ -414,6 +414,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   challengeLevel = 1;
   gameTime = 0.0f;
   initEvents();
+  scoreSaveFile = "";
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -921,8 +922,7 @@ void WitchBlastGame::updateRunningGame()
       {
         if (!isPlayerAlive && player->getDeathAge() > 3.5f)
         {
-          // TODO File name
-          saveDeathScreen("DeathCertificate.png");
+          if (scoreSaveFile.compare("") == 0) saveDeathScreen();
         }
       }
 
@@ -1421,6 +1421,17 @@ void WitchBlastGame::renderRunningGame()
         app->draw(rectangle);
 
         renderDeathScreen(80, 110);
+
+        if (scoreSaveFile.compare("") == 0)
+        {
+          write("Press [F1] to capture the certificate", 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+        }
+        else
+        {
+          std::stringstream ss;
+          ss << "Saved to " << scoreSaveFile;
+          write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+        }
       }
       else if (deathAge > DEATH_CERTIFICATE_DELAY - 1.0f)
       {
@@ -1554,15 +1565,35 @@ void WitchBlastGame::renderRunningGame()
   }
 }
 
-void WitchBlastGame::saveDeathScreen(std::string fileName)
+void WitchBlastGame::saveDeathScreen()
 {
+  std::stringstream ss;
+  ss << "rip_";
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime( & t );
+
+  ss << (now->tm_year + 1900);
+  if (now->tm_mon < 9) ss << "0";
+  ss << (now->tm_mon + 1);
+  if (now->tm_mday < 9) ss << "0";
+  ss << now->tm_mday;
+  if (now->tm_hour <= 9) ss << "0";
+  ss << (now->tm_hour);
+  if (now->tm_min <= 9) ss << "0";
+  ss << (now->tm_min);
+  if (now->tm_sec <= 9) ss << "0";
+  ss << (now->tm_sec);
+
+  ss << ".png";
+
+  scoreSaveFile = ss.str();
   int width = 810, height = 300, border = 4;
   int x = 80, y = 110;
   sf::Image screenShot(app->capture());
   sf::Image savedImage;
   savedImage.create(width + border * 2, height + border * 2);
   savedImage.copy(screenShot,0 , 0, sf::IntRect( x - border, y - border, width + border * 2, height + border * 2));
-  savedImage.saveToFile(fileName);
+  savedImage.saveToFile(scoreSaveFile);
 }
 
 void WitchBlastGame::renderDeathScreen(float x, float y)

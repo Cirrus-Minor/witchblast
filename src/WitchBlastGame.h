@@ -370,7 +370,7 @@ public:
   std::string enemyToString(enemyTypeEnum enemyType);
   std::string sourceToString(sourceTypeEnum sourceType, enemyTypeEnum enemyType);
 
-  void saveDeathScreen(std::string fileName);
+  void saveDeathScreen();
 
   struct StructScore
   {
@@ -513,6 +513,8 @@ private:
   };
 
   sf::Keyboard::Key input[NumberKeys];     /*!< Input key array */
+
+  std::string scoreSaveFile;
 
   /*!
    *  \brief Starts the game
