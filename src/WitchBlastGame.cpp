@@ -1666,13 +1666,17 @@ void WitchBlastGame::calculateScore()
   score += getChallengeScore(challengeLevel);
   score += getGoldScore(player->getGold());
 
+  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
+  {
+    if (player->isEquiped(i)) score += getItemScore((item_equip_enum)i);
+    lastScore.equip[i] = player->isEquiped(i);
+  }
+
   // to save
   lastScore.name = parameters.playerName;
   lastScore.score = score;
   lastScore.level = level;
   lastScore.shotType = player->getShotType();
-  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
-    lastScore.equip[i] = player->isEquiped(i);
 
   scores.push_back(lastScore);
 

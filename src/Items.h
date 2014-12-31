@@ -210,7 +210,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBossKey, "item_boss_key", "item_boss_key_desc",
-    200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    10, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemDisplacementGloves, "item_displacement_gloves", "item_displacement_gloves_desc",
@@ -250,7 +250,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyIce, "item_fairy_ice", "item_fairy_ice_desc",
-    40, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    30, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemRingIce, "item_ring_ice", "item_ring_ice_desc",
@@ -278,7 +278,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyFire, "item_fairy_fire", "item_fairy_fire_desc",
-    40, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    30, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemFairyTarget, "item_fairy_target", "item_fairy_target_desc",
