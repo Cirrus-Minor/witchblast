@@ -1160,7 +1160,7 @@ void WitchBlastGame::updateRunningGame()
   verifyDoorUnlocking();
   if (roomClosed)
   {
-    if (getEnnemyCount() == 0)
+    if (getEnemyCount() == 0)
     {
       currentMap->setCleared(true);
       openDoors();
@@ -2262,7 +2262,7 @@ void WitchBlastGame::openDoors()
     doorEntity[3]->openDoor();
 }
 
-int WitchBlastGame::getEnnemyCount()
+int WitchBlastGame::getEnemyCount()
 {
   int n=0;
 
@@ -2280,7 +2280,7 @@ int WitchBlastGame::getEnnemyCount()
   return n;
 }
 
-Vector2D WitchBlastGame::getNearestEnnemy(float x, float y)
+Vector2D WitchBlastGame::getNearestEnemy(float x, float y)
 {
   Vector2D target(-100.0f, -100.0f);
   float distanceMin = -1.0f;
@@ -4077,13 +4077,6 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
     else
       killedEnemies[enemyType]++;
   }
-}
-
-void WitchBlastGame::displayKilledEnemies()
-{
-  std::cout<<"KILLED: ";
-  for (int i = 0; i < NB_ENEMY; i++) if (killedEnemies[i] > 0) std::cout << i << "x" << killedEnemies[i] << " ";
-  std::cout << std::endl;
 }
 
 void WitchBlastGame::registerLanguage()
