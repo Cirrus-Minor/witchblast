@@ -425,6 +425,7 @@ private:
   DungeonMap* currentMap;     /*!< Pointer to the logical current map */
   GameFloor* currentFloor;    /*!< Pointer to the logical floor (level) */
   bool showLogical;           /*!< True if showing bounding boxes, z and center */
+  bool showGameTime;          /*!< True if showing the game time */
 
   // game play
   int level;                  /*!< Level (floor) */

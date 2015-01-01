@@ -305,6 +305,7 @@ WitchBlastGame::WitchBlastGame():
 
   isPausing = false;
   showLogical = false;
+  showGameTime = false;
 
   shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
 
@@ -929,6 +930,10 @@ void WitchBlastGame::updateRunningGame()
       if (event.key.code == sf::Keyboard::F2)
       {
         showLogical = !showLogical;
+      }
+      if (event.key.code == sf::Keyboard::F3)
+      {
+        showGameTime = !showGameTime;
       }
 
       // DEBUG
@@ -1564,6 +1569,21 @@ void WitchBlastGame::renderRunningGame()
       }
     }
   }
+
+  // show game time
+  if (showGameTime)
+  {
+    int minutes   = (int)gameTime / 60;
+    int secondes  = (int)gameTime % 60;
+    std::stringstream ss;
+    if (minutes < 10) ss << "0";
+    ss << minutes;
+    ss << ":";
+    if (secondes < 10) ss << "0";
+    ss << secondes;
+    write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
+  }
+
 }
 
 void WitchBlastGame::saveDeathScreen()
@@ -1614,7 +1634,9 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   ss.str(std::string());
   ss.clear();
   ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
-  ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << (int)gameTime / 60 << tools::getLabel("dc_minutes") << "." << std::endl;
+  int minutes = (int)gameTime / 60;
+  if (minutes < 1) minutes = 1;
+  ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << minutes << " " << tools::getLabel("dc_minutes") << "." << std::endl;
 
   ss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount << std::endl;
   ss << tools::getLabel("dc_gold") << ": " << player->getGold() << std::endl;
