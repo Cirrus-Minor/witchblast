@@ -309,6 +309,8 @@ credits_desc#Credits screen
 volume_sound#Sound volume
 volume_sound_desc#Use left/right arrows to change volume
 volume_music#Music volume
+certificate_capture#Press [F1] to save the certificate as a PNG file
+certificate_saved#Saved to
 
 [french]
 start_new_game#Nouvelle partie

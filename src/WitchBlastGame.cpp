@@ -1425,12 +1425,12 @@ void WitchBlastGame::renderRunningGame()
 
         if (scoreSaveFile.compare("") == 0)
         {
-          write("Press [F1] to capture the certificate", 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+          write(tools::getLabel("certificate_capture"), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
         }
         else
         {
           std::stringstream ss;
-          ss << "Saved to " << scoreSaveFile;
+          ss << tools::getLabel("certificate_saved") << " " << scoreSaveFile;
           write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
         }
       }
@@ -2130,7 +2130,7 @@ void WitchBlastGame::renderCredits()
 
   ////// RIGHT
 
-  yCursor = yCursorInit + yStep;
+  yCursor = yCursorInit - yStep;
   write("Music", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
   yCursor += yStep;
   i = 0;
@@ -2140,6 +2140,18 @@ void WitchBlastGame::renderCredits()
     yCursor += yStep;
     i++;
   }
+  yCursor += yStep;
+
+  write("Translation", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  yCursor += yStep;
+  i = 0;
+  while (creditsTranslate[i] != "END")
+  {
+    write(creditsTranslate[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    yCursor += yStep;
+    i++;
+  }
+  yCursor += yStep;
 }
 
 void WitchBlastGame::renderHiScores()

@@ -98,6 +98,14 @@ const std::string creditsMusic[]  =
   "ET16",
   "END"
 };
+/** Credits: Translation */
+const std::string creditsTranslate[]  =
+{
+  "achpile (russian)",
+  "AFS (spanish)",
+  "Geheim (german)",
+  "END"
+};
 
 /** Struct for game parameters */
 struct parameterStruct
