@@ -1393,7 +1393,8 @@ void WitchBlastGame::renderRunningGame()
       // items
       write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0);
       int n = 0;
-      for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
+
+      for (auto i: sortedEquipement)
       {
         if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
         {
@@ -1627,7 +1628,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   // items
   write(tools::getLabel("inventory"), 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
   int n = 0;
-  for (int i=0; i < NUMBER_EQUIP_ITEMS; i++)
+  for (auto i: sortedEquipement)
   {
     if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
     {
