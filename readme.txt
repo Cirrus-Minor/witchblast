@@ -99,11 +99,13 @@ AFS (for the Spanish translation)
 Changes
 -------
 Next version
-- ADD Score
+- ADD Scores an d hi-score screen
 - ADD Blood is spraying now
-- ADD Sound and music volume in config file
+- ADD Sound and music volume in config menu
 - ADD Options to enable/disable zoom, vssync, blood spraying, in config file
 - ADD Auto-save at the beginning of a fight (game is not wasted in case of crash or freeze)
+- MOD Level 5 and level 6 are easier now
+- MOD Sorted inventory
 - MOD Optimizations (use of vertex arrays)
 - MOD Don't distort game screen when resizing the window
 - MOD Corpses don't stay on walls
