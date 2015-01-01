@@ -238,7 +238,7 @@ void generateStandardRoom05()
   if (random < 10)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeRat, 4);
+    game().findPlaceMonsters(EnemyTypeRat, 3);
     game().findPlaceMonsters(EnemyTypeRatHelmet, 4);
     if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
     else game().findPlaceMonsters(EnemyTypeWitchRed, 1);
@@ -253,8 +253,8 @@ void generateStandardRoom05()
   else if (random < 32)
   {
     game().getCurrentMap()->generateRoomWithoutHoles(2 + rand() % 2);
-    game().findPlaceMonsters(EnemyTypeWitch, 3);
-    game().findPlaceMonsters(EnemyTypeWitchRed, 2);
+    game().findPlaceMonsters(EnemyTypeWitch, 1 + rand() % 2);
+    game().findPlaceMonsters(EnemyTypeWitchRed, 1 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeCauldron, 1);
   }
   else if (random < 48)
@@ -264,12 +264,12 @@ void generateStandardRoom05()
     if (rand() % 2 == 0)
     {
       game().findPlaceMonsters(EnemyTypePumpkin, 2 + rand() % 4);
-      game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
+      game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 1);
     }
     else
     {
       game().findPlaceMonsters(EnemyTypeImpBlue, 3);
-      game().findPlaceMonsters(EnemyTypeEvilFlower, 2);
+      game().findPlaceMonsters(EnemyTypeEvilFlower, 1);
     }
   }
   else if (random < 64)
@@ -284,13 +284,14 @@ void generateStandardRoom05()
     int r = rand() % 3;
     if (r == 0)
     {
-      game().findPlaceMonsters(EnemyTypeImpRed, 4);
-      game().findPlaceMonsters(EnemyTypeImpBlue, 4);
+      game().findPlaceMonsters(EnemyTypeImpRed, 3 + rand() % 2);
+      game().findPlaceMonsters(EnemyTypeImpBlue, 3 + rand() % 2);
     }
     else if (r == 1)
-      game().findPlaceMonsters(EnemyTypeImpRed, 8);
+      game().findPlaceMonsters(EnemyTypeImpRed, 7);
     else
-      game().findPlaceMonsters(EnemyTypeImpBlue, 8);
+      game().findPlaceMonsters(EnemyTypeImpBlue, 7);
+
     if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
   else if (random < 90)
@@ -312,7 +313,7 @@ void generateStandardRoom05()
   {
     game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
     game().getCurrentMap()->addRandomGrids(4);
-    int r = 9 + rand() % 5;
+    int r = 8 + rand() % 5;
     for (int i = 0; i < r; i++)
     {
       int rtype = rand() % 5;
@@ -324,7 +325,7 @@ void generateStandardRoom05()
         case 3: game().findPlaceMonsters(EnemyTypeSlimeViolet,1); break;
       }
     }
-    if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
+    if (rand() % 4 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
   }
 }
 
@@ -335,7 +336,7 @@ void generateStandardRoom06()
   if (random < 10)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeZombie, 7);
+    game().findPlaceMonsters(EnemyTypeZombie, 6 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeRatHelmet, 2);
     if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
     else game().findPlaceMonsters(EnemyTypeZombie, 2);
@@ -351,14 +352,14 @@ void generateStandardRoom06()
   else if (random < 30)
   {
     game().getCurrentMap()->generateRoomWithoutHoles(2 + rand() % 2);
-    game().findPlaceMonsters(EnemyTypeWitch, 3);
-    game().findPlaceMonsters(EnemyTypeWitchRed, 3);
+    game().findPlaceMonsters(EnemyTypeWitch, 2 +  + rand() % 2);
+    game().findPlaceMonsters(EnemyTypeWitchRed, 2 +  + rand() % 2);
     game().findPlaceMonsters(EnemyTypeCauldron, 1);
   }
   else if (random < 40)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
-    game().findPlaceMonsters(EnemyTypeEvilFlower, 3);
+    game().findPlaceMonsters(EnemyTypeEvilFlower, 2);
     game().findPlaceMonsters(EnemyTypePumpkin, 3 + rand() % 4);
     game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
   }
@@ -402,7 +403,7 @@ void generateStandardRoom06()
   {
     game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
     game().getCurrentMap()->addRandomGrids(4);
-    int r = 9 + rand() % 5;
+    int r = 8 + rand() % 5;
     for (int i = 0; i < r; i++)
     {
       int rtype = rand() % 5;

@@ -210,7 +210,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBossKey, "item_boss_key", "item_boss_key_desc",
-    200, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    10, true, FamiliarNone, false, false, true, 1, RarityCommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemDisplacementGloves, "item_displacement_gloves", "item_displacement_gloves_desc",
@@ -250,7 +250,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyIce, "item_fairy_ice", "item_fairy_ice_desc",
-    40, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    30, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemRingIce, "item_ring_ice", "item_ring_ice_desc",
@@ -278,7 +278,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFairyFire, "item_fairy_fire", "item_fairy_fire_desc",
-    40, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
+    30, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, AlignmentNone, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemFairyTarget, "item_fairy_target", "item_fairy_target_desc",
@@ -416,5 +416,63 @@ enum item_equip_enum {
 
   NUMBER_EQUIP_ITEMS
   };
+
+const std::vector<item_equip_enum> sortedEquipement =
+{
+  // clothes
+  EQUIP_MAGICIAN_ROBE,
+  EQUIP_MAGICIAN_HAT,
+  EQUIP_LEATHER_BOOTS,
+  EQUIP_DISPLACEMENT_GLOVES,
+  EQUIP_LEATHER_BELT,
+  EQUIP_RAGE_AMULET,
+  EQUIP_BROOCH_FINESSE,
+  EQUIP_RING_ICE,
+  EQUIP_RING_STONE,
+  EQUIP_RING_LIGHTNING,
+  EQUIP_RING_FIRE,
+  EQUIP_RING_ILLUSION,
+
+  // weapons
+  EQUIP_MAHOGANY_STAFF,
+  EQUIP_BLOOD_SNAKE,
+  EQUIP_REAR_SHOT,
+  EQUIP_SULFUR,
+  EQUIP_GEM_ICE,
+  EQUIP_GEM_STONE,
+  EQUIP_GEM_LIGHTNING,
+  EQUIP_GEM_FIRE,
+  EQUIP_GEM_ILLUSION,
+
+  // books
+  EQUIP_MANUAL_STAFF,
+  EQUIP_MANUAL_SLIMES,
+  EQUIP_MANUAL_HEALTH,
+  EQUIP_BOOK_RANDOM,
+  EQUIP_BOOK_MAGIC_I,
+  EQUIP_BOOK_MAGIC_II,
+  EQUIP_BOOK_DUAL,
+  EQUIP_BOOK_TRIPLE,
+  EQUIP_BOOK_DUAL_QUICK,
+  EQUIP_BOOK_TRIPLE_QUICK,
+
+  // familiars
+  EQUIP_FAIRY,
+  EQUIP_FAIRY_ICE,
+  EQUIP_FAIRY_FIRE,
+  EQUIP_FAIRY_TARGET,
+
+  // spells
+  EQUIP_SPELL_TELEPORT,
+  EQUIP_SPELL_SLIME_EXPLODE,
+  EQUIP_SPELL_FIREBALL,
+  EQUIP_SPELL_FREEZE,
+  EQUIP_SPELL_EARTHQUAKE,
+  EQUIP_SPELL_PROTECTION,
+  EQUIP_SPELL_WEB,
+
+  // others
+  EQUIP_BOSS_KEY,
+};
 
 #endif

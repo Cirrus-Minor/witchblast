@@ -35,17 +35,21 @@ const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
 const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */
 
-const int X_GAME_FADE_IN  = 0;
-const int X_GAME_FADE_OUT = 1;
+const int X_GAME_FADE_IN  = 0;  /*!< Fade In effect ID */
+const int X_GAME_FADE_OUT = 1;  /*!< Fade out effect ID */
 
-const int X_GAME_COLOR_RED    = 0;
-const int X_GAME_COLOR_GREEN  = 1;
-const int X_GAME_COLOR_BLUE   = 2;
-const int X_GAME_COLOR_VIOLET = 3;
-const int X_GAME_COLOR_BROWN  = 4;
-const int X_GAME_COLOR_WHITE  = 5;
+const int X_GAME_COLOR_RED    = 0;  /*!< Red light color effect  ID */
+const int X_GAME_COLOR_GREEN  = 1;  /*!< Green light color effect  ID */
+const int X_GAME_COLOR_BLUE   = 2;  /*!< Blue light color effect  ID */
+const int X_GAME_COLOR_VIOLET = 3;  /*!< Violet light color effect  ID */
+const int X_GAME_COLOR_BROWN  = 4;  /*!< Brown light color effect  ID */
+const int X_GAME_COLOR_WHITE  = 5;  /*!< White light color effect  ID */
 
-unsigned const int NumberKeys = 12;
+unsigned const int NumberKeys = 12; /*!< Number of input keys on the game */
+
+/** Input key string
+ *  Keys in the config file.
+ */
 const std::string inputKeyString[NumberKeys] =
 {
   "key_move_up",
@@ -62,17 +66,20 @@ const std::string inputKeyString[NumberKeys] =
   "key_fire"
 };
 
+/** Credits: coder */
 const std::string creditsCode[]  =
 {
   "Seby",
   "END"
 };
+/** Credits: 2D artists */
 const std::string credits2D[]  =
 {
   "Vetea",
   "Pierre",
   "END"
 };
+/** Credits: Sound */
 const std::string creditsSound[]  =
 {
   "www.freesound.org/",
@@ -80,6 +87,7 @@ const std::string creditsSound[]  =
   "www.universal-soundbank.com/",
   "END"
 };
+/** Credits: Music */
 const std::string creditsMusic[]  =
 {
   "Michael Ghelfi",
@@ -90,16 +98,25 @@ const std::string creditsMusic[]  =
   "ET16",
   "END"
 };
+/** Credits: Translation */
+const std::string creditsTranslate[]  =
+{
+  "achpile (russian)",
+  "AFS (spanish)",
+  "Geheim (german)",
+  "END"
+};
 
+/** Struct for game parameters */
 struct parameterStruct
 {
-  int language;
-  int musicVolume;
-  int soundVolume;
-  bool zoom;
-  bool vsync;
-  bool bloodSpread;
-  std::string playerName;
+  int language;               /*!< Language ID (english = 0) */
+  int musicVolume;            /*!< music volume (0 to 100) */
+  int soundVolume;            /*!< sound volume (0 to 100) */
+  bool zoom;                  /*!< zoom effect (false = disabled) */
+  bool vsync;                 /*!< monitor vsync (false = disabled) */
+  bool bloodSpread;           /*!< blood spread (false = disabled) */
+  std::string playerName;     /*!< player name */
 };
 
 /*! \class WitchBlastGame
@@ -111,59 +128,55 @@ struct parameterStruct
 class WitchBlastGame : public Game
 {
 public:
+// DATA TYPES
+  /** Savegame header data */
+  struct saveHeaderStruct
+  {
+    bool ok;            /**< Save game OK ? */
+    int level;          /**< Level the save game */
+    float gameTime;     /**< How long it has been played */
+    int shotType;       /**< Current special shot type */
+    std::string date;   /**< Date of the save game */
+    std::string time;   /**< Time of the save game */
+  };
+
+// PUBLIC METHODS
   /*!
    *  \brief Constructor
-   *
-   *  Constructor of the WitchBlastGame class.
    */
   WitchBlastGame();
 
   /*!
    *  \brief Destructor
-   *
-   *  Destructor of the WitchBlastGame class.
    */
   virtual ~WitchBlastGame();
 
   /*!
   *  \brief Accessor on the current dungeon map
-  *
-  *  Accessor on the current dungeon map (room).
-  *
   *  \return a pointer to the current dungeon map
   */
   DungeonMap* getCurrentMap();
 
   /*!
   *  \brief Accessor on the current dungeon map entity
-  *
   *  \return a pointer to the current dungeon map entity
   */
   DungeonMapEntity* getCurrentMapEntity();
 
   /*!
    *  \brief Accessor on the player
-   *
-   *  Accessor on the player.
-   *
    *  \return a pointer to the player
    */
   PlayerEntity* getPlayer();
 
   /*!
    *  \brief Accessor on the player's position
-   *
-   *  Accessor on the player's position.
-   *
    *  \return a Vector2D of the player's position
    */
   Vector2D getPlayerPosition();
 
   /*!
    *  \brief accessor on the level
-   *
-   *  Accessor on the level.
-   *
    *  \return : the level
    */
   int getLevel();
@@ -188,7 +201,6 @@ public:
 
   /*!
    *  \brief Start the game and the game loop
-   *
    *  This method starts the game and the game loop.
    *  The game loop watches the events, the inputs, update and draw the game elements.
    */
@@ -196,17 +208,14 @@ public:
 
   /*!
   *  \brief Move the player to another map (room)
-  *
   *  Moves the player to another room of the dungeon.
   *  It's called when a player walk through an opened door.
-  *
   *  \param direction : direction of the new map. 4 = left, 8 = north, 6 = right, 2 = south
   */
   void moveToOtherMap(int direction);
 
   /*!
    *  \brief Closes the doors of the room
-   *
    *  Closes the doors of the room.
    *  It's called when the player enter in an area with monsters.
    */
@@ -214,52 +223,48 @@ public:
 
   /*!
    *  \brief Opens the doors of the room
-   *
    *  Opens the doors of the room.
    *  It's called when the player destroy the last monster of a room.
    */
   void openDoors();
 
-  /*!
+ /*!
   *  \brief Count the enemies in the room
-  *
   *  Count the enemies in the room.
   *  It's called when the room is closed : 0 enemy = room is cleared and doors shall open.
-  *
   *  \return amount of enemies
   */
-  int getEnnemyCount();
+  int getEnemyCount();
 
-  /*!
+ /*!
   *  \brief Return the position of the nearest enemy
-  *
   *  \param x : x position of the source
   *  \param y : y position of the source
-  *  \return amount of enemies
+  *  \return position of the nearest enemy (negative position when no enemy found)
   */
-  Vector2D getNearestEnnemy(float x, float y);
+  Vector2D getNearestEnemy(float x, float y);
 
-
-  /*!
+ /*!
   *  \brief Generates blood
-  *
-  *  Generates blood, it's called when someone is hurt or dies.
-  *
   *  \param x : x position of the blood
   *  \param y : y position of the blood
   *  \param bloodColor : color of the blood (red; green, ...)
   */
   void generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor);
 
+/*!
+  *  \brief Add a corpse on the map
+  *  \param x : x position of the corpse
+  *  \param y : y position of the corpse
+  *  \param frame : frame of the corpse in the spritesheet
+  */
   void addCorpse(float x, float y, int frame);
 
   /*!
    *  \brief Show a "popup" with artefact's description
-   *
    *  Show a "popup" with artefact's description.
    *  Artefact's description consists of zoomed picture of the item, name and description.
    *  It's called when a player get an equipment item.
-   *
    *  \param itemType : item identifier
    */
   void showArtefactDescription(enumItemType itemType);
@@ -277,6 +282,18 @@ public:
    */
   void makeColorEffect(int color, float duration);
 
+  /*!
+   *  \brief Write a string on screen
+   *  \param str : the string
+   *  \param size : the character size
+   *  \param x : x position
+   *  \param y : y position
+   *  \param align : alignment (ALIGN_LEFT, ALIGN_CENTER or ALIGN_RIGHT)
+   *  \param color : color of the string
+   *  \param app : the rendering target
+   *  \param xShadow : offset of the shadow (x)
+   *  \param yShadow : offset of the shadow (y)
+   */
   void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow);
 
   /*!
@@ -302,25 +319,16 @@ public:
    */
   void loadGameData();
 
-  struct saveHeaderStruct
-  {
-    bool ok;            /**< Save game OK ? */
-    int level;          /**< Level the save game */
-    float gameTime;     /**< How long it has been played */
-    int shotType;       /**< Current special shot type */
-    std::string date;   /**< Date of the save game */
-    std::string time;   /**< Time of the save game */
-  };
   /*!
    *  \brief Load the savegame data
-   *  \return true if succeeded
+   *  \return the savegame data
    */
   saveHeaderStruct loadGameHeader();
 
   /*!
    *  \brief Returns a random equip object
    *
-   * Returns a random equip object (not an object the player already possesses) .
+   *  Returns a random equip object (not an object the player already possesses) .
    *  \param toSale : true if it's an item for sale
    *
    *  \return the equipment item ID
@@ -343,23 +351,34 @@ public:
   /*!
    *  \brief Adds monsters
    *
-   * Adds monsters to the room in suitable places.
+   *  Adds monsters to the room in suitable places.
    *  \param monsterType : monster type
    *  \param amount : amount of monsters
    */
   void findPlaceMonsters(enemyTypeEnum monsterType, int amount);
 
+  /*!
+   *  \brief Add a monster to the "killed monsters" table
+   *  \param enemyType : ID of the monster
+   */
   void addKilledEnemy(enemyTypeEnum enemyType);
-  void displayKilledEnemies();
 
+  /*!
+   *  \brief Proceed an event
+   *  \param event : ID of the event
+   */
   void proceedEvent(EnumWorldEvents event);
 
+  /*!
+   *  \brief Proceed a message
+   *  \param event : ID of the message
+   */
   void testAndAddMessageToQueue(EnumMessages type);
 
   std::string enemyToString(enemyTypeEnum enemyType);
   std::string sourceToString(sourceTypeEnum sourceType, enemyTypeEnum enemyType);
 
-  void saveDeathScreen(std::string fileName);
+  void saveDeathScreen();
 
   struct StructScore
   {
@@ -406,6 +425,7 @@ private:
   DungeonMap* currentMap;     /*!< Pointer to the logical current map */
   GameFloor* currentFloor;    /*!< Pointer to the logical floor (level) */
   bool showLogical;           /*!< True if showing bounding boxes, z and center */
+  bool showGameTime;          /*!< True if showing the game time */
 
   // game play
   int level;                  /*!< Level (floor) */
@@ -502,6 +522,8 @@ private:
   };
 
   sf::Keyboard::Key input[NumberKeys];     /*!< Input key array */
+
+  std::string scoreSaveFile;
 
   /*!
    *  \brief Starts the game
@@ -630,6 +652,11 @@ private:
   void playMusic(musicEnum musicChoice);
 
   /*!
+   *  \brief Update the music volume (with parameters.volumeMusic)
+   */
+  void updateMusicVolume();
+
+  /*!
    *  \brief Add a key to the player input map from a string key (from file)
    *  \param logicInput : input function (move left, fire up, etc...)
    *  \param key : Key as string
@@ -712,6 +739,8 @@ private:
     MenuCredits,      /**< Display the credits screen */
     MenuHiScores,     /**< Display the hi-scores screen */
     MenuPlayerName,   /**< To enter/change the player name */
+    MenuVolumeSound,
+    MenuVolumeMusic,
 
     MenuContinue,     /**< Continue the game */
     MenuSaveAndQuit,  /**< Save and return to main */

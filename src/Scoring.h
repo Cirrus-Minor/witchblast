@@ -91,16 +91,23 @@ int getMonsterScore(enemyTypeEnum monster)
   return score;
 }
 
-// 100 pts / completed challenge
+// 100 points / completed challenge
 int getChallengeScore(int challengeLevel)
 {
   return 100 * (challengeLevel - 1);
 }
 
-// 1 point / gold
+// 1 point = 1 gold
 int getGoldScore(int gold)
 {
   return gold;
+}
+
+// points = half price value
+int getItemScore(item_equip_enum item)
+{
+  int points = items[(int) item + FirstEquipItem].price / 2;
+  return points;
 }
 
 #endif // SCORING_H_INCLUDED

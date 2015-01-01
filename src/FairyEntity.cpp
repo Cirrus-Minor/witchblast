@@ -146,7 +146,7 @@ void FairyEntity::fire(int dir)
 
     if (fairyType == FamiliarFairyTarget)
     {
-      Vector2D target = game().getNearestEnnemy(x, y);
+      Vector2D target = game().getNearestEnemy(x, y);
       if (target.x > -1.0f)
       {
         bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
@@ -168,7 +168,7 @@ void FairyEntity::fire(int dir)
   {
     if (fairyType == FamiliarFairyTarget)
     {
-      Vector2D target = game().getNearestEnnemy(x, y);
+      Vector2D target = game().getNearestEnemy(x, y);
       if (target.x > -1.0f)
       {
         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
@@ -198,7 +198,7 @@ void FairyEntity::tryToFire()
   {
     if (fairyType == FamiliarFairyTarget)
     {
-      Vector2D target = game().getNearestEnnemy(x, y);
+      Vector2D target = game().getNearestEnemy(x, y);
       if (target.x > -1.0f)
       {
         BoltEntity* bolt = new BoltEntity(x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
@@ -230,7 +230,7 @@ void FairyEntity::tryToFire()
   {
     if (fairyType == FamiliarFairyTarget)
     {
-      Vector2D target = game().getNearestEnnemy(x, y);
+      Vector2D target = game().getNearestEnemy(x, y);
       if (target.x > -1.0f)
       {
         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
