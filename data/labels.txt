@@ -616,6 +616,18 @@ dc_killed_monsters#Monstres vaincus
 dc_gold#Or
 dc_challenges#Défis relevés
 
+player_name#Nom du joueur
+player_name_desc#Modifier le nom du joueur
+hi_scores#Hall of fame
+hi_scores_desc#Meilleurs scores
+credits#Crédits
+credits_desc#Ecran des crédits
+volume_sound#Volume du son
+volume_sound_desc#Utiliser les flèches gauche/droite pour modifier le volume
+volume_music#Volume de la musique
+certificate_capture#Appuyez sur [F1] pour faire une copie du certificat dans un PNG
+certificate_saved#Enregistré sous
+
 [german]
 start_new_game#Neues Spiel starten
 start_desc#Alter Speicherstand wird überschrieben !

@@ -2085,7 +2085,7 @@ void WitchBlastGame::renderCredits()
   write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   // credits
-  write("Credits", 30, 485, 230, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("credits"), 30, 485, 230, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   int yCursorInit = 340;
   int yStep = 30;
