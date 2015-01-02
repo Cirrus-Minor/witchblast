@@ -1538,3 +1538,14 @@ dc_minutes# минут игры
 dc_killed_monsters#Убитые монстры
 dc_gold#Золото
 dc_challenges#Завершено битв
+player_name#Имя игрока
+player_name_desc#Изменить имя игрока
+hi_scores#Зал славы
+hi_scores_desc#Лучшие результаты
+credits#Авторы
+credits_desc#Список создателей
+volume_sound#Громкость звука
+volume_sound_desc#Используйте клавиши влево/вправо чтоы изменить громкость
+volume_music#Громкость музыки
+certificate_capture#Нажмите [F1] чтобы сохранить сертификат в PNG файл
+certificate_saved#Сохранено в
