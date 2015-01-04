@@ -73,7 +73,7 @@ void DungeonMapEntity::animate(float delay)
   if (moving) computeBloodVertices();
 
   // corpses
-  int CorpsesBox = 40, CorpsesLargeBox = 80;
+  int CorpsesBox = 38, CorpsesLargeBox = 76;
   moving = false;
   for (unsigned int i = 0; i < corpses.size(); i++)
   {
@@ -436,6 +436,7 @@ void DungeonMapEntity::addCorpse(float x, float y, int frame)
   corpseEntity.y = y;
   corpseEntity.velocity.x = 0;
   corpseEntity.velocity.y = 0;
+  corpseEntity.scale = 0.0f;
 
   corpseEntity.moving = true;
 
