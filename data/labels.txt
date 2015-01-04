@@ -1249,6 +1249,17 @@ dc_minutes#mins. de juego
 dc_killed_monsters#Monstruos asesinados
 dc_gold#Oro
 dc_challenges#Desafíos completados
+player_name#Nombre del jugador
+player_name_desc#Modifica el nombre del jugador
+hi_scores#Salón de la fama
+hi_scores_desc#Mejores puntajes
+credits#Créditos
+credits_desc#Pantalla de créditos
+volume_sound#Volumen del sonido
+volume_sound_desc#Usa las flechas izquierda/derecha para cambiar el volumen
+volume_music#Volumen de la música
+certificate_capture#Presione [F1] para guardar el certificado en un archivo PNG
+certificate_saved#Guardado en
 
 [russian]
 start_new_game#Начать новую игру
