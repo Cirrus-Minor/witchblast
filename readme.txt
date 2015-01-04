@@ -98,8 +98,8 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next version
-- ADD Scores an d hi-score screen
+v0.4.1
+- ADD Scores and hi-score screen
 - ADD Blood is spraying now
 - ADD Sound and music volume in config menu
 - ADD Options to enable/disable zoom, vssync, blood spraying, in config file
