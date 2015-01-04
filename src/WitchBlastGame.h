@@ -453,6 +453,8 @@ private:
   sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
   sf::Font font;              /*!< The font used for displaying text */
   sf::Text myText;            /*!< The text to be displayed */
+  sf::Sprite introScreenSprite;
+  sf::Sprite titleSprite;
 
   float xOffset, yOffset;     /*!< Main game client position in the GUI */
 

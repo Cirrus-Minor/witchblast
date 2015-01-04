@@ -64,7 +64,7 @@
 
 #include <extlib/utf8/utf8.h>
 
-//#define START_LEVEL 4
+//#define START_LEVEL 5
 
 static std::string intToString(int n)
 {
@@ -186,7 +186,7 @@ WitchBlastGame::WitchBlastGame():
 
   if (parameters.vsync == false)
   {
-    app->setVerticalSyncEnabled(true);
+    app->setVerticalSyncEnabled(false);
     app->setFramerateLimit(60);
   }
 
@@ -214,7 +214,7 @@ WitchBlastGame::WitchBlastGame():
     "media/interface.png",     "media/hud_shots.png",
     "media/explosion.png",     "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
-    "media/night.png",
+    "media/night.png",         "media/title.png",
     "media/pnj.png",           "media/fairy.png",
   };
 
@@ -308,6 +308,9 @@ WitchBlastGame::WitchBlastGame():
   showGameTime = false;
 
   shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
+  introScreenSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  titleSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TITLE));
+  titleSprite.setOrigin(titleSprite.getTextureRect().width / 2, titleSprite.getTextureRect().height / 2);
 
   loadGameData();
   loadHiScores();
@@ -783,14 +786,10 @@ void WitchBlastGame::updateIntro()
 
 void WitchBlastGame::renderIntro()
 {
-  sf::Sprite bgSprite(*ImageManager::getInstance().getImage(IMAGE_INTRO));
-  app->draw(bgSprite);
-
+  app->draw(introScreenSprite);
+  titleSprite.setPosition(SCREEN_WIDTH / 2, 280);
+  app->draw(titleSprite);
   EntityManager::getInstance().render(app);
-
-  // title
-  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
-  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 }
 
 void WitchBlastGame::updateRunningGame()
@@ -1972,15 +1971,12 @@ void WitchBlastGame::renderMenu()
     return;
   }
 
-  sf::Sprite bgSprite;
-  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
-  app->draw(bgSprite);
+  app->draw(introScreenSprite);
+  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -5);
+  else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 180);
+  app->draw(titleSprite);
 
   EntityManager::getInstance().render(app);
-
-  // title
-  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
-  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
   menuStuct* menu = nullptr;
   if (menuState == MenuStateMain || menuState == MenuStateChangeName)
@@ -2098,13 +2094,10 @@ void WitchBlastGame::renderMenu()
 
 void WitchBlastGame::renderCredits()
 {
-  sf::Sprite bgSprite;
-  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
-  app->draw(bgSprite);
-
-  // title
-  write("Witch Blast", 70, 485, 90, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 3, 3);
-  write("A philosophical dungeon crawler fiction", 21, 485, 170, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  app->draw(introScreenSprite);
+  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -5);
+  else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 180);
+  app->draw(titleSprite);
 
   // credits
   write(tools::getLabel("credits"), 30, 485, 230, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);

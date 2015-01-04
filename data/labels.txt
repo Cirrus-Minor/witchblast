@@ -49,9 +49,9 @@ menu_quit_desc#Return to main screen without saving
 play_again#Press [ENTER] to play again / [ESC] to go back to the menu
 items_found#Items
 monsters_killed#Monsters
-congratulations_1#CONGRATULATIONS !
-congratulations_2#You've challenged this demo and kill the bosses !
-congratulations_3#See you soon for new adventures !
+congratulations_1#CONGRATULATIONS!
+congratulations_2#You've challenged this demo and kill the bosses!
+congratulations_3#See you soon for new adventures!
 by#by
 critical#CRITICAL X2
 poison#POISON
@@ -178,7 +178,7 @@ msg_level1_0#Your quest begins!
 msg_level1_1#"Witches have abducted the Archmage's daughter and brought her in their lair.
 msg_level1_2#I have to recover her!"
 msg_level2_0#The Archmage's daughter
-msg_level2_1#"I'm coming right now to rescue you !
+msg_level2_1#"I'm coming right now to rescue you!
 msg_level2_2#Hopefully, she's safe and sound..."
 msg_level3_0#The Archmage's daughter
 msg_level3_1#"Did I ever tell you?
@@ -188,7 +188,7 @@ msg_level4_1#"The Archmage is a very wise man, and also my mentor.
 msg_level4_2#He's taught me we live in the best of the worlds."
 msg_level5_0#The Archmage's daughter
 msg_level5_1#"I remember the Archmage's daughter and me, back in the Magic Academy.
-msg_level5_2#We used to play at the healer mage, hi hi !"
+msg_level5_2#We used to play at the healer mage, hi hi!"
 msg_level6_0#The Archmage
 msg_level6_1#"My parents died when I was a baby.
 msg_level6_2#The Archmage has raised me like his own son."
@@ -198,7 +198,7 @@ msg_rats_bats_2#in these Rogue games ?"
 msg_snakes_0#Snakes
 msg_snakes_1#"I HATE snakes!"
 msg_witches_0#Witches
-msg_witches_1#"B... Witches !!!"
+msg_witches_1#"B... Witches!!!"
 msg_gold_0#Gold
 msg_gold_1#"♫ Money money money ♫
 msg_gold_2#I wonder if I can buy useful items in this dungeon..."
@@ -245,7 +245,7 @@ msg_tuto_spell_0#Tutorial: Spells
 msg_tuto_spell_1#You've found a magic spell.
 msg_tuto_spell_2#Press the spell key (standard: space) to cast the spell.
 msg_francky_0#The... Thing
-msg_francky_1#Yuk... It looks like made with various body parts !
+msg_francky_1#Yuk... It looks like made with various body parts!
 msg_tuto_tips_0#Tutorial: Tips
 msg_tuto_tips_1#Use Time Control (standard: RShift) to travel faster.
 msg_tuto_tips_2#Press [Enter] to close the message box immediately.
@@ -933,6 +933,18 @@ dc_minutes#Min. vom Spiel
 dc_killed_monsters#Besiegte Monster
 dc_gold#Gold
 dc_challenges#Abgeschlossene Herausforderungen
+player_name#Spielername
+player_name_desc#Ändere den Spielernamen
+hi_scores#Ruhmeshalle
+hi_scores_desc#Highscores
+credits#Credits
+credits_desc#Credits Bildschirm
+volume_sound#Sound Lautstärke
+volume_sound_desc#Benutze die linke und rechte Pfeiltaste um die Lautstärke zu regeln
+volume_music#Musik Lautstärke
+certificate_capture#Drücke [F1] um das Zertifikat als PNG Bild zu speichern
+certificate_saved#Speicher auf
+
 [spanish]
 start_new_game#Empezar nueva partida
 start_desc#La partida anterior se perderá
@@ -1237,6 +1249,17 @@ dc_minutes#mins. de juego
 dc_killed_monsters#Monstruos asesinados
 dc_gold#Oro
 dc_challenges#Desafíos completados
+player_name#Nombre del jugador
+player_name_desc#Modifica el nombre del jugador
+hi_scores#Salón de la fama
+hi_scores_desc#Mejores puntajes
+credits#Créditos
+credits_desc#Pantalla de créditos
+volume_sound#Volumen del sonido
+volume_sound_desc#Usa las flechas izquierda/derecha para cambiar el volumen
+volume_music#Volumen de la música
+certificate_capture#Presione [F1] para guardar el certificado en un archivo PNG
+certificate_saved#Guardado en
 
 [russian]
 start_new_game#Начать новую игру
@@ -1538,3 +1561,14 @@ dc_minutes# минут игры
 dc_killed_monsters#Убитые монстры
 dc_gold#Золото
 dc_challenges#Завершено битв
+player_name#Имя игрока
+player_name_desc#Изменить имя игрока
+hi_scores#Зал славы
+hi_scores_desc#Лучшие результаты
+credits#Авторы
+credits_desc#Список создателей
+volume_sound#Громкость звука
+volume_sound_desc#Используйте клавиши влево/вправо чтоы изменить громкость
+volume_music#Громкость музыки
+certificate_capture#Нажмите [F1] чтобы сохранить сертификат в PNG файл
+certificate_saved#Сохранено в
