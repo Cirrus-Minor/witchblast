@@ -1215,14 +1215,54 @@ void WitchBlastGame::updateRunningGame()
   }
 }
 
+void WitchBlastGame::addLifeBarToDisplay(std::string label, int hp, int hpMax)
+{
+  lifeBar.toDisplay = true;
+  lifeBar.label = label;
+  lifeBar.hp = hp;
+  lifeBar.hpMax = hpMax;
+}
+
 void WitchBlastGame::renderGame()
 {
+  lifeBar.toDisplay = false;
   EntityManager::getInstance().renderUnder(app, 5000);
 }
 
 void WitchBlastGame::renderHud()
 {
+  if (lifeBar.toDisplay) renderLifeBar();
   EntityManager::getInstance().renderAfter(app, 5000);
+}
+
+void WitchBlastGame::renderLifeBar()
+{
+  if (lifeBar.toDisplay)
+  {
+    float l = lifeBar.hp * ((MAP_WIDTH - 1) * TILE_WIDTH) / lifeBar.hpMax;
+    int label_dy = 0;
+
+    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
+    rectangle.setFillColor(sf::Color(0, 0, 0,128));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+    rectangle.setOutlineThickness(1);
+    rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
+    app->draw(rectangle);
+
+    rectangle.setSize(sf::Vector2f(l, 25));
+    rectangle.setFillColor(sf::Color(190, 20, 20));
+    rectangle.setOutlineThickness(0);
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+    app->draw(rectangle);
+
+    game().write(           lifeBar.label,
+                            18,
+                            TILE_WIDTH / 2 + 10.0f,
+                            label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
+                            ALIGN_LEFT,
+                            sf::Color(255, 255, 255),
+                            app, 0 , 0);
+  }
 }
 
 void WitchBlastGame::renderRunningGame()

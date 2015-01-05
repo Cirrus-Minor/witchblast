@@ -390,6 +390,8 @@ public:
   };
   void calculateScore();
 
+  void addLifeBarToDisplay(std::string label, int hp, int hpMax);
+
 protected:
   /*!
    *  \brief Rendering method
@@ -455,6 +457,14 @@ private:
   sf::Text myText;            /*!< The text to be displayed */
   sf::Sprite introScreenSprite;
   sf::Sprite titleSprite;
+
+  struct lifeBarStruct
+  {
+    bool toDisplay;
+    std::string label;
+    int hp;
+    int hpMax;
+  } lifeBar;
 
   float xOffset, yOffset;     /*!< Main game client position in the GUI */
 
@@ -687,6 +697,7 @@ private:
 
   void renderGame();
   void renderHud();
+  void renderLifeBar();
 
   /*!
    *  \brief Update the menu
