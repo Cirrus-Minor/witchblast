@@ -50,7 +50,7 @@ void DoorEntity::render(sf::RenderTarget* app)
   if (!isVisible) return;
 
   float xl, yl, xr, yr;
-  float yTranslate = 11 * TILE_HEIGHT;
+  float yTranslate = 13 * TILE_HEIGHT;
 
   if (direction == 8)
   {

@@ -3,6 +3,7 @@
 
 #include "sfml_game/GameMap.h"
 #include "sfml_game/MyTools.h"
+#include "Constants.h"
 #include <list>
 
 const int MAP_NORMAL_FLOOR  =   7;
@@ -10,32 +11,41 @@ const int MAP_STAIRS_UP     =   39;
 const int MAP_DOOR_OPEN     =   49;
 const int MAP_WALL          =   50;
 const int MAP_DOOR          =   51;
-const int MAP_WALL_7        =   66;
-const int MAP_WALL_77       =   68;
-const int MAP_WALL_8        =   60;
-const int MAP_WALL_9        =   67;
-const int MAP_WALL_99       =   69;
-const int MAP_WALL_4        =   62;
-const int MAP_WALL_6        =   63;
-const int MAP_WALL_1        =   76;
-const int MAP_WALL_11       =   78;
-const int MAP_WALL_2        =   61;
-const int MAP_WALL_3        =   77;
-const int MAP_WALL_33       =   79;
 
-const int MAP_WALL_87       =   70;
-const int MAP_WALL_89       =   71;
-const int MAP_WALL_21       =   72;
-const int MAP_WALL_23       =   73;
-const int MAP_WALL_47       =   64;
-const int MAP_WALL_41       =   74;
-const int MAP_WALL_69       =   65;
-const int MAP_WALL_63       =   75;
+// temple
+const int MAP_TEMPLE          =   42;
+const int MAP_TEMPLE_WALL     =   52;
 
-const int MAP_WALL_X        =   89;
+// walls
+const int MAP_WALL_7        =   76;
+const int MAP_WALL_77       =   78;
+const int MAP_WALL_8        =   70;
+const int MAP_WALL_9        =   77;
+const int MAP_WALL_99       =   79;
+const int MAP_WALL_4        =   72;
+const int MAP_WALL_6        =   73;
+const int MAP_WALL_1        =   86;
+const int MAP_WALL_11       =   88;
+const int MAP_WALL_2        =   71;
+const int MAP_WALL_3        =   87;
+const int MAP_WALL_33       =   89;
+const int MAP_WALL_87       =   80;
+const int MAP_WALL_89       =   81;
+const int MAP_WALL_21       =   82;
+const int MAP_WALL_23       =   83;
+const int MAP_WALL_47       =   74;
+const int MAP_WALL_41       =   84;
+const int MAP_WALL_69       =   75;
+const int MAP_WALL_63       =   85;
+const int MAP_WALL_EXIT_L   =   90;
+const int MAP_WALL_EXIT_R   =   91;
+const int MAP_WALL_START_L  =   92;
+const int MAP_WALL_START_M  =   93;
+const int MAP_WALL_START_R  =   94;
+const int MAP_WALL_X        =   99;
 
-const int MAP_GRID          =   9;
-const int MAP_HOLE          =   90;
+const int MAP_GRID          =   29;
+const int MAP_HOLE          =   110;
 const int MAP_HOLE_TOP      =   MAP_HOLE;
 const int MAP_HOLE_BOTTOM   =   MAP_HOLE + 1;
 
@@ -54,7 +64,8 @@ enum roomTypeEnum
   roomTypeBonus,
   roomTypeExit,
   roomTypeStarting,
-  roomTypeChallenge
+  roomTypeChallenge,
+  roomTypeTemple
 };
 
 class DungeonMap : public GameMap
@@ -73,6 +84,8 @@ class DungeonMap : public GameMap
     bool isWalkable(int x, int y);
     bool isFlyable(int x, int y);
     bool isShootable(int x, int y);
+
+    int getDivinity(int x, int y);
 
     bool containsHealth();
 
@@ -104,6 +117,8 @@ class DungeonMap : public GameMap
     Vector2D generateBonusRoom();
     Vector2D generateMerchantRoom();
     Vector2D generateKeyRoom();
+    void generateTemple(int x, int y, enumDivinityType type);
+    void generateTempleRoom();
     void addRandomGrids(int n);
 
     void addItem(int itemType, float x, float y, bool merch);

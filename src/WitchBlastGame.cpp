@@ -420,6 +420,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   gameTime = 0.0f;
   initEvents();
   scoreSaveFile = "";
+  interaction.active = false;
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -560,12 +561,14 @@ void WitchBlastGame::startNewLevel()
 
 void WitchBlastGame::playLevel(bool isFight)
 {
+  /*
   if (level % 3 == 1)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles01.png");
   else if (level % 3 == 2)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles02.png");
   else
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles03.png");
+    */
 
   isPlayerAlive = true;
 
@@ -1163,6 +1166,8 @@ void WitchBlastGame::updateRunningGame()
   onUpdate();
 
   verifyDoorUnlocking();
+  checkInteraction();
+
   if (roomClosed)
   {
     if (getEnemyCount() == 0)
@@ -1232,6 +1237,12 @@ void WitchBlastGame::renderGame()
 void WitchBlastGame::renderHud()
 {
   if (lifeBar.toDisplay) renderLifeBar();
+
+  if (interaction.active)
+  {
+    write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+  }
+
   EntityManager::getInstance().renderAfter(app, 5000);
 }
 
@@ -2505,7 +2516,7 @@ void WitchBlastGame::refreshMap()
         (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(19);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourDown())
@@ -2515,7 +2526,7 @@ void WitchBlastGame::refreshMap()
         MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(180);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(19);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourLeft())
@@ -2525,7 +2536,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(270);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(19);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourRight())
@@ -2535,7 +2546,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(90);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(19);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
 }
@@ -2970,6 +2981,11 @@ void WitchBlastGame::generateMap()
                     (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
                     ChestExit, false);
   }
+  else if (currentMap->getRoomType() == roomTypeTemple)
+  {
+    currentMap->generateTempleRoom();
+    currentMap->setCleared(true);
+  }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
 }
@@ -3317,6 +3333,22 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
       ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
       newItem->setViscosity(0.96f);
+    }
+  }
+}
+
+void WitchBlastGame::checkInteraction()
+{
+  interaction.active = false;
+
+  if (currentMap->getRoomType() == roomTypeTemple)
+  {
+    int divinity = currentMap->getDivinity(player->getX() / TILE_WIDTH, player->getZ() / TILE_HEIGHT);
+    if (divinity > -1)
+    {
+      interaction.active = true;
+      interaction.id = divinity;
+      interaction.label = "Press [return] to worship this divinity";
     }
   }
 }

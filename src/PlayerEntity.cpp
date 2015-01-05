@@ -15,6 +15,8 @@
 #include <iostream>
 #include <sstream>
 
+#define SPIRAL_STAIRCASE
+
 const int xHalo[10][3] =
 {
   { 6, 6, 6},
@@ -414,7 +416,7 @@ void PlayerEntity::animate(float delay)
                                                     TILE_HEIGHT / 2, 64, 64, 1);
     doorEntity->setZ(TILE_HEIGHT);
     doorEntity->setImagesProLine(10);
-    doorEntity->setFrame(119);
+    doorEntity->setFrame(139);
     doorEntity->setType(ENTITY_EFFECT);
   }
 #endif

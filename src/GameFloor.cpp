@@ -117,6 +117,9 @@ void GameFloor::displayToConsole()
       case roomTypeChallenge:
         printf("?");
         break;
+      case roomTypeTemple:
+        printf("+");
+        break;
       }
     }
     printf("\n");

@@ -655,6 +655,11 @@ private:
   void verifyDoorUnlocking();
 
   /*!
+   *  \brief Checks if player can interact with something
+   */
+  void checkInteraction();
+
+  /*!
    *  \brief Plays a music
    *
    * Plays a music.
@@ -868,6 +873,13 @@ private:
   StructScore lastScore;
   void loadHiScores();
   void saveHiScores();
+
+  struct StructInteraction
+  {
+    bool active;
+    int id;
+    std::string label;
+  } interaction;
 };
 
 /*!
