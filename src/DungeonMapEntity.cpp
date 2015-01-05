@@ -5,14 +5,20 @@
 
 DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
 {
-    this->z = -1.0f;
+  this->z = -1.0f;
 
-    type = 0;
-    hasChanged = true;
+  type = 0;
+  hasChanged = true;
 
-    DungeonMapEntityPost* post = new DungeonMapEntityPost(this);
-    post->setZ(-0.2f);
-    post->setType(0);
+  DungeonMapEntityPost* post = new DungeonMapEntityPost(this);
+  post->setZ(-0.2f);
+  post->setType(0);
+
+  DungeonMapEntityOverlay* over = new DungeonMapEntityOverlay(this);
+  over->setZ(1000);
+  over->setType(0);
+
+  overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
 }
 
 void DungeonMapEntity::animate(float delay)
@@ -250,6 +256,11 @@ void DungeonMapEntity::renderPost(sf::RenderTarget* app)
   displayCorpses(app);
 }
 
+void DungeonMapEntity::renderOverlay(sf::RenderTarget* app)
+{
+  app->draw(overlaySprite);
+}
+
 std::vector <displayEntityStruct> DungeonMapEntity::getBlood()
 {
   return blood;
@@ -465,4 +476,20 @@ void DungeonMapEntityPost::animate(float delay)
 void DungeonMapEntityPost::render(sf::RenderTarget* app)
 {
   parent->renderPost(app);
+}
+/////////////////////////////////////////////////////////////////////////
+
+
+DungeonMapEntityOverlay::DungeonMapEntityOverlay(DungeonMapEntity* parent) : GameEntity (0.0f, 0.0f)
+{
+  this->parent = parent;
+}
+
+void DungeonMapEntityOverlay::animate(float delay)
+{
+}
+
+void DungeonMapEntityOverlay::render(sf::RenderTarget* app)
+{
+  parent->renderOverlay(app);
 }

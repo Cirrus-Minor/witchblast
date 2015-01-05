@@ -21,6 +21,7 @@ public:
   virtual void animate(float delay);
   virtual void render(sf::RenderTarget* app);
   void renderPost(sf::RenderTarget* app);
+  void renderOverlay(sf::RenderTarget* app);
 
   void refreshMap();
 
@@ -74,12 +75,24 @@ private:
     SudWest,
     SudEast
   };
+
+  sf::Sprite overlaySprite;
 };
 
 class DungeonMapEntityPost : public GameEntity
 {
 public:
   DungeonMapEntityPost(DungeonMapEntity* parent);
+  virtual void animate(float delay);
+  virtual void render(sf::RenderTarget* app);
+private:
+  DungeonMapEntity* parent;
+};
+
+class DungeonMapEntityOverlay: public GameEntity
+{
+public:
+  DungeonMapEntityOverlay(DungeonMapEntity* parent);
   virtual void animate(float delay);
   virtual void render(sf::RenderTarget* app);
 private:

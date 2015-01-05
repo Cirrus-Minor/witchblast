@@ -215,6 +215,7 @@ WitchBlastGame::WitchBlastGame():
     "media/explosion.png",     "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
     "media/night.png",         "media/title.png",
+    "media/overlay_00.png",
     "media/pnj.png",           "media/fairy.png",
   };
 
@@ -1214,6 +1215,16 @@ void WitchBlastGame::updateRunningGame()
   }
 }
 
+void WitchBlastGame::renderGame()
+{
+  EntityManager::getInstance().renderUnder(app, 5000);
+}
+
+void WitchBlastGame::renderHud()
+{
+  EntityManager::getInstance().renderAfter(app, 5000);
+}
+
 void WitchBlastGame::renderRunningGame()
 {
   EntityManager::getInstance().sortByZ();
@@ -1252,10 +1263,10 @@ void WitchBlastGame::renderRunningGame()
     view.move(-5, -5);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
   else if (parameters.zoom && gameTime < 1.0f)
   {
@@ -1267,10 +1278,10 @@ void WitchBlastGame::renderRunningGame()
     view.move(-5, -5);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
   else if (xGame[xGameTypeShake].active)
   {
@@ -1280,10 +1291,10 @@ void WitchBlastGame::renderRunningGame()
     view.move(-4 + rand() % 9, -4 + rand() % 9);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
   else
   {
@@ -1293,10 +1304,10 @@ void WitchBlastGame::renderRunningGame()
     view.move(-OFFSET_X, -OFFSET_Y);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
 
   myText.setColor(sf::Color(255, 255, 255, 255));
@@ -1972,7 +1983,7 @@ void WitchBlastGame::renderMenu()
   }
 
   app->draw(introScreenSprite);
-  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -5);
+  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -8);
   else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 180);
   app->draw(titleSprite);
 
@@ -2095,7 +2106,7 @@ void WitchBlastGame::renderMenu()
 void WitchBlastGame::renderCredits()
 {
   app->draw(introScreenSprite);
-  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -5);
+  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -8);
   else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 180);
   app->draw(titleSprite);
 

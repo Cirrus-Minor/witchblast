@@ -685,6 +685,9 @@ private:
    */
   void renderRunningGame();
 
+  void renderGame();
+  void renderHud();
+
   /*!
    *  \brief Update the menu
    */
