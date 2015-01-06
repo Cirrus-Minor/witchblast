@@ -440,13 +440,14 @@ Vector2D DungeonMap::generateBonusRoom()
 
 void DungeonMap::generateTemple(int x, int y, enumDivinityType type)
 {
-  map[x - 1][y - 1] = MAP_TEMPLE_WALL + (int)type;
-  map[x][y - 1] = MAP_TEMPLE_WALL + (int)type;
-  map[x + 1][y - 1] = MAP_TEMPLE_WALL + (int)type;
+  map[x - 1][y - 1] = MAP_WALL;
+  map[x][y - 2] = MAP_TEMPLE_WALL + (int)type;
+  map[x][y - 1] = MAP_TEMPLE_WALL + 10 + (int)type;
+  map[x + 1][y - 1] = MAP_WALL;
 
-  map[x - 1][y] = MAP_TEMPLE_WALL + (int)type;
+  map[x - 1][y] = MAP_WALL;
   map[x][y] = MAP_TEMPLE + (int)type;
-  map[x + 1][y] = MAP_TEMPLE_WALL + (int)type;
+  map[x + 1][y] = MAP_WALL;
 }
 
 void DungeonMap::generateTempleRoom()

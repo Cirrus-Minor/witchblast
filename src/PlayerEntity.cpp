@@ -11,6 +11,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 #include "TextEntity.h"
+#include "TextMapper.h"
 
 #include <iostream>
 #include <sstream>
@@ -99,6 +100,9 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   activeSpell.delay = -1.0f;
   activeSpell.spell = SpellNone;
+
+  divinity.divinity = -1;
+  divinity.piety = 0;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -132,6 +136,20 @@ float PlayerEntity::getPercentFireDelay()
   if (canFirePlayer) return 1.0f;
 
   else return (1.0f - currentFireDelay / fireDelay);
+}
+
+float PlayerEntity::getLightCone()
+{
+  if (playerStatus == playerStatusPraying)
+  {
+    float result = 1.0f;
+    if (statusTimer < 0.25f)
+      result = 4 * statusTimer;
+    else if (statusTimer > WORSHIP_DELAY - 0.25f)
+      result = (WORSHIP_DELAY - statusTimer) * 4;
+    return result;
+  }
+  else return -1.0f;
 }
 
 float PlayerEntity::getPercentSpellDelay()
@@ -188,6 +206,16 @@ float PlayerEntity::getDeathAge()
 void PlayerEntity::setDeathAge(float deathAge)
 {
   this->deathAge = deathAge;
+}
+
+int PlayerEntity::getDivinity()
+{
+  return divinity.divinity;
+}
+
+int PlayerEntity::getPiety()
+{
+  return divinity.piety;
 }
 
 void PlayerEntity::setEntering()
@@ -346,17 +374,17 @@ void PlayerEntity::animate(float delay)
   // acquisition animation
   if (playerStatus == playerStatusAcquire)
   {
-    acquireDelay -= delay;
-    if (acquireDelay <= 0.0f)
+    statusTimer -= delay;
+    if (statusTimer <= 0.0f)
     {
       acquireItemAfterStance();
     }
   }
   // unlocking animation
-  else if (playerStatus == playerStatusUnlocking)
+  else if (playerStatus == playerStatusUnlocking || playerStatus == playerStatusPraying)
   {
-    acquireDelay -= delay;
-    if (acquireDelay <= 0.0f)
+    statusTimer -= delay;
+    if (statusTimer <= 0.0f)
     {
       playerStatus = playerStatusPlaying;
     }
@@ -380,7 +408,7 @@ void PlayerEntity::animate(float delay)
     frame = ((int)(age * 7.0f)) % 4;
     if (frame == 3) frame = 1;
   }
-  else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
+  else if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking || playerStatus == playerStatusPraying)
     frame = 3;
   else if (playerStatus == playerStatusDead)
     frame = 0;
@@ -416,7 +444,7 @@ void PlayerEntity::animate(float delay)
                                                     TILE_HEIGHT / 2, 64, 64, 1);
     doorEntity->setZ(TILE_HEIGHT);
     doorEntity->setImagesProLine(10);
-    doorEntity->setFrame(139);
+    doorEntity->setFrame(189);
     doorEntity->setType(ENTITY_EFFECT);
   }
 #endif
@@ -714,7 +742,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
     if (!isMoving()) spriteDy += 3;
   }
 
-  if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
+  if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking  || playerStatus == playerStatusPraying)
   {
     spriteDy = 3;
     frame = ((int)(age * 4.0f)) % 4;
@@ -823,7 +851,7 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
 void PlayerEntity::move(int direction)
 {
-  if (playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2)
+  if (playerStatus == playerStatusAcquire && statusTimer < ACQUIRE_DELAY / 2)
   {
     acquireItemAfterStance();
   }
@@ -1109,7 +1137,7 @@ void PlayerEntity::fire(int direction)
 bool PlayerEntity::canMove()
 {
   return (playerStatus == playerStatusPlaying
-          || (playerStatus == playerStatusAcquire && acquireDelay < ACQUIRE_DELAY / 2));
+          || (playerStatus == playerStatusAcquire && statusTimer < ACQUIRE_DELAY / 2));
 }
 
 int PlayerEntity::hurt(StructHurt hurtParam)
@@ -1301,7 +1329,7 @@ void PlayerEntity::acquireStance(enumItemType type)
   velocity.x = 0.0f;
   velocity.y = 0.0f;
   playerStatus = playerStatusAcquire;
-  acquireDelay = ACQUIRE_DELAY;
+  statusTimer = ACQUIRE_DELAY;
   acquiredItem = (enumItemType)(type);
   SoundManager::getInstance().playSound(SOUND_BONUS);
 
@@ -1361,7 +1389,7 @@ void PlayerEntity::useBossKey()
   velocity.x = 0.0f;
   velocity.y = 0.0f;
   playerStatus = playerStatusUnlocking;
-  acquireDelay = UNLOCK_DELAY;
+  statusTimer = UNLOCK_DELAY;
   acquiredItem = (enumItemType)(type - FirstEquipItem);
   SoundManager::getInstance().playSound(SOUND_BONUS);
   equip[EQUIP_BOSS_KEY] = false;
@@ -1501,6 +1529,53 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
     return (nbAdvanced >= SPECIAL_SHOT_SLOTS_ADVANCED);
   else
     return (nbSpecial >= SPECIAL_SHOT_SLOTS_STANDARD);
+}
+
+void PlayerEntity::interact(EnumInteractionType interaction, int id)
+{
+  if (playerStatus == playerStatusPlaying)
+  {
+    // praying at the temple
+    if (interaction == InteractionTypeTemple)
+    {
+      if (divinity.divinity == id)
+      {
+        // donation
+        if (gold >= 10)
+        {
+          gold -= 10;
+          divinity.piety += 50;
+          SoundManager::getInstance().playSound(SOUND_PAY);
+        }
+      }
+      else
+      {
+        worship((enumDivinityType)id);
+      }
+    }
+
+  }
+}
+
+void PlayerEntity::worship(enumDivinityType id)
+{
+  playerStatus = playerStatusPraying;
+  statusTimer = WORSHIP_DELAY;
+  SoundManager::getInstance().playSound(SOUND_OM);
+  divinity.divinity = id;
+
+  // text
+  float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
+  float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 140.0f;
+  std::stringstream ss;
+  ss << tools::getLabel("worshipping") << " ";
+  ss << tools::getLabel(divinityLabel[divinity.divinity]);
+  TextEntity* text = new TextEntity(ss.str(), 24, x0, y0);
+  text->setAlignment(ALIGN_CENTER);
+  text->setLifetime(2.5f);
+  text->setWeight(-36.0f);
+  text->setZ(1200);
+  text->setColor(TextEntity::COLOR_FADING_WHITE);
 }
 
 castSpellStruct PlayerEntity::getActiveSpell()

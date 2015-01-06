@@ -45,7 +45,7 @@ const int X_GAME_COLOR_VIOLET = 3;  /*!< Violet light color effect  ID */
 const int X_GAME_COLOR_BROWN  = 4;  /*!< Brown light color effect  ID */
 const int X_GAME_COLOR_WHITE  = 5;  /*!< White light color effect  ID */
 
-unsigned const int NumberKeys = 12; /*!< Number of input keys on the game */
+unsigned const int NumberKeys = 13; /*!< Number of input keys on the game */
 
 /** Input key string
  *  Keys in the config file.
@@ -62,6 +62,7 @@ const std::string inputKeyString[NumberKeys] =
   "key_fire_right",
   "key_fire_select",
   "key_spell",
+  "key_interact",
   "key_time",
   "key_fire"
 };
@@ -529,6 +530,7 @@ private:
     KeyFireRight,
     KeyFireSelect,
     KeySpell,
+    KeyInteract,
     KeyTimeControl,
     KeyFire
   };
@@ -877,6 +879,7 @@ private:
   struct StructInteraction
   {
     bool active;
+    EnumInteractionType type;
     int id;
     std::string label;
   } interaction;

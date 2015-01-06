@@ -150,6 +150,10 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void setEquiped(int item, bool toggleEquipped);
 
+    int getDivinity();
+    int getPiety();
+
+
     /*!
      *  \brief updates the entering status of the player
      *
@@ -213,6 +217,13 @@ class PlayerEntity : public BaseCreatureEntity
      *  \return : the percentage (between 0.0f for empty to 1.0 for full)
      */
     float getPercentFireDelay();
+
+    /*!
+     *  \brief returns the light cone percentage
+     *
+     *  \return : the percentage (between 0.0f for empty to 1.0 for full) or -1.0f if no light cone
+     */
+    float getLightCone();
 
     /*!
      *  \brief called when the player get an item
@@ -297,6 +308,7 @@ class PlayerEntity : public BaseCreatureEntity
       playerStatusEntering,   /**< Player is entering a not yet cleared room (walking is forced) */
       playerStatusAcquire,    /**< Player is under acquiring stance */
       playerStatusUnlocking,  /**< Player is under unlocking stance */
+      playerStatusPraying,    /**< Player is under unlocking stance */
       playerStatusStairs,     /**< Player walk the stairs */
       playerStatusGoingNext,  /**< Player goes to next level */
       playerStatusDead        /**< Player RIP */
@@ -441,6 +453,9 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void castSpell();
 
+    void interact(EnumInteractionType interaction, int id);
+    void worship(enumDivinityType divinity);
+
     void setActiveSpell(enumCastSpell spell, bool fromSaveInFight);
     castSpellStruct getActiveSpell();
     float getPercentSpellDelay();
@@ -472,7 +487,7 @@ class PlayerEntity : public BaseCreatureEntity
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
-    float acquireDelay;
+    float statusTimer;
     enumItemType acquiredItem;
 
     bool equip[NUMBER_EQUIP_ITEMS];
@@ -527,6 +542,12 @@ class PlayerEntity : public BaseCreatureEntity
     void castEarthquake();
     void castProtection();
     void castWeb();
+
+    struct divinityStruct
+    {
+      int divinity;
+      int piety;
+    } divinity;
 };
 
 #endif // PLAYERSPRITE_H

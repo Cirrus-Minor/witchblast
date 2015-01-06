@@ -299,7 +299,6 @@ dc_minutes#min. of game
 dc_killed_monsters#Slayed monsters
 dc_gold#Gold
 dc_challenges#Completed challenges
-
 player_name#Player name
 player_name_desc#Modify player name
 hi_scores#Hall of fame
@@ -311,6 +310,14 @@ volume_sound_desc#Use left/right arrows to change volume
 volume_music#Music volume
 certificate_capture#Press [F1] to save the certificate as a PNG file
 certificate_saved#Saved to
+
+key_interact#interact
+interact_worship#Press [interact] to worship
+interact_donate#Press [interact] to donate 10 gold
+interact_donate_fail#(not enough gold)
+divinity_heal_name#Llara the Righteous
+divinity_power_name#Kahroon the Powerful
+worshipping#You're now a worshipper of
 
 [french]
 start_new_game#Nouvelle partie

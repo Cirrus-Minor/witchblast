@@ -9,43 +9,44 @@
 const int MAP_NORMAL_FLOOR  =   7;
 const int MAP_STAIRS_UP     =   39;
 const int MAP_DOOR_OPEN     =   49;
-const int MAP_WALL          =   50;
-const int MAP_DOOR          =   51;
+const int MAP_WALL          =   70;
+const int MAP_DOOR          =   71;
 
 // temple
 const int MAP_TEMPLE          =   42;
-const int MAP_TEMPLE_WALL     =   52;
+const int MAP_TEMPLE_WALL     =   72;
 
 // walls
-const int MAP_WALL_7        =   76;
-const int MAP_WALL_77       =   78;
-const int MAP_WALL_8        =   70;
-const int MAP_WALL_9        =   77;
-const int MAP_WALL_99       =   79;
-const int MAP_WALL_4        =   72;
-const int MAP_WALL_6        =   73;
-const int MAP_WALL_1        =   86;
-const int MAP_WALL_11       =   88;
-const int MAP_WALL_2        =   71;
-const int MAP_WALL_3        =   87;
-const int MAP_WALL_33       =   89;
-const int MAP_WALL_87       =   80;
-const int MAP_WALL_89       =   81;
-const int MAP_WALL_21       =   82;
-const int MAP_WALL_23       =   83;
-const int MAP_WALL_47       =   74;
-const int MAP_WALL_41       =   84;
-const int MAP_WALL_69       =   75;
-const int MAP_WALL_63       =   85;
-const int MAP_WALL_EXIT_L   =   90;
-const int MAP_WALL_EXIT_R   =   91;
-const int MAP_WALL_START_L  =   92;
-const int MAP_WALL_START_M  =   93;
-const int MAP_WALL_START_R  =   94;
-const int MAP_WALL_X        =   99;
+const int MAP_WALL_BEGIN    =   110;
+const int MAP_WALL_7        =   6 + MAP_WALL_BEGIN;
+const int MAP_WALL_77       =   8 + MAP_WALL_BEGIN;
+const int MAP_WALL_8        =   0 + MAP_WALL_BEGIN;
+const int MAP_WALL_9        =   7 + MAP_WALL_BEGIN;
+const int MAP_WALL_99       =   9 + MAP_WALL_BEGIN;
+const int MAP_WALL_4        =   2 + MAP_WALL_BEGIN;
+const int MAP_WALL_6        =   3 + MAP_WALL_BEGIN;
+const int MAP_WALL_1        =   16 + MAP_WALL_BEGIN;
+const int MAP_WALL_11       =   18 + MAP_WALL_BEGIN;
+const int MAP_WALL_2        =   1 + MAP_WALL_BEGIN;
+const int MAP_WALL_3        =   17 + MAP_WALL_BEGIN;
+const int MAP_WALL_33       =   19 + MAP_WALL_BEGIN;
+const int MAP_WALL_87       =   10 + MAP_WALL_BEGIN;
+const int MAP_WALL_89       =   11 + MAP_WALL_BEGIN;
+const int MAP_WALL_21       =   12 + MAP_WALL_BEGIN;
+const int MAP_WALL_23       =   13 + MAP_WALL_BEGIN;
+const int MAP_WALL_47       =   4 + MAP_WALL_BEGIN;
+const int MAP_WALL_41       =   14 + MAP_WALL_BEGIN;
+const int MAP_WALL_69       =   5 + MAP_WALL_BEGIN;
+const int MAP_WALL_63       =   15 + MAP_WALL_BEGIN;
+const int MAP_WALL_EXIT_L   =   20 + MAP_WALL_BEGIN;
+const int MAP_WALL_EXIT_R   =   21 + MAP_WALL_BEGIN;
+const int MAP_WALL_START_L  =   22 + MAP_WALL_BEGIN;
+const int MAP_WALL_START_M  =   23 + MAP_WALL_BEGIN;
+const int MAP_WALL_START_R  =   24 + MAP_WALL_BEGIN;
+const int MAP_WALL_X        =   29 + MAP_WALL_BEGIN;
 
 const int MAP_GRID          =   29;
-const int MAP_HOLE          =   110;
+const int MAP_HOLE          =   160;
 const int MAP_HOLE_TOP      =   MAP_HOLE;
 const int MAP_HOLE_BOTTOM   =   MAP_HOLE + 1;
 

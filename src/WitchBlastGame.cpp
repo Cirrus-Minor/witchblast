@@ -64,7 +64,7 @@
 
 #include <extlib/utf8/utf8.h>
 
-//#define START_LEVEL 5
+//#define START_LEVEL 2
 
 static std::string intToString(int n)
 {
@@ -215,7 +215,8 @@ WitchBlastGame::WitchBlastGame():
     "media/explosion.png",     "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
     "media/night.png",         "media/title.png",
-    "media/overlay_00.png",
+    "media/overlay_00.png",    "media/light_cone.png",
+    "media/divinity.png",
     "media/pnj.png",           "media/fairy.png",
   };
 
@@ -272,7 +273,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/fuse.ogg",           "media/sound/electricity.ogg",
     "media/sound/electric_blast.ogg", "media/sound/francky_00.ogg",
     "media/sound/francky_01.ogg",     "media/sound/francky_02.ogg",
-    "media/sound/francky_die.ogg",
+    "media/sound/francky_die.ogg",    "media/sound/om.ogg",
   };
 
   // game main client position in the UI
@@ -917,6 +918,12 @@ void WitchBlastGame::updateRunningGame()
         }
       }
 
+      if (event.key.code == input[KeyInteract])
+      {
+        if (!player->isDead() && interaction.active)
+          player->interact(interaction.type, interaction.id);
+      }
+
       if (event.key.code == sf::Keyboard::X)
       {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false);
@@ -1197,7 +1204,7 @@ void WitchBlastGame::updateRunningGame()
         text->setAlignment(ALIGN_CENTER);
         text->setLifetime(2.5f);
         text->setWeight(-36.0f);
-        text->setZ(1000);
+        text->setZ(1200);
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
         challengeLevel++;
@@ -1236,11 +1243,25 @@ void WitchBlastGame::renderGame()
 
 void WitchBlastGame::renderHud()
 {
+  // boss life bar ?
   if (lifeBar.toDisplay) renderLifeBar();
 
+  // interaction text ?
   if (interaction.active)
   {
-    write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+    if (interaction.type == InteractionTypeTemple)
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+  }
+
+  // light cone ?
+  float fade = player->getLightCone();
+  if (fade > 0.0f)
+  {
+    sf::Sprite cone;
+    cone.setTexture(*ImageManager::getInstance().getImage(IMAGE_LIGHT_CONE));
+    cone.setPosition(player->getX() - 64, player->getY() - 580);
+    cone.setColor(sf::Color(255, 255, 255, 255 * fade));
+    app->draw(cone);
   }
 
   EntityManager::getInstance().renderAfter(app, 5000);
@@ -1435,6 +1456,16 @@ void WitchBlastGame::renderRunningGame()
 
     // drawing the key on the interface
     if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
+
+    // drawing the divinity
+    if (player->getDivinity() >= 0)
+    {
+      sf::Sprite divSprite;
+      divSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_DIVINITY));
+      divSprite.setPosition(760, 625);
+      divSprite.setTextureRect(sf::IntRect(player->getDivinity() * 64, 0, 64, 64));
+      app->draw(divSprite);
+    }
 
     // render the shots
     renderHudShots(app);
@@ -2143,6 +2174,7 @@ void WitchBlastGame::renderMenu()
       write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1);
       write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1);
       write(tools::getLabel("key_spell"), 16, xKeys + 148, yKeys + 184, ALIGN_CENTER, sf::Color::White, app, 1, 1);
+      // TODO key interact
       std::ostringstream oss;
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
       write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
@@ -2516,7 +2548,7 @@ void WitchBlastGame::refreshMap()
         (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
-    keystoneEntity->setFrame(19);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourDown())
@@ -2526,7 +2558,7 @@ void WitchBlastGame::refreshMap()
         MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(180);
-    keystoneEntity->setFrame(19);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourLeft())
@@ -2536,7 +2568,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(270);
-    keystoneEntity->setFrame(19);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourRight())
@@ -2546,7 +2578,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(90);
-    keystoneEntity->setFrame(19);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
 }
@@ -2564,6 +2596,7 @@ void WitchBlastGame::refreshMinimap()
             || currentFloor->getRoom(i, j) == roomTypeChallenge
             || currentFloor->getRoom(i, j) == roomTypeBonus
             || currentFloor->getRoom(i, j) == roomTypeKey
+            || currentFloor->getRoom(i, j) == roomTypeTemple
             || currentFloor->getRoom(i, j) == roomTypeStandard)
         {
           if ( currentFloor->getMap(i, j)->containsHealth())
@@ -3341,14 +3374,34 @@ void WitchBlastGame::checkInteraction()
 {
   interaction.active = false;
 
+  if (player->getPlayerStatus() != PlayerEntity::playerStatusPlaying) return;
+
   if (currentMap->getRoomType() == roomTypeTemple)
   {
     int divinity = currentMap->getDivinity(player->getX() / TILE_WIDTH, player->getZ() / TILE_HEIGHT);
     if (divinity > -1)
     {
       interaction.active = true;
+      interaction.type = InteractionTypeTemple;
       interaction.id = divinity;
-      interaction.label = "Press [return] to worship this divinity";
+      std::stringstream ss;
+      if (player->getDivinity() == divinity)
+      {
+        ss << tools::getLabel("interact_donate");
+        if (player->getGold() < 10)
+        {
+          ss << " ";
+          ss << tools::getLabel(divinityLabel[divinity]);
+        }
+      }
+      else
+      {
+        ss << tools::getLabel("interact_worship");
+        ss << " ";
+        ss << tools::getLabel(divinityLabel[divinity]);
+      }
+
+      interaction.label = ss.str();
     }
   }
 }
@@ -3983,6 +4036,7 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["keyboard_fire_left"] = intToString(input[KeyFireLeft]);
   newMap["keyboard_fire_right"] = intToString(input[KeyFireRight]);
   newMap["keyboard_spell"] = intToString(input[KeySpell]);
+  newMap["keyboard_interact"] = intToString(input[KeyInteract]);
   newMap["keyboard_fire"] = intToString(input[KeyFire]);
   newMap["keyboard_time_control"] = intToString(input[KeyTimeControl]);
   newMap["keyboard_fire_select"] = intToString(input[KeyFireSelect]);
@@ -4011,6 +4065,7 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireRight] = sf::Keyboard::Right;
   input[KeyFire] = sf::Keyboard::RControl;
   input[KeySpell] = sf::Keyboard::Space;
+  input[KeyInteract] = sf::Keyboard::E;
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
 

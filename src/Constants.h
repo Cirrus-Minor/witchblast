@@ -122,6 +122,8 @@ enum item_images {
   IMAGE_INTRO,
   IMAGE_TITLE,
   IMAGE_OVERLAY,
+  IMAGE_LIGHT_CONE,
+  IMAGE_DIVINITY,
 
   IMAGE_PNJ,
   IMAGE_FAIRY
@@ -220,6 +222,7 @@ enum sound_resources {
   SOUND_FRANCKY_01,
   SOUND_FRANCKY_02,
   SOUND_FRANCKY_DYING,
+  SOUND_OM,
 };
 
 enum corpses_ressources{
@@ -319,6 +322,11 @@ enum enumDivinityType {
 
   NB_DIVINITY
 };
+const std::string divinityLabel[NB_DIVINITY]
+{
+  "divinity_heal_name",
+  "divinity_power_name",
+};
 
 // entity type
 const int ENTITY_PLAYER = 1;
@@ -352,6 +360,7 @@ const int INITIAL_PLAYER_HP = 20;
 const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
 const float ACQUIRE_DELAY = 2.8f;
 const float UNLOCK_DELAY = 1.0f;
+const float WORSHIP_DELAY = 2.0f;
 const float INVINCIBLE_DELAY = 1.5f;
 
 const float INITIAL_BOLT_LIFE = 0.45f;
@@ -567,6 +576,12 @@ enum EnumWorldEvents
   EventGetSpell,
 
   NB_EVENTS
+};
+
+enum EnumInteractionType
+{
+  InteractionTypeTemple,
+  InteractionTypeMerchandise,
 };
 
 #endif // CONSTANTS_H_INCLUDED
