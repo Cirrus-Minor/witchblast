@@ -15,6 +15,15 @@ struct castSpellStruct
   int frame;
 };
 
+struct divinityStruct
+{
+  int divinity;
+  int piety;
+  int level;
+  int interventions;
+  float percentsToNextLevels;
+};
+
 /*! \class PlayerEntity
 * \brief Class for the player
 *
@@ -150,7 +159,7 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void setEquiped(int item, bool toggleEquipped);
 
-    int getDivinity();
+    divinityStruct getDivinity();
     int getPiety();
 
 
@@ -455,6 +464,10 @@ class PlayerEntity : public BaseCreatureEntity
 
     void interact(EnumInteractionType interaction, int id);
     void worship(enumDivinityType divinity);
+    void donate(int n);
+    void sacrifice(enemyTypeEnum monster);
+    void addPiety(int n);
+    void loadDivinity(int id, int piety, int level, int interventions);
 
     void setActiveSpell(enumCastSpell spell, bool fromSaveInFight);
     castSpellStruct getActiveSpell();
@@ -484,6 +497,7 @@ class PlayerEntity : public BaseCreatureEntity
     int gold;
     int criticalChance;
     float invincibleDelay;
+    float divineInterventionDelay;
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
@@ -515,6 +529,8 @@ class PlayerEntity : public BaseCreatureEntity
     void renderPlayer(sf::RenderTarget* app);
     void renderHalo(sf::RenderTarget* app);
 
+    divinityStruct divinity;
+
     void fallRock();
     void initFallingGrid();
     bool fallingGrid[MAP_WIDTH][MAP_HEIGHT];
@@ -542,12 +558,6 @@ class PlayerEntity : public BaseCreatureEntity
     void castEarthquake();
     void castProtection();
     void castWeb();
-
-    struct divinityStruct
-    {
-      int divinity;
-      int piety;
-    } divinity;
 };
 
 #endif // PLAYERSPRITE_H

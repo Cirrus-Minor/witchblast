@@ -52,6 +52,8 @@ PlayerEntity::PlayerEntity(float x, float y)
   currentFireDelay = -1.0f;
   randomFireDelay = -1.0f;
   invincibleDelay = -1.0f;
+  divineInterventionDelay = -1.0f;
+
   canFirePlayer = true;
   type = ENTITY_PLAYER;
 
@@ -103,6 +105,9 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   divinity.divinity = -1;
   divinity.piety = 0;
+  divinity.level = 0;
+  divinity.interventions = 0;
+  divinity.percentsToNextLevels = 0.0f;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -147,6 +152,15 @@ float PlayerEntity::getLightCone()
       result = 4 * statusTimer;
     else if (statusTimer > WORSHIP_DELAY - 0.25f)
       result = (WORSHIP_DELAY - statusTimer) * 4;
+    return result;
+  }
+  else if (divineInterventionDelay > 0.0f)
+  {
+    float result = 1.0f;
+    if (divineInterventionDelay < 0.25f)
+      result = 4 * divineInterventionDelay;
+    else if (divineInterventionDelay > WORSHIP_DELAY - 0.25f)
+      result = (WORSHIP_DELAY - divineInterventionDelay) * 4;
     return result;
   }
   else return -1.0f;
@@ -208,9 +222,9 @@ void PlayerEntity::setDeathAge(float deathAge)
   this->deathAge = deathAge;
 }
 
-int PlayerEntity::getDivinity()
+divinityStruct PlayerEntity::getDivinity()
 {
-  return divinity.divinity;
+  return divinity;
 }
 
 int PlayerEntity::getPiety()
@@ -380,6 +394,9 @@ void PlayerEntity::animate(float delay)
       acquireItemAfterStance();
     }
   }
+
+  if (divineInterventionDelay > 0.0f) divineInterventionDelay -= delay;
+
   // unlocking animation
   else if (playerStatus == playerStatusUnlocking || playerStatus == playerStatusPraying)
   {
@@ -1163,9 +1180,24 @@ int PlayerEntity::hurt(StructHurt hurtParam)
       lastHurtingEnemy = hurtParam.enemyType;
       lastHurtingSource = hurtParam.sourceType;
 
+      // divinity
+      if (hp <= hpMax / 4)
+      {
+        if (divinity.divinity > -1 && divinity.interventions < divinity.level - 1)
+        {
+          SoundManager::getInstance().playSound(SOUND_OM);
+          SoundManager::getInstance().playSound(SOUND_OM);
+          divinity.interventions ++;
+          specialState[SpecialStatePoison].active = false;
+          divineInterventionDelay = WORSHIP_DELAY;
+          hp += hpMax / 2;
+        }
+      }
+
       return true;
     }
   }
+
   return false;
 }
 
@@ -1543,9 +1575,7 @@ void PlayerEntity::interact(EnumInteractionType interaction, int id)
         // donation
         if (gold >= 10)
         {
-          gold -= 10;
-          divinity.piety += 50;
-          SoundManager::getInstance().playSound(SOUND_PAY);
+          donate(10);
         }
       }
       else
@@ -1553,8 +1583,60 @@ void PlayerEntity::interact(EnumInteractionType interaction, int id)
         worship((enumDivinityType)id);
       }
     }
-
   }
+}
+
+void PlayerEntity::donate(int n)
+{
+  if (gold >= n)
+  {
+    gold -= 10;
+    SoundManager::getInstance().playSound(SOUND_PAY);
+
+    // standard : 1 gold = 3 piety
+    int pietyProGold = 3;
+    addPiety(pietyProGold * n);
+  }
+}
+
+void PlayerEntity::sacrifice(enemyTypeEnum monster)
+{
+  if (divinity.divinity > -1)
+  {
+    // standard : 1 monster = 2 piety - 1 boss = 20 piety
+    int pietyProMonster   = 2;
+    int pietyProBoss      = 20;
+
+    if (monster < EnemyTypeButcher) // normal or mini-boss
+    {
+      addPiety(pietyProMonster);
+    }
+    else if (monster < EnemyTypeBat_invocated) // boss
+    {
+      addPiety(pietyProBoss);
+    }
+  }
+}
+
+void PlayerEntity::addPiety(int n)
+{
+  divinity.piety += n;
+  int i = 0;
+  while (divinity.piety > DIVINITY_LEVEL_TRESHOLD[i] && i < MAX_DIVINITY_LEVEL) i++;
+  divinity.level = i + 1;
+
+  if (divinity.level == MAX_DIVINITY_LEVEL)
+    divinity.percentsToNextLevels = 1.0f;
+  else
+  {
+    if (divinity.level == 1)
+      divinity.percentsToNextLevels = (float)divinity.piety / (float)DIVINITY_LEVEL_TRESHOLD[0];
+    else
+      divinity.percentsToNextLevels
+        = (float)(divinity.piety - DIVINITY_LEVEL_TRESHOLD[divinity.level - 2])
+        / (float)(DIVINITY_LEVEL_TRESHOLD[divinity.level - 1] - - DIVINITY_LEVEL_TRESHOLD[divinity.level - 2]);
+  }
+  std::cout << divinity.percentsToNextLevels << " ";
 }
 
 void PlayerEntity::worship(enumDivinityType id)
@@ -1563,6 +1645,10 @@ void PlayerEntity::worship(enumDivinityType id)
   statusTimer = WORSHIP_DELAY;
   SoundManager::getInstance().playSound(SOUND_OM);
   divinity.divinity = id;
+  divinity.piety = 0;
+  divinity.level = 1;
+  divinity.interventions = 0;
+  divinity.percentsToNextLevels = 0.0f;
 
   // text
   float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
@@ -1576,6 +1662,15 @@ void PlayerEntity::worship(enumDivinityType id)
   text->setWeight(-36.0f);
   text->setZ(1200);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
+}
+
+void PlayerEntity::loadDivinity(int id, int piety, int level, int interventions)
+{
+  divinity.divinity = id;
+  divinity.piety = piety;
+  divinity.level = level;
+  divinity.interventions = interventions;
+  addPiety(0);
 }
 
 castSpellStruct PlayerEntity::getActiveSpell()

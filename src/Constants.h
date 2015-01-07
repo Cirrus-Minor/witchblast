@@ -327,6 +327,9 @@ const std::string divinityLabel[NB_DIVINITY]
   "divinity_heal_name",
   "divinity_power_name",
 };
+const int MAX_DIVINITY_LEVEL = 5;
+const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =
+  { 100, 250, 450, 700, 1000};
 
 // entity type
 const int ENTITY_PLAYER = 1;

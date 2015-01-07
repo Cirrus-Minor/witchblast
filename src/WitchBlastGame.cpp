@@ -64,7 +64,7 @@
 
 #include <extlib/utf8/utf8.h>
 
-//#define START_LEVEL 2
+//#define START_LEVEL 3
 
 static std::string intToString(int n)
 {
@@ -1458,13 +1458,27 @@ void WitchBlastGame::renderRunningGame()
     if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
 
     // drawing the divinity
-    if (player->getDivinity() >= 0)
+    if (player->getDivinity().divinity >= 0)
     {
       sf::Sprite divSprite;
       divSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_DIVINITY));
-      divSprite.setPosition(760, 625);
-      divSprite.setTextureRect(sf::IntRect(player->getDivinity() * 64, 0, 64, 64));
+      divSprite.setPosition(895, 605);
+      divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 64, 0, 64, 64));
       app->draw(divSprite);
+
+      rectangle.setFillColor(sf::Color(0, 0, 0, 200));
+      rectangle.setPosition(sf::Vector2f(896, 670));
+      rectangle.setSize(sf::Vector2f(62, 12));
+      rectangle.setOutlineColor(sf::Color::White);
+      rectangle.setOutlineThickness(1);
+      app->draw(rectangle);
+
+      rectangle.setOutlineThickness(0);
+      rectangle.setFillColor(sf::Color(100, 100, 200, 255));
+      rectangle.setSize(sf::Vector2f(62 * player->getDivinity().percentsToNextLevels, 12));
+      app->draw(rectangle);
+
+      write(intToString(player->getDivinity().level), 10, 928, 671, ALIGN_CENTER, sf::Color::White, app, 0, 0);
     }
 
     // render the shots
@@ -3385,13 +3399,13 @@ void WitchBlastGame::checkInteraction()
       interaction.type = InteractionTypeTemple;
       interaction.id = divinity;
       std::stringstream ss;
-      if (player->getDivinity() == divinity)
+      if (player->getDivinity().divinity == divinity)
       {
         ss << tools::getLabel("interact_donate");
         if (player->getGold() < 10)
         {
           ss << " ";
-          ss << tools::getLabel(divinityLabel[divinity]);
+          ss << tools::getLabel("interact_donate_fail");
         }
       }
       else
@@ -3697,6 +3711,10 @@ void WitchBlastGame::saveGame()
     file << player->getShotIndex();
     for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
     file << player->getActiveSpell().spell << std::endl;
+    // divinity
+    file << player->getDivinity().divinity << " " << player->getDivinity().piety << " "
+      << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
+    // events
     for (i = 0; i < NB_EVENTS; i++) file << worldEvent[i] << " ";
     file.close();
   }
@@ -3882,6 +3900,17 @@ bool WitchBlastGame::loadGame()
     file >> n;
     player->setActiveSpell((enumCastSpell)n, saveInFight.isFight);
 
+    // divinity
+    {
+      int divinityId, piety, divLevel, interventions;
+      file >> divinityId;
+      file >> piety;
+      file >> divLevel;
+      file >> interventions;
+      player->loadDivinity(divinityId, piety, divLevel, interventions);
+    }
+
+    // events
     for (i = 0; i < NB_EVENTS; i++)
     {
       bool event;
@@ -4276,7 +4305,10 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
     if (enemyType == NB_ENEMY)
       std::cout << "[ERROR] No enemy type";
     else
+    {
       killedEnemies[enemyType]++;
+      player->sacrifice(enemyType);
+    }
   }
 }
 
