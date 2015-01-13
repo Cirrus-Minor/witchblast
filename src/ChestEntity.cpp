@@ -17,8 +17,9 @@ ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
   this->isOpen = isOpen;
   this->chestType = chestType;
   frame = chestType * imagesProLine;
-  if (chestType > ChestFairy) frame = ChestFairy * imagesProLine;
+  //if (chestType > ChestFairy) frame = ChestFairy * imagesProLine;
   frame += (isOpen ? 1 : 0);
+  if (isOpen && frame > ChestFairy * imagesProLine + 1) frame = ChestFairy * imagesProLine + 1;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
   timer = -1.0f;
@@ -107,6 +108,7 @@ void ChestEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     {
       open();
       frame += 1;
+      if (frame > ChestFairy * imagesProLine + 1) frame = ChestFairy * imagesProLine + 1;
     }
   }
 }
