@@ -10,7 +10,7 @@
 #include <iostream>
 
 ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
-    : CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_CHEST), x, y, 48, 48)
+    : CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_CHEST), x, y, 48, 64)
 {
   type = ENTITY_CHEST;
   imagesProLine = 2;
@@ -24,6 +24,7 @@ ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
 
   timer = -1.0f;
   appearTimer = -1.0f;
+  sprite.setOrigin(24, 40);
 }
 
 bool ChestEntity::getOpened()
@@ -54,7 +55,7 @@ void ChestEntity::animate(float delay)
   if (appearTimer >= 0.0f) appearTimer -= delay;
   CollidingSpriteEntity::animate(delay);
   if (!isOpen) testSpriteCollisions();
-  z = y + height/2 - 5;
+  z = y + 21;
 
   // trap
   if (timer > 0.0f)
@@ -92,8 +93,8 @@ void ChestEntity::calculateBB()
 {
   boundingBox.left = (int)x - width / 2;
   boundingBox.width = width;
-  boundingBox.top = (int)y - height / 2;
-  boundingBox.height =  height;
+  boundingBox.top = (int)y - 24;
+  boundingBox.height =  46;
 }
 
 
@@ -116,7 +117,10 @@ void ChestEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 void ChestEntity::open()
 {
   isOpen = true;
-  SoundManager::getInstance().playSound(SOUND_CHEST_OPENING);
+  if (chestType >= ChestFairy)
+    SoundManager::getInstance().playSound(SOUND_GLASS);
+  else
+    SoundManager::getInstance().playSound(SOUND_CHEST_OPENING);
 
   if (chestType == ChestBasic)
   {
