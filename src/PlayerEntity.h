@@ -465,9 +465,13 @@ class PlayerEntity : public BaseCreatureEntity
     void interact(EnumInteractionType interaction, int id);
     void worship(enumDivinityType divinity);
     void donate(int n);
-    void sacrifice(enemyTypeEnum monster);
+    void offerMonster(enemyTypeEnum monster);
+    void offerHealth(int lostHp);
+    void offerChallenge();
     void addPiety(int n);
     void loadDivinity(int id, int piety, int level, int interventions);
+    bool triggerDivinityBefore();
+    void triggerDivinityAfter();
 
     void setActiveSpell(enumCastSpell spell, bool fromSaveInFight);
     castSpellStruct getActiveSpell();

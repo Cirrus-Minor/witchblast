@@ -315,8 +315,8 @@ key_interact#interact
 interact_worship#Press [interact] to worship
 interact_donate#Press [interact] to donate 10 gold
 interact_donate_fail#(not enough gold)
-divinity_heal_name#Llara the Righteous
-divinity_power_name#Kahroon the Powerful
+divinity_healer_name#Llara the Righteous
+divinity_fighter_name#Kahroon the Powerful
 worshipping#You're now a worshipper of
 
 [french]

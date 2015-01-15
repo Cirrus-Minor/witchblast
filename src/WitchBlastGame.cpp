@@ -64,7 +64,7 @@
 
 #include <extlib/utf8/utf8.h>
 
-//#define START_LEVEL 3
+//#define START_LEVEL 2
 
 static std::string intToString(int n)
 {
@@ -274,6 +274,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/electric_blast.ogg", "media/sound/francky_00.ogg",
     "media/sound/francky_01.ogg",     "media/sound/francky_02.ogg",
     "media/sound/francky_die.ogg",    "media/sound/om.ogg",
+    "media/sound/glass.ogg",
   };
 
   // game main client position in the UI
@@ -1208,6 +1209,7 @@ void WitchBlastGame::updateRunningGame()
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
         challengeLevel++;
+        player->offerChallenge();
       }
     }
   }
@@ -1465,6 +1467,14 @@ void WitchBlastGame::renderRunningGame()
       divSprite.setPosition(895, 605);
       divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 64, 0, 64, 64));
       app->draw(divSprite);
+
+      float fade = player->getLightCone();
+      if (fade > 0.0f && player->getPlayerStatus() != PlayerEntity::playerStatusPraying)
+      {
+        divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 64, 64, 64, 64));
+        divSprite.setColor(sf::Color(255, 255, 255, 255 * fade));
+        app->draw(divSprite);
+      }
 
       rectangle.setFillColor(sf::Color(0, 0, 0, 200));
       rectangle.setPosition(sf::Vector2f(896, 670));
@@ -2080,7 +2090,7 @@ void WitchBlastGame::renderMenu()
 
   app->draw(introScreenSprite);
   if (titleSprite.getPosition().y > 160) titleSprite.move(0, -8);
-  else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 180);
+  else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 160);
   app->draw(titleSprite);
 
   EntityManager::getInstance().render(app);
@@ -2127,7 +2137,7 @@ void WitchBlastGame::renderMenu()
 
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
-        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(20 *getAbsolutTime()) % 2), 0, 48, 48));
         fairySprite.setPosition(xAlign - 60, 250 + i * yStep + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
@@ -3412,7 +3422,7 @@ void WitchBlastGame::checkInteraction()
       {
         ss << tools::getLabel("interact_worship");
         ss << " ";
-        ss << tools::getLabel(divinityLabel[divinity]);
+        ss << tools::getLabel(divinityLabel[divinity] + "_name");
       }
 
       interaction.label = ss.str();
@@ -4307,7 +4317,7 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
     else
     {
       killedEnemies[enemyType]++;
-      player->sacrifice(enemyType);
+      player->offerMonster(enemyType);
     }
   }
 }

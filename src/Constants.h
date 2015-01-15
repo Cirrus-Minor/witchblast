@@ -223,6 +223,7 @@ enum sound_resources {
   SOUND_FRANCKY_02,
   SOUND_FRANCKY_DYING,
   SOUND_OM,
+  SOUND_GLASS,
 };
 
 enum corpses_ressources{
@@ -317,15 +318,15 @@ const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
 
 // divinity
 enum enumDivinityType {
-  DivinityHeal,
-  DivinityPower,
+  DivinityHealer,
+  DivinityFighter,
 
   NB_DIVINITY
 };
 const std::string divinityLabel[NB_DIVINITY]
 {
-  "divinity_heal_name",
-  "divinity_power_name",
+  "divinity_healer",
+  "divinity_fighter",
 };
 const int MAX_DIVINITY_LEVEL = 5;
 const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =
