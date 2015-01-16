@@ -532,6 +532,9 @@ enum EnumMessages
   MsgInfoGiantSpiderAfter,
   MsgInfoFranky,
 
+  MsgInfoDivHealer,
+  MsgInfoDivFighter,
+
   MsgTutoBasics,
   MsgTutoTips,
   MsgTutoItems,

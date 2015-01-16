@@ -1731,7 +1731,7 @@ void PlayerEntity::worship(enumDivinityType id)
   float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 140.0f;
   std::stringstream ss;
   ss << tools::getLabel("worshipping") << " ";
-  ss << tools::getLabel(divinityLabel[divinity.divinity] + "_name");
+  ss << tools::getLabel(divinityLabel[divinity.divinity] + "_0");
   TextEntity* text = new TextEntity(ss.str(), 24, x0, y0);
   text->setAlignment(ALIGN_CENTER);
   text->setLifetime(2.5f);
@@ -1741,6 +1741,9 @@ void PlayerEntity::worship(enumDivinityType id)
 
   // reconversion
   if (isReconversion) addPiety(oldPiety / 2);
+
+  // message
+  game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivHealer + (int)id));
 }
 
 void PlayerEntity::loadDivinity(int id, int piety, int level, int interventions)

@@ -67,6 +67,9 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgTutoHeal,              { MessageTypeTutorial, 0, "msg_tuto_heal",            3} },
   { MsgTutoShots,             { MessageTypeTutorial, 0, "msg_tuto_shots",           3} },
   { MsgTutoSpell,             { MessageTypeTutorial, 0, "msg_tuto_spell",           3} },
+
+  { MsgInfoDivHealer,         { MessageTypeInfo, 0, "divinity_healer",            3} },
+  { MsgInfoDivFighter,        { MessageTypeInfo, 0, "divinity_fighter",           3} },
 };
 
 static void loadMessageData(std::string msg_array[NB_MSG_LINES], std::string key, int nbLines)
@@ -94,6 +97,9 @@ static messageStruct getMessage(EnumMessages type)
   msg.message[1] = "";
   msg.message[2] = "";
   loadMessageData(msg.message, msgBuilder.key, msgBuilder.nbLines);
+
+  if (type == MsgInfoDivHealer) msg.icon = 2;
+  else if (type == MsgInfoDivFighter) msg.icon = 3;
 
   return msg;
 }

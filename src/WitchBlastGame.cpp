@@ -3422,7 +3422,7 @@ void WitchBlastGame::checkInteraction()
       {
         ss << tools::getLabel("interact_worship");
         ss << " ";
-        ss << tools::getLabel(divinityLabel[divinity] + "_name");
+        ss << tools::getLabel(divinityLabel[divinity] + "_0");
       }
 
       interaction.label = ss.str();
