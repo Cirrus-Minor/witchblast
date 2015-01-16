@@ -248,6 +248,25 @@ bool DungeonMapEntity::getChanged()
 void DungeonMapEntity::render(sf::RenderTarget* app)
 {
   app->draw(vertices, ImageManager::getInstance().getImage(IMAGE_TILES));
+
+  if (game().getCurrentMap()->getRoomType() == roomTypeTemple)
+  {
+    for (int i = 1; i < MAP_WIDTH - 2 ; i++)
+      for (int j = 1; j < MAP_WIDTH - 2 ; j++)
+        if (game().getCurrentMap()->getTile(i, j) >= MAP_TEMPLE
+            && game().getCurrentMap()->getTile(i, j) < MAP_TEMPLE + 10)
+        {
+          sf::Sprite tile;
+          tile.setTexture(*ImageManager::getInstance().getImage(IMAGE_TILES));
+          tile.setPosition(i * TILE_WIDTH, j * TILE_HEIGHT);
+          tile.setTextureRect(sf::IntRect((game().getCurrentMap()->getTile(i, j) % 10) * TILE_WIDTH,
+                               (1 + game().getCurrentMap()->getTile(i, j) / 10) * TILE_HEIGHT,
+                               TILE_WIDTH, TILE_HEIGHT));
+          int fade = 127 + 127 * (cosf(6.0f * game().getAbsolutTime()));
+          tile.setColor(sf::Color(255, 255, 255, fade));
+          app->draw(tile);
+        }
+  }
 }
 
 void DungeonMapEntity::renderPost(sf::RenderTarget* app)
