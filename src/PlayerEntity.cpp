@@ -485,6 +485,12 @@ void PlayerEntity::animate(float delay)
   z = y + 17;
 }
 
+void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
+{
+  BaseCreatureEntity::setSpecialState(state, active, timer, param1, param2);
+  computePlayer();
+}
+
 void PlayerEntity::renderPlayer(sf::RenderTarget* app)
 {
   sf::Color savedColor = sprite.getColor();
@@ -1652,11 +1658,29 @@ bool PlayerEntity::triggerDivinityBefore()
       }
     case DivinityFighter:
       {
-        /*SoundManager::getInstance().playSound(SOUND_OM);
+        SoundManager::getInstance().playSound(SOUND_OM);
         divinity.interventions ++;
+
         specialState[SpecialStatePoison].active = false;
         divineInterventionDelay = WORSHIP_DELAY;
-        hp += hpMax / 2;*/
+        hp += hpMax / 3;
+
+        // FURY
+        for (float i = 0.0f; i < 2 * PI; i +=  PI / 12)
+        {
+          BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
+          bolt->setDamages(8 + divinity.level * 8);
+          float velx = 400 * cos(i);
+          float vely = 400 * sin(i);
+          bolt->setVelocity(Vector2D(velx, vely));
+          bolt->setFlying(true);
+          bolt->setViscosity(1.0f);
+          bolt->setGoThrough(true);
+        }
+
+        game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
+        return true;
+
         break;
       }
     }
@@ -1754,6 +1778,8 @@ void PlayerEntity::loadDivinity(int id, int piety, int level, int interventions)
   divinity.interventions = interventions;
   addPiety(0);
 }
+
+// MAGIC
 
 castSpellStruct PlayerEntity::getActiveSpell()
 {

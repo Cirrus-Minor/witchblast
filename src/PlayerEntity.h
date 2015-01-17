@@ -481,6 +481,8 @@ class PlayerEntity : public BaseCreatureEntity
     enemyTypeEnum getLastHurtingEnemy();
     sourceTypeEnum getLastHurtingSource();
 
+    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2) override;
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);

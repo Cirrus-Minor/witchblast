@@ -99,7 +99,7 @@ float BaseCreatureEntity::animateStates(float delay)
     if (specialState[i].active)
     {
       specialState[i].timer -= delay;
-      if (specialState[i].timer <= 0.0f) specialState[i].active = false;
+      if (specialState[i].timer <= 0.0f) setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
     }
   }
   // ice

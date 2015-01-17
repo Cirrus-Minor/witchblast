@@ -138,7 +138,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       float param3;
     };
     specialStateStuct specialState[NB_SPECIAL_STATES];
-    void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2);
+    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2);
 
     enum enumResistances
     {
