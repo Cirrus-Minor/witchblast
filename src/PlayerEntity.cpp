@@ -811,7 +811,17 @@ void PlayerEntity::render(sf::RenderTarget* app)
     renderPlayer(app);
 
     // shield
-    if (protection.active)
+    if (specialState[DivineStateProtection].active)
+    {
+      sf::Color savedColor = sprite.getColor();
+      sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (specialState[DivineStateProtection].timer < 2.0f ? 25 : 10)) * 30 ));
+      sprite.setTextureRect(sf::IntRect( 3 * width, 11 * height, width, height));
+      sprite.setScale(1.5f, 1.5f);
+      app->draw(sprite);
+      sprite.setScale(1.0f, 1.0f);
+      sprite.setColor(savedColor);
+    }
+    else if (protection.active)
     {
       sf::Color savedColor = sprite.getColor();
       sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (protection.timer < 2.0f ? 25 : 10)) * 30 ));
@@ -1352,12 +1362,18 @@ void PlayerEntity::computePlayer()
   if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
   else if (getShotType() == ShotTypeFire) fireDamages *= FIRE_DAMAGE_INCREASE[getShotLevel()];
 
+  // divinity
+  if (specialState[DivineStateProtection].active)
+    armor += specialState[DivineStateProtection].param1;
+
   // post-computation
   if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamages *= 0.65f;
   else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamages *= 0.75f;
 
   // spells
   if (protection.active) armor += protection.value;
+
+  if (armor > 1.0f) armor = 1.0f;
 }
 
 void PlayerEntity::acquireStance(enumItemType type)
@@ -1590,6 +1606,8 @@ void PlayerEntity::interact(EnumInteractionType interaction, int id)
   }
 }
 
+// DIVINITY
+
 void PlayerEntity::donate(int n)
 {
   if (gold >= n)
@@ -1646,6 +1664,37 @@ void PlayerEntity::offerChallenge()
   addPiety(30);
 }
 
+void PlayerEntity::divineFury()
+{
+  for (float i = 0.0f; i < 2 * PI; i +=  PI / 16)
+        {
+          BoltEntity* bolt = new BoltEntity(TILE_WIDTH * 1.5f + rand() % (MAP_WIDTH - 3) * TILE_WIDTH ,
+                                            TILE_HEIGHT * 1.5f + rand() % (MAP_HEIGHT - 3) * TILE_HEIGHT,
+                                            boltLifeTime, ShotTypeStandard, 0);
+          bolt->setDamages(8 + divinity.level * 8);
+          float velx = 400 * cos(i);
+          float vely = 400 * sin(i);
+          bolt->setVelocity(Vector2D(velx, vely));
+          bolt->setFlying(true);
+          bolt->setViscosity(1.0f);
+          bolt->setLifetime(-1.0f);
+          bolt->setGoThrough(true);
+        }
+}
+
+void PlayerEntity::divineProtection(float duration, float armorBonus)
+{
+  setSpecialState(DivineStateProtection, true, 4.0f, 0.8f, 0.0f);
+}
+
+void PlayerEntity::divineHeal(int hpHealed)
+{
+  hp += hpHealed;
+  if (hp > hpMax) hp = hpMax;
+  specialState[SpecialStatePoison].active = false;
+  divineInterventionDelay = WORSHIP_DELAY;
+}
+
 bool PlayerEntity::triggerDivinityBefore()
 {
   if (divinity.divinity > -1 && divinity.interventions < divinity.level - 1)
@@ -1658,27 +1707,20 @@ bool PlayerEntity::triggerDivinityBefore()
       }
     case DivinityFighter:
       {
+        int r = rand() % 3;
+        if (r == 0) return false;
+
         SoundManager::getInstance().playSound(SOUND_OM);
         divinity.interventions ++;
 
-        specialState[SpecialStatePoison].active = false;
-        divineInterventionDelay = WORSHIP_DELAY;
-        hp += hpMax / 3;
-
-        // FURY
-        for (float i = 0.0f; i < 2 * PI; i +=  PI / 12)
-        {
-          BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
-          bolt->setDamages(8 + divinity.level * 8);
-          float velx = 400 * cos(i);
-          float vely = 400 * sin(i);
-          bolt->setVelocity(Vector2D(velx, vely));
-          bolt->setFlying(true);
-          bolt->setViscosity(1.0f);
-          bolt->setGoThrough(true);
-        }
+        divineHeal(hpMax / 3);
+        if (r == 1)
+          divineProtection(5.0f, 0.8f);
+        else
+          divineFury();
 
         game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
+
         return true;
 
         break;
@@ -1698,18 +1740,14 @@ void PlayerEntity::triggerDivinityAfter()
       {
         SoundManager::getInstance().playSound(SOUND_OM);
         divinity.interventions ++;
-        specialState[SpecialStatePoison].active = false;
-        divineInterventionDelay = WORSHIP_DELAY;
-        hp = hpMax;
+        divineHeal(hpMax);
         break;
       }
     case DivinityFighter:
       {
         SoundManager::getInstance().playSound(SOUND_OM);
         divinity.interventions ++;
-        specialState[SpecialStatePoison].active = false;
-        divineInterventionDelay = WORSHIP_DELAY;
-        hp += hpMax / 2;
+        divineHeal(hpMax / 2);
         break;
       }
     }

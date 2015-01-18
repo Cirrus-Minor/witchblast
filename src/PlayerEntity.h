@@ -472,6 +472,9 @@ class PlayerEntity : public BaseCreatureEntity
     void loadDivinity(int id, int piety, int level, int interventions);
     bool triggerDivinityBefore();
     void triggerDivinityAfter();
+    void divineFury();
+    void divineProtection(float duration, float armorBonus);
+    void divineHeal(int hpHealed);
 
     void setActiveSpell(enumCastSpell spell, bool fromSaveInFight);
     castSpellStruct getActiveSpell();

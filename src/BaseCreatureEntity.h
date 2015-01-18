@@ -125,6 +125,11 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       SpecialStateSlow,
       SpecialStatePoison,
 
+      DivineStateProtection,
+      DivineStateSpeed,
+      DivineStateFireRate,
+      DivineStateFireDamage,
+
       NB_SPECIAL_STATES
     };
     enum enumStateResistance { ResistanceImmune, ResistanceVeryHigh, ResistanceHigh, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
