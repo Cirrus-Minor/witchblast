@@ -1482,7 +1482,14 @@ void WitchBlastGame::renderRunningGame()
       app->draw(rectangle);
 
       rectangle.setOutlineThickness(0);
-      rectangle.setFillColor(sf::Color(100, 100, 200, 255));
+      if (player->getDivinity().interventions + 1 < player->getDivinity().level)
+      {
+        int fade = 50 + 50 * cosf(game().getAbsolutTime() * 8);
+        rectangle.setFillColor(sf::Color(100 + fade, 100 + fade, 200 + fade / 2, 255));
+      }
+
+      else
+        rectangle.setFillColor(sf::Color(100, 100, 200, 255));
       rectangle.setSize(sf::Vector2f(62 * player->getDivinity().percentsToNextLevels, 12));
       app->draw(rectangle);
 
