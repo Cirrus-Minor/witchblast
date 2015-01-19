@@ -133,7 +133,7 @@ int PlayerEntity::getFacingDirection()
 void PlayerEntity::setFacingDirection(int facingDirection)
 {
   if (facingDirection == 4 || facingDirection == 6 || facingDirection == 2  || facingDirection == 8)
-  this->facingDirection = facingDirection;
+    this->facingDirection = facingDirection;
 }
 
 float PlayerEntity::getPercentFireDelay()
@@ -245,6 +245,7 @@ void PlayerEntity::setLeavingLevel()
 void PlayerEntity::pay(int price)
 {
   gold -= price;
+  displayAcquiredGold(-price);
   if (gold < 0) gold = 0;
   SoundManager::getInstance().playSound(SOUND_PAY);
 }
@@ -457,8 +458,8 @@ void PlayerEntity::animate(float delay)
     facingDirection = 4;
 
     SpriteEntity* doorEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-                                                    (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
-                                                    TILE_HEIGHT / 2, 64, 64, 1);
+        (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
+        TILE_HEIGHT / 2, 64, 64, 1);
     doorEntity->setZ(TILE_HEIGHT);
     doorEntity->setImagesProLine(10);
     doorEntity->setFrame(189);
@@ -1257,7 +1258,8 @@ void PlayerEntity::dying()
 void PlayerEntity::displayAcquiredGold(int n)
 {
   std::ostringstream oss;
-  oss << "+" << n;
+  if (n > 0) oss << "+";
+  oss << n;
   TextEntity* text = new TextEntity(oss.str(), 16, x, y - 30.0f);
   text->setColor(TextEntity::COLOR_FADING_YELLOW);
   text->setAge(-0.6f);
@@ -1612,7 +1614,8 @@ void PlayerEntity::donate(int n)
 {
   if (gold >= n)
   {
-    gold -= 10;
+    gold -= n;
+    displayAcquiredGold(-n);
     SoundManager::getInstance().playSound(SOUND_PAY);
 
     // standard : 1 gold = 3 piety
@@ -1667,19 +1670,19 @@ void PlayerEntity::offerChallenge()
 void PlayerEntity::divineFury()
 {
   for (float i = 0.0f; i < 2 * PI; i +=  PI / 16)
-        {
-          BoltEntity* bolt = new BoltEntity(TILE_WIDTH * 1.5f + rand() % (MAP_WIDTH - 3) * TILE_WIDTH ,
-                                            TILE_HEIGHT * 1.5f + rand() % (MAP_HEIGHT - 3) * TILE_HEIGHT,
-                                            boltLifeTime, ShotTypeStandard, 0);
-          bolt->setDamages(8 + divinity.level * 8);
-          float velx = 400 * cos(i);
-          float vely = 400 * sin(i);
-          bolt->setVelocity(Vector2D(velx, vely));
-          bolt->setFlying(true);
-          bolt->setViscosity(1.0f);
-          bolt->setLifetime(-1.0f);
-          bolt->setGoThrough(true);
-        }
+  {
+    BoltEntity* bolt = new BoltEntity(TILE_WIDTH * 1.5f + rand() % (MAP_WIDTH - 3) * TILE_WIDTH ,
+                                      TILE_HEIGHT * 1.5f + rand() % (MAP_HEIGHT - 3) * TILE_HEIGHT,
+                                      boltLifeTime, ShotTypeStandard, 0);
+    bolt->setDamages(8 + divinity.level * 8);
+    float velx = 400 * cos(i);
+    float vely = 400 * sin(i);
+    bolt->setVelocity(Vector2D(velx, vely));
+    bolt->setFlying(true);
+    bolt->setViscosity(1.0f);
+    bolt->setLifetime(-1.0f);
+    bolt->setGoThrough(true);
+  }
 }
 
 void PlayerEntity::divineProtection(float duration, float armorBonus)
@@ -1702,29 +1705,29 @@ bool PlayerEntity::triggerDivinityBefore()
     switch (divinity.divinity)
     {
     case DivinityHealer:
-      {
-        break;
-      }
+    {
+      break;
+    }
     case DivinityFighter:
-      {
-        int r = rand() % 3;
-        if (r == 0) return false;
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
 
-        SoundManager::getInstance().playSound(SOUND_OM);
-        divinity.interventions ++;
+      SoundManager::getInstance().playSound(SOUND_OM);
+      divinity.interventions ++;
 
-        divineHeal(hpMax / 3);
-        if (r == 1)
-          divineProtection(5.0f, 0.8f);
-        else
-          divineFury();
+      divineHeal(hpMax / 3);
+      if (r == 1)
+        divineProtection(5.0f, 0.8f);
+      else
+        divineFury();
 
-        game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
+      game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
 
-        return true;
+      return true;
 
-        break;
-      }
+      break;
+    }
     }
   }
   return false;
@@ -1737,25 +1740,26 @@ void PlayerEntity::triggerDivinityAfter()
     switch (divinity.divinity)
     {
     case DivinityHealer:
-      {
-        SoundManager::getInstance().playSound(SOUND_OM);
-        divinity.interventions ++;
-        divineHeal(hpMax);
-        break;
-      }
+    {
+      SoundManager::getInstance().playSound(SOUND_OM);
+      divinity.interventions ++;
+      divineHeal(hpMax);
+      break;
+    }
     case DivinityFighter:
-      {
-        SoundManager::getInstance().playSound(SOUND_OM);
-        divinity.interventions ++;
-        divineHeal(hpMax / 2);
-        break;
-      }
+    {
+      SoundManager::getInstance().playSound(SOUND_OM);
+      divinity.interventions ++;
+      divineHeal(hpMax / 2);
+      break;
+    }
     }
   }
 }
 
 void PlayerEntity::addPiety(int n)
 {
+  int oldLevel = divinity.level;
   divinity.piety += n;
   int i = 0;
   while (divinity.piety > DIVINITY_LEVEL_TRESHOLD[i] && i < MAX_DIVINITY_LEVEL) i++;
@@ -1770,7 +1774,12 @@ void PlayerEntity::addPiety(int n)
     else
       divinity.percentsToNextLevels
         = (float)(divinity.piety - DIVINITY_LEVEL_TRESHOLD[divinity.level - 2])
-        / (float)(DIVINITY_LEVEL_TRESHOLD[divinity.level - 1] - DIVINITY_LEVEL_TRESHOLD[divinity.level - 2]);
+          / (float)(DIVINITY_LEVEL_TRESHOLD[divinity.level - 1] - DIVINITY_LEVEL_TRESHOLD[divinity.level - 2]);
+  }
+
+  if (divinity.level > oldLevel)
+  {
+    // TODO
   }
 }
 
@@ -1785,7 +1794,6 @@ void PlayerEntity::worship(enumDivinityType id)
   divinity.divinity = id;
   divinity.piety = 0;
   divinity.level = 1;
-  divinity.interventions = 0;
   divinity.percentsToNextLevels = 0.0f;
 
   // text
@@ -1802,7 +1810,14 @@ void PlayerEntity::worship(enumDivinityType id)
   text->setColor(TextEntity::COLOR_FADING_WHITE);
 
   // reconversion
-  if (isReconversion) addPiety(oldPiety / 2);
+  if (isReconversion)
+  {
+    addPiety(oldPiety / 2);
+    if (divinity.interventions > divinity.level - 1)
+      divinity.interventions = divinity.level - 1;
+  }
+  else
+    divinity.interventions = 0;
 
   // message
   game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivHealer + (int)id));
