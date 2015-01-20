@@ -1340,6 +1340,27 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 0.5f;
   if (equip[EQUIP_MAGICIAN_ROBE]) armor += 0.15f;
 
+  // divinity
+  switch (divinity.divinity)
+  {
+  case (DivinityHealer):
+    {
+      break;
+    }
+  case (DivinityFighter):
+    {
+      if (divinity.level >= 5)
+        fireDamagesBonus += 0.5f;
+      else if (divinity.level >= 4)
+        fireDamagesBonus += 0.375f;
+      else if (divinity.level >= 3)
+        fireDamagesBonus += 0.25f;
+      else if (divinity.level >= 2)
+        fireDamagesBonus += 0.125f;
+      break;
+    }
+  }
+
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;
   fireVelocity = INITIAL_BOLT_VELOCITY * fireVelocityBonus;
