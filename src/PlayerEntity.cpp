@@ -1295,23 +1295,36 @@ void PlayerEntity::acquireItem(enumItemType type)
     case ItemHealthVerySmallPoison:
       specialState[SpecialStatePoison].active = false;
     case ItemHealthVerySmall:
-      hp += equip[EQUIP_MANUAL_HEALTH] ? 5 : 3;
+      heal(equip[EQUIP_MANUAL_HEALTH] ? 5 : 3);
       SoundManager::getInstance().playSound(SOUND_EAT);
-      if (hp > hpMax) hp = hpMax;
       break;
     case ItemHealthSmall:
-      hp += equip[EQUIP_MANUAL_HEALTH] ? 10 : 7;
+      heal(equip[EQUIP_MANUAL_HEALTH] ? 10 : 7);
       SoundManager::getInstance().playSound(SOUND_EAT);
-      if (hp > hpMax) hp = hpMax;
       break;
     case ItemHealth:
-      hp += equip[EQUIP_MANUAL_HEALTH] ? 22 : 15;
+      heal(equip[EQUIP_MANUAL_HEALTH] ? 22 : 15);
       SoundManager::getInstance().playSound(SOUND_EAT);
-      if (hp > hpMax) hp = hpMax;
       break;
     default:
       break;
     }
+}
+
+void PlayerEntity::onClearRoom()
+{
+  if (divinity.divinity == DivinityHealer)
+  {
+    if (divinity.level > 1 && hp < hpMax)
+    {
+      divineInterventionDelay = WORSHIP_DELAY / 2;
+
+      if (divinity.level >= 5) heal(4);
+      else if (divinity.level >= 4) heal(3);
+      else if (divinity.level >= 3) heal(2);
+      else if (divinity.level >= 2) heal(1);
+    }
+  }
 }
 
 void PlayerEntity::computePlayer()

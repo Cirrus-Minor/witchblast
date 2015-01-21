@@ -462,6 +462,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void castSpell();
 
+    void onClearRoom();
+
     void interact(EnumInteractionType interaction, int id);
     void worship(enumDivinityType divinity);
     void donate(int n);

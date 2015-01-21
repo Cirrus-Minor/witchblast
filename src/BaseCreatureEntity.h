@@ -168,8 +168,9 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void computeFacingDirection();
     virtual void dyingFromAge();
     virtual bool canCollide();
-
     bool canSee(float xf, float yf);
+
+    void heal(int healPoints);
 
     static StructHurt getHurtParams(int damage,
                           enumShotType hurtingType,

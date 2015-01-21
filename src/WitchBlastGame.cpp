@@ -1179,6 +1179,7 @@ void WitchBlastGame::updateRunningGame()
     if (getEnemyCount() == 0)
     {
       currentMap->setCleared(true);
+      player->onClearRoom();
       openDoors();
       remove(SAVE_FILE.c_str());
       if (currentMap->getRoomType() == roomTypeBoss)

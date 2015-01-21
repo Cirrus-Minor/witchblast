@@ -717,3 +717,30 @@ bool BaseCreatureEntity::canSee(float xf, float yf)
 
   return true;
 }
+
+void BaseCreatureEntity::heal(int healPoints)
+{
+  int savedHp = hp;
+  hp += healPoints;
+  if (hp > hpMax) hp = hpMax;
+
+  int healedHp = hp - savedHp;
+
+  if (savedHp > 0)
+  {
+    std::ostringstream oss;
+    oss << "+" << healedHp;
+    int textSize;
+    if (healedHp < 8) textSize = 17;
+    else textSize = 17 + (healedHp - 3) / 5;
+    TextEntity* text = new TextEntity(oss.str(), textSize, x, y - 20.0f);
+    text->setColor(TextEntity::COLOR_FADING_GREEN);
+    text->setAge(-0.6f);
+    text->setLifetime(0.3f);
+    text->setWeight(-60.0f);
+    text->setZ(2000);
+    text->setAlignment(ALIGN_CENTER);
+    text->setType(ENTITY_FLYING_TEXT);
+    while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
+  }
+}
