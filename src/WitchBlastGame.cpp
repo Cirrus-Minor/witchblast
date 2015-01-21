@@ -452,7 +452,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
-  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 15, 11, 12);
+  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 15, 11, 10);
   miniMapEntity->setTileBox(16, 12);
   miniMapEntity->setX(407);
   miniMapEntity->setY(614);
@@ -2626,7 +2626,6 @@ void WitchBlastGame::refreshMinimap()
             || currentFloor->getRoom(i, j) == roomTypeChallenge
             || currentFloor->getRoom(i, j) == roomTypeBonus
             || currentFloor->getRoom(i, j) == roomTypeKey
-            || currentFloor->getRoom(i, j) == roomTypeTemple
             || currentFloor->getRoom(i, j) == roomTypeStandard)
         {
           if ( currentFloor->getMap(i, j)->containsHealth())
@@ -2636,27 +2635,34 @@ void WitchBlastGame::refreshMinimap()
         }
 
         else
-          miniMap->setTile(i, j, currentFloor->getRoom(i, j));
+        {
+          if (currentFloor->getRoom(i, j) == roomTypeMerchant)
+            miniMap->setTile(i, j, 3);
+          else if (currentFloor->getRoom(i, j) == roomTypeTemple)
+            miniMap->setTile(i, j, 7);
+          else
+            miniMap->setTile(i, j, currentFloor->getRoom(i, j));
+        }
       }
       else if (n > 0 && currentFloor->getMap(i, j)->isKnown())
       {
         if (currentFloor->getRoom(i, j) == roomTypeBoss)
         {
-          miniMap->setTile(i, j, 7);
+          miniMap->setTile(i, j, 12);
           proceedEvent(EventFindBossDoor);
         }
         else if (currentFloor->getRoom(i, j) == roomTypeChallenge)
         {
-          miniMap->setTile(i, j, 10);
+          miniMap->setTile(i, j, 15);
           proceedEvent(EventFindChallengeDoor);
         }
         else
-          miniMap->setTile(i, j, 9);
+          miniMap->setTile(i, j, 11);
       }
       else
         miniMap->setTile(i, j, 0);
     }
-  miniMap->setTile(floorX, floorY, 8);
+  miniMap->setTile(floorX, floorY, 10);
 }
 
 void WitchBlastGame::checkEntering()
