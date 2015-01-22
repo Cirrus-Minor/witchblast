@@ -123,6 +123,7 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
   { EventFindShop,            MsgTutoShops },
   { EventFindBossDoor,        MsgTutoBossDoor },
   { EventFindChallengeDoor,   MsgTutoChallengeDoor },
+  { EventFindTemple,          MsgTutoTemple },
   { EventGetItem,             MsgTutoItems },
   { EventGetSpecialShot,      MsgTutoShots },
   { EventGetSpell,            MsgTutoSpell },
@@ -3054,6 +3055,7 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateTempleRoom();
     currentMap->setCleared(true);
+    proceedEvent(EventFindTemple);
   }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());

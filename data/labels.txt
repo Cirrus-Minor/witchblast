@@ -311,6 +311,9 @@ volume_music#Music volume
 certificate_capture#Press [F1] to save the certificate as a PNG file
 certificate_saved#Saved to
 
+msg_tuto_temple_0#Tutorial: Temple
+msg_tuto_temple_1#The temple is the place where you can worship a divinity or donate.
+msg_tuto_temple_2#Divinities can help you and provide bonus.
 key_interact#interact
 interact_worship#Press [interact] to worship
 interact_donate#Press [interact] to donate 10 gold

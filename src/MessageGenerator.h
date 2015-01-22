@@ -59,11 +59,12 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoFranky,            { MessageTypeInfo, 1, "msg_francky",              2} },
 
   { MsgTutoBasics,            { MessageTypeTutorial, 0, "msg_tuto_intro",           3} },
-  { MsgTutoTips,              { MessageTypeTutorial, 0, "msg_tuto_tips",           3} },
+  { MsgTutoTips,              { MessageTypeTutorial, 0, "msg_tuto_tips",            3} },
   { MsgTutoItems,             { MessageTypeTutorial, 0, "msg_tuto_items",           3} },
   { MsgTutoShops,             { MessageTypeTutorial, 0, "msg_tuto_shops",           3} },
   { MsgTutoBossDoor,          { MessageTypeTutorial, 0, "msg_tuto_boss_door",       3} },
   { MsgTutoChallengeDoor,     { MessageTypeTutorial, 0, "msg_tuto_challenge_door",  3} },
+  { MsgTutoTemple,            { MessageTypeTutorial, 0, "msg_tuto_temple",          3} },
   { MsgTutoHeal,              { MessageTypeTutorial, 0, "msg_tuto_heal",            3} },
   { MsgTutoShots,             { MessageTypeTutorial, 0, "msg_tuto_shots",           3} },
   { MsgTutoSpell,             { MessageTypeTutorial, 0, "msg_tuto_spell",           3} },
