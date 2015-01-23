@@ -2468,6 +2468,24 @@ int WitchBlastGame::getEnemyCount()
   return n;
 }
 
+int WitchBlastGame::getItemsCount()
+{
+  int n=0;
+
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() == ENTITY_ITEM) n++;
+  }
+
+  return n;
+}
+
 Vector2D WitchBlastGame::getNearestEnemy(float x, float y)
 {
   Vector2D target(-100.0f, -100.0f);

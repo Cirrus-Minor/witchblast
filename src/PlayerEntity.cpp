@@ -1658,6 +1658,24 @@ void PlayerEntity::donate(int n)
       pietyProGold = 5;
 
     addPiety(pietyProGold * n);
+
+    // check item invoke
+    if (divinity.divinity == DivinityHealer && divinity.level >= 3)
+    {
+      // Healer + level 3 = Health manual
+      if (!equip[EQUIP_MANUAL_HEALTH] && game().getItemsCount() == 0)
+      {
+        float xItem = GAME_WIDTH / 2;
+        float yItem = GAME_HEIGHT * 0.8f;
+        new ItemEntity(ItemManualHealth, xItem, yItem);
+        SoundManager::getInstance().playSound(SOUND_OM);
+        for (int i = 0; i < 8; i++)
+        {
+          generateStar(sf::Color::White, xItem, yItem);
+          generateStar(sf::Color(255, 255, 210), xItem, yItem);
+        }
+      }
+    }
   }
 }
 

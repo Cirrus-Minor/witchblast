@@ -629,9 +629,14 @@ bool BaseCreatureEntity::canCollide()
 
 void BaseCreatureEntity::generateStar(sf::Color starColor)
 {
+  generateStar(starColor, x, y);
+}
+
+void BaseCreatureEntity::generateStar(sf::Color starColor, float xStar, float yStar)
+{
   SpriteEntity* spriteStar = new SpriteEntity(
                            ImageManager::getInstance().getImage(IMAGE_STAR_2),
-                            x, y);
+                            xStar, yStar);
   spriteStar->setScale(0.8f, 0.8f);
   spriteStar->setZ(1000.0f);
   spriteStar->setSpin(-100 + rand()%200);

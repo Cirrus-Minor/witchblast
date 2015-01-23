@@ -237,6 +237,8 @@ public:
   */
   int getEnemyCount();
 
+  int getItemsCount();
+
  /*!
   *  \brief Return the position of the nearest enemy
   *  \param x : x position of the source
