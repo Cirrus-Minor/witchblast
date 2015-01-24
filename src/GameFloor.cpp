@@ -136,6 +136,21 @@ int GameFloor::neighboorCount(int x, int y)
   return count;
 }
 
+void GameFloor::reveal()
+{
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] > roomTypeNULL)
+      {
+        if (!maps[i][j]->isCleared())
+        {
+          maps[i][j]->setKnown(true);
+        }
+      }
+    }
+}
+
 IntCoord GameFloor::getFirstNeighboor(int x, int y)
 {
   if (x > 0 && floor[x - 1][y] > 0) return IntCoord(x - 1, y);

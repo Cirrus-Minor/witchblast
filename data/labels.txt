@@ -325,6 +325,8 @@ divinity_healer_2#She appreciates donations, suffering and fighting evil.
 divinity_fighter_0#Kahroon the Powerful
 divinity_fighter_1#Lord of the fighters and the strong.
 divinity_fighter_2#He appreciates monsters and titans falling in fight
+item_floor_map#Dungeon Map
+item_floor_map_desc#Reveal the map of the current floor
 
 [french]
 start_new_game#Nouvelle partie

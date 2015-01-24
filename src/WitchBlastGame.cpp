@@ -521,6 +521,9 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
 void WitchBlastGame::startNewLevel()
 {
+  // reset floor items
+  player->resetFloorItem();
+
   bool needShop = false;
   // create the new level
   if (currentFloor != NULL)
@@ -1458,6 +1461,15 @@ void WitchBlastGame::renderRunningGame()
 
     // drawing the key on the interface
     if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
+
+    if (player->isEquiped(EQUIP_FLOOR_MAP))
+    {
+      sf::Sprite mapSprite;
+      mapSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+      mapSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 3, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
+      mapSprite.setPosition(326, 652);
+      app->draw(mapSprite);
+    }
 
     // drawing the divinity
     if (player->getDivinity().divinity >= 0)
@@ -2645,6 +2657,7 @@ void WitchBlastGame::refreshMinimap()
             || currentFloor->getRoom(i, j) == roomTypeChallenge
             || currentFloor->getRoom(i, j) == roomTypeBonus
             || currentFloor->getRoom(i, j) == roomTypeKey
+            || currentFloor->getRoom(i, j) == roomTypeBoss
             || currentFloor->getRoom(i, j) == roomTypeStandard)
         {
           if ( currentFloor->getMap(i, j)->containsHealth())
@@ -2665,18 +2678,43 @@ void WitchBlastGame::refreshMinimap()
       }
       else if (n > 0 && currentFloor->getMap(i, j)->isKnown())
       {
-        if (currentFloor->getRoom(i, j) == roomTypeBoss)
+        switch (currentFloor->getRoom(i, j))
         {
+        case roomTypeBoss:
           miniMap->setTile(i, j, 12);
           proceedEvent(EventFindBossDoor);
-        }
-        else if (currentFloor->getRoom(i, j) == roomTypeChallenge)
-        {
+          break;
+        case roomTypeChallenge:
           miniMap->setTile(i, j, 15);
-          proceedEvent(EventFindChallengeDoor);
-        }
-        else
+          proceedEvent(EventFindBossDoor);
+          break;
+        case roomTypeMerchant:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 13 : 11 );
+          break;
+        case roomTypeKey:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 14 : 11 );
+          break;
+        case roomTypeExit:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 16 : 11 );
+          break;
+        case roomTypeTemple:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 17 : 11 );
+        case roomTypeBonus:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 2 : 11 );
+          break;
+        case roomTypeStandard:
+        case roomTypeStarting:
           miniMap->setTile(i, j, 11);
+          break;
+        case roomTypeNULL:
+          miniMap->setTile(i, j, 0);
+          break;
+        }
       }
       else
         miniMap->setTile(i, j, 0);
@@ -4828,6 +4866,12 @@ void WitchBlastGame::loadHiScores()
       scores.push_back(score);
     }
   }
+}
+
+void WitchBlastGame::revealFloor()
+{
+  currentFloor->reveal();
+  refreshMinimap();
 }
 
 WitchBlastGame &game()

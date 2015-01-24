@@ -395,6 +395,8 @@ public:
 
   void addLifeBarToDisplay(std::string label, int hp, int hpMax);
 
+  void revealFloor();
+
 protected:
   /*!
    *  \brief Rendering method

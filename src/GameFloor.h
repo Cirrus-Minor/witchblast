@@ -46,6 +46,9 @@ class GameFloor
     DungeonMap* getAndVisitMap(int x, int y);
 
     int neighboorCount(int x, int y);
+
+    void reveal();
+
   protected:
   private:
     int level;

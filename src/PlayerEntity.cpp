@@ -266,17 +266,22 @@ void PlayerEntity::acquireItemAfterStance()
     }
 
     // shot types
-    if (items[acquiredItem].specialShot != (ShotTypeStandard))
+    else if (items[acquiredItem].specialShot != (ShotTypeStandard))
     {
       registerSpecialShot(acquiredItem);
       game().proceedEvent(EventGetSpecialShot);
     }
 
     // spells
-    if (items[acquiredItem].spell != SpellNone)
+    else if (items[acquiredItem].spell != SpellNone)
     {
       setActiveSpell(items[acquiredItem].spell, false);
       game().proceedEvent(EventGetSpell);
+    }
+
+    else if (acquiredItem == ItemFloorMap)
+    {
+      game().revealFloor();
     }
 
     computePlayer();
@@ -323,6 +328,12 @@ void PlayerEntity::acquireItemAfterStance()
   spriteItem->setDying(true);
   spriteItemStar->setDying(true);
   playerStatus = playerStatusPlaying;
+}
+
+void PlayerEntity::resetFloorItem()
+{
+  equip[EQUIP_BOSS_KEY] = false;
+  equip[EQUIP_FLOOR_MAP] = false;
 }
 
 void PlayerEntity::animate(float delay)

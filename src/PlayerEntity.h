@@ -463,6 +463,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castSpell();
 
     void onClearRoom();
+    void resetFloorItem();
 
     void interact(EnumInteractionType interaction, int id);
     void worship(enumDivinityType divinity);
