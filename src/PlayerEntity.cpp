@@ -69,6 +69,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   hpMax = hp;
   gold = 0;
   deathAge = -1.0f;
+  hiccupDelay = HICCUP_DELAY;
   idleAge = 0.0f;
 
   boltLifeTime = INITIAL_BOLT_LIFE;
@@ -280,9 +281,9 @@ void PlayerEntity::acquireItemAfterStance()
     }
 
     else if (acquiredItem == ItemFloorMap)
-    {
       game().revealFloor();
-    }
+    else if (acquiredItem == ItemAlcohol)
+      hiccupDelay = HICCUP_DELAY;;
 
     computePlayer();
   }
@@ -334,6 +335,8 @@ void PlayerEntity::resetFloorItem()
 {
   equip[EQUIP_BOSS_KEY] = false;
   equip[EQUIP_FLOOR_MAP] = false;
+  equip[EQUIP_ALCOHOL] = false;
+  computePlayer();
 }
 
 void PlayerEntity::animate(float delay)
@@ -404,6 +407,31 @@ void PlayerEntity::animate(float delay)
     if (statusTimer <= 0.0f)
     {
       acquireItemAfterStance();
+    }
+  }
+  else if (equip[EQUIP_ALCOHOL])
+  {
+    hiccupDelay -= delay;
+    if (hiccupDelay <= 0.0f)
+    {
+      hiccupDelay = 4.0f;
+
+      // hiccup
+      recoil.active = true;
+      recoil.stun = true;
+      recoil.velocity = Vector2D(350.0f);
+      recoil.timer = 0.4f;
+
+      TextEntity* text = new TextEntity("*hic*", 16, x, y - 30.0f);
+      text->setColor(TextEntity::COLOR_FADING_GREEN);
+      text->setAge(-0.6f);
+      text->setLifetime(0.3f);
+      text->setWeight(-60.0f);
+      text->setZ(2000);
+      text->setAlignment(ALIGN_CENTER);
+      text->setType(ENTITY_FLYING_TEXT);
+
+      SoundManager::getInstance().playSound(SOUND_HICCUP);
     }
   }
 
@@ -1416,6 +1444,7 @@ void PlayerEntity::computePlayer()
   // post-computation
   if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamages *= 0.65f;
   else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamages *= 0.75f;
+  if (equip[EQUIP_ALCOHOL]) fireDamages *= 1.25f;
 
   // spells
   if (protection.active) armor += protection.value;

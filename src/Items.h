@@ -114,6 +114,7 @@ enum enumItemType
   ItemBookMagicII,
   ItemSulfur,
   ItemFloorMap,
+  ItemAlcohol,
 
   NUMBER_ITEMS
 };
@@ -360,6 +361,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemFloorMap, "item_floor_map", "item_floor_map_desc",
     20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemAlcohol, "item_alcohol", "item_alcohol_desc",
+    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -410,6 +415,7 @@ enum item_equip_enum {
   EQUIP_BOOK_MAGIC_II,
   EQUIP_SULFUR,
   EQUIP_FLOOR_MAP,
+  EQUIP_ALCOHOL,
 
   NUMBER_EQUIP_ITEMS
   };

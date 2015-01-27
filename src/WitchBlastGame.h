@@ -709,6 +709,7 @@ private:
   void renderGame();
   void renderHud();
   void renderLifeBar();
+  void renderMessages();
 
   /*!
    *  \brief Update the menu

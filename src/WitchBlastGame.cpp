@@ -62,7 +62,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 2
+//#define START_LEVEL 4
 
 static std::string intToString(int n)
 {
@@ -217,6 +217,8 @@ WitchBlastGame::WitchBlastGame():
     "media/overlay_00.png",    "media/light_cone.png",
     "media/divinity.png",
     "media/pnj.png",           "media/fairy.png",
+    "media/ui_life.png",       "media/ui_mana.png",
+    "media/ui_spells.png",
   };
 
   for (const char *const filename : images)
@@ -273,7 +275,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/electric_blast.ogg", "media/sound/francky_00.ogg",
     "media/sound/francky_01.ogg",     "media/sound/francky_02.ogg",
     "media/sound/francky_die.ogg",    "media/sound/om.ogg",
-    "media/sound/glass.ogg",
+    "media/sound/glass.ogg",          "media/sound/hiccup.ogg",
   };
 
   // game main client position in the UI
@@ -449,13 +451,13 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   // key symbol on the interface
   keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
   keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
-  keySprite.setPosition(326, 616);
+  keySprite.setPosition(737, 612);
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
   TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 15, 11, 10);
   miniMapEntity->setTileBox(16, 12);
-  miniMapEntity->setX(407);
+  miniMapEntity->setX(778);
   miniMapEntity->setY(614);
   miniMapEntity->setZ(10001.0f);
 
@@ -1387,75 +1389,71 @@ void WitchBlastGame::renderRunningGame()
     renderHud();
   }
 
-  myText.setColor(sf::Color(255, 255, 255, 255));
-
-  myText.setCharacterSize(18);
   std::ostringstream oss;
   oss << player->getGold();
-  myText.setString(oss.str());
-  myText.setPosition(690, 612);
-  app->draw(myText);
+  write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0);
 
   myText.setColor(sf::Color(0, 0, 0, 255));
   myText.setCharacterSize(16);
 
+
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  write(oss.str(), 16, 410, 692, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
 
   sf::RectangleShape rectangle(sf::Vector2f(200, 25));
 
   if (gameState == gameStatePlaying)
   {
     // life
-    if (player->isPoisoned())
-      rectangle.setFillColor(sf::Color(20, 190, 20));
-    else
-      rectangle.setFillColor(sf::Color(190, 20, 20));
-    rectangle.setPosition(sf::Vector2f(90, 622));
-    rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 25));
-    app->draw(rectangle);
+    // if (player->isPoisoned()) TODO
 
-    rectangle.setFillColor(sf::Color(255, 190, 190));
-    rectangle.setPosition(sf::Vector2f(90, 625));
-    rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 2));
-    app->draw(rectangle);
+    sf::Sprite hpSprite;
+    hpSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_LIFE));
+    int hpFade = 88.0f * (float)player->getHpDisplay() / (float)player->getHpMax();
+    hpSprite.setPosition(170, 619 + 88 - hpFade);
+    hpSprite.setTextureRect(sf::IntRect(0, 88 - hpFade, 98, hpFade));
+    app->draw(hpSprite);
 
     oss.str("");
     oss << player->getHp() << "/" << player->getHpMax();
-    write(oss.str(), 16, 95, 624, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+    write(oss.str(), 16, 210, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0);
 
     // mana
-    rectangle.setFillColor(sf::Color(20, 20, 190));
-    rectangle.setPosition(sf::Vector2f(90, 658));
-    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 25));
-    app->draw(rectangle);
+    sf::Sprite manaSprite;
+    manaSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MANA));
+    int manaFade = player->getPercentFireDelay() * 98;
+    manaSprite.setPosition(558, 614 + 98 - manaFade);
+    manaSprite.setTextureRect(sf::IntRect(0, 98 - manaFade, 98, manaFade));
+    app->draw(manaSprite);
 
-    rectangle.setFillColor(sf::Color(190, 190, 255));
-    rectangle.setPosition(sf::Vector2f(90, 661));
-    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 2));
-    app->draw(rectangle);
+
 
     if (player->getActiveSpell().spell != SpellNone)
     {
-      oss.str("");
-      oss << tools::getLabel(spellLabel[player->getActiveSpell().spell]);
-      if (player->isEquiped(EQUIP_BOOK_MAGIC_II)) oss << "+";
-      write(oss.str(), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      //oss.str("");
+      //oss << tools::getLabel(spellLabel[player->getActiveSpell().spell]);
+      //if (player->isEquiped(EQUIP_BOOK_MAGIC_II)) oss << "+";
+      //write(oss.str(), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
       // TODO
-      sf::Sprite itemSprite;
-      itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-      itemSprite.setPosition(10, 620);
-      int frame = player->getActiveSpell().frame;
-      itemSprite.setTextureRect(sf::IntRect((frame % 10) * 32, (frame / 10) * 32, 32, 32));
-      itemSprite.scale(2.0f, 2.0f);
-      app->draw(itemSprite);
+      sf::Sprite spellSprite;
+      spellSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_SPELLS));
+      spellSprite.setPosition(568, 624);
+      int frame = player->getActiveSpell().spell;
+      spellSprite.setTextureRect(sf::IntRect(frame * 78, 78, 78, 78));
+      //spellSprite.scale(2.0f, 2.0f);
+      app->draw(spellSprite);
+
+      int spellFade = player->getPercentSpellDelay() * 78;
+      spellSprite.setPosition(568, 624 + 78 - spellFade);
+      spellSprite.setTextureRect(sf::IntRect(frame * 78, 78 - spellFade, 78, spellFade));
+      app->draw(spellSprite);
 
       if (player->canCastSpell())
       {
         float fade = (cos(8.0f * getAbsolutTime()) + 1.0f) * 0.5f;
-        itemSprite.setColor(sf::Color(255, 255, 255, 255 * fade));
-        app->draw(itemSprite, sf::BlendAdd);
+        spellSprite .setColor(sf::Color(255, 255, 255, 255 * fade));
+        app->draw(spellSprite, sf::BlendAdd);
       }
     }
 
@@ -1467,8 +1465,17 @@ void WitchBlastGame::renderRunningGame()
       sf::Sprite mapSprite;
       mapSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
       mapSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 3, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
-      mapSprite.setPosition(326, 652);
+      mapSprite.setPosition(737, 648);
       app->draw(mapSprite);
+    }
+
+    if (player->isEquiped(EQUIP_ALCOHOL))
+    {
+      sf::Sprite alcSprite;
+      alcSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+      alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 4, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
+      alcSprite.setPosition(737, 681);
+      app->draw(alcSprite);
     }
 
     // drawing the divinity
@@ -1476,24 +1483,17 @@ void WitchBlastGame::renderRunningGame()
     {
       sf::Sprite divSprite;
       divSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_DIVINITY));
-      divSprite.setPosition(895, 605);
-      divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 64, 0, 64, 64));
+      divSprite.setPosition(100, 614);
+      divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 0, 48, 85));
       app->draw(divSprite);
 
       float fade = player->getLightCone();
       if (fade > 0.0f && player->getPlayerStatus() != PlayerEntity::playerStatusPraying)
       {
-        divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 64, 64, 64, 64));
+        divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 85, 48, 85));
         divSprite.setColor(sf::Color(255, 255, 255, 255 * fade));
         app->draw(divSprite);
       }
-
-      rectangle.setFillColor(sf::Color(0, 0, 0, 200));
-      rectangle.setPosition(sf::Vector2f(896, 670));
-      rectangle.setSize(sf::Vector2f(62, 12));
-      rectangle.setOutlineColor(sf::Color::White);
-      rectangle.setOutlineThickness(1);
-      app->draw(rectangle);
 
       rectangle.setOutlineThickness(0);
       if (player->getDivinity().interventions + 1 < player->getDivinity().level)
@@ -1504,10 +1504,11 @@ void WitchBlastGame::renderRunningGame()
 
       else
         rectangle.setFillColor(sf::Color(100, 100, 200, 255));
-      rectangle.setSize(sf::Vector2f(62 * player->getDivinity().percentsToNextLevels, 12));
+      rectangle.setPosition(sf::Vector2f(101, 689));
+      rectangle.setSize(sf::Vector2f(48 * player->getDivinity().percentsToNextLevels, 8));
       app->draw(rectangle);
 
-      write(intToString(player->getDivinity().level), 10, 928, 671, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+      write(intToString(player->getDivinity().level), 10, 122, 689, ALIGN_CENTER, sf::Color::White, app, 0, 0);
     }
 
     // render the shots
@@ -1663,15 +1664,36 @@ void WitchBlastGame::renderRunningGame()
     }
   }
 
+  renderMessages();
+
+  // show game time
+  if (showGameTime)
+  {
+    int minutes   = (int)gameTime / 60;
+    int secondes  = (int)gameTime % 60;
+    std::stringstream ss;
+    if (minutes < 10) ss << "0";
+    ss << minutes;
+    ss << ":";
+    if (secondes < 10) ss << "0";
+    ss << secondes;
+    write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
+  }
+
+}
+
+void WitchBlastGame::renderMessages()
+{
   // message queue
   if (!messagesQueue.empty())
   {
-
     int xf = 10;
     int yf = MAP_HEIGHT * TILE_HEIGHT + 10;
     int ySize = SCREEN_HEIGHT - (MAP_HEIGHT * TILE_HEIGHT) - 10;
     int xm = xf;
     int ym = yf;
+
+    sf::RectangleShape rectangle;
 
     if (messagesQueue.front().timer < 0.5f)
     {
@@ -1704,21 +1726,6 @@ void WitchBlastGame::renderRunningGame()
       }
     }
   }
-
-  // show game time
-  if (showGameTime)
-  {
-    int minutes   = (int)gameTime / 60;
-    int secondes  = (int)gameTime % 60;
-    std::stringstream ss;
-    if (minutes < 10) ss << "0";
-    ss << minutes;
-    ss << ":";
-    if (secondes < 10) ss << "0";
-    ss << secondes;
-    write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
-  }
-
 }
 
 void WitchBlastGame::saveDeathScreen()
@@ -2848,8 +2855,8 @@ void WitchBlastGame::onRender()
 
 void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
 {
-  int xHud = 640;
-  int yHud = 650;
+  int xHud = 277;
+  int yHud = 655;
   int index = 0;
 
   for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++)
@@ -2857,7 +2864,7 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
     if (i == 0 || player->getShotType(i) != ShotTypeStandard)
     {
       int type_shot = player->getShotType(i);
-      shotsSprite.setPosition(xHud + 48 * index, yHud);
+      shotsSprite.setPosition(xHud + 55 * index, yHud);
       if (index == player->getShotIndex())
       {
         shotsSprite.setTextureRect(sf::IntRect(0, 0,  48, 48));
@@ -2871,7 +2878,7 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
       {
         std::ostringstream oss;
         oss << "lvl " << player->getShotLevel(i) + 1;
-        write(oss.str(), 10, xHud + 48 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0);
+        write(oss.str(), 10, xHud + 55 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0);
       }
 
       index++;

@@ -126,7 +126,11 @@ enum item_images {
   IMAGE_DIVINITY,
 
   IMAGE_PNJ,
-  IMAGE_FAIRY
+  IMAGE_FAIRY,
+
+  IMAGE_UI_LIFE,
+  IMAGE_UI_MANA,
+  IMAGE_UI_SPELLS,
 };
 
 enum sound_resources {
@@ -224,6 +228,7 @@ enum sound_resources {
   SOUND_FRANCKY_DYING,
   SOUND_OM,
   SOUND_GLASS,
+  SOUND_HICCUP
 };
 
 enum corpses_ressources{
@@ -366,6 +371,7 @@ const float ACQUIRE_DELAY = 2.8f;
 const float UNLOCK_DELAY = 1.0f;
 const float WORSHIP_DELAY = 2.0f;
 const float INVINCIBLE_DELAY = 1.5f;
+const float HICCUP_DELAY = 5.0f;
 
 const float INITIAL_BOLT_LIFE = 0.45f;
 const int INITIAL_BOLT_DAMAGES = 8;
