@@ -326,7 +326,9 @@ divinity_fighter_0#Kahroon the Powerful
 divinity_fighter_1#Lord of the fighters and the strong.
 divinity_fighter_2#He appreciates monsters and titans falling in fight
 item_floor_map#Dungeon Map
-item_floor_map_desc#Reveal the map of the current floor
+item_floor_map_desc#Reveals the map of the current floor
+item_alcohol#Absinthe
+item_alcohol_desc#temporarily makes damage stronger
 
 [french]
 start_new_game#Nouvelle partie
