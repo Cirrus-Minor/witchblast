@@ -219,6 +219,7 @@ WitchBlastGame::WitchBlastGame():
     "media/pnj.png",           "media/fairy.png",
     "media/ui_life.png",       "media/ui_mana.png",
     "media/ui_spells.png",     "media/ui_message.png",
+    "media/ui_top_layer.png",
   };
 
   for (const char *const filename : images)
@@ -311,7 +312,13 @@ WitchBlastGame::WitchBlastGame():
   showLogical = false;
   showGameTime = false;
 
-  shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
+  uiSprites.shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
+  uiSprites.topLayer.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_TOP_LAYER));
+  uiSprites.topLayer.setPosition(0, 602);
+  uiSprites.msgBoxSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MESSAGE));
+  uiSprites.iconSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MESSAGE_ICONS));
+  uiSprites.iconSprite.setPosition(15, 630);
+
   introScreenSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
   titleSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TITLE));
   titleSprite.setOrigin(titleSprite.getTextureRect().width / 2, titleSprite.getTextureRect().height / 2);
@@ -449,16 +456,16 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   interface->setType(0);
 
   // key symbol on the interface
-  keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-  keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
-  keySprite.setPosition(737, 612);
+  uiSprites.keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+  uiSprites.keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
+  uiSprites.keySprite.setPosition(737, 612);
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
-  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 15, 11, 10);
-  miniMapEntity->setTileBox(16, 12);
-  miniMapEntity->setX(778);
-  miniMapEntity->setY(614);
+  miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 19, 15, 10);
+  miniMapEntity->setTileBox(20, 16);
+  miniMapEntity->setX(800);
+  miniMapEntity->setY(645);
   miniMapEntity->setZ(10001.0f);
 
   // doors
@@ -1389,6 +1396,79 @@ void WitchBlastGame::renderRunningGame()
     renderHud();
   }
 
+  sf::RectangleShape rectangle(sf::Vector2f(200, 25));
+
+  // effects
+  if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
+  {
+    // effect
+    int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
+    rectangle.setFillColor(sf::Color(0, 255, 255, effectFade));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    sf::RenderStates r;
+    r.blendMode = sf::BlendAlpha ;
+    app->draw(rectangle, r);
+  }
+
+  if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_IN)
+  {
+    // fade in
+    rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    app->draw(rectangle);
+  }
+  else if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_OUT)
+  {
+    // fade out
+    rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    app->draw(rectangle);
+  }
+  if (xGame[xGameTypeFadeColor].active)
+  {
+    // color fade
+    unsigned int r = 0, g = 0, b = 0;
+    switch (xGame[xGameTypeFadeColor].param)
+    {
+    case X_GAME_COLOR_RED:
+      r = 255;
+      g = 100;
+      break;
+    case X_GAME_COLOR_GREEN:
+      g = 255;
+      break;
+    case X_GAME_COLOR_BLUE:
+      b = 255;
+      break;
+    case X_GAME_COLOR_VIOLET:
+      r = 255;
+      b = 200;
+      break;
+    case X_GAME_COLOR_BROWN:
+      r = 200;
+      b = 100;
+      g = 150;
+      break;
+    case X_GAME_COLOR_WHITE:
+      r = 255;
+      b = 255;
+      g = 255;
+      break;
+    }
+    int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
+
+    rectangle.setFillColor(sf::Color(r, g, b, alpha));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    app->draw(rectangle, sf::BlendAdd);
+  }
+
+  renderMessages();
+  app->draw(uiSprites.topLayer);
+
   std::ostringstream oss;
   oss << player->getGold();
   write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0);
@@ -1401,8 +1481,6 @@ void WitchBlastGame::renderRunningGame()
   oss << tools::getLabel("level") << " " << level;
   write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
 
-  sf::RectangleShape rectangle(sf::Vector2f(200, 25));
-
   if (gameState == gameStatePlaying)
   {
     // life
@@ -1411,6 +1489,8 @@ void WitchBlastGame::renderRunningGame()
     sf::Sprite hpSprite;
     hpSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_LIFE));
     int hpFade = 88.0f * (float)player->getHpDisplay() / (float)player->getHpMax();
+    if (hpFade < 0) hpFade = 0;
+    else if (hpFade > 88) hpFade = 88;
     hpSprite.setPosition(170, 619 + 88 - hpFade);
     hpSprite.setTextureRect(sf::IntRect(0, 88 - hpFade, 98, hpFade));
     app->draw(hpSprite);
@@ -1426,7 +1506,6 @@ void WitchBlastGame::renderRunningGame()
     manaSprite.setPosition(558, 614 + 98 - manaFade);
     manaSprite.setTextureRect(sf::IntRect(0, 98 - manaFade, 98, manaFade));
     app->draw(manaSprite);
-
 
 
     if (player->getActiveSpell().spell != SpellNone)
@@ -1458,7 +1537,7 @@ void WitchBlastGame::renderRunningGame()
     }
 
     // drawing the key on the interface
-    if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
+    if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(uiSprites.keySprite);
 
     if (player->isEquiped(EQUIP_FLOOR_MAP))
     {
@@ -1476,6 +1555,13 @@ void WitchBlastGame::renderRunningGame()
       alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 4, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
       alcSprite.setPosition(737, 681);
       app->draw(alcSprite);
+    }
+
+    // drawing message icon
+    if (!messagesQueue.empty())
+    {
+      uiSprites.iconSprite.setTextureRect(sf::IntRect((messagesQueue.front().icon % 10) * 64, (messagesQueue.front().icon / 10) * 64, 64, 64));
+      app->draw(uiSprites.iconSprite);
     }
 
     // drawing the divinity
@@ -1594,77 +1680,7 @@ void WitchBlastGame::renderRunningGame()
       write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2);
       write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2);
     }
-
-    if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
-    {
-      // effect
-      int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
-      rectangle.setFillColor(sf::Color(0, 255, 255, effectFade));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      sf::RenderStates r;
-      r.blendMode = sf::BlendAlpha ;
-      app->draw(rectangle, r);
-    }
-
-    if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_IN)
-    {
-      // fade in
-      rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      app->draw(rectangle);
-    }
-    else if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_OUT)
-    {
-      // fade out
-      rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      app->draw(rectangle);
-    }
-
-    if (xGame[xGameTypeFadeColor].active)
-    {
-      // color fade
-      unsigned int r = 0, g = 0, b = 0;
-      switch (xGame[xGameTypeFadeColor].param)
-      {
-      case X_GAME_COLOR_RED:
-        r = 255;
-        g = 100;
-        break;
-      case X_GAME_COLOR_GREEN:
-        g = 255;
-        break;
-      case X_GAME_COLOR_BLUE:
-        b = 255;
-        break;
-      case X_GAME_COLOR_VIOLET:
-        r = 255;
-        b = 200;
-        break;
-      case X_GAME_COLOR_BROWN:
-        r = 200;
-        b = 100;
-        g = 150;
-        break;
-      case X_GAME_COLOR_WHITE:
-        r = 255;
-        b = 255;
-        g = 255;
-        break;
-      }
-      int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
-
-      rectangle.setFillColor(sf::Color(r, g, b, alpha));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      app->draw(rectangle, sf::BlendAdd);
-    }
   }
-
-  renderMessages();
 
   // show game time
   if (showGameTime)
@@ -1687,10 +1703,19 @@ void WitchBlastGame::renderMessages()
   // message queue
   if (!messagesQueue.empty())
   {
-    sf::Sprite msgBoxSprite;
-    msgBoxSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MESSAGE));
-    msgBoxSprite.setPosition(0, 602 - 48);
-    app->draw(msgBoxSprite);
+    int dy = 38;
+
+    if (messagesQueue.front().timer < 0.5f)
+    {
+      dy = (2 * messagesQueue.front().timer) * 38;
+    }
+    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
+    {
+      dy = (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * 38;
+    }
+
+    uiSprites.msgBoxSprite.setPosition(0, 590 - dy);
+    app->draw(uiSprites.msgBoxSprite);
 
     std::stringstream ss;
     ss << messagesQueue.front().message[0];
@@ -1700,47 +1725,7 @@ void WitchBlastGame::renderMessages()
     ss << messagesQueue.front().message[2];
 
 
-    write(ss.str(), 16, 10, 602 - 46, ALIGN_LEFT, sf::Color::White, app, 0,0);
-
-    /*
-    int xf = 10;
-    int yf = MAP_HEIGHT * TILE_HEIGHT + 10;
-    int ySize = SCREEN_HEIGHT - (MAP_HEIGHT * TILE_HEIGHT) - 10;
-    int xm = xf;
-    int ym = yf;
-
-    sf::RectangleShape rectangle;
-
-    if (messagesQueue.front().timer < 0.5f)
-    {
-      ym += (1.0f - 2 * messagesQueue.front().timer) * ySize;
-    }
-    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
-    {
-      ym += (1.0f - 2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * ySize;
-    }
-
-    rectangle.setFillColor(sf::Color(236, 222, 194, 255));
-    rectangle.setOutlineThickness(2.0f);
-    rectangle.setOutlineColor(sf::Color(201, 145, 95,255));
-    rectangle.setPosition(sf::Vector2f(xm, ym));
-    rectangle.setSize(sf::Vector2f(SCREEN_WIDTH - 20, ySize));
-    app->draw(rectangle);
-
-    sf::Sprite iconSprite;
-    iconSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MESSAGE_ICONS));
-    iconSprite.setPosition(xm + 12, ym + 32);
-    iconSprite.setTextureRect(sf::IntRect((messagesQueue.front().icon % 10) * 64, (messagesQueue.front().icon / 10) * 64, 64, 64));
-    app->draw(iconSprite);
-
-    for (int i = 0; i < 3; i++)
-    {
-      int fontSize = i == 0 ? 18 : 16;
-      if (!messagesQueue.front().message[i].empty())
-      {
-        write(messagesQueue.front().message[i], fontSize, xm + 100, ym + ((i == 0 ) ? 15 : 20) + i * 30, ALIGN_LEFT, sf::Color::Black, app, 0,0);
-      }
-    }*/
+    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0,0);
   }
 }
 
@@ -2726,6 +2711,7 @@ void WitchBlastGame::refreshMinimap()
         case roomTypeTemple:
           miniMap->setTile(i, j,
                            game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 17 : 11 );
+          break;
         case roomTypeBonus:
           miniMap->setTile(i, j,
                            game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 2 : 11 );
@@ -2743,6 +2729,18 @@ void WitchBlastGame::refreshMinimap()
         miniMap->setTile(i, j, 0);
     }
   miniMap->setTile(floorX, floorY, 10);
+
+
+  int xMap = 760 + (6 - floorX) * 19;
+  if (xMap < 710) xMap = 710;
+  else if (xMap > 795) xMap = 795;
+
+  int yMap = 620 + (3 - floorY) * 15;
+  if (yMap < 605) yMap = 605;
+  else if (yMap > 625) yMap = 625;
+
+  miniMapEntity->setX(xMap);
+  miniMapEntity->setY(yMap);
 }
 
 void WitchBlastGame::checkEntering()
@@ -2880,14 +2878,14 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
     if (i == 0 || player->getShotType(i) != ShotTypeStandard)
     {
       int type_shot = player->getShotType(i);
-      shotsSprite.setPosition(xHud + 55 * index, yHud);
+      uiSprites.shotsSprite.setPosition(xHud + 55 * index, yHud);
       if (index == player->getShotIndex())
       {
-        shotsSprite.setTextureRect(sf::IntRect(0, 0,  48, 48));
-        app->draw(shotsSprite);
+        uiSprites.shotsSprite.setTextureRect(sf::IntRect(0, 0,  48, 48));
+        app->draw(uiSprites.shotsSprite);
       }
-      shotsSprite.setTextureRect(sf::IntRect(48 * ( 1 + type_shot), 0,  48, 48));
-      app->draw(shotsSprite);
+      uiSprites.shotsSprite.setTextureRect(sf::IntRect(48 * ( 1 + type_shot), 0,  48, 48));
+      app->draw(uiSprites.shotsSprite);
 
       // level
       if (i > 0)
@@ -3815,7 +3813,7 @@ void WitchBlastGame::saveGame()
     file << player->getActiveSpell().spell << std::endl;
     // divinity
     file << player->getDivinity().divinity << " " << player->getDivinity().piety << " "
-      << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
+         << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
     // events
     for (i = 0; i < NB_EVENTS; i++) file << worldEvent[i] << " ";
     file.close();

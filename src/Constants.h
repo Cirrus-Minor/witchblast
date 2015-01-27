@@ -132,6 +132,7 @@ enum item_images {
   IMAGE_UI_MANA,
   IMAGE_UI_SPELLS,
   IMAGE_UI_MESSAGE,
+  IMAGE_UI_TOP_LAYER,
 };
 
 enum sound_resources {

@@ -453,15 +453,22 @@ private:
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */
   DungeonMapEntity* dungeonEntity;  /*!< TileMap of the room (main game board) + blood, items, etc...*/
-
+  TileMapEntity* miniMapEntity;
   // displaying objects
   DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */
-  sf::Sprite keySprite;       /*!< A simple sprite with the boss key (displayed on the HUD) */
-  sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
   sf::Font font;              /*!< The font used for displaying text */
   sf::Text myText;            /*!< The text to be displayed */
   sf::Sprite introScreenSprite;
   sf::Sprite titleSprite;
+
+  struct uiSpritesStruct
+  {
+    sf::Sprite keySprite;       /*!< A simple sprite with the boss key (displayed on the HUD) */
+    sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
+    sf::Sprite topLayer;
+    sf::Sprite msgBoxSprite;
+    sf::Sprite iconSprite;
+  } uiSprites;
 
   struct lifeBarStruct
   {
