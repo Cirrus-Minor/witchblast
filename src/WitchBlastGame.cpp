@@ -218,7 +218,7 @@ WitchBlastGame::WitchBlastGame():
     "media/divinity.png",
     "media/pnj.png",           "media/fairy.png",
     "media/ui_life.png",       "media/ui_mana.png",
-    "media/ui_spells.png",
+    "media/ui_spells.png",     "media/ui_message.png",
   };
 
   for (const char *const filename : images)
@@ -1687,6 +1687,22 @@ void WitchBlastGame::renderMessages()
   // message queue
   if (!messagesQueue.empty())
   {
+    sf::Sprite msgBoxSprite;
+    msgBoxSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MESSAGE));
+    msgBoxSprite.setPosition(0, 602 - 48);
+    app->draw(msgBoxSprite);
+
+    std::stringstream ss;
+    ss << messagesQueue.front().message[0];
+    ss << ": ";
+    ss << messagesQueue.front().message[1];
+    ss << std::endl;
+    ss << messagesQueue.front().message[2];
+
+
+    write(ss.str(), 16, 10, 602 - 46, ALIGN_LEFT, sf::Color::White, app, 0,0);
+
+    /*
     int xf = 10;
     int yf = MAP_HEIGHT * TILE_HEIGHT + 10;
     int ySize = SCREEN_HEIGHT - (MAP_HEIGHT * TILE_HEIGHT) - 10;
@@ -1724,7 +1740,7 @@ void WitchBlastGame::renderMessages()
       {
         write(messagesQueue.front().message[i], fontSize, xm + 100, ym + ((i == 0 ) ? 15 : 20) + i * 30, ALIGN_LEFT, sf::Color::Black, app, 0,0);
       }
-    }
+    }*/
   }
 }
 
