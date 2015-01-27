@@ -19,7 +19,6 @@ class PnjEntity : public SpriteEntity
     float speechTimer;
     bool isSpeaking;
     std::string speech;
-    int headFrame;
 
   private:
 };
