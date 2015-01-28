@@ -1295,7 +1295,7 @@ void WitchBlastGame::renderLifeBar()
 
     sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
     rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
     rectangle.setOutlineThickness(1);
     rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
     app->draw(rectangle);
@@ -1303,13 +1303,13 @@ void WitchBlastGame::renderLifeBar()
     rectangle.setSize(sf::Vector2f(l, 25));
     rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setOutlineThickness(0);
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22/));
     app->draw(rectangle);
 
     game().write(           lifeBar.label,
                             18,
                             TILE_WIDTH / 2 + 10.0f,
-                            label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
+                            label_dy + 23,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
                             app, 0 , 0);
