@@ -1303,7 +1303,7 @@ void WitchBlastGame::renderLifeBar()
     rectangle.setSize(sf::Vector2f(l, 25));
     rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setOutlineThickness(0);
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22/));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
     app->draw(rectangle);
 
     game().write(           lifeBar.label,
