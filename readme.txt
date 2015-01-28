@@ -98,6 +98,12 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next version
+- ADD Temple and divinities
+- ADD Interaction key
+- ADD "level" objects
+- ADD New art and GUI
+
 v0.4.1
 - ADD Scores and hi-score screen
 - ADD Blood is spraying now
