@@ -2737,7 +2737,7 @@ void WitchBlastGame::refreshMinimap()
 
   int yMap = 620 + (3 - floorY) * 15;
   if (yMap < 605) yMap = 605;
-  else if (yMap > 625) yMap = 625;
+  else if (yMap > 640) yMap = 640;
 
   miniMapEntity->setX(xMap);
   miniMapEntity->setY(yMap);
