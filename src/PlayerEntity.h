@@ -489,6 +489,9 @@ class PlayerEntity : public BaseCreatureEntity
 
     virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2) override;
 
+    void setItemToBuy(ItemEntity* item);
+    ItemEntity* getItemToBuy();
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
@@ -571,6 +574,8 @@ class PlayerEntity : public BaseCreatureEntity
     void castEarthquake();
     void castProtection();
     void castWeb();
+
+    ItemEntity* itemToBuy;
 };
 
 #endif // PLAYERSPRITE_H

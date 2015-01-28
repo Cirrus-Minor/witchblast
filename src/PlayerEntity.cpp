@@ -109,6 +109,8 @@ PlayerEntity::PlayerEntity(float x, float y)
   divinity.level = 0;
   divinity.interventions = 0;
   divinity.percentsToNextLevels = 0.0f;
+
+  itemToBuy = NULL;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -337,6 +339,16 @@ void PlayerEntity::resetFloorItem()
   equip[EQUIP_FLOOR_MAP] = false;
   equip[EQUIP_ALCOHOL] = false;
   computePlayer();
+}
+
+void PlayerEntity::setItemToBuy(ItemEntity* item)
+{
+  itemToBuy = item;
+}
+
+ItemEntity* PlayerEntity::getItemToBuy()
+{
+  return itemToBuy;
 }
 
 void PlayerEntity::animate(float delay)
@@ -1678,6 +1690,10 @@ void PlayerEntity::interact(EnumInteractionType interaction, int id)
       {
         worship((enumDivinityType)id);
       }
+    }
+    else if (interaction == InteractionTypeMerchandise)
+    {
+      if (itemToBuy != NULL) itemToBuy->buy();
     }
   }
 }

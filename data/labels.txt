@@ -316,6 +316,7 @@ msg_tuto_temple_1#The temple is the place where you can worship a divinity or do
 msg_tuto_temple_2#Divinities can help you and provide bonus.
 key_interact#interact
 interact_worship#Press [interact] to worship
+interact_shop#Press [interact] to buy
 interact_donate#Press [interact] to donate 10 gold
 interact_donate_fail#(not enough gold)
 worshipping#You're now a worshipper of

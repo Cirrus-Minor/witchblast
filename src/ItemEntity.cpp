@@ -221,6 +221,21 @@ void ItemEntity::dying()
   isDying = true;
 }
 
+void ItemEntity::buy()
+{
+  if (canBePickedUp() && isMerchandise)
+  {
+    game().getPlayer()->acquireItem(itemType);
+    game().getPlayer()->pay(getPrice());
+    game().getPlayer()->setItemToBuy(NULL);
+
+    dying();
+
+    if (!items[itemType].generatesStance)
+      new MagnetEntity(x, y, game().getPlayer(), itemType);
+  }
+}
+
 void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
   if (itemType == ItemBossHeart && !game().getCurrentMap()->isCleared()) return;
@@ -231,13 +246,11 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   {
     if (playerEntity != NULL && !playerEntity->isDead())
     {
-      /*if (playerEntity->getHp() == playerEntity->getHpMax())
+      if (isMerchandise)
       {
-        // don't use health item if you don't need it
-        if (itemType >= ItemHealthVerySmall && itemType <= ItemHealthVerySmallPoison) return;
+        playerEntity->setItemToBuy(this);
       }
-      if (isMerchandise == false || playerEntity->getGold() >= getPrice())*/
-      if (canBePickedUp())
+      else if (canBePickedUp())
       {
         playerEntity->acquireItem(itemType);
 

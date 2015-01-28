@@ -377,6 +377,8 @@ void WitchBlastGame::onUpdate()
 {
   if (!isPausing)
   {
+    if (isPlayerAlive) player->setItemToBuy(NULL);
+
     EntityManager::getInstance().animate(deltaTime);
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
     {
@@ -812,6 +814,7 @@ void WitchBlastGame::renderIntro()
 void WitchBlastGame::updateRunningGame()
 {
   bool backToMenu = false;
+
   // Process events
   sf::Event event;
   while (app->pollEvent(event))
@@ -1264,6 +1267,8 @@ void WitchBlastGame::renderHud()
   if (interaction.active)
   {
     if (interaction.type == InteractionTypeTemple)
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+    else if (interaction.type == InteractionTypeMerchandise)
       write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
   }
 
@@ -3517,6 +3522,23 @@ void WitchBlastGame::checkInteraction()
 
       interaction.label = ss.str();
     }
+  }
+  else if (player->getItemToBuy() != NULL)
+  {
+    interaction.active = true;
+    interaction.type = InteractionTypeMerchandise;
+    interaction.id = player->getItemToBuy()->getItemType();
+
+    std::stringstream ss;
+    ss << tools::getLabel(items[interaction.id].name);
+    ss << ": ";
+    ss << tools::getLabel(items[interaction.id].description);
+    if (player->getItemToBuy()->canBePickedUp())
+    {
+      ss << std::endl;
+      ss << tools::getLabel("interact_shop");
+    }
+    interaction.label = ss.str();
   }
 }
 
