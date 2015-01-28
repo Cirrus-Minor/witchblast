@@ -13,8 +13,14 @@ const int MAP_WALL          =   70;
 const int MAP_DOOR          =   71;
 
 // temple
-const int MAP_TEMPLE          =   42;
-const int MAP_TEMPLE_WALL     =   72;
+const int MAP_TEMPLE          =   50;
+const int MAP_TEMPLE_WALL     =   80;
+
+// shop
+const int MAP_SHOP_BEGIN      =   100;
+const int MAP_SHOP_LEFT       = 0 + MAP_SHOP_BEGIN;
+const int MAP_SHOP            = 1 + MAP_SHOP_BEGIN;
+const int MAP_SHOP_RIGHT      = 2 + MAP_SHOP_BEGIN;
 
 // walls
 const int MAP_WALL_BEGIN    =   110;

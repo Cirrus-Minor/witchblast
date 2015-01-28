@@ -440,21 +440,24 @@ Vector2D DungeonMap::generateBonusRoom()
 
 void DungeonMap::generateTemple(int x, int y, enumDivinityType type)
 {
-  map[x - 1][y - 1] = MAP_WALL;
+  map[x - 1][y - 2] = MAP_HOLE_TOP;
+  map[x - 1][y - 1] = MAP_HOLE_BOTTOM;
+  map[x - 1][y] = MAP_HOLE_BOTTOM;
+
+  map[x + 1][y - 2] = MAP_HOLE_TOP;
+  map[x + 1][y - 1] = MAP_HOLE_BOTTOM;
+  map[x + 1][y] = MAP_HOLE_BOTTOM;
+
   map[x][y - 2] = MAP_TEMPLE_WALL + (int)type;
   map[x][y - 1] = MAP_TEMPLE_WALL + 10 + (int)type;
-  map[x + 1][y - 1] = MAP_WALL;
-
-  map[x - 1][y] = MAP_WALL;
   map[x][y] = MAP_TEMPLE + (int)type;
-  map[x + 1][y] = MAP_WALL;
 }
 
 void DungeonMap::generateTempleRoom()
 {
   initRoom();
   int x0 = MAP_WIDTH / 2;
-  int y0 = MAP_HEIGHT / 2;
+  int y0 = 1 + MAP_HEIGHT / 2;
 
   if (rand() % 3 == 0)
   {
@@ -470,8 +473,8 @@ void DungeonMap::generateTempleRoom()
   else
   {
     // two temples
-    generateTemple(x0 - 2, y0, DivinityHeal);
-    generateTemple(x0 + 2, y0, DivinityPower);
+    generateTemple(x0 - 1, y0, DivinityHealer);
+    generateTemple(x0 + 1, y0, DivinityFighter);
   }
 
 }
@@ -505,11 +508,13 @@ void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
 Vector2D DungeonMap::generateMerchantRoom()
 {
   initRoom();
-  int x0 = 3;
-  int y0 = 3;
 
-  generateCarpet(3, 3, 9, 3, 20);
+  int x0 = MAP_WIDTH / 2;
+  int y0 = MAP_HEIGHT / 2;
 
+  for (int i = x0 - 2; i <= x0 + 2; i++) map[i][y0] = MAP_SHOP;
+  map[x0 - 3][y0] = MAP_SHOP_LEFT;
+  map[x0 + 3][y0] = MAP_SHOP_RIGHT;
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
