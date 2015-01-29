@@ -309,7 +309,7 @@ void EnemyEntity::dying()
 
   if (bloodColor != BloodNone) for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
-  game().addKilledEnemy(enemyType);
+  game().addKilledEnemy(enemyType, hurtingType);
 }
 
 void EnemyEntity::drop()

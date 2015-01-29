@@ -358,7 +358,7 @@ void GiantSlimeEntity::collideMapBottom()
 void GiantSlimeEntity::dying()
 {
   isDying = true;
-  game().addKilledEnemy(enemyType);
+  game().addKilledEnemy(enemyType, hurtingType);
   game().addCorpse(x, y, FRAME_CORPSE_GIANT_SLIME);
 
   float xSlime = x;

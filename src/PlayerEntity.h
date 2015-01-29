@@ -468,7 +468,7 @@ class PlayerEntity : public BaseCreatureEntity
     void interact(EnumInteractionType interaction, int id);
     void worship(enumDivinityType divinity);
     void donate(int n);
-    void offerMonster(enemyTypeEnum monster);
+    void offerMonster(enemyTypeEnum monster, enumShotType hurtingType);
     void offerHealth(int lostHp);
     void offerChallenge();
     void addPiety(int n);

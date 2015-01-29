@@ -327,6 +327,8 @@ const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
 enum enumDivinityType {
   DivinityHealer,
   DivinityFighter,
+  DivinityIce,
+  DivinityStone,
 
   NB_DIVINITY
 };
@@ -334,6 +336,8 @@ const std::string divinityLabel[NB_DIVINITY]
 {
   "divinity_healer",
   "divinity_fighter",
+  "divinity_ice",
+  "divinity_stone",
 };
 const int MAX_DIVINITY_LEVEL = 5;
 const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =
@@ -542,6 +546,8 @@ enum EnumMessages
 
   MsgInfoDivHealer,
   MsgInfoDivFighter,
+  MsgInfoDivIce,
+  MsgInfoDivStone,
 
   MsgTutoBasics,
   MsgTutoTips,

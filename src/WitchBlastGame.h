@@ -364,7 +364,7 @@ public:
    *  \brief Add a monster to the "killed monsters" table
    *  \param enemyType : ID of the monster
    */
-  void addKilledEnemy(enemyTypeEnum enemyType);
+  void addKilledEnemy(enemyTypeEnum enemyType, enumShotType damageType);
 
   /*!
    *  \brief Proceed an event

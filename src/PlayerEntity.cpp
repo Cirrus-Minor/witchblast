@@ -1435,16 +1435,34 @@ void PlayerEntity::computePlayer()
   for (int i = 1; i < SPECIAL_SHOT_SLOTS; i++)
   {
     specialShotLevel[i] = 0;
-    if (specialShots[i] == ShotTypeIce && equip[EQUIP_RING_ICE])
-      specialShotLevel[i]++;
-    if (specialShots[i] == ShotTypeStone && equip[EQUIP_RING_STONE])
-      specialShotLevel[i]++;
-    if (specialShots[i] == ShotTypeLightning && equip[EQUIP_RING_LIGHTNING])
-      specialShotLevel[i]++;
-    if (specialShots[i] == ShotTypeIllusion && equip[EQUIP_RING_ILLUSION])
-      specialShotLevel[i]++;
-    if (specialShots[i] == ShotTypeFire && equip[EQUIP_RING_FIRE])
-      specialShotLevel[i]++;
+
+    switch (specialShots[i])
+    {
+    case ShotTypeIce:
+      if (equip[EQUIP_RING_ICE]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityIce && divinity.level >= 4) specialShotLevel[i]++;
+      break;
+
+    case ShotTypeStone:
+      if (equip[EQUIP_RING_STONE]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityStone && divinity.level >= 4) specialShotLevel[i]++;
+      break;
+
+    case ShotTypeLightning:
+      if (equip[EQUIP_RING_LIGHTNING]) specialShotLevel[i]++;
+      break;
+
+    case ShotTypeIllusion:
+      if (equip[EQUIP_RING_ILLUSION]) specialShotLevel[i]++;
+      break;
+
+    case ShotTypeFire:
+      if (equip[EQUIP_RING_FIRE]) specialShotLevel[i]++;
+      break;
+
+    default:
+      break;
+    }
   }
   if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
   else if (getShotType() == ShotTypeFire) fireDamages *= FIRE_DAMAGE_INCREASE[getShotLevel()];
@@ -1735,7 +1753,7 @@ void PlayerEntity::donate(int n)
   }
 }
 
-void PlayerEntity::offerMonster(enemyTypeEnum monster)
+void PlayerEntity::offerMonster(enemyTypeEnum monster, enumShotType hurtingType)
 {
   if (divinity.divinity > -1)
   {
@@ -1743,13 +1761,51 @@ void PlayerEntity::offerMonster(enemyTypeEnum monster)
     int pietyProMonster   = 2;
     int pietyProBoss      = 20;
 
-    if (divinity.divinity == DivinityHealer)
-      pietyProMonster = 0;
-    else if (divinity.divinity == DivinityFighter)
+    switch (divinity.divinity)
     {
+    case DivinityHealer:
+      if (monster == EnemyTypeGhost
+          || monster == EnemyTypeZombie
+          || monster == EnemyTypeZombieDark
+          || monster == EnemyTypeImpBlue
+          || monster == EnemyTypeImpRed
+          || monster == EnemyTypeWitch
+          || monster == EnemyTypeWitchRed)
+        pietyProMonster   = 4;
+      else
+        pietyProMonster   = 0;
+      break;
+
+    case DivinityFighter:
       pietyProMonster = 3;
       pietyProBoss    = 30;
+      break;
+
+    case DivinityIce:
+      if (monster == EnemyTypeSlimeRed
+          || monster == EnemyTypeImpRed)
+        pietyProMonster = 4;
+
+      if (hurtingType == ShotTypeCold || hurtingType == ShotTypeIce)
+      {
+        pietyProMonster *= 1.5f;
+        pietyProBoss = 25;
+      }
+      break;
+
+    case DivinityStone:
+      if (hurtingType == ShotTypeCold || hurtingType == ShotTypeIce)
+      {
+        pietyProMonster = 3;
+        pietyProBoss    = 30;
+      }
+      else
+      {
+        pietyProBoss    = 25;
+      }
+      break;
     }
+
 
     if (monster < EnemyTypeButcher) // normal or mini-boss
     {
@@ -1768,6 +1824,7 @@ void PlayerEntity::offerHealth(int lostHp)
   {
     addPiety(lostHp * 2.5f);
   }
+
 }
 
 void PlayerEntity::offerChallenge()

@@ -62,7 +62,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 4
+//#define START_LEVEL 2
 
 static std::string intToString(int n)
 {
@@ -1565,6 +1565,16 @@ void WitchBlastGame::renderRunningGame()
     // drawing message icon
     if (!messagesQueue.empty())
     {
+      int fade = 255;
+      if (messagesQueue.front().timer < 0.5f)
+      {
+        fade = (2 * messagesQueue.front().timer) * 255;
+      }
+      else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
+      {
+        fade = (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * 255;
+      }
+      uiSprites.iconSprite.setColor(sf::Color(255, 255, 255, fade));
       uiSprites.iconSprite.setTextureRect(sf::IntRect((messagesQueue.front().icon % 10) * 64, (messagesQueue.front().icon / 10) * 64, 64, 64));
       app->draw(uiSprites.iconSprite);
     }
@@ -1708,15 +1718,15 @@ void WitchBlastGame::renderMessages()
   // message queue
   if (!messagesQueue.empty())
   {
-    int dy = 38;
+    int dy = 30;
 
     if (messagesQueue.front().timer < 0.5f)
     {
-      dy = (2 * messagesQueue.front().timer) * 38;
+      dy *= (2 * messagesQueue.front().timer);
     }
     else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
     {
-      dy = (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * 38;
+      dy *= (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer));
     }
 
     uiSprites.msgBoxSprite.setPosition(0, 590 - dy);
@@ -2073,6 +2083,7 @@ void WitchBlastGame::updateMenu()
         case MenuTutoReset:
           for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
           SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
+          saveGameData();
           break;
         case MenuConfigBack:
           menuState = MenuStateMain;
@@ -4420,7 +4431,7 @@ void WitchBlastGame::resetKilledEnemies()
   for (int i = 0; i < NB_ENEMY; i++) killedEnemies[i] = 0;
 }
 
-void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
+void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtingType)
 {
   if(!player->isDead())
   {
@@ -4429,7 +4440,7 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
     else
     {
       killedEnemies[enemyType]++;
-      player->offerMonster(enemyType);
+      player->offerMonster(enemyType, hurtingType);
     }
   }
 }
