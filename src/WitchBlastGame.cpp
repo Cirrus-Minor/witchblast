@@ -1497,7 +1497,7 @@ void WitchBlastGame::renderRunningGame()
     if (hpFade < 0) hpFade = 0;
     else if (hpFade > 88) hpFade = 88;
     hpSprite.setPosition(170, 619 + 88 - hpFade);
-    hpSprite.setTextureRect(sf::IntRect(0, 88 - hpFade, 98, hpFade));
+    hpSprite.setTextureRect(sf::IntRect(0, 88 - hpFade, 88, hpFade));
     app->draw(hpSprite);
 
     oss.str("");
