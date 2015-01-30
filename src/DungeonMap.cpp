@@ -465,16 +465,25 @@ void DungeonMap::generateTempleRoom()
     else initPattern(PatternSmallStar);
   }
 
+  int d0, d1, d2;
+  d0 = rand() % NB_DIVINITY;
+  d1 = d0;
+  while (d0 == d1) d1 = rand() % NB_DIVINITY;
+
   if (rand() % 2 == 0)
   {
-    // one temple
-    generateTemple(x0, y0, (enumDivinityType)(rand() % NB_DIVINITY));
+    // three temple
+    d2 = d0;
+    while (d0 == d2 || d1 == d2) d2 = rand() % NB_DIVINITY;
+    generateTemple(x0 - 2, y0, (enumDivinityType)d0);
+    generateTemple(x0 + 2, y0, (enumDivinityType)d1);
+    generateTemple(x0, y0, (enumDivinityType)d2);
   }
   else
   {
     // two temples
-    generateTemple(x0 - 1, y0, DivinityHealer);
-    generateTemple(x0 + 1, y0, DivinityFighter);
+    generateTemple(x0 - 1, y0, (enumDivinityType)d0);
+    generateTemple(x0 + 1, y0, (enumDivinityType)d1);
   }
 
 }
