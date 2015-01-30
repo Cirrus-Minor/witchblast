@@ -421,7 +421,7 @@ void PlayerEntity::animate(float delay)
       acquireItemAfterStance();
     }
   }
-  else if (equip[EQUIP_ALCOHOL])
+  else if (equip[EQUIP_ALCOHOL] && playerStatus == playerStatusPlaying)
   {
     hiccupDelay -= delay;
     if (hiccupDelay <= 0.0f)
