@@ -1734,20 +1734,39 @@ void PlayerEntity::donate(int n)
     addPiety(pietyProGold * n);
 
     // check item invoke
-    if (divinity.divinity == DivinityHealer && divinity.level >= 3)
+    bool divineGift = false;
+    enumItemType itemType = ItemCopperCoin;
+
+    if (divinity.level >= 3 && game().getItemsCount() == 0)
     {
-      // Healer + level 3 = Health manual
-      if (!equip[EQUIP_MANUAL_HEALTH] && game().getItemsCount() == 0)
+      if (divinity.divinity == DivinityHealer && !equip[EQUIP_MANUAL_HEALTH])
       {
-        float xItem = GAME_WIDTH / 2;
-        float yItem = GAME_HEIGHT * 0.8f;
-        new ItemEntity(ItemManualHealth, xItem, yItem);
-        SoundManager::getInstance().playSound(SOUND_OM);
-        for (int i = 0; i < 8; i++)
-        {
-          generateStar(sf::Color::White, xItem, yItem);
-          generateStar(sf::Color(255, 255, 210), xItem, yItem);
-        }
+        // Healer + level 3 = Health manual
+        divineGift = true;
+        itemType = ItemManualHealth;
+      }
+      else if (divinity.divinity == DivinityIce && !equip[EQUIP_GEM_ICE])
+      {
+        divineGift = true;
+        itemType = ItemGemIce;
+      }
+      else if (divinity.divinity == DivinityStone && !equip[EQUIP_GEM_STONE])
+      {
+        divineGift = true;
+        itemType = ItemGemStone;
+      }
+    }
+
+    if (divineGift)
+    {
+      float xItem = GAME_WIDTH / 2;
+      float yItem = GAME_HEIGHT * 0.8f;
+      new ItemEntity(itemType, xItem, yItem);
+      SoundManager::getInstance().playSound(SOUND_OM);
+      for (int i = 0; i < 8; i++)
+      {
+        generateStar(sf::Color::White, xItem, yItem);
+        generateStar(sf::Color(255, 255, 210), xItem, yItem);
       }
     }
   }
@@ -1834,12 +1853,19 @@ void PlayerEntity::offerChallenge()
 
 void PlayerEntity::divineFury()
 {
+  enumShotType shotType = ShotTypeStandard;
+  if (divinity.divinity == DivinityIce) shotType = ShotTypeIce;
+  else if (divinity.divinity == DivinityStone) shotType = ShotTypeStone;
+
+  int multBonus = 6;
+  if (divinity.divinity == DivinityFighter) multBonus = 8;
+
   for (float i = 0.0f; i < 2 * PI; i +=  PI / 16)
   {
     BoltEntity* bolt = new BoltEntity(TILE_WIDTH * 1.5f + rand() % (MAP_WIDTH - 3) * TILE_WIDTH ,
                                       TILE_HEIGHT * 1.5f + rand() % (MAP_HEIGHT - 3) * TILE_HEIGHT,
-                                      boltLifeTime, ShotTypeStandard, 0);
-    bolt->setDamages(8 + divinity.level * 8);
+                                      boltLifeTime, shotType, 0);
+    bolt->setDamages(8 + divinity.level * multBonus);
     float velx = 400 * cos(i);
     float vely = 400 * sin(i);
     bolt->setVelocity(Vector2D(velx, vely));
@@ -1847,6 +1873,23 @@ void PlayerEntity::divineFury()
     bolt->setViscosity(1.0f);
     bolt->setLifetime(-1.0f);
     bolt->setGoThrough(true);
+  }
+}
+
+void PlayerEntity::divineIce()
+{
+  EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX)
+    {
+      EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
+      enemy->setSpecialState(SpecialStateIce, true, 10.0f, 0.1f, 0.0f);
+    }
   }
 }
 
@@ -1880,17 +1923,25 @@ bool PlayerEntity::triggerDivinityBefore()
 
       SoundManager::getInstance().playSound(SOUND_OM);
       divinity.interventions ++;
-
       divineHeal(hpMax / 3);
-      if (r == 1)
-        divineProtection(5.0f, 0.8f);
-      else
-        divineFury();
-
+      if (r == 1) divineProtection(5.0f, 0.8f);
+      else divineFury();
       game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
-
       return true;
+      break;
+    }
+    case DivinityIce:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
 
+      SoundManager::getInstance().playSound(SOUND_OM);
+      divinity.interventions ++;
+      divineHeal(hpMax / 3);
+      if (r == 1) divineIce();
+      else divineFury();
+      game().makeColorEffect(X_GAME_COLOR_BLUE, 0.45f);
+      return true;
       break;
     }
     }
