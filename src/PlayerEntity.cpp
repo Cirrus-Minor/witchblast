@@ -1893,6 +1893,43 @@ void PlayerEntity::divineIce()
   }
 }
 
+void PlayerEntity::divineRepulse()
+{
+  EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX)
+    {
+      EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
+
+      enemy->giveRecoil(true, Vector2D(x, y).vectorTo(Vector2D(enemy->getX(), enemy->getY()), 700.0f), 2.0f);
+    }
+  }
+
+  // effect
+  for (int i = 0; i < 40; i++)
+  {
+    SpriteEntity* spriteRock = new SpriteEntity(
+                           ImageManager::getInstance().getImage(IMAGE_CYCLOP),
+                            x, y, 64, 64);
+    spriteRock->setZ(1000.0f);
+    spriteRock->setImagesProLine(20);
+    spriteRock->setFrame(rand() % 2 == 0 ? 38 : 58);
+    spriteRock->setSpin(-100 + rand()%200);
+    spriteRock->setVelocity(Vector2D(400 + rand()%400));
+    spriteRock->setFading(true);
+    spriteRock->setAge(-0.8f);
+    spriteRock->setLifetime(2.0f);
+    spriteRock->setType(ENTITY_EFFECT);
+  }
+  game().makeShake(1.0f);
+  SoundManager::getInstance().playSound(SOUND_EARTHQUAKE);
+}
+
 void PlayerEntity::divineProtection(float duration, float armorBonus)
 {
   setSpecialState(DivineStateProtection, true, 4.0f, 0.8f, 0.0f);
@@ -1938,9 +1975,38 @@ bool PlayerEntity::triggerDivinityBefore()
       SoundManager::getInstance().playSound(SOUND_OM);
       divinity.interventions ++;
       divineHeal(hpMax / 3);
-      if (r == 1) divineIce();
-      else divineFury();
-      game().makeColorEffect(X_GAME_COLOR_BLUE, 0.45f);
+      if (r == 1)
+      {
+        divineIce();
+      }
+      else
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_BLUE, 0.45f);
+      }
+      return true;
+      break;
+    }
+    case DivinityStone:
+    {
+      int r = rand() % 3;
+      r = 1;
+      divineProtection(10.0f, 0.5f);
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      divinity.interventions ++;
+      divineHeal(hpMax / 3);
+      if (r == 1)
+      {
+        divineRepulse();
+        game().makeColorEffect(X_GAME_COLOR_BROWN, 3.0f);
+      }
+      else
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_BROWN, 0.5f);
+      }
       return true;
       break;
     }
