@@ -328,10 +328,12 @@ divinity_fighter_1#Lord of the fighters and the strong.
 divinity_fighter_2#He appreciates monsters and titans falling in fight.
 divinity_ice_0#Mister Snow
 divinity_ice_1#Divinity of the coldness.
-divinity_ice_2#He appreciates ice magic.
+divinity_ice_2#He appreciates the use of ice.
 divinity_stone_0#Gaya
 divinity_stone_1#Divinity of the stone and earth.
-divinity_stone_2#He appreciates stone magic.
+divinity_stone_2#He appreciates the use of stone.
+divinity_intervention#intervenes in your favour.
+divinity_gift#grants you a gift.
 item_floor_map#Dungeon Map
 item_floor_map_desc#Reveals the map of the current floor
 item_alcohol#Absinthe
