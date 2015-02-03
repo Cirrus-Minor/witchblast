@@ -332,8 +332,10 @@ divinity_ice_2#He appreciates the use of ice.
 divinity_stone_0#Gaya
 divinity_stone_1#Divinity of the stone and earth.
 divinity_stone_2#He appreciates the use of stone.
-divinity_intervention#intervenes in your favour.
-divinity_gift#grants you a gift.
+divinity_intervention_0#Divine intervention
+divinity_intervention_1#intervenes in your favour.
+divinity_gift_0#Divine gift
+divinity_gift_1#grants you a gift.
 item_floor_map#Dungeon Map
 item_floor_map_desc#Reveals the map of the current floor
 item_alcohol#Absinthe
