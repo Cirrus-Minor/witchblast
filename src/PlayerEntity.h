@@ -508,6 +508,9 @@ class PlayerEntity : public BaseCreatureEntity
     int fireDamages;
     float fireVelocity;
     float fireDelay;
+    float fireAnimationDelay;
+    float fireAnimationDelayMax;
+    int fireAnimationDirection;
     float currentFireDelay;
     float randomFireDelay;
     float hiccupDelay;

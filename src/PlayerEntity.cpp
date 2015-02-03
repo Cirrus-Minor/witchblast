@@ -47,12 +47,14 @@ const int yHalo[10][3] =
 };
 
 PlayerEntity::PlayerEntity(float x, float y)
-  : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 42, 80)
+  : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 64, 96)
 {
   currentFireDelay = -1.0f;
   randomFireDelay = -1.0f;
   invincibleDelay = -1.0f;
   divineInterventionDelay = -1.0f;
+  fireAnimationDelay = -1.0f;
+  fireAnimationDelayMax = 0.5f;
 
   canFirePlayer = true;
   type = ENTITY_PLAYER;
@@ -96,7 +98,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   firingDirection = 5;
   facingDirection = 2;
 
-  sprite.setOrigin(21, 60);
+  sprite.setOrigin(32, 80);
 
   protection.active = false;
   armor = 0.0f;
@@ -448,6 +450,7 @@ void PlayerEntity::animate(float delay)
   }
 
   if (divineInterventionDelay > 0.0f) divineInterventionDelay -= delay;
+  if (fireAnimationDelay > 0.0f) fireAnimationDelay -= delay;
 
   // unlocking animation
   else if (playerStatus == playerStatusUnlocking || playerStatus == playerStatusPraying)
@@ -472,7 +475,14 @@ void PlayerEntity::animate(float delay)
   if (firingDirection != 5)
     facingDirection = firingDirection;
 
-  if (isMoving() || firingDirection != 5)
+  // find the frame
+  if  (firingDirection != 5)
+  {
+    if (fireAnimationDelay < 0.0f)
+      fireAnimationDelay = fireAnimationDelayMax;
+    fireAnimationDirection = firingDirection;
+  }
+  else if (isMoving())
   {
     frame = ((int)(age * 7.0f)) % 4;
     if (frame == 3) frame = 1;
@@ -534,7 +544,7 @@ void PlayerEntity::animate(float delay)
   {
     if (invincibleDelay >= 0.0f) invincibleDelay -= delay;
   }
-  z = y + 17;
+  z = y + 4;
 }
 
 void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
@@ -601,67 +611,8 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  // idle ?
-  if (idleAge >= 4.0 && idleAge <= 5.0)
-  {
-    if (isPoisoned()) sprite.setColor(sf::Color(180, 255, 180, 255));
-    int faceFrame = (5.0f - idleAge) / 0.2f;
-    if (faceFrame == 3) faceFrame = 1;
-    else if (faceFrame == 4) faceFrame = 0;
-    if (spriteDy == 0)
-    {
-      sf::Sprite faceSprite;
-      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
-      faceSprite.setPosition(x - 21, y - 60);
-      faceSprite.setTextureRect(sf::IntRect( faceFrame * width, 0 , width, height / 2));
-      app->draw(faceSprite);
-    }
-    else if (spriteDy == 1)
-    {
-      sf::Sprite faceSprite;
-      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
-      faceSprite.setPosition(x - 21, y - 60);
-      if (isMirroring)
-        faceSprite.setTextureRect(sf::IntRect( faceFrame * width + width, height / 2, -width, height / 2));
-      else
-        faceSprite.setTextureRect(sf::IntRect( faceFrame * width, height / 2, width, height / 2));
-      app->draw(faceSprite);
-    }
-    sprite.setColor(savedColor);
-  }
-  else if (idleAge >= 9.0 && idleAge <= 10.2)
-  {
-    if (isPoisoned()) sprite.setColor(sf::Color(180, 255, 180, 255));
-    int faceFrame = (10.2f - idleAge) / 0.2f;
-    if (faceFrame == 5) SoundManager::getInstance().playSound(SOUND_YAWN);
-    if (faceFrame == 3) faceFrame = 2;
-    else if (faceFrame == 4) faceFrame = 1;
-    else if (faceFrame == 5) faceFrame = 0;
-    if (spriteDy == 0)
-    {
-      sf::Sprite faceSprite;
-      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
-      faceSprite.setPosition(x - 21, y - 60);
-      faceSprite.setTextureRect(sf::IntRect( faceFrame * width, height, width, height / 2));
-      app->draw(faceSprite);
-    }
-    else if (spriteDy == 1)
-    {
-      sf::Sprite faceSprite;
-      faceSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_FACES));
-      faceSprite.setPosition(x - 21, y - 60);
-      if (isMirroring)
-        faceSprite.setTextureRect(sf::IntRect( faceFrame * width + width, height + height / 2, -width, height / 2));
-      else
-        faceSprite.setTextureRect(sf::IntRect( faceFrame * width, height + height / 2, width, height / 2));
-      app->draw(faceSprite);
-    }
-    sprite.setColor(savedColor);
-  }
-  else if (idleAge > 11.0f) idleAge -= 11.0f;
-
-  // hat
-  if (equip[EQUIP_MAGICIAN_HAT] && playerStatus != playerStatusDead)
+  // boots
+  if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
@@ -670,18 +621,8 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  // boots
-  if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
-  {
-    if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (6 + frame) * width + width, spriteDy * height, -width, height));
-    else
-      sprite.setTextureRect(sf::IntRect( (6 + frame) * width, spriteDy * height, width, height));
-    app->draw(sprite);
-  }
-
   // staff
-  int frameDx = equip[EQUIP_MAHOGANY_STAFF] ? 27 : 3;
+  int frameDx = equip[EQUIP_MAHOGANY_STAFF] ? 6 : 3;
   if (isMirroring)
     sprite.setTextureRect(sf::IntRect( (frameDx + frame) * width + width, spriteDy * height, -width, height));
   else
@@ -691,18 +632,18 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
   if (equip[EQUIP_BLOOD_SNAKE])
   {
     if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (30 + frame) * width + width, spriteDy * height, -width, height));
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width + width, spriteDy * height, -width, height));
     else
-      sprite.setTextureRect(sf::IntRect( (30 + frame) * width, spriteDy * height, width, height));
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
 
   if (equip[EQUIP_REAR_SHOT])
   {
     if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (33 + frame) * width + width, spriteDy * height, -width, height));
+      sprite.setTextureRect(sf::IntRect( (30 + frame) * width + width, spriteDy * height, -width, height));
     else
-      sprite.setTextureRect(sf::IntRect( (33 + frame) * width, spriteDy * height, width, height));
+      sprite.setTextureRect(sf::IntRect( (30 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
 
@@ -740,11 +681,21 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     }
 
     if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (33 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (33 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setColor(savedColor);
+  }
+
+  // hat
+  if (equip[EQUIP_MAGICIAN_HAT] && playerStatus != playerStatusDead)
+  {
+    if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (36 + frame) * width + width, spriteDy * height, -width, height));
     else
       sprite.setTextureRect(sf::IntRect( (36 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
-    sprite.setColor(savedColor);
   }
 }
 
@@ -793,7 +744,28 @@ void PlayerEntity::render(sf::RenderTarget* app)
   spriteDy = 0;
   isMirroring = false;
 
-  if (firingDirection == 5)
+  if (idleAge > 7.8f)
+  {
+    idleAge -= 7.8f;
+    facingDirection = 2;
+  }
+  else if (idleAge >= 7.5)
+  {
+    spriteDy = 8;
+    frame = 2;
+  }
+  else if (idleAge >= 7.0)
+  {
+    spriteDy = 8;
+    frame = 1;
+  }
+  else if (idleAge >= 6.0)
+  {
+    spriteDy = 8;
+    frame = 0;
+  }
+
+  else if (fireAnimationDelay < 0.0f)
   {
     if (facingDirection == 6) spriteDy = 1;
     else if (facingDirection == 8) spriteDy = 2;
@@ -805,22 +777,24 @@ void PlayerEntity::render(sf::RenderTarget* app)
   }
   else
   {
-    if (firingDirection == 2) spriteDy = 4;
-    else if (firingDirection == 6) spriteDy = 5;
-    else if (firingDirection == 8) spriteDy = 6;
-    else if (firingDirection == 4)
+    if (fireAnimationDirection == 2) spriteDy = 3;
+    else if (fireAnimationDirection == 6) spriteDy = 4;
+    else if (fireAnimationDirection == 8) spriteDy = 5;
+    else if (fireAnimationDirection == 4)
     {
-      spriteDy = 5;
+      spriteDy = 4;
       isMirroring = true;
     }
-
-    if (!isMoving()) spriteDy += 3;
+    if (fireAnimationDelay < fireAnimationDelayMax * 0.25f) frame = 1;
+    else if (fireAnimationDelay < fireAnimationDelayMax * 0.5f) frame = 2;
+    else if (fireAnimationDelay < fireAnimationDelayMax * 0.75f) frame = 1;
+    else frame = 0;
   }
 
   if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking  || playerStatus == playerStatusPraying)
   {
-    spriteDy = 3;
-    frame = ((int)(age * 4.0f)) % 4;
+    spriteDy = 6;
+    frame = ((int)(age * 10.0f)) % 4;
     if (frame == 3) frame = 1;
   }
 
@@ -897,7 +871,7 @@ void PlayerEntity::calculateBB()
 {
   boundingBox.left = (int)x - 10;
   boundingBox.width = 20;
-  boundingBox.top = (int)y - 16;
+  boundingBox.top = (int)y - 29;
   boundingBox.height =  33;
 }
 
@@ -1231,7 +1205,11 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 
   bool divinityInvoked = false;
   if (hp - hurtParam.damage <= hpMax / 4)
+  {
     divinityInvoked = triggerDivinityBefore();
+    //if (divinityInvoked)
+      // TODO
+  }
 
   if (invincibleDelay <= 0.0f || hurtParam.hurtingType == ShotTypeDeterministic)
   {

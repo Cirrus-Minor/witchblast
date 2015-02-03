@@ -78,7 +78,6 @@ const float DEATH_CERTIFICATE_DELAY = 3.5f;
 
 enum item_images {
   IMAGE_PLAYER_BASE,
-  IMAGE_PLAYER_FACES,
   IMAGE_BOLT,
   IMAGE_TILES,
   IMAGE_RAT,
@@ -146,7 +145,6 @@ enum sound_resources {
   SOUND_BONUS,
   SOUND_DRINK,
   SOUND_EAT,
-  SOUND_YAWN,
   SOUND_PLAYER_HIT,
   SOUND_PLAYER_DIE,
   SOUND_ENNEMY_DYING,
@@ -548,6 +546,8 @@ enum EnumMessages
   MsgInfoDivFighter,
   MsgInfoDivIce,
   MsgInfoDivStone,
+  MsgInfoDivIntervention,
+  MsgInfoDivGift,
 
   MsgTutoBasics,
   MsgTutoTips,

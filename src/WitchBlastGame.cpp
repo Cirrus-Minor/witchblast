@@ -192,7 +192,7 @@ WitchBlastGame::WitchBlastGame():
   // loading resources
   const char *const images[] =
   {
-    "media/player_base.png",   "media/player_faces.png",
+    "media/player_base.png",
     "media/bolt.png",          "media/tiles01.png",
     "media/rat.png",           "media/minimap.png",
     "media/items.png",         "media/items_equip.png",
@@ -233,8 +233,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/door_closing.ogg",   "media/sound/door_opening.ogg",
     "media/sound/chest_opening.ogg",  "media/sound/impact.ogg",
     "media/sound/bonus.ogg",          "media/sound/drink.ogg",
-    "media/sound/eat.ogg",            "media/sound/yawn.ogg",
-    "media/sound/player_hit.ogg",
+    "media/sound/eat.ogg",            "media/sound/player_hit.ogg",
     "media/sound/player_die.ogg",     "media/sound/ennemy_dying.ogg",
     "media/sound/coin.ogg",           "media/sound/pay.ogg",
     "media/sound/wall_impact.ogg",    "media/sound/big_wall_impact.ogg",
@@ -2615,7 +2614,7 @@ void WitchBlastGame::refreshMap()
     if (currentMap->getRoomType() == roomTypeMerchant)
     {
       new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                    (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
+                    (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT,
                     0);
     }
   }
@@ -3012,7 +3011,7 @@ void WitchBlastGame::generateMap()
     item2->setMerchandise(true);
 
     new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                  (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
+                  (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT,
                   0);
 
     currentMap->setCleared(true);
@@ -3474,6 +3473,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   {
     ItemEntity* newItem = new ItemEntity(getItemSpell(), x, y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+    if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setViscosity(0.96f);
 
     ItemEntity* healthItem1 = new ItemEntity(ItemHealthVerySmall, x, y);
@@ -3487,6 +3487,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   else
   {
     ItemEntity* newItem = new ItemEntity(ItemBonusHealth, x, y);
+    if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
 
