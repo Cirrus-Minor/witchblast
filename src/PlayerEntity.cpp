@@ -791,11 +791,22 @@ void PlayerEntity::render(sf::RenderTarget* app)
     else frame = 0;
   }
 
-  if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking  || playerStatus == playerStatusPraying)
+  if (playerStatus == playerStatusAcquire || playerStatus == playerStatusUnlocking)
   {
     spriteDy = 6;
     frame = ((int)(age * 10.0f)) % 4;
     if (frame == 3) frame = 1;
+  }
+  else if (playerStatus == playerStatusPraying)
+  {
+    spriteDy = 7;
+    frame = ((int)(age * 10.0f)) % 4;
+    if (frame == 3) frame = 1;
+    if (statusTimer < WORSHIP_DELAY * 0.1f) frame = 0;
+    else if (statusTimer < WORSHIP_DELAY * 0.2f) frame = 1;
+    else if (statusTimer < WORSHIP_DELAY * 0.7f) frame = 2;
+    else if (statusTimer < WORSHIP_DELAY * 0.85f) frame = 1;
+    else frame = 0;
   }
 
   if (playerStatus == playerStatusDead)
@@ -2055,6 +2066,7 @@ void PlayerEntity::worship(enumDivinityType id)
   divinity.piety = 0;
   divinity.level = 1;
   divinity.percentsToNextLevels = 0.0f;
+  facingDirection = 2;
 
   // text
   float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
