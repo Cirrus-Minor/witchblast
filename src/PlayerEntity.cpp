@@ -55,6 +55,8 @@ PlayerEntity::PlayerEntity(float x, float y)
   divineInterventionDelay = -1.0f;
   fireAnimationDelay = -1.0f;
   fireAnimationDelayMax = 0.5f;
+  spellAnimationDelay = -1.0f;
+  spellAnimationDelayMax = 0.8f;
 
   canFirePlayer = true;
   type = ENTITY_PLAYER;
@@ -451,6 +453,7 @@ void PlayerEntity::animate(float delay)
 
   if (divineInterventionDelay > 0.0f) divineInterventionDelay -= delay;
   if (fireAnimationDelay > 0.0f) fireAnimationDelay -= delay;
+  if (spellAnimationDelay > 0.0f) spellAnimationDelay -= delay;
 
   // unlocking animation
   else if (playerStatus == playerStatusUnlocking || playerStatus == playerStatusPraying)
@@ -764,8 +767,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
     spriteDy = 8;
     frame = 0;
   }
-
-  else if (fireAnimationDelay < 0.0f)
+  else if (fireAnimationDelay < 0.0f && spellAnimationDelay < 0.0f)
   {
     if (facingDirection == 6) spriteDy = 1;
     else if (facingDirection == 8) spriteDy = 2;
@@ -774,6 +776,15 @@ void PlayerEntity::render(sf::RenderTarget* app)
       spriteDy = 1;
       isMirroring = true;
     }
+  }
+  else if (spellAnimationDelay >= 0.0f)
+  {
+    spriteDy = 7;
+    if (spellAnimationDelay < fireAnimationDelayMax * 0.1f) frame = 0;
+    else if (spellAnimationDelay < fireAnimationDelayMax * 0.2f) frame = 1;
+    else if (spellAnimationDelay < fireAnimationDelayMax * 0.7f) frame = 2;
+    else if (spellAnimationDelay < fireAnimationDelayMax * 0.85f) frame = 1;
+    else frame = 0;
   }
   else
   {
@@ -811,12 +822,16 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
   if (playerStatus == playerStatusDead)
   {
-    int deathframe = (int)(deathAge / 0.35f);
+    //int deathframe = (int)(deathAge / 0.35f);
+    frame = (int)(deathAge / 0.35f);
+    if (frame > 6) frame = 6;
+    spriteDy = 9;
+    /*
     switch (deathframe)
     {
     case 0:
       frame = 0;
-      spriteDy = 10;
+
       break;
     case 1:
       frame = 1;
@@ -834,7 +849,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
       frame = 1;
       spriteDy = 11;
       break;
-    }
+    }*/
     sprite.setTextureRect(sf::IntRect( frame * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
@@ -2188,12 +2203,15 @@ void PlayerEntity::castSpell()
       castFireball();
       break;
     case SpellFreeze:
+      spellAnimationDelay = spellAnimationDelayMax;
       castFreeze();
       break;
     case SpellEarthquake:
+      spellAnimationDelay = spellAnimationDelayMax;
       castEarthquake();
       break;
     case SpellProtection:
+      spellAnimationDelay = spellAnimationDelayMax;
       castProtection();
       break;
     case SpellWeb:
