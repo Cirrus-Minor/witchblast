@@ -26,7 +26,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 
 
   type = ENTITY_ENEMY_BOSS;
-  bloodColor = BloodRed;
+  bloodColor = BloodNone; // stones don't bleed
   dyingFrame = 5;
   deathFrame = FRAME_CORPSE_CYCLOP;
   agonizingSound = SOUND_CYCLOP_DIE;
@@ -239,7 +239,7 @@ void CyclopsEntity::animate(float delay)
   else if (state == 1)
   {
     isMirroring = game().getPlayer()->getX() > x;
-    frame = 3;
+    frame = timer > 0.5f ? 4 : 3;
   }
   else if (state == 2)
   {
