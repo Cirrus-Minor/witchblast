@@ -569,6 +569,16 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
   app->draw(sprite);
   sprite.setColor(savedColor);
 
+  // boots
+  if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
   if (equip[EQUIP_MAGICIAN_ROBE])
   {
     if (isMirroring)
@@ -611,16 +621,6 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
       sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
     else
       sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
-    app->draw(sprite);
-  }
-
-  // boots
-  if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
-  {
-    if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
-    else
-      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
 
@@ -747,10 +747,9 @@ void PlayerEntity::render(sf::RenderTarget* app)
   spriteDy = 0;
   isMirroring = false;
 
-  if (idleAge > 7.8f)
+  if (idleAge > 8.5f)
   {
-    idleAge -= 7.8f;
-    facingDirection = 2;
+    idleAge -= 8.5f;
   }
   else if (idleAge >= 7.5)
   {
@@ -766,6 +765,11 @@ void PlayerEntity::render(sf::RenderTarget* app)
   {
     spriteDy = 8;
     frame = 0;
+  }
+  else if (idleAge >= 5.5f && facingDirection != 2)
+  {
+    facingDirection = 2;
+    idleAge -= 2.0f;
   }
   else if (fireAnimationDelay < 0.0f && spellAnimationDelay < 0.0f)
   {
