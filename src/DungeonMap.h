@@ -11,13 +11,15 @@ const int MAP_STAIRS_UP     =   39;
 const int MAP_DOOR_OPEN     =   49;
 const int MAP_WALL          =   70;
 const int MAP_DOOR          =   71;
+const int MAP_BIG_OBSTACLE  =   100;
+const int MAP_WALL_SPECIAL  =   74;
 
 // temple
 const int MAP_TEMPLE          =   50;
 const int MAP_TEMPLE_WALL     =   80;
 
 // shop
-const int MAP_SHOP_BEGIN      =   100;
+const int MAP_SHOP_BEGIN      =   71;
 const int MAP_SHOP_LEFT       = 0 + MAP_SHOP_BEGIN;
 const int MAP_SHOP            = 1 + MAP_SHOP_BEGIN;
 const int MAP_SHOP_RIGHT      = 2 + MAP_SHOP_BEGIN;
@@ -50,6 +52,8 @@ const int MAP_WALL_START_L  =   22 + MAP_WALL_BEGIN;
 const int MAP_WALL_START_M  =   23 + MAP_WALL_BEGIN;
 const int MAP_WALL_START_R  =   24 + MAP_WALL_BEGIN;
 const int MAP_WALL_X        =   29 + MAP_WALL_BEGIN;
+const int MAP_WALL_ALTERN   =   30 + MAP_WALL_BEGIN;
+const int MAP_WALL_SHOP     =   40 + MAP_WALL_BEGIN;
 
 const int MAP_GRID          =   29;
 const int MAP_HOLE          =   160;
@@ -169,6 +173,8 @@ class DungeonMap : public GameMap
     void restoreItems();
     void restoreSprites();
     void restoreChests();
+
+    void makePatternTile(int x, int y);
 };
 
 #endif // MAGICMAP_H

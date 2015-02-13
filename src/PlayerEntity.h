@@ -521,6 +521,7 @@ class PlayerEntity : public BaseCreatureEntity
     int criticalChance;
     float invincibleDelay;
     float divineInterventionDelay;
+    bool isRegeneration;
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;

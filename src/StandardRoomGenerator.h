@@ -253,7 +253,7 @@ void generateStandardRoom05()
   else if (random < 32)
   {
     game().getCurrentMap()->generateRoomWithoutHoles(2 + rand() % 2);
-    game().findPlaceMonsters(EnemyTypeWitch, 1 + rand() % 2);
+    game().findPlaceMonsters(EnemyTypeWitch, 2 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeWitchRed, 1 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeCauldron, 1);
   }

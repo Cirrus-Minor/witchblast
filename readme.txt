@@ -57,12 +57,13 @@ Features
 - chest and keys,
 - merchant,
 - spells with cooldown,
+- temples and divinities,
 - candy eye effects.
 
 Credits
 -------
 Seby: code and music 
-Vetea: 2D art
+Pierre "dejam0rt" Baron: 2D art
 R0d: particles system and multilingual support coding
 
 Music
@@ -88,6 +89,7 @@ Thanks
 --------
 Thanks to
 
+Vetea (for the v0.4.0 2D redesign)
 Sideous and Portoss01 (they provide me 2D art in earlier versions)
 Billx (who suggested me the title "Witch Blast")
 Mika Attila (for his "coding" contribution during the development)
@@ -98,11 +100,15 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next version
-- ADD Temple and divinities
+v0.4.5
+- ADD Temple (worship + donation)
+- Divinities (4)
+- Divinity powers and interventions
 - ADD Interaction key
 - ADD "level" objects
 - ADD New art and GUI
+- MOD Shop interaction
+- MOD New Key room
 
 v0.4.1
 - ADD Scores and hi-score screen

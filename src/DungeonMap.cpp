@@ -126,6 +126,17 @@ bool DungeonMap::isRightBlocking(int x, int y)
 bool DungeonMap::isWalkable(int x, int y)
 {
   if (!inMap(x, y)) return true;
+  if (roomType == roomTypeKey && !cleared)
+  {
+    int x0 = MAP_WIDTH / 2;
+    int y0 = MAP_HEIGHT / 2;
+    if (x == x0 - 1 && y >= y0 -1 && y <= y0 + 1)
+      return false;
+    else if (x == x0 + 1 && y >= y0 -1 && y <= y0 + 1)
+      return false;
+    else if (x == x0 && (y == y0 -1 || y == y0 + 1))
+      return false;
+  }
   return (map[x][y] < MAP_WALL);
 }
 
@@ -330,9 +341,6 @@ void DungeonMap::initRoom()
   for ( j = 1 ; j < height - 1 ; j++)
     for ( i = 1 ; i < width - 1 ; i++)
     {
-      //map[i][j] = 0;
-      //if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
-
       map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
       while (map[i][j] == map[i - 1][j] || map[i][j] == map[i][j - 1] || map[i][j] == map[i - 1][j - 1] || map[i][j] == map[i + 1][j - 1])
         map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
@@ -350,6 +358,65 @@ void DungeonMap::initRoom()
     if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y+1) > 0)
       map[x0][MAP_HEIGHT -1] = 0;
   }
+
+  // alternative floor
+  for (i = 0; i < 8; i++)
+  {
+    if (rand() % 2 > 0)
+    {
+      map[1 + rand() % (MAP_WIDTH - 2)][1 + rand() % (MAP_HEIGHT - 2)] = 20 + i;
+    }
+  }
+
+  // alternative walls
+  for (i = 0; i < 9; i++)
+  {
+    if (rand() % 2 > 0)
+    {
+      int xTile = 0;
+      int yTile = 0;
+      int horizontal = rand() % 2;
+      if (horizontal == 0)
+      {
+        yTile = rand() % 2 == 0 ? 0 : MAP_HEIGHT - 1;
+        xTile = 1 + rand() % 12;
+        if (xTile > 6) xTile++;
+      }
+      else
+      {
+        xTile = rand() % 2 == 0 ? 0 : MAP_WIDTH - 1;
+        yTile = 1 + rand() % 6;
+        if (yTile > 3) yTile++;
+      }
+      map[xTile][yTile] = i + MAP_WALL_ALTERN;
+    }
+  }
+  if (hasNeighbourUp() && rand() % 3 == 0)
+  {
+    map[x0 - 2][0] = 9 + MAP_WALL_ALTERN;
+    map[x0 + 2][0] = 9 + MAP_WALL_ALTERN;
+  }
+  if (hasNeighbourDown() && rand() % 3 == 0)
+  {
+    map[x0 - 2][MAP_HEIGHT - 1] = 9 + MAP_WALL_ALTERN;
+    map[x0 + 2][MAP_HEIGHT - 1] = 9 + MAP_WALL_ALTERN;
+  }
+  if (hasNeighbourLeft() && rand() % 3 == 0)
+  {
+    map[0][y0 - 2] = 9 + MAP_WALL_ALTERN;
+    map[0][y0 + 2] = 9 + MAP_WALL_ALTERN;
+  }
+  if (hasNeighbourRight() && rand() % 3 == 0)
+  {
+    map[MAP_WIDTH - 1][y0 - 2] = 9 + MAP_WALL_ALTERN;
+    map[MAP_WIDTH - 1][y0 + 2] = 9 + MAP_WALL_ALTERN;
+  }
+}
+
+void DungeonMap::makePatternTile(int x, int y)
+{
+  if (map[x][y] < 10) map[x][y] += 10;
+  else map[x][y] = 10;
 }
 
 void DungeonMap::initPattern(patternEnum n)
@@ -361,8 +428,7 @@ void DungeonMap::initPattern(patternEnum n)
     for ( i = 2 ; i < width - 2 ; i++)
       for ( j = 2 ; j < height - 2 ; j++)
       {
-        if ((i + j) % 2 == 1)
-          map[i][j] += 10;
+        if ((i + j) % 2 == 1) makePatternTile(i, j);
       }
   }
   if (n == PatternBigChecker)
@@ -370,8 +436,7 @@ void DungeonMap::initPattern(patternEnum n)
     for ( i = 1 ; i < width - 1 ; i++)
       for ( j = 1 ; j < height - 1 ; j++)
       {
-        if ((i + j) % 2 == 1)
-          map[i][j] += 10;
+        if ((i + j) % 2 == 1) makePatternTile(i, j);
       }
   }
   if (n == PatternBorder)
@@ -380,7 +445,7 @@ void DungeonMap::initPattern(patternEnum n)
       for ( j = 1 ; j < height - 1 ; j++)
       {
         if (i == 1 || j == 1 || i == width - 2 || j == height - 2)
-          map[i][j] += 10;
+          makePatternTile(i, j);
       }
   }
   if (n == PatternBigCircle)
@@ -389,7 +454,7 @@ void DungeonMap::initPattern(patternEnum n)
       for ( j = 2 ; j < height - 2 ; j++)
       {
         if (i == 2 || j == 2 || i == width - 3 || j == height - 3)
-          map[i][j] += 10;
+          makePatternTile(i, j);
       }
   }
   if (n == PatternSmallCircle || n == PatternSmallStar)
@@ -398,22 +463,22 @@ void DungeonMap::initPattern(patternEnum n)
       for ( j = 2 ; j < height - 2 ; j++)
       {
         if (i == 5 || i == 9 || j == 2 || j == height - 3)
-          map[i][j] += 10;
+          makePatternTile(i, j);
       }
   }
   if (n == PatternSmallStar)
   {
-    map[7][1] += 10;
-    map[7][height - 2] += 10;
-    map[4][4] += 10;
-    map[10][4] += 10;
+    makePatternTile(7, 1);
+    makePatternTile(7, height - 2);
+    makePatternTile(4, 4);
+    makePatternTile(10, 4);
   }
   if (n == PatternSmallDisc)
   {
     for ( i = 5 ; i < 10 ; i++)
       for ( j = 2 ; j < height - 2 ; j++)
       {
-        map[i][j] += 10;
+        makePatternTile(i, j);
       }
   }
 }
@@ -430,10 +495,10 @@ Vector2D DungeonMap::generateBonusRoom()
     else initPattern(PatternSmallStar);
   }
 
-  map[x0 - 1][y0 - 1] = MAP_WALL;
-  map[x0 - 1][y0 + 1] = MAP_WALL;
-  map[x0 + 1][y0 - 1] = MAP_WALL;
-  map[x0 + 1][y0 + 1] = MAP_WALL;
+  map[x0 - 1][y0 - 1] = MAP_WALL_SPECIAL;
+  map[x0 - 1][y0 + 1] = MAP_WALL_SPECIAL + 2;
+  map[x0 + 1][y0 - 1] = MAP_WALL_SPECIAL + 1;
+  map[x0 + 1][y0 + 1] = MAP_WALL_SPECIAL + 3;
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
@@ -525,6 +590,19 @@ Vector2D DungeonMap::generateMerchantRoom()
   map[x0 - 3][y0] = MAP_SHOP_LEFT;
   map[x0 + 3][y0] = MAP_SHOP_RIGHT;
 
+  if (!hasNeighbourUp())
+  {
+    map[x0 - 1][0] = MAP_WALL_SHOP;
+    map[x0][0] = MAP_WALL_SHOP + 1;
+    map[x0 + 1][0] = MAP_WALL_SHOP + 2;
+  }
+  else
+  {
+    map[x0 - 1][MAP_HEIGHT - 1] = MAP_WALL_SHOP +3;
+    map[x0][MAP_HEIGHT - 1] = MAP_WALL_SHOP + 4;
+    map[x0 + 1][MAP_HEIGHT - 1] = MAP_WALL_SHOP + 5;
+  }
+
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
 
@@ -534,12 +612,10 @@ Vector2D DungeonMap::generateKeyRoom()
   int x0 = MAP_WIDTH / 2;
   int y0 = MAP_HEIGHT / 2;
 
-  for (int i = x0 - 1; i <= x0 + 1; i++)
-    for (int j = y0 - 1; j <= y0 + 1; j++)
-      map[i][j] = MAP_WALL;
-
-  map[x0][y0] = 0;
-  map[x0][y0+1] = MAP_DOOR;
+  map[x0 - 1][y0 - 1] = MAP_WALL_SPECIAL;
+  map[x0 - 1][y0 + 1] = MAP_WALL_SPECIAL + 2;
+  map[x0 + 1][y0 - 1] = MAP_WALL_SPECIAL + 1;
+  map[x0 + 1][y0 + 1] = MAP_WALL_SPECIAL + 3;
 
   if (rand() % 3 == 0)
   {
@@ -637,21 +713,15 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     if (rand() % 3 == 0) initPattern(PatternBorder);
 
     r = 1 + rand() % 3;
-    for (i = x0 - r; i <= x0 + r; i++)
-      for (j = y0 - 1; j <= y0 + 1; j++)
-        map[i][j] = MAP_WALL;
+    generateCarpet(x0 - r, y0 - 1, 1 + 2 * r, 3, 100);
   }
   if (type == 3)
   {
     // blocks in the corners
-    for (i = 2; i <= 3; i++)
-      for (j = 2; j <= 3; j++)
-      {
-        map[i][MAP_HEIGHT - 1 - j] = MAP_WALL;
-        map[i][j] = MAP_WALL;
-        map[MAP_WIDTH - 1 - i][MAP_HEIGHT - 1 - j] = MAP_WALL;
-        map[MAP_WIDTH - 1 - i][j] = MAP_WALL;
-      }
+    generateCarpet(2, 2, 2, 2, 100);
+    generateCarpet(2, MAP_HEIGHT - 4, 2, 2, 100);
+    generateCarpet(MAP_WIDTH - 4, MAP_HEIGHT - 4, 2, 2, 100);
+    generateCarpet(MAP_WIDTH - 4, 2, 2, 2, 100);
   }
   if (type == ROOM_TYPE_CHECKER)
   {

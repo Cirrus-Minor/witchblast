@@ -329,7 +329,7 @@ void CyclopsEntity::render(sf::RenderTarget* app)
   EnemyEntity::render(app);
 
   // stones
-  if (state == 1)
+  if (state == 1 && timer < 0.5f)
   {
     if (nextRockMissile == 0) // small rock
     {

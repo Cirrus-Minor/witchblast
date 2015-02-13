@@ -60,7 +60,7 @@ merchant_speech_1#Welcome to the Pawn'n'Witches shop!
 merchant_speech_2#Have a look at our merchandise!
 enemy_butcher#Pigman Butcher
 enemy_giant_slime#Giant Slime
-enemy_cyclops#Barbarian Cyclops
+
 enemy_rat_king#Wererat King
 enemy_giant_spider#Giant Spider
 item_copper#Copper coin
@@ -93,7 +93,7 @@ item_rage_amulet#Rage Amulet
 item_rage_amulet_desc#Retaliates
 item_displacement_gloves#Displacement Gloves
 item_displacement_gloves_desc#Player's velocity impacts bolt's one
-item_staff#Mahogany Staff
+
 item_staff_desc#Increases bolt's speed and damage
 item_fairy#Fairy Lilly
 item_fairy_desc#Helps you in the dungeon
@@ -113,15 +113,15 @@ item_fairy_ice#Fairy Natasha
 item_fairy_ice_desc#Helps you in the dungeon
 item_ring_ice#Sapphire Ring
 item_ring_ice_desc#Increases ice power
-item_ring_stone#Obsidian Ring
+
 item_ring_stone_desc#Increases stone power
-item_ring_lightning#Opal Ring
+
 item_ring_lightning_desc#Increases lightning power
-item_ring_illusion#Quartz Ring
+
 item_ring_illusion_desc#Increases illusion power
 item_spell_triple#Spell : Triple bolts
 item_spell_triple_desc#Shoots three bolts
-item_brooch_finesse#Brooch of finesse
+
 item_brooch_finesse_desc#Chance to critical shot (x2)
 item_fairy_fire#Fairy Alicia
 item_fairy_fire_desc#Helps you in the dungeon
@@ -211,7 +211,7 @@ msg_butcher_2#I hope I won't end up in sausages..."
 msg_giant_slime_0#The Giant Slime
 msg_giant_slime_1#"I am green, huge and I stink.
 msg_giant_slime_2#What I am ?"
-msg_cyclops_0#The Barbarian Cyclops
+
 msg_cyclops_1#"How did it go in the room?
 msg_cyclops_2#It's bigger and larger than the gate!"
 msg_wererat_0#The Wererat
@@ -272,7 +272,7 @@ enemy_type_cauldron#a cauldron
 enemy_type_bubble#a bubble
 enemy_type_boss_butcher#the Pigman Butcher
 enemy_type_boss_slime_giant#the Giant Slime
-enemy_type_boss_cyclops#the Barbarian Cyclops
+
 enemy_type_boss_rat_king#the Wererat King
 enemy_type_boss_spider_giant#the Giant Spider
 enemy_type_green_rat#a green rat
@@ -315,9 +315,9 @@ msg_tuto_temple_0#Tutorial: Temple
 msg_tuto_temple_1#The temple is the place where you can worship a divinity or donate.
 msg_tuto_temple_2#Divinities can help you and provide bonus.
 key_interact#interact
-interact_worship#Press [interact] to worship
-interact_shop#Press [interact] to buy
-interact_donate#Press [interact] to donate 10 gold
+interact_worship#Press [interact] (standard: space)  to worship
+interact_shop#Press [interact] (standard: space)  to buy
+interact_donate#Press [interact] (standard: space) to donate 10 gold
 interact_donate_fail#(not enough gold)
 worshipping#You're now a worshipper of
 divinity_healer_0#Pomonos the Righteous
@@ -340,6 +340,15 @@ item_floor_map#Dungeon Map
 item_floor_map_desc#Reveals the map of the current floor
 item_alcohol#Absinthe
 item_alcohol_desc#temporarily makes damage stronger
+
+item_staff#Ebony Staff
+item_ring_stone#Quartz Ring
+item_ring_lightning#Amethyst Ring
+item_ring_illusion#Obsidian Ring
+item_brooch_finesse#Fake Archmage beard
+enemy_cyclops#Stone Cyclops
+msg_cyclops_0#The Stone Cyclops
+enemy_type_boss_cyclops#the Stone Cyclops
 
 [french]
 start_new_game#Nouvelle partie
@@ -405,7 +414,7 @@ merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
 merchant_speech_2#Jetez un oeil à nos produits !
 enemy_butcher#Boucher porcin
 enemy_giant_slime#Slime géant
-enemy_cyclops#Cyclope barbare
+enemy_cyclops#Cyclope de pierre
 enemy_rat_king#Roi des Rats-garous
 enemy_giant_spider#Araignée géante
 enemy_francky#La Chose
@@ -440,7 +449,7 @@ item_rage_amulet#Amulette de rage
 item_rage_amulet_desc#Contre-attaque
 item_displacement_gloves#Gants de déplacement
 item_displacement_gloves_desc#La vitesse du porteur impacte la trajectoire
-item_staff#Bâton d'acajou
+item_staff#Bâton d'ébène
 item_staff_desc#Augmente les dégâts et la vitesse de tir
 item_fairy#La fée Lilly
 item_fairy_desc#Vous aide dans le donjon
@@ -460,15 +469,15 @@ item_fairy_ice#La fée Natacha
 item_fairy_ice_desc#Vous aide dans le donjon
 item_ring_ice#Anneau de saphir
 item_ring_ice_desc#Augmente le pouvoir de glace
-item_ring_stone#Anneau d'obsidienne
+item_ring_stone#Anneau de quartz
 item_ring_stone_desc#Augmente le pouvoir de pierre
-item_ring_lightning#Anneau d'opale
+item_ring_lightning#Anneau d'améthyste
 item_ring_lightning_desc#Augmente le pouvoir de foudre
-item_ring_illusion#Anneau de quartz
+item_ring_illusion#Anneau d'obsidienne
 item_ring_illusion_desc#Augmente le pouvoir d'illusion
 item_spell_triple#Manuel de Triple-tir
 item_spell_triple_desc#Tire trois projectiles
-item_brooch_finesse#Broche de finesse
+item_brooch_finesse#Fake Archmage beard
 item_brooch_finesse_desc#Chance de dégâts critiques (x2)
 item_fairy_fire#La fée Alicia
 item_fairy_fire_desc#Vous aide dans le donjon
@@ -558,7 +567,7 @@ msg_butcher_2#J'espère ne pas terminer en saucisses..."
 msg_giant_slime_0#Le Slime géant
 msg_giant_slime_1#"Je suis vert, énorme et je pue.
 msg_giant_slime_2#Qui suis-je ?"
-msg_cyclops_0#Le Cyclope barbare
+msg_cyclops_0#Le Cyclope de pierre
 msg_cyclops_1#"Comment est-il entré dans cette pièce ?
 msg_cyclops_2#Il est plus large que les portes !"
 msg_wererat_0#Le Roi des Rats-garous
@@ -567,28 +576,28 @@ msg_giant_spider_before_0#Une pièce vide
 msg_giant_spider_before_1#"Y'a quelqu'un ? "
 msg_giant_spider_after_0#L'Araignée géante
 msg_giant_spider_after_1#"Je DETESTE les araignées"
-msg_tuto_intro_0#Tutorial: Bases
+msg_tuto_intro_0#Tutoriel: Bases
 msg_tuto_intro_1#Utilisez ZQSD (standard) pour se déplacer dans le donjon.
 msg_tuto_intro_2#Tirez avec les flèches (standard).
-msg_tuto_items_0#Tutorial: Objets
+msg_tuto_items_0#Tutoriel: Objets
 msg_tuto_items_1#Les objets améliorent le personnage ou lui octroient de nouveaux pouvoirs.
 msg_tuto_items_2#trouvez ou achetez-en autant que possible.
-msg_tuto_heal_0#Tutorial: Santé
+msg_tuto_heal_0#Tutoriel: Santé
 msg_tuto_heal_1#Vous avez perdu des points de vie.
 msg_tuto_heal_2#Trouvez des moyens de guérir avant de mourir.
-msg_tuto_shops_0#Tutorial: Boutique
+msg_tuto_shops_0#Tutoriel: Boutique
 msg_tuto_shops_1#Vous pouvez trouver plusieurs boutiques dans le donjon.
 msg_tuto_shops_2#Ici, vous dépenserez votre argent en objets et nourriture.
-msg_tuto_boss_door_0#Tutorial: Porte du Boss
+msg_tuto_boss_door_0#Tutoriel: Porte du Boss
 msg_tuto_boss_door_1#D'ici, vous apercevez une porte dorée verrouillée.
 msg_tuto_boss_door_2#Elle protège le Boss, trouvez la clef adéquate pour l'ouvrir.
-msg_tuto_challenge_door_0#Tutorial: Salle de Challenge
+msg_tuto_challenge_door_0#Tutoriel: Salle de Challenge
 msg_tuto_challenge_door_1#Regardez la porte décorée ? C'est une salle de challenge.
 msg_tuto_challenge_door_2#Vous pouvez y gagner des objets de valeur mais attention !
-msg_tuto_shots_0#Tutorial: Types de tir
+msg_tuto_shots_0#Tutoriel: Types de tir
 msg_tuto_shots_1#Vous avez trouvé un nouveau type de tir.
 msg_tuto_shots_2#Appuyez sur [sélection de tir] (standard: tab) pour changer de type de tir.
-msg_tuto_spell_0#Tutorial: Magie
+msg_tuto_spell_0#Tutoriel: Magie
 msg_tuto_spell_1#Vous avez trouvé un nouveau sort.
 msg_tuto_spell_2#Appuyez sur la touche de sort (standard: espace) pour le lancer.
 msg_francky_0#La... Chose
@@ -619,7 +628,7 @@ enemy_type_cauldron#un chaudron
 enemy_type_bubble#une bulle
 enemy_type_boss_butcher#le Boucher porcin
 enemy_type_boss_slime_giant#le Slime géant
-enemy_type_boss_cyclops#le Cyclope barbare
+enemy_type_boss_cyclops#le Cyclope de pierre
 enemy_type_boss_rat_king#le Roi des Rats-garous
 enemy_type_boss_spider_giant#l'Araignée géante
 enemy_type_green_rat#un rat vert
@@ -656,6 +665,36 @@ volume_sound_desc#Utiliser les flèches gauche/droite pour modifier le volume
 volume_music#Volume de la musique
 certificate_capture#Appuyez sur [F1] pour faire une copie du certificat dans un PNG
 certificate_saved#Enregistré sous
+
+msg_tuto_temple_0#Tutoriel: Temple
+msg_tuto_temple_1#Au temple, vous pouvez vénérer des divinités et faire des donations.
+msg_tuto_temple_2#Les divinités vous apporte leur aide et des bonus.
+key_interact#interaction
+interact_worship#Presser [interaction] (standard: E) pour vénérer
+interact_shop#Presser [interaction] (standard: E) pour acheter
+interact_donate#Press [interaction] (standard: E) pour donner 10 pièces
+interact_donate_fail#(pas assez d'argent)
+worshipping#Vous êtes maintenant un disciple de
+divinity_healer_0#Pomonos le Juste
+divinity_healer_1#Gardien de la vertue et protecteur des faibles.
+divinity_healer_2#Il apprécie les dons, la souffrance, et le combat contre le mal.
+divinity_fighter_0#Tello le Puissant
+divinity_fighter_1#Seigneur des guerriers et de la force.
+divinity_fighter_2#Il aime voir tomber les monstres et les titans.
+divinity_ice_0#Mister Snow
+divinity_ice_1#Divinité du Froid.
+divinity_ice_2#Il apprécie l'usage de la glace.
+divinity_stone_0#Gaya
+divinity_stone_1#Divinité de la Terre et de la Pierre.
+divinity_stone_2#Il apprécie l'usage de la pierre.
+divinity_intervention_0#Intervention divine
+divinity_intervention_1#intervient en votre faveur.
+divinity_gift_0#Présent divin
+divinity_gift_1#vous offre un présent.
+item_floor_map#Carte du donjon
+item_floor_map_desc#Révèle la carte de cet étage
+item_alcohol#Absinthe
+item_alcohol_desc#Vous rend temporairement plus fort
 
 [german]
 start_new_game#Neues Spiel starten

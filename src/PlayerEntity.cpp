@@ -18,32 +18,30 @@
 
 #define SPIRAL_STAIRCASE
 
-const int xHalo[10][3] =
+const int xHalo[9][3] =
 {
-  { 6, 6, 6},
-  { 34, 34, 32},
-  { 34, 36, 37},
-  { 5, 5, 5},
-  { 14, 14, 14},
-  { 32, 34, 37},
-  { 27, 26, 6},
-  { 14, 14, 14},
-  { 32, 34, 37},
-  { 27, 26, 6}
+  { 13, 13, 18},
+  { 47, 45, 37},
+  { 48, 47, 44},
+  { 15, 15, 16},
+  { 45, 45, 45},
+  { 46, 44, 42},
+  { 13, 13, 13},
+  { 13, 24, 36},
+  { 13, 17, 13}
 };
 
-const int yHalo[10][3] =
+const int yHalo[9][3] =
 {
-  { 13, 13, 19},
-  { 12, 12, 12},
-  { 9, 10, 12},
-  { 13, 8, 6},
-  { 6, 8, 10},
-  { 4, 7, 10},
-  { 4, 10, 14},
-  { 6, 8, 10},
-  { 4, 7, 10},
-  { 4, 10, 14}
+  { 26, 25, 25},
+  { 23, 23, 23},
+  { 23, 24, 25},
+  { 31, 32, 34},
+  { 23, 23, 23},
+  { 23, 22, 21},
+  { 26, 26, 26},
+  { 26, 15, 6},
+  { 25, 27, 25}
 };
 
 PlayerEntity::PlayerEntity(float x, float y)
@@ -54,9 +52,9 @@ PlayerEntity::PlayerEntity(float x, float y)
   invincibleDelay = -1.0f;
   divineInterventionDelay = -1.0f;
   fireAnimationDelay = -1.0f;
-  fireAnimationDelayMax = 0.5f;
+  fireAnimationDelayMax = 0.4f;
   spellAnimationDelay = -1.0f;
-  spellAnimationDelayMax = 0.8f;
+  spellAnimationDelayMax = 0.7f;
 
   canFirePlayer = true;
   type = ENTITY_PLAYER;
@@ -113,6 +111,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   divinity.level = 0;
   divinity.interventions = 0;
   divinity.percentsToNextLevels = 0.0f;
+  isRegeneration = false;
 
   itemToBuy = NULL;
 }
@@ -163,6 +162,7 @@ float PlayerEntity::getLightCone()
   }
   else if (divineInterventionDelay > 0.0f)
   {
+    if (isRegeneration) return -1.0f;
     float result = 1.0f;
     if (divineInterventionDelay < 0.25f)
       result = 4 * divineInterventionDelay;
@@ -452,8 +452,16 @@ void PlayerEntity::animate(float delay)
   }
 
   if (divineInterventionDelay > 0.0f) divineInterventionDelay -= delay;
-  if (fireAnimationDelay > 0.0f) fireAnimationDelay -= delay;
-  if (spellAnimationDelay > 0.0f) spellAnimationDelay -= delay;
+  if (fireAnimationDelay > 0.0f)
+  {
+    fireAnimationDelay -= delay;
+    if (fireAnimationDelay <= 0.0f) fireAnimationDelay = -1.0f;
+  }
+  if (spellAnimationDelay > 0.0f)
+  {
+    spellAnimationDelay -= delay;
+    if (spellAnimationDelay <= 0.0f) spellAnimationDelay = -1.0f;
+  }
 
   // unlocking animation
   else if (playerStatus == playerStatusUnlocking || playerStatus == playerStatusPraying)
@@ -471,6 +479,32 @@ void PlayerEntity::animate(float delay)
   }
   else
     testSpriteCollisions();
+
+  // key room collision
+  if (game().getCurrentMap()->getRoomType() == roomTypeKey && !game().getCurrentMap()->isCleared())
+  {
+    sf::IntRect col1;
+    col1.width = 198;
+    col1.height = 68;
+    col1.top = 254;
+    col1.left = 380;
+
+    sf::IntRect col2;
+    col2.width = 68;
+    col2.height = 198;
+    col2.top = 189;
+    col2.left = 445;
+
+    if (boundingBox.intersects(col1) || boundingBox.intersects(col2))
+    {
+      recoil.active = true;
+      recoil.stun = true;
+      recoil.velocity = Vector2D(GAME_WIDTH / 2, GAME_HEIGHT /2).vectorTo(Vector2D(x, y), 650.0f);
+      recoil.timer = 0.4f;
+
+      game().activateKeyRoomEffect();
+    }
+  }
 
   collidingDirection = 0;
   BaseCreatureEntity::animate(delay);
@@ -514,10 +548,10 @@ void PlayerEntity::animate(float delay)
     game().moveToOtherMap(2);
 #ifdef SPIRAL_STAIRCASE
   else if (playerStatus == playerStatusPlaying
-           && game().getCurrentMap()->getRoomType() == roomTypeExit && y < TILE_HEIGHT * 0.41)
+           && game().getCurrentMap()->getRoomType() == roomTypeExit && y < TILE_HEIGHT * 0.6f)
   {
     playerStatus = playerStatusStairs;
-    velocity.y = creatureSpeed / 12; //0.0f;
+    velocity.y = creatureSpeed / 12;
     velocity.x = -creatureSpeed / 3;
     facingDirection = 4;
 
@@ -704,7 +738,7 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
 
 void PlayerEntity::renderHalo(sf::RenderTarget* app)
 {
-  if (frame > 2 || spriteDy > 9) return;
+  if (frame > 2 || spriteDy > 8) return;
   // gems
   if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeFire)  && playerStatus != playerStatusDead)
   {
@@ -719,20 +753,21 @@ void PlayerEntity::renderHalo(sf::RenderTarget* app)
       fade = 200 + rand() % 40;
 
     if (getShotType() == ShotTypeIce)
-      sprite.setTextureRect(sf::IntRect(3 * width, 10 * height, 20, 20));
+      sprite.setTextureRect(sf::IntRect(448, 864, 20, 20));
     else if (getShotType() == ShotTypeLightning)
-      sprite.setTextureRect(sf::IntRect(3 * width + 20, 10 * height, 20, 20));
+      sprite.setTextureRect(sf::IntRect(448 + 20, 864, 20, 20));
     else if (getShotType() == ShotTypeFire)
-      sprite.setTextureRect(sf::IntRect(3 * width + 40, 10 * height, 20, 20));
+      sprite.setTextureRect(sf::IntRect(448 + 40, 864, 20, 20));
 
     sprite.setColor(sf::Color(255, 255, 255, fade));
     if (isMirroring)
-      sprite.setPosition(x - 10 + 42 - xHalo[spriteDy][frame], y - 10 + yHalo[spriteDy][frame]);
+      sprite.setPosition(x - 10 + 64 - xHalo[spriteDy][frame], y - 10 + yHalo[spriteDy][frame]);
     else
       sprite.setPosition(x - 10 + xHalo[spriteDy][frame], y - 10 + yHalo[spriteDy][frame]);
 
     sf::RenderStates r;
     r.blendMode = sf::BlendAdd;
+
     app->draw(sprite, r);
 
     sprite.setPosition(x, y);
@@ -771,7 +806,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
     facingDirection = 2;
     idleAge -= 2.0f;
   }
-  else if (fireAnimationDelay < 0.0f && spellAnimationDelay < 0.0f)
+  else if (fireAnimationDelay <= 0.0f && spellAnimationDelay <= 0.0f)
   {
     if (facingDirection == 6) spriteDy = 1;
     else if (facingDirection == 8) spriteDy = 2;
@@ -784,10 +819,10 @@ void PlayerEntity::render(sf::RenderTarget* app)
   else if (spellAnimationDelay >= 0.0f)
   {
     spriteDy = 7;
-    if (spellAnimationDelay < fireAnimationDelayMax * 0.1f) frame = 0;
-    else if (spellAnimationDelay < fireAnimationDelayMax * 0.2f) frame = 1;
-    else if (spellAnimationDelay < fireAnimationDelayMax * 0.7f) frame = 2;
-    else if (spellAnimationDelay < fireAnimationDelayMax * 0.85f) frame = 1;
+    if (spellAnimationDelay < spellAnimationDelayMax * 0.1f) frame = 0;
+    else if (spellAnimationDelay < spellAnimationDelayMax * 0.2f) frame = 1;
+    else if (spellAnimationDelay < spellAnimationDelayMax * 0.7f) frame = 2;
+    else if (spellAnimationDelay < spellAnimationDelayMax * 0.85f) frame = 1;
     else frame = 0;
   }
   else
@@ -800,9 +835,10 @@ void PlayerEntity::render(sf::RenderTarget* app)
       spriteDy = 4;
       isMirroring = true;
     }
-    if (fireAnimationDelay < fireAnimationDelayMax * 0.25f) frame = 1;
-    else if (fireAnimationDelay < fireAnimationDelayMax * 0.5f) frame = 2;
-    else if (fireAnimationDelay < fireAnimationDelayMax * 0.75f) frame = 1;
+    if (fireAnimationDelay < fireAnimationDelayMax * 0.2f) frame = 0;
+    else if (fireAnimationDelay < fireAnimationDelayMax * 0.4f) frame = 1;
+    else if (fireAnimationDelay < fireAnimationDelayMax * 0.6f) frame = 2;
+    else if (fireAnimationDelay < fireAnimationDelayMax * 0.8f) frame = 1;
     else frame = 0;
   }
 
@@ -826,66 +862,104 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
   if (playerStatus == playerStatusDead)
   {
-    //int deathframe = (int)(deathAge / 0.35f);
     frame = (int)(deathAge / 0.35f);
     if (frame > 6) frame = 6;
     spriteDy = 9;
-    /*
-    switch (deathframe)
-    {
-    case 0:
-      frame = 0;
 
-      break;
-    case 1:
-      frame = 1;
-      spriteDy = 10;
-      break;
-    case 2:
-      frame = 2;
-      spriteDy = 10;
-      break;
-    case 3:
-      frame = 0;
-      spriteDy = 11;
-      break;
-    default:
-      frame = 1;
-      spriteDy = 11;
-      break;
-    }*/
     sprite.setTextureRect(sf::IntRect( frame * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
   else
   {
     // shadow
-    sprite.setTextureRect(sf::IntRect( 2 * width, 11 * height, width, height));
-    app->draw(sprite);
+    //sprite.setTextureRect(sf::IntRect( 2 * width, 11 * height, width, height));
+    //app->draw(sprite);
 
     renderHalo(app);
     renderPlayer(app);
 
     // shield
-    if (specialState[DivineStateProtection].active)
+    if (specialState[DivineStateProtection].active || protection.active)
     {
-      sf::Color savedColor = sprite.getColor();
-      sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (specialState[DivineStateProtection].timer < 2.0f ? 25 : 10)) * 30 ));
-      sprite.setTextureRect(sf::IntRect( 3 * width, 11 * height, width, height));
-      sprite.setScale(1.5f, 1.5f);
+      int firstFrame = 8;
+      if (specialState[DivineStateProtection].active && divinity.divinity == DivinityStone) firstFrame = 16;
+      float timer = specialState[DivineStateProtection].active ? specialState[DivineStateProtection].timer : protection.timer;
+
+      sprite.setTextureRect(sf::IntRect( firstFrame * width, 9 * height, width, height));
       app->draw(sprite);
-      sprite.setScale(1.0f, 1.0f);
+
+      sf::Color savedColor = sprite.getColor();
+      sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (timer < 2.0f ? 25 : 10)) * 30 ));
+      sprite.setTextureRect(sf::IntRect( (firstFrame + 1) * width, 9 * height, width, height));
+      app->draw(sprite);
       sprite.setColor(savedColor);
     }
-    else if (protection.active)
+
+    // divine field
+    if (divinity.level > 1)
     {
-      sf::Color savedColor = sprite.getColor();
-      sprite.setColor(sf::Color(255, 255, 255, 100 + cos(age * (protection.timer < 2.0f ? 25 : 10)) * 30 ));
-      sprite.setTextureRect(sf::IntRect( 3 * width, 11 * height, width, height));
-      sprite.setScale(1.5f, 1.5f);
-      app->draw(sprite);
-      sprite.setScale(1.0f, 1.0f);
-      sprite.setColor(savedColor);
+      bool displayField = false;
+      int fieldFrame;
+      int fieldFade;
+
+      switch (divinity.divinity)
+      {
+      case DivinityHealer:
+        {
+          displayField = true;
+          fieldFrame = 10;
+          fieldFade = 58 * (divinity.level - 1);
+          break;
+        }
+      case DivinityFighter:
+        {
+          displayField = true;
+          fieldFrame = 12;
+          fieldFade = 58 * (divinity.level - 1);
+          break;
+        }
+      case DivinityIce:
+        {
+          if (divinity.level > 2)
+          {
+            displayField = true;
+            fieldFrame = 14;
+            fieldFade = 80 * (divinity.level - 2);
+          }
+          break;
+        }
+      case DivinityStone:
+        {
+          if (divinity.level > 2)
+          {
+            displayField = true;
+            fieldFrame = 16;
+            fieldFade = 80 * (divinity.level - 2);
+          }
+          break;
+        }
+      }
+
+      if (displayField)
+      {
+        sf::Color savedColor = sprite.getColor();
+        sprite.setColor(sf::Color(255, 255, 255, fieldFade ));
+        sprite.setTextureRect(sf::IntRect( fieldFrame * width, 9 * height, width, height));
+        app->draw(sprite);
+
+        if (divinity.divinity != DivinityStone && divinity.divinity != DivinityHealer)
+        {
+          sprite.setColor(sf::Color(255, 255, 255, 2 + fieldFade / 2 + cos(age * 15) * fieldFade / 2 ));
+          sprite.setTextureRect(sf::IntRect( (fieldFrame + 1) * width, 9 * height, width, height));
+          app->draw(sprite);
+          sprite.setColor(savedColor);
+        }
+        if (divinity.divinity == DivinityHealer && divineInterventionDelay > 0.0f && isRegeneration)
+        {
+          sprite.setTextureRect(sf::IntRect( (fieldFrame + 1) * width, 9 * height, width, height));
+          app->draw(sprite);
+        }
+      }
     }
   }
 
@@ -1061,7 +1135,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
 
   }
 
-  BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, boltType, shotLevel);
+  BoltEntity* bolt = new BoltEntity(x, y - 20, boltLifeTime, boltType, shotLevel);
   int boltDamage = fireDamages;
   if (criticalChance > 0)
     if (rand()% 100 < criticalChance)
@@ -1234,11 +1308,11 @@ int PlayerEntity::hurt(StructHurt hurtParam)
   if (playerStatus == playerStatusDead) return false;
 
   bool divinityInvoked = false;
-  if (hp - hurtParam.damage <= hpMax / 4)
+  if (hp - hurtParam.damage <= hpMax / 4 && divinity.divinity >= 0)
   {
     divinityInvoked = triggerDivinityBefore();
-    //if (divinityInvoked)
-      // TODO
+    if (divinityInvoked)
+      game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
   }
 
   if (invincibleDelay <= 0.0f || hurtParam.hurtingType == ShotTypeDeterministic)
@@ -1263,9 +1337,10 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 
       // divinity
       offerHealth(oldHp - hp);
-      if (!divinityInvoked && hp <= hpMax / 4)
+      if (!divinityInvoked && hp <= hpMax / 4 && divinity.divinity >= 0)
       {
         triggerDivinityAfter();
+        game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
       }
 
       return true;
@@ -1377,7 +1452,7 @@ void PlayerEntity::onClearRoom()
     if (divinity.level > 1 && hp < hpMax)
     {
       divineInterventionDelay = WORSHIP_DELAY / 2;
-
+      isRegeneration = true;
       if (divinity.level >= 5) heal(4);
       else if (divinity.level >= 4) heal(3);
       else if (divinity.level >= 3) heal(2);
@@ -1395,6 +1470,9 @@ void PlayerEntity::computePlayer()
   float fireDamagesBonus = 1.0f;
   armor = 0.0f;
   criticalChance = 0;
+
+  for (int i = 0; i < NB_RESISTANCES; i++)
+    resistance[i] = ResistanceStandard;
 
   if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
@@ -1429,6 +1507,18 @@ void PlayerEntity::computePlayer()
         fireDamagesBonus += 0.25f;
       else if (divinity.level >= 2)
         fireDamagesBonus += 0.125f;
+      break;
+    }
+  case (DivinityIce):
+    {
+      if (divinity.level >= 5) resistance[ResistanceFrozen] = ResistanceVeryHigh;
+      if (divinity.level >= 4) resistance[ResistanceIce] = ResistanceHigh;
+      break;
+    }
+  case (DivinityStone):
+    {
+      if (divinity.level >= 5) resistance[ResistanceRecoil] = ResistanceVeryHigh;
+      if (divinity.level >= 4) resistance[ResistanceStone] = ResistanceHigh;
       break;
     }
   }
@@ -1771,11 +1861,15 @@ void PlayerEntity::donate(int n)
       float yItem = GAME_HEIGHT * 0.8f;
       new ItemEntity(itemType, xItem, yItem);
       SoundManager::getInstance().playSound(SOUND_OM);
+      divineInterventionDelay = WORSHIP_DELAY / 2;
+      isRegeneration = false;
       for (int i = 0; i < 8; i++)
       {
         generateStar(sf::Color::White, xItem, yItem);
         generateStar(sf::Color(255, 255, 210), xItem, yItem);
       }
+
+      game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivGift));
     }
   }
 }
@@ -1856,7 +1950,8 @@ void PlayerEntity::offerHealth(int lostHp)
 
 void PlayerEntity::offerChallenge()
 {
-  addPiety(30);
+  if (divinity.divinity >= 0)
+    addPiety(30);
 }
 
 void PlayerEntity::divineFury()
@@ -1949,6 +2044,7 @@ void PlayerEntity::divineHeal(int hpHealed)
   if (hp > hpMax) hp = hpMax;
   specialState[SpecialStatePoison].active = false;
   divineInterventionDelay = WORSHIP_DELAY;
+  isRegeneration = false;
 }
 
 bool PlayerEntity::triggerDivinityBefore()
@@ -2051,6 +2147,8 @@ void PlayerEntity::addPiety(int n)
 {
   int oldLevel = divinity.level;
   divinity.piety += n;
+  if (divinity.piety > DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL - 1])
+    divinity.piety = DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL - 1];
   int i = 0;
   while (divinity.piety > DIVINITY_LEVEL_TRESHOLD[i] && i < MAX_DIVINITY_LEVEL) i++;
   divinity.level = i + 1;
@@ -2069,7 +2167,9 @@ void PlayerEntity::addPiety(int n)
 
   if (divinity.level > oldLevel)
   {
-    // TODO
+    SoundManager::getInstance().playSound(SOUND_OM);
+    divineInterventionDelay = WORSHIP_DELAY / 2;
+    isRegeneration = false;
   }
 }
 
@@ -2120,7 +2220,7 @@ void PlayerEntity::loadDivinity(int id, int piety, int level, int interventions)
   divinity.piety = piety;
   divinity.level = level;
   divinity.interventions = interventions;
-  addPiety(0);
+  if (id >= 0) addPiety(0);
 }
 
 // MAGIC
