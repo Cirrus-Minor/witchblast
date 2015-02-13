@@ -17,15 +17,11 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
     this->setFrame(itemType);
   this->setType(ENTITY_ARTIFACT_DESCRIPTION);
 
-  float x0 = MAP_WIDTH * TILE_WIDTH * 0.5f - ARTEFACT_RECT_WIDTH * 0.5f;
+  rectangle.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEM_DESCRIPTION));
+  float x0 = 20 + MAP_WIDTH * TILE_WIDTH * 0.5f - rectangle.getTextureRect().width * 0.5f;
+  rectangle.setPosition(x0, ARTEFACT_POS_Y);
 
-  rectangle.setSize(sf::Vector2f(ARTEFACT_RECT_WIDTH, ARTEFACT_RECT_HEIGHT));
-  rectangle.setPosition(sf::Vector2f(x0, ARTEFACT_POS_Y));
-  rectangle.setFillColor(sf::Color(236, 222, 194, 255));
-  rectangle.setOutlineThickness(ARTEFACT_BORDER);
-  rectangle.setOutlineColor(sf::Color(201, 145, 95,255));
-
-  this->x = x0 + 40.0f;
+  this->x = x0;
   this->y = 500.0f;
   sprite.setScale(3.5f, 3.5f);
 
@@ -76,7 +72,6 @@ void ArtefactDescriptionEntity::render(sf::RenderTarget* app)
     sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
 
     sprite.setPosition(x, y);
-    sprite.setRotation(angle);
 
     if (isFading)
     {
@@ -88,8 +83,18 @@ void ArtefactDescriptionEntity::render(sf::RenderTarget* app)
         sprite.setScale(getFade(), getFade());
     }
 
+    sf::Color fadeColor = sf::Color::White;
+    if (age > lifetime - 0.5f)
+    {
+      int fade = 500 * (lifetime - age);
+      if (fade < 0) fade = 0;
+      fadeColor = sf::Color(255, 255, 255, fade);
+      rectangle.setColor(fadeColor);
+      sprite.setColor(fadeColor);
+    }
+
     app->draw(rectangle);
-    game().write(artefactName, 22, 315.0f, ARTEFACT_POS_Y + 15.0f, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-    game().write(artefactDescription, 19, 315.0f, ARTEFACT_POS_Y + 55.0f, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+    game().write(artefactName, 19, 470.0f, ARTEFACT_POS_Y + 15.0f, ALIGN_CENTER, fadeColor, app, 0, 0);
+    game().write(artefactDescription, 17, 470.0f, ARTEFACT_POS_Y + 55.0f, ALIGN_CENTER, fadeColor, app, 0, 0);
     app->draw(sprite);
 }

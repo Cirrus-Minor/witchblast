@@ -128,6 +128,32 @@ void BoltEntity::animate(float delay)
 
   testWallsCollision = true;
   CollidingSpriteEntity::animate(delay);
+
+  // key room collision
+  if (game().getCurrentMap()->getRoomType() == roomTypeKey && !game().getCurrentMap()->isCleared())
+  {
+    sf::IntRect col1;
+    col1.width = 198;
+    col1.height = 68;
+    col1.top = 254;
+    col1.left = 380;
+
+    sf::IntRect col2;
+    col2.width = 68;
+    col2.height = 198;
+    col2.top = 189;
+    col2.left = 445;
+
+    if (boundingBox.intersects(col1) || boundingBox.intersects(col2))
+    {
+      game().activateKeyRoomEffect();
+      if (x < 390) collideMapRight();
+      else if (x > 565) collideMapLeft();
+      else if (y < 265) collideMapBottom();
+      else collideMapTop();
+    }
+  }
+
   testWallsCollision = false;
   calculateBB();
 
@@ -144,7 +170,14 @@ void BoltEntity::animate(float delay)
 
 void BoltEntity::render(sf::RenderTarget* app)
 {
-  CollidingSpriteEntity::render(app);
+  if (boltType == ShotTypeBomb)
+  {
+    sprite.setTextureRect(sf::IntRect(8 * width, 0, width * 2, height * 2));
+    sprite.setPosition(x - width / 2, y - height);
+    app->draw(sprite);
+  }
+  else
+    CollidingSpriteEntity::render(app);
   if (game().getShowLogical())
   {
     displayBoundingBox(app);

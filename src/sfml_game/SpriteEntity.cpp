@@ -59,6 +59,11 @@ void SpriteEntity::setColor(sf::Color color)
   sprite.setColor(sf::Color(color.r, color.g, color.b, color.a));
 }
 
+void SpriteEntity::setTexture(sf::Texture* image)
+{
+  sprite.setTexture(*image);
+}
+
 void SpriteEntity::setShrinking(bool isShrinking)
 {
   setShrinking(isShrinking, 1.0f, 1.0f);

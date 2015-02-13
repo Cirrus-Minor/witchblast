@@ -20,14 +20,14 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.4.1";
+const std::string APP_VERSION =   "0.4.5";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
 const std::string SAVE_DATA_FILE =  "data/data.sav";
 const std::string HISCORES_FILE =  "data/scores.dat";
 
-const std::string SAVE_VERSION =  "SAVE_0.4.0";
+const std::string SAVE_VERSION =  "SAVE_0.4.1";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
@@ -76,7 +76,9 @@ const float FADE_OUT_DELAY = 1.0f;
 const float EXPLOSION_DELAY = 2.0f;
 const float DEATH_CERTIFICATE_DELAY = 3.5f;
 
-enum item_images {
+const float KeyRoomFXDelay = 2.0f;
+
+enum enum_images {
   IMAGE_PLAYER_BASE,
   IMAGE_BOLT,
   IMAGE_TILES,
@@ -126,12 +128,23 @@ enum item_images {
 
   IMAGE_PNJ,
   IMAGE_FAIRY,
+  IMAGE_KEY_AREA,
 
   IMAGE_UI_LIFE,
   IMAGE_UI_MANA,
   IMAGE_UI_SPELLS,
   IMAGE_UI_MESSAGE,
   IMAGE_UI_TOP_LAYER,
+
+  IMAGE_FOG,
+  IMAGE_TITLE_ANIM,
+  IMAGE_SPLATTER,
+  IMAGE_WITCH_INTRO,
+
+  IMAGE_ITEM_DESCRIPTION,
+  IMAGE_DEATH_CERTIFICATE,
+
+  NB_IMAGES
 };
 
 enum sound_resources {
@@ -228,7 +241,10 @@ enum sound_resources {
   SOUND_FRANCKY_DYING,
   SOUND_OM,
   SOUND_GLASS,
-  SOUND_HICCUP
+  SOUND_HICCUP,
+  SOUND_SPLATCH,
+  SOUND_INTRO_WITCH,
+  SOUND_FORCE_FIELD,
 };
 
 enum corpses_ressources{
@@ -339,7 +355,7 @@ const std::string divinityLabel[NB_DIVINITY]
 };
 const int MAX_DIVINITY_LEVEL = 5;
 const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =
-  { 100, 250, 450, 700, 1000};
+  { 100, 300, 500, 900, 1400};
 
 // entity type
 const int ENTITY_PLAYER = 1;

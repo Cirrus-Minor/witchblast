@@ -124,8 +124,7 @@ void ChestEntity::open()
 
   if (chestType == ChestBasic)
   {
-    // TODO
-    int r = rand()% 50;
+    int r = rand()% 35;
     if (r == 0 && !game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP))
     {
       // map
@@ -134,7 +133,6 @@ void ChestEntity::open()
       if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
       newItem->setViscosity(0.96f);
     }
-
     else if (r == 1 && !game().getPlayer()->isEquiped(EQUIP_ALCOHOL))
     {
       // alcohol
@@ -155,9 +153,7 @@ void ChestEntity::open()
         if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
         newItem->setViscosity(0.96f);
       }
-
     }
-
 
     // trap !
     if (game().getLevel() >= 4)

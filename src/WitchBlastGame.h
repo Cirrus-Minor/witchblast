@@ -76,8 +76,7 @@ const std::string creditsCode[]  =
 /** Credits: 2D artists */
 const std::string credits2D[]  =
 {
-  "Vetea",
-  "Pierre",
+  "Pierre \"dejam0rt\" Baron",
   "END"
 };
 /** Credits: Sound */
@@ -396,6 +395,8 @@ public:
   void addLifeBarToDisplay(std::string label, int hp, int hpMax);
 
   void revealFloor();
+
+  void activateKeyRoomEffect();
 
 protected:
   /*!
@@ -881,6 +882,7 @@ private:
   StructSaveInFight saveInFight;  /**< Data for "in fight" game saving */
 
   SpriteEntity* introSprites[8];
+  int introState;
   int introSoundState;
 
   std::vector <StructScore> scores;
@@ -895,6 +897,8 @@ private:
     int id;
     std::string label;
   } interaction;
+
+  void enableAA(bool enable);
 };
 
 /*!

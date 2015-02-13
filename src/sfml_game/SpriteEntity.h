@@ -39,6 +39,7 @@ public:
   void setImagesProLine(int n);
   void setScale(float scx, float scy);
   void setColor(sf::Color color);
+  void setTexture(sf::Texture* image);
 
   void setRenderAdd();
 

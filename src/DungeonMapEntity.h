@@ -3,6 +3,7 @@
 
 #include "sfml_game/GameEntity.h"
 #include "sfml_game/TileMapEntity.h"
+#include "DungeonMap.h"
 
 struct displayEntityStruct
 {
@@ -39,6 +40,8 @@ public:
 
   std::vector <displayEntityStruct> getBlood();
   std::vector <displayEntityStruct> getCorpses();
+
+  void activateKeyRoomEffect();
 
 protected:
 
@@ -77,6 +80,14 @@ private:
   };
 
   sf::Sprite overlaySprite;
+  roomTypeEnum roomType;
+
+  struct structKeyRoomFX
+  {
+    float delay;
+    int amplitude;
+    bool isBlinking;
+  } keyRoomEffect;
 };
 
 class DungeonMapEntityPost : public GameEntity

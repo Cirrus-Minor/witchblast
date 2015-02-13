@@ -1,3 +1,5 @@
+#include <iostream>
+#include <sstream>
 #include "WitchBlastGame.h"
 #include "DungeonMapEntity.h"
 #include "Constants.h"
@@ -19,6 +21,8 @@ DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
   over->setType(0);
 
   overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
+  roomType = roomTypeStarting;
+  keyRoomEffect.delay = -1.0f;
 }
 
 void DungeonMapEntity::animate(float delay)
@@ -57,7 +61,7 @@ void DungeonMapEntity::animate(float delay)
         if (game().getParameters().bloodSpread && blood[i].frame < 12)
         {
           if (blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y > 80
-            && rand() % 4 == 0)
+              && rand() % 4 == 0)
           {
             addBlood(blood[i].x, blood[i].y, blood[i].frame, blood[i].scale);
             blood[i].scale *= 0.85f;
@@ -146,6 +150,17 @@ void DungeonMapEntity::animate(float delay)
     }
   }
   if (moving) computeCorpsesVertices();
+
+  if (game().getCurrentMap()->getRoomType() == roomTypeKey && !game().getCurrentMap()->isCleared())
+  {
+    keyRoomEffect.delay -= delay;
+    if (keyRoomEffect.delay <= 0.0f)
+    {
+      keyRoomEffect.delay = KeyRoomFXDelay;
+      keyRoomEffect.amplitude = 120 + rand() % 100;
+      keyRoomEffect.isBlinking = false;
+    }
+  }
 }
 
 void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float delay, float viscosity)
@@ -260,12 +275,37 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
           tile.setTexture(*ImageManager::getInstance().getImage(IMAGE_TILES));
           tile.setPosition(i * TILE_WIDTH, j * TILE_HEIGHT);
           tile.setTextureRect(sf::IntRect((game().getCurrentMap()->getTile(i, j) % 10) * TILE_WIDTH,
-                               (1 + game().getCurrentMap()->getTile(i, j) / 10) * TILE_HEIGHT,
-                               TILE_WIDTH, TILE_HEIGHT));
+                                          (1 + game().getCurrentMap()->getTile(i, j) / 10) * TILE_HEIGHT,
+                                          TILE_WIDTH, TILE_HEIGHT));
           int fade = 127 + 127 * (cosf(6.0f * game().getAbsolutTime()));
           tile.setColor(sf::Color(255, 255, 255, fade));
           app->draw(tile);
         }
+  }
+  else if (game().getCurrentMap()->getRoomType() == roomTypeKey && !game().getCurrentMap()->isCleared())
+  {
+    int fade = 0;
+    if (keyRoomEffect.isBlinking)
+    {
+      fade = (int)(25.0f * game().getAbsolutTime()) % 2 == 0 ? 0 : 255;
+    }
+    else
+    {
+      if (keyRoomEffect.delay > KeyRoomFXDelay / 2)
+        fade = keyRoomEffect.amplitude - keyRoomEffect.amplitude * (keyRoomEffect.delay - KeyRoomFXDelay / 2) / KeyRoomFXDelay * 2;
+      else
+        fade = keyRoomEffect.amplitude - keyRoomEffect.amplitude * (KeyRoomFXDelay / 2 - keyRoomEffect.delay) / KeyRoomFXDelay * 2;
+    }
+
+    sf::Sprite tiles;
+    tiles.setTexture(*ImageManager::getInstance().getImage(IMAGE_KEY_AREA));
+    tiles.setPosition((MAP_WIDTH / 2 - 1) * TILE_WIDTH, (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT);
+    tiles.setTextureRect(sf::IntRect(0, 0, 3 * TILE_WIDTH, 3 * TILE_HEIGHT));
+    app->draw(tiles);
+
+    tiles.setColor(sf::Color(255, 255, 255, fade));
+    tiles.setTextureRect(sf::IntRect(3 * TILE_WIDTH, 0, 3 * TILE_WIDTH, 3 * TILE_HEIGHT));
+    app->draw(tiles);
   }
 }
 
@@ -335,16 +375,105 @@ void DungeonMapEntity::computeVertices()
 
       sf::Vertex* quad = &vertices[(i + j * gameMap->getWidth()) * 4];
 
-      quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
-      quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
-      quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
-      quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+      if (gameMap->getTile(i, j) >= MAP_WALL_ALTERN && gameMap->getTile(i, j) < 10 + MAP_WALL_ALTERN)
+      {
+        if (j == 0 && i < MAP_WIDTH / 2)
+        {
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (j == 0 && i > MAP_HEIGHT / 2)
+        {
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (j == MAP_HEIGHT - 1 && i < MAP_WIDTH / 2)
+        {
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (j == MAP_HEIGHT - 1 && i > MAP_WIDTH / 2)
+        {
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (i == 0 && j < MAP_HEIGHT / 2)
+        {
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (i == MAP_WIDTH - 1 && j < MAP_HEIGHT / 2)
+        {
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (i == MAP_WIDTH - 1 && j > MAP_HEIGHT / 2)
+        {
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (i == 0 && j > MAP_HEIGHT / 2)
+        {
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+      }
+      else
+      {
+        quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+        quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+        quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+      }
+
 
       quad[0].texCoords = sf::Vector2f(nx * tileBoxWidth, ny * tileBoxHeight);
       quad[1].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, ny * tileBoxHeight);
       quad[2].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, (ny + 1) * tileBoxHeight);
       quad[3].texCoords = sf::Vector2f(nx * tileBoxWidth, (ny + 1) * tileBoxHeight);
     }
+
+  if (roomType != game().getCurrentMap()->getRoomType())
+  {
+    std::stringstream ss;
+    roomType = game().getCurrentMap()->getRoomType();
+    switch (roomType)
+    {
+    case roomTypeChallenge:
+      ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_boss_01.png");
+      break;
+    case roomTypeTemple:
+      ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_temple.png");
+      break;
+    case roomTypeMerchant:
+      ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_shop.png");
+      break;
+    case roomTypeBoss:
+      ss << "media/overlay_boss_0" << game().getLevel() << ".png";
+      ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile(ss.str());
+      break;
+    default:
+      ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_00.png");
+      break;
+    }
+    overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
+  }
 }
 
 void DungeonMapEntity::computeBloodVertices()
@@ -432,7 +561,7 @@ displayEntityStruct& DungeonMapEntity::generateBlood(float x, float y, BaseCreat
   bloodEntity.velocity = Vector2D(rand()%250);
   bloodEntity.x = x;
   bloodEntity.y = y;
-  bloodEntity.scale = 1.0f + (rand() % 10) * 0.1f;
+  bloodEntity.scale = /*bloodColor == 0 ?*/ 1.0f + (rand() % 10) * 0.1f /*: 1.0f*/;
 
   bloodEntity.moving = true;
 
@@ -478,8 +607,14 @@ void DungeonMapEntity::addCorpse(float x, float y, int frame)
   {
     corpses.push_back(corpseEntity);
   }
-
 }
+
+void DungeonMapEntity::activateKeyRoomEffect()
+{
+  keyRoomEffect.isBlinking = true;
+  keyRoomEffect.delay = 1.0f;
+}
+
 /////////////////////////////////////////////////////////////////////////
 
 
