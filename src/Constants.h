@@ -78,7 +78,6 @@ const float DEATH_CERTIFICATE_DELAY = 3.5f;
 
 enum item_images {
   IMAGE_PLAYER_BASE,
-  IMAGE_PLAYER_FACES,
   IMAGE_BOLT,
   IMAGE_TILES,
   IMAGE_RAT,
@@ -121,9 +120,18 @@ enum item_images {
   IMAGE_MESSAGE_ICONS,
   IMAGE_INTRO,
   IMAGE_TITLE,
+  IMAGE_OVERLAY,
+  IMAGE_LIGHT_CONE,
+  IMAGE_DIVINITY,
 
   IMAGE_PNJ,
-  IMAGE_FAIRY
+  IMAGE_FAIRY,
+
+  IMAGE_UI_LIFE,
+  IMAGE_UI_MANA,
+  IMAGE_UI_SPELLS,
+  IMAGE_UI_MESSAGE,
+  IMAGE_UI_TOP_LAYER,
 };
 
 enum sound_resources {
@@ -137,7 +145,6 @@ enum sound_resources {
   SOUND_BONUS,
   SOUND_DRINK,
   SOUND_EAT,
-  SOUND_YAWN,
   SOUND_PLAYER_HIT,
   SOUND_PLAYER_DIE,
   SOUND_ENNEMY_DYING,
@@ -219,6 +226,9 @@ enum sound_resources {
   SOUND_FRANCKY_01,
   SOUND_FRANCKY_02,
   SOUND_FRANCKY_DYING,
+  SOUND_OM,
+  SOUND_GLASS,
+  SOUND_HICCUP
 };
 
 enum corpses_ressources{
@@ -311,6 +321,26 @@ const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Air resistance
 const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
     = { 1.15f, 1.3f, 1.45f };
 
+// divinity
+enum enumDivinityType {
+  DivinityHealer,
+  DivinityFighter,
+  DivinityIce,
+  DivinityStone,
+
+  NB_DIVINITY
+};
+const std::string divinityLabel[NB_DIVINITY]
+{
+  "divinity_healer",
+  "divinity_fighter",
+  "divinity_ice",
+  "divinity_stone",
+};
+const int MAX_DIVINITY_LEVEL = 5;
+const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =
+  { 100, 250, 450, 700, 1000};
+
 // entity type
 const int ENTITY_PLAYER = 1;
 const int ENTITY_FAMILIAR = 2;
@@ -343,7 +373,9 @@ const int INITIAL_PLAYER_HP = 20;
 const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
 const float ACQUIRE_DELAY = 2.8f;
 const float UNLOCK_DELAY = 1.0f;
+const float WORSHIP_DELAY = 2.0f;
 const float INVINCIBLE_DELAY = 1.5f;
+const float HICCUP_DELAY = 5.0f;
 
 const float INITIAL_BOLT_LIFE = 0.45f;
 const int INITIAL_BOLT_DAMAGES = 8;
@@ -510,12 +542,20 @@ enum EnumMessages
   MsgInfoGiantSpiderAfter,
   MsgInfoFranky,
 
+  MsgInfoDivHealer,
+  MsgInfoDivFighter,
+  MsgInfoDivIce,
+  MsgInfoDivStone,
+  MsgInfoDivIntervention,
+  MsgInfoDivGift,
+
   MsgTutoBasics,
   MsgTutoTips,
   MsgTutoItems,
   MsgTutoShops,
   MsgTutoBossDoor,
   MsgTutoChallengeDoor,
+  MsgTutoTemple,
   MsgTutoHeal,
   MsgTutoShots,
   MsgTutoSpell,
@@ -552,12 +592,19 @@ enum EnumWorldEvents
   EventFindShop,
   EventFindBossDoor,
   EventFindChallengeDoor,
+  EventFindTemple,
   EventGetItem,
   EventGetSpecialShot,
   EventGetFamiliar,
   EventGetSpell,
 
   NB_EVENTS
+};
+
+enum EnumInteractionType
+{
+  InteractionTypeTemple,
+  InteractionTypeMerchandise,
 };
 
 #endif // CONSTANTS_H_INCLUDED

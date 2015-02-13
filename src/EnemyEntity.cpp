@@ -309,7 +309,7 @@ void EnemyEntity::dying()
 
   if (bloodColor != BloodNone) for (int i = 0; i < 4; i++) game().generateBlood(x, y, bloodColor);
   drop();
-  game().addKilledEnemy(enemyType);
+  game().addKilledEnemy(enemyType, hurtingType);
 }
 
 void EnemyEntity::drop()
@@ -397,28 +397,7 @@ void EnemyEntity::render(sf::RenderTarget* app)
 
 void EnemyEntity::renderLifeBar(sf::RenderTarget* app, std::string label)
 {
-  float l = hpDisplay * ((MAP_WIDTH - 1) * TILE_WIDTH) / hpMax;
-
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
-    rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    rectangle.setOutlineThickness(1);
-    rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
-    app->draw(rectangle);
-
-    rectangle.setSize(sf::Vector2f(l, 25));
-    rectangle.setFillColor(sf::Color(190, 20, 20));
-    rectangle.setOutlineThickness(0);
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT));
-    app->draw(rectangle);
-
-    game().write(           label,
-                            18,
-                            TILE_WIDTH / 2 + 10.0f,
-                            label_dy + 25 + (MAP_HEIGHT - 1) * TILE_HEIGHT + 1.0f,
-                            ALIGN_LEFT,
-                            sf::Color(255, 255, 255),
-                            app, 0 , 0);
+  game().addLifeBarToDisplay(label, hpDisplay, hpMax);
 }
 
 bool EnemyEntity::testEntityInMap()

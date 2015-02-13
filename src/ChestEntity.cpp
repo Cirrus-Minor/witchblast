@@ -10,19 +10,21 @@
 #include <iostream>
 
 ChestEntity::ChestEntity(float x, float y, int chestType, bool isOpen)
-    : CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_CHEST), x, y, 48, 48)
+    : CollidingSpriteEntity(ImageManager::getInstance().getImage(IMAGE_CHEST), x, y, 48, 64)
 {
   type = ENTITY_CHEST;
   imagesProLine = 2;
   this->isOpen = isOpen;
   this->chestType = chestType;
   frame = chestType * imagesProLine;
-  if (chestType > ChestFairy) frame = ChestFairy * imagesProLine;
+  //if (chestType > ChestFairy) frame = ChestFairy * imagesProLine;
   frame += (isOpen ? 1 : 0);
+  if (isOpen && frame > ChestFairy * imagesProLine + 1) frame = ChestFairy * imagesProLine + 1;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
   timer = -1.0f;
   appearTimer = -1.0f;
+  sprite.setOrigin(24, 40);
 }
 
 bool ChestEntity::getOpened()
@@ -53,7 +55,7 @@ void ChestEntity::animate(float delay)
   if (appearTimer >= 0.0f) appearTimer -= delay;
   CollidingSpriteEntity::animate(delay);
   if (!isOpen) testSpriteCollisions();
-  z = y + height/2 - 5;
+  z = y + 21;
 
   // trap
   if (timer > 0.0f)
@@ -91,8 +93,8 @@ void ChestEntity::calculateBB()
 {
   boundingBox.left = (int)x - width / 2;
   boundingBox.width = width;
-  boundingBox.top = (int)y - height / 2;
-  boundingBox.height =  height;
+  boundingBox.top = (int)y - 24;
+  boundingBox.height =  46;
 }
 
 
@@ -107,6 +109,7 @@ void ChestEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     {
       open();
       frame += 1;
+      if (frame > ChestFairy * imagesProLine + 1) frame = ChestFairy * imagesProLine + 1;
     }
   }
 }
@@ -114,17 +117,47 @@ void ChestEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 void ChestEntity::open()
 {
   isOpen = true;
-  SoundManager::getInstance().playSound(SOUND_CHEST_OPENING);
+  if (chestType >= ChestFairy)
+    SoundManager::getInstance().playSound(SOUND_GLASS);
+  else
+    SoundManager::getInstance().playSound(SOUND_CHEST_OPENING);
 
   if (chestType == ChestBasic)
   {
-    int r = 2 + rand() % 6;
-    for (int i = 0; i < r; i++)
+    // TODO
+    int r = rand()% 50;
+    if (r == 0 && !game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP))
     {
-      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
+      // map
+      ItemEntity* newItem = new ItemEntity(ItemFloorMap, x, y);
       newItem->setVelocity(Vector2D(50.0f + rand()% 150));
+      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
       newItem->setViscosity(0.96f);
     }
+
+    else if (r == 1 && !game().getPlayer()->isEquiped(EQUIP_ALCOHOL))
+    {
+      // alcohol
+      ItemEntity* newItem = new ItemEntity(ItemAlcohol, x, y);
+      newItem->setVelocity(Vector2D(50.0f + rand()% 150));
+      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
+      newItem->setViscosity(0.96f);
+    }
+
+    else
+    {
+      // gold
+      int r = 2 + rand() % 6;
+      for (int i = 0; i < r; i++)
+      {
+        ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
+        newItem->setVelocity(Vector2D(50.0f + rand()% 150));
+        if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
+        newItem->setViscosity(0.96f);
+      }
+
+    }
+
 
     // trap !
     if (game().getLevel() >= 4)
@@ -156,6 +189,7 @@ void ChestEntity::open()
       {
         ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
         newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+        if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
         newItem->setViscosity(0.96f);
       }
     }
@@ -165,10 +199,12 @@ void ChestEntity::open()
       {
         ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
         newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+        if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
         newItem->setViscosity(0.96f);
       }
       ItemEntity* newItem = new ItemEntity(ItemHealth, x, y);
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
+      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
       newItem->setViscosity(0.96f);
     }
     else
@@ -180,6 +216,7 @@ void ChestEntity::open()
       else
         newItem = new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), x ,y);
       newItem->setVelocity(Vector2D(160.0f + rand()% 80));
+      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
       newItem->setViscosity(0.96f);
     }
   }

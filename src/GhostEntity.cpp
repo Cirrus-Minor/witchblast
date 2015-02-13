@@ -12,7 +12,7 @@ GhostEntity::GhostEntity(float x, float y)
 {
 
   frame = 0;
-  dyingFrame = 4;
+  dyingFrame = 3;
   deathFrame = FRAME_CORPSE_GHOST;
   enemyType = EnemyTypeGhost;
   hp = GHOST_HP;
@@ -24,7 +24,6 @@ GhostEntity::GhostEntity(float x, float y)
   timer = 0.0f;
 
   bloodColor = BloodNone;
-  shadowFrame = 3;
 
   agonizingSound = SOUND_GHOST_DYING;
 

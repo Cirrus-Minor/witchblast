@@ -62,9 +62,7 @@
 
 #include <algorithm>
 
-#include <extlib/utf8/utf8.h>
-
-//#define START_LEVEL 5
+//#define START_LEVEL 2
 
 static std::string intToString(int n)
 {
@@ -125,6 +123,7 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
   { EventFindShop,            MsgTutoShops },
   { EventFindBossDoor,        MsgTutoBossDoor },
   { EventFindChallengeDoor,   MsgTutoChallengeDoor },
+  { EventFindTemple,          MsgTutoTemple },
   { EventGetItem,             MsgTutoItems },
   { EventGetSpecialShot,      MsgTutoShots },
   { EventGetSpell,            MsgTutoSpell },
@@ -193,7 +192,7 @@ WitchBlastGame::WitchBlastGame():
   // loading resources
   const char *const images[] =
   {
-    "media/player_base.png",   "media/player_faces.png",
+    "media/player_base.png",
     "media/bolt.png",          "media/tiles01.png",
     "media/rat.png",           "media/minimap.png",
     "media/items.png",         "media/items_equip.png",
@@ -215,7 +214,12 @@ WitchBlastGame::WitchBlastGame():
     "media/explosion.png",     "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",
     "media/night.png",         "media/title.png",
+    "media/overlay_00.png",    "media/light_cone.png",
+    "media/divinity.png",
     "media/pnj.png",           "media/fairy.png",
+    "media/ui_life.png",       "media/ui_mana.png",
+    "media/ui_spells.png",     "media/ui_message.png",
+    "media/ui_top_layer.png",
   };
 
   for (const char *const filename : images)
@@ -229,8 +233,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/door_closing.ogg",   "media/sound/door_opening.ogg",
     "media/sound/chest_opening.ogg",  "media/sound/impact.ogg",
     "media/sound/bonus.ogg",          "media/sound/drink.ogg",
-    "media/sound/eat.ogg",            "media/sound/yawn.ogg",
-    "media/sound/player_hit.ogg",
+    "media/sound/eat.ogg",            "media/sound/player_hit.ogg",
     "media/sound/player_die.ogg",     "media/sound/ennemy_dying.ogg",
     "media/sound/coin.ogg",           "media/sound/pay.ogg",
     "media/sound/wall_impact.ogg",    "media/sound/big_wall_impact.ogg",
@@ -271,7 +274,8 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/fuse.ogg",           "media/sound/electricity.ogg",
     "media/sound/electric_blast.ogg", "media/sound/francky_00.ogg",
     "media/sound/francky_01.ogg",     "media/sound/francky_02.ogg",
-    "media/sound/francky_die.ogg",
+    "media/sound/francky_die.ogg",    "media/sound/om.ogg",
+    "media/sound/glass.ogg",          "media/sound/hiccup.ogg",
   };
 
   // game main client position in the UI
@@ -307,7 +311,13 @@ WitchBlastGame::WitchBlastGame():
   showLogical = false;
   showGameTime = false;
 
-  shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
+  uiSprites.shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
+  uiSprites.topLayer.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_TOP_LAYER));
+  uiSprites.topLayer.setPosition(0, 602);
+  uiSprites.msgBoxSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MESSAGE));
+  uiSprites.iconSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MESSAGE_ICONS));
+  uiSprites.iconSprite.setPosition(15, 630);
+
   introScreenSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
   titleSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TITLE));
   titleSprite.setOrigin(titleSprite.getTextureRect().width / 2, titleSprite.getTextureRect().height / 2);
@@ -366,6 +376,8 @@ void WitchBlastGame::onUpdate()
 {
   if (!isPausing)
   {
+    if (isPlayerAlive) player->setItemToBuy(NULL);
+
     EntityManager::getInstance().animate(deltaTime);
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
     {
@@ -419,6 +431,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   gameTime = 0.0f;
   initEvents();
   scoreSaveFile = "";
+  interaction.active = false;
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -444,16 +457,16 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   interface->setType(0);
 
   // key symbol on the interface
-  keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-  keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
-  keySprite.setPosition(326, 616);
+  uiSprites.keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+  uiSprites.keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
+  uiSprites.keySprite.setPosition(737, 612);
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
-  TileMapEntity* miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 15, 11, 12);
-  miniMapEntity->setTileBox(16, 12);
-  miniMapEntity->setX(407);
-  miniMapEntity->setY(614);
+  miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 19, 15, 10);
+  miniMapEntity->setTileBox(20, 16);
+  miniMapEntity->setX(800);
+  miniMapEntity->setY(645);
   miniMapEntity->setZ(10001.0f);
 
   // doors
@@ -518,6 +531,9 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
 void WitchBlastGame::startNewLevel()
 {
+  // reset floor items
+  player->resetFloorItem();
+
   bool needShop = false;
   // create the new level
   if (currentFloor != NULL)
@@ -559,12 +575,14 @@ void WitchBlastGame::startNewLevel()
 
 void WitchBlastGame::playLevel(bool isFight)
 {
+  /*
   if (level % 3 == 1)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles01.png");
   else if (level % 3 == 2)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles02.png");
   else
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles03.png");
+    */
 
   isPlayerAlive = true;
 
@@ -795,6 +813,7 @@ void WitchBlastGame::renderIntro()
 void WitchBlastGame::updateRunningGame()
 {
   bool backToMenu = false;
+
   // Process events
   sf::Event event;
   while (app->pollEvent(event))
@@ -911,6 +930,12 @@ void WitchBlastGame::updateRunningGame()
           if (messagesQueue.front().timer > 0.5f)
             messagesQueue.front().timer = 0.5f;
         }
+      }
+
+      if (event.key.code == input[KeyInteract])
+      {
+        if (!player->isDead() && interaction.active)
+          player->interact(interaction.type, interaction.id);
       }
 
       if (event.key.code == sf::Keyboard::X)
@@ -1162,11 +1187,14 @@ void WitchBlastGame::updateRunningGame()
   onUpdate();
 
   verifyDoorUnlocking();
+  checkInteraction();
+
   if (roomClosed)
   {
     if (getEnemyCount() == 0)
     {
       currentMap->setCleared(true);
+      player->onClearRoom();
       openDoors();
       remove(SAVE_FILE.c_str());
       if (currentMap->getRoomType() == roomTypeBoss)
@@ -1191,10 +1219,11 @@ void WitchBlastGame::updateRunningGame()
         text->setAlignment(ALIGN_CENTER);
         text->setLifetime(2.5f);
         text->setWeight(-36.0f);
-        text->setZ(1000);
+        text->setZ(1200);
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
         challengeLevel++;
+        player->offerChallenge();
       }
     }
   }
@@ -1211,6 +1240,78 @@ void WitchBlastGame::updateRunningGame()
     {
       prepareIntro(); // switchToMenu();
     }
+  }
+}
+
+void WitchBlastGame::addLifeBarToDisplay(std::string label, int hp, int hpMax)
+{
+  lifeBar.toDisplay = true;
+  lifeBar.label = label;
+  lifeBar.hp = hp;
+  lifeBar.hpMax = hpMax;
+}
+
+void WitchBlastGame::renderGame()
+{
+  lifeBar.toDisplay = false;
+  EntityManager::getInstance().renderUnder(app, 5000);
+}
+
+void WitchBlastGame::renderHud()
+{
+  // boss life bar ?
+  if (lifeBar.toDisplay) renderLifeBar();
+
+  // interaction text ?
+  if (interaction.active)
+  {
+    if (interaction.type == InteractionTypeTemple)
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+    else if (interaction.type == InteractionTypeMerchandise)
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+  }
+
+  // light cone ?
+  float fade = player->getLightCone();
+  if (fade > 0.0f)
+  {
+    sf::Sprite cone;
+    cone.setTexture(*ImageManager::getInstance().getImage(IMAGE_LIGHT_CONE));
+    cone.setPosition(player->getX() - 64, player->getY() - 580);
+    cone.setColor(sf::Color(255, 255, 255, 255 * fade));
+    app->draw(cone);
+  }
+
+  EntityManager::getInstance().renderAfter(app, 5000);
+}
+
+void WitchBlastGame::renderLifeBar()
+{
+  if (lifeBar.toDisplay)
+  {
+    float l = lifeBar.hp * ((MAP_WIDTH - 1) * TILE_WIDTH) / lifeBar.hpMax;
+    int label_dy = 0;
+
+    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
+    rectangle.setFillColor(sf::Color(0, 0, 0,128));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
+    rectangle.setOutlineThickness(1);
+    rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
+    app->draw(rectangle);
+
+    rectangle.setSize(sf::Vector2f(l, 25));
+    rectangle.setFillColor(sf::Color(190, 20, 20));
+    rectangle.setOutlineThickness(0);
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
+    app->draw(rectangle);
+
+    game().write(           lifeBar.label,
+                            18,
+                            TILE_WIDTH / 2 + 10.0f,
+                            label_dy + 23,
+                            ALIGN_LEFT,
+                            sf::Color(255, 255, 255),
+                            app, 0 , 0);
   }
 }
 
@@ -1252,10 +1353,10 @@ void WitchBlastGame::renderRunningGame()
     view.move(-5, -5);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
   else if (parameters.zoom && gameTime < 1.0f)
   {
@@ -1267,10 +1368,10 @@ void WitchBlastGame::renderRunningGame()
     view.move(-5, -5);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
   else if (xGame[xGameTypeShake].active)
   {
@@ -1280,10 +1381,10 @@ void WitchBlastGame::renderRunningGame()
     view.move(-4 + rand() % 9, -4 + rand() % 9);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
   else
   {
@@ -1293,86 +1394,222 @@ void WitchBlastGame::renderRunningGame()
     view.move(-OFFSET_X, -OFFSET_Y);
     app->setView(view);
 
-    EntityManager::getInstance().renderUnder(app, 5000);
+    renderGame();
 
     app->setView(viewSave);
-    EntityManager::getInstance().renderAfter(app, 5000);
+    renderHud();
   }
 
-  myText.setColor(sf::Color(255, 255, 255, 255));
+  sf::RectangleShape rectangle(sf::Vector2f(200, 25));
 
-  myText.setCharacterSize(18);
+  // effects
+  if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
+  {
+    // effect
+    int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
+    rectangle.setFillColor(sf::Color(0, 255, 255, effectFade));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    sf::RenderStates r;
+    r.blendMode = sf::BlendAlpha ;
+    app->draw(rectangle, r);
+  }
+
+  if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_IN)
+  {
+    // fade in
+    rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    app->draw(rectangle);
+  }
+  else if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_OUT)
+  {
+    // fade out
+    rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    app->draw(rectangle);
+  }
+  if (xGame[xGameTypeFadeColor].active)
+  {
+    // color fade
+    unsigned int r = 0, g = 0, b = 0;
+    switch (xGame[xGameTypeFadeColor].param)
+    {
+    case X_GAME_COLOR_RED:
+      r = 255;
+      g = 100;
+      break;
+    case X_GAME_COLOR_GREEN:
+      g = 255;
+      break;
+    case X_GAME_COLOR_BLUE:
+      b = 255;
+      break;
+    case X_GAME_COLOR_VIOLET:
+      r = 255;
+      b = 200;
+      break;
+    case X_GAME_COLOR_BROWN:
+      r = 200;
+      b = 100;
+      g = 150;
+      break;
+    case X_GAME_COLOR_WHITE:
+      r = 255;
+      b = 255;
+      g = 255;
+      break;
+    }
+    int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
+
+    rectangle.setFillColor(sf::Color(r, g, b, alpha));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    app->draw(rectangle, sf::BlendAdd);
+  }
+
+  renderMessages();
+  app->draw(uiSprites.topLayer);
+
   std::ostringstream oss;
   oss << player->getGold();
-  myText.setString(oss.str());
-  myText.setPosition(690, 612);
-  app->draw(myText);
+  write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0);
 
   myText.setColor(sf::Color(0, 0, 0, 255));
   myText.setCharacterSize(16);
 
+
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  write(oss.str(), 16, 410, 692, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-
-  sf::RectangleShape rectangle(sf::Vector2f(200, 25));
+  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
 
   if (gameState == gameStatePlaying)
   {
     // life
-    if (player->isPoisoned())
-      rectangle.setFillColor(sf::Color(20, 190, 20));
-    else
-      rectangle.setFillColor(sf::Color(190, 20, 20));
-    rectangle.setPosition(sf::Vector2f(90, 622));
-    rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 25));
-    app->draw(rectangle);
+    // if (player->isPoisoned()) TODO
 
-    rectangle.setFillColor(sf::Color(255, 190, 190));
-    rectangle.setPosition(sf::Vector2f(90, 625));
-    rectangle.setSize(sf::Vector2f(200.0f * (float)(player->getHpDisplay()) / (float)(player->getHpMax()) , 2));
-    app->draw(rectangle);
+    sf::Sprite hpSprite;
+    hpSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_LIFE));
+    int hpFade = 88.0f * (float)player->getHpDisplay() / (float)player->getHpMax();
+    if (hpFade < 0) hpFade = 0;
+    else if (hpFade > 88) hpFade = 88;
+    hpSprite.setPosition(170, 619 + 88 - hpFade);
+    hpSprite.setTextureRect(sf::IntRect(0, 88 - hpFade, 88, hpFade));
+    app->draw(hpSprite);
 
     oss.str("");
     oss << player->getHp() << "/" << player->getHpMax();
-    write(oss.str(), 16, 95, 624, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+    write(oss.str(), 16, 210, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0);
 
     // mana
-    rectangle.setFillColor(sf::Color(20, 20, 190));
-    rectangle.setPosition(sf::Vector2f(90, 658));
-    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 25));
-    app->draw(rectangle);
+    sf::Sprite manaSprite;
+    manaSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MANA));
+    int manaFade = player->getPercentFireDelay() * 98;
+    manaSprite.setPosition(558, 614 + 98 - manaFade);
+    manaSprite.setTextureRect(sf::IntRect(0, 98 - manaFade, 98, manaFade));
+    app->draw(manaSprite);
 
-    rectangle.setFillColor(sf::Color(190, 190, 255));
-    rectangle.setPosition(sf::Vector2f(90, 661));
-    rectangle.setSize(sf::Vector2f(200.0f * player->getPercentSpellDelay() , 2));
-    app->draw(rectangle);
 
     if (player->getActiveSpell().spell != SpellNone)
     {
-      oss.str("");
-      oss << tools::getLabel(spellLabel[player->getActiveSpell().spell]);
-      if (player->isEquiped(EQUIP_BOOK_MAGIC_II)) oss << "+";
-      write(oss.str(), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      //oss.str("");
+      //oss << tools::getLabel(spellLabel[player->getActiveSpell().spell]);
+      //if (player->isEquiped(EQUIP_BOOK_MAGIC_II)) oss << "+";
+      //write(oss.str(), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
       // TODO
-      sf::Sprite itemSprite;
-      itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-      itemSprite.setPosition(10, 620);
-      int frame = player->getActiveSpell().frame;
-      itemSprite.setTextureRect(sf::IntRect((frame % 10) * 32, (frame / 10) * 32, 32, 32));
-      itemSprite.scale(2.0f, 2.0f);
-      app->draw(itemSprite);
+      sf::Sprite spellSprite;
+      spellSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_SPELLS));
+      spellSprite.setPosition(568, 624);
+      int frame = player->getActiveSpell().spell;
+      spellSprite.setTextureRect(sf::IntRect(frame * 78, 78, 78, 78));
+      //spellSprite.scale(2.0f, 2.0f);
+      app->draw(spellSprite);
+
+      int spellFade = player->getPercentSpellDelay() * 78;
+      spellSprite.setPosition(568, 624 + 78 - spellFade);
+      spellSprite.setTextureRect(sf::IntRect(frame * 78, 78 - spellFade, 78, spellFade));
+      app->draw(spellSprite);
 
       if (player->canCastSpell())
       {
         float fade = (cos(8.0f * getAbsolutTime()) + 1.0f) * 0.5f;
-        itemSprite.setColor(sf::Color(255, 255, 255, 255 * fade));
-        app->draw(itemSprite, sf::BlendAdd);
+        spellSprite .setColor(sf::Color(255, 255, 255, 255 * fade));
+        app->draw(spellSprite, sf::BlendAdd);
       }
     }
 
     // drawing the key on the interface
-    if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(keySprite);
+    if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(uiSprites.keySprite);
+
+    if (player->isEquiped(EQUIP_FLOOR_MAP))
+    {
+      sf::Sprite mapSprite;
+      mapSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+      mapSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 3, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
+      mapSprite.setPosition(737, 648);
+      app->draw(mapSprite);
+    }
+
+    if (player->isEquiped(EQUIP_ALCOHOL))
+    {
+      sf::Sprite alcSprite;
+      alcSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+      alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 4, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
+      alcSprite.setPosition(737, 681);
+      app->draw(alcSprite);
+    }
+
+    // drawing message icon
+    if (!messagesQueue.empty())
+    {
+      int fade = 255;
+      if (messagesQueue.front().timer < 0.5f)
+      {
+        fade = (2 * messagesQueue.front().timer) * 255;
+      }
+      else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
+      {
+        fade = (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * 255;
+      }
+      uiSprites.iconSprite.setColor(sf::Color(255, 255, 255, fade));
+      uiSprites.iconSprite.setTextureRect(sf::IntRect((messagesQueue.front().icon % 10) * 64, (messagesQueue.front().icon / 10) * 64, 64, 64));
+      app->draw(uiSprites.iconSprite);
+    }
+
+    // drawing the divinity
+    if (player->getDivinity().divinity >= 0)
+    {
+      sf::Sprite divSprite;
+      divSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_DIVINITY));
+      divSprite.setPosition(100, 614);
+      divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 0, 48, 85));
+      app->draw(divSprite);
+
+      float fade = player->getLightCone();
+      if (fade > 0.0f && player->getPlayerStatus() != PlayerEntity::playerStatusPraying)
+      {
+        divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 85, 48, 85));
+        divSprite.setColor(sf::Color(255, 255, 255, 255 * fade));
+        app->draw(divSprite);
+      }
+
+      rectangle.setOutlineThickness(0);
+      if (player->getDivinity().interventions + 1 < player->getDivinity().level)
+      {
+        int fade = 50 + 50 * cosf(game().getAbsolutTime() * 8);
+        rectangle.setFillColor(sf::Color(100 + fade, 100 + fade, 200 + fade / 2, 255));
+      }
+
+      else
+        rectangle.setFillColor(sf::Color(100, 100, 200, 255));
+      rectangle.setPosition(sf::Vector2f(101, 689));
+      rectangle.setSize(sf::Vector2f(48 * player->getDivinity().percentsToNextLevels, 8));
+      app->draw(rectangle);
+
+      write(intToString(player->getDivinity().level), 10, 122, 689, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+    }
 
     // render the shots
     renderHudShots(app);
@@ -1457,116 +1694,6 @@ void WitchBlastGame::renderRunningGame()
       write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2);
       write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2);
     }
-
-    if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
-    {
-      // effect
-      int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
-      rectangle.setFillColor(sf::Color(0, 255, 255, effectFade));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      sf::RenderStates r;
-      r.blendMode = sf::BlendAlpha ;
-      app->draw(rectangle, r);
-    }
-
-    if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_IN)
-    {
-      // fade in
-      rectangle.setFillColor(sf::Color(0, 0, 0, 255 - ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      app->draw(rectangle);
-    }
-    else if (xGame[xGameTypeFade].active && xGame[xGameTypeFade].param == X_GAME_FADE_OUT)
-    {
-      // fade out
-      rectangle.setFillColor(sf::Color(0, 0, 0, ((FADE_IN_DELAY - xGame[xGameTypeFade].timer) / FADE_IN_DELAY) * 255));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      app->draw(rectangle);
-    }
-
-    if (xGame[xGameTypeFadeColor].active)
-    {
-      // color fade
-      unsigned int r = 0, g = 0, b = 0;
-      switch (xGame[xGameTypeFadeColor].param)
-      {
-      case X_GAME_COLOR_RED:
-        r = 255;
-        g = 100;
-        break;
-      case X_GAME_COLOR_GREEN:
-        g = 255;
-        break;
-      case X_GAME_COLOR_BLUE:
-        b = 255;
-        break;
-      case X_GAME_COLOR_VIOLET:
-        r = 255;
-        b = 200;
-        break;
-      case X_GAME_COLOR_BROWN:
-        r = 200;
-        b = 100;
-        g = 150;
-        break;
-      case X_GAME_COLOR_WHITE:
-        r = 255;
-        b = 255;
-        g = 255;
-        break;
-      }
-      int alpha = xGame[xGameTypeFadeColor].timer * 200.0f /  xGame[xGameTypeFadeColor].duration;
-
-      rectangle.setFillColor(sf::Color(r, g, b, alpha));
-      rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
-      rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
-      app->draw(rectangle, sf::BlendAdd);
-    }
-  }
-
-  // message queue
-  if (!messagesQueue.empty())
-  {
-
-    int xf = 10;
-    int yf = MAP_HEIGHT * TILE_HEIGHT + 10;
-    int ySize = SCREEN_HEIGHT - (MAP_HEIGHT * TILE_HEIGHT) - 10;
-    int xm = xf;
-    int ym = yf;
-
-    if (messagesQueue.front().timer < 0.5f)
-    {
-      ym += (1.0f - 2 * messagesQueue.front().timer) * ySize;
-    }
-    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
-    {
-      ym += (1.0f - 2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * ySize;
-    }
-
-    rectangle.setFillColor(sf::Color(236, 222, 194, 255));
-    rectangle.setOutlineThickness(2.0f);
-    rectangle.setOutlineColor(sf::Color(201, 145, 95,255));
-    rectangle.setPosition(sf::Vector2f(xm, ym));
-    rectangle.setSize(sf::Vector2f(SCREEN_WIDTH - 20, ySize));
-    app->draw(rectangle);
-
-    sf::Sprite iconSprite;
-    iconSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MESSAGE_ICONS));
-    iconSprite.setPosition(xm + 12, ym + 32);
-    iconSprite.setTextureRect(sf::IntRect((messagesQueue.front().icon % 10) * 64, (messagesQueue.front().icon / 10) * 64, 64, 64));
-    app->draw(iconSprite);
-
-    for (int i = 0; i < 3; i++)
-    {
-      int fontSize = i == 0 ? 18 : 16;
-      if (!messagesQueue.front().message[i].empty())
-      {
-        write(messagesQueue.front().message[i], fontSize, xm + 100, ym + ((i == 0 ) ? 15 : 20) + i * 30, ALIGN_LEFT, sf::Color::Black, app, 0,0);
-      }
-    }
   }
 
   // show game time
@@ -1583,6 +1710,37 @@ void WitchBlastGame::renderRunningGame()
     write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
   }
 
+}
+
+void WitchBlastGame::renderMessages()
+{
+  // message queue
+  if (!messagesQueue.empty())
+  {
+    int dy = 30;
+
+    if (messagesQueue.front().timer < 0.5f)
+    {
+      dy *= (2 * messagesQueue.front().timer);
+    }
+    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
+    {
+      dy *= (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer));
+    }
+
+    uiSprites.msgBoxSprite.setPosition(0, 590 - dy);
+    app->draw(uiSprites.msgBoxSprite);
+
+    std::stringstream ss;
+    ss << messagesQueue.front().message[0];
+    ss << ": ";
+    ss << messagesQueue.front().message[1];
+    ss << std::endl;
+    ss << messagesQueue.front().message[2];
+
+
+    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0,0);
+  }
 }
 
 void WitchBlastGame::saveDeathScreen()
@@ -1924,6 +2082,7 @@ void WitchBlastGame::updateMenu()
         case MenuTutoReset:
           for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
           SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
+          saveGameData();
           break;
         case MenuConfigBack:
           menuState = MenuStateMain;
@@ -1972,8 +2131,8 @@ void WitchBlastGame::renderMenu()
   }
 
   app->draw(introScreenSprite);
-  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -5);
-  else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 180);
+  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -8);
+  else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 160);
   app->draw(titleSprite);
 
   EntityManager::getInstance().render(app);
@@ -2020,7 +2179,7 @@ void WitchBlastGame::renderMenu()
 
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
-        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(20 *getAbsolutTime()) % 2), 0, 48, 48));
         fairySprite.setPosition(xAlign - 60, 250 + i * yStep + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
@@ -2081,6 +2240,7 @@ void WitchBlastGame::renderMenu()
       write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1);
       write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1);
       write(tools::getLabel("key_spell"), 16, xKeys + 148, yKeys + 184, ALIGN_CENTER, sf::Color::White, app, 1, 1);
+      // TODO key interact
       std::ostringstream oss;
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
       write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
@@ -2095,7 +2255,7 @@ void WitchBlastGame::renderMenu()
 void WitchBlastGame::renderCredits()
 {
   app->draw(introScreenSprite);
-  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -5);
+  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -8);
   else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2, 180);
   app->draw(titleSprite);
 
@@ -2343,6 +2503,24 @@ int WitchBlastGame::getEnemyCount()
   return n;
 }
 
+int WitchBlastGame::getItemsCount()
+{
+  int n=0;
+
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() == ENTITY_ITEM) n++;
+  }
+
+  return n;
+}
+
 Vector2D WitchBlastGame::getNearestEnemy(float x, float y)
 {
   Vector2D target(-100.0f, -100.0f);
@@ -2436,7 +2614,7 @@ void WitchBlastGame::refreshMap()
     if (currentMap->getRoomType() == roomTypeMerchant)
     {
       new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                    (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
+                    (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT,
                     0);
     }
   }
@@ -2454,7 +2632,7 @@ void WitchBlastGame::refreshMap()
         (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourDown())
@@ -2464,7 +2642,7 @@ void WitchBlastGame::refreshMap()
         MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(180);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourLeft())
@@ -2474,7 +2652,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(270);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourRight())
@@ -2484,7 +2662,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(90);
-    keystoneEntity->setFrame(17);
+    keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
 }
@@ -2502,6 +2680,7 @@ void WitchBlastGame::refreshMinimap()
             || currentFloor->getRoom(i, j) == roomTypeChallenge
             || currentFloor->getRoom(i, j) == roomTypeBonus
             || currentFloor->getRoom(i, j) == roomTypeKey
+            || currentFloor->getRoom(i, j) == roomTypeBoss
             || currentFloor->getRoom(i, j) == roomTypeStandard)
         {
           if ( currentFloor->getMap(i, j)->containsHealth())
@@ -2511,27 +2690,72 @@ void WitchBlastGame::refreshMinimap()
         }
 
         else
-          miniMap->setTile(i, j, currentFloor->getRoom(i, j));
+        {
+          if (currentFloor->getRoom(i, j) == roomTypeMerchant)
+            miniMap->setTile(i, j, 3);
+          else if (currentFloor->getRoom(i, j) == roomTypeTemple)
+            miniMap->setTile(i, j, 7);
+          else
+            miniMap->setTile(i, j, currentFloor->getRoom(i, j));
+        }
       }
       else if (n > 0 && currentFloor->getMap(i, j)->isKnown())
       {
-        if (currentFloor->getRoom(i, j) == roomTypeBoss)
+        switch (currentFloor->getRoom(i, j))
         {
-          miniMap->setTile(i, j, 7);
+        case roomTypeBoss:
+          miniMap->setTile(i, j, 12);
           proceedEvent(EventFindBossDoor);
+          break;
+        case roomTypeChallenge:
+          miniMap->setTile(i, j, 15);
+          proceedEvent(EventFindBossDoor);
+          break;
+        case roomTypeMerchant:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 13 : 11 );
+          break;
+        case roomTypeKey:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 14 : 11 );
+          break;
+        case roomTypeExit:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 16 : 11 );
+          break;
+        case roomTypeTemple:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 17 : 11 );
+          break;
+        case roomTypeBonus:
+          miniMap->setTile(i, j,
+                           game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 2 : 11 );
+          break;
+        case roomTypeStandard:
+        case roomTypeStarting:
+          miniMap->setTile(i, j, 11);
+          break;
+        case roomTypeNULL:
+          miniMap->setTile(i, j, 0);
+          break;
         }
-        else if (currentFloor->getRoom(i, j) == roomTypeChallenge)
-        {
-          miniMap->setTile(i, j, 10);
-          proceedEvent(EventFindChallengeDoor);
-        }
-        else
-          miniMap->setTile(i, j, 9);
       }
       else
         miniMap->setTile(i, j, 0);
     }
-  miniMap->setTile(floorX, floorY, 8);
+  miniMap->setTile(floorX, floorY, 10);
+
+
+  int xMap = 760 + (6 - floorX) * 19;
+  if (xMap < 710) xMap = 710;
+  else if (xMap > 795) xMap = 795;
+
+  int yMap = 620 + (3 - floorY) * 15;
+  if (yMap < 605) yMap = 605;
+  else if (yMap > 640) yMap = 640;
+
+  miniMapEntity->setX(xMap);
+  miniMapEntity->setY(yMap);
 }
 
 void WitchBlastGame::checkEntering()
@@ -2660,8 +2884,8 @@ void WitchBlastGame::onRender()
 
 void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
 {
-  int xHud = 640;
-  int yHud = 650;
+  int xHud = 277;
+  int yHud = 655;
   int index = 0;
 
   for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++)
@@ -2669,21 +2893,21 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
     if (i == 0 || player->getShotType(i) != ShotTypeStandard)
     {
       int type_shot = player->getShotType(i);
-      shotsSprite.setPosition(xHud + 48 * index, yHud);
+      uiSprites.shotsSprite.setPosition(xHud + 55 * index, yHud);
       if (index == player->getShotIndex())
       {
-        shotsSprite.setTextureRect(sf::IntRect(0, 0,  48, 48));
-        app->draw(shotsSprite);
+        uiSprites.shotsSprite.setTextureRect(sf::IntRect(0, 0,  48, 48));
+        app->draw(uiSprites.shotsSprite);
       }
-      shotsSprite.setTextureRect(sf::IntRect(48 * ( 1 + type_shot), 0,  48, 48));
-      app->draw(shotsSprite);
+      uiSprites.shotsSprite.setTextureRect(sf::IntRect(48 * ( 1 + type_shot), 0,  48, 48));
+      app->draw(uiSprites.shotsSprite);
 
       // level
       if (i > 0)
       {
         std::ostringstream oss;
         oss << "lvl " << player->getShotLevel(i) + 1;
-        write(oss.str(), 10, xHud + 48 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0);
+        write(oss.str(), 10, xHud + 55 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0);
       }
 
       index++;
@@ -2769,25 +2993,25 @@ void WitchBlastGame::generateMap()
 
     ItemEntity* item1 = new ItemEntity(
       ItemHealth,
-      (MAP_WIDTH / 2 - 3) * TILE_WIDTH + TILE_WIDTH / 2,
-      (MAP_HEIGHT / 2) * TILE_HEIGHT);
+      (MAP_WIDTH / 2 - 1) * TILE_WIDTH + TILE_WIDTH / 2,
+      (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
     item1->setMerchandise(true);
 
     ItemEntity* item3 = new ItemEntity(
       ItemHealthSmall,
-      (MAP_WIDTH / 2 + 3) * TILE_WIDTH + TILE_WIDTH / 2,
-      (MAP_HEIGHT / 2) * TILE_HEIGHT);
+      (MAP_WIDTH / 2 + 1) * TILE_WIDTH + TILE_WIDTH / 2,
+      (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
     item3->setMerchandise(true);
 
     int bonusType = getRandomEquipItem(true, true);
     ItemEntity* item2 = new ItemEntity(
       (enumItemType)(FirstEquipItem + bonusType),
       (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-      (MAP_HEIGHT / 2) * TILE_HEIGHT);
+      (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
     item2->setMerchandise(true);
 
     new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                  (MAP_HEIGHT / 2 - 2) * TILE_HEIGHT,
+                  (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT,
                   0);
 
     currentMap->setCleared(true);
@@ -2919,15 +3143,20 @@ void WitchBlastGame::generateMap()
                     (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
                     ChestExit, false);
   }
+  else if (currentMap->getRoomType() == roomTypeTemple)
+  {
+    currentMap->generateTempleRoom();
+    currentMap->setCleared(true);
+    proceedEvent(EventFindTemple);
+  }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
 }
 
 void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0)
 {
-  std::basic_string<sf::Uint32> utf32String;
-  utf8::utf8to32(str.begin(), str.end(), std::back_inserter(utf32String));
-  myText.setString(utf32String);
+  myText.setString(str);
+  myText.setString(sf::String::fromUtf8(str.begin(), str.end()));
   myText.setCharacterSize(size);
 
   float xFont = x;
@@ -3244,6 +3473,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   {
     ItemEntity* newItem = new ItemEntity(getItemSpell(), x, y);
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+    if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setViscosity(0.96f);
 
     ItemEntity* healthItem1 = new ItemEntity(ItemHealthVerySmall, x, y);
@@ -3257,6 +3487,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   else
   {
     ItemEntity* newItem = new ItemEntity(ItemBonusHealth, x, y);
+    if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
 
@@ -3267,6 +3498,59 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
       newItem->setViscosity(0.96f);
     }
+  }
+}
+
+void WitchBlastGame::checkInteraction()
+{
+  interaction.active = false;
+
+  if (player->getPlayerStatus() != PlayerEntity::playerStatusPlaying) return;
+
+  if (currentMap->getRoomType() == roomTypeTemple)
+  {
+    int divinity = currentMap->getDivinity(player->getX() / TILE_WIDTH, player->getZ() / TILE_HEIGHT);
+    if (divinity > -1)
+    {
+      interaction.active = true;
+      interaction.type = InteractionTypeTemple;
+      interaction.id = divinity;
+      std::stringstream ss;
+      if (player->getDivinity().divinity == divinity)
+      {
+        ss << tools::getLabel("interact_donate");
+        if (player->getGold() < 10)
+        {
+          ss << " ";
+          ss << tools::getLabel("interact_donate_fail");
+        }
+      }
+      else
+      {
+        ss << tools::getLabel("interact_worship");
+        ss << " ";
+        ss << tools::getLabel(divinityLabel[divinity] + "_0");
+      }
+
+      interaction.label = ss.str();
+    }
+  }
+  else if (player->getItemToBuy() != NULL)
+  {
+    interaction.active = true;
+    interaction.type = InteractionTypeMerchandise;
+    interaction.id = player->getItemToBuy()->getItemType();
+
+    std::stringstream ss;
+    ss << tools::getLabel(items[interaction.id].name);
+    ss << ": ";
+    ss << tools::getLabel(items[interaction.id].description);
+    if (player->getItemToBuy()->canBePickedUp())
+    {
+      ss << std::endl;
+      ss << tools::getLabel("interact_shop");
+    }
+    interaction.label = ss.str();
   }
 }
 
@@ -3561,6 +3845,10 @@ void WitchBlastGame::saveGame()
     file << player->getShotIndex();
     for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
     file << player->getActiveSpell().spell << std::endl;
+    // divinity
+    file << player->getDivinity().divinity << " " << player->getDivinity().piety << " "
+         << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
+    // events
     for (i = 0; i < NB_EVENTS; i++) file << worldEvent[i] << " ";
     file.close();
   }
@@ -3746,6 +4034,17 @@ bool WitchBlastGame::loadGame()
     file >> n;
     player->setActiveSpell((enumCastSpell)n, saveInFight.isFight);
 
+    // divinity
+    {
+      int divinityId, piety, divLevel, interventions;
+      file >> divinityId;
+      file >> piety;
+      file >> divLevel;
+      file >> interventions;
+      player->loadDivinity(divinityId, piety, divLevel, interventions);
+    }
+
+    // events
     for (i = 0; i < NB_EVENTS; i++)
     {
       bool event;
@@ -3900,6 +4199,7 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["keyboard_fire_left"] = intToString(input[KeyFireLeft]);
   newMap["keyboard_fire_right"] = intToString(input[KeyFireRight]);
   newMap["keyboard_spell"] = intToString(input[KeySpell]);
+  newMap["keyboard_interact"] = intToString(input[KeyInteract]);
   newMap["keyboard_fire"] = intToString(input[KeyFire]);
   newMap["keyboard_time_control"] = intToString(input[KeyTimeControl]);
   newMap["keyboard_fire_select"] = intToString(input[KeyFireSelect]);
@@ -3928,6 +4228,7 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireRight] = sf::Keyboard::Right;
   input[KeyFire] = sf::Keyboard::RControl;
   input[KeySpell] = sf::Keyboard::Space;
+  input[KeyInteract] = sf::Keyboard::E;
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
 
@@ -4131,14 +4432,17 @@ void WitchBlastGame::resetKilledEnemies()
   for (int i = 0; i < NB_ENEMY; i++) killedEnemies[i] = 0;
 }
 
-void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType)
+void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtingType)
 {
   if(!player->isDead())
   {
     if (enemyType == NB_ENEMY)
       std::cout << "[ERROR] No enemy type";
     else
+    {
       killedEnemies[enemyType]++;
+      player->offerMonster(enemyType, hurtingType);
+    }
   }
 }
 
@@ -4617,6 +4921,12 @@ void WitchBlastGame::loadHiScores()
       scores.push_back(score);
     }
   }
+}
+
+void WitchBlastGame::revealFloor()
+{
+  currentFloor->reveal();
+  refreshMinimap();
 }
 
 WitchBlastGame &game()

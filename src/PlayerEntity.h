@@ -15,6 +15,15 @@ struct castSpellStruct
   int frame;
 };
 
+struct divinityStruct
+{
+  int divinity;
+  int piety;
+  int level;
+  int interventions;
+  float percentsToNextLevels;
+};
+
 /*! \class PlayerEntity
 * \brief Class for the player
 *
@@ -150,6 +159,10 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void setEquiped(int item, bool toggleEquipped);
 
+    divinityStruct getDivinity();
+    int getPiety();
+
+
     /*!
      *  \brief updates the entering status of the player
      *
@@ -213,6 +226,13 @@ class PlayerEntity : public BaseCreatureEntity
      *  \return : the percentage (between 0.0f for empty to 1.0 for full)
      */
     float getPercentFireDelay();
+
+    /*!
+     *  \brief returns the light cone percentage
+     *
+     *  \return : the percentage (between 0.0f for empty to 1.0 for full) or -1.0f if no light cone
+     */
+    float getLightCone();
 
     /*!
      *  \brief called when the player get an item
@@ -297,6 +317,7 @@ class PlayerEntity : public BaseCreatureEntity
       playerStatusEntering,   /**< Player is entering a not yet cleared room (walking is forced) */
       playerStatusAcquire,    /**< Player is under acquiring stance */
       playerStatusUnlocking,  /**< Player is under unlocking stance */
+      playerStatusPraying,    /**< Player is under unlocking stance */
       playerStatusStairs,     /**< Player walk the stairs */
       playerStatusGoingNext,  /**< Player goes to next level */
       playerStatusDead        /**< Player RIP */
@@ -441,6 +462,25 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void castSpell();
 
+    void onClearRoom();
+    void resetFloorItem();
+
+    void interact(EnumInteractionType interaction, int id);
+    void worship(enumDivinityType divinity);
+    void donate(int n);
+    void offerMonster(enemyTypeEnum monster, enumShotType hurtingType);
+    void offerHealth(int lostHp);
+    void offerChallenge();
+    void addPiety(int n);
+    void loadDivinity(int id, int piety, int level, int interventions);
+    bool triggerDivinityBefore();
+    void triggerDivinityAfter();
+    void divineFury();
+    void divineIce();
+    void divineRepulse();
+    void divineProtection(float duration, float armorBonus);
+    void divineHeal(int hpHealed);
+
     void setActiveSpell(enumCastSpell spell, bool fromSaveInFight);
     castSpellStruct getActiveSpell();
     float getPercentSpellDelay();
@@ -448,6 +488,11 @@ class PlayerEntity : public BaseCreatureEntity
 
     enemyTypeEnum getLastHurtingEnemy();
     sourceTypeEnum getLastHurtingSource();
+
+    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2) override;
+
+    void setItemToBuy(ItemEntity* item);
+    ItemEntity* getItemToBuy();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
@@ -463,16 +508,23 @@ class PlayerEntity : public BaseCreatureEntity
     int fireDamages;
     float fireVelocity;
     float fireDelay;
+    float fireAnimationDelay;
+    float fireAnimationDelayMax;
+    int fireAnimationDirection;
+    float spellAnimationDelay;
+    float spellAnimationDelayMax;
     float currentFireDelay;
     float randomFireDelay;
+    float hiccupDelay;
     float boltLifeTime;
     int gold;
     int criticalChance;
     float invincibleDelay;
+    float divineInterventionDelay;
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
-    float acquireDelay;
+    float statusTimer;
     enumItemType acquiredItem;
 
     bool equip[NUMBER_EQUIP_ITEMS];
@@ -499,6 +551,8 @@ class PlayerEntity : public BaseCreatureEntity
     int spriteDy;
     void renderPlayer(sf::RenderTarget* app);
     void renderHalo(sf::RenderTarget* app);
+
+    divinityStruct divinity;
 
     void fallRock();
     void initFallingGrid();
@@ -527,6 +581,8 @@ class PlayerEntity : public BaseCreatureEntity
     void castEarthquake();
     void castProtection();
     void castWeb();
+
+    ItemEntity* itemToBuy;
 };
 
 #endif // PLAYERSPRITE_H

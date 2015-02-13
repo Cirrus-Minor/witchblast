@@ -113,6 +113,8 @@ enum enumItemType
   ItemBookMagicI,
   ItemBookMagicII,
   ItemSulfur,
+  ItemFloorMap,
+  ItemAlcohol,
 
   NUMBER_ITEMS
 };
@@ -355,6 +357,14 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemSulfur, "item_sulfur", "item_sulfur_desc",
     35, true, FamiliarNone, true, true, true, 2, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemFloorMap, "item_floor_map", "item_floor_map_desc",
+    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemAlcohol, "item_alcohol", "item_alcohol_desc",
+    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -404,6 +414,8 @@ enum item_equip_enum {
   EQUIP_BOOK_MAGIC_I,
   EQUIP_BOOK_MAGIC_II,
   EQUIP_SULFUR,
+  EQUIP_FLOOR_MAP,
+  EQUIP_ALCOHOL,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -464,6 +476,7 @@ const std::vector<item_equip_enum> sortedEquipement =
 
   // others
   EQUIP_BOSS_KEY,
+  EQUIP_FLOOR_MAP
 };
 
 #endif

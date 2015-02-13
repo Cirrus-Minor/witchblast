@@ -117,6 +117,9 @@ void GameFloor::displayToConsole()
       case roomTypeChallenge:
         printf("?");
         break;
+      case roomTypeTemple:
+        printf("+");
+        break;
       }
     }
     printf("\n");
@@ -131,6 +134,21 @@ int GameFloor::neighboorCount(int x, int y)
   if (y > 0 && floor[x][y-1] > 0) count++;
   if (y < FLOOR_HEIGHT - 1 && floor[x][y+1] > 0) count++;
   return count;
+}
+
+void GameFloor::reveal()
+{
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] > roomTypeNULL)
+      {
+        if (!maps[i][j]->isCleared())
+        {
+          maps[i][j]->setKnown(true);
+        }
+      }
+    }
 }
 
 IntCoord GameFloor::getFirstNeighboor(int x, int y)
@@ -213,9 +231,10 @@ bool GameFloor::finalize()
   floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeKey;
   isolatedVector.erase(isolatedVector.begin() + index);
 
-  int nbIsolatedRoomsMin = 3;
+  int nbIsolatedRoomsMin = 5;
   if (level == 1) nbIsolatedRoomsMin = 2;
-  if (level > 2 && game().getPlayer()->getActiveSpell().spell == SpellNone) nbIsolatedRoomsMin = 4;
+  else if (level == 2) nbIsolatedRoomsMin = 4;
+  //if (level > 2 && game().getPlayer()->getActiveSpell().spell == SpellNone) nbIsolatedRoomsMin = 4;
 
   if (nbIsolatedRooms < nbIsolatedRoomsMin) return false;
 
@@ -227,10 +246,19 @@ bool GameFloor::finalize()
   isolatedVector.erase(isolatedVector.begin() + index);
 
   if (level == 1 || nbIsolatedRooms < 4) return true;
-  // challenge
+
+  // temple
   index = rand() % isolatedVector.size();
-  floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeChallenge;
+  floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeTemple;
   isolatedVector.erase(isolatedVector.begin() + index);
+
+  // challenge
+  if (isolatedVector.size() > 0)
+  {
+    index = rand() % isolatedVector.size();
+    floor[isolatedVector[index].x][isolatedVector[index].y] = roomTypeChallenge;
+    isolatedVector.erase(isolatedVector.begin() + index);
+  }
 
   return true;
 }

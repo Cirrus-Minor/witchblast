@@ -45,7 +45,7 @@ const int X_GAME_COLOR_VIOLET = 3;  /*!< Violet light color effect  ID */
 const int X_GAME_COLOR_BROWN  = 4;  /*!< Brown light color effect  ID */
 const int X_GAME_COLOR_WHITE  = 5;  /*!< White light color effect  ID */
 
-unsigned const int NumberKeys = 12; /*!< Number of input keys on the game */
+unsigned const int NumberKeys = 13; /*!< Number of input keys on the game */
 
 /** Input key string
  *  Keys in the config file.
@@ -62,6 +62,7 @@ const std::string inputKeyString[NumberKeys] =
   "key_fire_right",
   "key_fire_select",
   "key_spell",
+  "key_interact",
   "key_time",
   "key_fire"
 };
@@ -236,6 +237,8 @@ public:
   */
   int getEnemyCount();
 
+  int getItemsCount();
+
  /*!
   *  \brief Return the position of the nearest enemy
   *  \param x : x position of the source
@@ -361,7 +364,7 @@ public:
    *  \brief Add a monster to the "killed monsters" table
    *  \param enemyType : ID of the monster
    */
-  void addKilledEnemy(enemyTypeEnum enemyType);
+  void addKilledEnemy(enemyTypeEnum enemyType, enumShotType damageType);
 
   /*!
    *  \brief Proceed an event
@@ -389,6 +392,10 @@ public:
     bool equip[NUMBER_EQUIP_ITEMS];
   };
   void calculateScore();
+
+  void addLifeBarToDisplay(std::string label, int hp, int hpMax);
+
+  void revealFloor();
 
 protected:
   /*!
@@ -446,15 +453,30 @@ private:
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */
   DungeonMapEntity* dungeonEntity;  /*!< TileMap of the room (main game board) + blood, items, etc...*/
-
+  TileMapEntity* miniMapEntity;
   // displaying objects
   DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */
-  sf::Sprite keySprite;       /*!< A simple sprite with the boss key (displayed on the HUD) */
-  sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
   sf::Font font;              /*!< The font used for displaying text */
   sf::Text myText;            /*!< The text to be displayed */
   sf::Sprite introScreenSprite;
   sf::Sprite titleSprite;
+
+  struct uiSpritesStruct
+  {
+    sf::Sprite keySprite;       /*!< A simple sprite with the boss key (displayed on the HUD) */
+    sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
+    sf::Sprite topLayer;
+    sf::Sprite msgBoxSprite;
+    sf::Sprite iconSprite;
+  } uiSprites;
+
+  struct lifeBarStruct
+  {
+    bool toDisplay;
+    std::string label;
+    int hp;
+    int hpMax;
+  } lifeBar;
 
   float xOffset, yOffset;     /*!< Main game client position in the GUI */
 
@@ -519,6 +541,7 @@ private:
     KeyFireRight,
     KeyFireSelect,
     KeySpell,
+    KeyInteract,
     KeyTimeControl,
     KeyFire
   };
@@ -645,6 +668,11 @@ private:
   void verifyDoorUnlocking();
 
   /*!
+   *  \brief Checks if player can interact with something
+   */
+  void checkInteraction();
+
+  /*!
    *  \brief Plays a music
    *
    * Plays a music.
@@ -684,6 +712,11 @@ private:
    *  \brief Render the game
    */
   void renderRunningGame();
+
+  void renderGame();
+  void renderHud();
+  void renderLifeBar();
+  void renderMessages();
 
   /*!
    *  \brief Update the menu
@@ -854,6 +887,14 @@ private:
   StructScore lastScore;
   void loadHiScores();
   void saveHiScores();
+
+  struct StructInteraction
+  {
+    bool active;
+    EnumInteractionType type;
+    int id;
+    std::string label;
+  } interaction;
 };
 
 /*!

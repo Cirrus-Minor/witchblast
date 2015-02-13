@@ -21,7 +21,7 @@ PnjEntity::PnjEntity(float x, float y, int pnjType) : SpriteEntity (ImageManager
 
   isSpeaking = false;
   speechTimer = 2.5f + 0.1f * (rand() % 50);
-  headFrame = 2;
+  isMirroring = false;
 
   type = ENTITY_PNJ;
 }
@@ -34,12 +34,14 @@ void PnjEntity::animate(float delay)
     direction = 4;
     velocity.x = -pnjVelocity;
     xGoal = x0 - 180.0f;
+    isMirroring = true;
   }
   else if (direction == 4 && x <= xGoal)
   {
     direction = 6;
     velocity.x = pnjVelocity;
     xGoal = x0 + 180.0f;
+    isMirroring = false;
   }
 
   speechTimer -= delay;
@@ -68,12 +70,12 @@ void PnjEntity::animate(float delay)
 
   if (isSpeaking)
   {
-    headFrame = 2 + (int)(4 * age) % 2;
+    frame = 3 + (int)(4 * age) % 2;
   }
   else
   {
-    frame = 0 + (int)(4 * age) % 2;
-    headFrame = 2;
+    frame = 0 + (int)(4 * age) % 4;
+    if (frame == 3) frame = 1;
   }
   z = y + height / 2 - 3;
 
@@ -82,19 +84,7 @@ void PnjEntity::animate(float delay)
 
 void PnjEntity::render(sf::RenderTarget* app)
 {
-  sprite.setPosition(x, y);
-
-  // shadow
-  sprite.setTextureRect(sf::IntRect(4 * width, 0, width, height));
-  app->draw(sprite);
-
-  // body
-  sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
-  app->draw(sprite);
-
-  // head
-  sprite.setTextureRect(sf::IntRect(headFrame * width, 0, width, height));
-  app->draw(sprite);
+  SpriteEntity::render(app);
 
   if (isSpeaking)
   {

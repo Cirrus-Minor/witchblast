@@ -106,7 +106,7 @@ void RockMissileEntity::collideWithEnemy(EnemyEntity* entity)
 void RockMissileEntity::dying()
 {
   isDying = true;
-  game().addKilledEnemy(enemyType);
+  game().addKilledEnemy(enemyType, hurtingType);
   SoundManager::getInstance().playSound(SOUND_ROCK_IMPACT);
   game().makeShake(0.1f);
 

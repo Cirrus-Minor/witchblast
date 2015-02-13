@@ -3,39 +3,56 @@
 
 #include "sfml_game/GameMap.h"
 #include "sfml_game/MyTools.h"
+#include "Constants.h"
 #include <list>
 
 const int MAP_NORMAL_FLOOR  =   7;
 const int MAP_STAIRS_UP     =   39;
 const int MAP_DOOR_OPEN     =   49;
-const int MAP_WALL          =   50;
-const int MAP_DOOR          =   51;
-const int MAP_WALL_7        =   66;
-const int MAP_WALL_77       =   68;
-const int MAP_WALL_8        =   60;
-const int MAP_WALL_9        =   67;
-const int MAP_WALL_99       =   69;
-const int MAP_WALL_4        =   62;
-const int MAP_WALL_6        =   63;
-const int MAP_WALL_1        =   76;
-const int MAP_WALL_11       =   78;
-const int MAP_WALL_2        =   61;
-const int MAP_WALL_3        =   77;
-const int MAP_WALL_33       =   79;
+const int MAP_WALL          =   70;
+const int MAP_DOOR          =   71;
 
-const int MAP_WALL_87       =   70;
-const int MAP_WALL_89       =   71;
-const int MAP_WALL_21       =   72;
-const int MAP_WALL_23       =   73;
-const int MAP_WALL_47       =   64;
-const int MAP_WALL_41       =   74;
-const int MAP_WALL_69       =   65;
-const int MAP_WALL_63       =   75;
+// temple
+const int MAP_TEMPLE          =   50;
+const int MAP_TEMPLE_WALL     =   80;
 
-const int MAP_WALL_X        =   89;
+// shop
+const int MAP_SHOP_BEGIN      =   100;
+const int MAP_SHOP_LEFT       = 0 + MAP_SHOP_BEGIN;
+const int MAP_SHOP            = 1 + MAP_SHOP_BEGIN;
+const int MAP_SHOP_RIGHT      = 2 + MAP_SHOP_BEGIN;
 
-const int MAP_GRID          =   9;
-const int MAP_HOLE          =   90;
+// walls
+const int MAP_WALL_BEGIN    =   110;
+const int MAP_WALL_7        =   6 + MAP_WALL_BEGIN;
+const int MAP_WALL_77       =   8 + MAP_WALL_BEGIN;
+const int MAP_WALL_8        =   0 + MAP_WALL_BEGIN;
+const int MAP_WALL_9        =   7 + MAP_WALL_BEGIN;
+const int MAP_WALL_99       =   9 + MAP_WALL_BEGIN;
+const int MAP_WALL_4        =   2 + MAP_WALL_BEGIN;
+const int MAP_WALL_6        =   3 + MAP_WALL_BEGIN;
+const int MAP_WALL_1        =   16 + MAP_WALL_BEGIN;
+const int MAP_WALL_11       =   18 + MAP_WALL_BEGIN;
+const int MAP_WALL_2        =   1 + MAP_WALL_BEGIN;
+const int MAP_WALL_3        =   17 + MAP_WALL_BEGIN;
+const int MAP_WALL_33       =   19 + MAP_WALL_BEGIN;
+const int MAP_WALL_87       =   10 + MAP_WALL_BEGIN;
+const int MAP_WALL_89       =   11 + MAP_WALL_BEGIN;
+const int MAP_WALL_21       =   12 + MAP_WALL_BEGIN;
+const int MAP_WALL_23       =   13 + MAP_WALL_BEGIN;
+const int MAP_WALL_47       =   4 + MAP_WALL_BEGIN;
+const int MAP_WALL_41       =   14 + MAP_WALL_BEGIN;
+const int MAP_WALL_69       =   5 + MAP_WALL_BEGIN;
+const int MAP_WALL_63       =   15 + MAP_WALL_BEGIN;
+const int MAP_WALL_EXIT_L   =   20 + MAP_WALL_BEGIN;
+const int MAP_WALL_EXIT_R   =   21 + MAP_WALL_BEGIN;
+const int MAP_WALL_START_L  =   22 + MAP_WALL_BEGIN;
+const int MAP_WALL_START_M  =   23 + MAP_WALL_BEGIN;
+const int MAP_WALL_START_R  =   24 + MAP_WALL_BEGIN;
+const int MAP_WALL_X        =   29 + MAP_WALL_BEGIN;
+
+const int MAP_GRID          =   29;
+const int MAP_HOLE          =   160;
 const int MAP_HOLE_TOP      =   MAP_HOLE;
 const int MAP_HOLE_BOTTOM   =   MAP_HOLE + 1;
 
@@ -54,7 +71,8 @@ enum roomTypeEnum
   roomTypeBonus,
   roomTypeExit,
   roomTypeStarting,
-  roomTypeChallenge
+  roomTypeChallenge,
+  roomTypeTemple
 };
 
 class DungeonMap : public GameMap
@@ -73,6 +91,8 @@ class DungeonMap : public GameMap
     bool isWalkable(int x, int y);
     bool isFlyable(int x, int y);
     bool isShootable(int x, int y);
+
+    int getDivinity(int x, int y);
 
     bool containsHealth();
 
@@ -104,6 +124,8 @@ class DungeonMap : public GameMap
     Vector2D generateBonusRoom();
     Vector2D generateMerchantRoom();
     Vector2D generateKeyRoom();
+    void generateTemple(int x, int y, enumDivinityType type);
+    void generateTempleRoom();
     void addRandomGrids(int n);
 
     void addItem(int itemType, float x, float y, bool merch);

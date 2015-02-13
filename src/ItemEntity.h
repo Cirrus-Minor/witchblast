@@ -12,6 +12,7 @@ class ItemEntity : public CollidingSpriteEntity
     bool getMerchandise();
     int getPrice();
     bool canBePickedUp();
+    void buy();
 
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);

@@ -65,6 +65,12 @@ bool ItemEntity::isOnMap()
 
 void ItemEntity::animate(float delay)
 {
+  if (isMerchandise)
+  {
+    testSpriteCollisions();
+    return;
+  }
+
   if (isFlying)
   {
     if (!isCollidingWithMap() && isOnMap())
@@ -168,11 +174,11 @@ void ItemEntity::render(sf::RenderTarget* app)
   if (isMerchandise)
   {
     std::ostringstream oss;
-    oss << getPrice() << " $";
+    oss << getPrice();
     sf::Color fontColor;
     if (getPrice() > game().getPlayer()->getGold()) fontColor = sf::Color(215, 20, 20);
     else fontColor = sf::Color(255, 255, 255);
-    game().write(oss.str(), 16, x, y + 18.0f, ALIGN_CENTER, fontColor, app, 1 , 1);
+    game().write(oss.str(), 16, x, y + 35.0f, ALIGN_CENTER, fontColor, app, 1 , 1);
   }
 
   if (h > 0.1f)
@@ -194,15 +200,40 @@ void ItemEntity::render(sf::RenderTarget* app)
 
 void ItemEntity::calculateBB()
 {
-  boundingBox.left = (int)x - width / 2;
-  boundingBox.width = width;
-  boundingBox.top = (int)y - height / 2;
-  boundingBox.height =  height;
+  if (isMerchandise)
+  {
+    boundingBox.left = (int)x - width / 4;
+    boundingBox.width = width / 2;
+    boundingBox.top = (int)y - height / 2 - 20;
+    boundingBox.height =  height + 100;
+  }
+  else
+  {
+    boundingBox.left = (int)x - width / 2;
+    boundingBox.width = width;
+    boundingBox.top = (int)y - height / 2;
+    boundingBox.height =  height;
+  }
 }
 
 void ItemEntity::dying()
 {
   isDying = true;
+}
+
+void ItemEntity::buy()
+{
+  if (canBePickedUp() && isMerchandise)
+  {
+    game().getPlayer()->acquireItem(itemType);
+    game().getPlayer()->pay(getPrice());
+    game().getPlayer()->setItemToBuy(NULL);
+
+    dying();
+
+    if (!items[itemType].generatesStance)
+      new MagnetEntity(x, y, game().getPlayer(), itemType);
+  }
 }
 
 void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -215,13 +246,11 @@ void ItemEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   {
     if (playerEntity != NULL && !playerEntity->isDead())
     {
-      /*if (playerEntity->getHp() == playerEntity->getHpMax())
+      if (isMerchandise)
       {
-        // don't use health item if you don't need it
-        if (itemType >= ItemHealthVerySmall && itemType <= ItemHealthVerySmallPoison) return;
+        playerEntity->setItemToBuy(this);
       }
-      if (isMerchandise == false || playerEntity->getGold() >= getPrice())*/
-      if (canBePickedUp())
+      else if (canBePickedUp())
       {
         playerEntity->acquireItem(itemType);
 

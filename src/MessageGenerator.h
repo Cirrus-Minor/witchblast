@@ -32,8 +32,8 @@ struct messageBuilderStruct
   int nbLines;
 };
 
-const float MESSAGE_DURATION = 6.0f;
-const float MESSAGE_DURATION_SHORT = 3.0f;
+const float MESSAGE_DURATION = 8.0f;
+const float MESSAGE_DURATION_SHORT = 4.0f;
 
 std::map<EnumMessages, messageBuilderStruct> msgMap =
 {
@@ -58,12 +58,18 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoGiantSpiderAfter,  { MessageTypeInfo, 1, "msg_giant_spider_after",   2} },
   { MsgInfoFranky,            { MessageTypeInfo, 1, "msg_francky",              2} },
 
+  { MsgInfoDivHealer,         { MessageTypeInfo, 0, "divinity_healer",            3} },
+  { MsgInfoDivFighter,        { MessageTypeInfo, 0, "divinity_fighter",           3} },
+  { MsgInfoDivIce,            { MessageTypeInfo, 0, "divinity_ice",               3} },
+  { MsgInfoDivStone,          { MessageTypeInfo, 0, "divinity_stone",             3} },
+
   { MsgTutoBasics,            { MessageTypeTutorial, 0, "msg_tuto_intro",           3} },
-  { MsgTutoTips,              { MessageTypeTutorial, 0, "msg_tuto_tips",           3} },
+  { MsgTutoTips,              { MessageTypeTutorial, 0, "msg_tuto_tips",            3} },
   { MsgTutoItems,             { MessageTypeTutorial, 0, "msg_tuto_items",           3} },
   { MsgTutoShops,             { MessageTypeTutorial, 0, "msg_tuto_shops",           3} },
   { MsgTutoBossDoor,          { MessageTypeTutorial, 0, "msg_tuto_boss_door",       3} },
   { MsgTutoChallengeDoor,     { MessageTypeTutorial, 0, "msg_tuto_challenge_door",  3} },
+  { MsgTutoTemple,            { MessageTypeTutorial, 0, "msg_tuto_temple",          3} },
   { MsgTutoHeal,              { MessageTypeTutorial, 0, "msg_tuto_heal",            3} },
   { MsgTutoShots,             { MessageTypeTutorial, 0, "msg_tuto_shots",           3} },
   { MsgTutoSpell,             { MessageTypeTutorial, 0, "msg_tuto_spell",           3} },
@@ -94,6 +100,11 @@ static messageStruct getMessage(EnumMessages type)
   msg.message[1] = "";
   msg.message[2] = "";
   loadMessageData(msg.message, msgBuilder.key, msgBuilder.nbLines);
+
+  if (type == MsgInfoDivHealer)       msg.icon = 2;
+  else if (type == MsgInfoDivFighter) msg.icon = 3;
+  else if (type == MsgInfoDivIce)     msg.icon = 4;
+  else if (type == MsgInfoDivStone)   msg.icon = 5;
 
   return msg;
 }

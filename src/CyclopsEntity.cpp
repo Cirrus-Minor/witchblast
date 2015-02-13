@@ -17,7 +17,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 {
   width = 128;
   height = 192;
-  creatureSpeed = CYCLOP_SPEED[0] * 0.6f;
+  creatureSpeed = CYCLOP_SPEED[0];
   velocity = Vector2D(creatureSpeed);
   hp = CYCLOP_HP;
   hpDisplay = CYCLOP_HP;
@@ -26,7 +26,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 
 
   type = ENTITY_ENEMY_BOSS;
-  bloodColor = BloodRed;
+  bloodColor = BloodNone; // stones don't bleed
   dyingFrame = 5;
   deathFrame = FRAME_CORPSE_CYCLOP;
   agonizingSound = SOUND_CYCLOP_DIE;
@@ -111,7 +111,7 @@ void CyclopsEntity::computeStates(float delay)
       {
         counter--;
         timer = 0.5f;
-        creatureSpeed = CYCLOP_SPEED[getHealthLevel()] * 0.6f;
+        creatureSpeed = CYCLOP_SPEED[getHealthLevel()];
         setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       }
       else
@@ -228,7 +228,7 @@ void CyclopsEntity::animate(float delay)
   // current frame
   if (state == 0)
   {
-    int r = ((int)(age * 2.0f)) % 4;
+    int r = ((int)(age * 5.0f)) % 4;
     if (r == 2) frame = 0;
     else if (r == 3) frame = 2;
     else frame = r;
@@ -239,7 +239,7 @@ void CyclopsEntity::animate(float delay)
   else if (state == 1)
   {
     isMirroring = game().getPlayer()->getX() > x;
-    frame = 3;
+    frame = timer > 0.5f ? 4 : 3;
   }
   else if (state == 2)
   {

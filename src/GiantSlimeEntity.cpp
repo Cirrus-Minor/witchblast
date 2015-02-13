@@ -321,6 +321,7 @@ void GiantSlimeEntity::animate(float delay)
   else if (state == 7)
     sprite.setColor(sf::Color(255, 255, 255, 0));
 
+  isMirroring = (frame == 2) && (velocity.x < 0.0f);
   z = y + 26;
 }
 
@@ -357,7 +358,7 @@ void GiantSlimeEntity::collideMapBottom()
 void GiantSlimeEntity::dying()
 {
   isDying = true;
-  game().addKilledEnemy(enemyType);
+  game().addKilledEnemy(enemyType, hurtingType);
   game().addCorpse(x, y, FRAME_CORPSE_GIANT_SLIME);
 
   float xSlime = x;
@@ -397,11 +398,17 @@ void GiantSlimeEntity::render(sf::RenderTarget* app)
   {
     // shadow
     sprite.setPosition(x, y);
-    sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect(shadowFrame * width + width, 0, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
     app->draw(sprite);
   }
   sprite.setPosition(x, y - h);
-  sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
+  if (isMirroring)
+      sprite.setTextureRect(sf::IntRect(frame * width + width, 0, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect(frame * width, 0, width, height));
   app->draw(sprite);
 
   renderLifeBar(app, tools::getLabel("enemy_giant_slime"));

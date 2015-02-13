@@ -268,6 +268,16 @@ roomTypeEnum DungeonMap::getNeighbourDown()
   else return roomTypeNULL;
 }
 
+int DungeonMap::getDivinity(int x, int y)
+{
+  if (x <= 0 || (x >= MAP_WIDTH - 1) || y <= 0 || (y >= MAP_HEIGHT - 1)) return -1;
+
+  if (map[x][y] >= MAP_TEMPLE && map[x][y] < MAP_TEMPLE + NB_DIVINITY)
+    return (map[x][y] - MAP_TEMPLE);
+  else
+    return -1;
+}
+
 void DungeonMap::initRoom()
 {
   int x0 = MAP_WIDTH / 2;
@@ -317,11 +327,15 @@ void DungeonMap::initRoom()
 
 
 
-  for ( i = 1 ; i < width - 1 ; i++)
-    for ( j = 1 ; j < height - 1 ; j++)
+  for ( j = 1 ; j < height - 1 ; j++)
+    for ( i = 1 ; i < width - 1 ; i++)
     {
-      map[i][j] = 0;
-      if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+      //map[i][j] = 0;
+      //if (rand()%7 == 0) map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+
+      map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+      while (map[i][j] == map[i - 1][j] || map[i][j] == map[i][j - 1] || map[i][j] == map[i - 1][j - 1] || map[i][j] == map[i + 1][j - 1])
+        map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
     }
 
   if (gameFloor != NULL)
@@ -424,6 +438,56 @@ Vector2D DungeonMap::generateBonusRoom()
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
 
+void DungeonMap::generateTemple(int x, int y, enumDivinityType type)
+{
+  map[x - 1][y - 2] = MAP_HOLE_TOP;
+  map[x - 1][y - 1] = MAP_HOLE_BOTTOM;
+  map[x - 1][y] = MAP_HOLE_BOTTOM;
+
+  map[x + 1][y - 2] = MAP_HOLE_TOP;
+  map[x + 1][y - 1] = MAP_HOLE_BOTTOM;
+  map[x + 1][y] = MAP_HOLE_BOTTOM;
+
+  map[x][y - 2] = MAP_TEMPLE_WALL + (int)type;
+  map[x][y - 1] = MAP_TEMPLE_WALL + 10 + (int)type;
+  map[x][y] = MAP_TEMPLE + (int)type;
+}
+
+void DungeonMap::generateTempleRoom()
+{
+  initRoom();
+  int x0 = MAP_WIDTH / 2;
+  int y0 = 1 + MAP_HEIGHT / 2;
+
+  if (rand() % 3 == 0)
+  {
+    if (rand() % 2 == 0) initPattern(PatternSmallDisc);
+    else initPattern(PatternSmallStar);
+  }
+
+  int d0, d1, d2;
+  d0 = rand() % NB_DIVINITY;
+  d1 = d0;
+  while (d0 == d1) d1 = rand() % NB_DIVINITY;
+
+  if (rand() % 2 == 0)
+  {
+    // three temple
+    d2 = d0;
+    while (d0 == d2 || d1 == d2) d2 = rand() % NB_DIVINITY;
+    generateTemple(x0 - 2, y0, (enumDivinityType)d0);
+    generateTemple(x0 + 2, y0, (enumDivinityType)d1);
+    generateTemple(x0, y0, (enumDivinityType)d2);
+  }
+  else
+  {
+    // two temples
+    generateTemple(x0 - 1, y0, (enumDivinityType)d0);
+    generateTemple(x0 + 1, y0, (enumDivinityType)d1);
+  }
+
+}
+
 void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
 {
   int xf = x0 + w - 1;
@@ -453,11 +517,13 @@ void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
 Vector2D DungeonMap::generateMerchantRoom()
 {
   initRoom();
-  int x0 = 3;
-  int y0 = 3;
 
-  generateCarpet(3, 3, 9, 3, 20);
+  int x0 = MAP_WIDTH / 2;
+  int y0 = MAP_HEIGHT / 2;
 
+  for (int i = x0 - 2; i <= x0 + 2; i++) map[i][y0] = MAP_SHOP;
+  map[x0 - 3][y0] = MAP_SHOP_LEFT;
+  map[x0 + 3][y0] = MAP_SHOP_RIGHT;
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
@@ -489,8 +555,8 @@ void DungeonMap::generateExitRoom()
   initRoom();
   int x0 = MAP_WIDTH / 2;
   map[x0][0] = MAP_STAIRS_UP;
-  map[x0 - 1][0] = 80;
-  map[x0 + 1][0] = 81;
+  map[x0 - 1][0] = MAP_WALL_EXIT_L;
+  map[x0 + 1][0] = MAP_WALL_EXIT_R;
 
   if (rand() % 3 == 0) initPattern(PatternBorder);
 }
@@ -516,9 +582,9 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
       if (game().getLevel() > 1)
       {
-        map[x0 - 1][MAP_HEIGHT - 1] = 82;
-        map[x0][MAP_HEIGHT - 1]     = 83;
-        map[x0 + 1][MAP_HEIGHT - 1] = 84;
+        map[x0 - 1][MAP_HEIGHT - 1] = MAP_WALL_START_L;
+        map[x0][MAP_HEIGHT - 1]     = MAP_WALL_START_M;
+        map[x0 + 1][MAP_HEIGHT - 1] = MAP_WALL_START_R;
       }
     }
     else if (roomType == roomTypeBoss && (game().getLevel() == 2 || game().getLevel() > 5) ) // giant slime

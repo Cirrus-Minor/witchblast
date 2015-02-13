@@ -155,7 +155,7 @@ void CauldronEntity::dying()
   isAgonising = true;
   agonizingDelay = 0.7f;
   drop();
-  game().addKilledEnemy(enemyType);
+  game().addKilledEnemy(enemyType, hurtingType);
 }
 
 void CauldronEntity::drop()

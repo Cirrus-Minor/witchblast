@@ -5,14 +5,20 @@
 
 DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
 {
-    this->z = -1.0f;
+  this->z = -1.0f;
 
-    type = 0;
-    hasChanged = true;
+  type = 0;
+  hasChanged = true;
 
-    DungeonMapEntityPost* post = new DungeonMapEntityPost(this);
-    post->setZ(-0.2f);
-    post->setType(0);
+  DungeonMapEntityPost* post = new DungeonMapEntityPost(this);
+  post->setZ(-0.2f);
+  post->setType(0);
+
+  DungeonMapEntityOverlay* over = new DungeonMapEntityOverlay(this);
+  over->setZ(1000);
+  over->setType(0);
+
+  overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
 }
 
 void DungeonMapEntity::animate(float delay)
@@ -242,12 +248,36 @@ bool DungeonMapEntity::getChanged()
 void DungeonMapEntity::render(sf::RenderTarget* app)
 {
   app->draw(vertices, ImageManager::getInstance().getImage(IMAGE_TILES));
+
+  if (game().getCurrentMap()->getRoomType() == roomTypeTemple)
+  {
+    for (int i = 1; i < MAP_WIDTH - 2 ; i++)
+      for (int j = 1; j < MAP_WIDTH - 2 ; j++)
+        if (game().getCurrentMap()->getTile(i, j) >= MAP_TEMPLE
+            && game().getCurrentMap()->getTile(i, j) < MAP_TEMPLE + 10)
+        {
+          sf::Sprite tile;
+          tile.setTexture(*ImageManager::getInstance().getImage(IMAGE_TILES));
+          tile.setPosition(i * TILE_WIDTH, j * TILE_HEIGHT);
+          tile.setTextureRect(sf::IntRect((game().getCurrentMap()->getTile(i, j) % 10) * TILE_WIDTH,
+                               (1 + game().getCurrentMap()->getTile(i, j) / 10) * TILE_HEIGHT,
+                               TILE_WIDTH, TILE_HEIGHT));
+          int fade = 127 + 127 * (cosf(6.0f * game().getAbsolutTime()));
+          tile.setColor(sf::Color(255, 255, 255, fade));
+          app->draw(tile);
+        }
+  }
 }
 
 void DungeonMapEntity::renderPost(sf::RenderTarget* app)
 {
   displayBlood(app);
   displayCorpses(app);
+}
+
+void DungeonMapEntity::renderOverlay(sf::RenderTarget* app)
+{
+  app->draw(overlaySprite);
 }
 
 std::vector <displayEntityStruct> DungeonMapEntity::getBlood()
@@ -465,4 +495,20 @@ void DungeonMapEntityPost::animate(float delay)
 void DungeonMapEntityPost::render(sf::RenderTarget* app)
 {
   parent->renderPost(app);
+}
+/////////////////////////////////////////////////////////////////////////
+
+
+DungeonMapEntityOverlay::DungeonMapEntityOverlay(DungeonMapEntity* parent) : GameEntity (0.0f, 0.0f)
+{
+  this->parent = parent;
+}
+
+void DungeonMapEntityOverlay::animate(float delay)
+{
+}
+
+void DungeonMapEntityOverlay::render(sf::RenderTarget* app)
+{
+  parent->renderOverlay(app);
 }

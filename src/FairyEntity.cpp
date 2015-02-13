@@ -104,9 +104,9 @@ void FairyEntity::animate(float delay)
   isMirroring = false;
 
   if (velocity.x * velocity.x + velocity.y * velocity.y > 400)
-    frame = ((int)(age * 10.0f)) % 2;
+    frame = ((int)(age * 24.0f)) % 2;
   else
-    frame = ((int)(age * 5.0f)) % 2;
+    frame = ((int)(age * 18.0f)) % 2;
 
   if (facingDirection == 8) frame += 2;
   else if (facingDirection == 4) frame += 4;

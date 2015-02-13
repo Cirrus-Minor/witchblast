@@ -299,7 +299,6 @@ dc_minutes#min. of game
 dc_killed_monsters#Slayed monsters
 dc_gold#Gold
 dc_challenges#Completed challenges
-
 player_name#Player name
 player_name_desc#Modify player name
 hi_scores#Hall of fame
@@ -311,6 +310,36 @@ volume_sound_desc#Use left/right arrows to change volume
 volume_music#Music volume
 certificate_capture#Press [F1] to save the certificate as a PNG file
 certificate_saved#Saved to
+
+msg_tuto_temple_0#Tutorial: Temple
+msg_tuto_temple_1#The temple is the place where you can worship a divinity or donate.
+msg_tuto_temple_2#Divinities can help you and provide bonus.
+key_interact#interact
+interact_worship#Press [interact] to worship
+interact_shop#Press [interact] to buy
+interact_donate#Press [interact] to donate 10 gold
+interact_donate_fail#(not enough gold)
+worshipping#You're now a worshipper of
+divinity_healer_0#Pomonos the Righteous
+divinity_healer_1#Guardian of the righteousness and patroness of the weak.
+divinity_healer_2#He appreciates donations, suffering and fighting evil.
+divinity_fighter_0#Tello the Powerful
+divinity_fighter_1#Lord of the fighters and the strong.
+divinity_fighter_2#He appreciates monsters and titans falling in fight.
+divinity_ice_0#Mister Snow
+divinity_ice_1#Divinity of the coldness.
+divinity_ice_2#He appreciates the use of ice.
+divinity_stone_0#Gaya
+divinity_stone_1#Divinity of the stone and earth.
+divinity_stone_2#He appreciates the use of stone.
+divinity_intervention_0#Divine intervention
+divinity_intervention_1#intervenes in your favour.
+divinity_gift_0#Divine gift
+divinity_gift_1#grants you a gift.
+item_floor_map#Dungeon Map
+item_floor_map_desc#Reveals the map of the current floor
+item_alcohol#Absinthe
+item_alcohol_desc#temporarily makes damage stronger
 
 [french]
 start_new_game#Nouvelle partie

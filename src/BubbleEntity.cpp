@@ -139,7 +139,7 @@ void BubbleEntity::collideWithEnemy(EnemyEntity* entity)
 void BubbleEntity::dying()
 {
   isDying = true;
-  if (bubbleSize == 0) game().addKilledEnemy(enemyType);
+  if (bubbleSize == 0) game().addKilledEnemy(enemyType, hurtingType);
 
   if (bubbleSize < 4)
   {

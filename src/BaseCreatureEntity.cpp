@@ -99,7 +99,7 @@ float BaseCreatureEntity::animateStates(float delay)
     if (specialState[i].active)
     {
       specialState[i].timer -= delay;
-      if (specialState[i].timer <= 0.0f) specialState[i].active = false;
+      if (specialState[i].timer <= 0.0f) setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
     }
   }
   // ice
@@ -629,9 +629,14 @@ bool BaseCreatureEntity::canCollide()
 
 void BaseCreatureEntity::generateStar(sf::Color starColor)
 {
+  generateStar(starColor, x, y);
+}
+
+void BaseCreatureEntity::generateStar(sf::Color starColor, float xStar, float yStar)
+{
   SpriteEntity* spriteStar = new SpriteEntity(
                            ImageManager::getInstance().getImage(IMAGE_STAR_2),
-                            x, y);
+                            xStar, yStar);
   spriteStar->setScale(0.8f, 0.8f);
   spriteStar->setZ(1000.0f);
   spriteStar->setSpin(-100 + rand()%200);
@@ -716,4 +721,31 @@ bool BaseCreatureEntity::canSee(float xf, float yf)
     }
 
   return true;
+}
+
+void BaseCreatureEntity::heal(int healPoints)
+{
+  int savedHp = hp;
+  hp += healPoints;
+  if (hp > hpMax) hp = hpMax;
+
+  int healedHp = hp - savedHp;
+
+  if (savedHp > 0)
+  {
+    std::ostringstream oss;
+    oss << "+" << healedHp;
+    int textSize;
+    if (healedHp < 8) textSize = 17;
+    else textSize = 17 + (healedHp - 3) / 5;
+    TextEntity* text = new TextEntity(oss.str(), textSize, x, y - 20.0f);
+    text->setColor(TextEntity::COLOR_FADING_GREEN);
+    text->setAge(-0.6f);
+    text->setLifetime(0.3f);
+    text->setWeight(-60.0f);
+    text->setZ(2000);
+    text->setAlignment(ALIGN_CENTER);
+    text->setType(ENTITY_FLYING_TEXT);
+    while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
+  }
 }

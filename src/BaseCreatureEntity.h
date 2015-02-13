@@ -125,6 +125,11 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       SpecialStateSlow,
       SpecialStatePoison,
 
+      DivineStateProtection,
+      DivineStateSpeed,
+      DivineStateFireRate,
+      DivineStateFireDamage,
+
       NB_SPECIAL_STATES
     };
     enum enumStateResistance { ResistanceImmune, ResistanceVeryHigh, ResistanceHigh, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
@@ -138,7 +143,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       float param3;
     };
     specialStateStuct specialState[NB_SPECIAL_STATES];
-    void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2);
+    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2);
 
     enum enumResistances
     {
@@ -163,8 +168,9 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void computeFacingDirection();
     virtual void dyingFromAge();
     virtual bool canCollide();
-
     bool canSee(float xf, float yf);
+
+    void heal(int healPoints);
 
     static StructHurt getHurtParams(int damage,
                           enumShotType hurtingType,
@@ -215,6 +221,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     } recoil;
 
     void generateStar(sf::Color starColor);
+    void generateStar(sf::Color starColor, float xStar, float yStar);
 
   private:
     bool determineSatusChance(enumStateResistance resistance, int level);
