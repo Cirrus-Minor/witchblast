@@ -1512,13 +1512,13 @@ void PlayerEntity::computePlayer()
   case (DivinityIce):
     {
       if (divinity.level >= 5) resistance[ResistanceFrozen] = ResistanceVeryHigh;
-      if (divinity.level >= 4) resistance[ResistanceIce] = ResistanceHigh;
+      if (divinity.level >= 3) resistance[ResistanceIce] = ResistanceHigh;
       break;
     }
   case (DivinityStone):
     {
       if (divinity.level >= 5) resistance[ResistanceRecoil] = ResistanceVeryHigh;
-      if (divinity.level >= 4) resistance[ResistanceStone] = ResistanceHigh;
+      if (divinity.level >= 3) resistance[ResistanceStone] = ResistanceHigh;
       break;
     }
   }
@@ -2170,6 +2170,7 @@ void PlayerEntity::addPiety(int n)
     SoundManager::getInstance().playSound(SOUND_OM);
     divineInterventionDelay = WORSHIP_DELAY / 2;
     isRegeneration = false;
+    computePlayer();
   }
 }
 
