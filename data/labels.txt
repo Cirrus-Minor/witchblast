@@ -315,9 +315,9 @@ msg_tuto_temple_0#Tutorial: Temple
 msg_tuto_temple_1#The temple is the place where you can worship a divinity or donate.
 msg_tuto_temple_2#Divinities can help you and provide bonus.
 key_interact#interact
-interact_worship#Press [interact] (standard: space)  to worship
-interact_shop#Press [interact] (standard: space)  to buy
-interact_donate#Press [interact] (standard: space) to donate 10 gold
+interact_worship#Press [interact] (standard: E)  to worship
+interact_shop#Press [interact] (standard: E)  to buy
+interact_donate#Press [interact] (standard: E) to donate 10 gold
 interact_donate_fail#(not enough gold)
 worshipping#You're now a worshipper of
 divinity_healer_0#Pomonos the Righteous
@@ -477,7 +477,7 @@ item_ring_illusion#Anneau d'obsidienne
 item_ring_illusion_desc#Augmente le pouvoir d'illusion
 item_spell_triple#Manuel de Triple-tir
 item_spell_triple_desc#Tire trois projectiles
-item_brooch_finesse#Fake Archmage beard
+item_brooch_finesse#Barbe factice d'Archimage
 item_brooch_finesse_desc#Chance de dégâts critiques (x2)
 item_fairy_fire#La fée Alicia
 item_fairy_fire_desc#Vous aide dans le donjon
