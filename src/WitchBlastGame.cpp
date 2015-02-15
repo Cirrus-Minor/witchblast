@@ -96,18 +96,52 @@ static std::string keyToString(sf::Keyboard::Key key)
     oss << c << " (numpad)";
     s = oss.str();
   }
+  else if (key >= sf::Keyboard::F1 && key <= sf::Keyboard::F15)
+  {
+    std::ostringstream oss;
+    oss << "F" << (int)key - (int)sf::Keyboard::F1;
+    s = oss.str();
+  }
+  else if (key == sf::Keyboard::Escape) s = "Escape";
   else if (key == sf::Keyboard::LControl) s = "Left Control";
   else if (key == sf::Keyboard::LShift) s = "Left Shift";
   else if (key == sf::Keyboard::LAlt) s = "Left Alt";
+  else if (key == sf::Keyboard::LSystem) s = "Left System";
   else if (key == sf::Keyboard::RControl) s = "Right Control";
   else if (key == sf::Keyboard::RShift) s = "Right Shift";
   else if (key == sf::Keyboard::RAlt) s = "Right Alt";
+  else if (key == sf::Keyboard::RSystem) s = "Right System";
   else if (key == sf::Keyboard::Space) s = "Space";
   else if (key == sf::Keyboard::Tab) s = "Tab";
   else if (key == sf::Keyboard::Left) s = "Left arrow";
   else if (key == sf::Keyboard::Right) s = "Right arrow";
   else if (key == sf::Keyboard::Up) s = "Up arrow";
   else if (key == sf::Keyboard::Down) s = "Down arrow";
+  else if (key == sf::Keyboard::LBracket) s = "[";
+  else if (key == sf::Keyboard::RBracket) s = "]";
+  else if (key == sf::Keyboard::SemiColon) s = ";";
+  else if (key == sf::Keyboard::Comma) s = ",";
+  else if (key == sf::Keyboard::Period) s = ".";
+  else if (key == sf::Keyboard::Quote) s = "Quote";
+  else if (key == sf::Keyboard::Slash) s = "/";
+  else if (key == sf::Keyboard::BackSlash) s = "\\";
+  else if (key == sf::Keyboard::Tilde) s = "~";
+  else if (key == sf::Keyboard::Equal) s = "=";
+  else if (key == sf::Keyboard::Dash) s = "_";
+  else if (key == sf::Keyboard::Return) s = "Return";
+  else if (key == sf::Keyboard::BackSpace) s = "BackSpace";
+  else if (key == sf::Keyboard::PageUp) s = "Page Up";
+  else if (key == sf::Keyboard::PageDown) s = "Page Down";
+  else if (key == sf::Keyboard::End) s = "End";
+  else if (key == sf::Keyboard::Home) s = "Home";
+  else if (key == sf::Keyboard::Insert) s = "Insert";
+  else if (key == sf::Keyboard::Delete) s = "Delete";
+  else if (key == sf::Keyboard::Add) s = "+";
+  else if (key == sf::Keyboard::Subtract) s = "-";
+  else if (key == sf::Keyboard::Multiply) s = "*";
+  else if (key == sf::Keyboard::Divide) s = "/";
+  else if (key == sf::Keyboard::Pause) s = "Pause";
+  else if (key == sf::Keyboard::KeyCount) s = "Key Count";
 
   return s;
 }
