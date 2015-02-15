@@ -1340,7 +1340,6 @@ int PlayerEntity::hurt(StructHurt hurtParam)
       if (!divinityInvoked && hp <= hpMax / 4 && divinity.divinity >= 0)
       {
         triggerDivinityAfter();
-        game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
       }
 
       return true;
@@ -1366,6 +1365,12 @@ void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
 
 void PlayerEntity::dying()
 {
+  if (divinity.divinity > -1 && divinity.interventions < divinity.level - 1)
+  {
+    hp = 1;
+    return;
+  }
+
   playerStatus = playerStatusDead;
   deathAge = 0.0f;
   hp = 0;
@@ -2126,20 +2131,21 @@ void PlayerEntity::triggerDivinityAfter()
     switch (divinity.divinity)
     {
     case DivinityHealer:
-    {
-      SoundManager::getInstance().playSound(SOUND_OM);
-      divinity.interventions ++;
-      divineHeal(hpMax);
-      break;
-    }
+      {
+        SoundManager::getInstance().playSound(SOUND_OM);
+        divinity.interventions ++;
+        divineHeal(hpMax);
+        break;
+      }
     case DivinityFighter:
-    {
-      SoundManager::getInstance().playSound(SOUND_OM);
-      divinity.interventions ++;
-      divineHeal(hpMax / 2);
-      break;
+      {
+        SoundManager::getInstance().playSound(SOUND_OM);
+        divinity.interventions ++;
+        divineHeal(hpMax / 2);
+        break;
+      }
     }
-    }
+    game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
   }
 }
 
