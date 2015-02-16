@@ -270,6 +270,7 @@ void EnemyEntity::startExplosion()
   isDying = true;
 
   game().addCorpse(x, y, deathFrame);
+  game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }
 
