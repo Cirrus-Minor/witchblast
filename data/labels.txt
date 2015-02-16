@@ -315,9 +315,9 @@ msg_tuto_temple_0#Tutorial: Temple
 msg_tuto_temple_1#The temple is the place where you can worship a divinity or donate.
 msg_tuto_temple_2#Divinities can help you and provide bonus.
 key_interact#interact
-interact_worship#Press [interact] (standard: E)  to worship
-interact_shop#Press [interact] (standard: E)  to buy
-interact_donate#Press [interact] (standard: E) to donate 10 gold
+interact_worship#Worship
+interact_shop#Buy
+interact_donate#Donate 10 gold
 interact_donate_fail#(not enough gold)
 worshipping#You're now a worshipper of
 divinity_healer_0#Pomonos the Righteous
@@ -670,9 +670,9 @@ msg_tuto_temple_0#Tutoriel: Temple
 msg_tuto_temple_1#Au temple, vous pouvez vénérer des divinités et faire des donations.
 msg_tuto_temple_2#Les divinités vous apporte leur aide et des bonus.
 key_interact#interaction
-interact_worship#Presser [interaction] (standard: E) pour vénérer
-interact_shop#Presser [interaction] (standard: E) pour acheter
-interact_donate#Press [interaction] (standard: E) pour donner 10 pièces
+interact_worship#Vénérer
+interact_shop#Acheter
+interact_donate#Donner 10 pièces
 interact_donate_fail#(pas assez d'argent)
 worshipping#Vous êtes maintenant un disciple de
 divinity_healer_0#Pomonos le Juste

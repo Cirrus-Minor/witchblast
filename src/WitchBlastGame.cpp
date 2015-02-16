@@ -3606,6 +3606,7 @@ void WitchBlastGame::checkInteraction()
       interaction.type = InteractionTypeTemple;
       interaction.id = divinity;
       std::stringstream ss;
+      ss << "[" << keyToString(input[KeyInteract]) << "] - ";
       if (player->getDivinity().divinity == divinity)
       {
         ss << tools::getLabel("interact_donate");
@@ -3638,6 +3639,7 @@ void WitchBlastGame::checkInteraction()
     if (player->getItemToBuy()->canBePickedUp())
     {
       ss << std::endl;
+      ss << "[" << keyToString(input[KeyInteract]) << "] - ";
       ss << tools::getLabel("interact_shop");
     }
     interaction.label = ss.str();
