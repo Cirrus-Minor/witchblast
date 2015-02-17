@@ -139,9 +139,14 @@ int ImpEntity::hurt(StructHurt hurtParam)
   if (!isDying && !isAgonising && !isExploding)
   {
     game().generateBlood(x, y, BloodRed);
-    teleport();
-    state = 3;
-    changingDelay = 0.4f;
+    //teleport();
+    //state = 3;
+    //changingDelay = 0.4f;
+    if (state != 2 || changingDelay > 0.4f)
+    {
+      state = 2;
+      changingDelay = 0.15f;
+    }
   }
 
   return result;
