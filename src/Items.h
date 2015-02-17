@@ -24,9 +24,9 @@ enum enumFamiliar
 {
   FamiliarNone = -1,    /**< No familiar */
   FamiliarFairy,        /**< Standard Fairy */
-  FamiliarFairyIce,     /**< Ice Fairy */
+  FamiliarFairyTarget,  /**< Target Fairy */
   FamiliarFairyFire,    /**< Fire Fairy */
-  FamiliarFairyTarget   /**< Target Fairy */
+  FamiliarFairyIce,     /**< Ice Fairy */
 };
 
 // spells
@@ -84,7 +84,7 @@ enum enumItemType
   ItemGemIllusion,
   ItemGemStone,
   ItemGemLightning,
-  ItemFairyIce,
+  ItemFairyTarget,
   ItemRingIce,
   ItemRingStone,
   ItemRingLightning,
@@ -92,7 +92,7 @@ enum enumItemType
   ItemBookTripleShots,
   ItemBroochFinesse,
   ItemFairyFire,
-  ItemFairyTarget,
+  ItemFairyIce,
   ItemMagicianRobe,
   ItemGemFire,
   ItemRingFire,
@@ -242,8 +242,8 @@ const itemStuct items[NUMBER_ITEMS] =
     25, true, FamiliarNone, true, true, true, 2, RarityCommon, false, -1, ShotTypeLightning, SpellNone
   },
   {
-    ItemFairyIce, "item_fairy_ice", "item_fairy_ice_desc",
-    30, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
+    ItemFairyTarget, "item_fairy_target", "item_fairy_target_desc",
+    40, true, FamiliarFairyTarget, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemRingIce, "item_ring_ice", "item_ring_ice_desc",
@@ -274,8 +274,8 @@ const itemStuct items[NUMBER_ITEMS] =
     30, true, FamiliarFairyFire, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
   },
   {
-    ItemFairyTarget, "item_fairy_target", "item_fairy_target_desc",
-    40, true, FamiliarFairyTarget, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
+    ItemFairyIce, "item_fairy_ice", "item_fairy_ice_desc",
+    30, true, FamiliarFairyIce, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemMagicianRobe, "item_robe_magician", "item_robe_magician_desc",
