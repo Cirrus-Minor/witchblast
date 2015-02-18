@@ -751,7 +751,7 @@ merchant_speech_1#Willkommen im Pawn'n'Witches Shop!
 merchant_speech_2#Schau dir unsere Waren an!
 enemy_butcher#Schweinemetzger
 enemy_giant_slime#Gigantischer Schleim
-enemy_cyclops#Barbarischer Zyklop
+enemy_cyclops#Steinzyklop
 enemy_rat_king#Werrattenkönig
 enemy_giant_spider#Gigantische Spinne
 item_copper#Kupfermünze
@@ -782,7 +782,7 @@ item_rage_amulet#Wutamulett
 item_rage_amulet_desc#Revanchiert sich bei Kontakt
 item_displacement_gloves#Verschiebungs-Handschuhe
 item_displacement_gloves_desc#Die Geschwindigkeit des Spielers beeinflusst die der Schüsse
-item_staff#Mahagoni-Stab
+item_staff#Elfenbeinstab
 item_staff_desc#Erhöht Schussgeschwindigkeit und Schaden
 item_fairy#Lilly-Fee
 item_fairy_desc#Hilft dir im Verlies
@@ -802,15 +802,15 @@ item_fairy_ice#Natasha-Fee
 item_fairy_ice_desc#Hilft dir im Verlies
 item_ring_ice#Saphir Ring
 item_ring_ice_desc#Erhöht die Eiskraft
-item_ring_stone#Obsidian Ring
+item_ring_stone#Quarzring
 item_ring_stone_desc#Erhöht die Steinkraft
-item_ring_lightning#Matter Ring
+item_ring_lightning#Amethystring
 item_ring_lightning_desc#Erhöht die Blitzkraft
-item_ring_illusion#Quartz Ring
+item_ring_illusion#Obsidianring
 item_ring_illusion_desc#Erhöht die Illusionskraft
 item_spell_triple#Zauber : Dreifacher Schuss
 item_spell_triple_desc#Schießt drei Schüsse
-item_brooch_finesse#Brosche der Raffinesse
+item_brooch_finesse#Falscher Erzmagierbart
 item_brooch_finesse_desc#Kritische Trefferchance (x2)
 item_fairy_fire#Alicia-Fee
 item_fairy_fire_desc#Hilft dir im Verlies
@@ -882,7 +882,7 @@ msg_butcher_2#Ich hoffe ich werde kein Hackfleisch..."
 msg_giant_slime_0#Der gigantische Schleim
 msg_giant_slime_1#"Ich bin grün, riesig und stinke.
 msg_giant_slime_2#Was ich bin ?"
-msg_cyclops_0#Der barbarische Zyklop
+msg_cyclops_0#Der Steinzyklop
 msg_cyclops_1#"Wie ist es in dem Raum gelaufen?
 msg_cyclops_2#Es ist größer und länger als das Tor!"
 msg_wererat_0#Die Werratte
@@ -938,7 +938,7 @@ enemy_type_cauldron#ein großer Kessel
 enemy_type_bubble#eine Blase
 enemy_type_boss_butcher#der Schweinemetzger
 enemy_type_boss_slime_giant#der Gigantische Schleim
-enemy_type_boss_cyclops#der Barbarische Zyklop
+enemy_type_boss_cyclops#der Steinzyklop
 enemy_type_boss_rat_king#der Werrattenkönig
 enemy_type_boss_spider_giant#die Gigantische Spinne
 enemy_type_green_rat#eine grüne Ratte
@@ -1012,6 +1012,37 @@ volume_sound_desc#Benutze die linke und rechte Pfeiltaste um die Lautstärke zu 
 volume_music#Musik Lautstärke
 certificate_capture#Drücke [F1] um das Zertifikat als PNG Bild zu speichern
 certificate_saved#Speicher auf
+
+msg_tuto_temple_0#Tutorial: Tempel
+msg_tuto_temple_1#Der Tempel ist der Ort, wo man zu einem Gott beten oder spenden kann.
+msg_tuto_temple_2#Götter können dir helfen und Boni vergeben.
+key_interact#interagiere
+interact_worship#Anbetung
+interact_shop#Kaufe
+interact_donate#Spende 10 Gold
+interact_donate_fail#(nicht genug Gold)
+worshipping#Du bist nun ein Anbeter von
+divinity_healer_0#Pomonos der Rechte
+divinity_healer_1#Wächter des Rechts und Schutzpatron der Armen.
+divinity_healer_2#Er würdigt Spenden, Leid und den Kampf gegen das Böse.
+divinity_fighter_0#Tello der Starke
+divinity_fighter_1#Gebieter der Kämpfer und der Starken.
+divinity_fighter_2#Er würdigt im Kampf gefallene Monster und Titanen.
+divinity_ice_0#Mister Schnee
+divinity_ice_1#Gott der Kälte.
+divinity_ice_2#Er würdigt den Einsatz von Eis.
+divinity_stone_0#Gaya
+divinity_stone_1#Gott des Gesteines und der Erde.
+divinity_stone_2#Er würdigt den Einsatz von Gestein.
+divinity_intervention_0#Göttliche Intervention
+divinity_intervention_1#schreitet zu deinem Gunsten ein.
+divinity_gift_0#Göttliche Gabe
+divinity_gift_1#gewährt dir ein Geschenk.
+item_floor_map#Verlieskarte
+item_floor_map_desc#Offenbart die Karte der derzeitigen Etage
+item_alcohol#Absinth
+item_alcohol_desc#erhöht vorübergehend den Schaden
+
 
 [spanish]
 start_new_game#Empezar nueva partida
