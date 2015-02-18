@@ -102,7 +102,7 @@ void FranckyEntity::animate(float delay)
   }
   else
   {
-    SoundManager::getInstance().playSound(SOUND_ELECTRICITY);
+    SoundManager::getInstance().playSound(SOUND_ELECTRICITY, false);
   }
 
   // collisions
