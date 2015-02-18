@@ -38,19 +38,11 @@ void GhostEntity::animate(float delay)
     timer = timer - delay;
     if (timer <= 0.0f)
     {
-      timer = 0.8f;
+      timer = 0.25f;
 
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       computeFacingDirection();
     }
-
-    float movAngle = Vector2D(x, y).angleTo(game().getPlayerPosition());
-    movAngle += cos( 2 * age) * 0.8f;
-
-    if (game().getPlayerPosition().y > y)
-      setVelocity(Vector2D(sin(movAngle) * creatureSpeed, cos(movAngle) * creatureSpeed));
-    else
-      setVelocity(Vector2D(-sin(movAngle) * creatureSpeed, -cos(movAngle) * creatureSpeed));
 
     frame = ((int)(age * 3.0f)) % 4;
     if (frame == 3) frame = 1;
