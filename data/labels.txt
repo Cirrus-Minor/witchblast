@@ -1101,7 +1101,7 @@ merchant_speech_1#¡Bienvenido a la tienda Pawn'n'Witches!
 merchant_speech_2#¡Echa una mirada a nuestra mercancía!
 enemy_butcher#Cerdo Carnicero
 enemy_giant_slime#Baba Gigante
-enemy_cyclops#Cíclope Bárbaro
+enemy_cyclops#Cíclope de piedra
 enemy_rat_king#Hombre Rata Rey
 enemy_giant_spider#Araña gigante
 item_copper#Moneda de cobre
@@ -1132,7 +1132,7 @@ item_rage_amulet#Amuleto de furia
 item_rage_amulet_desc#Contraataca
 item_displacement_gloves#Guantes de desplazamiento
 item_displacement_gloves_desc#La velocidad del jugador afecta la velocidad del proyectil
-item_staff#Báculo Mahogany
+item_staff#Báculo Ébano
 item_staff_desc#Aumenta la velocidad y el daño del rayo
 item_fairy#Hada Lilly
 item_fairy_desc#Te ayuda en el calabozo
@@ -1152,15 +1152,15 @@ item_fairy_ice#Hada Natasha
 item_fairy_ice_desc#Te ayuda en el calabozo
 item_ring_ice#Anillo de safiro
 item_ring_ice_desc#Aumenta el poder del hielo
-item_ring_stone#Anillo de obsidiana
+item_ring_stone#Anillo de cuarso
 item_ring_stone_desc#Aumenta el poder de la piedra
-item_ring_lightning#Anillo de ópalo
+item_ring_lightning#Anillo de amatista
 item_ring_lightning_desc#Aumenta el poder del trueno
-item_ring_illusion#Anillo de cuarzo
+item_ring_illusion#Anillo de obsidiana
 item_ring_illusion_desc#Aumenta el poder de la ilusión
 item_spell_triple#Conjuro : Rayo triple
 item_spell_triple_desc#Dispara tres rayos
-item_brooch_finesse#Broche de la agudeza
+item_brooch_finesse#Barba falsa de archimago
 item_brooch_finesse_desc#Probabilidad de disparo crítico (x2)
 item_fairy_fire#Hada Alicia
 item_fairy_fire_desc#Te ayuda en el calabozo
@@ -1229,7 +1229,7 @@ msg_butcher_2#Espero no terminar hecho salchichas..."
 msg_giant_slime_0#La Baba Gigante
 msg_giant_slime_1#"Soy verde, grande y apesto.
 msg_giant_slime_2#¿Qué soy?"
-msg_cyclops_0#El Cíclope Bárbaro
+msg_cyclops_0#El Cíclope de piedra
 msg_cyclops_1#"¿Cómo se pudo meter en la habitación?
 msg_cyclops_2#¡Es más grande que la puerta!"
 msg_wererat_0#El Hombre Rata
@@ -1285,7 +1285,7 @@ enemy_type_cauldron#un caldero
 enemy_type_bubble#una burbuja
 enemy_type_boss_butcher#el Cerdo Carnicero
 enemy_type_boss_slime_giant#la Baba Gigante
-enemy_type_boss_cyclops#el Cíclope Bárbaro
+enemy_type_boss_cyclops#el Cíclope de piedra.
 enemy_type_boss_rat_king#el Rey Hombre-Rata
 enemy_type_boss_spider_giant#la Araña Gigante
 enemy_type_green_rat#una rata verde
@@ -1359,6 +1359,36 @@ volume_sound_desc#Usa las flechas izquierda/derecha para cambiar el volumen
 volume_music#Volumen de la música
 certificate_capture#Presione [F1] para guardar el certificado en un archivo PNG
 certificate_saved#Guardado en
+
+msg_tuto_temple_0#Tutorial: Templo
+msg_tuto_temple_1#El templo es el lugar en donde puedes venerar a una divinidad o donar.
+msg_tuto_temple_2#Las Divinidades te pueden ayudar y te dan bonificaciones.
+key_interact#interactuar
+interact_worship#Venerar
+interact_shop#Comprar
+interact_donate#Donar 10 de oro
+interact_donate_fail#(no hay suficiente oro)
+worshipping#Ahora eres un venerador de
+divinity_healer_0#Pomonos el Honrado
+divinity_healer_1#Guardián de la honradez and patrocinador de los débiles.
+divinity_healer_2#Él aprecia las donaciones, el sufrimiento y la lucha contra el mal.
+divinity_fighter_0#Tello el Poderoso
+divinity_fighter_1#Señor de los guerreros y los fuertes.
+divinity_fighter_2#Él aprecia monstruos y titanes cayendo en la batalla.
+divinity_ice_0#Señor Nieve
+divinity_ice_1#Divinidad de la frialdad.
+divinity_ice_2#Él aprecia el uso del hielo.
+divinity_stone_0#Gaya
+divinity_stone_1#Divinidad de la piedra y de la tierra.
+divinity_stone_2#Él aprecia el uso de la piedra.
+divinity_intervention_0#Intervención divina.
+divinity_intervention_1#interviene a tu favor.
+divinity_gift_0#Regalo divino.
+divinity_gift_1#te concede un regalo.
+item_floor_map#Mapa del calabozo
+item_floor_map_desc#Revela el mapa del piso actual.
+item_alcohol#Absenta
+item_alcohol_desc#aumenta los daños temporalmente.
 
 [russian]
 start_new_game#Начать новую игру
