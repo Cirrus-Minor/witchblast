@@ -165,7 +165,7 @@ void CyclopsEntity::computeStates(float delay)
       state = 4; // destroy
       timer = 0.2;
       game().makeShake(0.4f);
-      SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
+      SoundManager::getInstance().playSound(SOUND_CYCLOPS_IMPACT);
       for (int i = 0; i < 10 ; i++) fallRock();
     }
     else if (state == 4)
