@@ -318,10 +318,7 @@ void CyclopsEntity::drop()
 void CyclopsEntity::render(sf::RenderTarget* app)
 {
   // shadow
-  if (frame == 3 || frame == 4 || frame == 6)
-    sprite.setPosition(isMirroring ? x - 20 : x + 20, y);
-  else
-    sprite.setPosition(x, y);
+  sprite.setPosition(x, y);
   sprite.setTextureRect(sf::IntRect(8 * width, 0, width, height));
   app->draw(sprite);
   sprite.setPosition(x, y);
