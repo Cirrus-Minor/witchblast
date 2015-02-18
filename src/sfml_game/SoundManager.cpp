@@ -21,17 +21,12 @@
 SoundManager::SoundManager()
 {
   mute = false;
+  volume = 100;
 }
 
 SoundManager::~SoundManager()
 {
   std::cout << "Releasing audio memory... ";
-  for (unsigned int i = 0; i < soundBufferArray.size(); i++)
-  {
-    soundArray[i]->stop();
-    delete(soundArray[i]);
-    delete(soundBufferArray[i]);
-  }
   soundArray.clear();
   soundBufferArray.clear();
   std::cout << "OK" << std::endl;
@@ -48,24 +43,35 @@ void SoundManager::addSound(const char* fileName)
   sf::SoundBuffer* newSoundBuffer = new sf::SoundBuffer;
   newSoundBuffer->loadFromFile(fileName);
   soundBufferArray.push_back(newSoundBuffer);
-
-  sf::Sound* newSound = new sf::Sound;
-  newSound->setBuffer(*newSoundBuffer);
-  newSound->setVolume(volume);
-  soundArray.push_back(newSound);
 }
 
-void SoundManager::playSound(int n)
+void SoundManager::playSound(int n, bool force)
 {
+  checkSoundStatus();
+
   if (mute) return;
-  if (soundArray[n]->getStatus() != sf::Sound::Playing)
-    soundArray[n]->play();
+
+  if (!force)
+  {
+    for (sf::Sound* s: soundArray)
+      if (s->getBuffer() == soundBufferArray[n]) return;
+  }
+
+  sf::Sound* newSound = new sf::Sound;
+  newSound->setBuffer(*soundBufferArray[n]);
+  newSound->setVolume(volume);
+  soundArray.push_back(newSound);
+  newSound->play();
+
+  std::cout << "Nb of playing sounds = " << soundArray.size() << std::endl;
 }
 
 void SoundManager::stopSound(int n)
 {
-  if (soundArray[n]->getStatus() == sf::Sound::Playing)
-    soundArray[n]->stop();
+  {
+    for (sf::Sound* s: soundArray)
+      if (s->getBuffer() == soundBufferArray[n]) s->stop();
+  }
 }
 
 void SoundManager::setMute(bool mute)
@@ -78,4 +84,18 @@ void SoundManager::setVolume(int volume)
   this->volume = volume;
   for (sf::Sound* s: soundArray)
     s->setVolume(volume);
+}
+
+void SoundManager::checkSoundStatus()
+{
+  for (int i = 0; i < soundArray.size(); i++)
+  {
+    sf::Sound* sound = soundArray[i];
+    if (sound->getStatus() == sf::Sound::Stopped)
+    {
+      delete sound;
+      soundArray.erase(soundArray.begin() + i);
+      i--;
+    }
+  }
 }

@@ -217,8 +217,6 @@ WitchBlastGame::WitchBlastGame():
 
   configureFromFile();
 
-  std::cout << "Antialiasing level: " << app->getSettings().antialiasingLevel << std::endl;
-
   if (parameters.vsync == false)
   {
     app->setVerticalSyncEnabled(false);
@@ -287,9 +285,10 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/bat_die.ogg",        "media/sound/imp_hurt.ogg",
     "media/sound/imp_die.ogg",        "media/sound/rock_impact.ogg",
     "media/sound/throw.ogg",          "media/sound/cyclop00.ogg",
-    "media/sound/cyclop_die.ogg",     "media/sound/butcher_00.ogg",
-    "media/sound/butcher_01.ogg",     "media/sound/butcher_hurt.ogg",
-    "media/sound/butcher_die.ogg",    "media/sound/vib.ogg",
+    "media/sound/cyclop_die.ogg",     "media/sound/cyclops_impact.ogg",
+    "media/sound/butcher_00.ogg",     "media/sound/butcher_01.ogg",
+    "media/sound/butcher_hurt.ogg",   "media/sound/butcher_die.ogg",
+    "media/sound/vib.ogg",
     "media/sound/boom_00.ogg",        "media/sound/clang_00.ogg",
     "media/sound/bubble_00.ogg",      "media/sound/bubble_01.ogg",
     "media/sound/trap.ogg",           "media/sound/egg_smash_00.ogg",
@@ -435,10 +434,8 @@ void WitchBlastGame::onUpdate()
     if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
     {
       EntityManager::getInstance().animate(deltaTime);
-      SoundManager::getInstance().playSound(SOUND_VIB);
+      SoundManager::getInstance().playSound(SOUND_VIB, false);
     }
-    else
-      SoundManager::getInstance().stopSound(SOUND_VIB);
 
     if (isPlayerAlive) gameTime += deltaTime;
 
