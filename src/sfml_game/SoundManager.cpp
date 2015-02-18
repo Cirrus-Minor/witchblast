@@ -57,6 +57,8 @@ void SoundManager::playSound(int n, bool force)
       if (s->getBuffer() == soundBufferArray[n]) return;
   }
 
+  stopSound(n);
+
   sf::Sound* newSound = new sf::Sound;
   newSound->setBuffer(*soundBufferArray[n]);
   newSound->setVolume(volume);
