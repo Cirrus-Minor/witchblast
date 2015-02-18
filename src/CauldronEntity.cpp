@@ -44,7 +44,7 @@ void CauldronEntity::animate(float delay)
   }
   else
   {
-    SoundManager::getInstance().playSound(SOUND_CAULDRON);
+    SoundManager::getInstance().playSound(SOUND_CAULDRON, false);
 
     invokeDelay -= delay;
     if (invokeDelay < 0.0f)

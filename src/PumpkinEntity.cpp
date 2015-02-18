@@ -93,9 +93,9 @@ void PumpkinEntity::animate(float delay)
     if (jumpingDelay < 0.0f)
     {
       if (rand() % 2 == 0)
-        SoundManager::getInstance().playSound(SOUND_PUMPKIN_01);
+        SoundManager::getInstance().playSound(SOUND_PUMPKIN_01, false);
       else
-        SoundManager::getInstance().playSound(SOUND_PUMPKIN_00);
+        SoundManager::getInstance().playSound(SOUND_PUMPKIN_00, false);
       hVelocity = 200.0f; // + rand() % 150;
       isJumping = true;
       isFirstJumping = true;
