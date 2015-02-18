@@ -24,6 +24,7 @@ class FranckyEntity : public EnemyEntity
 
   private:
     float timer;
+    float followTimer;
     int state;
     int counter;
 

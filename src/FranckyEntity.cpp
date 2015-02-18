@@ -34,6 +34,7 @@ FranckyEntity::FranckyEntity(float x, float y)
 
   state = 0;
   timer = 3.0f;
+  followTimer = -1.0f;
   counter = 10;
   age = -1.5f;
   enemyType = EnemyTypeFrancky;
@@ -60,7 +61,12 @@ void FranckyEntity::animate(float delay)
   if (timer < 0.0f)
   {
     state++;
-    if (state == 5) state = 0;
+    if (state == 5)
+    {
+      state = 0;
+      followTimer = 0.25f;
+    }
+
     int health;
 
     switch (state)
@@ -87,7 +93,12 @@ void FranckyEntity::animate(float delay)
   if (state == 0)
   {
     // walking
-    setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
+    followTimer -= delay;
+    if (followTimer <= 0.0f)
+    {
+      setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
+      followTimer = 0.25f;
+    }
   }
   else
   {
