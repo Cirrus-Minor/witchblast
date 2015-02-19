@@ -61,8 +61,11 @@ void SnakeEntity::animate(float delay)
     {
       timer = 0.8f;
 
-      setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
-      computeFacingDirection();
+      if (canWalkTo(game().getPlayerPosition().x, game().getPlayerPosition().y))
+      {
+        setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
+        computeFacingDirection();
+      }
     }
 
     switch (facingDirection)

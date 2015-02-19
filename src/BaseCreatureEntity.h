@@ -169,6 +169,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void dyingFromAge();
     virtual bool canCollide();
     bool canSee(float xf, float yf);
+    bool canWalkTo(float xf, float yf);
 
     void heal(int healPoints);
 

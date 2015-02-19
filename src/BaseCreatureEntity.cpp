@@ -723,6 +723,47 @@ bool BaseCreatureEntity::canSee(float xf, float yf)
   return true;
 }
 
+bool BaseCreatureEntity::canWalkTo(float xf, float yf)
+{
+  int tileX0 = x / TILE_WIDTH;
+  int tileXf = xf / TILE_WIDTH;
+  int tileY0 = y / TILE_HEIGHT;
+  int tileYf = yf / TILE_HEIGHT;
+
+  int xBegin, xEnd, yBegin, yEnd;
+  if (tileXf < tileX0)
+  {
+    xBegin = tileXf;
+    xEnd = tileX0;
+  }
+  else
+  {
+    xBegin = tileX0;
+    xEnd = tileXf;
+  }
+
+  if (tileYf < tileY0)
+  {
+    yBegin = tileYf;
+    yEnd = tileY0;
+  }
+  else
+  {
+    yBegin = tileY0;
+    yEnd = tileYf;
+  }
+
+  for (int i = xBegin; i <= xEnd; i++ )
+    for (int j = yBegin; j <= yEnd; j++ )
+    {
+      if (!game().getCurrentMap()->isWalkable(i, j))
+        if (intersectsTile(Vector2D(x, y), game().getPlayerPosition(), i , j))
+          return false;
+    }
+
+  return true;
+}
+
 void BaseCreatureEntity::heal(int healPoints)
 {
   int savedHp = hp;
