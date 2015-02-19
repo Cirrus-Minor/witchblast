@@ -322,7 +322,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/francky_die.ogg",    "media/sound/om.ogg",
     "media/sound/glass.ogg",          "media/sound/hiccup.ogg",
     "media/sound/splatch.ogg",        "media/sound/intro_witch.ogg",
-    "media/sound/force_field.ogg",
+    "media/sound/force_field.ogg",    "media/sound/door_opening_boss.ogg",
   };
 
   // game main client position in the UI
@@ -1703,6 +1703,7 @@ void WitchBlastGame::renderRunningGame()
 
     if (isPausing)
     {
+      // background
       rectangle.setFillColor(sf::Color(0, 0, 0, 200));
       rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));

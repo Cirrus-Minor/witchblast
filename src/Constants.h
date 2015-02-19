@@ -255,6 +255,7 @@ enum sound_resources {
   SOUND_SPLATCH,
   SOUND_INTRO_WITCH,
   SOUND_FORCE_FIELD,
+  SOUND_DOOR_OPENING_BOSS,
 };
 
 enum corpses_ressources{
@@ -397,8 +398,8 @@ const float DOOR_CLOSE_TIME = 1.0f;
 const float INITIAL_PLAYER_SPEED = 220.0f;
 const int INITIAL_PLAYER_HP = 20;
 const float INITIAL_PLAYER_FIRE_DELAY = 0.7f;
-const float ACQUIRE_DELAY = 2.2f;
-const float UNLOCK_DELAY = 1.0f;
+const float ACQUIRE_DELAY = 2.3f;
+const float UNLOCK_DELAY = 1.2f;
 const float WORSHIP_DELAY = 2.0f;
 const float INVINCIBLE_DELAY = 1.5f;
 const float HICCUP_DELAY = 5.0f;

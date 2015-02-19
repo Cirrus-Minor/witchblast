@@ -853,10 +853,11 @@ void PlayerEntity::render(sf::RenderTarget* app)
     spriteDy = 7;
     frame = ((int)(age * 10.0f)) % 4;
     if (frame == 3) frame = 1;
-    if (statusTimer < WORSHIP_DELAY * 0.1f) frame = 0;
-    else if (statusTimer < WORSHIP_DELAY * 0.2f) frame = 1;
-    else if (statusTimer < WORSHIP_DELAY * 0.7f) frame = 2;
-    else if (statusTimer < WORSHIP_DELAY * 0.85f) frame = 1;
+    float delay = playerStatus == playerStatusPraying ? WORSHIP_DELAY : UNLOCK_DELAY;
+    if (statusTimer < delay * 0.1f) frame = 0;
+    else if (statusTimer < delay * 0.2f) frame = 1;
+    else if (statusTimer < delay * 0.7f) frame = 2;
+    else if (statusTimer < delay * 0.85f) frame = 1;
     else frame = 0;
   }
 
@@ -1207,25 +1208,25 @@ void PlayerEntity::fire(int direction)
     {
     case ShotTypeCold:
     case ShotTypeIce:
-      SoundManager::getInstance().playSound(SOUND_BLAST_ICE);
+      SoundManager::getInstance().playPitchModSound(SOUND_BLAST_ICE);
       break;
     case ShotTypeFire:
-      SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
+      SoundManager::getInstance().playPitchModSound(SOUND_BLAST_FIRE);
       break;
     case ShotTypeIllusion:
-      SoundManager::getInstance().playSound(SOUND_BLAST_ILLUSION);
+      SoundManager::getInstance().playPitchModSound(SOUND_BLAST_ILLUSION);
       break;
     case ShotTypeLightning:
-      SoundManager::getInstance().playSound(SOUND_BLAST_LIGHTNING);
+      SoundManager::getInstance().playPitchModSound(SOUND_BLAST_LIGHTNING);
       break;
     case ShotTypePoison:
-      SoundManager::getInstance().playSound(SOUND_BLAST_POISON);
+      SoundManager::getInstance().playPitchModSound(SOUND_BLAST_POISON);
       break;
     case ShotTypeStone:
-      SoundManager::getInstance().playSound(SOUND_BLAST_STONE);
+      SoundManager::getInstance().playPitchModSound(SOUND_BLAST_STONE);
       break;
     default:
-      SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+      SoundManager::getInstance().playPitchModSound(SOUND_BLAST_STANDARD);
       break;
     }
 
@@ -1676,16 +1677,19 @@ void PlayerEntity::useBossKey()
   playerStatus = playerStatusUnlocking;
   statusTimer = UNLOCK_DELAY;
   acquiredItem = (enumItemType)(type - FirstEquipItem);
-  SoundManager::getInstance().playSound(SOUND_BONUS);
+  SoundManager::getInstance().playSound(SOUND_DOOR_OPENING_BOSS);
   equip[EQUIP_BOSS_KEY] = false;
 
 
   SpriteEntity* spriteItem = new SpriteEntity(
     ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP),
-    x, y - 100.0f, ITEM_WIDTH, ITEM_HEIGHT);
+    x, y - 80.0f, ITEM_WIDTH, ITEM_HEIGHT);
   spriteItem->setFrame(EQUIP_BOSS_KEY);
   spriteItem->setZ(z);
-  spriteItem->setLifetime(UNLOCK_DELAY);
+  spriteItem->setAge(-UNLOCK_DELAY * 0.5f);
+  spriteItem->setLifetime(UNLOCK_DELAY * 0.5f);
+  spriteItem->setFading(true);
+  spriteItem->setSpin(300);
 }
 
 enumShotType PlayerEntity::getShotType()
