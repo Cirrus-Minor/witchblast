@@ -287,6 +287,7 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/heart.ogg",          "media/sound/rat_die.ogg",
     "media/sound/bat_die.ogg",        "media/sound/imp_hurt.ogg",
     "media/sound/imp_die.ogg",        "media/sound/rock_impact.ogg",
+    "media/sound/rock_impact_medium.ogg", "media/sound/rock_impact_heavy.ogg",
     "media/sound/throw.ogg",          "media/sound/cyclop00.ogg",
     "media/sound/cyclop_die.ogg",     "media/sound/cyclops_impact.ogg",
     "media/sound/butcher_00.ogg",     "media/sound/butcher_01.ogg",

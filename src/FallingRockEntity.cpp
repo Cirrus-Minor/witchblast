@@ -124,7 +124,19 @@ void FallingRockEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType, hurtingType);
-  SoundManager::getInstance().playSound(SOUND_ROCK_IMPACT/*, false*/);
+  switch (rockType)
+  {
+  case 0:
+    SoundManager::getInstance().playSound(SOUND_ROCK_IMPACT_LIGHT);
+    break;
+  case 1:
+    SoundManager::getInstance().playSound(SOUND_ROCK_IMPACT_MEDIUM);
+    break;
+  case 2:
+    SoundManager::getInstance().playSound(SOUND_ROCK_IMPACT_HEAVY);
+    break;
+  }
+
   game().makeShake(0.1f);
 
   for (int i = 0; i < 4; i++)

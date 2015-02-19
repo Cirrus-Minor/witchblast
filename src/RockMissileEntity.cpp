@@ -107,7 +107,8 @@ void RockMissileEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType, hurtingType);
-  SoundManager::getInstance().playSound(SOUND_ROCK_IMPACT);
+  SoundManager::getInstance().playSound(
+    rockType == 0 ? SOUND_ROCK_IMPACT_LIGHT : SOUND_ROCK_IMPACT_MEDIUM);
   game().makeShake(0.1f);
 
   for (int i = 0; i < 4; i++)
