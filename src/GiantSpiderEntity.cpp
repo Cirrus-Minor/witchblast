@@ -304,16 +304,16 @@ bool GiantSpiderEntity::canCollide()
 
 void GiantSpiderEntity::fire(int fireType)
 {
-    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
+  SoundManager::getInstance().playSound(SOUND_BLAST_POISON);
 
-    EnemyBoltEntity* bolt;
+  EnemyBoltEntity* bolt;
 
-    bolt = new EnemyBoltEntity(x, y, ShotTypePoison, 0, enemyType);
-    bolt->setDamages(5);
+  bolt = new EnemyBoltEntity(x, y, ShotTypePoison, 0, enemyType);
+  bolt->setDamages(5);
 
-    float fireVelocity = 180.0f;
-    if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
-    bolt->setVelocity(Vector2D(fireVelocity));
+  float fireVelocity = 180.0f;
+  if (specialState[SpecialStateIce].active) fireVelocity *= 0.5f;
+  bolt->setVelocity(Vector2D(fireVelocity));
 }
 
 int GiantSpiderEntity::getHealthLevel()
@@ -334,18 +334,18 @@ void GiantSpiderEntity::drop()
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
 
-	for (it = entityList->begin (); it != entityList->end ();)
-	{
-		GameEntity *e = *it;
-		it++;
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
 
     EnemyEntity* entity = dynamic_cast<EnemyEntity*>(e);
     if (entity != NULL)
-		{
-		  if (entity->getEnemyType()== EnemyTypeSpiderWeb)
+    {
+      if (entity->getEnemyType()== EnemyTypeSpiderWeb)
       {
         entity->hurt(getHurtParams(entity->getHp(), ShotTypeStandard, 0, false, SourceTypeMelee, enemyType, false));
       }
-		}
-	}
+    }
+  }
 }

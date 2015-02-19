@@ -10,7 +10,7 @@
 #include <math.h>
 
 EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
-    : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_FLOWER), x, y)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_FLOWER), x, y)
 {
   hp = EVIL_FLOWER_HP;
   meleeDamages = EVIL_FLOWER_MELEE_DAMAGES;
@@ -79,48 +79,48 @@ void EvilFlowerEntity::animate(float delay)
 
 void EvilFlowerEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + EVIL_FLOWER_BB_LEFT;
-    boundingBox.width = width - EVIL_FLOWER_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + EVIL_FLOWER_BB_TOP;
-    boundingBox.height =  height - EVIL_FLOWER_BB_HEIGHT_DIFF;
+  boundingBox.left = (int)x - width / 2 + EVIL_FLOWER_BB_LEFT;
+  boundingBox.width = width - EVIL_FLOWER_BB_WIDTH_DIFF;
+  boundingBox.top = (int)y - height / 2 + EVIL_FLOWER_BB_TOP;
+  boundingBox.height =  height - EVIL_FLOWER_BB_HEIGHT_DIFF;
 }
 
 void EvilFlowerEntity::fire()
 {
-    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
-
-    if (flowerType == FlowerTypeIce)
-    {
-      for (int i = 0; i < 2; i++)
-      {
-        EnemyBoltEntity* bolt = new EnemyBoltEntity
-            (x, y + 10, ShotTypeIce, 0, enemyType);
-        bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
-        bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-
-        float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
-
-        float fireAngle = Vector2D(x, y).angleTo(game().getPlayerPosition());
-        if (i == 0) fireAngle += 0.1f;
-        else fireAngle -= 0.1f;
-
-        if (game().getPlayerPosition().y > y)
-          bolt->setVelocity(Vector2D(sin(fireAngle) * flowerFireVelocity, cos(fireAngle) * flowerFireVelocity));
-        else
-          bolt->setVelocity(Vector2D(-sin(fireAngle) * flowerFireVelocity, -cos(fireAngle) * flowerFireVelocity));
-      }
-    }
-    else
+  if (flowerType == FlowerTypeIce)
+  {
+    SoundManager::getInstance().playSound(SOUND_BLAST_ICE);
+    for (int i = 0; i < 2; i++)
     {
       EnemyBoltEntity* bolt = new EnemyBoltEntity
-            (x, y + 10, ShotTypeStandard, 0, enemyType);
+      (x, y + 10, ShotTypeIce, 0, enemyType);
       bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
       bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
       float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
-      if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
-      bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), flowerFireVelocity ));
+
+      float fireAngle = Vector2D(x, y).angleTo(game().getPlayerPosition());
+      if (i == 0) fireAngle += 0.1f;
+      else fireAngle -= 0.1f;
+
+      if (game().getPlayerPosition().y > y)
+        bolt->setVelocity(Vector2D(sin(fireAngle) * flowerFireVelocity, cos(fireAngle) * flowerFireVelocity));
+      else
+        bolt->setVelocity(Vector2D(-sin(fireAngle) * flowerFireVelocity, -cos(fireAngle) * flowerFireVelocity));
     }
+  }
+  else
+  {
+    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
+    EnemyBoltEntity* bolt = new EnemyBoltEntity
+    (x, y + 10, ShotTypeStandard, 0, enemyType);
+    bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
+    bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+
+    float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
+    if (specialState[SpecialStateIce].active) flowerFireVelocity *= 0.5f;
+    bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), flowerFireVelocity ));
+  }
 
 }
 

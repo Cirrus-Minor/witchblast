@@ -161,18 +161,18 @@ void ImpEntity::dying()
 
 void ImpEntity::fire()
 {
-    SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
-
     EnemyBoltEntity* bolt;
     if (impType == ImpTypeBlue)
     {
       bolt = new EnemyBoltEntity(x, y, ShotTypeIce, 0, enemyType);
       bolt->setDamages(5);
+      SoundManager::getInstance().playSound(SOUND_BLAST_ICE);
     }
     else
     {
       bolt = new EnemyBoltEntity(x, y, ShotTypeFire, 0, enemyType);
       bolt->setDamages(8);
+      SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
     }
     bolt->setFlying(true);
 

@@ -355,7 +355,9 @@ void SlimeEntity::fire()
       case 3: bolt->setVelocity(Vector2D(0, -SLIME_FIRE_VELOCITY)); break;
     }
   }
-  SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
+  if (slimeType == SlimeTypeBlue) SoundManager::getInstance().playSound(SOUND_BLAST_ICE);
+  else if (slimeType == SlimeTypeRed) SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
+  else SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
 }
 
 void SlimeEntity::explode()

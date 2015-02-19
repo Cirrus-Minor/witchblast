@@ -128,7 +128,18 @@ void FairyEntity::fire(int dir)
 
   if (fireDelay <= 0.0f)
   {
-    SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+    switch (fairyType)
+    {
+    case FamiliarFairyIce:
+      SoundManager::getInstance().playSound(SOUND_BLAST_ICE);
+      break;
+    case FamiliarFairyFire:
+      SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
+      break;
+    default:
+      SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+      break;
+    }
     fireDelay = fairyFireDelay;
 
     float velx = 0.0f;
