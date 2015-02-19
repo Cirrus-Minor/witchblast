@@ -64,8 +64,30 @@ void SoundManager::playSound(int n, bool force)
   newSound->setVolume(volume);
   soundArray.push_back(newSound);
   newSound->play();
+}
 
-  std::cout << "Nb of playing sounds = " << soundArray.size() << std::endl;
+void SoundManager::playPitchModSound(int n, bool force)
+{
+  checkSoundStatus();
+
+  if (mute) return;
+
+  if (!force)
+  {
+    for (sf::Sound* s: soundArray)
+      if (s->getBuffer() == soundBufferArray[n]) return;
+  }
+
+  stopSound(n);
+
+  sf::Sound* newSound = new sf::Sound;
+  newSound->setBuffer(*soundBufferArray[n]);
+  newSound->setVolume(volume);
+
+  newSound->setPitch( (float)(75 +(rand() % 50)) / 100.0f );
+
+  soundArray.push_back(newSound);
+  newSound->play();
 }
 
 void SoundManager::stopSound(int n)
@@ -90,7 +112,7 @@ void SoundManager::setVolume(int volume)
 
 void SoundManager::checkSoundStatus()
 {
-  for (int i = 0; i < soundArray.size(); i++)
+  for (unsigned int i = 0; i < soundArray.size(); i++)
   {
     sf::Sound* sound = soundArray[i];
     if (sound->getStatus() == sf::Sound::Stopped)

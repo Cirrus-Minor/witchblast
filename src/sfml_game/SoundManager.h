@@ -25,6 +25,7 @@ public:
     static SoundManager& getInstance();
     void addSound(const char *fileName);
     void playSound(int n, bool force = true);
+    void playPitchModSound(int n, bool force = true);
     void stopSound(int n);
     void setMute(bool mute);
     void setVolume(int volume);
