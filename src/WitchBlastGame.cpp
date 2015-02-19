@@ -62,7 +62,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 2
+//#define START_LEVEL 5
 
 static std::string intToString(int n)
 {
@@ -1709,13 +1709,27 @@ void WitchBlastGame::renderRunningGame()
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
 
-      float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
-      int fade = 50 + 205 * (1.0f + cos(3.0f * getAbsolutTime())) * 0.5f;
-      myText.setColor(sf::Color(255, 255, 255, fade));
-      myText.setCharacterSize(40);
-      myText.setString("PAUSE");
-      myText.setPosition(x0 - myText.getLocalBounds().width / 2, 100);
-      app->draw(myText);
+      // minimap
+      int mapx = 350;
+      int mapy = 30;
+      // background
+      rectangle.setFillColor(sf::Color(233, 217, 186, 255));
+      rectangle.setPosition(sf::Vector2f(mapx, mapy));
+      rectangle.setSize(sf::Vector2f(15 * 19 + 1, 9 * 15 + 1));
+      rectangle.setOutlineColor(sf::Color(233, 217, 186, 128));
+      rectangle.setOutlineThickness(4);
+
+      app->draw(rectangle);
+      // map
+      float miniX = miniMapEntity->getX();
+      float miniY = miniMapEntity->getY();
+      miniMapEntity->setX(mapx);
+      miniMapEntity->setY(mapy);
+      miniMapEntity->computeVertices();
+      miniMapEntity->render(app);
+      miniMapEntity->setX(miniX);
+      miniMapEntity->setY(miniY);
+      miniMapEntity->computeVertices();
 
       float x = 200;
       float y = 480;
