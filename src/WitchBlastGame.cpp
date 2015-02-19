@@ -488,6 +488,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
 
   // cleaning all entities
   EntityManager::getInstance().clean();
+  SoundManager::getInstance().stopSound(SOUND_NIGHT);
 
   // cleaning the message queue
   std::queue<messageStruct> empty;
@@ -1950,8 +1951,6 @@ void WitchBlastGame::calculateScore()
 
 void WitchBlastGame::switchToMenu()
 {
-  SoundManager::getInstance().stopSound(SOUND_NIGHT);
-
   gameState = gameStateMenu;
   buildMenu(false);
 
@@ -1965,6 +1964,7 @@ void WitchBlastGame::switchToMenu()
 
 void WitchBlastGame::updateMenu()
 {
+  SoundManager::getInstance().playSound(SOUND_NIGHT, false);
   menuStuct* menu = NULL;
   if (menuState == MenuStateMain)
     menu = &menuMain;
