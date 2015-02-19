@@ -244,6 +244,7 @@ WitchBlastGame::WitchBlastGame():
     "media/blood.png",
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
+    "media/hurt_impact.png",
     "media/interface.png",     "media/hud_shots.png",
     "media/explosion.png",     "media/keys_qwer.png",
     "media/keys_azer.png",     "media/message_icons.png",

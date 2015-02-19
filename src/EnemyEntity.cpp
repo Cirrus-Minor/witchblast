@@ -137,7 +137,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
-          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
           star->setFading(true);
           star->setZ(y+ 100);
           star->setLifetime(0.7f);
@@ -191,7 +191,7 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
   if (bloodColor > BloodNone) game().generateBlood(x, y, bloodColor);
   SoundManager::getInstance().playSound(SOUND_IMPACT);
 
-  SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
+  SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
   star->setFading(true);
   star->setZ(y+ 100);
   star->setLifetime(0.7f);

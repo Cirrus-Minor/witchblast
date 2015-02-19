@@ -64,7 +64,7 @@ void FallingRockEntity::collideWithEnemy(EnemyEntity* entity)
   {
     float xs = (x + entity->getX()) / 2;
     float ys = (y + entity->getY()) / 2;
-    SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
+    SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
     star->setFading(true);
     star->setZ(y+ 100);
     star->setLifetime(0.7f);

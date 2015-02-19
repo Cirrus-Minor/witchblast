@@ -190,7 +190,7 @@ void RatEntity::collideWithBolt(BoltEntity* boltEntity)
       float xs = (x + boltEntity->getX()) / 2;
       float ys = (y + boltEntity->getY()) / 2;
       boltEntity->collide();
-      SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_STAR_2), xs, ys);
+      SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
       star->setFading(true);
       star->setZ(y+ 100);
       star->setLifetime(0.7f);
