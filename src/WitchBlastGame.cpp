@@ -269,6 +269,9 @@ WitchBlastGame::WitchBlastGame():
   const char *const sounds[] =
   {
     "media/sound/blast00.ogg",        "media/sound/blast01.ogg",
+    "media/sound/blast_elec.ogg",     "media/sound/blast_fire.ogg",
+    "media/sound/blast_ice.ogg",      "media/sound/blast_illusion.ogg",
+    "media/sound/blast_poison.ogg",   "media/sound/blast_stone.ogg",
     "media/sound/door_closing.ogg",   "media/sound/door_opening.ogg",
     "media/sound/chest_opening.ogg",  "media/sound/impact.ogg",
     "media/sound/bonus.ogg",          "media/sound/drink.ogg",

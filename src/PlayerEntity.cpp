@@ -1180,7 +1180,7 @@ void PlayerEntity::rageFire()
         bolt->setVelocity(Vector2D(velx, vely));
       }
     }
-  SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+  SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
 }
 
 void PlayerEntity::resestFireDirection()
@@ -1203,7 +1203,31 @@ void PlayerEntity::fire(int direction)
 
   if (canFirePlayer && playerStatus != playerStatusDead && playerStatus != playerStatusAcquire)
   {
-    SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+    switch (getShotType())
+    {
+    case ShotTypeCold:
+    case ShotTypeIce:
+      SoundManager::getInstance().playSound(SOUND_BLAST_ICE);
+      break;
+    case ShotTypeFire:
+      SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
+      break;
+    case ShotTypeIllusion:
+      SoundManager::getInstance().playSound(SOUND_BLAST_ILLUSION);
+      break;
+    case ShotTypeLightning:
+      SoundManager::getInstance().playSound(SOUND_BLAST_LIGHTNING);
+      break;
+    case ShotTypePoison:
+      SoundManager::getInstance().playSound(SOUND_BLAST_POISON);
+      break;
+    case ShotTypeStone:
+      SoundManager::getInstance().playSound(SOUND_BLAST_STONE);
+      break;
+    default:
+      SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+      break;
+    }
 
     if (equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_TRIPLE]
         || equip[EQUIP_BOOK_DUAL_QUICK] || equip[EQUIP_BOOK_TRIPLE_QUICK])
