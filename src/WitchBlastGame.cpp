@@ -203,15 +203,47 @@ static sf::View getLetterboxView(sf::View view, int windowWidth, int windowHeigh
   return view;
 }
 
+static sf::View getFullScreenLetterboxView(sf::View view, int clientWidth, int clientHeight)
+{
+  sf::View returnView(sf::FloatRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+
+  float clientRatio = clientWidth / (float) clientHeight;
+  float viewRatio = view.getSize().x / (float) view.getSize().y;
+  float sizeX = 1;
+  float sizeY = 1;
+  float posX = 0;
+  float posY = 0;
+
+  bool horizontalSpacing = true;
+  if (clientRatio > viewRatio)
+    horizontalSpacing = false;
+
+  // If horizontalSpacing is true, the black bars will appear on the left and right side.
+  // Otherwise, the black bars will appear on the top and bottom.
+
+  if (horizontalSpacing)
+  {
+    sizeX = clientRatio / viewRatio;
+    posX = (1 - sizeX) / 2.0;
+  }
+
+  else
+  {
+    sizeY = viewRatio / clientRatio;
+    posY = (1 - sizeY) / 2.0;
+  }
+
+  returnView.setViewport( sf::FloatRect(posX, posY, sizeX, sizeY) );
+
+  return returnView;
+}
+
 namespace
 {
 WitchBlastGame* gameptr;
 }
 
-WitchBlastGame::WitchBlastGame():
-  Game(SCREEN_WIDTH,
-       SCREEN_HEIGHT,
-       APP_NAME + " V" + APP_VERSION)
+WitchBlastGame::WitchBlastGame()
 {
   gameptr = this;
 
@@ -223,12 +255,27 @@ WitchBlastGame::WitchBlastGame():
     app->setFramerateLimit(60);
   }
 
+  // Fullscreen ?
+  if (parameters.fullscreen)
+  {
+    //create(sf::VideoMode(this->screenWidth, this->screenHeight), APP_NAME + " V" + APP_VERSION, /*sf::Style::Fullscreen*/ true);
+    create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, true);
+    sf::View view = app->getDefaultView();
+    view = getFullScreenLetterboxView( view, SCREEN_WIDTH, SCREEN_HEIGHT );
+    app->setView(view);
+  }
+  else
+  {
+    create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION);
+  }
+
   // loading resources
   const char *const images[] =
   {
     "media/player_base.png",
     "media/bolt.png",          "media/tiles01.png",
     "media/rat.png",           "media/minimap.png",
+    "media/items.png",         "media/items_equip.png",
     "media/items.png",         "media/items_equip.png",
     "media/chest.png",         "media/bat.png",
     "media/evil_flower.png",   "media/slime.png",
@@ -262,10 +309,7 @@ WitchBlastGame::WitchBlastGame():
   };
 
   for (const char *const filename : images)
-  {
     ImageManager::getInstance().addImage(filename);
-
-  }
 
   const char *const sounds[] =
   {
@@ -325,6 +369,9 @@ WitchBlastGame::WitchBlastGame():
     "media/sound/force_field.ogg",    "media/sound/door_opening_boss.ogg",
   };
 
+  // AA in fullscreen
+  if (parameters.fullscreen) enableAA(true);
+
   // game main client position in the UI
   xOffset = OFFSET_X;
   yOffset = OFFSET_Y;
@@ -378,7 +425,7 @@ void WitchBlastGame::enableAA(bool enable)
 {
   for (int i = 0; i < NB_IMAGES; i++)
   {
-    if (i != IMAGE_TILES && i != IMAGE_MINIMAP && i != IMAGE_ITEMS && i != IMAGE_ITEMS_EQUIP && i != IMAGE_CORPSES
+    if (i != IMAGE_TILES && i != IMAGE_MINIMAP && i != IMAGE_ITEMS_PRES && i != IMAGE_ITEMS_EQUIP_PRES && i != IMAGE_CORPSES
           && i != IMAGE_CORPSES_BIG)
       ImageManager::getInstance().getImage(i)->setSmooth(enable);
   }
@@ -4298,6 +4345,7 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["zoom_enabled"] = parameters.zoom ? "1" : "0";
   newMap["vsync_enabled"] = parameters.vsync ? "1" : "0";
   newMap["blood_spreading"] = parameters.bloodSpread ? "1" : "0";
+  newMap["fullscreen"] = parameters.fullscreen ? "1" : "0";
 
   // Keys
   newMap["keyboard_move_up"] = intToString(input[KeyUp]);
@@ -4324,6 +4372,7 @@ void WitchBlastGame::configureFromFile()
   parameters.zoom = true;
   parameters.vsync = true;
   parameters.bloodSpread = true;
+  parameters.fullscreen = false;
   parameters.musicVolume = 100;
   parameters.soundVolume = 80;
   parameters.playerName = "";
@@ -4370,6 +4419,8 @@ void WitchBlastGame::configureFromFile()
   if (i >= 0) parameters.zoom = i;
   i = config.findInt("blood_spreading");
   if (i >= 0) parameters.bloodSpread = i;
+  i = config.findInt("fullscreen");
+  if (i >= 0) parameters.fullscreen = i;
 
   std::string playerName = config.findString("player_name");
   if (playerName.size() > 0) parameters.playerName = playerName;

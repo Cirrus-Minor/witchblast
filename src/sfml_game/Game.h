@@ -27,25 +27,26 @@
 
 class Game
 {
-    public:
-        Game(int screenWidth, int screenHeight, std::string windowsTitle = "Generic sfmlGame", bool fullScreen = false);
-        virtual ~Game();
+public:
+  Game();
+  virtual ~Game();
 
-        virtual void startGame();
-        virtual void quitGame();
+  virtual void startGame();
+  virtual void quitGame();
 
-        static float getAbsolutTime();
+  static float getAbsolutTime();
+  void create(int screenWidth, int screenHeight, std::string windowsTitle = "Generic sfmlGame", bool fullScreen = false);
 
-    protected:
-        virtual void onRender();     // screen and game items rendering
-        virtual void onUpdate();
+protected:
+  virtual void onRender();     // screen and game items rendering
+  virtual void onUpdate();
 
-        int screenWidth;
-        int screenHeight;
+  int screenWidth;
+  int screenHeight;
 
-        float lastTime;
+  float lastTime;
 
-        sf::RenderWindow* app;
+  sf::RenderWindow* app;
 };
 
 #endif // GAME_H_INCLUDED

@@ -116,6 +116,7 @@ struct parameterStruct
   bool zoom;                  /*!< zoom effect (false = disabled) */
   bool vsync;                 /*!< monitor vsync (false = disabled) */
   bool bloodSpread;           /*!< blood spread (false = disabled) */
+  bool fullscreen;            /*!< full screen (false = disabled) */
   std::string playerName;     /*!< player name */
 };
 

@@ -21,53 +21,57 @@
 
 #include <iostream>
 
-Game::Game(int screenWidth, int screenHeight, std::string windowsTitle, bool fullScreen)
+Game::Game()
 {
-    this->screenWidth = screenWidth;
-    this->screenHeight = screenHeight;
+}
 
-    if (fullScreen)
-        app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle, sf::Style::Fullscreen);
-    else
-        app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle); // , sf::Style::Close);
-    app->setVerticalSyncEnabled(true);
+void Game::create(int screenWidth, int screenHeight, std::string windowsTitle, bool fullScreen)
+{
+  this->screenWidth = screenWidth;
+  this->screenHeight = screenHeight;
+
+  if (fullScreen)
+    app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle, sf::Style::Fullscreen);
+  else
+    app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle);
+  app->setVerticalSyncEnabled(true);
 }
 
 Game::~Game()
 {
-    printf("Deleting the game...\n");
-    delete(app);
+  printf("Deleting the game...\n");
+  delete(app);
 }
 
 float Game::getAbsolutTime()
 {
-    static sf::Clock clock;
-    return clock.getElapsedTime().asSeconds();
+  static sf::Clock clock;
+  return clock.getElapsedTime().asSeconds();
 }
 
 void Game::startGame()
 {
-    lastTime = getAbsolutTime();
+  lastTime = getAbsolutTime();
 
-    // Start game loop
-    while (app->isOpen())
+  // Start game loop
+  while (app->isOpen())
+  {
+    // Process events
+    sf::Event event;
+
+    while (app->pollEvent(event))
     {
-        // Process events
-        sf::Event event;
+      // Close window : exit
+      if (event.type == sf::Event::Closed)
+        app->close();
 
-        while (app->pollEvent(event))
-        {
-            // Close window : exit
-            if (event.type == sf::Event::Closed)
-                app->close();
-
-        }
-
-        onUpdate();
-        onRender();
     }
 
-    quitGame();
+    onUpdate();
+    onRender();
+  }
+
+  quitGame();
 }
 
 void Game::quitGame()
@@ -76,13 +80,13 @@ void Game::quitGame()
 
 void Game::onRender()
 {
-    // clear the view
-    app->clear(sf::Color(32, 32, 32));
+  // clear the view
+  app->clear(sf::Color(32, 32, 32));
 
-    // render the game objects
-    EntityManager::getInstance().render(app);
+  // render the game objects
+  EntityManager::getInstance().render(app);
 
-    app->display();
+  app->display();
 }
 
 void Game::onUpdate()
