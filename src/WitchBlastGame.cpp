@@ -258,7 +258,6 @@ WitchBlastGame::WitchBlastGame()
   // Fullscreen ?
   if (parameters.fullscreen)
   {
-    //create(sf::VideoMode(this->screenWidth, this->screenHeight), APP_NAME + " V" + APP_VERSION, /*sf::Style::Fullscreen*/ true);
     create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, true);
     sf::View view = app->getDefaultView();
     view = getFullScreenLetterboxView( view, SCREEN_WIDTH, SCREEN_HEIGHT );
