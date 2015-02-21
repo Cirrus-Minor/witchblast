@@ -313,33 +313,33 @@ certificate_saved#Saved to
 
 msg_tuto_temple_0#Tutorial: Temple
 msg_tuto_temple_1#The temple is the place where you can worship a divinity or donate.
-msg_tuto_temple_2#Divinities can help you and provide bonus.
+msg_tuto_temple_2#Divinities can help you and provide bonuses.
 key_interact#interact
 interact_worship#Worship
 interact_shop#Buy
-interact_donate#Donate 10 gold
+interact_donate#Donate 10 pieces of gold
 interact_donate_fail#(not enough gold)
 worshipping#You're now a worshipper of
 divinity_healer_0#Pomonos the Righteous
 divinity_healer_1#Guardian of the righteousness and patroness of the weak.
 divinity_healer_2#He appreciates donations, suffering and fighting evil.
 divinity_fighter_0#Tello the Powerful
-divinity_fighter_1#Lord of the fighters and the strong.
-divinity_fighter_2#He appreciates monsters and titans falling in fight.
+divinity_fighter_1#Lord of the fighters and the war.
+divinity_fighter_2#He appreciates monsters and titans falling in battle.
 divinity_ice_0#Mister Snow
-divinity_ice_1#Divinity of the coldness.
-divinity_ice_2#He appreciates the use of ice.
+divinity_ice_1#Divinity of the cold.
+divinity_ice_2#He likes the use of ice.
 divinity_stone_0#Gaya
 divinity_stone_1#Divinity of the stone and earth.
-divinity_stone_2#He appreciates the use of stone.
+divinity_stone_2#He likes the use of stone.
 divinity_intervention_0#Divine intervention
 divinity_intervention_1#intervenes in your favour.
 divinity_gift_0#Divine gift
 divinity_gift_1#grants you a gift.
 item_floor_map#Dungeon Map
-item_floor_map_desc#Reveals the map of the current floor
+item_floor_map_desc#Reveals the map of the present floor
 item_alcohol#Absinthe
-item_alcohol_desc#temporarily makes damage stronger
+item_alcohol_desc#temporarily increases damage
 
 item_staff#Ebony Staff
 item_ring_stone#Quartz Ring
