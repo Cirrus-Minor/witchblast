@@ -91,19 +91,32 @@ Thanks to
 
 Vetea (for the v0.4.0 2D redesign)
 Sideous and Portoss01 (they provide me 2D art in earlier versions)
-Billx (who suggested me the title "Witch Blast")
+Billx (who suggested me the title "Witch Blast" + English corrections)
 Mika Attila (for his "coding" contribution during the development)
-Ruth (for the english corrections)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
 AFS (for the Spanish translation)
 
 Changes
 -------
+v0.4.5.b
+- ADD German and Spanish translations
+- ADD Improved and new sound (each shot type has a different sound effect)
+- ADD Full screen mode (experimental)
+- MOD Short latency before teleport when an imp has been hurt
+- MOD Exploding enemy shows "burned" sprite
+- MOD Improved snake AI
+- FIX No player stats update when levelling up piety level
+- FIX Shadows missing (items and eggs) or misplaced (Cyclops)
+- FIX Label errors (missing French translation, or wrong key error for English version) 
+- FIX False bolt sprite for The Thing
+- FIX Scarlet and Natasha sprites are switched
+- FIX Unexpected divine intervention messages
+
 v0.4.5
 - ADD Temple (worship + donation)
-- Divinities (4)
-- Divinity powers and interventions
+- ADD Divinities (4)
+- ADD Divinity powers and interventions
 - ADD Interaction key
 - ADD "level" objects
 - ADD New art and GUI
