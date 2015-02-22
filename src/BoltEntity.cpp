@@ -20,6 +20,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   this->boltType = boltType;
   enemyType = EnemyTypeNone;
   goThrough = false;
+  hitNumber = 0;
 
   switch (boltType)
   {
@@ -196,6 +197,9 @@ void BoltEntity::calculateBB()
 
 void BoltEntity::collide()
 {
+  hitNumber++;
+  if (hitNumber == 3) game().registerAchievement(Achievement3Hits);
+
   if (goThrough)
   {
     if (damages > 0) return;

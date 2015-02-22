@@ -61,6 +61,8 @@ class BoltEntity : public CollidingSpriteEntity
     bool critical;
     bool goThrough;
     unsigned int level;
+
+    int hitNumber;
 };
 
 #endif // BOLTENTITY_H
