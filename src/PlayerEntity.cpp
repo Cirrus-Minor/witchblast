@@ -909,14 +909,14 @@ void PlayerEntity::render(sf::RenderTarget* app)
         {
           displayField = true;
           fieldFrame = 10;
-          fieldFade = 58 * (divinity.level - 1);
+          fieldFade = 40 * (divinity.level - 1);
           break;
         }
       case DivinityFighter:
         {
           displayField = true;
           fieldFrame = 12;
-          fieldFade = 58 * (divinity.level - 1);
+          fieldFade = 40 * (divinity.level - 1);
           break;
         }
       case DivinityIce:
@@ -925,7 +925,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
           {
             displayField = true;
             fieldFrame = 14;
-            fieldFade = 80 * (divinity.level - 2);
+            fieldFade = 80 * (divinity.level - 3);
           }
           break;
         }
@@ -935,7 +935,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
           {
             displayField = true;
             fieldFrame = 16;
-            fieldFade = 80 * (divinity.level - 2);
+            fieldFade = 80 * (divinity.level - 3);
           }
           break;
         }
@@ -2115,11 +2115,12 @@ bool PlayerEntity::triggerDivinityBefore()
       if (r == 1)
       {
         divineIce();
+        game().makeColorEffect(X_GAME_COLOR_BLUE, 7.5f);
       }
       else
       {
         divineFury();
-        game().makeColorEffect(X_GAME_COLOR_BLUE, 0.45f);
+        game().makeColorEffect(X_GAME_COLOR_BLUE, 0.5f);
       }
       return true;
       break;
@@ -2181,16 +2182,19 @@ void PlayerEntity::addPiety(int n)
 {
   int oldLevel = divinity.level;
   divinity.piety += n;
-  if (divinity.piety > DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL - 1])
+  if (divinity.piety >= DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL - 1])
+  {
     divinity.piety = DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL - 1];
-  int i = 0;
-  while (divinity.piety > DIVINITY_LEVEL_TRESHOLD[i] && i < MAX_DIVINITY_LEVEL) i++;
-  divinity.level = i + 1;
-
-  if (divinity.level == MAX_DIVINITY_LEVEL)
     divinity.percentsToNextLevels = 1.0f;
+    game().registerAchievement(AchievementPietyMax);
+    divinity.level = MAX_DIVINITY_LEVEL + 1;
+  }
   else
   {
+    int i = 0;
+    while (divinity.piety > DIVINITY_LEVEL_TRESHOLD[i] && i < (MAX_DIVINITY_LEVEL + 1)) i++;
+    divinity.level = i + 1;
+
     if (divinity.level == 1)
       divinity.percentsToNextLevels = (float)divinity.piety / (float)DIVINITY_LEVEL_TRESHOLD[0];
     else

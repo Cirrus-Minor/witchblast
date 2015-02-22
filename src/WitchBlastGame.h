@@ -25,6 +25,7 @@
 #include "DoorEntity.h"
 #include "GameFloor.h"
 #include "Config.h"
+#include "Achievements.h"
 
 #include <queue>
 
@@ -398,6 +399,8 @@ public:
   void revealFloor();
 
   void activateKeyRoomEffect();
+
+  void registerAchievement(enumAchievementType achievement);
 
 protected:
   /*!
@@ -900,6 +903,8 @@ private:
   } interaction;
 
   void enableAA(bool enable);
+
+  bool achievementState[NB_ACHIEVEMENTS];
 };
 
 /*!

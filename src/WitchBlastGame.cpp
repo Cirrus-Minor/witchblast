@@ -62,7 +62,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 5
+//#define START_LEVEL 2
 
 static std::string intToString(int n)
 {
@@ -1738,10 +1738,9 @@ void WitchBlastGame::renderRunningGame()
       app->draw(rectangle);
 
       std::ostringstream oss;
-      oss << "lvl " << player->getDivinity().level;
+      if (player->getDivinity().level == MAX_DIVINITY_LEVEL + 1) oss << "MAX";
+      else oss << "lvl " << player->getDivinity().level;
       write(oss.str(), 11, 122, 702, ALIGN_CENTER, sf::Color::White, app, 0, 0);
-
-      //write(intToString(player->getDivinity().level), 10, 122, 689, ALIGN_CENTER, sf::Color::White, app, 0, 0);
     }
 
     // render the shots
@@ -4317,6 +4316,13 @@ void WitchBlastGame::loadGameData()
       file >> gameMessagesToSkip[i];
     }
   }
+
+  // Achievements
+  // TODO load and save
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+  {
+    achievementState[i] = false;
+  }
 }
 
 void WitchBlastGame::addKey(int logicInput, std::string key)
@@ -4602,6 +4608,23 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
     {
       killedEnemies[enemyType]++;
       player->offerMonster(enemyType, hurtingType);
+
+      // achievements
+      if (!achievementState[AchievementGiantSlime] && (enemyType == EnemyTypeSlimeBoss))
+          registerAchievement(AchievementGiantSlime);
+      else if (!achievementState[AchievementCyclops] && (enemyType == EnemyTypeCyclops))
+          registerAchievement(AchievementCyclops);
+      else if (!achievementState[AchievementRatKing] && (enemyType == EnemyTypeRatKing))
+          registerAchievement(AchievementRatKing);
+      else if (!achievementState[AchievementGiantSpider] && (enemyType == EnemyTypeSpiderGiant))
+          registerAchievement(AchievementFrancky);
+      else if (!achievementState[AchievementFrancky] && (enemyType == EnemyTypeFranckyHead))
+          registerAchievement(AchievementGiantSlime);
+      else if (!achievementState[AchievementRats] && (enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet
+          || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
+        if (killedEnemies[EnemyTypeRat] + killedEnemies[EnemyTypeRatHelmet]
+            + killedEnemies[EnemyTypeRatBlack] + killedEnemies[EnemyTypeRatBlackHelmet] >= 10)
+          registerAchievement(AchievementRats);
     }
   }
 }
@@ -4675,6 +4698,18 @@ void WitchBlastGame::initEvents()
 
 void WitchBlastGame::proceedEvent(EnumWorldEvents event)
 {
+  // achievements
+  if (event == EventGetCoin)
+  {
+    if (!achievementState[Achievement100] && player->getGold() > 100)
+      registerAchievement(Achievement100);
+  }
+  else if (event == EventPietyMax)
+  {
+    if (!achievementState[AchievementPietyMax]) registerAchievement(AchievementPietyMax);
+  }
+
+  // message ?
   if (worldEvent[event]) return;
 
   worldEvent[event] = true;
@@ -5109,6 +5144,15 @@ void WitchBlastGame::activateKeyRoomEffect()
   dungeonEntity->activateKeyRoomEffect();
   makeColorEffect(X_GAME_COLOR_VIOLET, 0.35f);
   SoundManager::getInstance().playSound(SOUND_FORCE_FIELD);
+}
+
+void WitchBlastGame::registerAchievement(enumAchievementType achievement)
+{
+  if (!achievementState[achievement])
+  {
+    achievementState[achievement] = true;
+    std::cout << "ACHIEVEMENT:" << achievements[achievement].label << std::endl;
+  }
 }
 
 WitchBlastGame &game()
