@@ -62,7 +62,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 2
+//#define START_LEVEL 5
 
 static std::string intToString(int n)
 {
@@ -4707,6 +4707,10 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
   else if (event == EventPietyMax)
   {
     if (!achievementState[AchievementPietyMax]) registerAchievement(AchievementPietyMax);
+  }
+  else if (event == EventTripleHit)
+  {
+    if (!achievementState[Achievement3Hits]) registerAchievement(Achievement3Hits);
   }
 
   // message ?
