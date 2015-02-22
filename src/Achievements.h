@@ -36,18 +36,16 @@ struct achievementStuct
 /** Array with all the achievement */
 const achievementStuct achievements[NB_ACHIEVEMENTS] =
 {
-  {
-    AchievementRats,        "achiev_rats",
-    Achievement100,         "achiev_100",
-    AchievementPietyMax,    "achiev_piety_max",
-    Achievement3Hits,       "achiev_3_hits",
+  { AchievementRats,        "achiev_rats" },
+  { Achievement100,         "achiev_100" },
+  { AchievementPietyMax,    "achiev_piety_max"},
+  { Achievement3Hits,       "achiev_3_hits" },
 
-    AchievementGiantSlime,  "achiev_giant_slime",
-    AchievementCyclops,     "achiev_cyclops",
-    AchievementRatKing,     "achiev_rat_king",
-    AchievementGiantSpider, "achiev_giant_spider",
-    AchievementFrancky,     "achiev_francky",
-  },
+  { AchievementGiantSlime,  "achiev_giant_slime" },
+  { AchievementCyclops,     "achiev_cyclops" },
+  { AchievementRatKing,     "achiev_rat_king" },
+  { AchievementGiantSpider, "achiev_giant_spider" },
+  { AchievementFrancky,     "achiev_francky" },
 };
 
 
