@@ -4617,9 +4617,9 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       else if (!achievementState[AchievementRatKing] && (enemyType == EnemyTypeRatKing))
           registerAchievement(AchievementRatKing);
       else if (!achievementState[AchievementGiantSpider] && (enemyType == EnemyTypeSpiderGiant))
-          registerAchievement(AchievementFrancky);
+          registerAchievement(AchievementGiantSpider);
       else if (!achievementState[AchievementFrancky] && (enemyType == EnemyTypeFranckyHead))
-          registerAchievement(AchievementGiantSlime);
+          registerAchievement(AchievementFrancky);
       else if (!achievementState[AchievementRats] && (enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet
           || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
         if (killedEnemies[EnemyTypeRat] + killedEnemies[EnemyTypeRatHelmet]
@@ -4711,6 +4711,10 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
   else if (event == EventTripleHit)
   {
     if (!achievementState[Achievement3Hits]) registerAchievement(Achievement3Hits);
+  }
+  else if (event == EventCompleteSet)
+  {
+    if (!achievementState[AchievementCompleteSet]) registerAchievement(AchievementCompleteSet);
   }
 
   // message ?

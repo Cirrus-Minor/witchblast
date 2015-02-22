@@ -12,6 +12,7 @@ enum enumAchievementType
   Achievement100,
   AchievementPietyMax,
   Achievement3Hits,
+  AchievementCompleteSet,
 
   AchievementGiantSlime,
   AchievementCyclops,
@@ -40,6 +41,7 @@ const achievementStuct achievements[NB_ACHIEVEMENTS] =
   { Achievement100,         "achiev_100" },
   { AchievementPietyMax,    "achiev_piety_max"},
   { Achievement3Hits,       "achiev_3_hits" },
+  { AchievementCompleteSet, "achiev_complete_set" },
 
   { AchievementGiantSlime,  "achiev_giant_slime" },
   { AchievementCyclops,     "achiev_cyclops" },

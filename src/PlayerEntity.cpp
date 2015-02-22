@@ -286,10 +286,15 @@ void PlayerEntity::acquireItemAfterStance()
       game().proceedEvent(EventGetSpell);
     }
 
+    // floor item
     else if (acquiredItem == ItemFloorMap)
       game().revealFloor();
     else if (acquiredItem == ItemAlcohol)
-      hiccupDelay = HICCUP_DELAY;;
+      hiccupDelay = HICCUP_DELAY;
+
+    // acquirement
+    if (equip[EQUIP_DISPLACEMENT_GLOVES] && equip[EQUIP_LEATHER_BOOTS] && equip[EQUIP_MAGICIAN_HAT] && equip[EQUIP_MAGICIAN_HAT])
+      game().registerAchievement(AchievementCompleteSet);
 
     computePlayer();
   }
