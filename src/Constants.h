@@ -615,6 +615,7 @@ enum EnumWorldEvents
   EventMeetSnakes,
   EventMeetWitches,
   EventGetCoin,
+  EventPietyMax,
 
   // tuto
   EventBeingHurted,
