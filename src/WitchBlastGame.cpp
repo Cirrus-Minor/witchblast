@@ -4374,8 +4374,8 @@ void WitchBlastGame::configureFromFile()
   parameters.vsync = true;
   parameters.bloodSpread = true;
   parameters.fullscreen = false;
-  parameters.musicVolume = 100;
-  parameters.soundVolume = 80;
+  parameters.musicVolume = 60;
+  parameters.soundVolume = 100;
   parameters.playerName = "";
 
   input[KeyUp]    = sf::Keyboard::W;
