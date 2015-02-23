@@ -99,9 +99,10 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-v0.4.5.b
+v0.4.6
 - ADD German and Spanish translations
 - ADD Improved and new sound (each shot type has a different sound effect)
+- ADD Full minimap on the pause menu
 - ADD Full screen mode (experimental)
 - MOD Short latency before teleport when an imp has been hurt
 - MOD Exploding enemy shows "burned" sprite
@@ -112,6 +113,7 @@ v0.4.5.b
 - FIX False bolt sprite for The Thing
 - FIX Scarlet and Natasha sprites are switched
 - FIX Unexpected divine intervention messages
+- FIX Teleport on key is possible
 
 v0.4.5
 - ADD Temple (worship + donation)
