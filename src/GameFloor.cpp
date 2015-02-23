@@ -296,7 +296,7 @@ void GameFloor::createFloor()
             maps[i][j]->setRoomType((roomTypeEnum)(floor[i][j]));
         }
 
-    displayToConsole();
+    //displayToConsole();
   }
 }
 
