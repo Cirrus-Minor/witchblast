@@ -130,11 +130,7 @@ bool DungeonMap::isWalkable(int x, int y)
   {
     int x0 = MAP_WIDTH / 2;
     int y0 = MAP_HEIGHT / 2;
-    if (x == x0 - 1 && y >= y0 -1 && y <= y0 + 1)
-      return false;
-    else if (x == x0 + 1 && y >= y0 -1 && y <= y0 + 1)
-      return false;
-    else if (x == x0 && (y == y0 -1 || y == y0 + 1))
+    if (x >= x0 - 1 && x <= x0 +1 && y >= y0 - 1 && y <= y0 + 1)
       return false;
   }
   return (map[x][y] < MAP_WALL);
