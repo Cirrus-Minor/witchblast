@@ -34,6 +34,7 @@ class BoltEntity : public CollidingSpriteEntity
     bool getGoThrough();
 
     enemyTypeEnum getEnemyType();
+    void setFromPlayer(bool fromPlayer);
 
   protected:
     virtual void calculateBB();
@@ -63,6 +64,7 @@ class BoltEntity : public CollidingSpriteEntity
     unsigned int level;
 
     int hitNumber;
+    bool fromPlayer;
 };
 
 #endif // BOLTENTITY_H

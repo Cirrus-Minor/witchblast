@@ -507,7 +507,7 @@ void PlayerEntity::animate(float delay)
       recoil.velocity = Vector2D(GAME_WIDTH / 2, GAME_HEIGHT /2).vectorTo(Vector2D(x, y), 650.0f);
       recoil.timer = 0.4f;
 
-      game().activateKeyRoomEffect();
+      game().activateKeyRoomEffect(true);
     }
   }
 
@@ -2014,6 +2014,7 @@ void PlayerEntity::divineFury()
     bolt->setViscosity(1.0f);
     bolt->setLifetime(-1.0f);
     bolt->setGoThrough(true);
+    bolt->setFromPlayer(false);
   }
 }
 

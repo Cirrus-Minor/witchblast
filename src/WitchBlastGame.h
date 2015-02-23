@@ -398,7 +398,7 @@ public:
 
   void revealFloor();
 
-  void activateKeyRoomEffect();
+  void activateKeyRoomEffect(bool withColorEffect);
 
   void registerAchievement(enumAchievementType achievement);
 
@@ -468,11 +468,13 @@ private:
 
   struct uiSpritesStruct
   {
+    sf::Sprite gui;
     sf::Sprite keySprite;       /*!< A simple sprite with the boss key (displayed on the HUD) */
     sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
     sf::Sprite topLayer;
     sf::Sprite msgBoxSprite;
     sf::Sprite iconSprite;
+    sf::Sprite mapBgSprite;
   } uiSprites;
 
   struct lifeBarStruct

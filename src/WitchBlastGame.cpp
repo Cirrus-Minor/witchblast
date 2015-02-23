@@ -274,6 +274,7 @@ WitchBlastGame::WitchBlastGame()
     "media/player_base.png",
     "media/bolt.png",          "media/tiles01.png",
     "media/rat.png",           "media/minimap.png",
+    "media/map_background.png",
     "media/items.png",         "media/items_equip.png",
     "media/items.png",         "media/items_equip.png",
     "media/chest.png",         "media/bat.png",
@@ -410,6 +411,8 @@ WitchBlastGame::WitchBlastGame()
   uiSprites.msgBoxSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MESSAGE));
   uiSprites.iconSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MESSAGE_ICONS));
   uiSprites.iconSprite.setPosition(12, 614);
+  uiSprites.mapBgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MAP_BACKGROUND));
+  uiSprites.mapBgSprite.setPosition(342, 23);
 
   introScreenSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
   titleSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TITLE));
@@ -553,10 +556,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   dungeonEntity = new DungeonMapEntity();
 
   // the interface
-  SpriteEntity* interface = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_INTERFACE));
-  interface->setZ(10000.0f);
-  interface->removeCenter();
-  interface->setType(0);
+  uiSprites.gui.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTERFACE));
 
   // key symbol on the interface
   uiSprites.keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
@@ -1410,6 +1410,7 @@ void WitchBlastGame::renderHud()
     app->draw(cone, sf::BlendAdd);
   }
 
+  app->draw(uiSprites.gui);
   EntityManager::getInstance().renderAfter(app, 5000);
 }
 
@@ -1758,13 +1759,8 @@ void WitchBlastGame::renderRunningGame()
       int mapx = 350;
       int mapy = 30;
       // background
-      rectangle.setFillColor(sf::Color(233, 217, 186, 255));
-      rectangle.setPosition(sf::Vector2f(mapx, mapy));
-      rectangle.setSize(sf::Vector2f(15 * 19 + 1, 9 * 15 + 1));
-      rectangle.setOutlineColor(sf::Color(233, 217, 186, 128));
-      rectangle.setOutlineThickness(4);
-
       app->draw(rectangle);
+      app->draw(uiSprites.mapBgSprite);
       // map
       float miniX = miniMapEntity->getX();
       float miniY = miniMapEntity->getY();
@@ -5147,10 +5143,10 @@ void WitchBlastGame::revealFloor()
   refreshMinimap();
 }
 
-void WitchBlastGame::activateKeyRoomEffect()
+void WitchBlastGame::activateKeyRoomEffect(bool withColorEffect)
 {
   dungeonEntity->activateKeyRoomEffect();
-  makeColorEffect(X_GAME_COLOR_VIOLET, 0.35f);
+  if (withColorEffect) makeColorEffect(X_GAME_COLOR_VIOLET, 0.35f);
   SoundManager::getInstance().playSound(SOUND_FORCE_FIELD);
 }
 

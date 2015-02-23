@@ -21,6 +21,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
   enemyType = EnemyTypeNone;
   goThrough = false;
   hitNumber = 0;
+  fromPlayer = true;
 
   switch (boltType)
   {
@@ -47,6 +48,11 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
 int BoltEntity::getDamages()
 {
   return damages;
+}
+
+void BoltEntity::setFromPlayer(bool fromPlayer)
+{
+  this->fromPlayer = fromPlayer;
 }
 
 unsigned int BoltEntity::getLevel()
@@ -147,7 +153,7 @@ void BoltEntity::animate(float delay)
 
     if (boundingBox.intersects(col1) || boundingBox.intersects(col2))
     {
-      game().activateKeyRoomEffect();
+      game().activateKeyRoomEffect(false);
       if (x < 390) collideMapRight();
       else if (x > 565) collideMapLeft();
       else if (y < 265) collideMapBottom();
@@ -198,11 +204,16 @@ void BoltEntity::calculateBB()
 void BoltEntity::collide()
 {
   hitNumber++;
-  if (hitNumber == 3) game().registerAchievement(Achievement3Hits);
-
-  if (goThrough)
+  if (fromPlayer)
   {
-    if (damages > 0) return;
+    if (hitNumber == 3) game().registerAchievement(Achievement3Hits);
+
+    if (hitNumber > 1) std::cout << "Hit: " << hitNumber << "(dam=" << damages << ")" << std::endl;
+
+    if (goThrough)
+    {
+      if (damages > 0) return;
+    }
   }
 
   isDying = true;

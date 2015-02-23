@@ -154,6 +154,7 @@ void FairyEntity::fire(int dir)
     bolt->setDamages(fairyDamages);
     bolt->setVelocity(Vector2D(velx, vely));
     bolt->setFlying(true);
+    bolt->setFromPlayer(false);
 
     if (fairyType == FamiliarFairyTarget)
     {
