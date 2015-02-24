@@ -99,8 +99,9 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next release
+v0.4.6b
 - ADD Russian translation
+- FIX No more texture bigger than 2048x2048 for better compatibility
 - FIX Wrong filename
 
 v0.4.6
