@@ -4730,28 +4730,28 @@ void WitchBlastGame::renderPlayer(float x, float y,
 
   if (equip[EQUIP_FAIRY_FIRE])
   {
-    sprite.setPosition(x - 35, y -25);
+    sprite.setPosition(x - 35, y - 25);
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
     sprite.setTextureRect(sf::IntRect( 0, 144, 48, 60));
     app->draw(sprite);
   }
-  if (equip[EQUIP_FAIRY_TARGET])
+  if (equip[EQUIP_FAIRY_ICE])
   {
-    sprite.setPosition(x - 15, y -25);
+    sprite.setPosition(x - 5, y - 25);
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
     sprite.setTextureRect(sf::IntRect( 0, 216, 48, 60));
     app->draw(sprite);
   }
   if (equip[EQUIP_FAIRY])
   {
-    sprite.setPosition(x - 40, y -10);
+    sprite.setPosition(x - 40, y);
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
     sprite.setTextureRect(sf::IntRect( 0, 0, 48, 60));
     app->draw(sprite);
   }
-  if (equip[EQUIP_FAIRY_ICE])
+  if (equip[EQUIP_FAIRY_TARGET])
   {
-    sprite.setPosition(x - 10, y -10);
+    sprite.setPosition(x - 10, y);
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
     sprite.setTextureRect(sf::IntRect( 0, 72, 48, 60));
     app->draw(sprite);
