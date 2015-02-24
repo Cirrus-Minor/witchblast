@@ -799,15 +799,15 @@ void WitchBlastGame::updateIntro()
     introSprites[2] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TITLE_ANIM),
                                        SCREEN_WIDTH / 2,
                                        SCREEN_HEIGHT / 2,
-                                       310, 278, 1);
+                                       310, 278, 3);
     introSprites[2]->setZ(50);
   }
   else if (introState == 1)
   {
     int frame = (gameTime - 2.5f) * 8.0f;
-    if (frame > 15)
+    if (frame > 16)
     {
-      frame = 15;
+      frame = 16;
       introState = 2;
       introSprites[3] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_WITCH_INTRO));
       introSprites[3]->setX(368 + 1000);
