@@ -99,6 +99,10 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next release
+- ADD Russian translation
+- FIX Wrong filename
+
 v0.4.6
 - ADD German and Spanish translations
 - ADD Improved and new sound (each shot type has a different sound effect)
