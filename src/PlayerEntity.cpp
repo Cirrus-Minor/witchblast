@@ -45,7 +45,7 @@ const int yHalo[9][3] =
 };
 
 PlayerEntity::PlayerEntity(float x, float y)
-  : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_BASE), x, y, 64, 96)
+  : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_0), x, y, 64, 96)
 {
   currentFireDelay = -1.0f;
   randomFireDelay = -1.0f;
@@ -682,11 +682,13 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
 
   if (equip[EQUIP_REAR_SHOT])
   {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (30 + frame) * width + width, spriteDy * height, -width, height));
+      sprite.setTextureRect(sf::IntRect( (frame) * width + width, spriteDy * height, -width, height));
     else
-      sprite.setTextureRect(sf::IntRect( (30 + frame) * width, spriteDy * height, width, height));
+      sprite.setTextureRect(sf::IntRect( (frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
   }
 
   // shot type
@@ -722,22 +724,26 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
       std::cout << "[WARNING] Can not render shot type: " << getShotType() << std::endl;
     }
 
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (33 + frame) * width + width, spriteDy * height, -width, height));
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width + width, spriteDy * height, -width, height));
     else
-      sprite.setTextureRect(sf::IntRect( (33 + frame) * width, spriteDy * height, width, height));
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
     sprite.setColor(savedColor);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
   }
 
   // hat
   if (equip[EQUIP_MAGICIAN_HAT] && playerStatus != playerStatusDead)
   {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (36 + frame) * width + width, spriteDy * height, -width, height));
+      sprite.setTextureRect(sf::IntRect( (6 + frame) * width + width, spriteDy * height, -width, height));
     else
-      sprite.setTextureRect(sf::IntRect( (36 + frame) * width, spriteDy * height, width, height));
+      sprite.setTextureRect(sf::IntRect( (6 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
   }
 }
 
