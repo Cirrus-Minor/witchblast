@@ -361,19 +361,19 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemFloorMap, "item_floor_map", "item_floor_map_desc",
-    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+    10, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemAlcohol, "item_alcohol", "item_alcohol_desc",
-    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+    10, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemLuck, "item_luck", "item_luck_desc",
-    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+    10, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemFairyPowder, "item_fairy_powder", "item_fairy_powder_desc",
-    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+    10, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
   },
 };
 

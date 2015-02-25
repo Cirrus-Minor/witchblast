@@ -3176,6 +3176,28 @@ void WitchBlastGame::generateMap()
       (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
     item2->setMerchandise(true);
 
+    // level item ?
+    if (rand() % 3 == 0)
+    {
+      int r = rand() % 4;
+      int item4Type = -1;
+      switch (r)
+      {
+        case 0: if (!game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP)) item4Type = ItemFloorMap; break;
+        case 1: if (!game().getPlayer()->isEquiped(EQUIP_ALCOHOL)) item4Type = ItemAlcohol; break;
+        case 2: if (!game().getPlayer()->isEquiped(EQUIP_LUCK)) item4Type = ItemLuck; break;
+        default: if (!game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) && player->getFairieNumber() > 0) item4Type = ItemFairyPowder; break;
+      }
+      if (item4Type > -1)
+      {
+        ItemEntity* item4 = new ItemEntity(
+            (enumItemType)(item4Type),
+            (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
+            (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
+        item4->setMerchandise(true);
+      }
+    }
+
     new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                   (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT,
                   0);
