@@ -347,6 +347,8 @@ void PlayerEntity::resetFloorItem()
   equip[EQUIP_BOSS_KEY] = false;
   equip[EQUIP_FLOOR_MAP] = false;
   equip[EQUIP_ALCOHOL] = false;
+  equip[EQUIP_FAIRY_POWDER] = false;
+  equip[EQUIP_LUCK] = false;
   computePlayer();
 }
 

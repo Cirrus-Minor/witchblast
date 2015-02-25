@@ -1690,6 +1690,24 @@ void WitchBlastGame::renderRunningGame()
       app->draw(alcSprite);
     }
 
+    if (player->isEquiped(EQUIP_LUCK))
+    {
+      sf::Sprite alcSprite;
+      alcSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+      alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 5, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
+      alcSprite.setPosition(704, 681);
+      app->draw(alcSprite);
+    }
+
+    if (player->isEquiped(EQUIP_FAIRY_POWDER))
+    {
+      sf::Sprite alcSprite;
+      alcSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+      alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 6, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
+      alcSprite.setPosition(671, 681);
+      app->draw(alcSprite);
+    }
+
     // drawing message icon
     if (!messagesQueue.empty())
     {

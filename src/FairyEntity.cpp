@@ -108,7 +108,7 @@ void FairyEntity::animate(float delay)
       teleportDelay = 4.0f + 0.1f * (rand() % 35);
       SoundManager::getInstance().playSound(SOUND_TELEPORT);
 
-      for(int i=0; i < 6; i++)
+      for(int i=0; i < 50; i++)
       {
         game().generateStar(sf::Color(50, 50, 255, 255), x, y);
         game().generateStar(sf::Color(200, 200, 255, 255), x, y);
