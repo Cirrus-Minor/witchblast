@@ -51,6 +51,12 @@ bool ItemEntity::canBePickedUp()
   if (itemType >= FirstEquipItem)
     if (game().getPlayer()->isEquiped(itemType - FirstEquipItem)) return false;
 
+  if (itemType == ItemBookDualShots || itemType == ItemBookTripleShots)
+    if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL_QUICK) || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE_QUICK)) return false;
+
+  if (itemType == ItemBookDualShotsQuick || itemType == ItemBookTripleShotsQuick)
+    if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL) || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE)) return false;
+
   return true;
 }
 
