@@ -445,6 +445,10 @@ void PlayerEntity::animate(float delay)
       recoil.velocity = Vector2D(350.0f);
       recoil.timer = 0.4f;
 
+      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
+      bolt->setDamages(fireDamages);
+      bolt->setVelocity(recoil.velocity.vectorTo(Vector2D(0, 0), fireVelocity));
+
       TextEntity* text = new TextEntity("*hic*", 16, x, y - 30.0f);
       text->setColor(TextEntity::COLOR_FADING_GREEN);
       text->setAge(-0.6f);
@@ -455,6 +459,7 @@ void PlayerEntity::animate(float delay)
       text->setType(ENTITY_FLYING_TEXT);
 
       SoundManager::getInstance().playSound(SOUND_HICCUP);
+      SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
     }
   }
 
