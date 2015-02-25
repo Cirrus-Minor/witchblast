@@ -2,6 +2,7 @@
 #define CHESTENTITY_H
 
 #include "sfml_game/CollidingSpriteEntity.h"
+#include "Items.h"
 #include "Constants.h"
 
 class ChestEntity : public CollidingSpriteEntity
@@ -30,6 +31,7 @@ class ChestEntity : public CollidingSpriteEntity
     void fallRock();
     void initFallingGrid();
     void generateStar(sf::Color starColor);
+    void dropItem(enumItemType item);
 
     bool fallingGrid[MAP_WIDTH][MAP_HEIGHT];
 };

@@ -114,6 +114,14 @@ void ChestEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   }
 }
 
+void ChestEntity::dropItem(enumItemType item)
+{
+  ItemEntity* newItem = new ItemEntity(item, x, y);
+  newItem->setVelocity(Vector2D(50.0f + rand()% 150));
+  if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
+  newItem->setViscosity(0.96f);
+}
+
 void ChestEntity::open()
 {
   isOpen = true;
@@ -124,23 +132,15 @@ void ChestEntity::open()
 
   if (chestType == ChestBasic)
   {
-    int r = rand()% 35;
+    int r = rand()% 50;
     if (r == 0 && !game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP))
-    {
-      // map
-      ItemEntity* newItem = new ItemEntity(ItemFloorMap, x, y);
-      newItem->setVelocity(Vector2D(50.0f + rand()% 150));
-      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-      newItem->setViscosity(0.96f);
-    }
+      dropItem(ItemFloorMap);
     else if (r == 1 && !game().getPlayer()->isEquiped(EQUIP_ALCOHOL))
-    {
-      // alcohol
-      ItemEntity* newItem = new ItemEntity(ItemAlcohol, x, y);
-      newItem->setVelocity(Vector2D(50.0f + rand()% 150));
-      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-      newItem->setViscosity(0.96f);
-    }
+      dropItem(ItemAlcohol);
+    else if (r == 2 && !game().getPlayer()->isEquiped(EQUIP_LUCK))
+      dropItem(ItemLuck);
+    else if (r == 3 && !game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) && game().getPlayer()->getFairieNumber() > 0)
+      dropItem(ItemFairyPowder);
 
     else
     {
