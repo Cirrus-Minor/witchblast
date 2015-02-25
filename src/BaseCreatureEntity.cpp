@@ -629,24 +629,7 @@ bool BaseCreatureEntity::canCollide()
 
 void BaseCreatureEntity::generateStar(sf::Color starColor)
 {
-  generateStar(starColor, x, y);
-}
-
-void BaseCreatureEntity::generateStar(sf::Color starColor, float xStar, float yStar)
-{
-  SpriteEntity* spriteStar = new SpriteEntity(
-                           ImageManager::getInstance().getImage(IMAGE_STAR_2),
-                            xStar, yStar);
-  spriteStar->setScale(0.8f, 0.8f);
-  spriteStar->setZ(1000.0f);
-  spriteStar->setSpin(-100 + rand()%200);
-  spriteStar->setVelocity(Vector2D(10 + rand()%40));
-  spriteStar->setWeight(-150);
-  spriteStar->setFading(true);
-  spriteStar->setAge(-0.8f);
-  spriteStar->setLifetime(0.1f + (rand() % 100) * 0.003f );
-  spriteStar->setColor(starColor);
-  spriteStar->setType(ENTITY_EFFECT);
+  game().generateStar(starColor, x, y);
 }
 
 static bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2)

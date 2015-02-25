@@ -134,7 +134,14 @@ void BoltEntity::animate(float delay)
   z = y + height;
 
   testWallsCollision = true;
-  CollidingSpriteEntity::animate(delay);
+  if (isCollidingWithMap())
+  {
+    isDying = true;
+    SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
+    for (int i=0; i<5; i++) generateParticule(100.0f + rand() % 150);
+  }
+  else
+    CollidingSpriteEntity::animate(delay);
 
   // key room collision
   if (game().getCurrentMap()->getRoomType() == roomTypeKey && !game().getCurrentMap()->isCleared())

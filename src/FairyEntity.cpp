@@ -21,6 +21,7 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
 
   fireDelay = -1.0f;
   facingDirection = 2;
+  teleportDelay = 5.0f + 0.1f * (rand() % 35);
 
   fairyDamages = FAIRY_BOLT_DAMAGES;
 
@@ -59,15 +60,17 @@ void FairyEntity::animate(float delay)
 
   float dist2 = (x - parentEntity->getX()) * (x - parentEntity->getX()) + (y - parentEntity->getY()) * (y - parentEntity->getY());
 
+  float creatureSpeed = game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) ? FAIRY_SPEED * 1.5f : FAIRY_SPEED;
+
   if (dist2 > 15000.0f)
   {
     float tan = (parentEntity->getX() - x) / (parentEntity->getY() - y);
     float angle = atan(tan);
 
     if (parentEntity->getY() > y)
-      setVelocity(Vector2D(sin(angle) * FAIRY_SPEED, cos(angle) * FAIRY_SPEED));
+      setVelocity(Vector2D(sin(angle) * creatureSpeed, cos(angle) * creatureSpeed));
     else
-      setVelocity(Vector2D(-sin(angle) * FAIRY_SPEED, -cos(angle) * FAIRY_SPEED));
+      setVelocity(Vector2D(-sin(angle) * creatureSpeed, -cos(angle) * creatureSpeed));
 
     viscosity = 1.0f;
   }
@@ -80,19 +83,47 @@ void FairyEntity::animate(float delay)
   {
     if (x < TILE_WIDTH * 1.3)
     {
-      velocity.x = FAIRY_SPEED;
+      velocity.x = creatureSpeed;
     }
     else if (x > TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3)
     {
-      velocity.x = -FAIRY_SPEED;
+      velocity.x = -creatureSpeed;
     }
     if (y < TILE_HEIGHT * 1.3)
     {
-      velocity.y = FAIRY_SPEED;
+      velocity.y = creatureSpeed;
     }
     else if (y > TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3)
     {
-      velocity.y = -FAIRY_SPEED;
+      velocity.y = -creatureSpeed;
+    }
+  }
+
+  if (game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER))
+  {
+    teleportDelay -= delay;
+
+    if (teleportDelay <= 0.0f)
+    {
+      teleportDelay = 4.0f + 0.1f * (rand() % 35);
+      SoundManager::getInstance().playSound(SOUND_TELEPORT);
+
+      for(int i=0; i < 6; i++)
+      {
+        game().generateStar(sf::Color(50, 50, 255, 255), x, y);
+        game().generateStar(sf::Color(200, 200, 255, 255), x, y);
+      }
+
+      x = TILE_WIDTH + rand() % (TILE_WIDTH * (MAP_WIDTH - 2));
+      y = TILE_HEIGHT + rand() % (TILE_HEIGHT * (MAP_HEIGHT - 2));
+
+      for(int i=0; i < 6; i++)
+      {
+        game().generateStar(sf::Color(50, 50, 255, 255), x, y);
+        game().generateStar(sf::Color(200, 200, 255, 255), x, y);
+      }
+
+      if (rand() % 6 == 0) game().getPlayer()->castTeleport();
     }
   }
 
@@ -140,7 +171,7 @@ void FairyEntity::fire(int dir)
       SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
       break;
     }
-    fireDelay = fairyFireDelay;
+    fireDelay = game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) ? fairyFireDelay * 0.6f : fairyFireDelay;
 
     float velx = 0.0f;
     float vely = 0.0f;

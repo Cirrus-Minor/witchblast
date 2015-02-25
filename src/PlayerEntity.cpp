@@ -1903,8 +1903,8 @@ void PlayerEntity::donate(int n)
       isRegeneration = false;
       for (int i = 0; i < 8; i++)
       {
-        generateStar(sf::Color::White, xItem, yItem);
-        generateStar(sf::Color(255, 255, 210), xItem, yItem);
+        game().generateStar(sf::Color::White, xItem, yItem);
+        game().generateStar(sf::Color(255, 255, 210), xItem, yItem);
       }
 
       game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivGift));

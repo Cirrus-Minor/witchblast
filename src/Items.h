@@ -115,6 +115,8 @@ enum enumItemType
   ItemSulfur,
   ItemFloorMap,
   ItemAlcohol,
+  ItemLuck,
+  ItemFairyPowder,
 
   NUMBER_ITEMS
 };
@@ -365,6 +367,14 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemAlcohol, "item_alcohol", "item_alcohol_desc",
     20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemLuck, "item_luck", "item_luck_desc",
+    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemFairyPowder, "item_fairy_powder", "item_fairy_powder_desc",
+    20, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -416,6 +426,8 @@ enum item_equip_enum {
   EQUIP_SULFUR,
   EQUIP_FLOOR_MAP,
   EQUIP_ALCOHOL,
+  EQUIP_LUCK,
+  EQUIP_FAIRY_POWDER,
 
   NUMBER_EQUIP_ITEMS
   };

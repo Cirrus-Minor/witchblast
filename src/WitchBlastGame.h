@@ -30,7 +30,7 @@
 #include <queue>
 
 // for tests
-//#define TEST_MODE
+#define TEST_MODE
 
 const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
@@ -399,6 +399,8 @@ public:
   void revealFloor();
 
   void activateKeyRoomEffect(bool withColorEffect);
+
+  void generateStar(sf::Color starColor, float xStar, float yStar);
 
   void registerAchievement(enumAchievementType achievement);
 
