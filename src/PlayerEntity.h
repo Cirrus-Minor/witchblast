@@ -494,6 +494,8 @@ class PlayerEntity : public BaseCreatureEntity
     void setItemToBuy(ItemEntity* item);
     ItemEntity* getItemToBuy();
 
+    void castTeleport();
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
@@ -575,7 +577,6 @@ class PlayerEntity : public BaseCreatureEntity
       float timer;
     } protection;
 
-    void castTeleport();
     void castSummonsSlimeExplode();
     void castFireball();
     void castFreeze();

@@ -18,6 +18,7 @@ class FairyEntity : public SpriteEntity
   private:
     PlayerEntity* parentEntity;
     float fireDelay;
+    float teleportDelay;
     int facingDirection;
     enumFamiliar fairyType;
     enumShotType shotType;

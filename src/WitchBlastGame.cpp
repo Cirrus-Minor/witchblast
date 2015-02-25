@@ -5156,6 +5156,23 @@ void WitchBlastGame::activateKeyRoomEffect(bool withColorEffect)
   SoundManager::getInstance().playSound(SOUND_FORCE_FIELD);
 }
 
+void WitchBlastGame::generateStar(sf::Color starColor, float xStar, float yStar)
+{
+  SpriteEntity* spriteStar = new SpriteEntity(
+                           ImageManager::getInstance().getImage(IMAGE_STAR_2),
+                            xStar, yStar);
+  spriteStar->setScale(0.8f, 0.8f);
+  spriteStar->setZ(1000.0f);
+  spriteStar->setSpin(-100 + rand()%200);
+  spriteStar->setVelocity(Vector2D(10 + rand()%40));
+  spriteStar->setWeight(-150);
+  spriteStar->setFading(true);
+  spriteStar->setAge(-0.8f);
+  spriteStar->setLifetime(0.1f + (rand() % 100) * 0.003f );
+  spriteStar->setColor(starColor);
+  spriteStar->setType(ENTITY_EFFECT);
+}
+
 void WitchBlastGame::registerAchievement(enumAchievementType achievement)
 {
   if (!achievementState[achievement])
