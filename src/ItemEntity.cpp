@@ -52,10 +52,20 @@ bool ItemEntity::canBePickedUp()
     if (game().getPlayer()->isEquiped(itemType - FirstEquipItem)) return false;
 
   if (itemType == ItemBookDualShots || itemType == ItemBookTripleShots)
-    if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL_QUICK) || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE_QUICK)) return false;
+    if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL_QUICK)
+        || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE_QUICK)
+        || game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT)) return false;
 
   if (itemType == ItemBookDualShotsQuick || itemType == ItemBookTripleShotsQuick)
-    if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL) || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE)) return false;
+    if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL)
+        || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE)
+        || game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT)) return false;
+
+  if (itemType == ItemBookRapidShots)
+    if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL)
+        || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE)
+        || game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL_QUICK)
+        || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE_QUICK)) return false;
 
   return true;
 }

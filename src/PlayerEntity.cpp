@@ -1282,7 +1282,27 @@ void PlayerEntity::fire(int direction)
         break;
       }
     }
-    if (!(equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_DUAL_QUICK]) || (equip[EQUIP_BOOK_TRIPLE] || equip[EQUIP_BOOK_TRIPLE_QUICK]))
+    if (equip[EQUIP_RAPID_SHOT])
+    {
+      Vector2D boltDirection;
+      switch(direction)
+      {
+      case 4:
+        boltDirection = Vector2D(0, 0).vectorNearlyTo(Vector2D(-1, 0), fireVelocity, 0.2f);
+        break;
+      case 6:
+        boltDirection = Vector2D(0, 0).vectorNearlyTo(Vector2D(1, 0), fireVelocity, 0.2f);
+        break;
+      case 8:
+        boltDirection = Vector2D(0, 0).vectorNearlyTo(Vector2D(0, -1), fireVelocity, 0.2f);
+        break;
+      case 2:
+        boltDirection = Vector2D(0, 0).vectorNearlyTo(Vector2D(0, 1), fireVelocity, 0.2f);
+        break;
+      }
+      generateBolt(boltDirection.x, boltDirection.y);
+    }
+    else if (!(equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_DUAL_QUICK]) || (equip[EQUIP_BOOK_TRIPLE] || equip[EQUIP_BOOK_TRIPLE_QUICK]))
     {
       switch(direction)
       {
@@ -1528,6 +1548,7 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
+
   if (equip[EQUIP_BROOCH_FINESSE]) criticalChance += 5;
   if (equip[EQUIP_MANUAL_STAFF]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
@@ -1620,6 +1641,11 @@ void PlayerEntity::computePlayer()
   // post-computation
   if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamages *= 0.65f;
   else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamages *= 0.75f;
+  else if (equip[EQUIP_RAPID_SHOT])
+  {
+    fireDelay *= 0.20f;
+    fireDamages *= 0.25f;
+  }
   if (equip[EQUIP_ALCOHOL]) fireDamages *= 1.25f;
 
   // spells

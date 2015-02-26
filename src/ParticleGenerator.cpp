@@ -24,6 +24,7 @@ void ParticleGenerator::GenerateParticles(int frame, int imageId, float posX, fl
 		Vector2D newVelocity = velocity;
 		RandomizeVelocity(newVelocity);
 		float lifeTime = lifetimeDistribution(randomGenerator);
+		if (scale == 0.7f) lifeTime *= 0.3f;
 
 		GenerateBoltParticle(frame, newVelocity, posX, posY, lifeTime, scale );
 	}

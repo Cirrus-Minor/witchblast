@@ -141,7 +141,17 @@ void BoltEntity::animate(float delay)
     for (int i=0; i<5; i++) generateParticule(100.0f + rand() % 150);
   }
   else
+  {
+    float oldX = x;
+    float oldY = y;
     CollidingSpriteEntity::animate(delay);
+    if (boltType != ShotTypeBomb && game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT))
+      particleGenerator.GenerateParticles(frame, IMAGE_BOLT, (x + oldX) * 0.5f, (y + oldY) * 0.5f, BOLT_WIDTH, BOLT_HEIGHT,
+                        boltType == ShotTypeLightning ? Vector2D(20.0f) : Vector2D(0.0f, 0.0f),
+                        10, boltType == ShotTypeIce ? renderScale * 1.3f : renderScale);
+
+  }
+
 
   // key room collision
   if (game().getCurrentMap()->getRoomType() == roomTypeKey && !game().getCurrentMap()->isCleared())
