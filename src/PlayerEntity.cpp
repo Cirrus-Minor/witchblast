@@ -596,6 +596,11 @@ void PlayerEntity::animate(float delay)
   z = y + 4;
 }
 
+bool PlayerEntity::canCollide()
+{
+  return invincibleDelay <= 0.0f;
+}
+
 void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
 {
   BaseCreatureEntity::setSpecialState(state, active, timer, param1, param2);
@@ -1000,7 +1005,7 @@ void PlayerEntity::calculateBB()
 
 void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
-  if (playerStatus == playerStatusDead) return;
+  if (playerStatus == playerStatusDead || !canCollide()) return;
 
   EnemyBoltEntity* boltEntity = dynamic_cast<EnemyBoltEntity*>(entity);
 

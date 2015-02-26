@@ -93,6 +93,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     virtual void calculateBB();
 
+    virtual bool canCollide();
+
     /*!
      *  \brief Moves the player in the given direction
      *
