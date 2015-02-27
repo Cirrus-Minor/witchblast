@@ -39,7 +39,7 @@ ZombieDarkEntity::ZombieDarkEntity(float x, float y)
 
 void ZombieDarkEntity::animate(float delay)
 {
-  if (age > 0.0f && !isAgonising && !isExploding)
+  if (age > 0.0f && !isAgonising)
   {
       // goal reached ?
     if (currentDirection == 6 && x > (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2) ) findNextGoal();

@@ -44,34 +44,16 @@ void EnemyEntity::setLabelDy(float label_dy)
 
 void EnemyEntity::animate(float delay)
 {
-  if (isExploding)
-  {
-    explodeTimer -= delay;
-
-    if (explodeTimer <= 0.0f)
-    {
-      startExplosion();
-    }
-
-    return;
-  }
-  else if (isAgonising)
+  if (isAgonising)
   {
     if (hpDisplay > hp) hpDisplay--;
 
     if (h < -0.01f)
     {
       isAgonising = false;
-      if (willExplode)
-      {
-        makeExplode();
-      }
-      else
-      {
-        isDying = true;
-        game().addCorpse(x, y, deathFrame);
-        if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
-      }
+      isDying = true;
+      game().addCorpse(x, y, deathFrame);
+      if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
     else
     {
@@ -264,31 +246,6 @@ int EnemyEntity::hurt(StructHurt hurtParam)
   return hurtedHp;
 }
 
-void EnemyEntity::startExplosion()
-{
-  new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
-  isDying = true;
-
-  game().addCorpse(x, y, deathFrame);
-  game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
-  SoundManager::getInstance().playSound(SOUND_BOOM_00);
-}
-
-void EnemyEntity::makeExplode()
-{
-  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_CORPSES));
-  setImagesProLine(10);
-  setFrame(deathFrame);
-  shadowFrame = -1;
-  width = 64;
-  height = 64;
-  sprite.setOrigin(32, 32);
-  type = ENTITY_ENEMY_NC;
-
-  isExploding = true;
-  explodeTimer = EXPLOSION_DELAY;
-}
-
 void EnemyEntity::dying()
 {
   if (dyingFrame > -1)
@@ -296,10 +253,6 @@ void EnemyEntity::dying()
     isAgonising = true;
     hVelocity = 200.0f;
     if (agonizingSound != SOUND_NONE) SoundManager::getInstance().playSound(agonizingSound);
-  }
-  else if (willExplode)
-  {
-    makeExplode();
   }
   else // dyingFrame == -1
   {
@@ -346,27 +299,7 @@ bool EnemyEntity::canCollide()
 
 void EnemyEntity::render(sf::RenderTarget* app)
 {
-  if (isExploding)
-  {
-    int nx = deathFrame;
-    int ny = 0;
-    if (imagesProLine > 0)
-    {
-      nx = deathFrame % imagesProLine;
-      ny = deathFrame / imagesProLine;
-    }
-    sprite.setPosition(x - 1 + rand() % 2, y - 1 + rand() % 2);
-    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
-    app->draw(sprite);
-
-    int fade = 128 + 127.0 * cos(explodeTimer * 4.0f);
-    sprite.setColor(sf::Color(255, fade, fade, 255));
-    renderAdd = true;
-    app->draw(sprite, sf::BlendAdd);
-    renderAdd = false;
-    SoundManager::getInstance().playSound(SOUND_FUSE, false);
-  }
-  else if (isAgonising || (isDying && dyingFrame > -1))
+  if (isAgonising || (isDying && dyingFrame > -1))
   {
     if (shadowFrame > -1)
     {

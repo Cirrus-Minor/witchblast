@@ -50,7 +50,7 @@ ImpEntity::ImpEntity(float x, float y, impTypeEnum impType)
 
 void ImpEntity::animate(float delay)
 {
-  if (!isDying && !isAgonising && !isExploding)
+  if (!isDying && !isAgonising)
   {
     if (age < 0.0f)
       frame = 1;
@@ -136,12 +136,10 @@ int ImpEntity::hurt(StructHurt hurtParam)
 {
   int result = EnemyEntity::hurt(hurtParam);
 
-  if (!isDying && !isAgonising && !isExploding)
+  if (!isDying && !isAgonising)
   {
     game().generateBlood(x, y, BloodRed);
-    //teleport();
-    //state = 3;
-    //changingDelay = 0.4f;
+
     if (state != 2 || changingDelay > 0.4f)
     {
       state = 2;

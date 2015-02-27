@@ -48,16 +48,9 @@ void ZombieEntity::animate(float delay)
     if (h < -0.01f)
     {
       isAgonising = false;
-      if (willExplode)
-      {
-        makeExplode();
-      }
-      else
-      {
-        isDying = true;
-        game().addCorpse(x, y, deathFrame);
-        if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
-      }
+      isDying = true;
+      game().addCorpse(x, y, deathFrame);
+      if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
     }
     else
     {
@@ -68,7 +61,7 @@ void ZombieEntity::animate(float delay)
 
     return;
   }
-  else if (age > 0.0f && !isExploding)
+  else if (age > 0.0f)
   {
     if (attackTimer <= 0.0f && attack())
     {

@@ -33,7 +33,7 @@ GhostEntity::GhostEntity(float x, float y)
 
 void GhostEntity::animate(float delay)
 {
-  if (age > 0.0f && !isAgonising && !isExploding)
+  if (age > 0.0f && !isAgonising)
   {
     timer = timer - delay;
     if (timer <= 0.0f)
@@ -80,7 +80,7 @@ void GhostEntity::render(sf::RenderTarget* app)
 {
   int fade = getFade();
   if (fade == 100) SoundManager::getInstance().playSound(SOUND_GHOST);
-  if (fade == 100 || isAgonising || isExploding)
+  if (fade == 100 || isAgonising)
   {
     sf::Color color = sprite.getColor();
     color.a = 255;

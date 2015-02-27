@@ -15,6 +15,7 @@ ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionTy
   this->explosionType = explosionType;
   imagesProLine = 6;
   lifetime = 0.6f;
+  canHurtPlayer = false;
 
   this->damage = damage;
 
@@ -28,6 +29,11 @@ ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionTy
   testCollisions();
 }
 
+void ExplosionEntity::setCanHurtPlayer(bool can)
+{
+  canHurtPlayer = can;
+}
+
 void ExplosionEntity::animate(float delay)
 {
   if (lifetime > 0)
@@ -37,12 +43,6 @@ void ExplosionEntity::animate(float delay)
   age += delay;
 
   z = y + height / 2;
-
-  /*if (age > lifetime - 0.5f)
-  {
-    float f = (lifetime - age) * 2.0f;
-    sprite.setScale(f, f);
-  }*/
 
   frame = age / lifetime * 6;
   if (frame > 5) frame = 5;
@@ -76,7 +76,9 @@ void ExplosionEntity::testCollisions()
     BaseCreatureEntity* entity = dynamic_cast<BaseCreatureEntity*>(e);
     if (entity != NULL)
 		{
-		  if (entity->getHp() > 0 && entity->canCollide())
+		  bool ok = true;
+		  if (!canHurtPlayer && entity->getType() == ENTITY_PLAYER) ok = false;
+		  if (ok && entity->getHp() > 0 && entity->canCollide())
       {
         entity->calculateBB();
 

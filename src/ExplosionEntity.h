@@ -15,6 +15,8 @@ class ExplosionEntity : public SpriteEntity
     virtual void render(sf::RenderTarget* app);
     virtual void dying();
 
+    void setCanHurtPlayer(bool can);
+
     //enemyTypeEnum getEnemyType();
 
   protected:
@@ -24,6 +26,7 @@ class ExplosionEntity : public SpriteEntity
     int damage;
     explosionTypeEnum explosionType;
     enemyTypeEnum enemyType;
+    bool canHurtPlayer;
 };
 
 #endif // EXPLOSIONENTITY_H

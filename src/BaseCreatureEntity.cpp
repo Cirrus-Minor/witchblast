@@ -3,6 +3,7 @@
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
 #include "WitchBlastGame.h"
+#include "ExplosionEntity.h"
 #include "TextMapper.h"
 
 #include <iostream>
@@ -18,7 +19,6 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   hpDisplay = 0;
   armor = 0.0f;
   movingStyle = movWalking;
-  willExplode = false;
   for (int i = 0; i < NB_SPECIAL_STATES; i++)
   {
     specialState[i].type = (enumSpecialState)i;
@@ -33,8 +33,6 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   }
   recoil.active = false;
   facingDirection = 2;
-  isExploding = false;
-  willExplode = false;
 }
 
 int BaseCreatureEntity::getHp()
@@ -496,14 +494,20 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
     if (hp <= 0)
     {
       hp = 0;
+
+      prepareDying();
       // exploding ?
       if (game().getPlayer()->isEquiped(EQUIP_SULFUR) && canExplode)
       {
         int luck = hurtingType == ShotTypeFire ? 33 : 25;
-        if (rand() % 100 < luck) willExplode = true;
+        if (rand() % 100 < luck)
+        {
+          ExplosionEntity* expl = new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
+          expl->setCanHurtPlayer(false);
+          game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
+          SoundManager::getInstance().playSound(SOUND_BOOM_00);
+        }
       }
-
-      prepareDying();
     }
 
     if (oldHp > 0)

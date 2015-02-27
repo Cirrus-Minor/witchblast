@@ -33,7 +33,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
 
 void LittleSpiderEntity::animate(float delay)
 {
-  if (age > 0.0f && !isAgonising && !isExploding)
+  if (age > 0.0f && !isAgonising)
   {
     timer = timer - delay;
     if (timer <= 0.0f)

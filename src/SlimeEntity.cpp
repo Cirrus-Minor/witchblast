@@ -72,11 +72,6 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
 
 void SlimeEntity::animate(float delay)
 {
-  if (isExploding)
-  {
-    EnemyEntity::animate(delay);
-    return;
-  }
   float slimeDelay = delay;
   if (specialState[SpecialStateIce].active) slimeDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -195,12 +190,7 @@ void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
 void SlimeEntity::render(sf::RenderTarget* app)
 {
-  if (isExploding)
-  {
-    EnemyEntity::render(app);
-    return;
-  }
-  else if (!isDying && shadowFrame > -1)
+  if (!isDying && shadowFrame > -1)
   {
     // shadow
     sprite.setPosition(x, y);

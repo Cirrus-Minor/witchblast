@@ -30,7 +30,7 @@ BatEntity::BatEntity(float x, float y, bool invocated)
 
 void BatEntity::animate(float delay)
 {
-  if (!isAgonising && !isExploding)
+  if (!isAgonising)
   {
     changingDelay -= delay;
     if (changingDelay < 0.0f)
@@ -54,7 +54,6 @@ void BatEntity::animate(float delay)
       frame += ((int)(age * 7.0f)) % 2;
     }
   }
-
   EnemyEntity::animate(delay);
 }
 

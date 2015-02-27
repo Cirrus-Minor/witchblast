@@ -203,9 +203,6 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     float armor;
 
     bool canExplode;  // true if the monster can explode with a fire attack
-    bool willExplode;   // true if will explode
-    bool isExploding;   // true if exploding
-    float explodeTimer;
 
     bool hurting;
     float hurtingDelay;

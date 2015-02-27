@@ -32,12 +32,6 @@ SpiderEggEntity::SpiderEggEntity(float x, float y, bool invocated)
 
 void SpiderEggEntity::animate(float delay)
 {
-  if (isExploding)
-  {
-    EnemyEntity::animate(delay);
-    return;
-  }
-
   if (movingStyle == movFlying)
   {
     if (jumping)
@@ -94,12 +88,6 @@ void SpiderEggEntity::dyingFromAge()
 
 void SpiderEggEntity::render(sf::RenderTarget* app)
 {
-  if (isExploding)
-  {
-    EnemyEntity::render(app);
-    return;
-  }
-
   int nx = frame % imagesProLine;
   int ny = frame / imagesProLine;
 

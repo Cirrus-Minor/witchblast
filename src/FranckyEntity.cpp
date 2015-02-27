@@ -274,7 +274,7 @@ FranckyEntityHand::FranckyEntityHand(float x, float y)
 
 void FranckyEntityHand::animate(float delay)
 {
-  if (!isAgonising && !isExploding)
+  if (!isAgonising)
   {
     if (age < 0.0f) frame = 3 * imagesProLine + 3;
     else frame = 3 * imagesProLine + 3 + ((int)(age * 6.0f)) % 2;
