@@ -856,10 +856,18 @@ private:
   void resetKilledEnemies();
 
   std::queue <messageStruct> messagesQueue;
-
   bool worldEvent[NB_EVENTS];
   void initEvents();
   bool gameMessagesToSkip[NB_MESSAGES];
+
+  struct achievementStruct
+  {
+    enumAchievementType type;
+    std::string message;
+    float timer;
+    bool hasStarted;
+  };
+  std::queue <achievementStruct> achievementsQueue;
 
   void renderPlayer(float x, float y, bool equip[NUMBER_EQUIP_ITEMS], int shotType,
                   int frame, int spriteDy);
@@ -908,7 +916,8 @@ private:
 
   void enableAA(bool enable);
 
-  bool achievementState[NB_ACHIEVEMENTS];
+  enum achievementStatus { AchievementDone, AchievementUndone, AchievementPending};
+  achievementStatus achievementState[NB_ACHIEVEMENTS];
 };
 
 /*!

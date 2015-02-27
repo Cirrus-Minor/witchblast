@@ -75,6 +75,7 @@ const float FADE_OUT_DELAY = 1.0f;
 
 const float EXPLOSION_DELAY = 2.0f;
 const float DEATH_CERTIFICATE_DELAY = 3.5f;
+const float ACHIEVEMENT_DELAY_MAX = 7.0f;
 
 const float KeyRoomFXDelay = 2.0f;
 
@@ -260,6 +261,7 @@ enum sound_resources {
   SOUND_INTRO_WITCH,
   SOUND_FORCE_FIELD,
   SOUND_DOOR_OPENING_BOSS,
+  SOUND_ACHIEVEMENT,
 };
 
 enum corpses_ressources{

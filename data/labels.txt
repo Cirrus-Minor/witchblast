@@ -350,6 +350,17 @@ enemy_cyclops#Stone Cyclops
 msg_cyclops_0#The Stone Cyclops
 enemy_type_boss_cyclops#the Stone Cyclops
 
+achiev_rats#Rodenticide
+achiev_100#Stingy
+achiev_piety_max#Faithful
+achiev_3_hits#Brochette
+achiev_complete_set#Dresses
+achiev_giant_slime#Giant Slime Slayer
+achiev_cyclops#Cyclops Slayer
+achiev_rat_king#Wererat Slayer
+achiev_giant_spider#Giant Spider Slayer
+achiev_francky#Thing Slayer
+
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue

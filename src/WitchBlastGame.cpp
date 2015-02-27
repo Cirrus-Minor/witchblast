@@ -367,6 +367,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/glass.ogg",          "media/sound/hiccup.ogg",
     "media/sound/splatch.ogg",        "media/sound/intro_witch.ogg",
     "media/sound/force_field.ogg",    "media/sound/door_opening_boss.ogg",
+    "media/sound/achievement.ogg",
   };
 
   // AA in fullscreen
@@ -480,7 +481,7 @@ bool WitchBlastGame::getShowLogical()
 
 void WitchBlastGame::onUpdate()
 {
-  if (!isPausing)
+  if (!isPausing) // && (achievementsQueue.empty() || !currentMap->isCleared()) )
   {
     if (isPlayerAlive) player->setItemToBuy(NULL);
 
@@ -544,6 +545,10 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
   // cleaning the message queue
   std::queue<messageStruct> empty;
   std::swap( messagesQueue, empty );
+
+  // cleaning the achievements queue
+  std::queue<achievementStruct> empty2;
+  std::swap( achievementsQueue, empty2 );
 
   // cleaning data
   if (miniMap != NULL) delete (miniMap);
@@ -1033,6 +1038,11 @@ void WitchBlastGame::updateRunningGame()
           if (messagesQueue.front().timer > 0.5f)
             messagesQueue.front().timer = 0.5f;
         }
+        else if (!achievementsQueue.empty())
+        {
+          if (achievementsQueue.front().timer > 0.5f)
+            achievementsQueue.front().timer = 0.5f;
+        }
       }
 
       if (event.key.code == input[KeyInteract])
@@ -1295,6 +1305,17 @@ void WitchBlastGame::updateRunningGame()
       {
         messagesQueue.pop();
         if (!messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
+      }
+    }
+
+    // achievement queue
+    if (!achievementsQueue.empty() && achievementsQueue.front().hasStarted)
+    {
+      achievementsQueue.front().timer -= deltaTime;
+      if (achievementsQueue.front().timer < 0.0f)
+      {
+        achievementsQueue.pop();
+        if (achievementsQueue.empty()) music.play();
       }
     }
   }
@@ -1810,6 +1831,29 @@ void WitchBlastGame::renderRunningGame()
       }
 
       renderInGameMenu();
+    }
+    else if (!achievementsQueue.empty() && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
+    {
+      int fade = 200;
+      if (achievementsQueue.front().timer < 0.5f) fade = achievementsQueue.front().timer * 400;
+      if (achievementsQueue.front().timer > ACHIEVEMENT_DELAY_MAX - 0.5f) fade = (ACHIEVEMENT_DELAY_MAX - achievementsQueue.front().timer) * 400;
+
+      if (!achievementsQueue.front().hasStarted)
+      {
+        music.pause();
+        SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
+        achievementsQueue.front().hasStarted = true;
+        achievementState[achievementsQueue.front().type] = AchievementDone;
+      }
+
+      sf::Sprite bg;
+      bg.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEM_DESCRIPTION));
+      bg.setPosition(800 - 4 * fade + 20 + MAP_WIDTH * TILE_WIDTH * 0.5f - bg.getTextureRect().width * 0.5, 80);
+      app->draw(bg);
+
+      game().write("ACHIEVEMENT UNLOCKED", 19, 800 - 4 * fade + 470.0f, 92.0f, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+      game().write(achievementsQueue.front().message, 18, 800 - 4 * fade + 470.0f, 120.0f, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+      game().write("Press [enter] to close", 12, 800 - 4 * fade + 675.0f, 152.0f, ALIGN_RIGHT, sf::Color::White, app, 0, 0);
     }
 
     if (player->isDead())
@@ -4360,7 +4404,7 @@ void WitchBlastGame::loadGameData()
   // TODO load and save
   for (int i = 0; i < NB_ACHIEVEMENTS; i++)
   {
-    achievementState[i] = false;
+    achievementState[i] = AchievementUndone;
   }
 }
 
@@ -4649,20 +4693,15 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       player->offerMonster(enemyType, hurtingType);
 
       // achievements
-      if (!achievementState[AchievementGiantSlime] && (enemyType == EnemyTypeSlimeBoss))
-          registerAchievement(AchievementGiantSlime);
-      else if (!achievementState[AchievementCyclops] && (enemyType == EnemyTypeCyclops))
-          registerAchievement(AchievementCyclops);
-      else if (!achievementState[AchievementRatKing] && (enemyType == EnemyTypeRatKing))
-          registerAchievement(AchievementRatKing);
-      else if (!achievementState[AchievementGiantSpider] && (enemyType == EnemyTypeSpiderGiant))
-          registerAchievement(AchievementGiantSpider);
-      else if (!achievementState[AchievementFrancky] && (enemyType == EnemyTypeFranckyHead))
-          registerAchievement(AchievementFrancky);
-      else if (!achievementState[AchievementRats] && (enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet
+      if (enemyType == EnemyTypeSlimeBoss) registerAchievement(AchievementGiantSlime);
+      else if (enemyType == EnemyTypeCyclops) registerAchievement(AchievementCyclops);
+      else if (enemyType == EnemyTypeRatKing) registerAchievement(AchievementRatKing);
+      else if (enemyType == EnemyTypeSpiderGiant) registerAchievement(AchievementGiantSpider);
+      else if (enemyType == EnemyTypeFranckyHead) registerAchievement(AchievementFrancky);
+      else if ((enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet
           || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
         if (killedEnemies[EnemyTypeRat] + killedEnemies[EnemyTypeRatHelmet]
-            + killedEnemies[EnemyTypeRatBlack] + killedEnemies[EnemyTypeRatBlackHelmet] >= 10)
+            + killedEnemies[EnemyTypeRatBlack] + killedEnemies[EnemyTypeRatBlackHelmet] >= 1)
           registerAchievement(AchievementRats);
     }
   }
@@ -5218,10 +5257,15 @@ void WitchBlastGame::generateStar(sf::Color starColor, float xStar, float yStar)
 
 void WitchBlastGame::registerAchievement(enumAchievementType achievement)
 {
-  if (!achievementState[achievement])
+  if (achievementState[achievement] == AchievementUndone)
   {
-    achievementState[achievement] = true;
-    std::cout << "ACHIEVEMENT:" << achievements[achievement].label << std::endl;
+    achievementState[achievement] = AchievementPending;
+    achievementStruct ach;
+    ach.type = achievement;
+    ach.message = tools::getLabel(achievements[achievement].label);
+    ach.timer = ACHIEVEMENT_DELAY_MAX;
+    ach.hasStarted = false;
+    achievementsQueue.push(ach);
   }
 }
 
