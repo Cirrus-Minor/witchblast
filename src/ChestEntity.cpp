@@ -146,6 +146,7 @@ void ChestEntity::open()
     {
       // gold
       int r = 2 + rand() % 6;
+      if (game().getPlayer()->isEquiped(EQUIP_LUCK)) r += rand() % 6;
       for (int i = 0; i < r; i++)
       {
         ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
