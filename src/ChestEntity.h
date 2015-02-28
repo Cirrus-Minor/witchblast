@@ -34,6 +34,14 @@ class ChestEntity : public CollidingSpriteEntity
     void dropItem(enumItemType item);
 
     bool fallingGrid[MAP_WIDTH][MAP_HEIGHT];
+
+    enum enumTrap
+    {
+      TrapStones,
+      TrapExplosion,
+      TrapSnakes
+    };
+    enumTrap trap;
 };
 
 #endif // CHESTENTITY_H

@@ -1,6 +1,8 @@
 #include "ChestEntity.h"
 #include "PlayerEntity.h"
 #include "FallingRockEntity.h"
+#include "ExplosionEntity.h"
+#include "SnakeEntity.h"
 #include "WitchBlastGame.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -63,10 +65,27 @@ void ChestEntity::animate(float delay)
     timer -= delay;
     if (timer <= 0.0f)
     {
-      initFallingGrid();
-      for (int i = 0; i < 22; i++) fallRock();
-      SoundManager::getInstance().playSound(SOUND_TRAP);
-      game().makeShake(0.25f);
+      if (trap == TrapStones)
+      {
+        initFallingGrid();
+        for (int i = 0; i < 22; i++) fallRock();
+        SoundManager::getInstance().playSound(SOUND_TRAP);
+        game().makeShake(0.25f);
+      }
+      else if (trap == TrapExplosion)
+      {
+        initFallingGrid();
+        new ExplosionEntity(x, y, ExplosionTypeStandard, 12, EnemyTypeNone);
+        game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
+        SoundManager::getInstance().playSound(SOUND_BOOM_00);
+        game().makeShake(0.25f);
+      }
+      else // snakes
+      {
+        new SnakeEntity(x + 1, y, SnakeEntity::SnakeTypeNormal, true);
+        new SnakeEntity(x - 1, y, SnakeEntity::SnakeTypeNormal, true);
+        new SnakeEntity(x, y + 1, SnakeEntity::SnakeTypeNormal, true);
+      }
     }
   }
 }
@@ -157,9 +176,27 @@ void ChestEntity::open()
     }
 
     // trap !
-    if (game().getLevel() >= 4)
+    if (game().getLevel() >= 2)
     {
-      if (rand() % 6 == 0) timer = 0.5f;
+      if (rand() % 6 == 0) // trap
+      {
+        int r = rand() % 3;
+        if (r == 0)
+        {
+          timer = 1.0f;
+          trap = TrapExplosion;
+        }
+        else if (r == 0)
+        {
+          timer = 1.0f;
+          trap = TrapExplosion;
+        }
+        else
+        {
+          timer = 0.5f;
+          trap = TrapStones;
+        }
+      }
     }
   }
   else if (chestType >= ChestFairy)
