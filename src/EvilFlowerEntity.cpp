@@ -38,6 +38,15 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
     resistance[ResistanceIce] = ResistanceVeryHigh;
     resistance[ResistanceFire] = ResistanceVeryLow;
   }
+  else if (flowerType == FlowerTypeFire)
+  {
+    frame = 6;
+    enemyType = EnemyTypeEvilFlowerFire;
+    deathFrame = FRAME_CORPSE_FLOWER_FIRE;
+
+    resistance[ResistanceIce] = ResistanceVeryLow;
+    resistance[ResistanceFire] = ResistanceVeryHigh;
+  }
 
   fireDelay = EVIL_FLOWER_FIRE_DELAY;
   age = -1.0f + (rand() % 2500) * 0.001f;
@@ -89,6 +98,28 @@ void EvilFlowerEntity::fire()
       EnemyBoltEntity* bolt = new EnemyBoltEntity
       (x, y + 10, ShotTypeIce, 0, enemyType);
       bolt->setDamages(EVIL_FLOWER_MISSILE_DAMAGES);
+      bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+
+      float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;
+
+      float fireAngle = Vector2D(x, y).angleTo(game().getPlayerPosition());
+      if (i == 0) fireAngle += 0.1f;
+      else fireAngle -= 0.1f;
+
+      if (game().getPlayerPosition().y > y)
+        bolt->setVelocity(Vector2D(sin(fireAngle) * flowerFireVelocity, cos(fireAngle) * flowerFireVelocity));
+      else
+        bolt->setVelocity(Vector2D(-sin(fireAngle) * flowerFireVelocity, -cos(fireAngle) * flowerFireVelocity));
+    }
+  }
+  else if (flowerType == FlowerTypeFire)
+  {
+    SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
+    for (int i = 0; i < 2; i++)
+    {
+      EnemyBoltEntity* bolt = new EnemyBoltEntity
+      (x, y + 10, ShotTypeFire, 0, enemyType);
+      bolt->setDamages(EVIL_FLOWER_FIRE_MISSILE_DAMAGES);
       bolt->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
 
       float flowerFireVelocity = EVIL_FLOWER_FIRE_VELOCITY;

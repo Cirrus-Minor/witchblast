@@ -36,6 +36,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeImpBlue:        score = 8; break;
     case EnemyTypeImpRed:         score = 8; break;
     case EnemyTypeEvilFlowerIce:  score = 8; break;
+    case EnemyTypeEvilFlowerFire: score = 8; break;
     case EnemyTypeSpiderEgg:      score = 8; break;
     case EnemyTypeSpiderLittle:   score = 8; break;
 

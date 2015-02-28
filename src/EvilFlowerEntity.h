@@ -4,7 +4,7 @@
 #include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-enum flowerTypeEnum { FlowerTypeStandard, FlowerTypeIce };
+enum flowerTypeEnum { FlowerTypeStandard, FlowerTypeIce, FlowerTypeFire };
 
 class EvilFlowerEntity : public EnemyEntity
 {

@@ -360,6 +360,7 @@ achiev_cyclops#Cyclops Slayer
 achiev_rat_king#Wererat Slayer
 achiev_giant_spider#Giant Spider Slayer
 achiev_francky#Thing Slayer
+enemy_type_evil_flower_fire#an evil fire flower
 
 [french]
 start_new_game#Nouvelle partie

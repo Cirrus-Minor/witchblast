@@ -1131,6 +1131,7 @@ void WitchBlastGame::updateRunningGame()
           initMonsterArray();
           findPlaceMonsters(EnemyTypeEvilFlower, 1);
           findPlaceMonsters(EnemyTypeEvilFlowerIce, 1);
+          findPlaceMonsters(EnemyTypeEvilFlowerFire, 1);
           findPlaceMonsters(EnemyTypePumpkin, 1);
         }
       }
@@ -3461,6 +3462,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeEvilFlowerIce:
     new EvilFlowerEntity(xm, ym - 2, FlowerTypeIce);
     break;
+  case EnemyTypeEvilFlowerFire:
+    new EvilFlowerEntity(xm, ym - 2, FlowerTypeFire);
+    break;
   case EnemyTypeSlime:
     new SlimeEntity(xm, ym, SlimeTypeStandard, false);
     break;
@@ -5020,6 +5024,9 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     break;
   case EnemyTypeEvilFlowerIce:
     value = "enemy_type_evil_flower_ice";
+    break;
+  case EnemyTypeEvilFlowerFire:
+    value = "enemy_type_evil_flower_fire";
     break;
   case EnemyTypeSnake_invocated:
   case EnemyTypeSnake:

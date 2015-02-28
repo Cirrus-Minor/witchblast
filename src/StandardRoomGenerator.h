@@ -183,7 +183,7 @@ void generateStandardRoom04()
     else
     {
       game().findPlaceMonsters(EnemyTypeImpBlue, 3);
-      game().findPlaceMonsters(EnemyTypeEvilFlower, 1);
+      game().findPlaceMonsters(EnemyTypeEvilFlowerFire, 1);
     }
   }
   else if (random < 64)
@@ -269,7 +269,7 @@ void generateStandardRoom05()
     else
     {
       game().findPlaceMonsters(EnemyTypeImpBlue, 3);
-      game().findPlaceMonsters(EnemyTypeEvilFlower, 1);
+      game().findPlaceMonsters(EnemyTypeEvilFlowerFire, 1);
     }
   }
   else if (random < 64)
@@ -361,7 +361,8 @@ void generateStandardRoom06()
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_ALL);
     game().findPlaceMonsters(EnemyTypeEvilFlower, 2);
     game().findPlaceMonsters(EnemyTypePumpkin, 3 + rand() % 4);
-    game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
+    else game().findPlaceMonsters(EnemyTypeEvilFlowerIce, 2);
   }
   else if (random < 50)
   {

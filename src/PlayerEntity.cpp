@@ -1992,7 +1992,8 @@ void PlayerEntity::offerMonster(enemyTypeEnum monster, enumShotType hurtingType)
 
     case DivinityIce:
       if (monster == EnemyTypeSlimeRed
-          || monster == EnemyTypeImpRed)
+          || monster == EnemyTypeImpRed
+          || monster == EnemyTypeEvilFlowerFire)
         pietyProMonster = 4;
 
       if (hurtingType == ShotTypeCold || hurtingType == ShotTypeIce)
