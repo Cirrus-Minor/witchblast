@@ -132,6 +132,8 @@ void BaseCreatureEntity::animateColors(float delay)
       if (hurtingDelay > HURTING_DELAY) fadeColor = 0;
       if (hurtingType == ShotTypeIce || hurtingType == ShotTypeCold)
         sprite.setColor(sf::Color(fadeColor, fadeColor, 255, 255 )); // blue
+      else if (hurtingType == ShotTypePoison)
+        sprite.setColor(sf::Color(fadeColor, 255, fadeColor, 255 )); // green
       else
         sprite.setColor(sf::Color(255, fadeColor, fadeColor, 255 )); // red
     }
@@ -142,6 +144,7 @@ void BaseCreatureEntity::animateColors(float delay)
     }
   }
   if (specialState[SpecialStateIce].active) sprite.setColor(sf::Color(100, 100, 255, 255 ));
+  else if (specialState[SpecialStatePoison].active) sprite.setColor(sf::Color(100, 255, 100, 255 ));
 }
 
 void BaseCreatureEntity::animateRecoil(float delay)

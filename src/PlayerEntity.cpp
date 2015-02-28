@@ -732,6 +732,10 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
       sprite.setColor(sf::Color(255, 180, 0, 255));
       break;
 
+    case ShotTypePoison:
+      sprite.setColor(sf::Color(50, 255, 50, 255));
+      break;
+
     default:
       std::cout << "[WARNING] Can not render shot type: " << getShotType() << std::endl;
     }
@@ -1151,6 +1155,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
   case ShotTypeStone:
   case ShotTypeLightning:
   case ShotTypeFire:
+  case ShotTypePoison:
     boltType = getShotType();
     shotLevel = getShotLevel();
     break;
@@ -1852,6 +1857,7 @@ bool PlayerEntity::canGetNewShot(bool advancedShot)
 
     case ShotTypeFire:
     case ShotTypeIllusion:
+    case ShotTypePoison:
       nbAdvanced++;
       break;
 
