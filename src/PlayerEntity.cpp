@@ -1638,6 +1638,10 @@ void PlayerEntity::computePlayer()
       if (equip[EQUIP_RING_FIRE]) specialShotLevel[i]++;
       break;
 
+    case ShotTypePoison:
+      if (equip[EQUIP_RING_POISON]) specialShotLevel[i]++;
+      break;
+
     default:
       break;
     }

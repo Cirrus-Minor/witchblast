@@ -123,6 +123,7 @@ enum enumItemType
   ItemGemPoison,
   ItemSpellFlower,
   ItemFairyPoison,
+  ItemRingPoison,
 
   NUMBER_ITEMS
 };
@@ -397,6 +398,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemFairyPoison, "item_fairy_poison", "item_fairy_poison_desc",
     30, true, FamiliarFairyPoison, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemRingPoison, "item_ring_poison", "item_ring_poison_desc",
+    50, true, FamiliarNone, true, true, true, 4, RarityUncommon, false, ItemGemPoison, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -454,6 +459,7 @@ enum item_equip_enum {
   EQUIP_GEM_POISON,
   EQUIP_SPELL_FLOWER,
   EQUIP_FAIRY_POISON,
+  EQUIP_RING_POISON,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -473,6 +479,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_RING_LIGHTNING,
   EQUIP_RING_FIRE,
   EQUIP_RING_ILLUSION,
+  EQUIP_RING_POISON,
 
   // weapons
   EQUIP_MAHOGANY_STAFF,
