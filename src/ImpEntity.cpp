@@ -140,7 +140,7 @@ int ImpEntity::hurt(StructHurt hurtParam)
   {
     game().generateBlood(x, y, BloodRed);
 
-    if (state != 2 || changingDelay > 0.4f)
+    if (result > 1 && (state != 2 || changingDelay > 0.4f))
     {
       state = 2;
       changingDelay = 0.15f;
