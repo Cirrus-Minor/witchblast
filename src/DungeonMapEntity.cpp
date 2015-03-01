@@ -537,7 +537,7 @@ void DungeonMapEntity::computeCorpsesVertices()
     sf::Vertex* quad = &corpsesLargeVertices[i * 4];
 
     float middle = 64;
-    int nx = (particle.frame) % 6;
+    int nx = (particle.frame - FRAME_CORPSE_KING_RAT) % 6;
     int ny = (particle.frame - FRAME_CORPSE_KING_RAT) / 6;
 
     quad[0].position = sf::Vector2f(particle.x - middle, particle.y - middle);
