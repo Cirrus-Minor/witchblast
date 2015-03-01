@@ -208,6 +208,7 @@ void ChestEntity::open()
       case FamiliarFairyIce: itemType = ItemFairyIce; break;
       case FamiliarFairyFire: itemType = ItemFairyFire; break;
       case FamiliarFairyTarget: itemType = ItemFairyTarget; break;
+      case FamiliarFairyPoison: itemType = ItemFairyPoison; break;
     }
 
     ItemEntity* newItem = new ItemEntity(itemType, x, y);

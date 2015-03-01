@@ -366,6 +366,9 @@ item_spell_flower#Spell: Invoke magic flower
 item_spell_flower_desc#Cast to invoke a magic flower
 item_rapid_shots#Spellbook of Rapid Fire
 item_rapid_shots_desc#Wizard machine gun
+item_fairy_poison#Fairy Vicky
+item_fairy_poison_desc#Helps you in the dungeon
+
 
 [french]
 start_new_game#Nouvelle partie
