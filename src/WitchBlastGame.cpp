@@ -3525,6 +3525,12 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeBubble:
     new BubbleEntity(xm, ym, BubbleStandard, 0);
     break;
+  case EnemyTypeBubbleIce:
+    new BubbleEntity(xm, ym, BubbleIce, 0);
+    break;
+  case EnemyTypeBubbleGreater:
+    new BubbleEntity(xm, ym, BubbleTriple, 0);
+    break;
   case EnemyTypeButcher:
     new ButcherEntity(xm, ym);
     break;
