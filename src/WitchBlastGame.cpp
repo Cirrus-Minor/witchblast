@@ -3701,6 +3701,9 @@ enumItemType WitchBlastGame::getItemSpell()
   case SpellWeb:
     item = ItemSpellWeb;
     break;
+  case SpellFlower:
+    item = ItemSpellFlower;
+    break;
   }
   return item;
 }

@@ -21,6 +21,8 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   this->flowerType = flowerType;
 
   bloodColor = BloodGreen;
+  fireDelayMax = EVIL_FLOWER_FIRE_DELAY;
+  fireDelay = EVIL_FLOWER_FIRE_DELAY;
 
   if (flowerType == FlowerTypeStandard)
   {
@@ -47,9 +49,18 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
     resistance[ResistanceIce] = ResistanceVeryLow;
     resistance[ResistanceFire] = ResistanceVeryHigh;
   }
+  else if (flowerType == FlowerTypePet)
+  {
+    frame = 9;
+    enemyType = EnemyTypeNone;
+    fireDelayMax = EVIL_FLOWER_FIRE_DELAY * 1.5f;
+    fireDelay = EVIL_FLOWER_FIRE_DELAY * 1.5f;
+    type = ENTITY_EFFECT;
+    bloodColor = BloodNone;
+  }
 
-  fireDelay = EVIL_FLOWER_FIRE_DELAY;
   age = -1.0f + (rand() % 2500) * 0.001f;
+  z = y + height * 0.5f;
 }
 
 void EvilFlowerEntity::animate(float delay)
@@ -61,7 +72,23 @@ void EvilFlowerEntity::animate(float delay)
   else if (fireDelay < 1.4f) setSpin(120.0f);
   else setSpin(50.0f);
 
-  EnemyEntity::animate(delay);
+  if (flowerType == FlowerTypePet)
+  {
+    age += delay;
+    if (age > lifetime)
+    {
+      isDying = true;
+      SoundManager::getInstance().playSound(SOUND_INVOKE);
+      for (int i = 0; i < 8; i++)
+      {
+        game().generateStar(sf::Color::White, x, y);
+        game().generateStar(sf::Color(210, 210, 255), x, y);
+      }
+    }
+  }
+  else
+    EnemyEntity::animate(flowerDelay);
+
   angle += spin * flowerDelay;
 
   if (age > 0.0f)
@@ -69,7 +96,11 @@ void EvilFlowerEntity::animate(float delay)
     fireDelay -= flowerDelay;
     if (fireDelay <= 0.0f)
     {
-      if (canSee(game().getPlayerPosition().x, game().getPlayerPosition().y))
+      if (flowerType == FlowerTypePet)
+      {
+        fire();
+      }
+      else if (canSee(game().getPlayerPosition().x, game().getPlayerPosition().y))
       {
         fireDelay = EVIL_FLOWER_FIRE_DELAY;
         fire();
@@ -78,6 +109,11 @@ void EvilFlowerEntity::animate(float delay)
         fireDelay = 0.35f;
     }
   }
+}
+
+void EvilFlowerEntity::setFireDelayMax(float fireDelayMax)
+{
+  this->fireDelayMax = fireDelayMax;
 }
 
 void EvilFlowerEntity::calculateBB()
@@ -134,6 +170,20 @@ void EvilFlowerEntity::fire()
         bolt->setVelocity(Vector2D(-sin(fireAngle) * flowerFireVelocity, -cos(fireAngle) * flowerFireVelocity));
     }
   }
+  else if (flowerType == FlowerTypePet)
+    {
+      Vector2D target = game().getNearestEnemy(x, y);
+      if (target.x > -1.0f)
+      {
+        SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
+        BoltEntity* bolt = new BoltEntity (x, y + 10, 6, ShotTypeStandard, 0);
+        bolt->setVelocity(Vector2D(x, y).vectorTo(target, 2 * EVIL_FLOWER_FIRE_VELOCITY));
+        bolt->setViscosity(1.0f);
+        fireDelay = fireDelayMax;
+      }
+      else
+        fireDelay = 0.35f;
+    }
   else
   {
     SoundManager::getInstance().playSound(SOUND_BLAST_FLOWER);
@@ -147,6 +197,11 @@ void EvilFlowerEntity::fire()
     bolt->setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), flowerFireVelocity ));
   }
 
+}
+
+bool EvilFlowerEntity::canCollide()
+{
+  return flowerType != FlowerTypePet;
 }
 
 void EvilFlowerEntity::render(sf::RenderTarget* app)

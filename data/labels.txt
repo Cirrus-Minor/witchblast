@@ -361,6 +361,8 @@ achiev_rat_king#Wererat Slayer
 achiev_giant_spider#Giant Spider Slayer
 achiev_francky#Thing Slayer
 enemy_type_evil_flower_fire#an evil fire flower
+item_spell_flower#Spell: Invoke magic flower
+item_spell_flower_desc#Cast to invoke a magic flower
 
 [french]
 start_new_game#Nouvelle partie

@@ -3,6 +3,7 @@
 #include "FallingRockEntity.h"
 #include "BoltEntity.h"
 #include "SpiderWebEntity.h"
+#include "EvilFlowerEntity.h"
 #include "EnemyBoltEntity.h"
 #include "ItemEntity.h"
 #include "FairyEntity.h"
@@ -2376,6 +2377,11 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell, bool fromSaveInFight)
     activeSpell.frame = ItemSpellWeb - FirstEquipItem;
     break;
 
+  case SpellFlower:
+    activeSpell.delayMax = 80.0f;
+    activeSpell.frame = ItemSpellFlower - FirstEquipItem;
+    break;
+
   case SpellNone:
     break;
   }
@@ -2416,6 +2422,10 @@ void PlayerEntity::castSpell()
       break;
     case SpellWeb:
       castWeb();
+      break;
+    case SpellFlower:
+      spellAnimationDelay = spellAnimationDelayMax;
+      castSummonsFlower();
       break;
 
     case SpellNone:
@@ -2597,4 +2607,12 @@ void PlayerEntity::castWeb()
 
     web->setVelocity(Vector2D(webVel * cos(webAngle), webVel * sin(webAngle)));
   }
+}
+
+void PlayerEntity::castSummonsFlower()
+{
+  SoundManager::getInstance().playSound(SOUND_INVOKE);
+  EvilFlowerEntity* flower = new EvilFlowerEntity(x, y, FlowerTypePet);
+  flower->setLifetime(equip[EQUIP_BOOK_MAGIC_II] ? 45 : 35);
+  if (equip[EQUIP_BOOK_MAGIC_II]) flower->setFireDelayMax(EVIL_FLOWER_FIRE_DELAY);
 }

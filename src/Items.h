@@ -39,6 +39,7 @@ enum enumCastSpell
   SpellEarthquake,
   SpellProtection,
   SpellWeb,
+  SpellFlower,
 
   SpellNone
 };
@@ -119,6 +120,7 @@ enum enumItemType
   ItemFairyPowder,
   ItemBookRapidShots,
   ItemGemPoison,
+  ItemSpellFlower,
 
   NUMBER_ITEMS
 };
@@ -385,6 +387,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemGemPoison, "item_gem_poison", "item_gem_poison_desc",
     30, true, FamiliarNone, true, true, true, 4, RarityUncommon, false, -1, ShotTypePoison, SpellNone
   },
+  {
+    ItemSpellFlower, "item_spell_flower", "item_spell_flower_desc",
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellFlower
+  },
 };
 
 /** Item equipment type enum
@@ -440,6 +446,7 @@ enum item_equip_enum {
   EQUIP_FAIRY_POWDER,
   EQUIP_RAPID_SHOT,
   EQUIP_GEM_POISON,
+  EQUIP_SPELL_FLOWER,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -499,6 +506,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_SPELL_EARTHQUAKE,
   EQUIP_SPELL_PROTECTION,
   EQUIP_SPELL_WEB,
+  EQUIP_SPELL_FLOWER,
 
   // others
   EQUIP_BOSS_KEY,

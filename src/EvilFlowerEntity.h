@@ -4,7 +4,7 @@
 #include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
-enum flowerTypeEnum { FlowerTypeStandard, FlowerTypeIce, FlowerTypeFire };
+enum flowerTypeEnum { FlowerTypeStandard, FlowerTypeIce, FlowerTypeFire, FlowerTypePet };
 
 class EvilFlowerEntity : public EnemyEntity
 {
@@ -14,9 +14,12 @@ class EvilFlowerEntity : public EnemyEntity
     virtual void calculateBB();
     virtual void render(sf::RenderTarget* app);
     void fire();
+    virtual bool canCollide();
+    void setFireDelayMax(float fireDelayMax);
 
   private:
     float fireDelay;
+    float fireDelayMax;
     flowerTypeEnum flowerType;
 };
 

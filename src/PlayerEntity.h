@@ -585,6 +585,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castEarthquake();
     void castProtection();
     void castWeb();
+    void castSummonsFlower();
 
     ItemEntity* itemToBuy;
 };
