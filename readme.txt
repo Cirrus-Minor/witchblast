@@ -99,6 +99,16 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next release
+- ADD Achievements
+- ADD Items
+- ADD Shot type (poison)
+- ADD Spell (summon magic flower)
+- ADD Chest traps
+- MOD No player collision while invincible
+- MOD Sulfur causes the monster explode directly, and safe for the player
+- MOD Hiccup makes the player fire
+
 v0.4.6b
 - ADD Russian translation
 - FIX No more texture bigger than 2048x2048 for better compatibility
