@@ -466,10 +466,10 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
   else if (hurtingType == ShotTypePoison && determineSatusChance(resistance[ResistancePoison], hurtParam.level))
   {
     specialState[SpecialStatePoison].active = true;
-    specialState[SpecialStatePoison].timer = 10.5f;
-    specialState[SpecialStatePoison].param1 = 1.0f;
-    specialState[SpecialStatePoison].param2 = 2.0f;
-    specialState[SpecialStatePoison].param3 = 2.0f;
+    specialState[SpecialStatePoison].timer = POISON_TIMER[hurtParam.level];
+    specialState[SpecialStatePoison].param1 = POISON_DAMAGE[hurtParam.level];
+    specialState[SpecialStatePoison].param2 = POISON_DELAY[hurtParam.level];
+    specialState[SpecialStatePoison].param3 = POISON_DELAY[hurtParam.level];
     poisoned = true;
   }
 

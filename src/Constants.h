@@ -354,6 +354,13 @@ const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Air resistance
 const float FIRE_DAMAGE_INCREASE[MAX_SHOT_LEVEL]   // Fire damage's bonus
     = { 1.15f, 1.3f, 1.45f };
 
+const float POISON_TIMER[MAX_SHOT_LEVEL]
+    = { 10.5f, 12.5f, 12.5f };
+const float POISON_DAMAGE[MAX_SHOT_LEVEL]
+    = { 1, 1, 1 };
+const float POISON_DELAY[MAX_SHOT_LEVEL]
+    = { 2.0f, 1.5f, 1.0f };
+
 // divinity
 enum enumDivinityType {
   DivinityHealer,
