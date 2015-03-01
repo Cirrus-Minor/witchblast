@@ -350,6 +350,7 @@ enemy_cyclops#Stone Cyclops
 msg_cyclops_0#The Stone Cyclops
 enemy_type_boss_cyclops#the Stone Cyclops
 
+
 achiev_rats#Rodenticide
 achiev_100#Stingy
 achiev_piety_max#Faithful
@@ -363,6 +364,8 @@ achiev_francky#Thing Slayer
 enemy_type_evil_flower_fire#an evil fire flower
 item_spell_flower#Spell: Invoke magic flower
 item_spell_flower_desc#Cast to invoke a magic flower
+item_rapid_fire#Spellbook of Rapid Fire
+item_rapid_fire_desc#Wizard machine gun
 
 [french]
 start_new_game#Nouvelle partie
