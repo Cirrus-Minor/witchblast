@@ -7,11 +7,12 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
+BubbleEntity::BubbleEntity(float x, float y, EnumBubbleType bubbleType, int bubbleSize)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_BUBBLE), x, y)
 {
   this->bubbleSize = bubbleSize;
-  imagesProLine = 8;
+  this->bubbleType = bubbleType;
+  imagesProLine = 2;
 
   frame = 0;
   enemyType = EnemyTypeBubble;
@@ -57,6 +58,13 @@ BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
   bloodColor = BloodNone;
   shadowFrame = 1;
 
+  if (bubbleType == BubbleIce)
+  {
+    frame = 2;
+    shadowFrame = 3;
+    meleeType = ShotTypeIce;
+  }
+
   width = 128;
   height = 128;
   sprite.setOrigin(64, 64);
@@ -66,26 +74,6 @@ BubbleEntity::BubbleEntity(float x, float y, int bubbleSize)
 int BubbleEntity::getBubbleSize()
 {
   return bubbleSize;
-}
-
-void BubbleEntity::render(sf::RenderTarget* app)
-{
-  if (!isDying && shadowFrame > -1)
-  {
-    // shadow
-    sprite.setPosition(x, y);
-    sprite.setTextureRect(sf::IntRect(shadowFrame * width, 0, width, height));
-    app->draw(sprite);
-  }
-  sprite.setPosition(x, y - 5);
-  sprite.setTextureRect(sf::IntRect(0, 0, width, height));
-  app->draw(sprite);
-
-  if (game().getShowLogical())
-  {
-    displayBoundingBox(app);
-    displayCenterAndZ(app);
-  }
 }
 
 void BubbleEntity::calculateBB()
@@ -143,16 +131,12 @@ void BubbleEntity::dying()
 
   if (bubbleSize < 4)
   {
-    BubbleEntity* b1 = new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
-    BubbleEntity* b2 = new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleSize + 1);
-    if (specialState[SpecialStateIce].active)
+    int nbBubbles = 2;
+    if (bubbleType == BubbleTriple) nbBubbles = 3;
+    for (int i = 0; i < nbBubbles; i++)
     {
-      b1->setSpecialState(SpecialStateIce,
-                          true,
-                          specialState[SpecialStateIce].timer,
-                          specialState[SpecialStateIce].param1,
-                          specialState[SpecialStateIce].param2);
-      b2->setSpecialState(SpecialStateIce,
+      BubbleEntity* b = new BubbleEntity(x - 5 + rand() % 10, y - 5 + rand() % 10, bubbleType, bubbleSize + 1);
+      b->setSpecialState(SpecialStateIce,
                           true,
                           specialState[SpecialStateIce].timer,
                           specialState[SpecialStateIce].param1,
@@ -161,7 +145,7 @@ void BubbleEntity::dying()
   }
 
   for (int i = 0; i < 5 - bubbleSize; i++)
-    game().generateBlood(x, y, BloodBubble);
+    game().generateBlood(x, y, bubbleType == BubbleIce ? BloodBubbleIce : BloodBubble);
 
   SoundManager::getInstance().playSound(SOUND_BUBBLE_00 + rand() % 2);
 }

@@ -55,6 +55,8 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeZombieDark:     score = 25; break;
 
     case EnemyTypeBubble:         score = 25; break;
+    case EnemyTypeBubbleIce:      score = 30; break;
+    case EnemyTypeBubbleGreater:  score = 35; break;
 
     case EnemyTypeButcher:        score = 30; break;
     case EnemyTypeSlimeBoss:      score = 60; break;

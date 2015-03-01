@@ -3,10 +3,12 @@
 
 #include "EnemyEntity.h"
 
+enum EnumBubbleType { BubbleStandard, BubbleIce, BubbleTriple };
+
 class BubbleEntity : public EnemyEntity
 {
   public:
-    BubbleEntity(float x, float y, int bubbleSize);
+    BubbleEntity(float x, float y, EnumBubbleType bubbleType, int bubbleSize);
     virtual void calculateBB();
     int getBubbleSize();
 
@@ -17,11 +19,11 @@ class BubbleEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void dying();
-    virtual void render(sf::RenderTarget* app);
 
     virtual void collideWithEnemy(EnemyEntity* entity) override;
   private:
     int bubbleSize;
+    EnumBubbleType bubbleType;
 };
 
 #endif // BUBBLEENTITY_H

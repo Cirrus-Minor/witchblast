@@ -36,6 +36,8 @@ enum enemyTypeEnum
 
   // mini boss
   EnemyTypeBubble,
+  EnemyTypeBubbleIce,
+  EnemyTypeBubbleGreater,
 
   // boss
   EnemyTypeButcher,
@@ -119,7 +121,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};
     virtual enumMovingStyle getMovingStyle();
-    enum enumBloodColor { BloodNone = -1, BloodRed, BloodGreen, BloodRock, BloodEgg, BloodBubble};
+    enum enumBloodColor { BloodNone = -1, BloodRed, BloodGreen, BloodRock, BloodEgg, BloodBubble, BloodBubbleIce};
     enum enumSpecialState
     {
       SpecialStateIce, // = 0
