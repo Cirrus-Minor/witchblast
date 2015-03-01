@@ -55,6 +55,11 @@ void BoltEntity::setFromPlayer(bool fromPlayer)
   this->fromPlayer = fromPlayer;
 }
 
+bool BoltEntity::isFromPlayer()
+{
+  return fromPlayer;
+}
+
 unsigned int BoltEntity::getLevel()
 {
   return level;

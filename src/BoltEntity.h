@@ -35,6 +35,7 @@ class BoltEntity : public CollidingSpriteEntity
 
     enemyTypeEnum getEnemyType();
     void setFromPlayer(bool fromPlayer);
+    bool isFromPlayer();
 
   protected:
     virtual void calculateBB();

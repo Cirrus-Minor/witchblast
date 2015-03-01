@@ -182,8 +182,9 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
 
   if (boltEntity->getBoltType() == ShotTypeStone)
   {
-    float recoilVelocity = STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
-    float recoilDelay = STONE_DECOIL_DELAY[boltEntity->getLevel()];
+    float factor = (boltEntity->isFromPlayer() && game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT)) ? 0.25f : 1.0f;
+    float recoilVelocity = factor * STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
+    float recoilDelay = factor * STONE_DECOIL_DELAY[boltEntity->getLevel()];
 
     Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
                             recoilVelocity );
