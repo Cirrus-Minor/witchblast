@@ -2541,6 +2541,8 @@ void PlayerEntity::castFireball()
   BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime + 0.5f, boltType, shotLevel);
 
   int boltDamage = fireDamages * (equip[EQUIP_BOOK_MAGIC_II] ? 4 : 3);
+  if (equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 16) boltDamage = 16;
+  else if (!equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 12) boltDamage = 12;
   bolt->setDamages(boltDamage);
   bolt->setGoThrough(true);
 
