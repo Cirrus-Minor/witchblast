@@ -1091,8 +1091,10 @@ void WitchBlastGame::updateRunningGame()
       {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
         {
-          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 0);
+          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 70,
+                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleTriple, 0);
+          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 70,
+                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleIce, 0);
         }
         else
         {
@@ -3129,7 +3131,7 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
 void WitchBlastGame::generateBlood(float x, float y, BaseCreatureEntity::enumBloodColor bloodColor)
 {
   dungeonEntity->generateBlood(x, y, bloodColor);
-  // double blood if the "Blood Snake3 object is equipped
+  // double blood if the "Blood Snake" object is equipped
   if (player->isEquiped(EQUIP_BLOOD_SNAKE)) dungeonEntity->generateBlood(x, y, bloodColor);
 }
 
@@ -3262,10 +3264,10 @@ void WitchBlastGame::generateMap()
     }
     else
     {
-      addMonster(EnemyTypeBubble,
+      addMonster(challengeLevel >= 3 ? EnemyTypeBubbleIce : EnemyTypeBubble,
                  (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 80,
                  (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      addMonster(EnemyTypeBubble,
+      addMonster(challengeLevel >= 4 ? EnemyTypeBubbleGreater : EnemyTypeBubble,
                  (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
                  (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
@@ -3521,7 +3523,7 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     break;
 
   case EnemyTypeBubble:
-    new BubbleEntity(xm, ym, 0);
+    new BubbleEntity(xm, ym, BubbleStandard, 0);
     break;
   case EnemyTypeButcher:
     new ButcherEntity(xm, ym);
@@ -5088,6 +5090,14 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
   // mini boss
   case EnemyTypeBubble:
     value = "enemy_type_bubble";
+    break;
+
+  case EnemyTypeBubbleIce:
+    value = "enemy_type_bubble_ice";
+    break;
+
+  case EnemyTypeBubbleGreater:
+    value = "enemy_type_bubble_greater";
     break;
 
   // boss
