@@ -28,6 +28,7 @@ CauldronEntity::CauldronEntity(float x, float y)
 
   enemyType = EnemyTypeCauldron;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistancePoison] = ResistanceImmune;
   canExplode = false;
 }
 

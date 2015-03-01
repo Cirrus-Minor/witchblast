@@ -31,6 +31,7 @@ FallingRockEntity::FallingRockEntity(float x, float y, int rockType, bool hurtAl
   case 2: meleeDamages = 12; frame = 58; break;
   }
   canExplode = false;
+  resistance[ResistancePoison] = ResistanceImmune;
 }
 
 void FallingRockEntity::animate(float delay)

@@ -33,6 +33,7 @@ ZombieDarkEntity::ZombieDarkEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceHigh;
   resistance[ResistanceRecoil] = ResistanceHigh;
+  resistance[ResistancePoison] = ResistanceImmune;
 
   findNextGoal();
 }

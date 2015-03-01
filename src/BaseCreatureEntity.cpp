@@ -418,6 +418,7 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
 {
   int oldHp = hp;
   int absorbedHp = 0;
+  bool poisoned = false;
   hurtingType = hurtParam.hurtingType;
   if (armor > 0.01f && hurtingType != ShotTypeDeterministic)
   {
@@ -462,14 +463,14 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
     specialState[SpecialStateIce].timer = STATUS_FROZEN_DELAY[hurtParam.level] * frozenDelayMult;
     specialState[SpecialStateIce].param1 = STATUS_FROZEN_MULT[hurtParam.level] + frozenMultAdd;
   }
-  else if (hurtingType == ShotTypePoison
-      /*&& determineSatusChance(resistance[ResistanceFrozen], hurtParam.level)*/)
+  else if (hurtingType == ShotTypePoison && determineSatusChance(resistance[ResistancePoison], hurtParam.level))
   {
     specialState[SpecialStatePoison].active = true;
     specialState[SpecialStatePoison].timer = 10.5f;
     specialState[SpecialStatePoison].param1 = 1.0f;
     specialState[SpecialStatePoison].param2 = 2.0f;
     specialState[SpecialStatePoison].param3 = 2.0f;
+    poisoned = true;
   }
 
   // damage bonus
@@ -483,8 +484,8 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
     hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistanceStone], hurtParam.level)) / 100;
   else if (hurtingType == ShotTypeIllusion)
     hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistanceIllusion], hurtParam.level)) / 100;
-  else if (hurtingType == ShotTypePoison)
-    hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistancePoison], hurtParam.level)) / 100;
+  //else if (hurtingType == ShotTypePoison)
+  //  hurtParam.damage += (hurtParam.damage * determineDamageBonus(resistance[ResistancePoison], hurtParam.level)) / 100;
 
   if (hurtParam.damage > 0)
   {
@@ -549,7 +550,7 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
         textCrit->setType(ENTITY_FLYING_TEXT);
       }
 
-      if (hurtingType == ShotTypePoison)
+      if (poisoned)
       {
         TextEntity* textCrit = new TextEntity(tools::getLabel("poison"), 16, x, text->getY() - 16.0f);
         textCrit->setColor(TextEntity::COLOR_FADING_RED);

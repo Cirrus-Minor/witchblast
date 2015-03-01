@@ -37,6 +37,7 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
 
   resistance[ResistanceFrozen] = ResistanceHigh;
   resistance[ResistanceRecoil] = ResistanceHigh;
+  resistance[ResistancePoison] = ResistanceImmune;
 }
 
 void ZombieEntity::animate(float delay)

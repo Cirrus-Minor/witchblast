@@ -41,6 +41,7 @@ RockMissileEntity::RockMissileEntity(float x, float y, int rockType)
   canExplode = false;
   if (y < TILE_HEIGHT) this->y = TILE_HEIGHT;
   if (!testEntityInMap()) isDying = true;
+  resistance[ResistancePoison] = ResistanceImmune;
 }
 
 void RockMissileEntity::animate(float delay)

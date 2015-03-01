@@ -29,6 +29,7 @@ GhostEntity::GhostEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceHigh;
   resistance[ResistanceRecoil] = ResistanceHigh;
+  resistance[ResistancePoison] = ResistanceImmune;
 }
 
 void GhostEntity::animate(float delay)

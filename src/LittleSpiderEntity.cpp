@@ -29,6 +29,8 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
   frame = 8;
 
   sprite.setOrigin(32.0f, 40.0f);
+
+  resistance[ResistancePoison] = ResistanceImmune;
 }
 
 void LittleSpiderEntity::animate(float delay)

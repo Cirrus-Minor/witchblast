@@ -41,6 +41,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistancePoison] = ResistanceVeryHigh;
 
   sprite.setOrigin(64, 84);
   canExplode = false;

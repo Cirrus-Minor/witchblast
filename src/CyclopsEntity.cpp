@@ -44,6 +44,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistancePoison] = ResistanceImmune;
   canExplode = false;
 }
 

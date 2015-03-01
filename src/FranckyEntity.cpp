@@ -40,6 +40,7 @@ FranckyEntity::FranckyEntity(float x, float y)
   enemyType = EnemyTypeFrancky;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
+  resistance[ResistancePoison] = ResistanceImmune;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
   resistance[ResistanceLightning] = ResistanceVeryHigh;
   canExplode = false;

@@ -43,6 +43,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistancePoison] = ResistanceImmune;
   creatureName = "???";
   canExplode = false;
 }

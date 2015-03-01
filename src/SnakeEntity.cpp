@@ -48,6 +48,7 @@ SnakeEntity::SnakeEntity(float x, float y, snakeTypeEnum snakeType, bool invocat
   timer = -1.0f;
 
   agonizingSound = SOUND_SNAKE_DIE;
+  resistance[ResistancePoison] = ResistanceImmune;
 }
 
 void SnakeEntity::animate(float delay)
