@@ -144,12 +144,14 @@ void SnakeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
+        int meleeLevel = 0;
         if (snakeType == SnakeTypeBlood)
         {
           if (rand() % 3 == 0)
           {
             meleeType = ShotTypePoison;
             meleeDamages = 4;
+            meleeLevel = 1;
           }
           else
           {
@@ -157,7 +159,7 @@ void SnakeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
             meleeDamages = 8;
           }
         }
-        if (playerEntity->hurt(getHurtParams(meleeDamages, meleeType, meleeDamages, false, SourceTypeMelee, enemyType, false)))
+        if (playerEntity->hurt(getHurtParams(meleeDamages, meleeType, meleeLevel, false, SourceTypeMelee, enemyType, false)))
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
