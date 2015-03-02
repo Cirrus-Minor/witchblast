@@ -2242,6 +2242,8 @@ void PlayerEntity::triggerDivinityAfter()
 
 void PlayerEntity::addPiety(int n)
 {
+  if (equip[EQUIP_BOOK_PRAYER_I]) n *= 1.5f;
+
   int oldLevel = divinity.level;
   divinity.piety += n;
   if (divinity.piety >= DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL - 1])
@@ -2304,7 +2306,7 @@ void PlayerEntity::worship(enumDivinityType id)
   // reconversion
   if (isReconversion)
   {
-    addPiety(oldPiety / 2);
+    addPiety((equip[EQUIP_BOOK_PRAYER_I]) ? 0.66 * oldPiety : 0.5 * oldPiety);
     if (divinity.interventions > divinity.level - 1)
       divinity.interventions = divinity.level - 1;
   }

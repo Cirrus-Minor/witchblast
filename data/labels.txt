@@ -376,6 +376,10 @@ item_ring_poison#Emerald ring
 item_ring_poison_desc#Increases poison power
 item_gem_poison#Poison Gem
 item_gem_poison_desc#Poison attack
+item_book_prayer_i#Book of prayer - Tome I
+item_book_prayer_i_desc#Increases piety
+item_book_prayer_ii#Book of prayer - Tome II
+item_book_prayer_ii_desc#Reduces reconversion cost
 
 [french]
 start_new_game#Nouvelle partie

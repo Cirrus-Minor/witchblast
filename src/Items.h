@@ -124,6 +124,8 @@ enum enumItemType
   ItemSpellFlower,
   ItemFairyPoison,
   ItemRingPoison,
+  ItemBookPrayerI,
+  ItemBookPrayerII,
 
   NUMBER_ITEMS
 };
@@ -402,6 +404,14 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemRingPoison, "item_ring_poison", "item_ring_poison_desc",
     50, true, FamiliarNone, true, true, true, 4, RarityUncommon, false, ItemGemPoison, ShotTypeStandard, SpellNone
   },
+  {
+    ItemBookPrayerI, "item_book_prayer_i", "item_book_prayer_i_desc",
+    35, true, FamiliarNone, true, true, true, 3, RarityRare, false, -1, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemBookPrayerII, "item_book_prayer_ii", "item_book_prayer_ii_desc",
+    35, true, FamiliarNone, true, true, true, 3, RarityRare, false, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -460,6 +470,8 @@ enum item_equip_enum {
   EQUIP_SPELL_FLOWER,
   EQUIP_FAIRY_POISON,
   EQUIP_RING_POISON,
+  EQUIP_BOOK_PRAYER_I,
+  EQUIP_BOOK_PRAYER_II,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -500,6 +512,8 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_BOOK_RANDOM,
   EQUIP_BOOK_MAGIC_I,
   EQUIP_BOOK_MAGIC_II,
+  EQUIP_BOOK_PRAYER_I,
+  EQUIP_BOOK_PRAYER_II,
   EQUIP_BOOK_DUAL,
   EQUIP_BOOK_TRIPLE,
   EQUIP_BOOK_DUAL_QUICK,
