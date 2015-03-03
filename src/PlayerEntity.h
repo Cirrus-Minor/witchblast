@@ -459,6 +459,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void setDeathAge(float deathAge);
 
+    virtual void setMap(GameMap* map, int tileWidth, int tileHeight, int offsetX, int offsetY) override;
+
     /*!
      *  \brief casts a spell (if possible)
      */

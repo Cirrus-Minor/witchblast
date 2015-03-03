@@ -54,6 +54,7 @@
 #include "Scoring.h"
 #include "MessageGenerator.h"
 #include "TextMapper.h"
+#include "SlimePetEntity.h"
 
 #include <iostream>
 #include <sstream>
@@ -2878,6 +2879,9 @@ void WitchBlastGame::refreshMap()
     keystoneEntity->setFrame(24);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
+
+  // pet slime
+  if (player->isEquiped(EQUIP_PET_SLIME)) new SlimePetEntity();
 }
 
 void WitchBlastGame::refreshMinimap()

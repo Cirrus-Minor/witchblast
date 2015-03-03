@@ -28,7 +28,7 @@ public:
   ~CollidingSpriteEntity();
 
   GameMap* getMap();
-  void setMap(GameMap* map, int tileWidth, int tileHeight, int offsetX, int offsetY);
+  virtual void setMap(GameMap* map, int tileWidth, int tileHeight, int offsetX, int offsetY);
   void setTileDimensions(int width, int height);
 
   virtual void render(sf::RenderTarget* app);

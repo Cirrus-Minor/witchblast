@@ -1,5 +1,6 @@
 #include "PlayerEntity.h"
 #include "SlimeEntity.h"
+#include "SlimePetEntity.h"
 #include "FallingRockEntity.h"
 #include "BoltEntity.h"
 #include "SpiderWebEntity.h"
@@ -285,6 +286,19 @@ void PlayerEntity::acquireItemAfterStance()
     {
       setActiveSpell(items[acquiredItem].spell, false);
       game().proceedEvent(EventGetSpell);
+    }
+
+    // spells
+    else if (items[acquiredItem].spell != SpellNone)
+    {
+      setActiveSpell(items[acquiredItem].spell, false);
+      game().proceedEvent(EventGetSpell);
+    }
+
+    // pet slime
+    else if (acquiredItem == ItemPetSlime)
+    {
+      new SlimePetEntity();
     }
 
     // floor item
@@ -1421,6 +1435,12 @@ int PlayerEntity::hurt(StructHurt hurtParam)
   }
 
   return false;
+}
+
+void PlayerEntity::setMap(GameMap* map, int tileWidth, int tileHeight, int offsetX, int offsetY)
+{
+  CollidingSpriteEntity::setMap(map, tileWidth, tileHeight, offsetX, offsetY);
+  //if (slimePet != NULL) slimePet->setMap(map, tileWidth, tileHeight, offsetX, offsetY);
 }
 
 void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)

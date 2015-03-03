@@ -126,6 +126,7 @@ enum enumItemType
   ItemRingPoison,
   ItemBookPrayerI,
   ItemBookPrayerII,
+  ItemPetSlime,
 
   NUMBER_ITEMS
 };
@@ -412,6 +413,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemBookPrayerII, "item_book_prayer_ii", "item_book_prayer_ii_desc",
     35, true, FamiliarNone, true, true, true, 3, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemSulfur, "item_pet_slime", "item_pet_slime_desc",
+    50, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -472,6 +477,7 @@ enum item_equip_enum {
   EQUIP_RING_POISON,
   EQUIP_BOOK_PRAYER_I,
   EQUIP_BOOK_PRAYER_II,
+  EQUIP_PET_SLIME,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -526,6 +532,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_FAIRY_FIRE,
   EQUIP_FAIRY_POISON,
   EQUIP_FAIRY_TARGET,
+  EQUIP_PET_SLIME,
 
   // spells
   EQUIP_SPELL_TELEPORT,

@@ -396,6 +396,7 @@ const int ENTITY_PNJ = 17;
 const int ENTITY_CHEST = 18;
 const int ENTITY_ITEM = 19;
 const int ENTITY_EXPLOSION = 20;
+const int ENTITY_FAMILIAR_LOCAL = 21;
 const int ENTITY_ENEMY = 31;
 const int ENTITY_ENEMY_INVOCATED = 32;
 const int ENTITY_ENEMY_BOSS = 33;
