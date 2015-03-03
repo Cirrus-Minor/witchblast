@@ -63,6 +63,8 @@ BubbleEntity::BubbleEntity(float x, float y, EnumBubbleType bubbleType, int bubb
     frame = 2;
     shadowFrame = 3;
     meleeType = ShotTypeIce;
+    resistance[ResistanceFrozen] = ResistanceImmune;
+    resistance[ResistanceIce] = ResistanceVeryHigh;
   }
 
   width = 128;
