@@ -30,6 +30,7 @@ class SlimeEntity : public EnemyEntity
 	  virtual void prepareDying();
 	  virtual void drop();
 	  virtual enumMovingStyle getMovingStyle();
+	  virtual void makeExplode();
 
   private:
     float jumpingDelay;
@@ -42,6 +43,7 @@ class SlimeEntity : public EnemyEntity
 
     void fire();
     void explode();
+    bool willExplode;
 };
 
 #endif // SLIMESPRITE_H

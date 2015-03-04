@@ -414,6 +414,14 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 	return false;
 }
 
+void BaseCreatureEntity::makeExplode()
+{
+  ExplosionEntity* expl = new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
+          expl->setCanHurtPlayer(false);
+          game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
+          SoundManager::getInstance().playSound(SOUND_BOOM_00);
+}
+
 int BaseCreatureEntity::hurt(StructHurt hurtParam)
 {
   int oldHp = hp;
@@ -504,13 +512,7 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
       if (game().getPlayer()->isEquiped(EQUIP_SULFUR) && canExplode)
       {
         int luck = hurtingType == ShotTypeFire ? 33 : 25;
-        if (rand() % 100 < luck)
-        {
-          ExplosionEntity* expl = new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
-          expl->setCanHurtPlayer(false);
-          game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
-          SoundManager::getInstance().playSound(SOUND_BOOM_00);
-        }
+        if (rand() % 100 < luck) makeExplode();
       }
     }
 

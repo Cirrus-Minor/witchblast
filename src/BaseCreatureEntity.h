@@ -222,6 +222,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     } recoil;
 
     void generateStar(sf::Color starColor);
+    virtual void makeExplode();
 
   private:
     bool determineSatusChance(enumStateResistance resistance, int level);

@@ -68,6 +68,7 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
   sprite.setOrigin(32, 44);
 
   isPet = false;
+  willExplode = false;
 }
 
 void SlimeEntity::animate(float delay)
@@ -142,6 +143,14 @@ void SlimeEntity::animate(float delay)
 
   EnemyEntity::animate(delay);
   z = y + 14;
+}
+
+void SlimeEntity::makeExplode()
+{
+  if (isJumping)
+    willExplode = true;
+  else
+    BaseCreatureEntity::makeExplode();
 }
 
 void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -296,6 +305,7 @@ bool SlimeEntity::collideWithMap(int direction)
 void SlimeEntity::dying()
 {
   if (slimeType == SlimeTypeViolet) explode();
+  else if (willExplode) BaseCreatureEntity::makeExplode();
   EnemyEntity::dying();
 }
 
@@ -307,7 +317,7 @@ void SlimeEntity::prepareDying()
 
 bool SlimeEntity::canCollide()
 {
-  return h <= 70.0f;
+  return h <= 70.0f && hp > 0;
 }
 
 BaseCreatureEntity::enumMovingStyle SlimeEntity::getMovingStyle()
