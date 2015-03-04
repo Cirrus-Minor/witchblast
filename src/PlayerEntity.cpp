@@ -460,7 +460,7 @@ void PlayerEntity::animate(float delay)
       recoil.velocity = Vector2D(350.0f);
       recoil.timer = 0.4f;
 
-      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
+      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypePoison, 0);
       bolt->setDamages(fireDamages);
       bolt->setVelocity(recoil.velocity.vectorTo(Vector2D(0, 0), fireVelocity));
 
