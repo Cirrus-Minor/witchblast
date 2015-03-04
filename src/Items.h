@@ -414,7 +414,7 @@ const itemStuct items[NUMBER_ITEMS] =
     35, true, FamiliarNone, true, true, true, 3, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
   {
-    ItemSulfur, "item_pet_slime", "item_pet_slime_desc",
+    ItemPetSlime, "item_pet_slime", "item_pet_slime_desc",
     50, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
 };

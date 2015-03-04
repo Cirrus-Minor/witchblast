@@ -113,24 +113,24 @@ void SlimePetEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
   if (canCollide() && collideWithEntity(entity))
   {
-      if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX_COUNT)
+    if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX_COUNT)
+    {
+      EnemyEntity* enemyEntity = static_cast<EnemyEntity*>(entity);
+      if (enemyEntity->canCollide())
       {
-          EnemyEntity* enemyEntity = static_cast<EnemyEntity*>(entity);
-          if (enemyEntity->canCollide())
-          {
-            if (attackDelay <= 0.0f)
-            {
-              enemyEntity->hurt(getHurtParams(8, ShotTypeStandard,0, false, SourceTypeMelee, EnemyTypeNone,false));
-              attackDelay = 0.65f;
-            }
+        if (attackDelay <= 0.0f)
+        {
+          enemyEntity->hurt(getHurtParams(8, ShotTypeStandard,0, false, SourceTypeMelee, EnemyTypeNone,false));
+          attackDelay = 0.65f;
+        }
 
-            if (enemyEntity->getMovingStyle() == movWalking)
-            {
-              Vector2D vel = Vector2D(enemyEntity->getX(), enemyEntity->getY()).vectorTo(Vector2D(x, y), 100.0f );
-              giveRecoil(false, vel, 0.3f);
-            }
-          }
+        if (enemyEntity->getMovingStyle() == movWalking)
+        {
+          Vector2D vel = Vector2D(enemyEntity->getX(), enemyEntity->getY()).vectorTo(Vector2D(x, y), 100.0f );
+          giveRecoil(false, vel, 0.3f);
+        }
       }
+    }
   }
 }
 
@@ -163,30 +163,30 @@ void SlimePetEntity::render(sf::RenderTarget* app)
 
 void SlimePetEntity::calculateBB()
 {
-    boundingBox.left = (int)x - width / 2 + SLIME_BB_LEFT;
-    boundingBox.width = width - SLIME_BB_WIDTH_DIFF;
-    boundingBox.top = (int)y - height / 2 + SLIME_BB_TOP - 15;
-    boundingBox.height =  height - SLIME_BB_HEIGHT_DIFF;
+  boundingBox.left = (int)x - width / 2 + SLIME_BB_LEFT;
+  boundingBox.width = width - SLIME_BB_WIDTH_DIFF;
+  boundingBox.top = (int)y - height / 2 + SLIME_BB_TOP - 15;
+  boundingBox.height =  height - SLIME_BB_HEIGHT_DIFF;
 }
 
 void SlimePetEntity::collideMapRight()
 {
-    velocity.x = -velocity.x * 0.8f;
+  velocity.x = -velocity.x * 0.8f;
 }
 
 void SlimePetEntity::collideMapLeft()
 {
-    velocity.x = -velocity.x * 0.8f;
+  velocity.x = -velocity.x * 0.8f;
 }
 
 void SlimePetEntity::collideMapTop()
 {
-    velocity.y = -velocity.y * 0.8f;
+  velocity.y = -velocity.y * 0.8f;
 }
 
 void SlimePetEntity::collideMapBottom()
 {
-    velocity.y = -velocity.y * 0.8f;
+  velocity.y = -velocity.y * 0.8f;
 }
 
 void SlimePetEntity::changeRoom()
@@ -201,42 +201,42 @@ void SlimePetEntity::changeRoom()
 
 bool SlimePetEntity::collideWithMap(int direction)
 {
-    calculateBB();
+  calculateBB();
 
-    int xTile0 = (boundingBox.left - offsetX) / tileWidth;
-    int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
-    int yTile0 = (boundingBox.top - offsetY) / tileHeight;
-    int yTilef = (boundingBox.top + boundingBox.height - offsetY) / tileHeight;
+  int xTile0 = (boundingBox.left - offsetX) / tileWidth;
+  int xTilef = (boundingBox.left + boundingBox.width - offsetX) / tileWidth;
+  int yTile0 = (boundingBox.top - offsetY) / tileHeight;
+  int yTilef = (boundingBox.top + boundingBox.height - offsetY) / tileHeight;
 
-    if (boundingBox.top < 0) yTile0 = -1;
+  if (boundingBox.top < 0) yTile0 = -1;
 
-    for (int xTile = xTile0; xTile <= xTilef; xTile++)
-        for (int yTile = yTile0; yTile <= yTilef; yTile++)
+  for (int xTile = xTile0; xTile <= xTilef; xTile++)
+    for (int yTile = yTile0; yTile <= yTilef; yTile++)
+    {
+      if (!game().getCurrentMap()->isFlyable(xTile, yTile))
+      {
+        switch (direction)
         {
-          if (!game().getCurrentMap()->isFlyable(xTile, yTile))
-          {
-            switch (direction)
-            {
-            case DIRECTION_LEFT:
-                if (map->isLeftBlocking(xTile, yTile)) return true;
-                break;
+        case DIRECTION_LEFT:
+          if (map->isLeftBlocking(xTile, yTile)) return true;
+          break;
 
-            case DIRECTION_RIGHT:
-                if (map->isRightBlocking(xTile, yTile)) return true;
-                break;
+        case DIRECTION_RIGHT:
+          if (map->isRightBlocking(xTile, yTile)) return true;
+          break;
 
-            case DIRECTION_TOP:
-                if (map->isUpBlocking(xTile, yTile)) return true;
-                break;
+        case DIRECTION_TOP:
+          if (map->isUpBlocking(xTile, yTile)) return true;
+          break;
 
-            case DIRECTION_BOTTOM:
-                if (map->isDownBlocking(xTile, yTile)) return true;
-                break;
-            }
-          }
+        case DIRECTION_BOTTOM:
+          if (map->isDownBlocking(xTile, yTile)) return true;
+          break;
         }
+      }
+    }
 
-    return false;
+  return false;
 }
 
 bool SlimePetEntity::canCollide()
