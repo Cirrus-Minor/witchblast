@@ -352,15 +352,25 @@ enemy_type_boss_cyclops#the Stone Cyclops
 
 
 achiev_rats#Rodenticide
+achiev_rats_desc#Kill one rat
 achiev_100#Stingy
+achiev_100_desc#Collect 100 gold coins
 achiev_piety_max#Faithful
+achiev_piety_max_desc#Reach the max piety level
 achiev_3_hits#Brochette
-achiev_complete_set#Dresses
+achiev_3_hits_desc#Hurt 3 monsters with the same shot
+achiev_complete_set#Dressed
+achiev_complete_set_desc#Equip robe + hat + boots + gloves
 achiev_giant_slime#Giant Slime Slayer
+achiev_giant_slime_desc#Kill the Giant Slime
 achiev_cyclops#Cyclops Slayer
+achiev_cyclops_desc#Kill the Stone Cyclops
 achiev_rat_king#Wererat Slayer
+achiev_rat_king_desc#Kill the Wererat king
 achiev_giant_spider#Giant Spider Slayer
+achiev_giant_spider_desc#Kill the Giant Spider
 achiev_francky#Thing Slayer
+achiev_francky_desc#Kill the Thing
 enemy_type_evil_flower_fire#an evil fire flower
 item_spell_flower#Spell: Invoke magic flower
 item_spell_flower_desc#Cast to invoke a magic flower
