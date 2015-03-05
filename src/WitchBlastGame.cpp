@@ -2502,7 +2502,6 @@ void WitchBlastGame::renderAchievements()
   else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2 - 15, 180);
   app->draw(titleSprite);
 
-
   // achievements
   write(tools::getLabel("menu_achievements"), 30, 485, 280, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
@@ -2536,7 +2535,11 @@ void WitchBlastGame::renderAchievements()
   oss << tools::getLabel(achievements[menuAchIndex].label);
   oss << ": ";
   if (achievementState[menuAchIndex] == AchievementDone)
+  {
     oss << tools::getLabel(achievements[menuAchIndex].label + "_desc");
+    if (achievements[menuAchIndex].unlockType == UnlockItem && achievements[menuAchIndex].unlock > -1)
+      oss << "\nUNLOCK: " << tools::getLabel(items[achievements[menuAchIndex].unlock].name);
+  }
   else
   {
     oss << "???";
