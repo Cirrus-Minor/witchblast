@@ -63,7 +63,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 5
+//#define START_LEVEL 4
 
 static std::string intToString(int n)
 {
@@ -3715,6 +3715,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     if (itemOk && toSale && !items[eq].canBeSold) itemOk = false;
     if (itemOk && !toSale && !items[eq].canBeFound) itemOk = false;
     if (itemOk && items[eq].level > level) itemOk = false;
+    if (itemOk && isItemLocked((enumItemType)eq)) { itemOk = false; std::cout << items[eq].name << " locked!\n"; }
     if (itemOk && items[eq].requirement >= FirstEquipItem
         && !player->isEquiped(items[eq].requirement - FirstEquipItem)) itemOk = false;
 
@@ -3765,38 +3766,49 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
 
 enumItemType WitchBlastGame::getItemSpell()
 {
-  enumCastSpell n = (enumCastSpell)(rand() % SPELL_MAX);
-  while (player->getActiveSpell().spell == n) n = (enumCastSpell)(rand() % SPELL_MAX);
-
+  bool ok = false;
   enumItemType item = ItemMagicianHat;
-  switch (n)
+
+  while (!ok)
   {
-  case SpellNone:
-  case SpellTeleport:
-    item = ItemSpellTeleport;
-    break;
-  case SpellSlimeExplode:
-    item = ItemSpellSlimeExplode;
-    break;
-  case SpellFireball:
-    item = ItemSpellFireball;
-    break;
-  case SpellFreeze:
-    item = ItemSpellFreeze;
-    break;
-  case SpellEarthquake:
-    item = ItemSpellEarthquake;
-    break;
-  case SpellProtection:
-    item = ItemSpellProtection;
-    break;
-  case SpellWeb:
-    item = ItemSpellWeb;
-    break;
-  case SpellFlower:
-    item = ItemSpellFlower;
-    break;
+    enumCastSpell n = (enumCastSpell)(rand() % SPELL_MAX);
+
+    if (player->getActiveSpell().spell != n) ok = true;
+
+    if (ok)
+    {
+      switch (n)
+      {
+      case SpellNone:
+      case SpellTeleport:
+        item = ItemSpellTeleport;
+        break;
+      case SpellSlimeExplode:
+        item = ItemSpellSlimeExplode;
+        break;
+      case SpellFireball:
+        item = ItemSpellFireball;
+        break;
+      case SpellFreeze:
+        item = ItemSpellFreeze;
+        break;
+      case SpellEarthquake:
+        item = ItemSpellEarthquake;
+        break;
+      case SpellProtection:
+        item = ItemSpellProtection;
+        break;
+      case SpellWeb:
+        item = ItemSpellWeb;
+        break;
+      case SpellFlower:
+        item = ItemSpellFlower;
+        break;
+      }
+      ok = !isItemLocked(item);
+    }
   }
+
   return item;
 }
 
@@ -4990,7 +5002,7 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_BROOCH_FINESSE])
+  if (equip[EQUIP_CRITICAL_ADVANCED])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
@@ -5406,6 +5418,19 @@ void WitchBlastGame::registerAchievement(enumAchievementType achievement)
     ach.hasStarted = false;
     achievementsQueue.push(ach);
   }
+}
+
+bool WitchBlastGame::isItemLocked(enumItemType item)
+{
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+  {
+    if (achievementState[i] == AchievementUndone)
+    {
+      if (achievements[i].unlockType == UnlockItem)
+        if (achievements[i].unlock == (int)item) return true;
+    }
+  }
+  return false;
 }
 
 WitchBlastGame &game()

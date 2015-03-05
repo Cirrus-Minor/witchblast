@@ -927,6 +927,8 @@ private:
   enum achievementStatus { AchievementDone, AchievementUndone, AchievementPending};
   achievementStatus achievementState[NB_ACHIEVEMENTS];
 
+  bool isItemLocked(enumItemType item);
+
   int getAchievementsPercents();
 };
 
