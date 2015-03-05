@@ -307,6 +307,7 @@ WitchBlastGame::WitchBlastGame()
     "media/fog.png",            "media/title_animation.png",
     "media/splatter.png",       "media/witch_intro.png",
     "media/item_description.png", "media/death_certificate.png",
+    "media/achievements.png",
   };
 
   for (const char *const filename : images)
@@ -401,6 +402,8 @@ WitchBlastGame::WitchBlastGame()
   for (i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
   for (i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++) achievementState[i] = AchievementUndone;
+
   saveInFight.monsters.clear();
 
   isPausing = false;
@@ -1001,6 +1004,7 @@ void WitchBlastGame::updateRunningGame()
         case MenuPlayerName:
         case MenuVolumeMusic:
         case MenuVolumeSound:
+        case MenuAchievements:
           std::cout << "[ERROR] Bad Menu ID\n";
           break;
 
@@ -1848,6 +1852,7 @@ void WitchBlastGame::renderRunningGame()
         SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
         achievementsQueue.front().hasStarted = true;
         achievementState[achievementsQueue.front().type] = AchievementDone;
+        saveGameData();
       }
 
       sf::Sprite bg;
@@ -2162,6 +2167,21 @@ void WitchBlastGame::updateMenu()
         if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
           menuState = MenuStateMain;
       }
+      else if (menuState == MenuStateAchievements)
+      {
+        if (event.key.code == sf::Keyboard::Escape)
+          menuState = MenuStateMain;
+        else if (event.key.code == sf::Keyboard::Right || event.key.code == input[KeyRight])
+        {
+          menuAchIndex++;
+          if (menuAchIndex >= NB_ACHIEVEMENTS) menuAchIndex = 0;
+        }
+        else if (event.key.code == sf::Keyboard::Left || event.key.code == input[KeyLeft])
+        {
+          menuAchIndex--;
+          if (menuAchIndex >= NB_ACHIEVEMENTS) menuAchIndex = NB_ACHIEVEMENTS - 1;
+        }
+      }
       else if (menuState == MenuStateHiScores)
       {
         if (parameters.playerName.size() > 0
@@ -2286,6 +2306,10 @@ void WitchBlastGame::updateMenu()
         case MenuHiScores:
           menuState = MenuStateHiScores;
           break;
+        case MenuAchievements:
+          menuState = MenuStateAchievements;
+          menuAchIndex = 0;
+          break;
         case MenuPlayerName:
           menuState = MenuStateChangeName;
           break;
@@ -2340,6 +2364,11 @@ void WitchBlastGame::renderMenu()
   else if (menuState == MenuStateHiScores)
   {
     renderHiScores();
+    return;
+  }
+  else if (menuState == MenuStateAchievements)
+  {
+    renderAchievements();
     return;
   }
 
@@ -2464,6 +2493,57 @@ void WitchBlastGame::renderMenu()
   std::ostringstream oss;
   oss << APP_NAME << " v" << APP_VERSION << "  - 2014 - " << " Seby (code), Pierre \"dejam0rt\" Baron (2D art)";
   write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+}
+
+void WitchBlastGame::renderAchievements()
+{
+  app->draw(introScreenSprite);
+  if (titleSprite.getPosition().y > 160) titleSprite.move(0, -8);
+  else if (titleSprite.getPosition().y < 160) titleSprite.setPosition(SCREEN_WIDTH / 2 - 15, 180);
+  app->draw(titleSprite);
+
+
+  // achievements
+  write(tools::getLabel("menu_achievements"), 30, 485, 280, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+
+  int achWidth = 64, achHeight = 64, x0 = 140, y0 = 380, xStep = 16, yStep = 16, nbProLine = 8;
+
+  sf::RectangleShape rectangle(sf::Vector2f(achWidth, achHeight));
+  rectangle.setPosition(x0 + (menuAchIndex % nbProLine) * (achWidth + xStep), y0 + (menuAchIndex / nbProLine) * (achHeight + yStep));
+  rectangle.setOutlineThickness(3);
+  rectangle.setOutlineColor(sf::Color(50, 255, 50));
+  app->draw(rectangle);
+
+  sf::Sprite sprite;
+  sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
+
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+  {
+    sprite.setPosition(x0 + (i % nbProLine) * (achWidth + xStep), y0 + (i / nbProLine) * (achHeight + yStep));
+    if (achievementState[i] == AchievementDone)
+    {
+      sprite.setTextureRect(sf::IntRect( ((i + 1) % 10) * achWidth, ((i + 1) / 10) * achHeight, achWidth, achHeight));
+    }
+    else
+    {
+      sprite.setTextureRect(sf::IntRect(0, 0, achWidth, achHeight));
+    }
+    app->draw(sprite);
+  }
+
+  sf::Color fontColor = sf::Color::White;
+  std::stringstream oss;
+  oss << tools::getLabel(achievements[menuAchIndex].label);
+  oss << ": ";
+  if (achievementState[menuAchIndex] == AchievementDone)
+    oss << tools::getLabel(achievements[menuAchIndex].label + "_desc");
+  else
+  {
+    oss << "???";
+    fontColor = sf::Color(150, 150, 150);
+  }
+
+  write(oss.str(), 19, 100, 650, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
 }
 
 void WitchBlastGame::renderCredits()
@@ -4374,15 +4454,24 @@ void WitchBlastGame::saveGameData()
   {
     // version (for compatibility check)
     file << SAVE_VERSION << std::endl;
+    int i;
 
     // tuto
-    for (int i = 0; i < NB_MESSAGES; i++)
+    for (i = 0; i < NB_MESSAGES; i++)
     {
       messageStruct msg = getMessage((EnumMessages)i);
       if (msg.messageType == MessageTypeTutorial)
       {
         file << gameMessagesToSkip[i] << " ";
       }
+      else file << "0 ";
+    }
+    file << std::endl;
+
+    // achievements
+    for (i = 0; i < NB_ACHIEVEMENTS; i++)
+    {
+      if (achievementState[i] == AchievementDone) file << "1 ";
       else file << "0 ";
     }
     file << std::endl;
@@ -4423,7 +4512,10 @@ void WitchBlastGame::loadGameData()
   // TODO load and save
   for (int i = 0; i < NB_ACHIEVEMENTS; i++)
   {
-    achievementState[i] = AchievementUndone;
+    int n;
+    file >> n;
+    if (n == 1) achievementState[i] = AchievementDone;
+    else achievementState[i] = AchievementUndone;
   }
 }
 
@@ -4607,6 +4699,15 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemConfig.id = MenuConfig;
   menuMain.items.push_back(itemConfig);
 
+  menuItemStuct itemAchiev;
+  std::ostringstream oss;
+  oss << tools::getLabel("menu_achievements");
+  oss << " (" << getAchievementsPercents() << "%)";
+  itemAchiev.label = oss.str();
+  itemAchiev.description = tools::getLabel("menu_achievements_desc");
+  itemAchiev.id = MenuAchievements;
+  menuMain.items.push_back(itemAchiev);
+
   if (scores.size() > 0)
   {
     menuItemStuct itemHiScores;
@@ -4615,7 +4716,6 @@ void WitchBlastGame::buildMenu(bool rebuild)
     itemHiScores.id = MenuHiScores;
     menuMain.items.push_back(itemHiScores);
   }
-
 
   menuItemStuct itemCredits;
   itemCredits.label = tools::getLabel("credits");
@@ -4754,6 +4854,15 @@ void WitchBlastGame::registerLanguage()
   input[KeySpell]  = sf::Keyboard::Space;
 
   saveConfigurationToFile();
+}
+
+int WitchBlastGame::getAchievementsPercents()
+{
+  int n = 0;
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+    if (achievementState[i] == AchievementDone) n++;
+
+  return (n * 100) / NB_ACHIEVEMENTS;
 }
 
 void WitchBlastGame::testAndAddMessageToQueue(EnumMessages type)

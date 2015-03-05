@@ -763,7 +763,12 @@ private:
   void renderCredits();
 
   /*!
-   *  \brief Render the credits screen
+   *  \brief Render the achievements screen
+   */
+  void renderAchievements();
+
+  /*!
+   *  \brief Render the scores screen
    */
   void renderHiScores();
 
@@ -780,6 +785,7 @@ private:
     MenuTutoReset,    /**< Reset the tutorials */
     MenuLanguage,     /**< When configuring the language */
     MenuExit,         /**< When exiting the game */
+    MenuAchievements, /**< Display the Achievements */
     MenuCredits,      /**< Display the credits screen */
     MenuHiScores,     /**< Display the hi-scores screen */
     MenuPlayerName,   /**< To enter/change the player name */
@@ -801,6 +807,7 @@ private:
     MenuStateHiScores,
     MenuStateChangeName,
     MenuStateCredits,
+    MenuStateAchievements,
     MenuStateFirst    /**< First time, we choose language and keyboard */
   };
   menuStateEnum menuState;
@@ -830,6 +837,7 @@ private:
   menuStuct menuConfig;
   menuStuct menuInGame;
   unsigned int menuKeyIndex;
+  unsigned int menuAchIndex;
 
   /*!
    *  \brief Build the menu items
@@ -918,6 +926,8 @@ private:
 
   enum achievementStatus { AchievementDone, AchievementUndone, AchievementPending};
   achievementStatus achievementState[NB_ACHIEVEMENTS];
+
+  int getAchievementsPercents();
 };
 
 /*!
