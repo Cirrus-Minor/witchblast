@@ -92,7 +92,7 @@ enum enumItemType
   ItemRingLightning,
   ItemRingIllusion,
   ItemBookTripleShots,
-  ItemBroochFinesse,
+  ItemCriticalAdvanced,
   ItemFairyFire,
   ItemFairyIce,
   ItemMagicianRobe,
@@ -127,6 +127,9 @@ enum enumItemType
   ItemBookPrayerI,
   ItemBookPrayerII,
   ItemPetSlime,
+  ItemHatAdvanced,
+  ItemRobeAdvanced,
+  ItemCritical,
 
   NUMBER_ITEMS
 };
@@ -278,8 +281,8 @@ const itemStuct items[NUMBER_ITEMS] =
     50, true, FamiliarNone, true, true, true, 4, RarityCommon, false, ItemBookDualShots, ShotTypeStandard, SpellNone
   },
   {
-    ItemBroochFinesse, "item_brooch_finesse", "item_brooch_finesse_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone
+    ItemCriticalAdvanced, "item_critical_advanced", "item_critical_advanced_desc",
+    35, true, FamiliarNone, true, true, true, 1, RarityCommon, false, ItemCritical, ShotTypeStandard, SpellNone
   },
   {
     ItemFairyFire, "item_fairy_fire", "item_fairy_fire_desc",
@@ -417,6 +420,18 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemPetSlime, "item_pet_slime", "item_pet_slime_desc",
     50, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemHatAdvanced, "item_hat_advanced", "item_hat_advanced_desc",
+    35, true, FamiliarNone, true, true, true, 2, RarityCommon, false, ItemMagicianHat, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemRobeAdvanced, "item_robe_advanced", "item_robe_advanced_desc",
+    40, true, FamiliarNone, true, true, true, 3, RarityCommon, false, ItemMagicianRobe, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemCritical, "item_critical", "item_critical_desc",
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -443,7 +458,7 @@ enum item_equip_enum {
   EQUIP_RING_LIGHTNING,
   EQUIP_RING_ILLUSION,
   EQUIP_BOOK_TRIPLE,
-  EQUIP_BROOCH_FINESSE,
+  EQUIP_CRITICAL_ADVANCED,
   EQUIP_FAIRY_FIRE,
   EQUIP_FAIRY_TARGET,
   EQUIP_MAGICIAN_ROBE,
@@ -478,6 +493,9 @@ enum item_equip_enum {
   EQUIP_BOOK_PRAYER_I,
   EQUIP_BOOK_PRAYER_II,
   EQUIP_PET_SLIME,
+  EQUIP_HAT_ADVANCED,
+  EQUIP_ROBE_ADVANCED,
+  EQUIP_CRITICAL,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -486,12 +504,15 @@ const std::vector<item_equip_enum> sortedEquipement =
 {
   // clothes
   EQUIP_MAGICIAN_ROBE,
+  EQUIP_ROBE_ADVANCED,
   EQUIP_MAGICIAN_HAT,
+  EQUIP_HAT_ADVANCED,
   EQUIP_LEATHER_BOOTS,
   EQUIP_DISPLACEMENT_GLOVES,
   EQUIP_LEATHER_BELT,
   EQUIP_RAGE_AMULET,
-  EQUIP_BROOCH_FINESSE,
+  EQUIP_CRITICAL,
+  EQUIP_CRITICAL_ADVANCED,
   EQUIP_RING_ICE,
   EQUIP_RING_STONE,
   EQUIP_RING_LIGHTNING,

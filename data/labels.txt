@@ -122,7 +122,7 @@ item_ring_illusion_desc#Increases illusion power
 item_spell_triple#Spell : Triple bolts
 item_spell_triple_desc#Shoots three bolts
 
-item_brooch_finesse_desc#Chance to critical shot (x2)
+
 item_fairy_fire#Fairy Alicia
 item_fairy_fire_desc#Helps you in the dungeon
 item_fairy_target#Fairy Scarlett
@@ -345,7 +345,6 @@ item_staff#Ebony Staff
 item_ring_stone#Quartz Ring
 item_ring_lightning#Amethyst Ring
 item_ring_illusion#Obsidian Ring
-item_brooch_finesse#Fake Archmage beard
 enemy_cyclops#Stone Cyclops
 msg_cyclops_0#The Stone Cyclops
 enemy_type_boss_cyclops#the Stone Cyclops
@@ -394,6 +393,14 @@ item_pet_slime#Slime Pet
 item_pet_slime_desc#It will follow and help you
 menu_achievements#Achievements
 menu_achievements_desc#Display the achievements
+item_hat_advanced#Warlock's Hat
+item_hat_advanced_desc#Increases fire rate
+item_robe_advanced#Magic robe of shock
+item_robe_advanced_desc#Repulses and increases armor
+item_critical#Fake mage beard
+item_critical_desc#Chance to critical shot (x2)
+item_critical_advanced#Fake Archmage beard
+item_critical_advanced_desc#Increases critical damage (x3)
 
 [french]
 start_new_game#Nouvelle partie

@@ -645,7 +645,26 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_MAGICIAN_ROBE])
+  if (equip[EQUIP_ROBE_ADVANCED] && playerStatus != playerStatusDead)
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (15 + frame) * width, spriteDy * height, width, height));
+    sprite.setColor(sf::Color(255, 255, 255, 100 + 100 * cosf(game().getAbsolutTime() * 3.5f)));
+    app->draw(sprite, sf::BlendAdd);
+    sprite.setColor(sf::Color(255, 255, 255, 255));
+
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_MAGICIAN_ROBE])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (12 + frame) * width + width, spriteDy * height, -width, height));
@@ -654,13 +673,24 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_BROOCH_FINESSE])
+  if (equip[EQUIP_CRITICAL_ADVANCED])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
     else
       sprite.setTextureRect(sf::IntRect( (24 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
+  }
+  else if (equip[EQUIP_CRITICAL])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
   }
 
   if (equip[EQUIP_RAGE_AMULET])
@@ -766,7 +796,17 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
   }
 
   // hat
-  if (equip[EQUIP_MAGICIAN_HAT] && playerStatus != playerStatusDead)
+  if (equip[EQUIP_HAT_ADVANCED] && playerStatus != playerStatusDead)
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_MAGICIAN_HAT] && playerStatus != playerStatusDead)
   {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
@@ -1184,7 +1224,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
   if (criticalChance > 0)
     if (rand()% 100 < criticalChance)
     {
-      boltDamage += boltDamage;
+      boltDamage *= equip[EQUIP_CRITICAL_ADVANCED] ? 3 : 2;
       bolt->setCritical(true);
     }
   bolt->setDamages(boltDamage);
@@ -1580,7 +1620,7 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
 
-  if (equip[EQUIP_BROOCH_FINESSE]) criticalChance += 5;
+  if (equip[EQUIP_CRITICAL_ADVANCED]) criticalChance += 5;
   if (equip[EQUIP_MANUAL_STAFF]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
   {
