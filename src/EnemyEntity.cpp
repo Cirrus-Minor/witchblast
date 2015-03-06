@@ -115,7 +115,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
       if (playerEntity != NULL && !playerEntity->isDead())
       {
-        if (playerEntity->hurt(getHurtParams(meleeDamages, meleeType, meleeDamages, false, SourceTypeBolt, enemyType, false)) > 0)
+        if (playerEntity->hurt(getHurtParams(meleeDamages, meleeType, meleeLevel, false, SourceTypeBolt, enemyType, false)) > 0)
         {
           float xs = (x + playerEntity->getX()) / 2;
           float ys = (y + playerEntity->getY()) / 2;
