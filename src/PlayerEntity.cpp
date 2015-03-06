@@ -1613,7 +1613,8 @@ void PlayerEntity::computePlayer()
     resistance[i] = ResistanceStandard;
 
   if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
-  if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
+  if (equip[EQUIP_HAT_ADVANCED]) fireDelayBonus -= 0.3f;
+  else if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
   if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
