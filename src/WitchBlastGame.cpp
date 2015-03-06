@@ -483,6 +483,11 @@ bool WitchBlastGame::getShowLogical()
   return showLogical;
 }
 
+float WitchBlastGame::getDeltaTime()
+{
+  return deltaTime;
+}
+
 void WitchBlastGame::onUpdate()
 {
   if (!isPausing) // && (achievementsQueue.empty() || !currentMap->isCleared()) )
@@ -2505,7 +2510,7 @@ void WitchBlastGame::renderAchievements()
   // achievements
   write(tools::getLabel("menu_achievements"), 30, 485, 280, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
-  int achWidth = 64, achHeight = 64, x0 = 140, y0 = 380, xStep = 16, yStep = 16, nbProLine = 8;
+  int achWidth = 64, achHeight = 64, x0 = 180, y0 = 380, xStep = 16, yStep = 16, nbProLine = 8;
 
   sf::RectangleShape rectangle(sf::Vector2f(achWidth, achHeight));
   rectangle.setPosition(x0 + (menuAchIndex % nbProLine) * (achWidth + xStep), y0 + (menuAchIndex / nbProLine) * (achHeight + yStep));
@@ -3806,6 +3811,9 @@ enumItemType WitchBlastGame::getItemSpell()
         break;
       case SpellFlower:
         item = ItemSpellFlower;
+        break;
+      case SpellFairy:
+        item = ItemSpellFairy;
         break;
       }
       ok = !isItemLocked(item);

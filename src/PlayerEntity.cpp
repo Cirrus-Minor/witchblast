@@ -114,6 +114,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   divinity.interventions = 0;
   divinity.percentsToNextLevels = 0.0f;
   isRegeneration = false;
+  isFairyTransmuted = false;
 
   itemToBuy = NULL;
 }
@@ -239,6 +240,11 @@ divinityStruct PlayerEntity::getDivinity()
 int PlayerEntity::getPiety()
 {
   return divinity.piety;
+}
+
+void PlayerEntity::stuck()
+{
+  castTeleport();
 }
 
 void PlayerEntity::setEntering()
@@ -954,12 +960,34 @@ void PlayerEntity::render(sf::RenderTarget* app)
   }
   else
   {
-    // shadow
-    //sprite.setTextureRect(sf::IntRect( 2 * width, 11 * height, width, height));
-    //app->draw(sprite);
+    if (isFairyTransmuted)
+    {
+      frame = 0;
+      if (velocity.x * velocity.x + velocity.y * velocity.y > 400)
+        frame = ((int)(age * 24.0f)) % 2;
+      else
+        frame = ((int)(age * 18.0f)) % 2;
 
-    renderHalo(app);
-    renderPlayer(app);
+      sf::Sprite fairySprite;
+      fairySprite.setColor(sprite.getColor());
+      fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+      fairySprite.setPosition(sprite.getPosition());
+      fairySprite.setOrigin(26, 62);
+
+      switch (facingDirection)
+      {
+        case 8: fairySprite.setTextureRect(sf::IntRect( (2 + frame) * 48, 5 * 72, 48, 72)); break;
+        case 4: fairySprite.setTextureRect(sf::IntRect( (4 + frame) * 48, 5 * 72, 48, 72)); break;
+        case 6: fairySprite.setTextureRect(sf::IntRect( (5 + frame) * 48, 5 * 72, - 48, 72)); break;
+        default: fairySprite.setTextureRect(sf::IntRect( frame * 48, 5 * 72, 48, 72)); break;
+      }
+      app->draw(fairySprite);
+    }
+    else
+    {
+      renderHalo(app);
+      renderPlayer(app);
+    }
 
     // shield
     if (specialState[DivineStateProtection].active || protection.active)
@@ -1729,6 +1757,18 @@ void PlayerEntity::computePlayer()
   if (protection.active) armor += protection.value;
 
   if (armor > 1.0f) armor = 1.0f;
+
+  // fairy ?
+  if (isFairyTransmuted)
+  {
+    fireDamages *= 0.5f;
+    creatureSpeed *= 1.5f;
+    movingStyle = movFlying;
+  }
+  else
+  {
+    movingStyle = movWalking;
+  }
 }
 
 void PlayerEntity::acquireStance(enumItemType type)
@@ -2450,6 +2490,11 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell, bool fromSaveInFight)
     activeSpell.frame = ItemSpellFlower - FirstEquipItem;
     break;
 
+  case SpellFairy:
+    activeSpell.delayMax = 10.0f;
+    activeSpell.frame = ItemSpellFairy - FirstEquipItem;
+    break;
+
   case SpellNone:
     break;
   }
@@ -2494,6 +2539,9 @@ void PlayerEntity::castSpell()
     case SpellFlower:
       spellAnimationDelay = spellAnimationDelayMax;
       castSummonsFlower();
+      break;
+    case SpellFairy:
+      castTransmuteFairy();
       break;
 
     case SpellNone:
@@ -2685,4 +2733,35 @@ void PlayerEntity::castSummonsFlower()
   EvilFlowerEntity* flower = new EvilFlowerEntity(x, y, FlowerTypePet);
   flower->setLifetime(equip[EQUIP_BOOK_MAGIC_II] ? 45 : 35);
   if (equip[EQUIP_BOOK_MAGIC_II]) flower->setFireDelayMax(EVIL_FLOWER_FIRE_DELAY);
+}
+
+void PlayerEntity::castTransmuteFairy()
+{
+  SoundManager::getInstance().playSound(SOUND_INVOKE);
+  if (isFairyTransmuted)
+  {
+    movingStyle = movWalking;
+    if (isCollidingWithMap())
+      movingStyle = movFlying;
+    else
+    {
+      isFairyTransmuted = false;
+      computePlayer();
+      for(int i=0; i < 6; i++)
+      {
+        generateStar(sf::Color(50, 50, 255, 255));
+        generateStar(sf::Color(200, 200, 255, 255));
+      }
+    }
+  }
+  else
+  {
+    isFairyTransmuted = true;
+    computePlayer();
+    for(int i=0; i < 6; i++)
+    {
+      generateStar(sf::Color(50, 50, 255, 255));
+      generateStar(sf::Color(200, 200, 255, 255));
+    }
+  }
 }

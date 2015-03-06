@@ -510,6 +510,8 @@ class PlayerEntity : public BaseCreatureEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
 
+    virtual void stuck() override;
+
   private:
     int fireDamages;
     float fireVelocity;
@@ -528,6 +530,7 @@ class PlayerEntity : public BaseCreatureEntity
     float invincibleDelay;
     float divineInterventionDelay;
     bool isRegeneration;
+    bool isFairyTransmuted;
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
@@ -588,6 +591,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castProtection();
     void castWeb();
     void castSummonsFlower();
+    void castTransmuteFairy();
 
     ItemEntity* itemToBuy;
 };

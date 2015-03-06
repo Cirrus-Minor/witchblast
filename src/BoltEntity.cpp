@@ -150,7 +150,7 @@ void BoltEntity::animate(float delay)
     float oldX = x;
     float oldY = y;
     CollidingSpriteEntity::animate(delay);
-    if (boltType != ShotTypeBomb && game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT))
+    if (boltType != ShotTypeBomb && (game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT) || damages < 5))
       particleGenerator.GenerateParticles(frame, IMAGE_BOLT, (x + oldX) * 0.5f, (y + oldY) * 0.5f, BOLT_WIDTH, BOLT_HEIGHT,
                         boltType == ShotTypeLightning ? Vector2D(20.0f) : Vector2D(0.0f, 0.0f),
                         10, boltType == ShotTypeIce ? renderScale * 1.3f : renderScale);

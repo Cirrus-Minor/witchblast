@@ -138,11 +138,12 @@ bool DungeonMap::isWalkable(int x, int y)
 
 bool DungeonMap::isFlyable(int x, int y)
 {
-  if (x <= 0) return false;
-  if (x >= MAP_WIDTH - 1) return false;
-  if (y <= 0) return false;
-  if (y >= MAP_HEIGHT - 1) return false;
-  if (map[x][y] >= MAP_WALL_8 && map[x][y] <= MAP_WALL_X) return false;
+  if (x < 0) return true;
+  if (x > MAP_WIDTH - 1) return true;
+  if (y < 0) return true;
+  if (y > MAP_HEIGHT - 1) return true;
+  if (map[x][y] >= MAP_WALL_8 && map[x][y] < MAP_HOLE) return false;
+  if (map[x][y] == MAP_DOOR) return false;
   return true;
 }
 

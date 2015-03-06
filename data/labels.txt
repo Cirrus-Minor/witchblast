@@ -371,6 +371,8 @@ achiev_giant_spider_desc#Kill the Giant Spider
 achiev_francky#Thing Slayer
 achiev_francky_desc#Kill the Thing
 enemy_type_evil_flower_fire#an evil fire flower
+menu_achievements#Achievements
+menu_achievements_desc#Display the achievements
 item_spell_flower#Spell: Invoke magic flower
 item_spell_flower_desc#Cast to invoke a magic flower
 item_rapid_shots#Spellbook of Rapid Fire
@@ -391,8 +393,6 @@ item_book_prayer_ii#Book of prayer - Tome II
 item_book_prayer_ii_desc#Reduces reconversion cost
 item_pet_slime#Slime Pet
 item_pet_slime_desc#It will follow and help you
-menu_achievements#Achievements
-menu_achievements_desc#Display the achievements
 item_hat_advanced#Warlock's Hat
 item_hat_advanced_desc#Increases fire rate
 item_robe_advanced#Magic robe of shock
@@ -401,6 +401,8 @@ item_critical#Fake mage beard
 item_critical_desc#Chance to critical shot (x2)
 item_critical_advanced#Fake Archmage beard
 item_critical_advanced_desc#Increases critical damage (x3)
+item_spell_fairy#Spell: Fairy transmutation
+item_spell_fairy_desc#Cast to transmute to a fairy
 
 [french]
 start_new_game#Nouvelle partie

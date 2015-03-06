@@ -41,6 +41,7 @@ enum enumCastSpell
   SpellProtection,
   SpellWeb,
   SpellFlower,
+  SpellFairy,
 
   SpellNone
 };
@@ -55,6 +56,8 @@ const std::string spellLabel[SpellNone] =
   "spell_earthquake",
   "spell_protection",
   "spell_web",
+  "spell_flower",
+  "spell_fairy"
 };
 
 /** Item type enum
@@ -130,6 +133,7 @@ enum enumItemType
   ItemHatAdvanced,
   ItemRobeAdvanced,
   ItemCritical,
+  ItemSpellFairy,
 
   NUMBER_ITEMS
 };
@@ -432,6 +436,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemCritical, "item_critical", "item_critical_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone
   },
+  {
+    ItemSpellFairy, "item_spell_fairy", "item_spell_fairy_desc",
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellFairy
+  },
 };
 
 /** Item equipment type enum
@@ -496,6 +504,7 @@ enum item_equip_enum {
   EQUIP_HAT_ADVANCED,
   EQUIP_ROBE_ADVANCED,
   EQUIP_CRITICAL,
+  EQUIP_SPELL_FAIRY,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -564,6 +573,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_SPELL_PROTECTION,
   EQUIP_SPELL_WEB,
   EQUIP_SPELL_FLOWER,
+  EQUIP_SPELL_FAIRY,
 
   // others
   EQUIP_BOSS_KEY,
