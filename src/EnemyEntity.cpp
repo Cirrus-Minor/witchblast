@@ -125,6 +125,12 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           star->setLifetime(0.7f);
           star->setType(ENTITY_EFFECT);
           star->setSpin(400.0f);
+
+          if (playerEntity->isEquiped(EQUIP_ROBE_ADVANCED))
+          {
+            giveRecoil(true, Vector2D(playerEntity->getX(), playerEntity->getY()).vectorTo(Vector2D(x, y), 800), 0.8f);
+            SoundManager::getInstance().playSound(SOUND_ELECTRIC_CHARGE);
+          }
         }
         inflictsRecoilTo(playerEntity);
       }

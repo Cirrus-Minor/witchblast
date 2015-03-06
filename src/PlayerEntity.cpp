@@ -1518,8 +1518,7 @@ void PlayerEntity::dying()
   {
     if (equip[i])
     {
-      if (items[i + FirstEquipItem].familiar == FamiliarNone
-          && i + FirstEquipItem != ItemMagicianRobe)
+      if (items[i + FirstEquipItem].familiar == FamiliarNone)
         loseItem(enumItemType(i), true);
     }
   }
@@ -1628,7 +1627,9 @@ void PlayerEntity::computePlayer()
     fireDamagesBonus += 0.5f;
   }
   if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 0.5f;
-  if (equip[EQUIP_MAGICIAN_ROBE]) armor += 0.15f;
+
+  if (equip[EQUIP_ROBE_ADVANCED]) armor += 0.2f;
+  else if (equip[EQUIP_MAGICIAN_ROBE]) armor += 0.15f;
 
   // divinity
   switch (divinity.divinity)
