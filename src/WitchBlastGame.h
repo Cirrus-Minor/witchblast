@@ -195,6 +195,8 @@ public:
    */
   bool getShowLogical();
 
+  float getDeltaTime();
+
   /*!
    *  \brief accessor on the parameters
    *  \return : the parameters
