@@ -134,6 +134,8 @@ enum enumItemType
   ItemRobeAdvanced,
   ItemCritical,
   ItemSpellFairy,
+  ItemGlovesAdvanced,
+  ItemBootsAdvanced,
 
   NUMBER_ITEMS
 };
@@ -440,6 +442,14 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemSpellFairy, "item_spell_fairy", "item_spell_fairy_desc",
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellFairy
   },
+  {
+    ItemGlovesAdvanced, "item_gloves_advanced", "item_gloves_advanced_desc",
+    35, true, FamiliarNone, true, true, true, 2, RarityCommon, false, ItemDisplacementGloves, ShotTypeStandard, SpellNone
+  },
+  {
+    ItemBootsAdvanced, "item_boots_advanced", "item_boots_advanced_desc",
+    35, true, FamiliarNone, true, true, true, 2, RarityCommon, false, ItemLeatherBoots, ShotTypeStandard, SpellNone
+  },
 };
 
 /** Item equipment type enum
@@ -505,6 +515,8 @@ enum item_equip_enum {
   EQUIP_ROBE_ADVANCED,
   EQUIP_CRITICAL,
   EQUIP_SPELL_FAIRY,
+  EQUIP_GLOVES_ADVANCED,
+  EQUIP_BOOTS_ADVANCED,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -517,7 +529,9 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_MAGICIAN_HAT,
   EQUIP_HAT_ADVANCED,
   EQUIP_LEATHER_BOOTS,
+  EQUIP_BOOTS_ADVANCED,
   EQUIP_DISPLACEMENT_GLOVES,
+  EQUIP_GLOVES_ADVANCED,
   EQUIP_LEATHER_BELT,
   EQUIP_RAGE_AMULET,
   EQUIP_CRITICAL,

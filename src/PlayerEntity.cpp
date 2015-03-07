@@ -648,7 +648,17 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
   sprite.setColor(savedColor);
 
   // boots
-  if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
+  if (equip[EQUIP_BOOTS_ADVANCED] && playerStatus != playerStatusDead)
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_LEATHER_BOOTS] && playerStatus != playerStatusDead)
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
@@ -685,7 +695,17 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  if (equip[EQUIP_GLOVES_ADVANCED] && playerStatus != playerStatusDead)
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_DISPLACEMENT_GLOVES])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
@@ -1661,11 +1681,13 @@ void PlayerEntity::computePlayer()
   for (int i = 0; i < NB_RESISTANCES; i++)
     resistance[i] = ResistanceStandard;
 
-  if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
+  if (equip[EQUIP_GLOVES_ADVANCED]) fireDelayBonus -= 0.15f;
+  else if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
   if (equip[EQUIP_HAT_ADVANCED]) fireDelayBonus -= 0.3f;
   else if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
-  if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
+  if (equip[EQUIP_BOOTS_ADVANCED]) creatureSpeedBonus += 0.25f;
+  else if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
 

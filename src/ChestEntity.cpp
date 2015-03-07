@@ -176,7 +176,7 @@ void ChestEntity::open()
     }
 
     // trap !
-    if (game().getLevel() >= 2)
+    if (game().getLevel() >= 2 && !game().getPlayer()->isEquiped(EQUIP_GLOVES_ADVANCED))
     {
       if (rand() % 6 == 0) // trap
       {
@@ -189,7 +189,7 @@ void ChestEntity::open()
         else if (r == 0)
         {
           timer = 1.0f;
-          trap = TrapExplosion;
+          trap = TrapSnakes;
         }
         else
         {

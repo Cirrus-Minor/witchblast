@@ -184,7 +184,7 @@ void ItemEntity::render(sf::RenderTarget* app)
   }
   else
   {
-    sprite.setTextureRect(sf::IntRect(9 * width, 5 * height, width, height));
+    sprite.setTextureRect(sf::IntRect(9 * width, 6 * height, width, height));
     app->draw(sprite);
   }
 

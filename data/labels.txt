@@ -403,6 +403,10 @@ item_critical_advanced#Fake Archmage beard
 item_critical_advanced_desc#Increases critical damage (x3)
 item_spell_fairy#Spell: Fairy transmutation
 item_spell_fairy_desc#Cast to transmute to a fairy
+item_gloves_advanced#Ranger gloves
+item_gloves_advanced_desc#Disarm traps and firerate+
+item_boots_advanced#Ranger boots
+item_boots_advanced_desc#Increases speed
 
 [french]
 start_new_game#Nouvelle partie
