@@ -932,6 +932,11 @@ private:
   bool isItemLocked(enumItemType item);
 
   int getAchievementsPercents();
+
+  struct globalDataStruct
+  {
+    int killedMonster[NB_ENEMY];
+  } globalData;
 };
 
 /*!

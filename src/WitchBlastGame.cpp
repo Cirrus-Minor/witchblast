@@ -402,7 +402,8 @@ WitchBlastGame::WitchBlastGame()
   for (i = 0; i < NB_X_GAME; i++) xGame[i].active = false;
   for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) equipNudeToDisplay[i] = false;
   for (i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
-  for (int i = 0; i < NB_ACHIEVEMENTS; i++) achievementState[i] = AchievementUndone;
+  for (i = 0; i < NB_ACHIEVEMENTS; i++) achievementState[i] = AchievementUndone;
+  for (i = 0; i < NB_ENEMY; i++) globalData.killedMonster[i] = 0;
 
   saveInFight.monsters.clear();
 
@@ -878,7 +879,11 @@ void WitchBlastGame::updateIntro()
   while (app->pollEvent(event))
   {
     // Close window : exit
-    if (event.type == sf::Event::Closed) app->close();
+    if (event.type == sf::Event::Closed)
+    {
+      saveGameData();
+      app->close();
+    }
 
     if (event.type == sf::Event::Resized)
     {
@@ -938,6 +943,7 @@ void WitchBlastGame::updateRunningGame()
     if (event.type == sf::Event::Closed)
     {
       if (gameState == gameStatePlaying && !player->isDead()) saveGame();
+      saveGameData();
       app->close();
     }
 
@@ -2121,6 +2127,7 @@ void WitchBlastGame::updateMenu()
     // Close window : exit
     if (event.type == sf::Event::Closed)
     {
+      saveGameData();
       app->close();
     }
 
@@ -2217,7 +2224,11 @@ void WitchBlastGame::updateMenu()
       else if (event.key.code == sf::Keyboard::Escape)
       {
         if (menuState == MenuStateConfig) menuState = MenuStateMain;
-        else app->close();
+        else
+        {
+          saveGameData();
+          app->close();
+        }
       }
       else if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
       {
@@ -2343,6 +2354,7 @@ void WitchBlastGame::updateMenu()
           }
           break;
         case MenuExit:
+          saveGameData();
           app->close();
           break;
         case MenuVolumeSound:
@@ -4499,6 +4511,13 @@ void WitchBlastGame::saveGameData()
     }
     file << std::endl;
 
+    // monsters
+    for (i = 0; i < NB_ENEMY; i++)
+    {
+      file << globalData.killedMonster[i] << " ";
+    }
+    file << std::endl;
+
     file.close();
   }
   else
@@ -4510,6 +4529,7 @@ void WitchBlastGame::saveGameData()
 void WitchBlastGame::loadGameData()
 {
   std::ifstream file(SAVE_DATA_FILE.c_str(), std::ios::in);
+  int i;
 
   if (file)
   {
@@ -4525,21 +4545,24 @@ void WitchBlastGame::loadGameData()
     }
 
     // tuto
-    for (int i = 0; i < NB_MESSAGES; i++)
+    for (i = 0; i < NB_MESSAGES; i++)
     {
       file >> gameMessagesToSkip[i];
     }
   }
 
   // Achievements
-  // TODO load and save
-  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+  for (i = 0; i < NB_ACHIEVEMENTS; i++)
   {
     int n;
     file >> n;
     if (n == 1) achievementState[i] = AchievementDone;
     else achievementState[i] = AchievementUndone;
   }
+
+  // Monsters
+  for (i = 0; i < NB_ENEMY; i++)
+    file >> globalData.killedMonster[i];
 }
 
 void WitchBlastGame::addKey(int logicInput, std::string key)
@@ -4832,6 +4855,7 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
     else
     {
       killedEnemies[enemyType]++;
+      globalData.killedMonster[enemyType]++;
       player->offerMonster(enemyType, hurtingType);
 
       // achievements
@@ -4842,8 +4866,8 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       else if (enemyType == EnemyTypeFranckyHead) registerAchievement(AchievementFrancky);
       else if ((enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet
           || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
-        if (killedEnemies[EnemyTypeRat] + killedEnemies[EnemyTypeRatHelmet]
-            + killedEnemies[EnemyTypeRatBlack] + killedEnemies[EnemyTypeRatBlackHelmet] >= 1)
+        if (globalData.killedMonster[EnemyTypeRat] + globalData.killedMonster[EnemyTypeRatHelmet]
+            + globalData.killedMonster[EnemyTypeRatBlack] + globalData.killedMonster[EnemyTypeRatBlackHelmet] >= 10)
           registerAchievement(AchievementRats);
     }
   }
@@ -5013,6 +5037,15 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
+  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
   if (equip[EQUIP_CRITICAL_ADVANCED])
   {
     if (isMirroring)
@@ -5037,15 +5070,6 @@ void WitchBlastGame::renderPlayer(float x, float y,
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
     else
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width, spriteDy * height, width, height));
-    app->draw(sprite);
-  }
-
-  if (equip[EQUIP_DISPLACEMENT_GLOVES])
-  {
-    if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
-    else
-      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
 
