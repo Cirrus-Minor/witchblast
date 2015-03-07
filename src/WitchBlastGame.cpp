@@ -881,7 +881,7 @@ void WitchBlastGame::updateIntro()
     // Close window : exit
     if (event.type == sf::Event::Closed)
     {
-      saveGameData();
+      //saveGameData();
       app->close();
     }
 
