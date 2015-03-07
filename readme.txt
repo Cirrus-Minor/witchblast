@@ -100,14 +100,17 @@ AFS (for the Spanish translation)
 Changes
 -------
 Next release
-- ADD Achievements
+- ADD Achievements and unlocks (16)
 - ADD Items
 - ADD Shot type (poison)
-- ADD Spell (summon magic flower)
+- ADD Spells (2)
+- ADD Familiars (a fairy and another one)
 - ADD Chest traps
+- ADD Challenge levels 3 and 4
 - MOD No player collision while invincible
 - MOD Sulfur causes the monster explode directly, and safe for the player
-- MOD Hiccup makes the player fire
+- MOD Hiccup makes the player fire poison
+- MOD Imps do not teleport with 1 HP damage
 
 v0.4.6b
 - ADD Russian translation
