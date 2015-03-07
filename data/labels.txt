@@ -351,7 +351,7 @@ enemy_type_boss_cyclops#the Stone Cyclops
 
 
 achiev_rats#Rodenticide
-achiev_rats_desc#Kill one rat
+achiev_rats_desc#Kill 250 rats
 achiev_100#Stingy
 achiev_100_desc#Collect 100 gold coins
 achiev_piety_max#Faithful
@@ -370,6 +370,19 @@ achiev_giant_spider#Giant Spider Slayer
 achiev_giant_spider_desc#Kill the Giant Spider
 achiev_francky#Thing Slayer
 achiev_francky_desc#Kill the Thing
+achiev_butcher#Butcher Slayer
+achiev_butcher_desc#Kill the Butcher
+achiev_witches#Inquisitor
+achiev_witches_desc#Kill 50 witches
+achiev_eggs#Bad omelette
+achiev_eggs_desc#Destroy 100 eggs
+achiev_fairies#Charlie's Angels
+achiev_fairies_desc#Free 3 fairies
+achiev_challenges#Gladiator
+achiev_challenges_desc#Complete 4 challenges
+achiev_win#Live a dream
+achiev_win_desc#Finish the demo
+
 enemy_type_evil_flower_fire#an evil fire flower
 menu_achievements#Achievements
 menu_achievements_desc#Display the achievements
@@ -404,7 +417,7 @@ item_critical_advanced_desc#Increases critical damage (x3)
 item_spell_fairy#Spell: Fairy transmutation
 item_spell_fairy_desc#Cast to transmute to a fairy
 item_gloves_advanced#Ranger gloves
-item_gloves_advanced_desc#Disarm traps and firerate+
+item_gloves_advanced_desc#Disarm traps and firerate up
 item_boots_advanced#Ranger boots
 item_boots_advanced_desc#Increases speed
 

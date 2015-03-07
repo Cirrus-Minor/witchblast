@@ -2185,13 +2185,19 @@ void WitchBlastGame::updateMenu()
           menuState = MenuStateMain;
         else if (event.key.code == sf::Keyboard::Right || event.key.code == input[KeyRight])
         {
-          menuAchIndex++;
-          if (menuAchIndex >= NB_ACHIEVEMENTS) menuAchIndex = 0;
+          if (menuAchIndex % 8 < 7) menuAchIndex++;
         }
         else if (event.key.code == sf::Keyboard::Left || event.key.code == input[KeyLeft])
         {
-          menuAchIndex--;
-          if (menuAchIndex >= NB_ACHIEVEMENTS) menuAchIndex = NB_ACHIEVEMENTS - 1;
+          if (menuAchIndex % 8 > 0) menuAchIndex--;
+        }
+        else if (event.key.code == sf::Keyboard::Down || event.key.code == input[KeyDown])
+        {
+          if (menuAchIndex / 8 < 1) menuAchIndex += 8;
+        }
+        else if (event.key.code == sf::Keyboard::Up || event.key.code == input[KeyUp])
+        {
+          if (menuAchIndex / 8 > 0) menuAchIndex -= 8;
         }
       }
       else if (menuState == MenuStateHiScores)
@@ -4859,16 +4865,29 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       player->offerMonster(enemyType, hurtingType);
 
       // achievements
-      if (enemyType == EnemyTypeSlimeBoss) registerAchievement(AchievementGiantSlime);
+      if (enemyType == EnemyTypeButcher) registerAchievement(AchievementButcher);
+      else if (enemyType == EnemyTypeSlimeBoss) registerAchievement(AchievementGiantSlime);
       else if (enemyType == EnemyTypeCyclops) registerAchievement(AchievementCyclops);
       else if (enemyType == EnemyTypeRatKing) registerAchievement(AchievementRatKing);
       else if (enemyType == EnemyTypeSpiderGiant) registerAchievement(AchievementGiantSpider);
       else if (enemyType == EnemyTypeFranckyHead) registerAchievement(AchievementFrancky);
       else if ((enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet
           || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
+      {
         if (globalData.killedMonster[EnemyTypeRat] + globalData.killedMonster[EnemyTypeRatHelmet]
-            + globalData.killedMonster[EnemyTypeRatBlack] + globalData.killedMonster[EnemyTypeRatBlackHelmet] >= 10)
+            + globalData.killedMonster[EnemyTypeRatBlack] + globalData.killedMonster[EnemyTypeRatBlackHelmet] >= 250)
           registerAchievement(AchievementRats);
+      }
+      else if (enemyType == EnemyTypeWitch || enemyType == EnemyTypeWitchRed)
+      {
+        if (globalData.killedMonster[EnemyTypeWitch] + globalData.killedMonster[EnemyTypeWitchRed] >= 50)
+          registerAchievement(AchievementWitches);
+      }
+      else if (enemyType == EnemyTypeSpiderEgg || enemyType == EnemyTypeSpiderEgg_invocated)
+      {
+        if (globalData.killedMonster[EnemyTypeSpiderEgg] + globalData.killedMonster[EnemyTypeSpiderEgg_invocated] >= 100)
+          registerAchievement(AchievementEggs);
+      }
     }
   }
 }
