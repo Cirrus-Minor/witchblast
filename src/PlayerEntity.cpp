@@ -232,6 +232,11 @@ void PlayerEntity::setDeathAge(float deathAge)
   this->deathAge = deathAge;
 }
 
+bool PlayerEntity::getFairyTransmuted()
+{
+  return isFairyTransmuted;
+}
+
 divinityStruct PlayerEntity::getDivinity()
 {
   return divinity;
@@ -466,8 +471,9 @@ void PlayerEntity::animate(float delay)
       recoil.velocity = Vector2D(350.0f);
       recoil.timer = 0.4f;
 
-      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypePoison, 0);
+      BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypePoison, 0);
       bolt->setDamages(fireDamages);
+      bolt->setFlying(isFairyTransmuted);
       bolt->setVelocity(recoil.velocity.vectorTo(Vector2D(0, 0), fireVelocity));
 
       TextEntity* text = new TextEntity("*hic*", 16, x, y - 30.0f);
@@ -679,6 +685,15 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
+  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
   if (equip[EQUIP_CRITICAL_ADVANCED])
   {
     if (isMirroring)
@@ -714,15 +729,6 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
     else
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width, spriteDy * height, width, height));
-    app->draw(sprite);
-  }
-
-  if (equip[EQUIP_DISPLACEMENT_GLOVES])
-  {
-    if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
-    else
-      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
 
@@ -1084,10 +1090,20 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
 void PlayerEntity::calculateBB()
 {
-  boundingBox.left = (int)x - 10;
-  boundingBox.width = 20;
-  boundingBox.top = (int)y - 29;
-  boundingBox.height =  33;
+  if (isFairyTransmuted)
+  {
+    boundingBox.left = (int)x - 10;
+    boundingBox.width = 20;
+    boundingBox.top = (int)y - 29;
+    boundingBox.height =  20;
+  }
+  else
+  {
+    boundingBox.left = (int)x - 10;
+    boundingBox.width = 20;
+    boundingBox.top = (int)y - 29;
+    boundingBox.height =  33;
+  }
 }
 
 void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -1247,7 +1263,8 @@ void PlayerEntity::generateBolt(float velx, float vely)
 
   }
 
-  BoltEntity* bolt = new BoltEntity(x, y - 20, boltLifeTime, boltType, shotLevel);
+  BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, boltType, shotLevel);
+  bolt->setFlying(isFairyTransmuted);
   int boltDamage = fireDamages;
   if (criticalChance > 0)
     if (rand()% 100 < criticalChance)
@@ -1273,16 +1290,18 @@ void PlayerEntity::rageFire()
   for (int i = -1; i <= 1; i += 2)
     for (int j = -1; j <= 1; j += 2)
     {
-      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeFire, 0);
+      BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
       bolt->setDamages(10);
+      bolt->setFlying(isFairyTransmuted);
       float velx = fireVelocity * i * 0.42f;
       float vely = fireVelocity * j * 0.42f;
       bolt->setVelocity(Vector2D(velx, vely));
 
       if (hp <= hpMax / 5)
       {
-        BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeFire, 0);
+        BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
         bolt->setDamages(10);
+        bolt->setFlying(isFairyTransmuted);
         float velx = 0.0f;
         float vely = 0.0f;
         if (i == -1 && j == -1) velx = -fireVelocity * i * 0.6f;
@@ -1416,8 +1435,9 @@ void PlayerEntity::fire(int direction)
 
     if (equip[EQUIP_REAR_SHOT])
     {
-      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
+      BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
       bolt->setDamages(fireDamages / 2);
+      bolt->setFlying(isFairyTransmuted);
       float velx = 0.0f;
       float vely = 0.0f;
       switch (direction)
@@ -1440,8 +1460,9 @@ void PlayerEntity::fire(int direction)
 
     if (equip[EQUIP_BOOK_RANDOM] && randomFireDelay <= 0.0f)
     {
-      BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeStandard, 0);
+      BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
       bolt->setDamages(fireDamages);
+      bolt->setFlying(isFairyTransmuted);
       float shotAngle = rand() % 360;
       bolt->setVelocity(Vector2D(fireVelocity * 0.75f * cos(shotAngle), fireVelocity * 0.75f * sin(shotAngle)));
       randomFireDelay = fireDelay * 1.5f;
@@ -2009,8 +2030,15 @@ void PlayerEntity::interact(EnumInteractionType interaction, int id)
   }
 }
 
-// DIVINITY
+float PlayerEntity::getBolPositionY()
+{
+  if (isFairyTransmuted)
+    return y - 25;
+  else
+    return y - 20;
+}
 
+// DIVINITY
 void PlayerEntity::donate(int n)
 {
   if (gold >= n)
@@ -2654,7 +2682,7 @@ void PlayerEntity::castFireball()
   enumShotType boltType = ShotTypeFire;
   unsigned int shotLevel = 2;
 
-  BoltEntity* bolt = new BoltEntity(x, y - 10, boltLifeTime + 0.5f, boltType, shotLevel);
+  BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime + 0.5f, boltType, shotLevel);
 
   int boltDamage = fireDamages * (equip[EQUIP_BOOK_MAGIC_II] ? 4 : 3);
   if (equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 16) boltDamage = 16;
@@ -2676,7 +2704,7 @@ void PlayerEntity::castFreeze()
   int iceLevel = equip[EQUIP_BOOK_MAGIC_II] ? 2 : 1;
   for (float i = 0.0f; i < 2 * PI; i +=  PI / 8)
   {
-    BoltEntity* bolt1 = new BoltEntity(x, y - 10, boltLifeTime, ShotTypeIce, iceLevel);
+    BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeIce, iceLevel);
     bolt1->setDamages(1);
     float velx = fireVelocity * cos(i);
     float vely = fireVelocity * sin(i);
@@ -2737,7 +2765,6 @@ void PlayerEntity::castSummonsFlower()
 
 void PlayerEntity::castTransmuteFairy()
 {
-  SoundManager::getInstance().playSound(SOUND_INVOKE);
   if (isFairyTransmuted)
   {
     movingStyle = movWalking;
@@ -2745,6 +2772,7 @@ void PlayerEntity::castTransmuteFairy()
       movingStyle = movFlying;
     else
     {
+      SoundManager::getInstance().playSound(SOUND_INVOKE);
       isFairyTransmuted = false;
       computePlayer();
       for(int i=0; i < 6; i++)
@@ -2756,6 +2784,7 @@ void PlayerEntity::castTransmuteFairy()
   }
   else
   {
+    SoundManager::getInstance().playSound(SOUND_INVOKE);
     isFairyTransmuted = true;
     computePlayer();
     for(int i=0; i < 6; i++)

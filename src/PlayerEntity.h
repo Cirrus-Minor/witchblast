@@ -163,7 +163,7 @@ class PlayerEntity : public BaseCreatureEntity
 
     divinityStruct getDivinity();
     int getPiety();
-
+    bool getFairyTransmuted();
 
     /*!
      *  \brief updates the entering status of the player
@@ -594,6 +594,8 @@ class PlayerEntity : public BaseCreatureEntity
     void castTransmuteFairy();
 
     ItemEntity* itemToBuy;
+
+    float getBolPositionY();
 };
 
 #endif // PLAYERSPRITE_H

@@ -51,6 +51,8 @@ bool ItemEntity::canBePickedUp()
   if (itemType >= FirstEquipItem)
     if (game().getPlayer()->isEquiped(itemType - FirstEquipItem)) return false;
 
+  if (items[itemType].spell != SpellNone && game().getPlayer()->getFairyTransmuted()) return false;
+
   if (itemType == ItemBookDualShots || itemType == ItemBookTripleShots)
     if (game().getPlayer()->isEquiped(EQUIP_BOOK_DUAL_QUICK)
         || game().getPlayer()->isEquiped(EQUIP_BOOK_TRIPLE_QUICK)
