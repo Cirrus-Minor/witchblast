@@ -631,7 +631,6 @@ enum EnumWorldEvents
   EventGetCoin,
   EventPietyMax,
   EventTripleHit,
-  EventCompleteSet,
 
   // tuto
   EventBeingHurted,

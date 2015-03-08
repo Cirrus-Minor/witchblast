@@ -1382,6 +1382,7 @@ void WitchBlastGame::updateRunningGame()
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
         challengeLevel++;
+        if (challengeLevel == 4) registerAchievement(AchievementChallenges);
         player->offerChallenge();
       }
     }
@@ -1918,6 +1919,8 @@ void WitchBlastGame::renderRunningGame()
       write(tools::getLabel("congratulations_1"), 25, x0, 220, ALIGN_CENTER, sf::Color::White, app, 2, 2);
       write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2);
       write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2);
+
+      registerAchievement(AchievementWin);
     }
   }
 
@@ -4983,10 +4986,6 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
   else if (event == EventTripleHit)
   {
     if (!achievementState[Achievement3Hits]) registerAchievement(Achievement3Hits);
-  }
-  else if (event == EventCompleteSet)
-  {
-    if (!achievementState[AchievementCompleteSet]) registerAchievement(AchievementCompleteSet);
   }
 
   // message ?
