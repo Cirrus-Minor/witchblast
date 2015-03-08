@@ -930,6 +930,7 @@ private:
   achievementStatus achievementState[NB_ACHIEVEMENTS];
 
   bool isItemLocked(enumItemType item);
+  bool isFunctionalityLocked(enumFunctionalityType func);
 
   int getAchievementsPercents();
 

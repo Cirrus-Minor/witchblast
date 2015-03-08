@@ -383,6 +383,10 @@ achiev_challenges_desc#Complete 4 challenges
 achiev_win#Live a dream
 achiev_win_desc#Finish the demo
 
+func_achiev_screen#Achievements screen
+func_achiev_all#All achievements descriptions
+func_double_spell#Two spells drop
+
 enemy_type_evil_flower_fire#an evil fire flower
 menu_achievements#Achievements
 menu_achievements_desc#Display the achievements

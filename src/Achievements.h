@@ -34,12 +34,29 @@ enum enumUnlockType
   UnlockNothing,
   UnlockItem,
   UnlockDivinity,
+  UnlockFunctionality,
+};
+
+enum enumFunctionalityType
+{
+  FunctionalityAchievementsScreen,
+  FunctionalityAllAchievements,
+  FunctionalityDoubleSpellDrop,
+
+  NB_FUNCTIONALITIES
+};
+
+const std::string functionalityLabel[NB_FUNCTIONALITIES] =
+{
+  "func_achiev_screen",
+  "func_achiev_all",
+  "func_double_spell",
 };
 
 /*!
- *  \brief Item structure
+ *  \brief Achievement structure
  *
- *  Contains all the data for an item.
+ *  Contains all the data for an achievement.
  */
 struct achievementStuct
 {
@@ -52,24 +69,24 @@ struct achievementStuct
 /** Array with all the achievement */
 const achievementStuct achievements[NB_ACHIEVEMENTS] =
 {
-  { AchievementRats,        "achiev_rats",          UnlockItem,     ItemFairyTarget },
-  { Achievement100,         "achiev_100",           UnlockNothing,  -1 },
-  { AchievementPietyMax,    "achiev_piety_max",     UnlockItem,     ItemBookPrayerII },
-  { Achievement3Hits,       "achiev_3_hits",        UnlockNothing,  -1 },
-  { AchievementCompleteSet, "achiev_complete_set",  UnlockItem,     ItemHatAdvanced},
+  { AchievementRats,        "achiev_rats",          UnlockItem,           ItemFairyTarget },
+  { Achievement100,         "achiev_100",           UnlockNothing,        -1 },
+  { AchievementPietyMax,    "achiev_piety_max",     UnlockItem,           ItemBookPrayerII },
+  { Achievement3Hits,       "achiev_3_hits",        UnlockNothing,        -1 },
+  { AchievementCompleteSet, "achiev_complete_set",  UnlockItem,           ItemHatAdvanced},
 
-  { AchievementGiantSlime,  "achiev_giant_slime",   UnlockItem,     ItemPetSlime },
-  { AchievementCyclops,     "achiev_cyclops",       UnlockItem,     ItemSpellEarthquake },
-  { AchievementRatKing,     "achiev_rat_king",      UnlockItem,     ItemCriticalAdvanced },
-  { AchievementGiantSpider, "achiev_giant_spider",  UnlockItem,     ItemSpellWeb },
-  { AchievementFrancky,     "achiev_francky",       UnlockItem,     ItemRobeAdvanced },
+  { AchievementGiantSlime,  "achiev_giant_slime",   UnlockItem,           ItemPetSlime },
+  { AchievementCyclops,     "achiev_cyclops",       UnlockItem,           ItemSpellEarthquake },
+  { AchievementRatKing,     "achiev_rat_king",      UnlockItem,           ItemCriticalAdvanced },
+  { AchievementGiantSpider, "achiev_giant_spider",  UnlockItem,           ItemSpellWeb },
+  { AchievementFrancky,     "achiev_francky",       UnlockItem,           ItemRobeAdvanced },
 
-  { AchievementButcher,     "achiev_butcher",       UnlockNothing,  -1 },
-  { AchievementWitches,     "achiev_witches",       UnlockItem,     ItemBookMagicII },
-  { AchievementEggs,        "achiev_eggs",          UnlockNothing,  -1 },
-  { AchievementFairies,     "achiev_fairies",       UnlockItem,     ItemSpellFairy },
-  { AchievementChallenges,  "achiev_challenges",    UnlockNothing,  -1 },
-  { AchievementWin,         "achiev_win",           UnlockNothing,  -1 },
+  { AchievementButcher,     "achiev_butcher",       UnlockFunctionality,  FunctionalityAchievementsScreen },
+  { AchievementWitches,     "achiev_witches",       UnlockItem,           ItemBookMagicII },
+  { AchievementEggs,        "achiev_eggs",          UnlockNothing,        -1 },
+  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemSpellFairy },
+  { AchievementChallenges,  "achiev_challenges",    UnlockFunctionality,  FunctionalityDoubleSpellDrop },
+  { AchievementWin,         "achiev_win",           UnlockFunctionality,  FunctionalityAllAchievements },
 };
 
 

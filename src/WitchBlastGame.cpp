@@ -2565,10 +2565,15 @@ void WitchBlastGame::renderAchievements()
     oss << tools::getLabel(achievements[menuAchIndex].label + "_desc");
     if (achievements[menuAchIndex].unlockType == UnlockItem && achievements[menuAchIndex].unlock > -1)
       oss << "\nUNLOCK: " << tools::getLabel(items[achievements[menuAchIndex].unlock].name);
+    else if (achievements[menuAchIndex].unlockType == UnlockFunctionality && achievements[menuAchIndex].unlock > -1)
+      oss << "\nUNLOCK: " << tools::getLabel(functionalityLabel[achievements[menuAchIndex].unlock]);
   }
   else
   {
-    oss << "???";
+    if (isFunctionalityLocked(FunctionalityAllAchievements))
+      oss << "???";
+    else
+      oss << tools::getLabel(achievements[menuAchIndex].label + "_desc");
     fontColor = sf::Color(150, 150, 150);
   }
 
@@ -3849,10 +3854,21 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   // loot
   if (player->getActiveSpell().spell == SpellNone || rand() % 2 == 0)
   {
-    ItemEntity* newItem = new ItemEntity(getItemSpell(), x, y);
-    newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-    if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-    newItem->setViscosity(0.96f);
+    enumItemType spell1 = getItemSpell();
+    ItemEntity* spellItem = new ItemEntity(spell1, x, y);
+    spellItem->setVelocity(Vector2D(100.0f + rand()% 250));
+    if (spellItem->getVelocity().y < 0.0f) spellItem->setVelocity(Vector2D(spellItem->getVelocity().x, -spellItem->getVelocity().y));
+    spellItem->setViscosity(0.96f);
+
+    if (!isFunctionalityLocked(FunctionalityDoubleSpellDrop))
+    {
+      enumItemType spell2 = spell1;
+      while (spell2 == spell1) spell2 = getItemSpell();
+      ItemEntity* spellItem2 = new ItemEntity(spell2, x, y);
+      spellItem2->setVelocity(Vector2D(100.0f + rand()% 250));
+      if (spellItem2->getVelocity().y < 0.0f) spellItem2->setVelocity(Vector2D(spellItem2->getVelocity().x, -spellItem2->getVelocity().y));
+      spellItem2->setViscosity(0.96f);
+    }
 
     ItemEntity* healthItem1 = new ItemEntity(ItemHealthVerySmall, x, y);
     healthItem1->setVelocity(Vector2D(100.0f + rand()% 250));
@@ -4754,14 +4770,17 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemConfig.id = MenuConfig;
   menuMain.items.push_back(itemConfig);
 
-  menuItemStuct itemAchiev;
-  std::ostringstream oss;
-  oss << tools::getLabel("menu_achievements");
-  oss << " (" << getAchievementsPercents() << "%)";
-  itemAchiev.label = oss.str();
-  itemAchiev.description = tools::getLabel("menu_achievements_desc");
-  itemAchiev.id = MenuAchievements;
-  menuMain.items.push_back(itemAchiev);
+  if (!isFunctionalityLocked(FunctionalityAchievementsScreen))
+  {
+    menuItemStuct itemAchiev;
+    std::ostringstream oss;
+    oss << tools::getLabel("menu_achievements");
+    oss << " (" << getAchievementsPercents() << "%)";
+    itemAchiev.label = oss.str();
+    itemAchiev.description = tools::getLabel("menu_achievements_desc");
+    itemAchiev.id = MenuAchievements;
+    menuMain.items.push_back(itemAchiev);
+  }
 
   if (scores.size() > 0)
   {
@@ -5481,6 +5500,19 @@ bool WitchBlastGame::isItemLocked(enumItemType item)
     {
       if (achievements[i].unlockType == UnlockItem)
         if (achievements[i].unlock == (int)item) return true;
+    }
+  }
+  return false;
+}
+
+bool WitchBlastGame::isFunctionalityLocked(enumFunctionalityType func)
+{
+  for (int i = 0; i < NB_FUNCTIONALITIES; i++)
+  {
+    if (achievementState[i] == AchievementUndone)
+    {
+      if (achievements[i].unlockType == UnlockFunctionality)
+        if (achievements[i].unlock == (int)func) return true;
     }
   }
   return false;
