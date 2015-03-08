@@ -53,8 +53,8 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   {
     frame = 9;
     enemyType = EnemyTypeNone;
-    fireDelayMax = EVIL_FLOWER_FIRE_DELAY * 1.5f;
-    fireDelay = EVIL_FLOWER_FIRE_DELAY * 1.5f;
+    fireDelayMax = EVIL_FLOWER_FIRE_DELAY;
+    fireDelay = EVIL_FLOWER_FIRE_DELAY;
     type = ENTITY_EFFECT;
     bloodColor = BloodNone;
   }

@@ -319,7 +319,7 @@ void PlayerEntity::acquireItemAfterStance()
       hiccupDelay = HICCUP_DELAY;
 
     // acquirement
-    if (equip[EQUIP_DISPLACEMENT_GLOVES] && equip[EQUIP_LEATHER_BOOTS] && equip[EQUIP_MAGICIAN_HAT] && equip[EQUIP_MAGICIAN_HAT])
+    if (equip[EQUIP_DISPLACEMENT_GLOVES] && equip[EQUIP_LEATHER_BOOTS] && equip[EQUIP_MAGICIAN_HAT] && equip[EQUIP_MAGICIAN_ROBE])
       game().registerAchievement(AchievementCompleteSet);
 
     computePlayer();
@@ -1246,6 +1246,7 @@ void PlayerEntity::setEquiped(int item, bool toggleEquipped)
                                          y - 50.0f + rand() % 100,
                                          items[FirstEquipItem + item].familiar);
     fairies.push_back(fairy);
+    if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
   }
   computePlayer();
 }
@@ -2782,7 +2783,7 @@ void PlayerEntity::castSummonsFlower()
   SoundManager::getInstance().playSound(SOUND_INVOKE);
   EvilFlowerEntity* flower = new EvilFlowerEntity(x, y, FlowerTypePet);
   flower->setLifetime(equip[EQUIP_BOOK_MAGIC_II] ? 45 : 35);
-  if (equip[EQUIP_BOOK_MAGIC_II]) flower->setFireDelayMax(EVIL_FLOWER_FIRE_DELAY);
+  if (equip[EQUIP_BOOK_MAGIC_II]) flower->setFireDelayMax(EVIL_FLOWER_FIRE_DELAY * 0.8f);
 }
 
 void PlayerEntity::castTransmuteFairy()
