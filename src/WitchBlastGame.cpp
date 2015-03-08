@@ -1382,7 +1382,7 @@ void WitchBlastGame::updateRunningGame()
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
         challengeLevel++;
-        if (challengeLevel == 4) registerAchievement(AchievementChallenges);
+        if (challengeLevel == 5) registerAchievement(AchievementChallenges);
         player->offerChallenge();
       }
     }
@@ -4995,16 +4995,16 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
   // achievements
   if (event == EventGetCoin)
   {
-    if (!achievementState[Achievement100] && player->getGold() > 100)
+    if (achievementState[Achievement100] == AchievementUndone && player->getGold() > 100)
       registerAchievement(Achievement100);
   }
   else if (event == EventPietyMax)
   {
-    if (!achievementState[AchievementPietyMax]) registerAchievement(AchievementPietyMax);
+    if (achievementState[AchievementPietyMax] == AchievementUndone) registerAchievement(AchievementPietyMax);
   }
   else if (event == EventTripleHit)
   {
-    if (!achievementState[Achievement3Hits]) registerAchievement(Achievement3Hits);
+    if (achievementState[Achievement3Hits] == AchievementUndone) registerAchievement(Achievement3Hits);
   }
 
   // message ?
@@ -5507,7 +5507,7 @@ bool WitchBlastGame::isItemLocked(enumItemType item)
 
 bool WitchBlastGame::isFunctionalityLocked(enumFunctionalityType func)
 {
-  for (int i = 0; i < NB_FUNCTIONALITIES; i++)
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
   {
     if (achievementState[i] == AchievementUndone)
     {

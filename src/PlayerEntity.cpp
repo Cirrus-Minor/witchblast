@@ -1633,6 +1633,7 @@ void PlayerEntity::acquireItem(enumItemType type)
       gold = gold + 10;
       displayAcquiredGold(10);
       SoundManager::getInstance().playSound(SOUND_COIN_PICK_UP);
+      game().proceedEvent(EventGetCoin);
       break;
     case ItemHealthVerySmallPoison:
       specialState[SpecialStatePoison].active = false;
