@@ -4893,10 +4893,10 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       else if (enemyType == EnemyTypeRatKing) registerAchievement(AchievementRatKing);
       else if (enemyType == EnemyTypeSpiderGiant) registerAchievement(AchievementGiantSpider);
       else if (enemyType == EnemyTypeFranckyHead) registerAchievement(AchievementFrancky);
-      else if ((enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet
+      else if ((enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet || enemyType == EnemyTypeRat_invocated
           || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
       {
-        if (globalData.killedMonster[EnemyTypeRat] + globalData.killedMonster[EnemyTypeRatHelmet]
+        if (globalData.killedMonster[EnemyTypeRat] + globalData.killedMonster[EnemyTypeRatHelmet] + globalData.killedMonster[EnemyTypeRat_invocated]
             + globalData.killedMonster[EnemyTypeRatBlack] + globalData.killedMonster[EnemyTypeRatBlackHelmet] >= 250)
           registerAchievement(AchievementRats);
       }
