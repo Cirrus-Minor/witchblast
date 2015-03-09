@@ -2542,9 +2542,10 @@ void WitchBlastGame::renderAchievements()
   sf::Sprite sprite;
   sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
 
-  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+  for (int k : sortedAchievements)
   {
-    sprite.setPosition(x0 + (i % nbProLine) * (achWidth + xStep), y0 + (i / nbProLine) * (achHeight + yStep));
+    int i = sortedAchievements[k];
+    sprite.setPosition(x0 + (k % nbProLine) * (achWidth + xStep), y0 + (k / nbProLine) * (achHeight + yStep));
     if (achievementState[i] == AchievementDone)
     {
       sprite.setTextureRect(sf::IntRect( ((i + 1) % 10) * achWidth, ((i + 1) / 10) * achHeight, achWidth, achHeight));
@@ -2558,22 +2559,29 @@ void WitchBlastGame::renderAchievements()
 
   sf::Color fontColor = sf::Color::White;
   std::stringstream oss;
-  oss << tools::getLabel(achievements[menuAchIndex].label);
+  int achIndex = sortedAchievements[menuAchIndex];
+
+  if (achIndex >= AchievementGiantSlime
+      && achIndex <= AchievementFrancky
+      && !achievementState[achIndex] == AchievementDone)
+    oss << "???";
+  else
+    oss << tools::getLabel(achievements[achIndex].label);
   oss << ": ";
-  if (achievementState[menuAchIndex] == AchievementDone)
+  if (achievementState[achIndex] == AchievementDone)
   {
-    oss << tools::getLabel(achievements[menuAchIndex].label + "_desc");
-    if (achievements[menuAchIndex].unlockType == UnlockItem && achievements[menuAchIndex].unlock > -1)
-      oss << "\nUNLOCK: " << tools::getLabel(items[achievements[menuAchIndex].unlock].name);
-    else if (achievements[menuAchIndex].unlockType == UnlockFunctionality && achievements[menuAchIndex].unlock > -1)
-      oss << "\nUNLOCK: " << tools::getLabel(functionalityLabel[achievements[menuAchIndex].unlock]);
+    oss << tools::getLabel(achievements[achIndex].label + "_desc");
+    if (achievements[achIndex].unlockType == UnlockItem && achievements[achIndex].unlock > -1)
+      oss << "\nUNLOCK: " << tools::getLabel(items[achievements[achIndex].unlock].name);
+    else if (achievements[achIndex].unlockType == UnlockFunctionality && achievements[achIndex].unlock > -1)
+      oss << "\nUNLOCK: " << tools::getLabel(functionalityLabel[achievements[achIndex].unlock]);
   }
   else
   {
     if (isFunctionalityLocked(FunctionalityAllAchievements))
       oss << "???";
     else
-      oss << tools::getLabel(achievements[menuAchIndex].label + "_desc");
+      oss << tools::getLabel(achievements[achIndex].label + "_desc");
     fontColor = sf::Color(150, 150, 150);
   }
 

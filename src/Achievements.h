@@ -69,10 +69,10 @@ struct achievementStuct
 /** Array with all the achievement */
 const achievementStuct achievements[NB_ACHIEVEMENTS] =
 {
-  { AchievementRats,        "achiev_rats",          UnlockItem,           ItemFairyTarget },
-  { Achievement100,         "achiev_100",           UnlockNothing,        -1 },
+  { AchievementRats,        "achiev_rats",          UnlockItem,           ItemSpellFairy },
+  { Achievement100,         "achiev_100",           UnlockItem,           ItemSpellFlower },
   { AchievementPietyMax,    "achiev_piety_max",     UnlockItem,           ItemBookPrayerII },
-  { Achievement3Hits,       "achiev_3_hits",        UnlockNothing,        -1 },
+  { Achievement3Hits,       "achiev_3_hits",        UnlockItem,           ItemFairyTarget },
   { AchievementCompleteSet, "achiev_complete_set",  UnlockItem,           ItemHatAdvanced},
 
   { AchievementGiantSlime,  "achiev_giant_slime",   UnlockItem,           ItemPetSlime },
@@ -83,11 +83,32 @@ const achievementStuct achievements[NB_ACHIEVEMENTS] =
 
   { AchievementButcher,     "achiev_butcher",       UnlockFunctionality,  FunctionalityAchievementsScreen },
   { AchievementWitches,     "achiev_witches",       UnlockItem,           ItemBookMagicII },
-  { AchievementEggs,        "achiev_eggs",          UnlockNothing,        -1 },
-  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemSpellFairy },
+  { AchievementEggs,        "achiev_eggs",          UnlockItem,           ItemBootsAdvanced },
+  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemGlovesAdvanced },
   { AchievementChallenges,  "achiev_challenges",    UnlockFunctionality,  FunctionalityDoubleSpellDrop },
   { AchievementWin,         "achiev_win",           UnlockFunctionality,  FunctionalityAllAchievements },
 };
 
+const std::vector<enumAchievementType> sortedAchievements =
+{
+  AchievementRats,
+  AchievementWitches,
+  AchievementEggs,
+  Achievement100,
+  AchievementPietyMax,
+  Achievement3Hits,
+  AchievementCompleteSet,
+  AchievementFairies,
 
+  // bosses
+  AchievementButcher,
+  AchievementGiantSlime,
+  AchievementCyclops,
+  AchievementRatKing,
+  AchievementGiantSpider,
+  AchievementFrancky,
+
+  AchievementChallenges,
+  AchievementWin,
+};
 #endif
