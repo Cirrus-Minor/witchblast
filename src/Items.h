@@ -14,7 +14,8 @@ enum enumRarity
 {
   RarityCommon,  /**< Common */
   RarityUncommon, /**< Uncommon */
-  RarityRare     /**< Rare */
+  RarityRare,    /**< Rare */
+  RarityVeryRare,/**< Very rare */
 };
 
 /** Familiar enum
@@ -244,23 +245,23 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBloodSnake, "item_blood_snake", "item_blood_snake_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemGemIce, "item_gem_ice", "item_gem_ice_desc",
-    25, true, FamiliarNone, true, true, true, 2, RarityCommon, false, -1, ShotTypeIce, SpellNone
+    25, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, -1, ShotTypeIce, SpellNone
   },
   {
     ItemGemIllusion, "item_gem_illusion", "item_gem_illusion_desc",
-    30, true, FamiliarNone, true, true, true, 4, RarityUncommon, false, -1, ShotTypeIllusion, SpellNone
+    30, true, FamiliarNone, true, true, true, 4, RarityRare, false, -1, ShotTypeIllusion, SpellNone
   },
   {
     ItemGemStone, "item_gem_stone", "item_gem_stone_desc",
-    25, true, FamiliarNone, true, true, true, 2, RarityCommon, false, -1, ShotTypeStone, SpellNone
+    25, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, -1, ShotTypeStone, SpellNone
   },
   {
     ItemGemLightning, "item_gem_lightning", "item_gem_lightning_desc",
-    25, true, FamiliarNone, true, true, true, 2, RarityCommon, false, -1, ShotTypeLightning, SpellNone
+    25, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, -1, ShotTypeLightning, SpellNone
   },
   {
     ItemFairyTarget, "item_fairy_target", "item_fairy_target_desc",
@@ -288,7 +289,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemCriticalAdvanced, "item_critical_advanced", "item_critical_advanced_desc",
-    35, true, FamiliarNone, true, true, true, 1, RarityCommon, false, ItemCritical, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 1, RarityUncommon, false, ItemCritical, ShotTypeStandard, SpellNone
   },
   {
     ItemFairyFire, "item_fairy_fire", "item_fairy_fire_desc",
@@ -340,7 +341,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemManualSlime, "item_manual_slime", "item_manual_slime_desc",
-    30, true, FamiliarNone, true, true, true, 3, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
+    30, true, FamiliarNone, true, true, true, 3, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBookDualShotsQuick, "item_spell_dual_quick", "item_spell_dual_quick_desc",
@@ -352,15 +353,15 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemManualHealth, "item_manual_health", "item_manual_health_desc",
-    20, true, FamiliarNone, true, true, true, 2, RarityCommon, false, -1, ShotTypeStandard, SpellNone
+    20, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemRearShot, "item_rear_shot", "item_rear_shot_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
+    20, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBookRandomShot, "item_book_random_shot", "item_book_random_shot_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityUncommon, false, -1, ShotTypeStandard, SpellNone
+    20, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemSpellWeb, "item_spell_web", "item_spell_web_desc",
@@ -416,11 +417,11 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBookPrayerI, "item_book_prayer_i", "item_book_prayer_i_desc",
-    35, true, FamiliarNone, true, true, true, 3, RarityRare, false, -1, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 3, RarityVeryRare, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemBookPrayerII, "item_book_prayer_ii", "item_book_prayer_ii_desc",
-    35, true, FamiliarNone, true, true, true, 3, RarityRare, false, -1, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 3, RarityVeryRare, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemPetSlime, "item_pet_slime", "item_pet_slime_desc",
@@ -428,11 +429,11 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemHatAdvanced, "item_hat_advanced", "item_hat_advanced_desc",
-    35, true, FamiliarNone, true, true, true, 2, RarityCommon, false, ItemMagicianHat, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemMagicianHat, ShotTypeStandard, SpellNone
   },
   {
     ItemRobeAdvanced, "item_robe_advanced", "item_robe_advanced_desc",
-    40, true, FamiliarNone, true, true, true, 3, RarityCommon, false, ItemMagicianRobe, ShotTypeStandard, SpellNone
+    40, true, FamiliarNone, true, true, true, 3, RarityUncommon, false, ItemMagicianRobe, ShotTypeStandard, SpellNone
   },
   {
     ItemCritical, "item_critical", "item_critical_desc",
@@ -444,11 +445,11 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemGlovesAdvanced, "item_gloves_advanced", "item_gloves_advanced_desc",
-    35, true, FamiliarNone, true, true, true, 2, RarityCommon, false, ItemDisplacementGloves, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemDisplacementGloves, ShotTypeStandard, SpellNone
   },
   {
     ItemBootsAdvanced, "item_boots_advanced", "item_boots_advanced_desc",
-    35, true, FamiliarNone, true, true, true, 2, RarityCommon, false, ItemLeatherBoots, ShotTypeStandard, SpellNone
+    35, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemLeatherBoots, ShotTypeStandard, SpellNone
   },
 };
 

@@ -3753,6 +3753,9 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     if (itemOk && items[eq].requirement >= FirstEquipItem
         && !player->isEquiped(items[eq].requirement - FirstEquipItem)) itemOk = false;
 
+    if (itemOk && toSale && level == 1 && items[eq].price > 25) itemOk = false;
+    if (itemOk && toSale && level == 2 && items[eq].price > 35) itemOk = false;
+
     if (itemOk && (items[eq].specialShot != ShotTypeStandard && items[eq].level < 3) && player->canGetNewShot(false))
       itemOk = false;
 
@@ -3776,12 +3779,15 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
       switch (items[eq].rarity)
       {
       case RarityCommon:
-        n = 4;
+        n = 8;
         break;
       case RarityUncommon:
-        n = 2;
+        n = 4;
         break;
       case RarityRare:
+        n = 2;
+        break;
+      case RarityVeryRare:
         n = 1;
         break;
       }
