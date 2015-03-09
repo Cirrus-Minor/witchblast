@@ -542,7 +542,13 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
 
       if (hurtParam.critical)
       {
-        TextEntity* textCrit = new TextEntity(tools::getLabel("critical"), 16, x, text->getY() - 16.0f);
+        std::ostringstream crss;
+        crss << tools::getLabel("critical");
+        if (game().getPlayer()->isEquiped(EQUIP_CRITICAL_ADVANCED))
+          crss << " X3";
+        else
+          crss << " X2";
+        TextEntity* textCrit = new TextEntity(crss.str(), 16, x, text->getY() - 16.0f);
         textCrit->setColor(TextEntity::COLOR_FADING_RED);
         textCrit->setAge(-0.6f);
         textCrit->setLifetime(0.3f);

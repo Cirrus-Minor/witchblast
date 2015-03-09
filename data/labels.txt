@@ -53,7 +53,7 @@ congratulations_1#CONGRATULATIONS!
 congratulations_2#You've challenged this demo and kill the bosses!
 congratulations_3#See you soon for new adventures!
 by#by
-critical#CRITICAL X2
+critical#CRITICAL
 poison#POISON
 merchant_speech_0#Best price in the entire dungeon!
 merchant_speech_1#Welcome to the Pawn'n'Witches shop!
@@ -482,7 +482,7 @@ congratulations_1#FELICITATIONS !
 congratulations_2#Vous êtes brillamment arrivé au terme de cette démo !
 congratulations_3#A bientôt pour de nouvelles aventures !
 by#par
-critical#CRITIQUE X2
+critical#CRITIQUE
 poison#POISON
 merchant_speech_0#Les meilleures affaires du donjon !
 merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
@@ -819,7 +819,7 @@ congratulations_1#HERZLICHEN GLÜCKWUNSCH !
 congratulations_2#Du hast dich der Demo Version gestellt und die Bosse getötet !
 congratulations_3#Bis bald für neue Abenteuer !
 by#von
-critical#KRITISCH X2
+critical#KRITISCH
 poison#GIFT
 merchant_speech_0#Bester Preis im gesamten Verlies!
 merchant_speech_1#Willkommen im Pawn'n'Witches Shop!
@@ -1169,7 +1169,7 @@ congratulations_1#FELICIDADES !
 congratulations_2#Te haz enfrentado a este demo y has derrotado a los jefes!
 congratulations_3#Nos veremos luego en una nueva aventura !
 by#por
-critical#CRÍTICO X2
+critical#CRÍTICO
 poison#VENENO
 merchant_speech_0#¡Los mejores precios de todo el calabozo!
 merchant_speech_1#¡Bienvenido a la tienda Pawn'n'Witches!
@@ -1511,7 +1511,7 @@ congratulations_1#ПОЗДРАВЛЯЕМ !
 congratulations_2#Вы прошли демо и победили всех боссов !
 congratulations_3#Скоро увидимся с новыми приключениями !
 by#
-critical#КРИТИЧЕСКИЙ УДАР X2
+critical#КРИТИЧЕСКИЙ УДАР
 poison#ЯД
 merchant_speech_0#Лучшие цены во всем подземелье!
 merchant_speech_1#Добро пожаловать в магазин "Ведьмы и пешки"!
