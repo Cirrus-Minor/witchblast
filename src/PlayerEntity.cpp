@@ -1680,12 +1680,19 @@ void PlayerEntity::computePlayer()
   armor = 0.0f;
   criticalChance = 0;
 
-  for (int i = 0; i < NB_RESISTANCES; i++)
-    resistance[i] = ResistanceStandard;
+  for (int i = 0; i < NB_RESISTANCES; i++) resistance[i] = ResistanceStandard;
 
   if (equip[EQUIP_GLOVES_ADVANCED]) fireDelayBonus -= 0.15f;
   else if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
-  if (equip[EQUIP_HAT_ADVANCED]) fireDelayBonus -= 0.3f;
+  if (equip[EQUIP_HAT_ADVANCED])
+  {
+    fireDelayBonus -= 0.3f;
+    resistance[ResistanceIce] = (enumStateResistance)(resistance[ResistanceIce] - 1);
+    resistance[ResistanceStone] = (enumStateResistance)(resistance[ResistanceStone] - 1);
+    resistance[ResistanceLightning] = (enumStateResistance)(resistance[ResistanceLightning] - 1);
+    resistance[ResistanceFire] = (enumStateResistance)(resistance[ResistanceFire] - 1);
+  }
+
   else if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
   if (equip[EQUIP_BOOTS_ADVANCED]) creatureSpeedBonus += 0.25f;
@@ -1727,13 +1734,13 @@ void PlayerEntity::computePlayer()
   case (DivinityIce):
     {
       if (divinity.level >= 5) resistance[ResistanceFrozen] = ResistanceVeryHigh;
-      if (divinity.level >= 3) resistance[ResistanceIce] = ResistanceHigh;
+      if (divinity.level >= 3) resistance[ResistanceIce] = (enumStateResistance)(resistance[ResistanceIce] - 1);
       break;
     }
   case (DivinityStone):
     {
       if (divinity.level >= 5) resistance[ResistanceRecoil] = ResistanceVeryHigh;
-      if (divinity.level >= 3) resistance[ResistanceStone] = ResistanceHigh;
+      if (divinity.level >= 3) resistance[ResistanceStone] = (enumStateResistance)(resistance[ResistanceStone] - 1);
       break;
     }
   }

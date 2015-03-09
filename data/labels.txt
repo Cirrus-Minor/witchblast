@@ -411,7 +411,7 @@ item_book_prayer_ii_desc#Reduces reconversion cost
 item_pet_slime#Slime Pet
 item_pet_slime_desc#It will follow and help you
 item_hat_advanced#Warlock's Hat
-item_hat_advanced_desc#Increases fire rate
+item_hat_advanced_desc#Elemental resistance + firerate up
 item_robe_advanced#Magic robe of shock
 item_robe_advanced_desc#Repulses and increases armor
 item_critical#Fake mage beard
