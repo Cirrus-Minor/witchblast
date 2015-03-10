@@ -1700,7 +1700,7 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
 
-  if (equip[EQUIP_CRITICAL_ADVANCED]) criticalChance += 5;
+  if (equip[EQUIP_CRITICAL]) criticalChance += 5;
   if (equip[EQUIP_MANUAL_STAFF]) boltLifeTimeBonus += 0.4f;
   if (equip[EQUIP_MAHOGANY_STAFF])
   {
