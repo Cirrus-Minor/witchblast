@@ -130,6 +130,10 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           {
             giveRecoil(true, Vector2D(playerEntity->getX(), playerEntity->getY()).vectorTo(Vector2D(x, y), 800), 0.8f);
             SoundManager::getInstance().playSound(SOUND_ELECTRIC_CHARGE);
+
+            star->setScale(1.5f, 1.5f);
+            star->setColor(sf::Color(220, 180, 255));
+            star->setLifetime(1.3f);
           }
         }
         inflictsRecoilTo(playerEntity);
