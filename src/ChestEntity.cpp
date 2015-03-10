@@ -186,7 +186,7 @@ void ChestEntity::open()
           timer = 1.0f;
           trap = TrapExplosion;
         }
-        else if (r == 0)
+        else if (r == 1)
         {
           timer = 1.0f;
           trap = TrapSnakes;
