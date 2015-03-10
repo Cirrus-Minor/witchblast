@@ -5081,7 +5081,22 @@ void WitchBlastGame::renderPlayer(float x, float y,
     sprite.setTextureRect(sf::IntRect( 0, 72, 48, 60));
     app->draw(sprite);
   }
+  if (equip[EQUIP_FAIRY_POISON])
+  {
+    sprite.setPosition(x + 20, y);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+    sprite.setTextureRect(sf::IntRect( 0, 288, 48, 60));
+    app->draw(sprite);
+  }
 
+    // slime
+  if (equip[EQUIP_PET_SLIME])
+  {
+    sprite.setPosition(x - 20, y + 24);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SLIME));
+    sprite.setTextureRect(sf::IntRect( 64, 256, 64, 64));
+    app->draw(sprite);
+  }
 
   sprite.setPosition(x, y);
   sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
@@ -5096,7 +5111,37 @@ void WitchBlastGame::renderPlayer(float x, float y,
     sprite.setTextureRect(sf::IntRect( frame * width, spriteDy * height, width, height));
   app->draw(sprite);
 
-  if (equip[EQUIP_MAGICIAN_ROBE])
+  // boots
+  if (equip[EQUIP_BOOTS_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (21 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_LEATHER_BOOTS])
+  {
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+  }
+
+  if (equip[EQUIP_ROBE_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (12 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_MAGICIAN_ROBE])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (12 + frame) * width + width, spriteDy * height, -width, height));
@@ -5105,7 +5150,17 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  if (equip[EQUIP_GLOVES_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (24 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_DISPLACEMENT_GLOVES])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (21 + frame) * width + width, spriteDy * height, -width, height));
@@ -5121,6 +5176,16 @@ void WitchBlastGame::renderPlayer(float x, float y,
     else
       sprite.setTextureRect(sf::IntRect( (24 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
+  }
+  else if (equip[EQUIP_CRITICAL])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (18 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
   }
 
   if (equip[EQUIP_RAGE_AMULET])
@@ -5142,7 +5207,17 @@ void WitchBlastGame::renderPlayer(float x, float y,
   }
 
   // hat
-  if (equip[EQUIP_MAGICIAN_HAT])
+  if (equip[EQUIP_HAT_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_MAGICIAN_HAT])
   {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
@@ -5151,16 +5226,6 @@ void WitchBlastGame::renderPlayer(float x, float y,
       sprite.setTextureRect(sf::IntRect( (6 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
-  }
-
-  // boots
-  if (equip[EQUIP_LEATHER_BOOTS])
-  {
-    if (isMirroring)
-      sprite.setTextureRect(sf::IntRect( (9 + frame) * width + width, spriteDy * height, -width, height));
-    else
-      sprite.setTextureRect(sf::IntRect( (9 + frame) * width, spriteDy * height, width, height));
-    app->draw(sprite);
   }
 
   // staff
