@@ -427,7 +427,7 @@ item_boots_advanced_desc#Increases speed
 divinity_leveling_0#Devotion level up!
 div_fighter_lvl#increases your damage
 div_healer_lvl_2#gives you regeneration
-div_healer_lvl_2#increases your regeneration
+div_healer_lvl_3#increases your regeneration
 div_ice_lvl_3#increases your ice resistance
 div_ice_lvl_4#increases your ice attack
 div_ice_lvl_5#increases your frozen immunity
