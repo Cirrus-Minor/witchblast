@@ -425,7 +425,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemPetSlime, "item_pet_slime", "item_pet_slime_desc",
-    50, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone
+    25, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone
   },
   {
     ItemHatAdvanced, "item_hat_advanced", "item_hat_advanced_desc",

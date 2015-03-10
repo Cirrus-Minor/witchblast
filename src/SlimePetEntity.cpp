@@ -30,7 +30,7 @@ SlimePetEntity::SlimePetEntity()
   viscosity = 0.98f;
   sprite.setOrigin(32, 44);
 
-  h = 1500;
+  h = 1300;
   hVelocity = 0.0f;
   isJumping = true;
   isFirstJumping = true;
@@ -91,7 +91,7 @@ void SlimePetEntity::animate(float delay)
     if (jumpingDelay < 0.0f)
     {
       SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
-      hVelocity = 350.0f + rand() % 300;
+      hVelocity = 300.0f + rand() % 250;
       isJumping = true;
       isFirstJumping = true;
 
@@ -120,8 +120,17 @@ void SlimePetEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       {
         if (attackDelay <= 0.0f)
         {
-          enemyEntity->hurt(getHurtParams(8, ShotTypeStandard,0, false, SourceTypeMelee, EnemyTypeNone,false));
+          enemyEntity->hurt(getHurtParams(12, ShotTypeStandard,0, false, SourceTypeMelee, EnemyTypeNone,false));
           attackDelay = 0.65f;
+
+          float xs = (x + enemyEntity->getX()) / 2;
+          float ys = (y + enemyEntity->getY()) / 2;
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
+          star->setFading(true);
+          star->setZ(y+ 100);
+          star->setLifetime(0.7f);
+          star->setType(ENTITY_EFFECT);
+          star->setSpin(400.0f);
         }
 
         if (enemyEntity->getMovingStyle() == movWalking)
