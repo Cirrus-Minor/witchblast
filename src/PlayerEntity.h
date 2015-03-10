@@ -476,6 +476,7 @@ class PlayerEntity : public BaseCreatureEntity
     void offerHealth(int lostHp);
     void offerChallenge();
     void addPiety(int n);
+    void pietyLevelUp();
     void loadDivinity(int id, int piety, int level, int interventions);
     bool triggerDivinityBefore();
     void triggerDivinityAfter();

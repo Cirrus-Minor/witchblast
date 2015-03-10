@@ -3757,7 +3757,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     if (itemOk && toSale && !items[eq].canBeSold) itemOk = false;
     if (itemOk && !toSale && !items[eq].canBeFound) itemOk = false;
     if (itemOk && items[eq].level > level) itemOk = false;
-    if (itemOk && isItemLocked((enumItemType)eq)) { itemOk = false; std::cout << items[eq].name << " locked!\n"; }
+    if (itemOk && isItemLocked((enumItemType)eq)) itemOk = false;
     if (itemOk && items[eq].requirement >= FirstEquipItem
         && !player->isEquiped(items[eq].requirement - FirstEquipItem)) itemOk = false;
 
@@ -4996,6 +4996,23 @@ void WitchBlastGame::testAndAddMessageToQueue(EnumMessages type)
       saveGameData();
     }
   }
+}
+
+void WitchBlastGame::addDivLevelMessageToQueue(std::string label)
+{
+  if (label.compare("") == 0) return;
+
+  if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
+
+  messageStruct msg = getMessage(MsgInfoDivLevel);
+
+  std::stringstream ss;
+  ss << tools::getLabel(divinityLabel[player->getDivinity().divinity] + "_0");
+  ss << " ";
+  ss << tools::getLabel(label);
+  msg.message[1] = ss.str();
+  msg.icon = 2 + player->getDivinity().divinity;
+  messagesQueue.push(msg);
 }
 
 void WitchBlastGame::initEvents()

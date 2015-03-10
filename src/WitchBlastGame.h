@@ -381,6 +381,12 @@ public:
    */
   void testAndAddMessageToQueue(EnumMessages type);
 
+  /*!
+   *  \brief Proceed a divinity level up message
+   *  \param label : the message to proceed
+   */
+  void addDivLevelMessageToQueue(std::string label);
+
   std::string enemyToString(enemyTypeEnum enemyType);
   std::string sourceToString(sourceTypeEnum sourceType, enemyTypeEnum enemyType);
 

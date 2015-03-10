@@ -65,6 +65,7 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
 
   { MsgInfoDivIntervention,   { MessageTypeInfo, 0, "divinity_intervention",      2} },
   { MsgInfoDivGift,           { MessageTypeInfo, 0, "divinity_gift",              2} },
+  { MsgInfoDivLevel,          { MessageTypeInfo, 0, "divinity_leveling",          2} },
 
   { MsgTutoBasics,            { MessageTypeTutorial, 0, "msg_tuto_intro",           3} },
   { MsgTutoTips,              { MessageTypeTutorial, 0, "msg_tuto_tips",            3} },

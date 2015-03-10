@@ -591,6 +591,7 @@ enum EnumMessages
   MsgInfoDivStone,
   MsgInfoDivIntervention,
   MsgInfoDivGift,
+  MsgInfoDivLevel,
 
   MsgTutoBasics,
   MsgTutoTips,

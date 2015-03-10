@@ -424,6 +424,16 @@ item_gloves_advanced#Ranger gloves
 item_gloves_advanced_desc#Disarm traps and firerate up
 item_boots_advanced#Ranger boots
 item_boots_advanced_desc#Increases speed
+divinity_leveling_0#Devotion level up!
+div_fighter_lvl#increases your damage
+div_healer_lvl_2#gives you regeneration
+div_healer_lvl_2#increases your regeneration
+div_ice_lvl_3#increases your ice resistance
+div_ice_lvl_4#increases your ice attack
+div_ice_lvl_5#increases your frozen immunity
+div_stone_lvl_3#increases your stone resistance
+div_stone_lvl_4#increases your stone attack
+div_stone_lvl_5#increases your repulse immunity
 
 [french]
 start_new_game#Nouvelle partie

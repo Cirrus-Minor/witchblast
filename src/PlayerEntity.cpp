@@ -2433,8 +2433,36 @@ void PlayerEntity::addPiety(int n)
     SoundManager::getInstance().playSound(SOUND_OM);
     divineInterventionDelay = WORSHIP_DELAY / 2;
     isRegeneration = false;
+    pietyLevelUp();
     computePlayer();
   }
+}
+
+void PlayerEntity::pietyLevelUp()
+{
+  std::string label = "";
+  switch (divinity.divinity)
+  {
+  case DivinityFighter:
+    label = "div_fighter_lvl";
+    break;
+  case DivinityHealer:
+    if (divinity.level == 2) label = "div_healer_lvl_2";
+    else label = "div_healer_lvl_3";
+    break;
+  case DivinityIce:
+    if (divinity.level == 3) label = "div_ice_lvl_3";
+    else if (divinity.level == 4) label = "div_ice_lvl_4";
+    else if (divinity.level == 5) label = "div_ice_lvl_5";
+    break;
+  case DivinityStone:
+    if (divinity.level == 3) label = "div_stone_lvl_3";
+    else if (divinity.level == 4) label = "div_stone_lvl_4";
+    else if (divinity.level == 5) label = "div_stone_lvl_5";
+    break;
+  }
+
+  if (label.compare("") != 0) game().addDivLevelMessageToQueue(label);
 }
 
 void PlayerEntity::worship(enumDivinityType id)
