@@ -46,6 +46,7 @@ enum enemyTypeEnum
   EnemyTypeRatKing,
   EnemyTypeSpiderGiant,
   EnemyTypeFrancky,
+  EnemyTypeVampire,
 
   // invocated
   EnemyTypeBat_invocated,
@@ -128,6 +129,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       SpecialStateSlow,
       SpecialStatePoison,
 
+      SpecialStateConfused,
+
       DivineStateProtection,
       DivineStateSpeed,
       DivineStateFireRate,
@@ -165,6 +168,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     enumStateResistance resistance[NB_RESISTANCES];
 
     bool isSpecialStateActive(enumSpecialState state);
+    specialStateStuct getSpecialState(enumSpecialState state);
 
     virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
     virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);

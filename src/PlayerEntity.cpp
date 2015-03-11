@@ -1161,6 +1161,17 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
 void PlayerEntity::move(int direction)
 {
+  if (specialState[SpecialStateConfused].active)
+  {
+    switch (direction)
+    {
+      case 4: direction = 6; break;
+      case 6: direction = 4; break;
+      case 2: direction = 8; break;
+      case 8: direction = 2; break;
+    }
+  }
+
   if (playerStatus == playerStatusAcquire && statusTimer < ACQUIRE_DELAY / 2)
   {
     acquireItemAfterStance();

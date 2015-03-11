@@ -82,6 +82,11 @@ bool BaseCreatureEntity::isSpecialStateActive(enumSpecialState state)
   return specialState[state].active;
 }
 
+BaseCreatureEntity::specialStateStuct BaseCreatureEntity::getSpecialState(enumSpecialState state)
+{
+  return specialState[state];
+}
+
 void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
 {
   specialState[state].active = active;
