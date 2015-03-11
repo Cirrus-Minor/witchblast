@@ -64,6 +64,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeRatKing:        score = 180; break;
     case EnemyTypeSpiderGiant:    score = 240; break;
     case EnemyTypeFranckyHead:    score = 300; break;
+    case EnemyTypeVampire:        score = 350; break;
 
     case EnemyTypeBat_invocated:
     case EnemyTypeRat_invocated:

@@ -47,6 +47,7 @@
 #include "LittleSpiderEntity.h"
 #include "SpiderEggEntity.h"
 #include "FranckyEntity.h"
+#include "VampireEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -63,7 +64,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 4
+//#define START_LEVEL 7
 
 static std::string intToString(int n)
 {
@@ -289,6 +290,7 @@ WitchBlastGame::WitchBlastGame()
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/francky.png",
+    "media/vampire.png",
     "media/blood.png",
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
@@ -1601,7 +1603,30 @@ void WitchBlastGame::renderRunningGame()
     rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
     app->draw(rectangle);
   }
-  if (xGame[xGameTypeFadeColor].active)
+  if (player->isSpecialStateActive(BaseCreatureEntity::SpecialStateConfused))
+  {
+    BaseCreatureEntity::specialStateStuct specialState = player->getSpecialState(BaseCreatureEntity::SpecialStateConfused);
+
+    // effect
+    int effectFade = 150 + cos(3.0f * getAbsolutTime()) * 100;
+
+    // fade
+    int fade = 55;
+    if (specialState.timer < 0.4f)
+      fade = 55 - (0.4f - specialState.timer) / 0.4f * 55;
+    else if (specialState.timer > specialState.param1 - 0.4f)
+      fade = (specialState.param1 - specialState.timer) / 0.4f * 55;
+    if (fade < 0) fade = 0;
+    else if (fade > 55) fade = 55;
+
+    rectangle.setFillColor(sf::Color(255 - effectFade, 0, effectFade, fade));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+    sf::RenderStates r;
+    r.blendMode = sf::BlendAlpha ;
+    app->draw(rectangle, r);
+  }
+  else if (xGame[xGameTypeFadeColor].active)
   {
     // color fade
     unsigned int r = 0, g = 0, b = 0;
@@ -3675,6 +3700,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeFrancky:
     new FranckyEntity(xm, ym);
     break;
+  case EnemyTypeVampire:
+    new VampireEntity(xm, ym);
+    break;
 
   default:
     std::cout << "[WARNING] Enemy (" << monsterType << ") not handled in switch.\n";
@@ -5420,6 +5448,9 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
   case EnemyTypeFranckyFoot:
   case EnemyTypeFrancky:
     value = "enemy_type_francky";
+    break;
+  case EnemyTypeVampire:
+    value = "enemy_type_vampire";
     break;
 
   // invocated
