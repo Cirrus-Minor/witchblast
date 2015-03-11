@@ -647,7 +647,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
   int y0 = MAP_HEIGHT / 2;
   int i, j, r;
 
-  if (type == 0)
+  if (type <= 0)
   {
     if (roomType == roomTypeStarting)
     {
@@ -671,7 +671,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     {
       if (rand() % 3 > 0 && gameFloor->neighboorCount(x, y) > 1)
       {
-        generateCorridors();
+        if (type == 0) generateCorridors();
       }
       else
       {
