@@ -93,11 +93,29 @@ void DungeonMapEntity::animate(float delay)
       if (corpses[i].frame != FRAME_CORPSE_SLIME_VIOLET
           && collideWithWall(corpses[i], CorpsesBox, CorpsesBox))
       {
-        if (corpses[i].velocity.x < 15.0f && corpses[i].velocity.x > -15.0f
+        if (checkFalling(corpses[i], 48, 48))
+        {
+          SpriteEntity* spriteEntity
+                  = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES),
+                             corpses[i].x,
+                             corpses[i].y,
+                             64, 64, 10);
+          spriteEntity->setAge(0.0f);
+          spriteEntity->setLifetime(3.0f);
+          spriteEntity->setShrinking(true);
+          spriteEntity->setFading(true);
+          spriteEntity->setFrame(corpses[i].frame);
+
+          corpses.erase(corpses.begin() + i);
+        }
+        else
+        {
+          if (corpses[i].velocity.x < 15.0f && corpses[i].velocity.x > -15.0f
             && corpses[i].velocity.y < 15.0f && corpses[i].velocity.y > -15.0f)
           autoSpeed(corpses[i], 200);
 
-        animateParticle(corpses[i], delay, 1.0f);
+          animateParticle(corpses[i], delay, 1.0f);
+        }
       }
       else
       {
