@@ -58,6 +58,7 @@ Features
 - merchant,
 - spells with cooldown,
 - temples and divinities,
+- achievements,
 - candy eye effects.
 
 Credits
@@ -100,6 +101,8 @@ AFS (for the Spanish translation)
 Changes
 -------
 Next release
+- ADD A new level (7)
+- ADD New boss (for level 7)
 - ADD Achievements and unlocks (16)
 - ADD Items
 - ADD Shot type (poison)
@@ -107,6 +110,7 @@ Next release
 - ADD Familiars (a fairy and another one)
 - ADD Chest traps
 - ADD Challenge levels 3 and 4
+- ADD Divinity level messages
 - MOD No player collision while invincible
 - MOD Sulfur causes the monster explode directly, and safe for the player
 - MOD Hiccup makes the player fire poison
