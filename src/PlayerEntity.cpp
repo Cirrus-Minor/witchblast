@@ -1169,6 +1169,11 @@ void PlayerEntity::move(int direction)
       case 6: direction = 4; break;
       case 2: direction = 8; break;
       case 8: direction = 2; break;
+
+      case 1: direction = 9; break;
+      case 9: direction = 1; break;
+      case 7: direction = 3; break;
+      case 3: direction = 7; break;
     }
   }
 
@@ -1257,7 +1262,7 @@ void PlayerEntity::setEquiped(int item, bool toggleEquipped)
                                          y - 50.0f + rand() % 100,
                                          items[FirstEquipItem + item].familiar);
     fairies.push_back(fairy);
-    if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
+    //if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
   }
   computePlayer();
 }
