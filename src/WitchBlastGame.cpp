@@ -303,11 +303,11 @@ WitchBlastGame::WitchBlastGame()
     "media/divinity.png",
     "media/pnj.png",           "media/fairy.png",
     "media/key_area.png",
-    "media/ui_life.png",       "media/ui_mana.png",
-    "media/ui_spells.png",     "media/ui_message.png",
-    "media/ui_top_layer.png",
-    "media/fog.png",            "media/title_animation.png",
-    "media/splatter.png",       "media/witch_intro.png",
+    "media/ui_life.png",          "media/ui_mana.png",
+    "media/ui_spells.png",        "media/ui_message.png",
+    "media/ui_top_layer.png",     "media/ui_achiev.png",
+    "media/fog.png",              "media/title_animation.png",
+    "media/splatter.png",         "media/witch_intro.png",
     "media/item_description.png", "media/death_certificate.png",
     "media/achievements.png",
   };
@@ -436,7 +436,7 @@ void WitchBlastGame::enableAA(bool enable)
   for (int i = 0; i < NB_IMAGES; i++)
   {
     if (i != IMAGE_TILES && i != IMAGE_MINIMAP && i != IMAGE_ITEMS_PRES && i != IMAGE_ITEMS_EQUIP_PRES && i != IMAGE_CORPSES
-          && i != IMAGE_CORPSES_BIG)
+        && i != IMAGE_CORPSES_BIG)
       ImageManager::getInstance().getImage(i)->setSmooth(enable);
   }
 }
@@ -1058,8 +1058,8 @@ void WitchBlastGame::updateRunningGame()
         }
         else if (!achievementsQueue.empty())
         {
-          if (achievementsQueue.front().timer > 0.5f)
-            achievementsQueue.front().timer = 0.5f;
+          if (achievementsQueue.front().timer > 1.0f)
+            achievementsQueue.front().timer = 1.0f;
         }
       }
 
@@ -1353,8 +1353,8 @@ void WitchBlastGame::updateRunningGame()
       currentMap->setCleared(true);
       if (currentMap->getRoomType() == roomTypeKey)
         new ItemEntity( (enumItemType)(ItemBossKey),
-                       MAP_WIDTH / 2 * TILE_WIDTH + TILE_WIDTH / 2,
-                       MAP_HEIGHT / 2 * TILE_HEIGHT + TILE_HEIGHT / 2);
+                        MAP_WIDTH / 2 * TILE_WIDTH + TILE_WIDTH / 2,
+                        MAP_HEIGHT / 2 * TILE_HEIGHT + TILE_HEIGHT / 2);
       player->onClearRoom();
       openDoors();
       remove(SAVE_FILE.c_str());
@@ -1428,10 +1428,144 @@ void WitchBlastGame::renderGame()
   EntityManager::getInstance().renderUnder(app, 5000);
 }
 
+void WitchBlastGame::generateUiParticle(float x, float y)
+{
+  SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT),
+      x, y, BOLT_WIDTH, BOLT_HEIGHT);
+  particle->setFading(true);
+  particle->setImagesProLine(BOLT_PRO_LINE);
+  particle->setZ(10000);
+  particle->setLifetime(0.5f);
+  particle->setVelocity(Vector2D(30 + rand() % 50));
+  particle->setWeight(200);
+  particle->setType(ENTITY_EFFECT);
+  //particle->setFrame(BOLT_PRO_LINE + 2);
+  particle->setFrame(BOLT_PRO_LINE * 2 + 6);
+  particle->setRenderAdd();
+  particle->setScale(0.35f, 0.35f);
+  particle->setFading(true);
+}
+
 void WitchBlastGame::renderHud()
 {
   // boss life bar ?
   if (lifeBar.toDisplay) renderLifeBar();
+
+  // achievements ?
+  if (!achievementsQueue.empty() && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
+  {
+    if (!achievementsQueue.front().hasStarted)
+    {
+      music.pause();
+      SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
+      achievementsQueue.front().hasStarted = true;
+      achievementState[achievementsQueue.front().type] = AchievementDone;
+      saveGameData();
+    }
+
+    int xPos = 560;
+    int yPos = 4;
+    int opening = 384;
+    float achievAge = ACHIEVEMENT_DELAY_MAX - achievementsQueue.front().timer;
+    sf::Sprite spriteScroll;
+    if (achievAge < 1.0f)
+      opening = 32;
+    else if (achievAge < 2.0f)
+      opening = 32 + (achievAge - 1.0f) * (384 - 32);
+    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
+      opening = 32 + (ACHIEVEMENT_DELAY_MAX - achievAge) * (384 - 32);
+    if (achievAge < 0.5f)
+      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * achievAge));
+    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 0.5f)
+      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * (ACHIEVEMENT_DELAY_MAX - achievAge)));
+
+    spriteScroll.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_ACHIEV));
+    spriteScroll.setTextureRect(sf::IntRect(128 + 384 - opening, 0, opening, 64));
+    spriteScroll.setPosition(xPos + 384 - opening, yPos);
+    app->draw(spriteScroll);
+
+    if ((achievAge > 1.0f && achievAge < 2.0f) || achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
+      spriteScroll.setTextureRect(sf::IntRect(32 * ((int)(achievAge * 8) % 4), 0, 32, 64));
+    else
+      spriteScroll.setTextureRect(sf::IntRect(0, 0, 32, 64));
+    spriteScroll.setPosition(xPos + 394 - opening - 16, yPos);
+    app->draw(spriteScroll);
+
+    if (achievAge > 2.0f && achievAge < ACHIEVEMENT_DELAY_MAX - 1.0f)
+    {
+      sf::Sprite icon;
+      icon.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
+      icon.setTextureRect(sf::IntRect( ((achievementsQueue.front().type + 1) % 10) * 64,
+                                      ((achievementsQueue.front().type + 1) / 10) * 64, 64, 64));
+
+      icon.setPosition(xPos + 308, yPos + 9);
+      icon.setScale(0.7f, 0.7f);
+      app->draw(icon);
+      icon.setColor(sf::Color(255, 255, 255, 50 + 50 * cosf(getAbsolutTime() * 4)));
+      app->draw(icon, sf::BlendAdd);
+
+      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color(0, 80, 20), app, 0, 0);
+
+      if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
+      {
+        game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
+                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color(10, 0, 80), app, 0, 0);
+      }
+      else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
+      {
+        game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
+                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color(10, 0, 80), app, 0, 0);
+      }
+    }
+
+    //if (achievAge < 1.0f)
+    {
+      int i = achievementsQueue.front().counter;
+
+      if (i < 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 1);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 2);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 3);
+        }
+      }
+      else if (i < 40 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 64, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 63, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 62, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 61, yPos);
+        }
+      }
+      else if (i < 40 + 64 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 1);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 2);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 3);
+        }
+      }
+      else if (i < 40 + 64 + 40 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 1, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 2, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 3, yPos + 64);
+        }
+      }
+
+      achievementsQueue.front().counter += 4;
+    }
+  }
 
   // interaction text ?
   if (interaction.active)
@@ -1878,30 +2012,6 @@ void WitchBlastGame::renderRunningGame()
       }
 
       renderInGameMenu();
-    }
-    else if (!achievementsQueue.empty() && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
-    {
-      int fade = 200;
-      if (achievementsQueue.front().timer < 0.5f) fade = achievementsQueue.front().timer * 400;
-      if (achievementsQueue.front().timer > ACHIEVEMENT_DELAY_MAX - 0.5f) fade = (ACHIEVEMENT_DELAY_MAX - achievementsQueue.front().timer) * 400;
-
-      if (!achievementsQueue.front().hasStarted)
-      {
-        music.pause();
-        SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
-        achievementsQueue.front().hasStarted = true;
-        achievementState[achievementsQueue.front().type] = AchievementDone;
-        saveGameData();
-      }
-
-      sf::Sprite bg;
-      bg.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEM_DESCRIPTION));
-      bg.setPosition(800 - 4 * fade + 20 + MAP_WIDTH * TILE_WIDTH * 0.5f - bg.getTextureRect().width * 0.5, 80);
-      app->draw(bg);
-
-      game().write("ACHIEVEMENT UNLOCKED", 19, 800 - 4 * fade + 470.0f, 92.0f, ALIGN_CENTER, sf::Color::White, app, 0, 0);
-      game().write(achievementsQueue.front().message, 18, 800 - 4 * fade + 470.0f, 120.0f, ALIGN_CENTER, sf::Color::White, app, 0, 0);
-      game().write("Press [enter] to close", 12, 800 - 4 * fade + 675.0f, 152.0f, ALIGN_RIGHT, sf::Color::White, app, 0, 0);
     }
 
     if (player->isDead())
@@ -3383,17 +3493,25 @@ void WitchBlastGame::generateMap()
       int item4Type = -1;
       switch (r)
       {
-        case 0: if (!game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP)) item4Type = ItemFloorMap; break;
-        case 1: if (!game().getPlayer()->isEquiped(EQUIP_ALCOHOL)) item4Type = ItemAlcohol; break;
-        case 2: if (!game().getPlayer()->isEquiped(EQUIP_LUCK)) item4Type = ItemLuck; break;
-        default: if (!game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) && player->getFairieNumber() > 0) item4Type = ItemFairyPowder; break;
+      case 0:
+        if (!game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP)) item4Type = ItemFloorMap;
+        break;
+      case 1:
+        if (!game().getPlayer()->isEquiped(EQUIP_ALCOHOL)) item4Type = ItemAlcohol;
+        break;
+      case 2:
+        if (!game().getPlayer()->isEquiped(EQUIP_LUCK)) item4Type = ItemLuck;
+        break;
+      default:
+        if (!game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) && player->getFairieNumber() > 0) item4Type = ItemFairyPowder;
+        break;
       }
       if (item4Type > -1)
       {
         ItemEntity* item4 = new ItemEntity(
-            (enumItemType)(item4Type),
-            (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
-            (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
+          (enumItemType)(item4Type),
+          (MAP_WIDTH / 2 + 2) * TILE_WIDTH + TILE_WIDTH / 2,
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
         item4->setMerchandise(true);
       }
     }
@@ -4939,7 +5057,7 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       else if (enemyType == EnemyTypeFranckyHead) registerAchievement(AchievementFrancky);
       else if (enemyType == EnemyTypeVampire) registerAchievement(AchievementVampire);
       else if ((enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet || enemyType == EnemyTypeRat_invocated
-          || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
+                || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
       {
         if (globalData.killedMonster[EnemyTypeRat] + globalData.killedMonster[EnemyTypeRatHelmet] + globalData.killedMonster[EnemyTypeRat_invocated]
             + globalData.killedMonster[EnemyTypeRatBlack] + globalData.killedMonster[EnemyTypeRatBlackHelmet] >= 250)
@@ -5120,7 +5238,7 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-    // slime
+  // slime
   if (equip[EQUIP_PET_SLIME])
   {
     sprite.setPosition(x - 20, y + 24);
@@ -5594,8 +5712,8 @@ void WitchBlastGame::activateKeyRoomEffect(bool withColorEffect)
 void WitchBlastGame::generateStar(sf::Color starColor, float xStar, float yStar)
 {
   SpriteEntity* spriteStar = new SpriteEntity(
-                           ImageManager::getInstance().getImage(IMAGE_STAR_2),
-                            xStar, yStar);
+    ImageManager::getInstance().getImage(IMAGE_STAR_2),
+    xStar, yStar);
   spriteStar->setScale(0.8f, 0.8f);
   spriteStar->setZ(1000.0f);
   spriteStar->setSpin(-100 + rand()%200);
@@ -5617,6 +5735,7 @@ void WitchBlastGame::registerAchievement(enumAchievementType achievement)
     ach.type = achievement;
     ach.message = tools::getLabel(achievements[achievement].label);
     ach.timer = ACHIEVEMENT_DELAY_MAX;
+    ach.counter = 0;
     ach.hasStarted = false;
     achievementsQueue.push(ach);
   }

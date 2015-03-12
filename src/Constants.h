@@ -75,7 +75,7 @@ const float FADE_OUT_DELAY = 1.0f;
 
 const float EXPLOSION_DELAY = 2.0f;
 const float DEATH_CERTIFICATE_DELAY = 3.5f;
-const float ACHIEVEMENT_DELAY_MAX = 7.0f;
+const float ACHIEVEMENT_DELAY_MAX = 15.0f;
 
 const float KeyRoomFXDelay = 2.0f;
 
@@ -142,6 +142,7 @@ enum enum_images {
   IMAGE_UI_SPELLS,
   IMAGE_UI_MESSAGE,
   IMAGE_UI_TOP_LAYER,
+  IMAGE_UI_ACHIEV,
 
   IMAGE_FOG,
   IMAGE_TITLE_ANIM,

@@ -882,6 +882,7 @@ private:
     std::string message;
     float timer;
     bool hasStarted;
+    int counter;
   };
   std::queue <achievementStruct> achievementsQueue;
 
@@ -944,6 +945,8 @@ private:
   {
     int killedMonster[NB_ENEMY];
   } globalData;
+
+  void generateUiParticle(float x, float y);
 };
 
 /*!
