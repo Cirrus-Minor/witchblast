@@ -375,8 +375,8 @@ achiev_witches#Inquisitor
 achiev_witches_desc#Kill 50 witches
 achiev_eggs#Bad omelette
 achiev_eggs_desc#Destroy 100 eggs
-achiev_fairies#Charlie's Angels
-achiev_fairies_desc#Free 3 fairies
+achiev_vampire#Vampire Hunter
+achiev_vampire_desc#Kill the Vampire
 achiev_challenges#Gladiator
 achiev_challenges_desc#Complete 4 challenges
 achiev_win#Live a dream
