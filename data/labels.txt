@@ -435,6 +435,10 @@ div_stone_lvl_4#increases your stone attack
 div_stone_lvl_5#increases your repulse immunity
 enemy_vampire#Vampire
 enemy_type_vampire#the Vampire
+msg_tuto_achiev_0#Tutorial: Achievements
+msg_tuto_achiev_1#You've completed an achievement.
+msg_tuto_achiev_2#They unlock new items or bonus.
+
 
 [french]
 start_new_game#Nouvelle partie

@@ -605,6 +605,7 @@ enum EnumMessages
   MsgTutoHeal,
   MsgTutoShots,
   MsgTutoSpell,
+  MsgTutoAchievements,
 
   NB_MESSAGES
 };
@@ -645,6 +646,7 @@ enum EnumWorldEvents
   EventGetSpecialShot,
   EventGetFamiliar,
   EventGetSpell,
+  EventAchievement,
 
   NB_EVENTS
 };

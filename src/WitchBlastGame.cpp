@@ -163,6 +163,7 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
   { EventGetItem,             MsgTutoItems },
   { EventGetSpecialShot,      MsgTutoShots },
   { EventGetSpell,            MsgTutoSpell },
+  { EventAchievement,         MsgTutoAchievements },
 };
 
 // author: AFS
@@ -1461,6 +1462,7 @@ void WitchBlastGame::renderHud()
       achievementsQueue.front().hasStarted = true;
       achievementState[achievementsQueue.front().type] = AchievementDone;
       saveGameData();
+      proceedEvent(EventAchievement);
     }
 
     int xPos = 560;
