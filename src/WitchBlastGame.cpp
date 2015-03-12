@@ -1619,6 +1619,8 @@ void WitchBlastGame::renderRunningGame()
     if (fade < 0) fade = 0;
     else if (fade > 55) fade = 55;
 
+    fade *= 1.5f;
+
     rectangle.setFillColor(sf::Color(255 - effectFade, 0, effectFade, fade));
     rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
     rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
@@ -4935,6 +4937,7 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       else if (enemyType == EnemyTypeRatKing) registerAchievement(AchievementRatKing);
       else if (enemyType == EnemyTypeSpiderGiant) registerAchievement(AchievementGiantSpider);
       else if (enemyType == EnemyTypeFranckyHead) registerAchievement(AchievementFrancky);
+      else if (enemyType == EnemyTypeVampire) registerAchievement(AchievementVampire);
       else if ((enemyType == EnemyTypeRat || enemyType == EnemyTypeRatHelmet || enemyType == EnemyTypeRat_invocated
           || enemyType == EnemyTypeRatBlack || enemyType == EnemyTypeRatBlackHelmet))
       {

@@ -22,7 +22,7 @@ enum enumAchievementType
   AchievementButcher,
   AchievementWitches,
   AchievementEggs,
-  AchievementFairies,
+  AchievementVampire,
   AchievementChallenges,
   AchievementWin,
 
@@ -84,7 +84,8 @@ const achievementStuct achievements[NB_ACHIEVEMENTS] =
   { AchievementButcher,     "achiev_butcher",       UnlockFunctionality,  FunctionalityAchievementsScreen },
   { AchievementWitches,     "achiev_witches",       UnlockItem,           ItemBookMagicII },
   { AchievementEggs,        "achiev_eggs",          UnlockItem,           ItemBootsAdvanced },
-  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemGlovesAdvanced },
+  //{ AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemGlovesAdvanced },
+  { AchievementVampire,     "achiev_vampire",       UnlockItem,           ItemGlovesAdvanced },
   { AchievementChallenges,  "achiev_challenges",    UnlockFunctionality,  FunctionalityDoubleSpellDrop },
   { AchievementWin,         "achiev_win",           UnlockFunctionality,  FunctionalityAllAchievements },
 };
@@ -98,7 +99,7 @@ const std::vector<enumAchievementType> sortedAchievements =
   AchievementPietyMax,
   Achievement3Hits,
   AchievementCompleteSet,
-  AchievementFairies,
+  //AchievementFairies,
 
   // bosses
   AchievementButcher,
@@ -107,6 +108,7 @@ const std::vector<enumAchievementType> sortedAchievements =
   AchievementRatKing,
   AchievementGiantSpider,
   AchievementFrancky,
+  AchievementVampire,
 
   AchievementChallenges,
   AchievementWin,
