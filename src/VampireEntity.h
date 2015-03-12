@@ -19,6 +19,7 @@ class VampireEntity : public EnemyEntity
 
 	  void computeStates(float delay);
 	  int getHealthLevel();
+	  virtual void prepareDying() override;
 
   private:
     float timer;
