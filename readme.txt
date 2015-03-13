@@ -113,8 +113,10 @@ Next release
 - ADD Divinity level messages
 - MOD No player collision while invincible
 - MOD Sulfur causes the monster explode directly, and safe for the player
+- MOD Giant Spider easier, and less green blood on screen
 - MOD Hiccup makes the player fire poison
 - MOD Imps do not teleport with 1 HP damage
+- MOD Corpse can fall in holes
 
 v0.4.6b
 - ADD Russian translation
