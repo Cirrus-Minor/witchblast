@@ -389,6 +389,7 @@ func_double_spell#Two spells drop
 enemy_type_evil_flower_fire#an evil fire flower
 menu_achievements#Achievements
 menu_achievements_desc#Display the achievements
+achievement_complete#Achievement unlocked!
 item_spell_flower#Spell: Invoke magic flower
 item_spell_flower_desc#Cast to invoke a magic flower
 item_rapid_shots#Spellbook of Rapid Fire

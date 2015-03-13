@@ -1463,6 +1463,16 @@ void WitchBlastGame::renderHud()
       achievementState[achievementsQueue.front().type] = AchievementDone;
       saveGameData();
       proceedEvent(EventAchievement);
+
+      // text
+      float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
+      float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
+      TextEntity* text = new TextEntity(tools::getLabel("achievement_complete"), 30, x0, y0);
+      text->setAlignment(ALIGN_CENTER);
+      text->setLifetime(2.5f);
+      text->setWeight(-36.0f);
+      text->setZ(1200);
+      text->setColor(TextEntity::COLOR_FADING_WHITE);
     }
 
     int xPos = 560;
