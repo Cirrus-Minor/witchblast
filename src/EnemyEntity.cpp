@@ -134,6 +134,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
             star->setScale(1.5f, 1.5f);
             star->setColor(sf::Color(220, 180, 255));
             star->setLifetime(1.3f);
+            game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.2f);
           }
         }
         inflictsRecoilTo(playerEntity);
