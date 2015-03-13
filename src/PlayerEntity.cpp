@@ -471,10 +471,14 @@ void PlayerEntity::animate(float delay)
       recoil.velocity = Vector2D(350.0f);
       recoil.timer = 0.4f;
 
-      BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypePoison, 0);
-      bolt->setDamages(fireDamages);
-      bolt->setFlying(isFairyTransmuted);
-      bolt->setVelocity(recoil.velocity.vectorTo(Vector2D(0, 0), fireVelocity));
+      for (int i = 0; i < 4; i++)
+      {
+        BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypePoison, 0);
+        bolt->setDamages(4);
+        bolt->setFlying(isFairyTransmuted);
+        //bolt->setVelocity(recoil.velocity.vectorTo(Vector2D(0, 0), fireVelocity));
+        bolt->setVelocity(Vector2D(fireVelocity));
+      }
 
       TextEntity* text = new TextEntity("*hic*", 16, x, y - 30.0f);
       text->setColor(TextEntity::COLOR_FADING_GREEN);
