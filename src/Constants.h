@@ -555,8 +555,8 @@ const int CYCLOP_DAMAGES = 8;
 
 // Giant Spider
 const float GIANT_SPIDER_SPEED[4] = { 240, 245, 250, 255 };
-const int GIANT_SPIDER_NUMBER_EGGS[4] = { 12, 14, 16, 19};
-const float GIANT_SPIDER_FIRE_DELAY[4] = { 0.8f, 0.7f, 0.6f, 0.5f};
+const int GIANT_SPIDER_NUMBER_EGGS[4] = { 11, 13, 15, 18};
+const float GIANT_SPIDER_FIRE_DELAY[4] = { 0.85f, 0.75f, 0.65f, 0.55f};
 const int GIANT_SPIDER_HP = 800;
 const int GIANT_SPIDER_DAMAGE = 8;
 

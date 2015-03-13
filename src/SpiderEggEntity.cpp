@@ -16,7 +16,7 @@ SpiderEggEntity::SpiderEggEntity(float x, float y, bool invocated)
   enemyType = invocated ? EnemyTypeSpiderEgg_invocated : EnemyTypeSpiderEgg;
   this->invocated = invocated;
   movingStyle = movFlying;
-  bloodColor = BloodGreen;
+  bloodColor = invocated ? BloodNone : BloodGreen;
   deathFrame = FRAME_CORPSE_SPIDER_EGG;
   dyingSound = rand() %  2 == 0 ? SOUND_EGG_SMASH_00 : SOUND_EGG_SMASH_01;
   meleeDamages = 5;
