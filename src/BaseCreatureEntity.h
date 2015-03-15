@@ -33,6 +33,9 @@ enum enemyTypeEnum
   EnemyTypeGhost,
   EnemyTypeZombie,
   EnemyTypeZombieDark,
+  EnemyTypeSlimeLarge,
+  EnemyTypeSlimeRedLarge,
+  EnemyTypeSlimeBlueLarge,
 
   // mini boss
   EnemyTypeBubble,
@@ -199,6 +202,9 @@ class BaseCreatureEntity : public CollidingSpriteEntity
 
       return hurtParams;
     }
+
+    bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2);
+    bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile);
 
   protected:
     int hp;

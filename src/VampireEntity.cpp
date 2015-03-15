@@ -18,6 +18,10 @@ const float VAMPIRE_FLYING_DELAY = 1.6f;
 const float VAMPIRE_BAT_DELAY = 0.3f;
 const float VAMPIRE_CONFUSION_DELAY = 5.0f;
 const float VAMPIRE_TRANSFORM_DELAY = 0.8f;
+const float VAMPIRE_CRY_DELAY = 6.0f;
+
+const int FORM_MAN = 0;
+const int FORM_BAT = 1;
 
 VampireEntity::VampireEntity(float myx, float myy)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_VAMPIRE), myx, myy)
@@ -32,6 +36,7 @@ VampireEntity::VampireEntity(float myx, float myy)
 
   type = ENTITY_ENEMY_BOSS;
   //deathFrame = FRAME_CORPSE_CYCLOP;
+  batSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_VAMPIRE_BAT));
 
   frame = 0;
   if (game().getPlayerPosition().x > x) isMirroring = true;
@@ -42,6 +47,7 @@ VampireEntity::VampireEntity(float myx, float myy)
   timer = 4.0f;
   age = -1.5f;
   enemyType = EnemyTypeVampire;
+  formState = FORM_MAN;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
@@ -71,6 +77,9 @@ VampireEntity::VampireEntity(float myx, float myy)
     y = 2.5f * TILE_HEIGHT;
     targetPos = 8;
   }
+
+  numberOfRays = 5;
+  raySpeedFactor = 30.0f;
 }
 
 int VampireEntity::getHealthLevel()
@@ -118,6 +127,7 @@ void VampireEntity::computeStates(float delay)
     else if (state == 5) // to bat cloud
     {
       state = 6;
+      frame = 10;
       timer = VAMPIRE_FLYING_DELAY;
       batTimer = VAMPIRE_BAT_DELAY;
       xSource = x;
@@ -131,15 +141,45 @@ void VampireEntity::computeStates(float delay)
         targetPos = rand() % 2 == 0 ? 4 : 6;
       }
     }
-    else if (state == 6) // to bat cloud
+    else if (state == 6) // vampire flying in the cloud
     {
       state = 7;
       timer = VAMPIRE_TRANSFORM_DELAY;
     }
-    else if (state == 7) // to bat cloud
+    else if (state == 7) // cloud to vampire
     {
       state = 0;
       timer = 1.5f;
+    }
+    else if (state == 8) // vampire to cloud < 50% HP
+    {
+      state = 9;  // cloud to center
+      frame = 10;
+      timer = VAMPIRE_FLYING_DELAY;
+      batTimer = VAMPIRE_BAT_DELAY;
+      xSource = x;
+      ySource = y;
+      targetPos = 5;
+    }
+    else if (state == 9) // cloud to center
+    {
+      state = 10; // transform to giant bat
+      timer = VAMPIRE_TRANSFORM_DELAY;
+    }
+    else if (state == 10) // transform to giant bat
+    {
+      state = 11; // giant bat
+      timer = 6.0f;
+    }
+    else if (state == 11) // giant bat waiting
+    {
+      state = 12; // to cry
+      timer = VAMPIRE_CRY_DELAY;
+    }
+    else if (state == 12) // cry !
+    {
+      state = 11; // giant bat waiting
+      timer = 6.0f;
     }
     else
     {
@@ -179,7 +219,7 @@ void VampireEntity::animate(float delay)
   {
     frame = 3 + ((int)(age * 7.0f)) % 2;
   }
-  else if (state == 5)  // to bat cloud
+  else if (state == 5 || state == 8)  // to bat cloud
   {
     sprite.setColor(sf::Color(255, 255, 255, 255));
     if (timer > 0.4f)
@@ -194,7 +234,7 @@ void VampireEntity::animate(float delay)
     else if (timer > 0.1f) frame = 8;
     else  frame = 9;
   }
-  else if (state == 7)  // to bat cloud
+  else if (state == 7 || state == 10)  // to bat cloud
   {
     sprite.setColor(sf::Color(255, 255, 255, 255));
 
@@ -211,7 +251,7 @@ void VampireEntity::animate(float delay)
 
     else  frame = 9;
   }
-  else if (state == 6)
+  else if (state == 6 || state == 9)
   {
     calculatePosition();
     batTimer -= delay;
@@ -224,29 +264,42 @@ void VampireEntity::animate(float delay)
       bat->setAge(0.0f);
     }
     // particules
+    for (int i = 0; i < 2; i++)
     {
       SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_VAMPIRE), x, y - 16, 96, 96);
       particle->setFading(true);
       particle->setImagesProLine(6);
       particle->setZ(10);
-      particle->setLifetime(0.9f);
+      particle->setLifetime(0.3f + 0.1f * (rand() % 10));
       particle->setVelocity(Vector2D(12.0f));
       particle->setType(ENTITY_EFFECT);
-      particle->setFrame(11);
+      particle->setFrame(11 + 6 * i);
+      //particle->setFading(true);
       particle->setShrinking(true);
+      particle->setX(x - 20 + rand()% 41);
+      particle->setY(y - 40 + rand()% 41);
     }
+    for (int i = 0; i < 2; i++)
     {
       SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_VAMPIRE), x, y - 16, 96, 96);
       particle->setFading(true);
       particle->setImagesProLine(6);
       particle->setZ(11);
-      particle->setLifetime(0.9f);
+      //particle->setLifetime(0.9f);
+      particle->setLifetime(0.3f + 0.1f * (rand() % 10));
       particle->setVelocity(Vector2D(12.0f));
       particle->setType(ENTITY_EFFECT);
-      particle->setFrame(17);
+      particle->setFrame(23 + 6 * i);
+      //particle->setFading(true);
       particle->setShrinking(true);
       particle->setRenderAdd();
+      particle->setX(x - 20 + rand()% 41);
+      particle->setY(y - 40 + rand()% 41);
     }
+  }
+  else if (state == 12)
+  {
+    testRaysCollision();
   }
 
   if (state != 5 && state != 7) isMirroring = game().getPlayer()->getX() > x;
@@ -322,9 +375,18 @@ void VampireEntity::calculatePosition()
 
 int VampireEntity::hurt(StructHurt hurtParam)
 {
-  if (state == 6) armor = 1.0f;
+  if (state == 6 || state == 8 ||state == 9) armor = 1.0f;
   else armor = 0.0f;
-  return EnemyEntity::hurt(hurtParam);
+  int result = EnemyEntity::hurt(hurtParam);
+
+  if (formState == FORM_MAN && hp <= hpMax / 2)
+  {
+    state = 8;
+    timer = VAMPIRE_TRANSFORM_DELAY;
+    formState = FORM_BAT;
+  }
+
+  return result;
 }
 
 void VampireEntity::prepareDying()
@@ -351,14 +413,25 @@ void VampireEntity::prepareDying()
       }
     }
   }
+  type = ENTITY_ENEMY_NC;
 }
 
 void VampireEntity::calculateBB()
 {
-  boundingBox.left = (int)x - 16;
-  boundingBox.width = 32;
-  boundingBox.top = (int)y - 16;
-  boundingBox.height =  32;
+  if (state >= 11)
+  {
+    boundingBox.left = (int)x - 50;
+    boundingBox.width = 100;
+    boundingBox.top = (int)y - 50;
+    boundingBox.height =  100;
+  }
+  else
+  {
+    boundingBox.left = (int)x - 16;
+    boundingBox.width = 32;
+    boundingBox.top = (int)y - 16;
+    boundingBox.height =  32;
+  }
 }
 
 
@@ -428,32 +501,166 @@ void VampireEntity::render(sf::RenderTarget* app)
   }
   else
   {
-    EnemyEntity::render(app);
-    if (state == 1) // hypnose
+    if (state == 11 || state == 12) // giant bat
     {
-      sf::Sprite eye;
-      eye.setOrigin(6, 6);
-      eye.setTexture(*ImageManager::getInstance().getImage(IMAGE_VAMPIRE));
-      eye.setTextureRect(sf::IntRect(5 * width, 0, 12, 12));
-      eye.setRotation(age * 500);
-      if (isMirroring) eye.setPosition(x + 10, y - 44);
-      else  eye.setPosition(x - 10, y - 44);
-      app->draw(eye);
+      int bodyFrame = (int)(age * 8) % 9;
+      batSprite.setTextureRect(sf::IntRect(418 * (bodyFrame % 3), 342 * (bodyFrame / 3), 418, 342));
+      batSprite.setPosition(x - 209, y - 200);
+      batSprite.setColor(sprite.getColor());
+      app->draw(batSprite);
 
-      float fade = (cos(8.0f * game().getAbsolutTime()) + 1.0f) * 0.5f;
-      eye.setColor(sf::Color(255, 255, 255, 255 * fade));
-      app->draw(eye, sf::BlendAdd);
+      if (state == 11)
+      {
+        frame = (int)(age * 4) % 9;
+        if (frame >= 5) frame = 8 - frame;
+        sprite.setTextureRect(sf::IntRect(width * frame, 3 * height, width, height));
 
-      if (isMirroring) eye.setPosition(x - 4, y - 44);
-      else  eye.setPosition(x + 4, y - 44);
+        //if (timer < 1.5f) renderRays(app, 5, 30, true);
+        if (timer < 1.0f && (int)(timer * 20) % 3 == 0) renderRays(app, false);
+      }
+      else if (state == 12)
+      {
+        // rays
+        renderRays(app, false);
 
-      eye.setColor(sf::Color(255, 255, 255, 255 ));
-      app->draw(eye);
-      eye.setColor(sf::Color(255, 255, 255, 255 * fade));
-      app->draw(eye, sf::BlendAdd);
+        // head
+        if (timer < 0.05f) frame = 1;
+        else if (timer < 0.1f) frame = 2;
+        else if (timer < 0.15f) frame = 3;
+        else if (timer < VAMPIRE_CRY_DELAY - 0.3f) frame = 4;
+        else if (timer < VAMPIRE_CRY_DELAY - 0.2f) frame = 3;
+        else if (timer < VAMPIRE_CRY_DELAY - 0.1f) frame = 2;
+        else frame = 1;
+        sprite.setTextureRect(sf::IntRect(width * frame, 4 * height, width, height));
+      }
+
+      sprite.setPosition(x + cosf(age * 2) * 2, y + sinf(age * 2) * 6);
+      app->draw(sprite);
+
+      if (game().getShowLogical())
+      {
+        displayBoundingBox(app);
+        displayCenterAndZ(app);
+      }
     }
+    else
+    {
+      EnemyEntity::render(app);
+      if (state == 1) // hypnose
+      {
+        sf::Sprite eye;
+        eye.setOrigin(6, 6);
+        eye.setTexture(*ImageManager::getInstance().getImage(IMAGE_VAMPIRE));
+        eye.setTextureRect(sf::IntRect(5 * width, 0, 12, 12));
+        eye.setRotation(age * 500);
+        if (isMirroring) eye.setPosition(x + 10, y - 44);
+        else  eye.setPosition(x - 10, y - 44);
+        app->draw(eye);
+
+        float fade = (cos(8.0f * game().getAbsolutTime()) + 1.0f) * 0.5f;
+        eye.setColor(sf::Color(255, 255, 255, 255 * fade));
+        app->draw(eye, sf::BlendAdd);
+
+        if (isMirroring) eye.setPosition(x - 4, y - 44);
+        else  eye.setPosition(x + 4, y - 44);
+
+        eye.setColor(sf::Color(255, 255, 255, 255 ));
+        app->draw(eye);
+        eye.setColor(sf::Color(255, 255, 255, 255 * fade));
+        app->draw(eye, sf::BlendAdd);
+      }
+    }
+
     renderLifeBar(app, tools::getLabel("enemy_vampire"));
   }
+}
+
+void VampireEntity::renderRays(sf::RenderTarget* app, bool isGhost)
+{
+  // rays
+  sf::RectangleShape ray(sf::Vector2f(500, 4));
+  ray.setOrigin(0, 2);
+  if (isGhost)
+  {
+    ray.setFillColor(sf::Color(128, 50, 50, 200));
+    ray.setOutlineColor(sf::Color(128, 50, 50, 100));
+  }
+  else
+  {
+    ray.setFillColor(sf::Color(255, 50, 50));
+    ray.setOutlineColor(sf::Color(255, 50, 50, 128));
+  }
+
+  ray.setOutlineThickness(1);
+  ray.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+
+  sf::RectangleShape rayLittle(sf::Vector2f(500, 2));
+  rayLittle.setOrigin(0, 1);
+  if (isGhost)
+  {
+    rayLittle.setFillColor(sf::Color(128, 50, 50, 100));
+    rayLittle.setOutlineColor(sf::Color(128, 50, 50, 50));
+  }
+  else
+  {
+    rayLittle.setFillColor(sf::Color(255, 50, 50, 150));
+    rayLittle.setOutlineColor(sf::Color(255, 50, 50, 75));
+  }
+  rayLittle.setOutlineThickness(1);
+  rayLittle.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+
+  float rayAngle = age * raySpeedFactor;
+  for (int i = 0; i < numberOfRays; i++)
+  {
+    ray.setRotation(rayAngle + i * 360 / numberOfRays);
+    app->draw(ray);
+
+    rayLittle.setRotation(ray.getRotation() + 3);
+    app->draw(rayLittle);
+    rayLittle.setRotation(ray.getRotation() - 3);
+    app->draw(rayLittle);
+  }
+}
+
+void VampireEntity::testRaysCollision()
+{
+  PlayerEntity* player = game().getPlayer();
+
+  if (player->canCollide() && player->getHp() > 0)
+  {
+    float rayAngle = age * raySpeedFactor;
+
+    Vector2D a1(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+
+    Vector2D b1(player->getBoundingBox().left, player->getBoundingBox().top);
+    Vector2D b2(player->getBoundingBox().left + player->getBoundingBox().width, player->getBoundingBox().top);
+    Vector2D b3(player->getBoundingBox().left + player->getBoundingBox().width, player->getBoundingBox().top + player->getBoundingBox().height);
+    Vector2D b4(player->getBoundingBox().left, player->getBoundingBox().top + player->getBoundingBox().height);
+
+    for (int i = 0; i < numberOfRays; i++)
+    {
+      float currentAngle = rayAngle + i * 360 / numberOfRays;
+      Vector2D a2(GAME_WIDTH / 2 + 500 * cosf(currentAngle / 57.3f),
+                  GAME_HEIGHT / 2 + 500 * sinf(currentAngle / 57.3f));
+
+      if (intersectsSegments(a1, a2, b1, b2)
+          || intersectsSegments(a1, a2, b2, b3)
+          || intersectsSegments(a1, a2, b3, b4)
+          || intersectsSegments(a1, a2, b4, b1))
+      {
+        if (player->hurt(getHurtParams(8, ShotTypeStandard, 0, false, SourceTypeMelee, EnemyTypeVampire, false)) > 0)
+        {
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), player->getX(), player->getY());
+          star->setFading(true);
+          star->setZ(y+ 100);
+          star->setLifetime(0.7f);
+          star->setType(ENTITY_EFFECT);
+          star->setSpin(400.0f);
+        }
+      }
+    }
+  }
+
 }
 
 void VampireEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)

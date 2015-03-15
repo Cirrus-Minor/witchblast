@@ -421,10 +421,9 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 
 void BaseCreatureEntity::makeExplode()
 {
-  ExplosionEntity* expl = new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone);
-          expl->setCanHurtPlayer(false);
-          game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
-          SoundManager::getInstance().playSound(SOUND_BOOM_00);
+  ExplosionEntity* expl = new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone, false);
+  game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
+  SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }
 
 int BaseCreatureEntity::hurt(StructHurt hurtParam)
@@ -653,7 +652,7 @@ void BaseCreatureEntity::generateStar(sf::Color starColor)
   game().generateStar(starColor, x, y);
 }
 
-static bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2)
+bool BaseCreatureEntity::intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2)
 {
     Vector2D b(a2.x - a1.x, a2.y - a1.y);
     Vector2D d(b2.x - b1.x, b2.y - b1.y);
@@ -672,7 +671,7 @@ static bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b
     return true;
 }
 
-static bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile)
+bool BaseCreatureEntity::intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile)
 {
   int posX = xTile * TILE_WIDTH;
   int posY = yTile * TILE_HEIGHT;

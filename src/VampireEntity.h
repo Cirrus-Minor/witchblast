@@ -27,6 +27,14 @@ class VampireEntity : public EnemyEntity
     int state;
     int targetPos;
     float xSource, ySource;
+    int formState;
+    sf::Sprite batSprite;
+
+    int numberOfRays;
+    int raySpeedFactor;
+
+    void renderRays(sf::RenderTarget* app, bool isGhost);
+    void testRaysCollision();
 
     void calculatePosition();
 };

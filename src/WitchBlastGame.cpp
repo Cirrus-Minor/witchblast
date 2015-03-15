@@ -291,7 +291,7 @@ WitchBlastGame::WitchBlastGame()
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/francky.png",
-    "media/vampire.png",
+    "media/vampire.png",       "media/vampire_bat.png",
     "media/blood.png",
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
