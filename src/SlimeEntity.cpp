@@ -365,7 +365,7 @@ void SlimeEntity::explode()
   int damage = 12;
   if (isPet) damage = game().getPlayer()->isEquiped(EQUIP_BOOK_MAGIC_II) ? 24 : 18;
 
-  new ExplosionEntity(x, y, ExplosionTypeStandard, damage, enemyType);
+  new ExplosionEntity(x, y, ExplosionTypeStandard, damage, enemyType, true);
   game().makeShake(1.0f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }

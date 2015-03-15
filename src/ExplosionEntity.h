@@ -9,7 +9,7 @@ enum explosionTypeEnum { ExplosionTypeStandard, ExplosionTypeViolet };
 class ExplosionEntity : public SpriteEntity
 {
   public:
-    ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage, enemyTypeEnum enemyType);
+    ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage, enemyTypeEnum enemyType, bool canHurtPlayer);
 
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);

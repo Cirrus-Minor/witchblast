@@ -230,7 +230,7 @@ void BoltEntity::collide()
   {
     if (hitNumber == 3) game().registerAchievement(Achievement3Hits);
 
-    if (hitNumber > 1) std::cout << "Hit: " << hitNumber << "(dam=" << damages << ")" << std::endl;
+    if (hitNumber > 2) std::cout << "Hit: " << hitNumber << "(dam=" << damages << ")" << std::endl;
 
     if (goThrough)
     {
@@ -411,7 +411,7 @@ void BoltEntity::collideMapBottom()
 void BoltEntity::explode()
 {
   isDying = true;
-  new ExplosionEntity(x, y, ExplosionTypeStandard, 12, enemyType);
+  new ExplosionEntity(x, y, ExplosionTypeStandard, 12, enemyType, true);
   game().makeShake(0.5f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
   game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);

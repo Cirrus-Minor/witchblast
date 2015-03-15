@@ -150,7 +150,7 @@ void CauldronEntity::collideWithEnemy(EnemyEntity* entity)
 
 void CauldronEntity::dying()
 {
-  new ExplosionEntity(x, y, ExplosionTypeViolet, 0, EnemyTypeNone);
+  new ExplosionEntity(x, y, ExplosionTypeViolet, 0, EnemyTypeNone, true);
 
   SoundManager::getInstance().playSound(dyingSound);
   isAgonising = true;

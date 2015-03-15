@@ -75,7 +75,7 @@ void ChestEntity::animate(float delay)
       else if (trap == TrapExplosion)
       {
         initFallingGrid();
-        new ExplosionEntity(x, y, ExplosionTypeStandard, 12, EnemyTypeNone);
+        new ExplosionEntity(x, y, ExplosionTypeStandard, 12, EnemyTypeNone, true);
         game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
         SoundManager::getInstance().playSound(SOUND_BOOM_00);
         game().makeShake(0.25f);

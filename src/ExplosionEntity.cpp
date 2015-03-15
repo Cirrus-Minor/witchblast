@@ -8,14 +8,14 @@
 
 #include <iostream>
 
-ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage, enemyTypeEnum enemyType)
+ExplosionEntity::ExplosionEntity(float x, float y, explosionTypeEnum explosionType, int damage, enemyTypeEnum enemyType, bool canHurtPlayer)
   : SpriteEntity(ImageManager::getInstance().getImage(IMAGE_EXPLOSION), x, y, 100, 100)
 {
   type = ENTITY_EXPLOSION;
   this->explosionType = explosionType;
   imagesProLine = 6;
   lifetime = 0.6f;
-  canHurtPlayer = false;
+  this->canHurtPlayer = canHurtPlayer;
 
   this->damage = damage;
 
