@@ -421,7 +421,7 @@ bool BaseCreatureEntity::textTooClose(TextEntity* textEntity, float xDistMin, fl
 
 void BaseCreatureEntity::makeExplode()
 {
-  ExplosionEntity* expl = new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone, false);
+  new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone, false);
   game().addCorpse(x, y, FRAME_CORPSE_SLIME_VIOLET);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
 }
