@@ -36,6 +36,7 @@ enum enemyTypeEnum
   EnemyTypeSlimeLarge,
   EnemyTypeSlimeRedLarge,
   EnemyTypeSlimeBlueLarge,
+  EnemyTypeSlimeVioletLarge,
 
   // mini boss
   EnemyTypeBubble,
