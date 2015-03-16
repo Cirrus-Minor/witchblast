@@ -33,6 +33,7 @@
 #include "BatEntity.h"
 #include "ImpEntity.h"
 #include "SlimeEntity.h"
+#include "LargeSlimeEntity.h"
 #include "PumpkinEntity.h"
 #include "ChestEntity.h"
 #include "EvilFlowerEntity.h"
@@ -1516,17 +1517,17 @@ void WitchBlastGame::renderHud()
       icon.setColor(sf::Color(255, 255, 255, 50 + 50 * cosf(getAbsolutTime() * 4)));
       app->draw(icon, sf::BlendAdd);
 
-      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color(0, 80, 20), app, 0, 0);
+      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
 
       if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
       {
         game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
-                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color(10, 0, 80), app, 0, 0);
+                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
       }
       else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
       {
         game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
-                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color(10, 0, 80), app, 0, 0);
+                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
       }
     }
 
@@ -3814,6 +3815,19 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeBubbleGreater:
     new BubbleEntity(xm, ym, BubbleTriple, 0);
     break;
+  case EnemyTypeSlimeLarge:
+    new LargeSlimeEntity(xm, ym, SlimeTypeStandard);
+    break;
+  case EnemyTypeSlimeBlueLarge:
+    new LargeSlimeEntity(xm, ym, SlimeTypeBlue);
+    break;
+  case EnemyTypeSlimeRedLarge:
+    new LargeSlimeEntity(xm, ym, SlimeTypeRed);
+    break;
+  case EnemyTypeSlimeVioletLarge:
+    new LargeSlimeEntity(xm, ym, SlimeTypeViolet);
+    break;
+
   case EnemyTypeButcher:
     new ButcherEntity(xm, ym);
     break;
@@ -3848,6 +3862,11 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
                          || monsterType == EnemyTypeImpBlue
                          || monsterType == EnemyTypeImpRed;
 
+  bool isMonsterLarge = monsterType == EnemyTypeSlimeLarge
+                         || monsterType == EnemyTypeSlimeBlueLarge
+                         || monsterType == EnemyTypeSlimeRedLarge
+                         || monsterType == EnemyTypeSlimeVioletLarge;
+
   bool bOk;
   int xm, ym;
   float xMonster, yMonster;
@@ -3862,8 +3881,18 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
     {
       bOk = true;
       watchdog--;
-      xm = 1 +rand() % (MAP_WIDTH - 3);
-      ym = 1 +rand() % (MAP_HEIGHT - 3);
+
+      if (isMonsterLarge)
+      {
+        xm = 2 +rand() % (MAP_WIDTH - 5);
+        ym = 2 +rand() % (MAP_HEIGHT - 5);
+      }
+      else
+      {
+        xm = 1 +rand() % (MAP_WIDTH - 3);
+        ym = 1 +rand() % (MAP_HEIGHT - 3);
+      }
+
       if (monsterArray[xm][ym])
       {
         bOk = false;
@@ -5558,6 +5587,22 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
 
   case EnemyTypeBubbleGreater:
     value = "enemy_type_bubble_greater";
+    break;
+
+  case EnemyTypeSlimeLarge:
+    value = "enemy_type_slime_large";
+    break;
+
+  case EnemyTypeSlimeBlueLarge:
+    value = "enemy_type_slime_blue_large";
+    break;
+
+  case EnemyTypeSlimeRedLarge:
+    value = "enemy_type_slime_red_large";
+    break;
+
+  case EnemyTypeSlimeVioletLarge:
+    value = "enemy_type_slime_violet_large";
     break;
 
   // boss
