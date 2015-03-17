@@ -14,10 +14,10 @@
 
 const int VAMPIRE_HP = 100;
 const int VAMPIRE_DAMAGE = 12;
-const float VAMPIRE_FLYING_DELAY = 1.6f;
-const float VAMPIRE_BAT_DELAY = 0.3f;
-const float VAMPIRE_CONFUSION_DELAY = 5.0f;
-const float VAMPIRE_TRANSFORM_DELAY = 0.8f;
+const float VAMPIRE_FLYING_DELAY = 1.2f;
+const float VAMPIRE_BAT_DELAY = 0.225f;
+const float VAMPIRE_CONFUSION_DELAY = 2.5f;
+const float VAMPIRE_TRANSFORM_DELAY = 0.4f;
 const float VAMPIRE_CRY_DELAY = 6.0f;
 
 const int FORM_MAN = 0;
@@ -100,7 +100,7 @@ void VampireEntity::computeStates(float delay)
     if (state == 0) // waiting bef hypnose
     {
       state = 1; // hypnose
-      timer = 2.0f;
+      timer = 1.6f;
       game().getPlayer()->setSpecialState(SpecialStateConfused, true, VAMPIRE_CONFUSION_DELAY, VAMPIRE_CONFUSION_DELAY, 0.0f);
     }
     else if (state == 1) // hypnose
@@ -111,13 +111,13 @@ void VampireEntity::computeStates(float delay)
     else if (state == 2) // waiting before laughing
     {
       state = 3; // laughing
-      timer = 2.0f; // 3.0f;
+      timer = 1.4f; // 3.0f;
       SoundManager::getInstance().playSound(SOUND_PUMPKIN_01);
     }
     else if (state == 3) // laughing
     {
       state = 4;
-      timer = 0.5f;
+      timer = 0.25f;
     }
     else if (state == 4) // to bat cloud
     {
@@ -149,7 +149,7 @@ void VampireEntity::computeStates(float delay)
     else if (state == 7) // cloud to vampire
     {
       state = 0;
-      timer = 1.5f;
+      timer = 1.0f;
     }
     else if (state == 8) // vampire to cloud < 50% HP
     {
@@ -222,32 +222,32 @@ void VampireEntity::animate(float delay)
   else if (state == 5 || state == 8)  // to bat cloud
   {
     sprite.setColor(sf::Color(255, 255, 255, 255));
-    if (timer > 0.4f)
+    if (timer > 0.2f)
     {
       frame = 0;
-      float fade = (VAMPIRE_TRANSFORM_DELAY - timer) / VAMPIRE_TRANSFORM_DELAY * 1.6f;
+      float fade = (VAMPIRE_TRANSFORM_DELAY - timer) / VAMPIRE_TRANSFORM_DELAY;
       sprite.setColor(sf::Color(255 - fade * 250, 255 - fade * 250, 255 - fade * 250, 255));
       isMirroring = game().getPlayer()->getX() > x;
     }
-    else if (timer > 0.3f) frame = 6;
-    else if (timer > 0.2f) frame = 7;
-    else if (timer > 0.1f) frame = 8;
+    else if (timer > 0.15f) frame = 6;
+    else if (timer > 0.1f) frame = 7;
+    else if (timer > 0.05f) frame = 8;
     else  frame = 9;
   }
   else if (state == 7 || state == 10)  // to bat cloud
   {
     sprite.setColor(sf::Color(255, 255, 255, 255));
 
-    if (timer < 0.4f)
+    if (timer < 0.2f)
     {
       frame = 0;
-      float fade = timer / 0.5f;
+      float fade = timer * 4;
       sprite.setColor(sf::Color(255 - fade * 250, 255 - fade * 250, 255 - fade * 250, 255));
       isMirroring = game().getPlayer()->getX() > x;
     }
-    else if (timer < VAMPIRE_TRANSFORM_DELAY - 0.3f) frame = 6;
-    else if (timer < VAMPIRE_TRANSFORM_DELAY - 0.2f) frame = 7;
-    else if (timer < VAMPIRE_TRANSFORM_DELAY - 0.1f) frame = 8;
+    else if (timer < VAMPIRE_TRANSFORM_DELAY - 0.15f) frame = 6;
+    else if (timer < VAMPIRE_TRANSFORM_DELAY - 0.1f) frame = 7;
+    else if (timer < VAMPIRE_TRANSFORM_DELAY - 0.05f) frame = 8;
 
     else  frame = 9;
   }
