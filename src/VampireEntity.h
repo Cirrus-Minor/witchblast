@@ -32,6 +32,7 @@ class VampireEntity : public EnemyEntity
 
     int numberOfRays;
     int raySpeedFactor;
+    int moveCounter;
 
     void renderRays(sf::RenderTarget* app, bool isGhost);
     void testRaysCollision();

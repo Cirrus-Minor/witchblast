@@ -19,6 +19,7 @@ const float VAMPIRE_BAT_DELAY = 0.225f;
 const float VAMPIRE_CONFUSION_DELAY = 2.5f;
 const float VAMPIRE_TRANSFORM_DELAY = 0.4f;
 const float VAMPIRE_CRY_DELAY = 6.0f;
+const float VAMPIRE_MOVE_COUNTER_MAX = 2;
 
 const int FORM_MAN = 0;
 const int FORM_BAT = 1;
@@ -80,6 +81,7 @@ VampireEntity::VampireEntity(float myx, float myy)
 
   numberOfRays = 5;
   raySpeedFactor = 30.0f;
+  moveCounter = 0;
 }
 
 int VampireEntity::getHealthLevel()
@@ -121,8 +123,19 @@ void VampireEntity::computeStates(float delay)
     }
     else if (state == 4) // to bat cloud
     {
-      state = 5;
-      timer = VAMPIRE_TRANSFORM_DELAY;
+      if (getHealthLevel() > 0 && moveCounter <= 0)
+      {
+        state = 8;
+        timer = VAMPIRE_TRANSFORM_DELAY;
+        formState = FORM_BAT;
+        moveCounter = VAMPIRE_MOVE_COUNTER_MAX;
+      }
+      else
+      {
+        state = 5;
+        timer = VAMPIRE_TRANSFORM_DELAY;
+        moveCounter--;
+      }
     }
     else if (state == 5) // to bat cloud
     {
@@ -169,7 +182,7 @@ void VampireEntity::computeStates(float delay)
     else if (state == 10) // transform to giant bat
     {
       state = 11; // giant bat
-      timer = 6.0f;
+      timer = 1.0f;
     }
     else if (state == 11) // giant bat waiting
     {
@@ -178,8 +191,25 @@ void VampireEntity::computeStates(float delay)
     }
     else if (state == 12) // cry !
     {
-      state = 11; // giant bat waiting
-      timer = 6.0f;
+      state = 13; // giant bat waiting
+      timer = VAMPIRE_TRANSFORM_DELAY;
+    }
+    else if (state == 13) // cry !
+    {
+      state = 6;
+      frame = 10;
+      timer = VAMPIRE_FLYING_DELAY;
+      batTimer = VAMPIRE_BAT_DELAY;
+      xSource = x;
+      ySource = y;
+      if (targetPos == 4 || targetPos == 6)
+      {
+        targetPos = rand() % 2 == 0 ? 2 : 8;
+      }
+      else
+      {
+        targetPos = rand() % 2 == 0 ? 4 : 6;
+      }
     }
     else
     {
@@ -379,12 +409,12 @@ int VampireEntity::hurt(StructHurt hurtParam)
   else armor = 0.0f;
   int result = EnemyEntity::hurt(hurtParam);
 
-  if (formState == FORM_MAN && hp <= hpMax / 2)
+  /*if (formState == FORM_MAN && hp <= hpMax / 2)
   {
     state = 8;
     timer = VAMPIRE_TRANSFORM_DELAY;
     formState = FORM_BAT;
-  }
+  }*/
 
   return result;
 }
