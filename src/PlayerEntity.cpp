@@ -2255,6 +2255,11 @@ void PlayerEntity::divineFury()
   }
 }
 
+void PlayerEntity::divineDestroyUndead()
+{
+  game().destroyUndead(40);
+}
+
 void PlayerEntity::divineIce()
 {
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
@@ -2331,6 +2336,15 @@ bool PlayerEntity::triggerDivinityBefore()
     {
     case DivinityHealer:
     {
+      if (game().getUndeadCount() > 0 && rand() % 2 == 0)
+      {
+        SoundManager::getInstance().playSound(SOUND_OM);
+        divinity.interventions ++;
+        divineHeal(hpMax / 2);
+        divineDestroyUndead();
+        game().makeColorEffect(X_GAME_COLOR_WHITE, 0.45f);
+        return true;
+      }
       break;
     }
     case DivinityFighter:

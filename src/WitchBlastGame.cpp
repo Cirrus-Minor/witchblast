@@ -2989,6 +2989,63 @@ int WitchBlastGame::getEnemyCount()
   return n;
 }
 
+int WitchBlastGame::getUndeadCount()
+{
+  int n=0;
+
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX_COUNT)
+    {
+      EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
+      if (enemy->canCollide() && (enemy->getEnemyType() == EnemyTypeZombie || enemy->getEnemyType() == EnemyTypeZombieDark
+          || enemy->getEnemyType() == EnemyTypeGhost || enemy->getEnemyType() == EnemyTypeVampire || enemy->getEnemyType() == EnemyTypeBat_invocated) )
+            n++;
+    }
+  }
+
+  return n;
+}
+
+void WitchBlastGame::destroyUndead(int damage)
+{
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX_COUNT)
+    {
+      EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
+      if (enemy->canCollide() && (enemy->getEnemyType() == EnemyTypeZombie || enemy->getEnemyType() == EnemyTypeZombieDark
+          || enemy->getEnemyType() == EnemyTypeGhost || enemy->getEnemyType() == EnemyTypeVampire || enemy->getEnemyType() == EnemyTypeBat_invocated) )
+          {
+            enemy->hurt(BaseCreatureEntity::getHurtParams(damage, ShotTypeStandard, 0, false, SourceTypeMelee, EnemyTypeNone, false));
+
+            SpriteEntity* spriteCone = new SpriteEntity(
+              ImageManager::getInstance().getImage(IMAGE_LIGHT_CONE),
+              enemy->getX(), enemy->getZ() - 290);
+            spriteCone->setZ(1000.0f);
+            spriteCone->setFading(true);
+            spriteCone->setAge(-1.2f);
+            spriteCone->setLifetime(2.4f);
+            spriteCone->setRenderAdd();
+
+          }
+
+    }
+  }
+}
+
 int WitchBlastGame::getItemsCount()
 {
   int n=0;

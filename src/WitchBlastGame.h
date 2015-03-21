@@ -240,6 +240,10 @@ public:
   */
   int getEnemyCount();
 
+  int getUndeadCount();
+
+  void destroyUndead(int damage);
+
   int getItemsCount();
 
  /*!

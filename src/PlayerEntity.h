@@ -481,6 +481,7 @@ class PlayerEntity : public BaseCreatureEntity
     bool triggerDivinityBefore();
     void triggerDivinityAfter();
     void divineFury();
+    void divineDestroyUndead();
     void divineIce();
     void divineRepulse();
     void divineProtection(float duration, float armorBonus);
