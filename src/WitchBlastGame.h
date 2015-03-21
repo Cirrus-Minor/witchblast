@@ -463,7 +463,6 @@ private:
   int floorY;                 /*!< Y position of the room in the level */
   bool roomClosed;            /*!< True if the room is closed */
   bool bossRoomOpened;        /*!< True if the boss gate has been opened in this level */
-  bool isPausing;             /*!< True if the game is currently pausing */
   int firingDirection;        /*!< Save the firing direction - for the "one button" gameplay */
   bool isPlayerAlive;         /*!< Dying sets this bool to false (trigger the ending music) */
   bool monsterArray[MAP_WIDTH][MAP_HEIGHT]; /*!<  use to remember if a case has a monster in monster spawn */
@@ -523,8 +522,10 @@ private:
     gameStateInit,      /**< Game initialization */
     gameStateIntro,     /** < Intro animation */
     gameStateMenu,      /**< Menu */
+    gameStateKeyConfig,  /**< Key config */
     gameStatePlaying,   /**< Playing */
-    gameStateKeyConfig  /**< Key config */
+    gameStatePlayingPause,   /**< Playing / Pause */
+    gameStatePlayingDisplayBoss,   /**< Playing / DisplayBoss */
   };
   gameStateEnum gameState;  /*!< Store the game state */
 

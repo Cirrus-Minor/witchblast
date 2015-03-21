@@ -411,7 +411,6 @@ WitchBlastGame::WitchBlastGame()
 
   saveInFight.monsters.clear();
 
-  isPausing = false;
   showLogical = false;
   showGameTime = false;
 
@@ -495,7 +494,7 @@ float WitchBlastGame::getDeltaTime()
 
 void WitchBlastGame::onUpdate()
 {
-  if (!isPausing) // && (achievementsQueue.empty() || !currentMap->isCleared()) )
+  if (gameState == gameStatePlaying)
   {
     if (isPlayerAlive) player->setItemToBuy(NULL);
 
@@ -544,7 +543,6 @@ void WitchBlastGame::onUpdate()
 void WitchBlastGame::startNewGame(bool fromSaveFile)
 {
   gameState = gameStateInit;
-  isPausing = false;
   level = 1;
   challengeLevel = 1;
   gameTime = 0.0f;
@@ -961,7 +959,7 @@ void WitchBlastGame::updateRunningGame()
 
     if (event.type == sf::Event::MouseWheelMoved)
     {
-      if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
+      if (gameState == gameStatePlaying) player->selectNextShotType();
     }
 
     if (event.type == sf::Event::KeyPressed)
@@ -969,24 +967,24 @@ void WitchBlastGame::updateRunningGame()
       if (event.key.code == sf::Keyboard::Escape)
       {
         if (player->isDead()) backToMenu = true;
-        else if (gameState == gameStatePlaying && !isPausing) isPausing = true;
-        else if (gameState == gameStatePlaying && isPausing) isPausing = false;
+        else if (gameState == gameStatePlaying) gameState = gameStatePlayingPause;
+        else if (gameState == gameStatePlayingPause) gameState = gameStatePlaying;
       }
 
       if (event.key.code == input[KeyFireSelect])
       {
-        if (gameState == gameStatePlaying && !isPausing) player->selectNextShotType();
+        if (gameState == gameStatePlaying) player->selectNextShotType();
       }
 
       if (event.key.code == input[KeySpell])
       {
-        if (gameState == gameStatePlaying && !isPausing) player->castSpell();
+        if (gameState == gameStatePlaying) player->castSpell();
       }
 
       if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
       {
         // in game menu ?
-        if (gameState == gameStatePlaying && isPausing)
+        if (gameState == gameStatePlayingPause)
         {
           menuInGame.index++;
           if (menuInGame.index == menuInGame.items.size()) menuInGame.index = 0;
@@ -996,7 +994,7 @@ void WitchBlastGame::updateRunningGame()
       else if (event.key.code == input[KeyUp] || event.key.code == sf::Keyboard::Up)
       {
         // in game menu ?
-        if (gameState == gameStatePlaying && isPausing)
+        if (gameState == gameStatePlayingPause)
         {
           if (menuInGame.index == 0) menuInGame.index = menuInGame.items.size() - 1;
           else menuInGame.index--;
@@ -1029,7 +1027,7 @@ void WitchBlastGame::updateRunningGame()
           break;
 
         case MenuContinue:
-          isPausing = false;
+          gameState = gameStatePlaying;
           break;
 
         case MenuSaveAndQuit:
@@ -1041,7 +1039,7 @@ void WitchBlastGame::updateRunningGame()
 
       if (event.key.code == input[KeyFire])
       {
-        if (gameState == gameStatePlaying && !isPausing) firingDirection = player->getFacingDirection();
+        if (gameState == gameStatePlaying) firingDirection = player->getFacingDirection();
       }
 
       if (event.key.code == sf::Keyboard::Return)
@@ -1232,10 +1230,10 @@ void WitchBlastGame::updateRunningGame()
     }
 
     if (event.type == sf::Event::LostFocus && !player->isDead())
-      isPausing = true;
+      gameState = gameStatePlayingPause;
   }
 
-  if (gameState == gameStatePlaying && !isPausing)
+  if (gameState == gameStatePlaying)
   {
     if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
 
@@ -1301,7 +1299,7 @@ void WitchBlastGame::updateRunningGame()
     }
 
     // spell (right click)
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && (gameState == gameStatePlaying && !isPausing))
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && (gameState == gameStatePlaying))
     {
       sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
       int xm = mousePosition.x - player->getX();
@@ -1829,7 +1827,7 @@ void WitchBlastGame::renderRunningGame()
   oss << tools::getLabel("level") << " " << level;
   write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
 
-  if (gameState == gameStatePlaying)
+  //if (gameState == gameStatePlaying)
   {
     // life
     // if (player->isPoisoned()) TODO
@@ -1980,7 +1978,7 @@ void WitchBlastGame::renderRunningGame()
     // render the shots
     renderHudShots(app);
 
-    if (isPausing)
+    if (gameState == gameStatePlayingPause)
     {
       // background
       rectangle.setFillColor(sf::Color(0, 0, 0, 200));
@@ -2023,7 +2021,6 @@ void WitchBlastGame::renderRunningGame()
           n++;
         }
       }
-
       renderInGameMenu();
     }
 
@@ -2909,6 +2906,8 @@ void WitchBlastGame::startGame()
       updateIntro();
       break;
     case gameStatePlaying:
+    case gameStatePlayingPause:
+    case gameStatePlayingDisplayBoss:
       updateRunningGame();
       break;
     }
@@ -3418,6 +3417,8 @@ void WitchBlastGame::onRender()
     renderMenu();
     break;
   case gameStatePlaying:
+  case gameStatePlayingPause:
+  case gameStatePlayingDisplayBoss:
     renderRunningGame();
     break;
   case gameStateIntro:
