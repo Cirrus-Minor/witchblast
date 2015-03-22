@@ -111,12 +111,14 @@ Next release
 - ADD Chest traps
 - ADD Challenge levels 3 and 4
 - ADD Divinity level messages
+- ADD Tree Divinity has a fury against undead
 - MOD No player collision while invincible
 - MOD Sulfur causes the monster explode directly, and safe for the player
 - MOD Giant Spider easier, and less green blood on screen
 - MOD Hiccup makes the player fire poison
 - MOD Imps do not teleport with 1 HP damage
 - MOD Corpse can fall in holes
+- FIX Natasha and Scarlett wrong display in Hall of Fame
 
 v0.4.6b
 - ADD Russian translation
