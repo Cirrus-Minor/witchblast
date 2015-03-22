@@ -12,7 +12,7 @@
 #include <iostream>
 #include <sstream>
 
-const int VAMPIRE_HP = 100;
+const int VAMPIRE_HP = 1200;
 const int VAMPIRE_DAMAGE = 12;
 const float VAMPIRE_FLYING_DELAY = 1.2f;
 const float VAMPIRE_BAT_DELAY = 0.225f;
@@ -20,6 +20,7 @@ const float VAMPIRE_CONFUSION_DELAY = 2.5f;
 const float VAMPIRE_TRANSFORM_DELAY = 0.4f;
 const float VAMPIRE_CRY_DELAY = 6.0f;
 const float VAMPIRE_MOVE_COUNTER_MAX = 2;
+const float VAMPIRE_DYING_TIME = 4.2f;
 
 const int FORM_MAN = 0;
 const int FORM_BAT = 1;
@@ -34,6 +35,7 @@ VampireEntity::VampireEntity(float myx, float myy)
   hpDisplay = VAMPIRE_HP;
   hpMax = VAMPIRE_HP;
   meleeDamages = VAMPIRE_DAMAGE;
+  shadowFrame = 30;
 
   type = ENTITY_ENEMY_BOSS;
   //deathFrame = FRAME_CORPSE_CYCLOP;
@@ -79,8 +81,6 @@ VampireEntity::VampireEntity(float myx, float myy)
     targetPos = 8;
   }
 
-  numberOfRays = 5;
-  raySpeedFactor = 30.0f;
   moveCounter = 0;
 }
 
@@ -108,22 +108,22 @@ void VampireEntity::computeStates(float delay)
     else if (state == 1) // hypnose
     {
       state = 2;
-      timer = 1.0f;
+      timer = 0.5f;
     }
     else if (state == 2) // waiting before laughing
     {
       state = 3; // laughing
-      timer = 1.4f; // 3.0f;
+      timer = 1.3f; // 3.0f;
       SoundManager::getInstance().playSound(SOUND_PUMPKIN_01);
     }
     else if (state == 3) // laughing
     {
       state = 4;
-      timer = 0.25f;
+      timer = 0.1f;
     }
     else if (state == 4) // to bat cloud
     {
-      if (getHealthLevel() > 0 && moveCounter <= 0)
+      if (getHealthLevel() > 1 && moveCounter <= 0)
       {
         state = 8;
         timer = VAMPIRE_TRANSFORM_DELAY;
@@ -162,7 +162,7 @@ void VampireEntity::computeStates(float delay)
     else if (state == 7) // cloud to vampire
     {
       state = 0;
-      timer = 1.0f;
+      timer = 0.5f;
     }
     else if (state == 8) // vampire to cloud < 50% HP
     {
@@ -173,6 +173,34 @@ void VampireEntity::computeStates(float delay)
       xSource = x;
       ySource = y;
       targetPos = 5;
+
+      if (hp <= hpMax * 0.1f)
+      {
+        numberOfRays = 6;
+        raySpeedFactor = 35.0f;
+      }
+      else if (hp <= hpMax  * 0.2f)
+      {
+        numberOfRays = 5;
+        raySpeedFactor = 35.0f;
+      }
+      else if (hp <= hpMax * 0.3f)
+      {
+        numberOfRays = 5;
+        raySpeedFactor = 30.0f;
+      }
+      else if (hp <= hpMax * 0.4f)
+      {
+        numberOfRays = 4;
+        raySpeedFactor = 30.0f;
+      }
+      else
+      {
+        numberOfRays = 4;
+        raySpeedFactor = 20.0f;
+      }
+
+
     }
     else if (state == 9) // cloud to center
     {
@@ -182,6 +210,12 @@ void VampireEntity::computeStates(float delay)
     else if (state == 10) // transform to giant bat
     {
       state = 11; // giant bat
+      for (int i = 0; i < 10; i++)
+      {
+        game().generateStar(sf::Color(200, 0, 200), x - 60 + rand() % 121, y - 60 + rand() % 121);
+        game().generateStar(sf::Color(0, 0, 0), x - 60 + rand() % 121, y - 60 + rand() % 121);
+      }
+      SoundManager::getInstance().playSound(SOUND_INVOKE);
       timer = 1.0f;
     }
     else if (state == 11) // giant bat waiting
@@ -193,6 +227,13 @@ void VampireEntity::computeStates(float delay)
     {
       state = 13; // giant bat waiting
       timer = VAMPIRE_TRANSFORM_DELAY;
+
+      for (int i = 0; i < 10; i++)
+      {
+        game().generateStar(sf::Color(200, 0, 200), x - 40 + rand() % 81, y - 40 + rand() % 81);
+        game().generateStar(sf::Color(0, 0, 0), x - 40 + rand() % 81, y - 40 + rand() % 81);
+      }
+      SoundManager::getInstance().playSound(SOUND_INVOKE);
     }
     else if (state == 13) // cry !
     {
@@ -224,7 +265,13 @@ void VampireEntity::animate(float delay)
   if (isAgonising)
   {
     timer += delay;
-    if (timer > 5.0f) dying();
+    if (timer > VAMPIRE_DYING_TIME)
+    {
+      dying();
+      VampireDeadEntity* corpse = new VampireDeadEntity(x, y);
+      corpse->setMirroring(isMirroring);
+    }
+
     return;
   }
 
@@ -329,61 +376,13 @@ void VampireEntity::animate(float delay)
   }
   else if (state == 12)
   {
+    x = GAME_WIDTH / 2;
+    y = GAME_HEIGHT / 2;
     testRaysCollision();
   }
 
   if (state != 5 && state != 7) isMirroring = game().getPlayer()->getX() > x;
 
-  //EnemyEntity::animate(delay);
-  /*if (age <= 0.0f)
-  {
-    age += delay;
-    return;
-  }
-
-  if (isAgonising)
-  {
-    if (h < -0.01f)
-    {
-      isDying = true;
-      game().addCorpse(x, y, deathFrame);
-      if (dyingSound != SOUND_NONE) SoundManager::getInstance().playSound(dyingSound);
-    }
-    else
-    {
-      frame = dyingFrame;
-      hVelocity -= 700.0f * delay;
-      h += hVelocity * delay;
-    }
-
-    return;
-  }
-
-  // special states
-  if (specialState[SpecialStateIce].active) delay *= specialState[SpecialStateIce].param1;
-
-  // IA
-  //computeStates(delay);
-
-  // collisions
-  if (canCollide()) testSpriteCollisions();
-  BaseCreatureEntity::animate(delay);
-
-  // old frame (for sound)
-  int oldFrame = frame;
-
-  // current frame
-  if (state == 0)
-  {
-
-  }
-
-  // frame's mirroring
-  if (velocity.x > 1.0f)
-    isMirroring = true;
-  else if (velocity.x < -1.0f)
-    isMirroring = false;
-*/
   z = y + 16;
 }
 
@@ -409,18 +408,22 @@ int VampireEntity::hurt(StructHurt hurtParam)
   else armor = 0.0f;
   int result = EnemyEntity::hurt(hurtParam);
 
-  /*if (formState == FORM_MAN && hp <= hpMax / 2)
-  {
-    state = 8;
-    timer = VAMPIRE_TRANSFORM_DELAY;
-    formState = FORM_BAT;
-  }*/
-
   return result;
 }
 
 void VampireEntity::prepareDying()
 {
+  // Giant bat ?
+  if (state == 11 || state ==12)
+  {
+    for (int i = 0; i < 10; i++)
+    {
+      game().generateStar(sf::Color(200, 0, 200), x - 40 + rand() % 81, y - 40 + rand() % 81);
+      game().generateStar(sf::Color(0, 0, 0), x - 40 + rand() % 81, y - 40 + rand() % 81);
+    }
+    SoundManager::getInstance().playSound(SOUND_INVOKE);
+  }
+
   timer = 0.0f;
   sprite.setOrigin(0.0f, 0.0f);
   isAgonising = true;
@@ -483,35 +486,31 @@ void VampireEntity::render(sf::RenderTarget* app)
   if (isAgonising)
   {
     sprite.setPosition(x - 48, y - 74);
-    sprite.setTextureRect(sf::IntRect(0 * width, 2 * height, width, height));
+    if (isMirroring) sprite.setTextureRect(sf::IntRect(1 * width, 2 * height, -width, height));
+    else sprite.setTextureRect(sf::IntRect(0 * width, 2 * height, width, height));
     app->draw(sprite);
 
     float burnHeight = timer < 4.0f ? height * timer / 4.0f : height;
-    sprite.setTextureRect(sf::IntRect(width, 2 * height, width, burnHeight));
+    if (isMirroring) sprite.setTextureRect(sf::IntRect(2 * width, 2 * height, -width, burnHeight));
+    else sprite.setTextureRect(sf::IntRect(width, 2 * height, width, burnHeight));
     app->draw(sprite);
 
-    sprite.setTextureRect(sf::IntRect(1 * width, 2 * height, width, height));
+    if (isMirroring) sprite.setTextureRect(sf::IntRect(2 * width, 2 * height, -width, height));
+    else sprite.setTextureRect(sf::IntRect(1 * width, 2 * height, width, height));
 
     // fire
     if (timer > 0.1f && timer < 3.8f)
     {
-      // OK
-      /*sf::Sprite burn;
-      burn.setTexture(*ImageManager::getInstance().getImage(IMAGE_VAMPIRE));
-      int burnFrame = (int)(timer * 10) % 3;
-      burn.setTextureRect(sf::IntRect(2 * width, 2 * height + burnFrame * 32, width, 32));
-      burn.setPosition(x - 48, y - 100 + burnHeight);
-      app->draw(burn);*/
-
       sf::Sprite burn;
       burn.setTexture(*ImageManager::getInstance().getImage(IMAGE_VAMPIRE));
 
-      burn.setTextureRect(sf::IntRect(4 * width, 2 * height + burnHeight - 4, width, 6));
+      if (isMirroring) burn.setTextureRect(sf::IntRect(5 * width, 2 * height + burnHeight - 4, -width, 6));
+      else burn.setTextureRect(sf::IntRect(4 * width, 2 * height + burnHeight - 4, width, 6));
       burn.setPosition(x - 48, y - 74 - 4 + burnHeight);
       app->draw(burn);
 
-      //int burnFrame = (int)(timer * 10) % 3;
-      burn.setTextureRect(sf::IntRect(3 * width, 2 * height + burnHeight - 2, width, 4));
+      if (isMirroring) burn.setTextureRect(sf::IntRect(4 * width, 2 * height + burnHeight - 2, -width, 4));
+      else burn.setTextureRect(sf::IntRect(3 * width, 2 * height + burnHeight - 2, width, 4));
       burn.setPosition(x - 48, y - 74 - 2 + burnHeight);
       app->draw(burn);
 
@@ -526,6 +525,8 @@ void VampireEntity::render(sf::RenderTarget* app)
     cone.setPosition(x - 68, y - 600);
     int fade = 200;
     if (timer < 0.2f) fade = timer * 1000;
+    else if (timer > VAMPIRE_DYING_TIME - 0.5f) fade = (VAMPIRE_DYING_TIME - timer) * 400;
+    if (fade < 0) fade = 0;
     cone.setColor(sf::Color(255, 255, 255, fade));
     app->draw(cone, sf::BlendAdd);
   }
@@ -533,7 +534,7 @@ void VampireEntity::render(sf::RenderTarget* app)
   {
     if (state == 11 || state == 12) // giant bat
     {
-      int bodyFrame = (int)(age * 8) % 9;
+      int bodyFrame = (int)(age * 18) % 9;
       batSprite.setTextureRect(sf::IntRect(418 * (bodyFrame % 3), 342 * (bodyFrame / 3), 418, 342));
       batSprite.setPosition(x - 209, y - 200);
       batSprite.setColor(sprite.getColor());
@@ -545,7 +546,6 @@ void VampireEntity::render(sf::RenderTarget* app)
         if (frame >= 5) frame = 8 - frame;
         sprite.setTextureRect(sf::IntRect(width * frame, 3 * height, width, height));
 
-        //if (timer < 1.5f) renderRays(app, 5, 30, true);
         if (timer < 1.0f && (int)(timer * 20) % 3 == 0) renderRays(app, false);
       }
       else if (state == 12)
@@ -701,5 +701,100 @@ void VampireEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
   {
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 450.0f);
     targetEntity->giveRecoil(true, recoilVector, 0.5f);
+  }
+}
+
+void VampireEntity::generateBats(int batFrame)
+{
+  SpriteEntity* spriteStar = new SpriteEntity(
+    ImageManager::getInstance().getImage(IMAGE_VAMPIRE),
+    x - 50 + rand() % 101, y - 50 + rand() % 101, 96, 96, 6);
+  //spriteStar->setScale(0.8f, 0.8f);
+  spriteStar->setFrame(batFrame);
+  spriteStar->setZ(1000.0f);
+  //spriteStar->setSpin(-100 + rand()%200);
+  spriteStar->setVelocity(Vector2D(30 + rand()%60));
+  spriteStar->setWeight(-150);
+  spriteStar->setFading(true);
+  spriteStar->setAge(-0.8f);
+  spriteStar->setLifetime(0.1f + (rand() % 100) * 0.003f );
+  spriteStar->setType(ENTITY_EFFECT);
+}
+
+
+////////////////////// DEAD VAMPIRE /////////////////
+VampireDeadEntity::VampireDeadEntity(float myx, float myy)
+  : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_VAMPIRE), myx, myy)
+{
+  width = 96;
+  height = 96;
+  creatureSpeed = 0;
+  hp = 250;
+  hpMax = 250;
+  shadowFrame = 30;
+
+  type = ENTITY_ENEMY_NC;
+  deathFrame = FRAME_CORPSE_VAMPIRE;
+
+  frame = 13;
+  sprite.setOrigin(48.0f, 74.0f);
+  imagesProLine = 6;
+
+  bloodColor = BloodNone;
+  enemyType = EnemyTypeVampireDead;
+
+  resistance[ResistanceFrozen] = ResistanceImmune;
+  resistance[ResistancePoison] = ResistanceImmune;
+  canExplode = false;
+}
+
+void VampireDeadEntity::calculateBB()
+{
+  boundingBox.left = (int)x - 16;
+  boundingBox.width = 32;
+  boundingBox.top = (int)y - 16;
+  boundingBox.height =  32;
+}
+
+void VampireDeadEntity::drop()
+{
+  ItemEntity* newItem = new ItemEntity(ItemGoldCoin, x, y);
+  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  newItem->setViscosity(0.96f);
+}
+
+void VampireDeadEntity::animate(float delay)
+{
+  EnemyEntity::animate(delay);
+  z = y + 16;
+}
+
+void VampireDeadEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+{
+  PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(targetEntity);
+
+  if (playerEntity != NULL && !playerEntity->isDead())
+  {
+    Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 100.0f);
+    targetEntity->giveRecoil(false, recoilVector, 0.1f);
+  }
+}
+
+void VampireDeadEntity::readCollidingEntity(CollidingSpriteEntity* entity)
+{
+  if (!isDying && !isAgonising && collideWithEntity(entity))
+  {
+    if (entity->getType() == ENTITY_PLAYER || entity->getType() == ENTITY_BOLT )
+    {
+      PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(entity);
+      BoltEntity* boltEntity = dynamic_cast<BoltEntity*>(entity);
+
+      if (playerEntity != NULL && !playerEntity->isDead()) inflictsRecoilTo(playerEntity);
+
+      else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
+      {
+        collideWithBolt(boltEntity);
+      }
+    }
   }
 }

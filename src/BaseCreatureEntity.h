@@ -76,6 +76,8 @@ enum enemyTypeEnum
   EnemyTypeFranckyHand,
   EnemyTypeFranckyFoot,
 
+  EnemyTypeVampireDead,
+
   EnemyTypeNone,  // player of fairy
 
   NB_ENEMY // = no enemy

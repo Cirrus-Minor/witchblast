@@ -5862,6 +5862,7 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     value = "enemy_type_francky";
     break;
   case EnemyTypeVampire:
+  case EnemyTypeVampireDead:
     value = "enemy_type_vampire";
     break;
 

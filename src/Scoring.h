@@ -91,6 +91,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeFrancky:
     case EnemyTypeFranckyFoot:
     case EnemyTypeFranckyHand:
+    case EnemyTypeVampireDead:
       score = 0; break;
 
     case EnemyTypeNone:

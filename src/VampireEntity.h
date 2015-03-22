@@ -38,6 +38,20 @@ class VampireEntity : public EnemyEntity
     void testRaysCollision();
 
     void calculatePosition();
+    void generateBats(int batFrame);
+};
+
+class VampireDeadEntity : public EnemyEntity
+{
+  public:
+    VampireDeadEntity(float x, float y);
+    virtual void calculateBB();
+    virtual void animate(float delay);
+    virtual void readCollidingEntity(CollidingSpriteEntity* entity);
+    virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+
+  protected:
+	  virtual void drop();
 };
 
 #endif // VAMPIREENTITY_H
