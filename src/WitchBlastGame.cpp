@@ -67,6 +67,8 @@
 
 //#define START_LEVEL 7
 
+float PORTRAIT_DIAPLAY_TIME = 5.0f;
+
 static std::string intToString(int n)
 {
   std::ostringstream oss;
@@ -311,7 +313,7 @@ WitchBlastGame::WitchBlastGame()
     "media/fog.png",              "media/title_animation.png",
     "media/splatter.png",         "media/witch_intro.png",
     "media/item_description.png", "media/death_certificate.png",
-    "media/achievements.png",
+    "media/achievements.png",     "media/boss_pictures.png",
   };
 
   for (const char *const filename : images)
@@ -537,6 +539,11 @@ void WitchBlastGame::onUpdate()
         playMusic(MusicEnding);
       }
     }
+  }
+  else if (gameState == gameStatePlayingDisplayBoss)
+  {
+    bossDisplayTimer += deltaTime;
+    if (bossDisplayTimer >= PORTRAIT_DIAPLAY_TIME) gameState = gameStatePlaying;
   }
 }
 
@@ -969,6 +976,7 @@ void WitchBlastGame::updateRunningGame()
         if (player->isDead()) backToMenu = true;
         else if (gameState == gameStatePlaying) gameState = gameStatePlayingPause;
         else if (gameState == gameStatePlayingPause) gameState = gameStatePlaying;
+        else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
       }
 
       if (event.key.code == input[KeyFireSelect])
@@ -1050,6 +1058,10 @@ void WitchBlastGame::updateRunningGame()
             player->setDeathAge(DEATH_CERTIFICATE_DELAY);
           else
             backToMenu = true;
+        }
+        else if (gameState == gameStatePlayingDisplayBoss)
+        {
+          gameState = gameStatePlaying;
         }
         else if (!messagesQueue.empty())
         {
@@ -1422,9 +1434,114 @@ void WitchBlastGame::addLifeBarToDisplay(std::string label, int hp, int hpMax)
   lifeBar.hpMax = hpMax;
 }
 
+void WitchBlastGame::renderBossPortrait()
+{
+  if (gameState == gameStatePlayingDisplayBoss)
+  {
+    float transitionTime = 2.5f;
+    float endTime = PORTRAIT_DIAPLAY_TIME;
+
+    int xBoss = GAME_WIDTH / 2 - 267;
+    int fade = 255;
+    if (bossDisplayTimer < 0.25f)
+    {
+      xBoss += (0.25f - bossDisplayTimer) * 3000;
+      fade = 255 - (0.25f - bossDisplayTimer) * 1000;
+    }
+    else if (bossDisplayTimer > endTime - 0.75f)
+    {
+      fade = (endTime - bossDisplayTimer) * 333;
+      if (fade < 0) fade = 0;
+    }
+
+    // background
+    sf::RectangleShape rectangle;
+    rectangle.setFillColor(sf::Color(0, 0, 0, fade));
+    rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+    rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
+    app->draw(rectangle);
+
+    // boss
+    if (bossDisplayTimer > transitionTime)
+    {
+      EnemyEntity* boss = getBoss();
+      if (boss)
+      {
+        sf::View view = app->getView();
+        view.move(-5, -5);
+        app->setView(view);
+        boss->render(app);
+        view.move(5, 5);
+        app->setView(view);
+      }
+    }
+
+    // boss portrait
+    if (bossDisplayTimer < transitionTime)
+    {
+      sf::Sprite bossSprite;
+      bossSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BOSS_PICTURES));
+      bossSprite.setPosition(xBoss, 0);
+
+      app->draw(bossSprite);
+    }
+    else
+    {
+      if (!bossDisplayHasExploded)
+      {
+        SoundManager::getInstance().playSound(SOUND_BOOM_00);
+        bossDisplayHasExploded = true;
+        int nx = 10;
+        int ny = 10;
+
+        int dx = 534 / nx;
+        int dy = 560 / ny;
+
+        for (int i = 0; i < 400; i++)
+        {
+          SpriteEntity* spriteStar = new SpriteEntity(
+            ImageManager::getInstance().getImage(IMAGE_STAR),
+            GAME_WIDTH / 2 - 150 + rand() % 300, GAME_HEIGHT / 2 - 150 + rand() % 300);
+          spriteStar->setScale(5.0f, 5.0f);
+          spriteStar->setZ(7000.0f);
+          spriteStar->setSpin(-100 + rand()%200);
+          spriteStar->setVelocity(Vector2D(400 + rand()%800));
+          spriteStar->setFading(true);
+          spriteStar->setLifetime(4.1f + (rand() % 100) * 0.003f );
+          //spriteStar->setColor(sf::Color(180 + rand() % 75, 180 + rand() % 75, 180 + rand() % 75));
+          spriteStar->setColor(sf::Color(rand() % 255, rand() % 255, 255, 128));
+          spriteStar->setType(ENTITY_EFFECT);
+          spriteStar->setRenderAdd();
+        }
+
+        for (int j = 0; j < ny; j++)
+          for (int i = 0; i < nx; i++)
+          {
+            SpriteEntity* spritePart = new SpriteEntity(
+              ImageManager::getInstance().getImage(IMAGE_BOSS_PICTURES),
+              xBoss + i * dx + dx / 2,
+              0 + j * dy + dy / 2, dx, dy, nx);
+            spritePart->setFrame(j * nx + i);
+            spritePart->setZ(8000.0f);
+            spritePart->setSpin(-150 + rand()%200);
+            spritePart->setVelocity(Vector2D(200 + rand()%200));
+            spritePart->setWeight(500);
+            spritePart->setFading(true);
+            //spritePart->setAge(-0.8f);
+            spritePart->setLifetime(4.1f + (rand() % 100) * 0.003f );
+
+            spritePart->setType(ENTITY_EFFECT);
+          }
+      }
+      animateEffects();
+    }
+  }
+}
+
 void WitchBlastGame::renderGame()
 {
   lifeBar.toDisplay = false;
+  EntityManager::getInstance().renderUnder(app, 5000);
   EntityManager::getInstance().renderUnder(app, 5000);
 }
 
@@ -1449,7 +1566,9 @@ void WitchBlastGame::generateUiParticle(float x, float y)
 void WitchBlastGame::renderHud()
 {
   // boss life bar ?
-  if (lifeBar.toDisplay) renderLifeBar();
+  if (lifeBar.toDisplay && gameState != gameStatePlayingDisplayBoss) renderLifeBar();
+
+  renderBossPortrait();
 
   // achievements ?
   if (!achievementsQueue.empty() && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
@@ -1507,7 +1626,7 @@ void WitchBlastGame::renderHud()
       sf::Sprite icon;
       icon.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
       icon.setTextureRect(sf::IntRect( ((achievementsQueue.front().type + 1) % 10) * 64,
-                                      ((achievementsQueue.front().type + 1) / 10) * 64, 64, 64));
+                                       ((achievementsQueue.front().type + 1) / 10) * 64, 64, 64));
 
       icon.setPosition(xPos + 308, yPos + 9);
       icon.setScale(0.7f, 0.7f);
@@ -1520,12 +1639,12 @@ void WitchBlastGame::renderHud()
       if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
       {
         game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
-                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+                     13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
       }
       else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
       {
         game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
-                                      13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+                     13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
       }
     }
 
@@ -1600,6 +1719,23 @@ void WitchBlastGame::renderHud()
 
   app->draw(uiSprites.gui);
   EntityManager::getInstance().renderAfter(app, 5000);
+
+  if (gameState == gameStatePlayingDisplayBoss)
+  {
+    // boss name
+    int fade = 255;
+    if (bossDisplayTimer < 0.25f)
+    {
+      fade = 255 - (0.25f - bossDisplayTimer) * 1000;
+    }
+    else if (bossDisplayTimer > PORTRAIT_DIAPLAY_TIME - 0.25f)
+    {
+      fade = (PORTRAIT_DIAPLAY_TIME - bossDisplayTimer) * 1000;
+      if (fade < 0) fade = 0;
+    }
+
+    write("THE COOK", 27, GAME_WIDTH / 2, 540, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0);
+  }
 }
 
 void WitchBlastGame::renderLifeBar()
@@ -1812,7 +1948,7 @@ void WitchBlastGame::renderRunningGame()
     app->draw(rectangle, sf::BlendAdd);
   }
 
-  renderMessages();
+  if (gameState != gameStatePlayingDisplayBoss) renderMessages();
   app->draw(uiSprites.topLayer);
 
   std::ostringstream oss;
@@ -2970,6 +3106,22 @@ void WitchBlastGame::openDoors()
     doorEntity[3]->openDoor();
 }
 
+EnemyEntity* WitchBlastGame::getBoss()
+{
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() == ENTITY_ENEMY_BOSS) return static_cast<EnemyEntity*> (e);
+  }
+
+  return NULL;
+}
+
 int WitchBlastGame::getEnemyCount()
 {
   int n=0;
@@ -3004,12 +3156,27 @@ int WitchBlastGame::getUndeadCount()
     {
       EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
       if (enemy->canCollide() && (enemy->getEnemyType() == EnemyTypeZombie || enemy->getEnemyType() == EnemyTypeZombieDark
-          || enemy->getEnemyType() == EnemyTypeGhost || enemy->getEnemyType() == EnemyTypeVampire || enemy->getEnemyType() == EnemyTypeBat_invocated) )
-            n++;
+                                  || enemy->getEnemyType() == EnemyTypeGhost || enemy->getEnemyType() == EnemyTypeVampire || enemy->getEnemyType() == EnemyTypeBat_invocated) )
+        n++;
     }
   }
 
   return n;
+}
+
+void WitchBlastGame::animateEffects()
+{
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() == ENTITY_EFFECT)
+      e->animate(deltaTime);
+  }
 }
 
 void WitchBlastGame::destroyUndead(int damage)
@@ -3026,20 +3193,20 @@ void WitchBlastGame::destroyUndead(int damage)
     {
       EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
       if (enemy->canCollide() && (enemy->getEnemyType() == EnemyTypeZombie || enemy->getEnemyType() == EnemyTypeZombieDark
-          || enemy->getEnemyType() == EnemyTypeGhost || enemy->getEnemyType() == EnemyTypeVampire || enemy->getEnemyType() == EnemyTypeBat_invocated) )
-          {
-            enemy->hurt(BaseCreatureEntity::getHurtParams(damage, ShotTypeStandard, 0, false, SourceTypeMelee, EnemyTypeNone, false));
+                                  || enemy->getEnemyType() == EnemyTypeGhost || enemy->getEnemyType() == EnemyTypeVampire || enemy->getEnemyType() == EnemyTypeBat_invocated) )
+      {
+        enemy->hurt(BaseCreatureEntity::getHurtParams(damage, ShotTypeStandard, 0, false, SourceTypeMelee, EnemyTypeNone, false));
 
-            SpriteEntity* spriteCone = new SpriteEntity(
-              ImageManager::getInstance().getImage(IMAGE_LIGHT_CONE),
-              enemy->getX(), enemy->getZ() - 290);
-            spriteCone->setZ(1000.0f);
-            spriteCone->setFading(true);
-            spriteCone->setAge(-1.2f);
-            spriteCone->setLifetime(2.4f);
-            spriteCone->setRenderAdd();
+        SpriteEntity* spriteCone = new SpriteEntity(
+          ImageManager::getInstance().getImage(IMAGE_LIGHT_CONE),
+          enemy->getX(), enemy->getZ() - 290);
+        spriteCone->setZ(1000.0f);
+        spriteCone->setFading(true);
+        spriteCone->setAge(-1.2f);
+        spriteCone->setLifetime(2.4f);
+        spriteCone->setRenderAdd();
 
-          }
+      }
 
     }
   }
@@ -3400,7 +3567,10 @@ void WitchBlastGame::moveToOtherMap(int direction)
     saveInFight.direction = direction;
     saveMapItems();
 
-    if (!currentMap->isCleared()) saveGame();
+    if (!currentMap->isCleared())
+    {
+      saveGame();
+    }
   }
 }
 
@@ -3705,6 +3875,12 @@ void WitchBlastGame::generateMap()
     }
 
     playMusic(MusicBoss);
+
+    // boss screen
+    gameState = gameStatePlayingDisplayBoss;
+    bossDisplayTimer = 0.0f;
+    bossDisplayHasExploded = false;
+    dungeonEntity->animate(0.0f);
   }
   else if (currentMap->getRoomType() == roomTypeStarting)
   {
@@ -3921,9 +4097,9 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
                          || monsterType == EnemyTypeImpRed;
 
   bool isMonsterLarge = monsterType == EnemyTypeSlimeLarge
-                         || monsterType == EnemyTypeSlimeBlueLarge
-                         || monsterType == EnemyTypeSlimeRedLarge
-                         || monsterType == EnemyTypeSlimeVioletLarge;
+                        || monsterType == EnemyTypeSlimeBlueLarge
+                        || monsterType == EnemyTypeSlimeRedLarge
+                        || monsterType == EnemyTypeSlimeVioletLarge;
 
   bool bOk;
   int xm, ym;

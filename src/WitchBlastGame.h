@@ -242,6 +242,10 @@ public:
 
   int getUndeadCount();
 
+  void animateEffects();
+
+  EnemyEntity* getBoss();
+
   void destroyUndead(int damage);
 
   int getItemsCount();
@@ -528,6 +532,8 @@ private:
     gameStatePlayingDisplayBoss,   /**< Playing / DisplayBoss */
   };
   gameStateEnum gameState;  /*!< Store the game state */
+  float bossDisplayTimer;
+  bool bossDisplayHasExploded;
 
   /** Special game states enum
    *  Used for effects such as fade in...
@@ -739,6 +745,7 @@ private:
   void renderHud();
   void renderLifeBar();
   void renderMessages();
+  void renderBossPortrait();
 
   /*!
    *  \brief Update the menu
