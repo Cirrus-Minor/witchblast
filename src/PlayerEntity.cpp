@@ -1100,6 +1100,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
           sprite.setTextureRect(sf::IntRect( (fieldFrame + 1) * width, 9 * height, width, height));
           app->draw(sprite);
         }
+        sprite.setColor(savedColor);
       }
     }
   }
