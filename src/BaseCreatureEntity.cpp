@@ -149,7 +149,11 @@ void BaseCreatureEntity::animateColors(float delay)
     }
   }
   if (specialState[SpecialStateIce].active) sprite.setColor(sf::Color(100, 100, 255, 255 ));
-  else if (specialState[SpecialStatePoison].active) sprite.setColor(sf::Color(100, 255, 100, 255 ));
+  else if (specialState[SpecialStatePoison].active)
+  {
+    int fade = 180 + 70 * cos(age * 5);
+    sprite.setColor(sf::Color(fade, 255, fade, 255 ));
+  }
 }
 
 void BaseCreatureEntity::animateRecoil(float delay)
