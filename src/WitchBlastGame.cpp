@@ -67,7 +67,8 @@
 
 //#define START_LEVEL 7
 
-float PORTRAIT_DIAPLAY_TIME = 5.0f;
+const float PORTRAIT_DIAPLAY_TIME = 5.0f;
+const unsigned int ACHIEV_LINES = 2;
 
 static std::string intToString(int n)
 {
@@ -1860,7 +1861,7 @@ void WitchBlastGame::renderRunningGame()
   sf::RectangleShape rectangle(sf::Vector2f(200, 25));
 
   // effects
-  if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
+  if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]) && gameState == gameStatePlaying)
   {
     // effect
     int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
@@ -2473,6 +2474,10 @@ void WitchBlastGame::updateMenu()
       {
         if (event.key.code == sf::Keyboard::Escape)
           menuState = MenuStateMain;
+        else if (event.key.code == sf::Keyboard::Return)
+        {
+          if (menuAchIndex / 8 >= ACHIEV_LINES) menuState = MenuStateMain;
+        }
         else if (event.key.code == sf::Keyboard::Right || event.key.code == input[KeyRight])
         {
           if (menuAchIndex % 8 < 7) menuAchIndex++;
@@ -2483,7 +2488,7 @@ void WitchBlastGame::updateMenu()
         }
         else if (event.key.code == sf::Keyboard::Down || event.key.code == input[KeyDown])
         {
-          if (menuAchIndex / 8 < 1) menuAchIndex += 8;
+          if (menuAchIndex / 8 < ACHIEV_LINES) menuAchIndex += 8;
         }
         else if (event.key.code == sf::Keyboard::Up || event.key.code == input[KeyUp])
         {
@@ -2820,11 +2825,14 @@ void WitchBlastGame::renderAchievements()
 
   int achWidth = 64, achHeight = 64, x0 = 180, y0 = 380, xStep = 16, yStep = 16, nbProLine = 8;
 
-  sf::RectangleShape rectangle(sf::Vector2f(achWidth, achHeight));
-  rectangle.setPosition(x0 + (menuAchIndex % nbProLine) * (achWidth + xStep), y0 + (menuAchIndex / nbProLine) * (achHeight + yStep));
-  rectangle.setOutlineThickness(3);
-  rectangle.setOutlineColor(sf::Color(50, 255, 50));
-  app->draw(rectangle);
+  if (menuAchIndex / 8 < ACHIEV_LINES)
+  {
+    sf::RectangleShape rectangle(sf::Vector2f(achWidth, achHeight));
+    rectangle.setPosition(x0 + (menuAchIndex % nbProLine) * (achWidth + xStep), y0 + (menuAchIndex / nbProLine) * (achHeight + yStep));
+    rectangle.setOutlineThickness(3);
+    rectangle.setOutlineColor(sf::Color(50, 255, 50));
+    app->draw(rectangle);
+  }
 
   sf::Sprite sprite;
   sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
@@ -2844,35 +2852,44 @@ void WitchBlastGame::renderAchievements()
     app->draw(sprite);
   }
 
-  sf::Color fontColor = sf::Color::White;
-  std::stringstream oss;
-  int achIndex = sortedAchievements[menuAchIndex];
-
-  if (achIndex >= AchievementGiantSlime
-      && achIndex <= AchievementFrancky
-      && !achievementState[achIndex] == AchievementDone)
-    oss << "???";
-  else
-    oss << tools::getLabel(achievements[achIndex].label);
-  oss << ": ";
-  if (achievementState[achIndex] == AchievementDone)
+  if (menuAchIndex / 8 >= ACHIEV_LINES)
   {
-    oss << tools::getLabel(achievements[achIndex].label + "_desc");
-    if (achievements[achIndex].unlockType == UnlockItem && achievements[achIndex].unlock > -1)
-      oss << "\nUNLOCK: " << tools::getLabel(items[achievements[achIndex].unlock].name);
-    else if (achievements[achIndex].unlockType == UnlockFunctionality && achievements[achIndex].unlock > -1)
-      oss << "\nUNLOCK: " << tools::getLabel(functionalityLabel[achievements[achIndex].unlock]);
+    write(tools::getLabel("config_back"), 17, 485, 550, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
   }
   else
   {
-    if (isFunctionalityLocked(FunctionalityAllAchievements))
+    write(tools::getLabel("config_back"), 17, 485, 550, ALIGN_CENTER, sf::Color(180, 180, 180, 255), app, 1, 1);
+
+    sf::Color fontColor = sf::Color::White;
+    std::stringstream oss;
+    int achIndex = sortedAchievements[menuAchIndex];
+
+    if (achIndex >= AchievementGiantSlime
+        && achIndex <= AchievementFrancky
+        && !achievementState[achIndex] == AchievementDone)
       oss << "???";
     else
+      oss << tools::getLabel(achievements[achIndex].label);
+    oss << ": ";
+    if (achievementState[achIndex] == AchievementDone)
+    {
       oss << tools::getLabel(achievements[achIndex].label + "_desc");
-    fontColor = sf::Color(150, 150, 150);
-  }
+      if (achievements[achIndex].unlockType == UnlockItem && achievements[achIndex].unlock > -1)
+        oss << "\nUNLOCK: " << tools::getLabel(items[achievements[achIndex].unlock].name);
+      else if (achievements[achIndex].unlockType == UnlockFunctionality && achievements[achIndex].unlock > -1)
+        oss << "\nUNLOCK: " << tools::getLabel(functionalityLabel[achievements[achIndex].unlock]);
+    }
+    else
+    {
+      if (isFunctionalityLocked(FunctionalityAllAchievements))
+        oss << "???";
+      else
+        oss << tools::getLabel(achievements[achIndex].label + "_desc");
+      fontColor = sf::Color(150, 150, 150);
+    }
 
-  write(oss.str(), 19, 100, 650, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(oss.str(), 19, 100, 650, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+  }
 }
 
 void WitchBlastGame::renderCredits()
