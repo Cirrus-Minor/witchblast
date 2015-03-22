@@ -65,7 +65,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 7
+#define START_LEVEL 7
 
 float PORTRAIT_DIAPLAY_TIME = 5.0f;
 

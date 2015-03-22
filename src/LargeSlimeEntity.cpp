@@ -303,7 +303,9 @@ void LargeSlimeEntity::dying()
 {
   isDying = true;
   game().addKilledEnemy(enemyType, hurtingType);
-  game().addCorpse(x, y, FRAME_CORPSE_GIANT_SLIME);
+  if (slimeType == SlimeTypeBlue) game().addCorpse(x, y, FRAME_CORPSE_GIANT_SLIME_BLUE);
+  else if (slimeType == SlimeTypeRed) game().addCorpse(x, y, FRAME_CORPSE_GIANT_SLIME_RED);
+  else if (slimeType == SlimeTypeStandard) game().addCorpse(x, y, FRAME_CORPSE_GIANT_SLIME);
 
   float xSlime = x;
   float ySlime = y;
