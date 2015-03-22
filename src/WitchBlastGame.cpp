@@ -65,7 +65,7 @@
 
 #include <algorithm>
 
-#define START_LEVEL 7
+//#define START_LEVEL 7
 
 float PORTRAIT_DIAPLAY_TIME = 5.0f;
 
@@ -1011,37 +1011,41 @@ void WitchBlastGame::updateRunningGame()
       }
       else if (event.key.code == sf::Keyboard::Return)
       {
-        switch (menuInGame.items[menuInGame.index].id)
+        // MENU
+        if (gameState == gameStatePlayingPause)
         {
-        case MenuStartNew:
-        case MenuStartOld:
-        case MenuKeys:
-        case MenuConfig:
-        case MenuTutoReset:
-        case MenuConfigBack:
-        case MenuLanguage:
-        case MenuCredits:
-        case MenuHiScores:
-        case MenuPlayerName:
-        case MenuVolumeMusic:
-        case MenuVolumeSound:
-        case MenuAchievements:
-          std::cout << "[ERROR] Bad Menu ID\n";
-          break;
+          switch (menuInGame.items[menuInGame.index].id)
+          {
+          case MenuStartNew:
+          case MenuStartOld:
+          case MenuKeys:
+          case MenuConfig:
+          case MenuTutoReset:
+          case MenuConfigBack:
+          case MenuLanguage:
+          case MenuCredits:
+          case MenuHiScores:
+          case MenuPlayerName:
+          case MenuVolumeMusic:
+          case MenuVolumeSound:
+          case MenuAchievements:
+            std::cout << "[ERROR] Bad Menu ID\n";
+            break;
 
-        case MenuExit:
-          backToMenu = true;
-          remove(SAVE_FILE.c_str());
-          break;
+          case MenuExit:
+            backToMenu = true;
+            remove(SAVE_FILE.c_str());
+            break;
 
-        case MenuContinue:
-          gameState = gameStatePlaying;
-          break;
+          case MenuContinue:
+            gameState = gameStatePlaying;
+            break;
 
-        case MenuSaveAndQuit:
-          saveGame();
-          backToMenu = true;
-          break;
+          case MenuSaveAndQuit:
+            saveGame();
+            backToMenu = true;
+            break;
+          }
         }
       }
 
@@ -1063,15 +1067,15 @@ void WitchBlastGame::updateRunningGame()
         {
           gameState = gameStatePlaying;
         }
-        else if (!messagesQueue.empty())
-        {
-          if (messagesQueue.front().timer > 0.5f)
-            messagesQueue.front().timer = 0.5f;
-        }
         else if (!achievementsQueue.empty())
         {
           if (achievementsQueue.front().timer > 1.0f)
             achievementsQueue.front().timer = 1.0f;
+        }
+        else if (!messagesQueue.empty())
+        {
+          if (messagesQueue.front().timer > 0.5f)
+            messagesQueue.front().timer = 0.5f;
         }
       }
 
