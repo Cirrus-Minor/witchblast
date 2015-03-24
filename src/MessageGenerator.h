@@ -43,6 +43,7 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoLevel4,    { MessageTypeInfo, 1, "msg_level4",           3} },
   { MsgInfoLevel5,    { MessageTypeInfo, 1, "msg_level5",           3} },
   { MsgInfoLevel6,    { MessageTypeInfo, 1, "msg_level6",           3} },
+  { MsgInfoLevel7,    { MessageTypeInfo, 1, "msg_level7",           3} },
 
   { MsgInfoRatsBats,  { MessageTypeInfo, 1, "msg_rats_bats",        3} },
   { MsgInfoSnakes,    { MessageTypeInfo, 1, "msg_snakes",           2} },
@@ -57,6 +58,7 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoGiantSpiderBefore, { MessageTypeInfo, 1, "msg_giant_spider_before",  2} },
   { MsgInfoGiantSpiderAfter,  { MessageTypeInfo, 1, "msg_giant_spider_after",   2} },
   { MsgInfoFranky,            { MessageTypeInfo, 1, "msg_francky",              2} },
+  { MsgInfoVampire,           { MessageTypeInfo, 1, "msg_vampire",              2} },
 
   { MsgInfoDivHealer,         { MessageTypeInfo, 0, "divinity_healer",            3} },
   { MsgInfoDivFighter,        { MessageTypeInfo, 0, "divinity_fighter",           3} },

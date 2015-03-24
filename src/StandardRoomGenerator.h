@@ -18,7 +18,7 @@
 #ifndef STANDARDROOMGENERATOR_H_INCLUDED
 #define STANDARDROOMGENERATOR_H_INCLUDED
 
-const int LAST_LEVEL = 6;
+const int LAST_LEVEL = 7;
 
 void generateStandardRoom01()
 {

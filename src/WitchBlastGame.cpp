@@ -690,7 +690,7 @@ void WitchBlastGame::startNewLevel()
   // the boss room is closed
   bossRoomOpened = false;
 
-  if (level <= 6) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
+  if (level <= 7) testAndAddMessageToQueue((EnumMessages)(MsgInfoLevel1 + level - 1));
   if (level == 1)
   {
     testAndAddMessageToQueue(MsgTutoBasics);
@@ -3858,6 +3858,13 @@ void WitchBlastGame::generateMap()
       testAndAddMessageToQueue(MsgInfoFranky);
     }
     else if (level == 7)
+    {
+      addMonster(EnemyTypeVampire,
+                 (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                 (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      testAndAddMessageToQueue(MsgInfoVampire);
+    }
+    else if (level == 8)
     {
       // TODO
       GiantSpiderEntity* b1 = new GiantSpiderEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,

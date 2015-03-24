@@ -579,6 +579,7 @@ enum EnumMessages
   MsgInfoLevel4,
   MsgInfoLevel5,
   MsgInfoLevel6,
+  MsgInfoLevel7,
   MsgInfoRatsBats,
   MsgInfoSnakes,
   MsgInfoWitches,
@@ -591,6 +592,7 @@ enum EnumMessages
   MsgInfoGiantSpiderBefore,
   MsgInfoGiantSpiderAfter,
   MsgInfoFranky,
+  MsgInfoVampire,
 
   MsgInfoDivHealer,
   MsgInfoDivFighter,

@@ -443,7 +443,11 @@ enemy_type_vampire#the Vampire
 msg_tuto_achiev_0#Tutorial: Achievements
 msg_tuto_achiev_1#You've completed an achievement.
 msg_tuto_achiev_2#They unlock new items or bonus.
-
+msg_vampire_0#The Vampire
+msg_vampire_1#I forgot to bring some garlic!
+msg_level7_0#The Archmage's daughter
+msg_level7_1#"I'm getting closer and closer.
+msg_level7_2#She can't be so far from here."
 
 [french]
 start_new_game#Nouvelle partie
