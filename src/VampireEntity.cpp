@@ -12,7 +12,7 @@
 #include <iostream>
 #include <sstream>
 
-const int VAMPIRE_HP = 1200;
+const int VAMPIRE_HP = 200;
 const int VAMPIRE_DAMAGE = 12;
 const float VAMPIRE_FLYING_DELAY = 1.2f;
 const float VAMPIRE_BAT_DELAY = 0.225f;
@@ -36,6 +36,7 @@ VampireEntity::VampireEntity(float myx, float myy)
   hpMax = VAMPIRE_HP;
   meleeDamages = VAMPIRE_DAMAGE;
   shadowFrame = 30;
+  bodyFrame = 0;
 
   type = ENTITY_ENEMY_BOSS;
   //deathFrame = FRAME_CORPSE_CYCLOP;
@@ -114,7 +115,7 @@ void VampireEntity::computeStates(float delay)
     {
       state = 3; // laughing
       timer = 1.3f; // 3.0f;
-      SoundManager::getInstance().playSound(SOUND_PUMPKIN_01);
+      SoundManager::getInstance().playSound(SOUND_VAMPIRE_LAUGHING);
     }
     else if (state == 3) // laughing
     {
@@ -129,12 +130,14 @@ void VampireEntity::computeStates(float delay)
         timer = VAMPIRE_TRANSFORM_DELAY;
         formState = FORM_BAT;
         moveCounter = VAMPIRE_MOVE_COUNTER_MAX;
+        SoundManager::getInstance().playSound(SOUND_VAMPIRE_TRANSFORM_BOLT);
       }
       else
       {
         state = 5;
         timer = VAMPIRE_TRANSFORM_DELAY;
         moveCounter--;
+        SoundManager::getInstance().playSound(SOUND_VAMPIRE_TRANSFORM_BOLT);
       }
     }
     else if (state == 5) // to bat cloud
@@ -158,6 +161,7 @@ void VampireEntity::computeStates(float delay)
     {
       state = 7;
       timer = VAMPIRE_TRANSFORM_DELAY;
+      SoundManager::getInstance().playSound(SOUND_VAMPIRE_TRANSFORM_BOLT);
     }
     else if (state == 7) // cloud to vampire
     {
@@ -215,7 +219,7 @@ void VampireEntity::computeStates(float delay)
         game().generateStar(sf::Color(200, 0, 200), x - 60 + rand() % 121, y - 60 + rand() % 121);
         game().generateStar(sf::Color(0, 0, 0), x - 60 + rand() % 121, y - 60 + rand() % 121);
       }
-      SoundManager::getInstance().playSound(SOUND_INVOKE);
+      SoundManager::getInstance().playSound(SOUND_VAMPIRE_TRANSFORM_BAT);
       timer = 1.0f;
     }
     else if (state == 11) // giant bat waiting
@@ -233,7 +237,7 @@ void VampireEntity::computeStates(float delay)
         game().generateStar(sf::Color(200, 0, 200), x - 40 + rand() % 81, y - 40 + rand() % 81);
         game().generateStar(sf::Color(0, 0, 0), x - 40 + rand() % 81, y - 40 + rand() % 81);
       }
-      SoundManager::getInstance().playSound(SOUND_INVOKE);
+      SoundManager::getInstance().playSound(SOUND_VAMPIRE_TRANSFORM_BAT);
     }
     else if (state == 13) // cry !
     {
@@ -421,13 +425,13 @@ void VampireEntity::prepareDying()
       game().generateStar(sf::Color(200, 0, 200), x - 40 + rand() % 81, y - 40 + rand() % 81);
       game().generateStar(sf::Color(0, 0, 0), x - 40 + rand() % 81, y - 40 + rand() % 81);
     }
-    SoundManager::getInstance().playSound(SOUND_INVOKE);
+    SoundManager::getInstance().playSound(SOUND_VAMPIRE_TRANSFORM_BAT);
   }
 
   timer = 0.0f;
   sprite.setOrigin(0.0f, 0.0f);
   isAgonising = true;
-  SoundManager::getInstance().playSound(SOUND_KING_RAT_DIE);
+  SoundManager::getInstance().playSound(SOUND_VAMPIRE_DYING);
 
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
@@ -534,7 +538,10 @@ void VampireEntity::render(sf::RenderTarget* app)
   {
     if (state == 11 || state == 12) // giant bat
     {
-      int bodyFrame = (int)(age * 18) % 9;
+      int oldBodyFrame = bodyFrame;
+      bodyFrame = (int)(age * 18) % 9;
+      if (oldBodyFrame == 6 && bodyFrame == 7)
+        SoundManager::getInstance().playSound(SOUND_VAMPIRE_FLAP);
       batSprite.setTextureRect(sf::IntRect(418 * (bodyFrame % 3), 342 * (bodyFrame / 3), 418, 342));
       batSprite.setPosition(x - 209, y - 200);
       batSprite.setColor(sprite.getColor());
@@ -650,6 +657,9 @@ void VampireEntity::renderRays(sf::RenderTarget* app, bool isGhost)
     rayLittle.setRotation(ray.getRotation() - 3);
     app->draw(rayLittle);
   }
+
+  if (!isGhost)
+    SoundManager::getInstance().playSound(SOUND_VAMPIRE_SONIC_RAY, false);
 }
 
 void VampireEntity::testRaysCollision()
@@ -680,7 +690,7 @@ void VampireEntity::testRaysCollision()
       {
         if (player->hurt(getHurtParams(8, ShotTypeStandard, 0, false, SourceTypeMelee, EnemyTypeVampire, false)) > 0)
         {
-          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), player->getX(), player->getY());
+          SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_VAMPIRE_PART), player->getX(), player->getY());
           star->setFading(true);
           star->setZ(y+ 100);
           star->setLifetime(0.7f);

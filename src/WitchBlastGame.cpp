@@ -296,6 +296,7 @@ WitchBlastGame::WitchBlastGame()
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/francky.png",
     "media/vampire.png",       "media/vampire_bat.png",
+    "media/vampire_part.png",
     "media/blood.png",
     "media/corpses.png",       "media/corpses_big.png",
     "media/star.png",          "media/star2.png",
@@ -315,6 +316,7 @@ WitchBlastGame::WitchBlastGame()
     "media/splatter.png",         "media/witch_intro.png",
     "media/item_description.png", "media/death_certificate.png",
     "media/achievements.png",     "media/boss_pictures.png",
+    "media/portrait_part.png",
   };
 
   for (const char *const filename : images)
@@ -377,6 +379,11 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/splatch.ogg",        "media/sound/intro_witch.ogg",
     "media/sound/force_field.ogg",    "media/sound/door_opening_boss.ogg",
     "media/sound/achievement.ogg",
+    "media/sound/vampire_flying.ogg", "media/sound/vampire_flap.ogg",
+    "media/sound/vampire_sonic.ogg",  "media/sound/vampire_laughing.ogg",
+    "media/sound/vampire_transform_bolt.ogg", "media/sound/vampire_transform_bat.ogg",
+    "media/sound/vampire_hypnosis.ogg", "media/sound/vampire_cry.ogg",
+    "media/sound/vampire_dying.ogg",
   };
 
   // AA in fullscreen
@@ -1451,7 +1458,7 @@ void WitchBlastGame::renderBossPortrait()
     if (bossDisplayTimer < 0.25f)
     {
       xBoss += (0.25f - bossDisplayTimer) * 3000;
-      fade = 255 - (0.25f - bossDisplayTimer) * 1000;
+      //fade = 255 - (0.25f - bossDisplayTimer) * 1000;
     }
     else if (bossDisplayTimer > endTime - 0.75f)
     {
@@ -1467,7 +1474,7 @@ void WitchBlastGame::renderBossPortrait()
     app->draw(rectangle);
 
     // boss
-    if (bossDisplayTimer > transitionTime)
+    if (bossDisplayTimer > transitionTime) // + 1.0f)
     {
       EnemyEntity* boss = getBoss();
       if (boss)
@@ -1478,6 +1485,19 @@ void WitchBlastGame::renderBossPortrait()
         boss->render(app);
         view.move(5, 5);
         app->setView(view);
+      }
+
+      /*if (bossDisplayTimer < transitionTime + 1.5f)
+      {
+        rectangle.setFillColor(sf::Color(0, 0, 0, (1.5 - (bossDisplayTimer - transitionTime)) * 510));
+        app->draw(rectangle);
+        std::cout << 1.5 - (bossDisplayTimer - transitionTime) << " ";
+      }*/
+      //if (bossDisplayTimer < transitionTime + 2.0f)
+      {
+        //rectangle.setFillColor(sf::Color(0, 0, 0, (2.0 - (bossDisplayTimer - transitionTime)) * 255));
+        //app->draw(rectangle);
+        //std::cout << 1.5 - (bossDisplayTimer - transitionTime) << " ";
       }
     }
 
@@ -1492,20 +1512,20 @@ void WitchBlastGame::renderBossPortrait()
     }
     else
     {
-      if (!bossDisplayHasExploded)
+      if (bossDisplayState == 0)
       {
         SoundManager::getInstance().playSound(SOUND_BOOM_00);
-        bossDisplayHasExploded = true;
+
         int nx = 10;
         int ny = 10;
 
         int dx = 534 / nx;
         int dy = 560 / ny;
 
-        for (int i = 0; i < 400; i++)
+        for (int i = 0; i < 250; i++)
         {
           SpriteEntity* spriteStar = new SpriteEntity(
-            ImageManager::getInstance().getImage(IMAGE_STAR),
+            ImageManager::getInstance().getImage(IMAGE_PORTRAIT_PART),
             GAME_WIDTH / 2 - 150 + rand() % 300, GAME_HEIGHT / 2 - 150 + rand() % 300);
           spriteStar->setScale(5.0f, 5.0f);
           spriteStar->setZ(7000.0f);
@@ -1513,13 +1533,13 @@ void WitchBlastGame::renderBossPortrait()
           spriteStar->setVelocity(Vector2D(400 + rand()%800));
           spriteStar->setFading(true);
           spriteStar->setLifetime(4.1f + (rand() % 100) * 0.003f );
-          //spriteStar->setColor(sf::Color(180 + rand() % 75, 180 + rand() % 75, 180 + rand() % 75));
           spriteStar->setColor(sf::Color(rand() % 255, rand() % 255, 255, 128));
+          spriteStar->setColor(sf::Color(40, 4, 40, 128));
           spriteStar->setType(ENTITY_EFFECT);
-          spriteStar->setRenderAdd();
+          if (rand()% 2 == 0) spriteStar->setRenderAdd();
         }
 
-        for (int j = 0; j < ny; j++)
+       /* for (int j = 0; j < ny; j++)
           for (int i = 0; i < nx; i++)
           {
             SpriteEntity* spritePart = new SpriteEntity(
@@ -1536,7 +1556,49 @@ void WitchBlastGame::renderBossPortrait()
             spritePart->setLifetime(4.1f + (rand() % 100) * 0.003f );
 
             spritePart->setType(ENTITY_EFFECT);
-          }
+          }*/
+
+        bossDisplayState = 1;
+      }
+      else if (bossDisplayState == 1 && bossDisplayTimer > transitionTime + 0.2f)
+      {
+        bossDisplayState = 2;
+        for (int i = 0; i < 50; i++)
+        {
+          SpriteEntity* spriteStar = new SpriteEntity(
+            ImageManager::getInstance().getImage(IMAGE_PORTRAIT_PART),
+            GAME_WIDTH / 2 - 150 + rand() % 300, GAME_HEIGHT / 2 - 150 + rand() % 300);
+          spriteStar->setScale(4.0f, 4.0f);
+          spriteStar->setZ(7000.0f);
+          spriteStar->setSpin(-100 + rand()%200);
+          spriteStar->setVelocity(Vector2D(400 + rand()%800));
+          spriteStar->setFading(true);
+          spriteStar->setLifetime(4.1f + (rand() % 100) * 0.003f );
+          spriteStar->setColor(sf::Color(rand() % 255, rand() % 255, 255, 128));
+          spriteStar->setColor(sf::Color(20, 2, 20, 128));
+          spriteStar->setType(ENTITY_EFFECT);
+          spriteStar->setRenderAdd();
+        }
+      }
+      else if (bossDisplayState == 2 && bossDisplayTimer > transitionTime + 0.4f)
+      {
+        bossDisplayState = 3;
+        for (int i = 0; i < 50; i++)
+        {
+          SpriteEntity* spriteStar = new SpriteEntity(
+            ImageManager::getInstance().getImage(IMAGE_PORTRAIT_PART),
+            GAME_WIDTH / 2 - 150 + rand() % 300, GAME_HEIGHT / 2 - 150 + rand() % 300);
+          spriteStar->setScale(3.0f, 3.0f);
+          spriteStar->setZ(7000.0f);
+          spriteStar->setSpin(-100 + rand()%200);
+          spriteStar->setVelocity(Vector2D(400 + rand()%800));
+          spriteStar->setFading(true);
+          spriteStar->setLifetime(4.1f + (rand() % 100) * 0.003f );
+          spriteStar->setColor(sf::Color(rand() % 255, rand() % 255, 255, 128));
+          spriteStar->setColor(sf::Color(20, 2, 20, 128));
+          spriteStar->setType(ENTITY_EFFECT);
+          spriteStar->setRenderAdd();
+        }
       }
       animateEffects();
     }
@@ -3905,10 +3967,13 @@ void WitchBlastGame::generateMap()
     playMusic(MusicBoss);
 
     // boss screen
-    gameState = gameStatePlayingDisplayBoss;
-    bossDisplayTimer = 0.0f;
-    bossDisplayHasExploded = false;
-    dungeonEntity->animate(0.0f);
+    if (parameters.displayBossPortrait)
+    {
+      gameState = gameStatePlayingDisplayBoss;
+      bossDisplayTimer = 0.0f;
+      bossDisplayState = 0;
+      dungeonEntity->animate(0.0f);
+    }
   }
   else if (currentMap->getRoomType() == roomTypeStarting)
   {
@@ -4250,6 +4315,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
         n = 1;
         break;
       }
+
       for (int j = 0; j < n; j++)
       {
         bonusSet.push_back(i);
@@ -5081,6 +5147,7 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["vsync_enabled"] = parameters.vsync ? "1" : "0";
   newMap["blood_spreading"] = parameters.bloodSpread ? "1" : "0";
   newMap["fullscreen"] = parameters.fullscreen ? "1" : "0";
+  newMap["display_boss_portrait"] = parameters.displayBossPortrait ? "1" : "0";
 
   // Keys
   newMap["keyboard_move_up"] = intToString(input[KeyUp]);
@@ -5111,6 +5178,7 @@ void WitchBlastGame::configureFromFile()
   parameters.musicVolume = 60;
   parameters.soundVolume = 100;
   parameters.playerName = "";
+  parameters.displayBossPortrait = true;
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
@@ -5156,6 +5224,8 @@ void WitchBlastGame::configureFromFile()
   if (i >= 0) parameters.bloodSpread = i;
   i = config.findInt("fullscreen");
   if (i >= 0) parameters.fullscreen = i;
+  i = config.findInt("display_boss_portrait");
+  if (i >= 0) parameters.displayBossPortrait = i;
 
   std::string playerName = config.findString("player_name");
   if (playerName.size() > 0) parameters.playerName = playerName;

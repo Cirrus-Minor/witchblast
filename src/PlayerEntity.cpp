@@ -623,6 +623,8 @@ void PlayerEntity::animate(float delay)
   if (playerStatus != playerStatusDead)
   {
     if (invincibleDelay >= 0.0f) invincibleDelay -= delay;
+    if (specialState[SpecialStateConfused].active)
+      SoundManager::getInstance().playSound(SOUND_VAMPIRE_HYPNOSIS, false);
   }
   z = y + 4;
 }

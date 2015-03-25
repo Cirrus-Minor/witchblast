@@ -29,6 +29,7 @@ class VampireEntity : public EnemyEntity
     float xSource, ySource;
     int formState;
     sf::Sprite batSprite;
+    int bodyFrame;
 
     int numberOfRays;
     int raySpeedFactor;

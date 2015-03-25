@@ -118,6 +118,7 @@ struct parameterStruct
   bool vsync;                 /*!< monitor vsync (false = disabled) */
   bool bloodSpread;           /*!< blood spread (false = disabled) */
   bool fullscreen;            /*!< full screen (false = disabled) */
+  bool displayBossPortrait;
   std::string playerName;     /*!< player name */
 };
 
@@ -533,7 +534,7 @@ private:
   };
   gameStateEnum gameState;  /*!< Store the game state */
   float bossDisplayTimer;
-  bool bossDisplayHasExploded;
+  int bossDisplayState;
 
   /** Special game states enum
    *  Used for effects such as fade in...
