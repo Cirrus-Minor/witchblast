@@ -1081,6 +1081,16 @@ void PlayerEntity::render(sf::RenderTarget* app)
           }
           break;
         }
+      case DivinityAir:
+        {
+          if (divinity.level > 2)
+          {
+            displayField = true;
+            fieldFrame = 14;
+            fieldFade = 80 * (divinity.level - 3);
+          }
+          break;
+        }
       }
 
       if (displayField)
@@ -1766,6 +1776,12 @@ void PlayerEntity::computePlayer()
       if (divinity.level >= 3) resistance[ResistanceStone] = (enumStateResistance)(resistance[ResistanceStone] - 1);
       break;
     }
+  case (DivinityAir):
+    {
+      if (divinity.level > 1) creatureSpeedBonus += (divinity.level - 1) * 0.04f;
+      if (divinity.level >= 3) resistance[ResistanceLightning] = (enumStateResistance)(resistance[ResistanceLightning] - 1);
+      break;
+    }
   }
 
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
@@ -1793,6 +1809,7 @@ void PlayerEntity::computePlayer()
 
     case ShotTypeLightning:
       if (equip[EQUIP_RING_LIGHTNING]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityAir && divinity.level >= 4) specialShotLevel[i]++;
       break;
 
     case ShotTypeIllusion:
@@ -2130,6 +2147,11 @@ void PlayerEntity::donate(int n)
         divineGift = true;
         itemType = ItemGemStone;
       }
+      else if (divinity.divinity == DivinityAir && !equip[EQUIP_GEM_LIGHTNING])
+      {
+        divineGift = true;
+        itemType = ItemGemLightning;
+      }
     }
 
     if (divineGift)
@@ -2237,6 +2259,7 @@ void PlayerEntity::divineFury()
   enumShotType shotType = ShotTypeStandard;
   if (divinity.divinity == DivinityIce) shotType = ShotTypeIce;
   else if (divinity.divinity == DivinityStone) shotType = ShotTypeStone;
+  else if (divinity.divinity == DivinityAir) shotType = ShotTypeLightning;
 
   int multBonus = 6;
   if (divinity.divinity == DivinityFighter) multBonus = 8;
@@ -2250,9 +2273,17 @@ void PlayerEntity::divineFury()
     float velx = 400 * cos(i);
     float vely = 400 * sin(i);
     bolt->setVelocity(Vector2D(velx, vely));
-    bolt->setFlying(true);
+    if (divinity.divinity == DivinityAir)
+    {
+      bolt->setFlying(true);
+      bolt->setLifetime(-1.0f);
+    }
+    else
+    {
+      bolt->setLifetime(8.0f);
+    }
+
     bolt->setViscosity(1.0f);
-    bolt->setLifetime(-1.0f);
     bolt->setGoThrough(true);
     bolt->setFromPlayer(false);
   }
@@ -2408,6 +2439,27 @@ bool PlayerEntity::triggerDivinityBefore()
       return true;
       break;
     }
+    case DivinityAir:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      divinity.interventions ++;
+      divineHeal(hpMax / 3);
+      /*if (r == 1)
+      {
+        divineIce();
+        game().makeColorEffect(X_GAME_COLOR_BLUE, 7.5f);
+      }
+      else*/
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.5f);
+      }
+      return true;
+      break;
+    }
     }
   }
   return false;
@@ -2426,7 +2478,8 @@ void PlayerEntity::triggerDivinityAfter()
         divineHeal(hpMax);
         break;
       }
-    case DivinityFighter:
+    //case DivinityFighter:
+    default:
       {
         SoundManager::getInstance().playSound(SOUND_OM);
         divinity.interventions ++;
@@ -2496,6 +2549,10 @@ void PlayerEntity::pietyLevelUp()
     if (divinity.level == 3) label = "div_stone_lvl_3";
     else if (divinity.level == 4) label = "div_stone_lvl_4";
     else if (divinity.level == 5) label = "div_stone_lvl_5";
+    break;
+  case DivinityAir:
+    if (divinity.level == 4) label = "div_air_lvl_4";
+    else label = "div_air_lvl";
     break;
   }
 

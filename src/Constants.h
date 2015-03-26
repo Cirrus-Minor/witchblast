@@ -387,6 +387,7 @@ enum enumDivinityType {
   DivinityFighter,
   DivinityIce,
   DivinityStone,
+  DivinityAir,
 
   NB_DIVINITY
 };
@@ -396,6 +397,7 @@ const std::string divinityLabel[NB_DIVINITY]
   "divinity_fighter",
   "divinity_ice",
   "divinity_stone",
+  "divinity_air",
 };
 const int MAX_DIVINITY_LEVEL = 5;
 const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =

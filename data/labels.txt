@@ -448,6 +448,11 @@ msg_vampire_1#I forgot to bring some garlic!
 msg_level7_0#The Archmage's daughter
 msg_level7_1#"I'm getting closer and closer.
 msg_level7_2#She can't be so far from here."
+divinity_air_0#Ostram
+divinity_air_1#Divinity of air and storm.
+divinity_air_2#He likes the use of lightning.
+div_air_lvl#increases your speed
+div_air_lvl_4#increases your lightning attack
 
 [french]
 start_new_game#Nouvelle partie
