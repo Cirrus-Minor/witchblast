@@ -34,6 +34,9 @@ class SlimePetEntity : public BaseCreatureEntity
     bool isJumping;
     bool isFirstJumping;
     bool invocated;
+
+    bool isFalling();
+    void fall();
 };
 
 #endif // SLIMESPRITE_H

@@ -34,6 +34,7 @@ SlimePetEntity::SlimePetEntity()
   hVelocity = 0.0f;
   isJumping = true;
   isFirstJumping = true;
+  age = 0.0f;
 
   x = GAME_WIDTH * 0.5f;
   y = GAME_HEIGHT * 0.5f;
@@ -46,66 +47,78 @@ SlimePetEntity::SlimePetEntity()
 
 void SlimePetEntity::animate(float delay)
 {
-  float slimeDelay = delay;
-  if (specialState[SpecialStateIce].active) slimeDelay = delay * specialState[SpecialStateIce].param1;
-
-  attackDelay -= delay;
-
-  if (isJumping)
+  if (age < 0.0f)
   {
-    hVelocity -= 700.0f * slimeDelay;
-
-    h += hVelocity * slimeDelay;
-
-    bool firstTimeGround = false;
-
-    if (h <= 0.0f)
-    {
-      if (hp <= 0)
-        dying();
-      else
-      {
-        h = 0.0f;
-        if (isFirstJumping)
-        {
-          isFirstJumping = false;
-          firstTimeGround = true;
-          hVelocity = 160.0f;
-          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT);
-        }
-        else
-        {
-          jumpingDelay = 0.3f + 0.1f * (rand() % 15);
-          isJumping = false;
-          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_WEAK);
-        }
-      }
-    }
-    if (firstTimeGround) frame = 0;
-    else if (hVelocity > -190.0f) frame = 2;
-    else frame = 1;
+    age += delay;
   }
   else
   {
-    jumpingDelay -= slimeDelay;
-    if (jumpingDelay < 0.0f)
+
+    attackDelay -= delay;
+
+    if (isJumping)
     {
-      SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
-      hVelocity = 300.0f + rand() % 250;
-      isJumping = true;
-      isFirstJumping = true;
+      hVelocity -= 700.0f * delay;
 
-      float randVel = 250.0f + rand() % 250;
+      h += hVelocity * delay;
 
-      setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), randVel ));
+      bool firstTimeGround = false;
+
+      if (h <= 0.0f)
+      {
+        h = 0.0f;
+        if (isFalling())
+        {
+          fall();
+        }
+        else
+        {
+          if (isFirstJumping)
+          {
+            isFirstJumping = false;
+            firstTimeGround = true;
+            hVelocity = 160.0f;
+            SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT);
+          }
+          else
+          {
+            jumpingDelay = 0.3f + 0.1f * (rand() % 15);
+            isJumping = false;
+            SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_WEAK);
+          }
+        }
+      }
+      if (firstTimeGround) frame = 0;
+      else if (hVelocity > -190.0f) frame = 2;
+      else frame = 1;
     }
-    else if (jumpingDelay < 0.1f)
-      frame = 1;
-    else frame = 0;
+    else if (isFalling())
+    {
+      fall();
+    }
+    else
+    {
+      jumpingDelay -= delay;
+      if (jumpingDelay < 0.0f)
+      {
+        SoundManager::getInstance().playSound(SOUND_SLIME_JUMP);
+        hVelocity = 300.0f + rand() % 250;
+        isJumping = true;
+        isFirstJumping = true;
+
+        float randVel = 250.0f + rand() % 250;
+
+        setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), randVel ));
+      }
+      else if (jumpingDelay < 0.1f)
+        frame = 1;
+      else frame = 0;
+    }
+
+    BaseCreatureEntity::animate(delay);
+    if (canCollide()) testSpriteCollisions();
   }
 
-  BaseCreatureEntity::animate(delay);
-  if (canCollide()) testSpriteCollisions();
   z = y + 14;
 }
 
@@ -251,6 +264,38 @@ bool SlimePetEntity::collideWithMap(int direction)
 bool SlimePetEntity::canCollide()
 {
   return h <= 70.0f;
+}
+
+bool SlimePetEntity::isFalling()
+{
+  int tilex0 = boundingBox.left / TILE_WIDTH;
+  int tiley0 = boundingBox.top / TILE_HEIGHT;
+  int tilexf = (boundingBox.left + boundingBox.width) / TILE_WIDTH;
+  int tileyf = (boundingBox.top + boundingBox.height) / TILE_HEIGHT;
+
+  return (game().getCurrentMap()->getTile(tilex0, tiley0) >= MAP_HOLE
+          && game().getCurrentMap()->getTile(tilex0, tileyf) >= MAP_HOLE
+          && game().getCurrentMap()->getTile(tilexf, tileyf) >= MAP_HOLE
+          && game().getCurrentMap()->getTile(tilexf, tiley0) >= MAP_HOLE);
+}
+
+void SlimePetEntity::fall()
+{
+  SpriteEntity* spriteEntity
+    = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_SLIME),
+                       x,
+                       y + 6,
+                       64, 64, 4);
+  spriteEntity->setAge(0.0f);
+  spriteEntity->setLifetime(3.0f);
+  spriteEntity->setShrinking(true);
+  spriteEntity->setFading(true);
+  spriteEntity->setFrame(16);
+
+  isDying = true;
+
+  SlimePetEntity* newSlime = new SlimePetEntity();
+  newSlime->setAge(-4.0f);
 }
 
 BaseCreatureEntity::enumMovingStyle SlimePetEntity::getMovingStyle()
