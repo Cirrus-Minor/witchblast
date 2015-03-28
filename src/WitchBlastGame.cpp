@@ -1158,7 +1158,8 @@ void WitchBlastGame::updateRunningGame()
         else
         {
           initMonsterArray();
-          findPlaceMonsters(EnemyTypeBat, 2);
+          findPlaceMonsters(EnemyTypeBat, 1);
+          findPlaceMonsters(EnemyTypeBatSkeleton, 2);
           findPlaceMonsters(EnemyTypeImpBlue, 1);
           findPlaceMonsters(EnemyTypeImpRed, 1);
         }
@@ -4041,8 +4042,11 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     new BlackRatEntity(xm, ym - 5, BlackRatEntity::RatBlackTypeHelmet);
     break;
   case EnemyTypeBat:
-    new BatEntity(xm, ym, false);
+    new BatEntity(xm, ym, BatStandard, false);
     proceedEvent(EventMeetRatsOrBats);
+    break;
+  case EnemyTypeBatSkeleton:
+    new BatEntity(xm, ym, BatSkeleton, false);
     break;
   case EnemyTypeSnake:
     new SnakeEntity(xm, ym, SnakeEntity::SnakeTypeNormal, false);
@@ -5815,6 +5819,10 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
   case EnemyTypeBat_invocated:
   case EnemyTypeBat:
     value = "enemy_type_bat";
+    break;
+  case EnemyTypeBatSkeleton_invocated:
+  case EnemyTypeBatSkeleton:
+    value = "enemy_type_bat_skeleton";
     break;
   case EnemyTypeRat_invocated:
   case EnemyTypeRat:

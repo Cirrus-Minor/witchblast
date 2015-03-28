@@ -9,6 +9,7 @@ enum enemyTypeEnum
 {
   // normal
   EnemyTypeBat,
+  EnemyTypeBatSkeleton,
   EnemyTypeRat,
   EnemyTypeRatBlack,
   EnemyTypeRatHelmet,
@@ -54,6 +55,7 @@ enum enemyTypeEnum
 
   // invocated
   EnemyTypeBat_invocated,
+  EnemyTypeBatSkeleton_invocated,
   EnemyTypeRat_invocated,
   EnemyTypeRatGreen,
   EnemyTypeRatHelmet_invocated,

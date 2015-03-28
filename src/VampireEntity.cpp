@@ -12,7 +12,7 @@
 #include <iostream>
 #include <sstream>
 
-const int VAMPIRE_HP = 200;
+const int VAMPIRE_HP = 1500;
 const int VAMPIRE_DAMAGE = 12;
 const float VAMPIRE_FLYING_DELAY = 1.2f;
 const float VAMPIRE_BAT_DELAY = 0.225f;
@@ -341,7 +341,11 @@ void VampireEntity::animate(float delay)
     {
       batTimer += VAMPIRE_BAT_DELAY;
       isMirroring = !isMirroring;
-      BatEntity* bat = new BatEntity(x, y, true);
+      BatEntity* bat;
+      if (hp <= hpMax  * 0.25f)
+        bat = new BatEntity(x, y, BatStandard, true);
+      else
+        bat = new BatEntity(x, y, BatSkeleton, true);
       bat->setAge(0.0f);
     }
     // particules

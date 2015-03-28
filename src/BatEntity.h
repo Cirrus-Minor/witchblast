@@ -3,10 +3,12 @@
 
 #include "EnemyEntity.h"
 
+enum EnumBatType { BatStandard, BatSkeleton};
+
 class BatEntity : public EnemyEntity
 {
   public:
-    BatEntity(float x, float y, bool invocated);
+    BatEntity(float x, float y, EnumBatType batType, bool invocated);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -22,6 +24,7 @@ class BatEntity : public EnemyEntity
   private:
     float changingDelay;
     bool invocated;
+    EnumBatType batType;
 };
 
 #endif // BATENTITY_H

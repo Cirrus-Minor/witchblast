@@ -6,26 +6,41 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-BatEntity::BatEntity(float x, float y, bool invocated)
+BatEntity::BatEntity(float x, float y, EnumBatType batType, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_BAT), x, y)
 {
   creatureSpeed = BAT_SPEED;
   velocity = Vector2D(creatureSpeed);
-  hp = BAT_HP;
-  meleeDamages = BAT_DAMAGES;
-  this->invocated = invocated;
+  imagesProLine = 10;
 
-  bloodColor = BloodRed;
+  this->invocated = invocated;
+  this->batType = batType;
+
   changingDelay = -0.5f;
   shadowFrame = 9;
   movingStyle = movFlying;
 
-  dyingFrame = 8;
   deathFrame = FRAME_CORPSE_BAT;
   agonizingSound = SOUND_BAT_DYING;
   sprite.setOrigin(32.0f, 26.0f);
 
-  enemyType = invocated ? EnemyTypeBat_invocated : EnemyTypeBat;
+  if (batType == BatStandard)
+  {
+    enemyType = invocated ? EnemyTypeBat_invocated : EnemyTypeBat;
+    hp = BAT_HP;
+    meleeDamages = BAT_DAMAGES;
+    bloodColor = BloodRed;
+    dyingFrame = 8;
+  }
+
+  else // BatSkeleton
+  {
+    enemyType = invocated ? EnemyTypeBatSkeleton_invocated : EnemyTypeBatSkeleton;
+    hp = BAT_HP * 2;
+    meleeDamages = 8;
+    bloodColor = BloodNone;
+    dyingFrame = 18;
+  }
 }
 
 void BatEntity::animate(float delay)
@@ -35,7 +50,10 @@ void BatEntity::animate(float delay)
     changingDelay -= delay;
     if (changingDelay < 0.0f)
     {
-      velocity = Vector2D(creatureSpeed);
+      if (batType != BatSkeleton || rand() % 2 == 0)
+        velocity = Vector2D(creatureSpeed);
+      else
+        setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
       changingDelay = 0.5f + (float)(rand() % 2500) / 1000.0f;
       computeFacingDirection();
     }
@@ -54,6 +72,7 @@ void BatEntity::animate(float delay)
       frame += ((int)(age * 7.0f)) % 2;
     }
   }
+  if (batType == BatSkeleton) frame += 10;
   EnemyEntity::animate(delay);
 }
 

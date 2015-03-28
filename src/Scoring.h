@@ -39,6 +39,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeEvilFlowerFire: score = 8; break;
     case EnemyTypeSpiderEgg:      score = 8; break;
     case EnemyTypeSpiderLittle:   score = 8; break;
+    case EnemyTypeBatSkeleton:    score = 8; break;
 
     case EnemyTypeSnakeBlood:     score = 10; break;
     case EnemyTypeSlimeRed:       score = 10; break;
@@ -72,6 +73,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeVampire:        score = 350; break;
 
     case EnemyTypeBat_invocated:
+    case EnemyTypeBatSkeleton_invocated:
     case EnemyTypeRat_invocated:
     case EnemyTypeRatGreen:
     case EnemyTypeRatHelmet_invocated:

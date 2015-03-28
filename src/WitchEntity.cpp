@@ -79,7 +79,7 @@ void WitchEntity::animate(float delay)
           else if(y0 > MAP_HEIGHT - 2) y0 = MAP_HEIGHT - 2;
           y0 = y0 * TILE_HEIGHT + TILE_HEIGHT / 2;
           if (witchType == WitchTypeNormal) new RatEntity(x0, y0, RatEntity::RatTypeNormal, true);
-          else new BatEntity(x0, y0, true);
+          else new BatEntity(x0, y0, BatStandard, true);
           SoundManager::getInstance().playSound(SOUND_INVOKE);
 
           for(int i=0; i < 6; i++)
