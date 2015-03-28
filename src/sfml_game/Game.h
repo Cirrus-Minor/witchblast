@@ -35,7 +35,7 @@ public:
   virtual void quitGame();
 
   static float getAbsolutTime();
-  void create(int screenWidth, int screenHeight, std::string windowsTitle = "Generic sfmlGame", bool fullScreen = false);
+  void create(int screenWidth, int screenHeight, std::string windowsTitle = "Generic sfmlGame", bool fullScreen = false, bool vsync = true);
 
 protected:
   virtual void onRender();     // screen and game items rendering

@@ -65,7 +65,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 7
+//#define START_LEVEL 2
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -258,21 +258,21 @@ WitchBlastGame::WitchBlastGame()
 
   if (parameters.vsync == false)
   {
-    app->setVerticalSyncEnabled(false);
+    //app->setVerticalSyncEnabled(false);
     app->setFramerateLimit(60);
   }
 
   // Fullscreen ?
   if (parameters.fullscreen)
   {
-    create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, true);
+    create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, true, parameters.vsync);
     sf::View view = app->getDefaultView();
     view = getFullScreenLetterboxView( view, SCREEN_WIDTH, SCREEN_HEIGHT );
     app->setView(view);
   }
   else
   {
-    create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION);
+    create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, false, parameters.vsync);
   }
 
   // loading resources
@@ -1516,12 +1516,6 @@ void WitchBlastGame::renderBossPortrait()
       {
         SoundManager::getInstance().playSound(SOUND_BOOM_00);
 
-        int nx = 10;
-        int ny = 10;
-
-        int dx = 534 / nx;
-        int dy = 560 / ny;
-
         for (int i = 0; i < 250; i++)
         {
           SpriteEntity* spriteStar = new SpriteEntity(
@@ -1538,25 +1532,6 @@ void WitchBlastGame::renderBossPortrait()
           spriteStar->setType(ENTITY_EFFECT);
           if (rand()% 2 == 0) spriteStar->setRenderAdd();
         }
-
-       /* for (int j = 0; j < ny; j++)
-          for (int i = 0; i < nx; i++)
-          {
-            SpriteEntity* spritePart = new SpriteEntity(
-              ImageManager::getInstance().getImage(IMAGE_BOSS_PICTURES),
-              xBoss + i * dx + dx / 2,
-              0 + j * dy + dy / 2, dx, dy, nx);
-            spritePart->setFrame(j * nx + i);
-            spritePart->setZ(8000.0f);
-            spritePart->setSpin(-150 + rand()%200);
-            spritePart->setVelocity(Vector2D(200 + rand()%200));
-            spritePart->setWeight(500);
-            spritePart->setFading(true);
-            //spritePart->setAge(-0.8f);
-            spritePart->setLifetime(4.1f + (rand() % 100) * 0.003f );
-
-            spritePart->setType(ENTITY_EFFECT);
-          }*/
 
         bossDisplayState = 1;
       }
@@ -3112,8 +3087,16 @@ void WitchBlastGame::startGame()
   while (app->isOpen())
   {
     deltaTime = getAbsolutTime() - lastTime;
+    if (deltaTime < 0.008f)
+    {
+      float sleepTime = 1.0f / 60.0f - deltaTime;
+      sf::sleep(sf::seconds(sleepTime));
+      deltaTime = getAbsolutTime() - lastTime;
+    }
+
     lastTime = getAbsolutTime();
     if (deltaTime > 0.05f) deltaTime = 0.05f;
+
     switch (gameState)
     {
     case gameStateInit:
@@ -4315,6 +4298,8 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
         n = 1;
         break;
       }
+
+      //if (itemOk && eq == ItemPetSlime) n = 15000;
 
       for (int j = 0; j < n; j++)
       {

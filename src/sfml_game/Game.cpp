@@ -25,7 +25,7 @@ Game::Game()
 {
 }
 
-void Game::create(int screenWidth, int screenHeight, std::string windowsTitle, bool fullScreen)
+void Game::create(int screenWidth, int screenHeight, std::string windowsTitle, bool fullScreen, bool vsync)
 {
   this->screenWidth = screenWidth;
   this->screenHeight = screenHeight;
@@ -34,7 +34,8 @@ void Game::create(int screenWidth, int screenHeight, std::string windowsTitle, b
     app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle, sf::Style::Fullscreen);
   else
     app = new sf::RenderWindow(sf::VideoMode(this->screenWidth, this->screenHeight), windowsTitle);
-  app->setVerticalSyncEnabled(true);
+  if (vsync) app->setVerticalSyncEnabled(true);
+  else app->setFramerateLimit(60);
 }
 
 Game::~Game()
