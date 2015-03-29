@@ -20,7 +20,6 @@ BatEntity::BatEntity(float x, float y, EnumBatType batType, bool invocated)
   shadowFrame = 9;
   movingStyle = movFlying;
 
-  deathFrame = FRAME_CORPSE_BAT;
   agonizingSound = SOUND_BAT_DYING;
   sprite.setOrigin(32.0f, 26.0f);
 
@@ -31,6 +30,7 @@ BatEntity::BatEntity(float x, float y, EnumBatType batType, bool invocated)
     meleeDamages = BAT_DAMAGES;
     bloodColor = BloodRed;
     dyingFrame = 8;
+    deathFrame = FRAME_CORPSE_BAT;
   }
 
   else // BatSkeleton
@@ -40,6 +40,7 @@ BatEntity::BatEntity(float x, float y, EnumBatType batType, bool invocated)
     meleeDamages = 8;
     bloodColor = BloodNone;
     dyingFrame = 18;
+    deathFrame = FRAME_CORPSE_BAT_SKELETON;
   }
 }
 

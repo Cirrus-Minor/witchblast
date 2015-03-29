@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.4.6b";
+const std::string APP_VERSION =   "0.4.9";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
@@ -313,6 +313,7 @@ enum corpses_ressources{
   FRAME_CORPSE_FRANCKY_FOOT,
   FRAME_CORPSE_FLOWER_FIRE,
   FRAME_CORPSE_VAMPIRE,
+  FRAME_CORPSE_BAT_SKELETON,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
