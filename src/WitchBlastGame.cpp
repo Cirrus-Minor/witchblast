@@ -65,7 +65,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 2
+//#define START_LEVEL 4
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -2938,9 +2938,9 @@ void WitchBlastGame::renderCredits()
   app->draw(titleSprite);
 
   // credits
-  write(tools::getLabel("credits"), 30, 485, 230, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("credits"), 30, 485, 275, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
 
-  int yCursorInit = 340;
+  int yCursorInit = 365;
   int yStep = 30;
   int xLeft = 30;
   int xRight = 470;
@@ -4400,7 +4400,10 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   }
   else
   {
-    ItemEntity* newItem = new ItemEntity(ItemBonusHealth, x, y);
+    ItemEntity* newItem;
+    if (challengeLevel < 4 || rand() % 8 > 0) newItem = new ItemEntity(ItemBonusHealth, x, y);
+    else newItem = new ItemEntity((enumItemType)(FirstEquipItem + getRandomEquipItem()), x, y);
+
     if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
