@@ -1241,10 +1241,18 @@ void WitchBlastGame::updateRunningGame()
       }
       if (event.key.code == sf::Keyboard::F12)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeZombie, 2);
-        findPlaceMonsters(EnemyTypeZombieDark, 2);
-        findPlaceMonsters(EnemyTypeGhost, 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new VampireEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeZombie, 2);
+          findPlaceMonsters(EnemyTypeZombieDark, 2);
+          findPlaceMonsters(EnemyTypeGhost, 2);
+        }
       }
       if (event.key.code == sf::Keyboard::F4)
       {
@@ -3443,7 +3451,7 @@ void WitchBlastGame::refreshMap()
   }
 
   // pet slime
-  if (player->isEquiped(EQUIP_PET_SLIME)) new SlimePetEntity();
+  if (player->isEquiped(EQUIP_PET_SLIME) && currentMap->getRoomType() != roomTypeTemple) new SlimePetEntity();
 }
 
 void WitchBlastGame::refreshMinimap()
