@@ -508,13 +508,6 @@ void generateStandardRoom07()
 {
   int random = rand() % 100;
 
-  if (random >= 0)
-  {
-    game().getCurrentMap()->generateRoomRandom(-1);
-    game().findPlaceMonsters(EnemyTypeVampire, 1);
-  }
-  else
-
   if (random < 10)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
@@ -522,6 +515,7 @@ void generateStandardRoom07()
     game().findPlaceMonsters(EnemyTypeRatHelmet, 2);
     if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitch, 1);
     else game().findPlaceMonsters(EnemyTypeZombie, 2);
+    if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeBogeyman, 1);
   }
   else if (random < 20)
   {
@@ -530,6 +524,7 @@ void generateStandardRoom07()
     game().findPlaceMonsters(EnemyTypeGhost, 6);
     if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeImpRed, 2);
     else game().findPlaceMonsters(EnemyTypeImpBlue, 2);
+    if (rand() % 3 == 0) game().findPlaceMonsters(EnemyTypeBogeyman, 1);
   }
   else if (random < 30)
   {
@@ -549,16 +544,7 @@ void generateStandardRoom07()
   else if (random < 50)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    int r = rand() % 3;
-    if (r == 0)
-    {
-      game().findPlaceMonsters(EnemyTypeImpRed, 5);
-      game().findPlaceMonsters(EnemyTypeImpBlue, 5);
-    }
-    else if (r == 1)
-      game().findPlaceMonsters(EnemyTypeImpRed, 9);
-    else
-      game().findPlaceMonsters(EnemyTypeImpBlue, 9);
+    game().findPlaceMonsters(EnemyTypeBogeyman, 5 + rand() % 2);
     if (rand() % 2 == 0) game().findPlaceMonsters(EnemyTypeWitchRed, 1);
   }
   else if (random < 60)
