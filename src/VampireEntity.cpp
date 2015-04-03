@@ -12,7 +12,7 @@
 #include <iostream>
 #include <sstream>
 
-const int VAMPIRE_HP = 500;
+const int VAMPIRE_HP = 1500;
 const int VAMPIRE_DAMAGE = 12;
 const float VAMPIRE_FLYING_DELAY = 1.2f;
 const float VAMPIRE_BAT_DELAY = 0.225f;
