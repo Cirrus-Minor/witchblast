@@ -58,7 +58,7 @@ void DungeonMapEntity::animate(float delay)
       {
         animateParticle(blood[i], delay, 0.95f);
 
-        if (game().getParameters().bloodSpread && blood[i].frame < 12)
+        if ((game().getParameters().bloodSpread && blood[i].frame < 12) || blood[i].frame >= 36)
         {
           if (blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y > 80
               && rand() % 4 == 0)

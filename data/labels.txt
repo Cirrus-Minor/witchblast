@@ -392,6 +392,7 @@ enemy_type_slime_large#a large slime
 enemy_type_slime_blue_large#a large blue slime
 enemy_type_slime_red_large#a large red slime
 enemy_type_slime_violet_large#a large violet slime
+enemy_type_bogeyman#a bogeyman
 menu_achievements#Achievements
 menu_achievements_desc#Display the achievements
 achievement_complete#Achievement unlocked!

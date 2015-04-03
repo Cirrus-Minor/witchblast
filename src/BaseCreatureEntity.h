@@ -34,6 +34,7 @@ enum enemyTypeEnum
   EnemyTypeGhost,
   EnemyTypeZombie,
   EnemyTypeZombieDark,
+  EnemyTypeBogeyman,
   EnemyTypeSlimeLarge,
   EnemyTypeSlimeRedLarge,
   EnemyTypeSlimeBlueLarge,
@@ -130,7 +131,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};
     virtual enumMovingStyle getMovingStyle();
-    enum enumBloodColor { BloodNone = -1, BloodRed, BloodGreen, BloodRock, BloodEgg, BloodBubble, BloodBubbleIce};
+    enum enumBloodColor { BloodNone = -1, BloodRed, BloodGreen, BloodRock, BloodEgg, BloodBubble, BloodBubbleIce, BloodBlack};
     enum enumSpecialState
     {
       SpecialStateIce, // = 0

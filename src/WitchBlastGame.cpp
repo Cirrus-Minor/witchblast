@@ -45,6 +45,7 @@
 #include "GhostEntity.h"
 #include "ZombieEntity.h"
 #include "ZombieDarkEntity.h"
+#include "BogeymanEntity.h"
 #include "LittleSpiderEntity.h"
 #include "SpiderEggEntity.h"
 #include "FranckyEntity.h"
@@ -65,7 +66,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 4
+//#define START_LEVEL 7
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -291,7 +292,7 @@ WitchBlastGame::WitchBlastGame()
     "media/bubble.png",        "media/witch.png",
     "media/cauldron.png",      "media/snake.png",
     "media/pumpkin.png",       "media/ghost.png",
-    "media/zombie.png",
+    "media/zombie.png",        "media/bogeyman.png",
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/francky.png",
@@ -1252,6 +1253,8 @@ void WitchBlastGame::updateRunningGame()
           findPlaceMonsters(EnemyTypeZombie, 2);
           findPlaceMonsters(EnemyTypeZombieDark, 2);
           findPlaceMonsters(EnemyTypeGhost, 2);
+
+          findPlaceMonsters(EnemyTypeBogeyman, 2);
         }
       }
       if (event.key.code == sf::Keyboard::F4)
@@ -4120,6 +4123,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeZombieDark:
     new ZombieDarkEntity(xm, ym);
     break;
+  case EnemyTypeBogeyman:
+    new BogeymanEntity(xm, ym);
+    break;
 
   case EnemyTypeSpiderEgg_invocated:
     new SpiderEggEntity(xm, ym, true);
@@ -5910,6 +5916,9 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     break;
   case EnemyTypeZombieDark:
     value = "enemy_type_zombie_dark";
+    break;
+  case EnemyTypeBogeyman:
+    value = "enemy_type_bogeyman";
     break;
 
   // mini boss

@@ -2190,7 +2190,8 @@ void PlayerEntity::offerMonster(enemyTypeEnum monster, enumShotType hurtingType)
           || monster == EnemyTypeImpBlue
           || monster == EnemyTypeImpRed
           || monster == EnemyTypeWitch
-          || monster == EnemyTypeWitchRed)
+          || monster == EnemyTypeWitchRed
+          || monster == EnemyTypeBogeyman)
         pietyProMonster   = 4;
       else
         pietyProMonster   = 0;

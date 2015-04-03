@@ -16,6 +16,7 @@ EnemyBoltEntity::EnemyBoltEntity(float x, float y, enumShotType boltType, int le
     case ShotTypeLightning: frame = 5; break;
     case ShotTypeFire: frame = 6; break;
     case ShotTypeBomb: frame = 8; break;
+    case ShotTypeIllusion:  frame = 3; break;
     default: frame = 1; break;
   }
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
@@ -37,5 +38,17 @@ void EnemyBoltEntity::animate(float delay)
       sprite.setColor(sf::Color(255, 255, 255, 0));
     else
       sprite.setColor(sf::Color(255, 255, 255, (sf::Uint8)((lifetime - age) / 0.2f * 255)));
+  }
+
+  if (boltType == ShotTypeIllusion)
+  {
+    float limit = 16;
+    if (x < limit
+        || x > TILE_WIDTH * MAP_WIDTH - limit
+        || y < limit
+        || y > TILE_HEIGHT * MAP_HEIGHT - limit)
+    {
+      isDying = true;
+    }
   }
 }
