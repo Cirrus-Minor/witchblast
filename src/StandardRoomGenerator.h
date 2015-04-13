@@ -217,7 +217,7 @@ void generateStandardRoom04()
   {
     if (rand() % 2 == 0)
     {
-      game().getCurrentMap()->generateRoomRandom(-1);
+      game().getCurrentMap()->generateRoomWithoutHoles(-1);
       game().getCurrentMap()->addRandomGrids(4);
       game().findPlaceMonsters(EnemyTypeSlimeLarge, 1);
       int r = 3 + rand() % 5;
@@ -333,7 +333,7 @@ void generateStandardRoom05()
   {
     if (rand() % 2 == 0)
     {
-      game().getCurrentMap()->generateRoomRandom(-1);
+      game().getCurrentMap()->generateRoomWithoutHoles(-1);
       game().getCurrentMap()->addRandomGrids(4);
       int r = rand() % 3;
       switch (r)
@@ -452,7 +452,7 @@ void generateStandardRoom06()
   {
     if (rand() % 2 == 0)
     {
-      game().getCurrentMap()->generateRoomRandom(-1);
+      game().getCurrentMap()->generateRoomWithoutHoles(-1);
       game().getCurrentMap()->addRandomGrids(4);
       int r = rand() % 4;
       switch (r)
@@ -570,7 +570,7 @@ void generateStandardRoom07()
   }
   else if (random < 90)
   {
-    game().getCurrentMap()->generateRoomRandom(-1);
+    game().getCurrentMap()->generateRoomWithoutHoles(-1);
     game().getCurrentMap()->addRandomGrids(4);
 
     int r = rand() % 4;
