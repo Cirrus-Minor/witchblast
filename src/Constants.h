@@ -657,7 +657,7 @@ enum EnumWorldEvents
   EventMeetWitches,
   EventGetCoin,
   EventPietyMax,
-  EventTripleHit,
+  Event4Hits,
 
   // tuto
   EventBeingHurted,

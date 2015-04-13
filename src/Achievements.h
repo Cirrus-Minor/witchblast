@@ -12,7 +12,7 @@ enum enumAchievementType
   AchievementRats,
   Achievement100,
   AchievementPietyMax,
-  Achievement3Hits,
+  Achievement4Hits,
   AchievementCompleteSet,
   AchievementGiantSlime,
   AchievementCyclops,
@@ -72,7 +72,7 @@ const achievementStuct achievements[NB_ACHIEVEMENTS] =
   { AchievementRats,        "achiev_rats",          UnlockItem,           ItemSpellFairy },
   { Achievement100,         "achiev_100",           UnlockItem,           ItemSpellFlower },
   { AchievementPietyMax,    "achiev_piety_max",     UnlockItem,           ItemBookPrayerII },
-  { Achievement3Hits,       "achiev_3_hits",        UnlockItem,           ItemFairyTarget },
+  { Achievement4Hits,       "achiev_4_hits",        UnlockItem,           ItemFairyTarget },
   { AchievementCompleteSet, "achiev_complete_set",  UnlockItem,           ItemHatAdvanced},
 
   { AchievementGiantSlime,  "achiev_giant_slime",   UnlockItem,           ItemPetSlime },
@@ -97,7 +97,7 @@ const std::vector<enumAchievementType> sortedAchievements =
   AchievementEggs,
   Achievement100,
   AchievementPietyMax,
-  Achievement3Hits,
+  Achievement4Hits,
   AchievementCompleteSet,
   //AchievementFairies,
 

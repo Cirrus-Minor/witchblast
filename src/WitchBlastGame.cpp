@@ -720,8 +720,10 @@ void WitchBlastGame::playLevel(bool isFight)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles04.png");
   else if (level == 5)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles05.png");
-  else
+  else if (level == 6)
     ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles06.png");
+  else
+    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles07.png");
 
   isPlayerAlive = true;
 
@@ -5184,7 +5186,7 @@ void WitchBlastGame::configureFromFile()
   parameters.musicVolume = 60;
   parameters.soundVolume = 100;
   parameters.playerName = "";
-  parameters.displayBossPortrait = true;
+  parameters.displayBossPortrait = false;
 
   input[KeyUp]    = sf::Keyboard::W;
   input[KeyDown]  = sf::Keyboard::S;
@@ -5561,9 +5563,9 @@ void WitchBlastGame::proceedEvent(EnumWorldEvents event)
   {
     if (achievementState[AchievementPietyMax] == AchievementUndone) registerAchievement(AchievementPietyMax);
   }
-  else if (event == EventTripleHit)
+  else if (event == Event4Hits)
   {
-    if (achievementState[Achievement3Hits] == AchievementUndone) registerAchievement(Achievement3Hits);
+    if (achievementState[Achievement4Hits] == AchievementUndone) registerAchievement(Achievement4Hits);
   }
 
   // message ?

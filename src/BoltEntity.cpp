@@ -228,9 +228,7 @@ void BoltEntity::collide()
   hitNumber++;
   if (fromPlayer)
   {
-    if (hitNumber == 3) game().registerAchievement(Achievement3Hits);
-
-    if (hitNumber > 2) std::cout << "Hit: " << hitNumber << "(dam=" << damages << ")" << std::endl;
+    if (hitNumber == 4) game().registerAchievement(Achievement4Hits);
 
     if (goThrough)
     {
