@@ -763,6 +763,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
             break;
         }
       }
+      if (rand() % 3 == 0) initPattern(PatternSmallChecker);
     }
     /*else
     {
@@ -917,6 +918,7 @@ void DungeonMap::generateRoomWithHoles(int type)
         i--;
       }
     }
+    if (rand() % 3 == 0) initPattern(PatternBigCircle);
   }
   else  //if (type == 5)
   {
