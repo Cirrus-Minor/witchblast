@@ -2915,9 +2915,14 @@ void WitchBlastGame::renderAchievements()
     std::stringstream oss;
     int achIndex = sortedAchievements[menuAchIndex];
 
-    if (achIndex >= AchievementGiantSlime
-        && achIndex <= AchievementFrancky
-        && !achievementState[achIndex] == AchievementDone)
+    if (!achievementState[achIndex] == AchievementDone && (
+           achIndex == AchievementGiantSlime
+        || achIndex == AchievementCyclops
+        || achIndex == AchievementRatKing
+        || achIndex == AchievementGiantSpider
+        || achIndex == AchievementFrancky
+        || achIndex == AchievementVampire)
+        )
       oss << "???";
     else
       oss << tools::getLabel(achievements[achIndex].label);

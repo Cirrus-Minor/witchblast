@@ -99,6 +99,7 @@ const std::vector<enumAchievementType> sortedAchievements =
   AchievementPietyMax,
   Achievement4Hits,
   AchievementCompleteSet,
+  AchievementChallenges,
   //AchievementFairies,
 
   // bosses
@@ -110,7 +111,6 @@ const std::vector<enumAchievementType> sortedAchievements =
   AchievementFrancky,
   AchievementVampire,
 
-  AchievementChallenges,
   AchievementWin,
 };
 #endif
