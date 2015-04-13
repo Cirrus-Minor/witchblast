@@ -12,6 +12,7 @@ const int MAP_DOOR_OPEN     =   49;
 const int MAP_WALL          =   70;
 const int MAP_DOOR          =   71;
 const int MAP_BIG_OBSTACLE  =   100;
+const int MAP_TOMB          =   109;
 const int MAP_WALL_SPECIAL  =   74;
 
 // temple

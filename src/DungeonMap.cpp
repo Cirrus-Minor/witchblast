@@ -671,7 +671,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     {
       if (rand() % 3 > 0 && gameFloor->neighboorCount(x, y) > 1)
       {
-        if (type == 0) generateCorridors();
+        if (type == 0 && game().getLevel() < 6) generateCorridors();
       }
       else
       {
@@ -727,7 +727,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
     for (i = 2; i < MAP_WIDTH - 2; i = i + 2)
       for (j = 2; j < MAP_HEIGHT - 2; j = j + 2)
-        map[i][j] = MAP_WALL;
+        map[i][j] = game().getLevel() >= 6 ? MAP_TOMB : MAP_WALL;
   }
 }
 
