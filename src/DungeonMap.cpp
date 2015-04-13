@@ -724,6 +724,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     //if (rand() % 2 == 0)
     {
       // type 1
+      if (rand() % 3 == 0) initPattern(PatternSmallChecker);
       bool leftOriented = rand() % 2 == 0;
 
       int bankType = rand() % 3;
@@ -763,7 +764,6 @@ void DungeonMap::generateRoomWithoutHoles(int type)
             break;
         }
       }
-      if (rand() % 3 == 0) initPattern(PatternSmallChecker);
     }
     /*else
     {
@@ -878,6 +878,7 @@ void DungeonMap::generateRoomWithHoles(int type)
   }
   else if (type == 4)
   {
+    if (rand() % 3 == 0) initPattern(PatternBigCircle);
     int r = 6 + rand()% 5;
     int obstacleType = rand() % 2;
     for (int i = 0; i < r; i++)
@@ -918,7 +919,6 @@ void DungeonMap::generateRoomWithHoles(int type)
         i--;
       }
     }
-    if (rand() % 3 == 0) initPattern(PatternBigCircle);
   }
   else  //if (type == 5)
   {
