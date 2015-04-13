@@ -14,6 +14,12 @@ const int MAP_DOOR          =   71;
 const int MAP_BIG_OBSTACLE  =   100;
 const int MAP_TOMB          =   109;
 const int MAP_WALL_SPECIAL  =   74;
+const int MAP_BANK_TOP      =   78;
+const int MAP_BANK          =   88;
+const int MAP_BANK_BOTTOM   =   98;
+const int MAP_LONG_LEFT     =   79;
+const int MAP_LONG          =   89;
+const int MAP_LONG_RIGHT    =   99;
 
 // temple
 const int MAP_TEMPLE          =   50;
@@ -61,8 +67,8 @@ const int MAP_HOLE          =   160;
 const int MAP_HOLE_TOP      =   MAP_HOLE;
 const int MAP_HOLE_BOTTOM   =   MAP_HOLE + 1;
 
-const int ROOM_TYPE_CHECKER = 4;
-const int ROOM_TYPE_ALL     = 5;
+const int ROOM_TYPE_CHECKER = 5;
+const int ROOM_TYPE_ALL     = 6;
 
 class GameFloor;
 

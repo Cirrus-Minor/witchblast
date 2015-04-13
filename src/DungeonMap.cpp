@@ -647,7 +647,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
   int y0 = MAP_HEIGHT / 2;
   int i, j, r;
 
-  if (type <= 0)
+  if (type <= 0) // empty room
   {
     if (roomType == roomTypeStarting)
     {
@@ -679,9 +679,8 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       }
     }
   }
-  if (type == 1)
+  if (type == 1) // corner block
   {
-    // corner block
     if (rand() % 3 == 0) initPattern(PatternSmallChecker);
 
     map[0][0] = MAP_WALL_X;
@@ -704,9 +703,8 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_WALL_77;
     map[MAP_WIDTH - 2][MAP_HEIGHT -1] = MAP_WALL_3;
   }
-  if (type == 2)
+  if (type == 2) // blocks in the middle
   {
-    // blocks in the middle
     if (rand() % 3 == 0) initPattern(PatternBorder);
 
     r = 1 + rand() % 3;
@@ -714,11 +712,76 @@ void DungeonMap::generateRoomWithoutHoles(int type)
   }
   if (type == 3)
   {
-    // blocks in the corners
+    // big blocks in the corners
     generateCarpet(2, 2, 2, 2, 100);
     generateCarpet(2, MAP_HEIGHT - 4, 2, 2, 100);
     generateCarpet(MAP_WIDTH - 4, MAP_HEIGHT - 4, 2, 2, 100);
     generateCarpet(MAP_WIDTH - 4, 2, 2, 2, 100);
+  }
+  if (type == 4)
+  {
+    // objects
+    //if (rand() % 2 == 0)
+    {
+      // type 1
+      bool leftOriented = rand() % 2 == 0;
+
+      int bankType = rand() % 3;
+
+      int x0 = leftOriented ? 5 : 3;
+
+      if (leftOriented) map[2][4] = MAP_WALL;
+      else map[12][4] = MAP_WALL;
+
+      for (int i = 0; i < 3; i++)
+      {
+        int xPos = x0 + i * 3;
+        switch (bankType)
+        {
+          case 0:
+            map[xPos][2] = MAP_BANK_TOP;
+            map[xPos][3] = MAP_BANK_BOTTOM;
+            map[xPos][5] = MAP_BANK_TOP;
+            map[xPos][6] = MAP_BANK_BOTTOM;
+            break;
+
+          case 1:
+            map[xPos][2] = MAP_BANK_TOP;
+            map[xPos][3] = MAP_BANK;
+            map[xPos][4] = MAP_BANK;
+            map[xPos][5] = MAP_BANK;
+            map[xPos][6] = MAP_BANK_BOTTOM;
+            break;
+
+          case 2:
+            map[xPos][1] = MAP_BANK_TOP;
+            map[xPos][2] = MAP_BANK;
+            map[xPos][3] = MAP_BANK_BOTTOM;
+            map[xPos][5] = MAP_BANK_TOP;
+            map[xPos][6] = MAP_BANK;
+            map[xPos][7] = MAP_BANK_BOTTOM;
+            break;
+        }
+      }
+    }
+    /*else
+    {
+      map[2][2] = MAP_LONG_LEFT;
+      map[3][2] = MAP_LONG;
+      map[4][2] = MAP_LONG_RIGHT;
+
+      map[2][6] = MAP_LONG_LEFT;
+      map[3][6] = MAP_LONG;
+      map[4][6] = MAP_LONG_RIGHT;
+
+      map[10][2] = MAP_LONG_LEFT;
+      map[11][2] = MAP_LONG;
+      map[12][2] = MAP_LONG_RIGHT;
+
+      map[10][6] = MAP_LONG_LEFT;
+      map[11][6] = MAP_LONG;
+      map[12][6] = MAP_LONG_RIGHT;
+    }*/
   }
   if (type == ROOM_TYPE_CHECKER)
   {
@@ -759,7 +822,7 @@ void DungeonMap::generateRoomWithHoles(int type)
       map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
     }
   }
-  if (type == 1)
+  else if (type == 1)
   {
     // corner hole
     if (rand() % 3 == 0) initPattern(PatternSmallChecker);
@@ -769,7 +832,7 @@ void DungeonMap::generateRoomWithHoles(int type)
     map[MAP_WIDTH - 2][1] = MAP_HOLE_TOP;
     map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_HOLE_TOP;
   }
-  if (type == 2)
+  else if (type == 2)
   {
     // blocks in the middle
     if (rand() % 3 == 0) initPattern(PatternBorder);
@@ -789,7 +852,7 @@ void DungeonMap::generateRoomWithHoles(int type)
         else map[i][j] = MAP_HOLE_BOTTOM;
       }
   }
-  if (type == 3)
+  else if (type == 3)
   {
     // 4 holes
     map[2][2] = MAP_HOLE_TOP;
@@ -812,7 +875,50 @@ void DungeonMap::generateRoomWithHoles(int type)
     map[MAP_WIDTH - 3][MAP_HEIGHT - 4] = MAP_HOLE_TOP;
     map[MAP_WIDTH - 3][MAP_HEIGHT - 3] = MAP_HOLE_BOTTOM;
   }
-  if (type == 4)
+  else if (type == 4)
+  {
+    int r = 6 + rand()% 5;
+    int obstacleType = rand() % 2;
+    for (int i = 0; i < r; i++)
+    {
+      int rx = 1 + rand() % (MAP_WIDTH - 3);
+      int ry = 1 + rand() % (MAP_HEIGHT - 3);
+
+      bool ok = true;
+      bool isObstacle = (obstacleType == 1) && rand() % 2 == 0;
+
+      if ( (rx == 1 && ry == MAP_HEIGHT / 2)
+          || (rx == MAP_WIDTH - 2 && ry == MAP_HEIGHT / 2)
+          || (rx == MAP_WIDTH /2 && ry == MAP_HEIGHT - 2)
+          || (rx == MAP_WIDTH /2 && ry == 1) )
+      {
+        ok = false;
+      }
+
+      else
+      {
+        for (int ix = -1; ix <= 1; ix++)
+          for (int iy = -1; iy <= 1; iy++)
+        {
+          ok = ok && map[rx + ix][ry + iy] < MAP_HOLE;
+          ok = ok && map[rx + ix][ry + iy] != MAP_WALL;
+        }
+      }
+
+      if (ok)
+      {
+        if (!isObstacle)
+          map[rx][ry] = MAP_HOLE;
+        else
+          map[rx][ry] = MAP_WALL;
+      }
+      else
+      {
+        i--;
+      }
+    }
+  }
+  else  //if (type == 5)
   {
     // "checker"
     for (i = 2; i < MAP_WIDTH - 2; i = i + 2)
