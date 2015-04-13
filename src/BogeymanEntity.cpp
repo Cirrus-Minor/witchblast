@@ -123,7 +123,7 @@ void BogeymanEntity::calculateBB()
     boundingBox.left = (int)x - 14;
     boundingBox.width = 28;
     boundingBox.top = (int)y - 55;
-    boundingBox.height =  38;
+    boundingBox.height =  58;
 }
 
 void BogeymanEntity::collideMapRight()
