@@ -349,14 +349,16 @@ msg_cyclops_0#The Stone Cyclops
 enemy_type_boss_cyclops#the Stone Cyclops
 
 
+
+
 achiev_rats#Rodenticide
 achiev_rats_desc#Kill 250 rats
 achiev_100#Stingy
 achiev_100_desc#Collect 100 gold coins
 achiev_piety_max#Faithful
 achiev_piety_max_desc#Reach the max piety level
-achiev_3_hits#Brochette
-achiev_3_hits_desc#Hurt 3 monsters with the same shot
+achiev_4_hits#Brochette
+achiev_4_hits_desc#Hurt 4 monsters with the same shot
 achiev_complete_set#Dressed
 achiev_complete_set_desc#Equip robe + hat + boots + gloves
 achiev_giant_slime#Giant Slime Slayer
@@ -583,8 +585,6 @@ item_ring_illusion#Anneau d'obsidienne
 item_ring_illusion_desc#Augmente le pouvoir d'illusion
 item_spell_triple#Manuel de Triple-tir
 item_spell_triple_desc#Tire trois projectiles
-item_brooch_finesse#Barbe factice d'Archimage
-item_brooch_finesse_desc#Chance de dégâts critiques (x2)
 item_fairy_fire#La fée Alicia
 item_fairy_fire_desc#Vous aide dans le donjon
 item_fairy_target#La fée Scarlett
@@ -801,6 +801,113 @@ item_floor_map#Carte du donjon
 item_floor_map_desc#Révèle la carte de cet étage
 item_alcohol#Absinthe
 item_alcohol_desc#Vous rend temporairement plus fort
+
+achiev_rats#Rodenticide
+achiev_rats_desc#Tuer 250 rats
+achiev_100#Radin
+achiev_100_desc#Posséder 100 pièces
+achiev_piety_max#Fidèle
+achiev_piety_max_desc#Atteindre le niveau max de piété
+achiev_4_hits#Brochette
+achiev_4_hits_desc#Toucher 4 monstres avec le même tir
+achiev_complete_set#Habillé
+achiev_complete_set_desc#Posséder robe + chapeau + bottes + gants
+achiev_giant_slime#Pourfendeur de Slime Géant
+achiev_giant_slime_desc#Tuer le Slime Géant
+achiev_cyclops#Pourfendeur de Cyclope
+achiev_cyclops_desc#Tuer le Cyclope de pierre
+achiev_rat_king#Pourfendeur de Rat-Garou
+achiev_rat_king_desc#Tuer le Rat-Garou
+achiev_giant_spider#Pourfendeur d'Araignée Géante
+achiev_giant_spider_desc#Tuer l'Araignée Géante
+achiev_francky#Pourfendeur de Chose
+achiev_francky_desc#Tuer la Chose
+achiev_butcher#Pourfendeur de Boucher
+achiev_butcher_desc#Tuer le Boucher porcin
+achiev_witches#Inquisiteur
+achiev_witches_desc#Tuer 50 sorcières
+achiev_eggs#Mauvaise omelette
+achiev_eggs_desc#Détruire 100 oeufs
+achiev_vampire#Chasseur de vampires
+achiev_vampire_desc#Tuer le Vampire
+achiev_challenges#Gladiateur
+achiev_challenges_desc#Relever 4 défis
+achiev_win#Vivre son rêve
+achiev_win_desc#Terminer la démo
+
+func_achiev_screen#Ecran des succés
+func_achiev_all#Description des succès
+func_double_spell#Drop de deux sorts
+
+enemy_type_evil_flower_fire#une fleur de feu maléfique
+enemy_type_bat_skeleton#une chauve-souris squelette
+enemy_type_slime_large#un gros slime
+enemy_type_slime_blue_large#un gros slime bleu
+enemy_type_slime_red_large#un gros slime rouge
+enemy_type_slime_violet_large#un gros slime violet
+enemy_type_bogeyman#un croque-mitaine
+menu_achievements#Succès
+menu_achievements_desc#Affiche les succès
+achievement_complete#Succès débloqué !
+item_spell_flower#Sort: Invoquer fleur magique
+item_spell_flower_desc#Invoque une fleur magique
+item_rapid_shots#Manuel de tir rapide
+item_rapid_shots_desc#La mitraillette du magicien
+item_fairy_poison#La fée Vicky
+item_fairy_poison_desc#Vous aide dans le donjon
+item_luck#Trèfle à 4 feuilles
+item_luck_desc#Augmente temporairement l'or trouvé
+item_fairy_powder#Poussière de fée
+item_fairy_powder_desc#Excite temporairement les fées
+item_ring_poison#Anneau d'émeraude
+item_ring_poison_desc#Augmente le pouvoir de poison
+item_gem_poison#Gemme de poison
+item_gem_poison_desc#Attaque de poison
+item_book_prayer_i#Livre de prières - Tome I
+item_book_prayer_i_desc#Augmente la piété
+item_book_prayer_ii#Livre de prières - Tome II
+item_book_prayer_ii_desc#Reduit les coûts en piété
+item_pet_slime#Slime de compagnie
+item_pet_slime_desc#Il vous suit et se bat à vos côtés
+item_hat_advanced#Chapeau de Warlock
+item_hat_advanced_desc#Resistance élémentaire + cadence de tir+
+item_robe_advanced#Robe magique de choc
+item_robe_advanced_desc#Repousse + armure augmentée
+item_critical#Barbe factice de mage
+item_critical_desc#Chance de dégâts critiques (x2)
+item_critical_advanced#Barbe factice d'Archimage
+item_critical_advanced_desc#Chance de dégâts critiques (x3)
+item_spell_fairy#Sort: Transformation en fée
+item_spell_fairy_desc#Transforme le magicien en fée
+item_gloves_advanced#Gants de ranger
+item_gloves_advanced_desc#Désarmer pièges + cadence de tir+
+item_boots_advanced#Bottes de ranger
+item_boots_advanced_desc#Augmente la vitesse
+divinity_leveling_0#Niveau supérieur de dévotion !
+div_fighter_lvl#augmente les dégâts
+div_healer_lvl_2#régénère
+div_healer_lvl_3#augmente la régénération
+div_ice_lvl_3#augmente la résistance au froid
+div_ice_lvl_4#augmente le niveau d'attaque de glace
+div_ice_lvl_5#augmente l'immunité de gel
+div_stone_lvl_3#augmente la résistance à la pierre
+div_stone_lvl_4#augmente le niveau d'attaque de pierre
+div_stone_lvl_5#augmente l'immunité de repoussement
+enemy_vampire#Vampire
+enemy_type_vampire#le Vampire
+msg_tuto_achiev_0#Tutorial: Succés
+msg_tuto_achiev_1#Vous avez obtenu un succès.
+msg_tuto_achiev_2#Ils débloquent des objets ou fonctionnalités.
+msg_vampire_0#Le Vampire
+msg_vampire_1#J'ai oublié d'emporter de l'ail !
+msg_level7_0#La fille de l'Archimage
+msg_level7_1#"Je me rapproche encore.
+msg_level7_2#Elle ne peut plus être trop loin d'ici."
+divinity_air_0#Ostram
+divinity_air_1#Divinité de l'air et du tonnerre.
+divinity_air_2#Il apprécie l'usage de la foudre.
+div_air_lvl#augmente votre vitesse
+div_air_lvl_4#augmente le niveau d'attaque de foudre
 
 [german]
 start_new_game#Neues Spiel starten
