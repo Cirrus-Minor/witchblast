@@ -1695,12 +1695,12 @@ void WitchBlastGame::renderHud()
       if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
       {
         game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
-                     13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
       }
       else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
       {
         game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
-                     13, xPos + 32, yPos + 32, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
       }
     }
 
