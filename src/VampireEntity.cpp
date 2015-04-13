@@ -749,6 +749,7 @@ VampireDeadEntity::VampireDeadEntity(float myx, float myy)
 
   type = ENTITY_ENEMY_NC;
   deathFrame = FRAME_CORPSE_VAMPIRE;
+  dyingFrame = 14;
 
   frame = 13;
   sprite.setOrigin(48.0f, 74.0f);
