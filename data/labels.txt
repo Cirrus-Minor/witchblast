@@ -415,7 +415,7 @@ item_gem_poison_desc#Poison attack
 item_book_prayer_i#Book of prayer - Tome I
 item_book_prayer_i_desc#Increases piety
 item_book_prayer_ii#Book of prayer - Tome II
-item_book_prayer_ii_desc#Reduces reconversion cost
+item_book_prayer_ii_desc#Reduces piety cost
 item_pet_slime#Slime Pet
 item_pet_slime_desc#It will follow and help you
 item_hat_advanced#Warlock's Hat
