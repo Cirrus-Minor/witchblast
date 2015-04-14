@@ -105,20 +105,25 @@ Next release
 - ADD New boss (for level 7)
 - ADD Achievements and unlocks (16)
 - ADD Items
+- ADD Monsters and variants
 - ADD Shot type (poison)
 - ADD Spells (2)
 - ADD Familiars (a fairy and another one)
 - ADD Chest traps
 - ADD Challenge levels 3 and 4
+- ADD Tiles and room patterns 
 - ADD Divinity level messages
 - ADD Tree Divinity has a fury against undead
 - MOD No player collision while invincible
 - MOD Sulfur causes the monster explode directly, and safe for the player
 - MOD Giant Spider easier, and less green blood on screen
+- MOD Divine interventions have a piety cost
 - MOD Hiccup makes the player fire poison
 - MOD Imps do not teleport with 1 HP damage
 - MOD Corpse can fall in holes
+- MOD Completed challenge chest can contain items (but it's rare)
 - FIX Natasha and Scarlett wrong display in Hall of Fame
+- FIX V-Sync does not work on some GPU
 
 v0.4.6b
 - ADD Russian translation
