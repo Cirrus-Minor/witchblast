@@ -165,12 +165,14 @@ float PlayerEntity::getLightCone()
   }
   else if (divineInterventionDelay > 0.0f)
   {
-    if (isRegeneration) return -1.0f;
     float result = 1.0f;
     if (divineInterventionDelay < 0.25f)
       result = 4 * divineInterventionDelay;
     else if (divineInterventionDelay > WORSHIP_DELAY - 0.25f)
       result = (WORSHIP_DELAY - divineInterventionDelay) * 4;
+
+    if (isRegeneration) result *= 0.4f;
+
     return result;
   }
   else return -1.0f;
