@@ -67,7 +67,8 @@ void SpiderEggEntity::animate(float delay)
 
 void SpiderEggEntity::dyingFromAge()
 {
-  new LittleSpiderEntity(x, y, invocated);
+  LittleSpiderEntity* ls = new LittleSpiderEntity(x, y, invocated);
+  ls->setAge(-0.3f);
 
   for (int i = 0; i < 4; i++)
   {

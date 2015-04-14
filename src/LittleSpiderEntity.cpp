@@ -12,7 +12,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
 {
   imagesProLine = 8;
   creatureSpeed = 175.0f;
-  velocity = Vector2D(creatureSpeed);
+  velocity = Vector2D(creatureSpeed * 0.25f);
   hp = 16;
   meleeDamages = 5;
 
@@ -25,7 +25,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
   agonizingSound = SOUND_SPIDER_LITTLE_DIE;
 
   timer = (rand() % 50) / 10.0f;
-  age = 0.0f;
+  if (invocated) age = 0.0f;
   frame = 8;
 
   sprite.setOrigin(32.0f, 40.0f);
