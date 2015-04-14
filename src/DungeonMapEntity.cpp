@@ -221,8 +221,17 @@ bool DungeonMapEntity::checkFalling(displayEntityStruct &particle, int boxWidth,
 {
   int tilex = (particle.x + boxWidth / 2) / TILE_WIDTH;
   int tiley = (particle.y + boxHeight / 2) / TILE_HEIGHT;
+  if (game().getCurrentMap()->getTile(tilex, tiley) < MAP_HOLE) return false;
 
-  return (game().getCurrentMap()->getTile(tilex, tiley) >= MAP_HOLE);
+  tilex = (particle.x + boxWidth / 2 - boxWidth / 3) / TILE_WIDTH;
+  tiley = (particle.y + boxHeight / 2 - boxHeight / 3) / TILE_HEIGHT;
+  if (game().getCurrentMap()->getTile(tilex, tiley) < MAP_HOLE) return false;
+
+  tilex = (particle.x + boxWidth / 2 + boxWidth / 3) / TILE_WIDTH;
+  tiley = (particle.y + boxHeight / 2 + boxHeight / 3) / TILE_HEIGHT;
+  if (game().getCurrentMap()->getTile(tilex, tiley) < MAP_HOLE) return false;
+
+  return true;
 }
 
 void DungeonMapEntity::autoSpeed(displayEntityStruct &particle, float speed)
