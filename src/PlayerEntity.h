@@ -598,6 +598,7 @@ class PlayerEntity : public BaseCreatureEntity
     ItemEntity* itemToBuy;
 
     float getBolPositionY();
+    void incrementDivInterventions();
 };
 
 #endif // PLAYERSPRITE_H

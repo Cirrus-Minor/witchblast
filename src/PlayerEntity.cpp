@@ -2376,7 +2376,7 @@ bool PlayerEntity::triggerDivinityBefore()
       if (game().getUndeadCount() > 0 && rand() % 2 == 0)
       {
         SoundManager::getInstance().playSound(SOUND_OM);
-        divinity.interventions ++;
+        incrementDivInterventions();
         divineHeal(hpMax / 2);
         divineDestroyUndead();
         game().makeColorEffect(X_GAME_COLOR_WHITE, 0.45f);
@@ -2390,7 +2390,7 @@ bool PlayerEntity::triggerDivinityBefore()
       if (r == 0) return false;
 
       SoundManager::getInstance().playSound(SOUND_OM);
-      divinity.interventions ++;
+      incrementDivInterventions();
       divineHeal(hpMax / 3);
       if (r == 1) divineProtection(5.0f, 0.8f);
       else divineFury();
@@ -2404,7 +2404,7 @@ bool PlayerEntity::triggerDivinityBefore()
       if (r == 0) return false;
 
       SoundManager::getInstance().playSound(SOUND_OM);
-      divinity.interventions ++;
+      incrementDivInterventions();
       divineHeal(hpMax / 3);
       if (r == 1)
       {
@@ -2427,7 +2427,7 @@ bool PlayerEntity::triggerDivinityBefore()
       if (r == 0) return false;
 
       SoundManager::getInstance().playSound(SOUND_OM);
-      divinity.interventions ++;
+      incrementDivInterventions();
       divineHeal(hpMax / 3);
       if (r == 1)
       {
@@ -2448,7 +2448,7 @@ bool PlayerEntity::triggerDivinityBefore()
       if (r == 0) return false;
 
       SoundManager::getInstance().playSound(SOUND_OM);
-      divinity.interventions ++;
+      incrementDivInterventions();
       divineHeal(hpMax / 3);
       /*if (r == 1)
       {
@@ -2477,7 +2477,7 @@ void PlayerEntity::triggerDivinityAfter()
     case DivinityHealer:
       {
         SoundManager::getInstance().playSound(SOUND_OM);
-        divinity.interventions ++;
+        incrementDivInterventions();
         divineHeal(hpMax);
         break;
       }
@@ -2485,7 +2485,7 @@ void PlayerEntity::triggerDivinityAfter()
     default:
       {
         SoundManager::getInstance().playSound(SOUND_OM);
-        divinity.interventions ++;
+        incrementDivInterventions();
         divineHeal(hpMax / 2);
         break;
       }
@@ -2496,7 +2496,7 @@ void PlayerEntity::triggerDivinityAfter()
 
 void PlayerEntity::addPiety(int n)
 {
-  if (equip[EQUIP_BOOK_PRAYER_I]) n *= 1.5f;
+  if (n > 0 && equip[EQUIP_BOOK_PRAYER_I]) n *= 1.5f;
 
   int oldLevel = divinity.level;
   divinity.piety += n;
@@ -2527,6 +2527,10 @@ void PlayerEntity::addPiety(int n)
     divineInterventionDelay = WORSHIP_DELAY / 2;
     isRegeneration = false;
     pietyLevelUp();
+    computePlayer();
+  }
+  else if (divinity.level < oldLevel)
+  {
     computePlayer();
   }
 }
@@ -2560,6 +2564,12 @@ void PlayerEntity::pietyLevelUp()
   }
 
   if (label.compare("") != 0) game().addDivLevelMessageToQueue(label);
+}
+
+void PlayerEntity::incrementDivInterventions()
+{
+  divinity.interventions++;
+  addPiety(-divinity.piety * (equip[EQUIP_BOOK_PRAYER_II] ? 0.04f : 0.08f));
 }
 
 void PlayerEntity::worship(enumDivinityType id)
