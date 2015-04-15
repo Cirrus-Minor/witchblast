@@ -220,7 +220,7 @@ void ChestEntity::open()
     int r = rand() % 3;
     if (r == 0)
     {
-      for (int i = 0; i < 5; i++)
+      for (int i = 0; i < (game().getPlayer()->isEquiped(EQUIP_LUCK) ? 6 : 5); i++)
       {
         ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
         newItem->setVelocity(Vector2D(90.0f + rand()% 150));
@@ -230,7 +230,7 @@ void ChestEntity::open()
     }
     else if (r == 1)
     {
-      for (int i = 0; i < 3; i++)
+      for (int i = 0; i < (game().getPlayer()->isEquiped(EQUIP_LUCK) ? 4 : 3); i++)
       {
         ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
         newItem->setVelocity(Vector2D(90.0f + rand()% 150));
