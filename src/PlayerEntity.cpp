@@ -1540,6 +1540,11 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 {
   if (playerStatus == playerStatusDead) return false;
 
+  if (isFairyTransmuted && hurtParam.hurtingType != ShotTypeDeterministic)
+  {
+    hurtParam.damage *= 2;
+  }
+
   bool divinityInvoked = false;
   if (hp - hurtParam.damage <= hpMax / 4 && divinity.divinity >= 0)
   {
