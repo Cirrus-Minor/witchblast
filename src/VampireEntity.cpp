@@ -48,8 +48,8 @@ VampireEntity::VampireEntity(float myx, float myy)
   imagesProLine = 6;
 
   state = 0;
-  timer = 4.0f;
-  age = -1.5f;
+  timer = 2.0f;
+  age = -1.0f;
   enemyType = EnemyTypeVampire;
   formState = FORM_MAN;
 
