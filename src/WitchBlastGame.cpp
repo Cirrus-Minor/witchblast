@@ -66,7 +66,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 7
+//#define START_LEVEL 5
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -1226,6 +1226,7 @@ void WitchBlastGame::updateRunningGame()
           findPlaceMonsters(EnemyTypeWitch, 1);
           findPlaceMonsters(EnemyTypeWitchRed, 1);
           findPlaceMonsters(EnemyTypeCauldron, 1);
+          findPlaceMonsters(EnemyTypeCauldronElemental, 1);
         }
       }
       if (event.key.code == sf::Keyboard::F11)
@@ -4113,7 +4114,10 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     proceedEvent(EventMeetWitches);
     break;
   case EnemyTypeCauldron:
-    new CauldronEntity(xm, ym);
+    new CauldronEntity(xm, ym, CauldronTypeStandard);
+    break;
+  case EnemyTypeCauldronElemental:
+    new CauldronEntity(xm, ym, CauldronTypeElemental);
     break;
   case EnemyTypeSpiderEgg:
     new SpiderEggEntity(xm, ym, false);
@@ -5913,6 +5917,9 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     break;
   case EnemyTypeCauldron:
     value = "enemy_type_cauldron";
+    break;
+  case EnemyTypeCauldronElemental:
+    value = "enemy_type_cauldron_elemental";
     break;
   case EnemyTypeGhost:
     value = "enemy_type_ghost";

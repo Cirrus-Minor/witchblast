@@ -395,6 +395,7 @@ enemy_type_slime_blue_large#a large blue slime
 enemy_type_slime_red_large#a large red slime
 enemy_type_slime_violet_large#a large violet slime
 enemy_type_bogeyman#a bogeyman
+enemy_type_cauldron_elemental#an elemental cauldron
 menu_achievements#Achievements
 menu_achievements_desc#Display the achievements
 achievement_complete#Achievement unlocked!
@@ -846,6 +847,7 @@ enemy_type_slime_blue_large#un gros slime bleu
 enemy_type_slime_red_large#un gros slime rouge
 enemy_type_slime_violet_large#un gros slime violet
 enemy_type_bogeyman#un croque-mitaine
+enemy_type_cauldron_elemental#un chaudron élémentaire
 menu_achievements#Succès
 menu_achievements_desc#Affiche les succès
 achievement_complete#Succès débloqué !

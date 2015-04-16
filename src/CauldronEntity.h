@@ -3,10 +3,12 @@
 
 #include "EnemyEntity.h"
 
+enum cauldronTypeEnum { CauldronTypeStandard, CauldronTypeElemental };
+
 class CauldronEntity : public EnemyEntity
 {
   public:
-    CauldronEntity(float x, float y);
+    CauldronEntity(float x, float y, cauldronTypeEnum cauldronType);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -25,6 +27,10 @@ class CauldronEntity : public EnemyEntity
     float invokeDelay;
     float bubbleDelay;
     float agonizingDelay;
+    float colorChangeDelay;
+    int colorState;
+
+    cauldronTypeEnum cauldronType;
 };
 
 #endif // CAULDRON_ENTITY_H

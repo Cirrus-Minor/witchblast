@@ -8,7 +8,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-CauldronEntity::CauldronEntity(float x, float y)
+CauldronEntity::CauldronEntity(float x, float y, cauldronTypeEnum cauldronType)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_CAULDRON), x, y)
 {
   creatureSpeed = 0.0f;
@@ -16,17 +16,30 @@ CauldronEntity::CauldronEntity(float x, float y)
   hp = CAULDRON_HP;
   hpMax = hp;
   meleeDamages = 0;
+  this->cauldronType = cauldronType;
 
   bloodColor = BloodNone;
   invokeDelay = 2.5f;
   bubbleDelay = 0.0f;
   shadowFrame = 2;
   sprite.setOrigin(32, 28);
+  imagesProLine = 2;
 
   deathFrame = FRAME_CORPSE_CAULDRON;
   dyingSound = SOUND_CAULDRON_DIE;
 
-  enemyType = EnemyTypeCauldron;
+  if (cauldronType == CauldronTypeElemental)
+  {
+    enemyType = EnemyTypeCauldronElemental;
+    colorChangeDelay = 4.0f + rand()% 40 * 0.1f;
+    colorState = rand() % 3;
+  }
+  else
+  {
+    enemyType = EnemyTypeCauldron;
+  }
+
+  enemyType = cauldronType == CauldronTypeStandard ? EnemyTypeCauldron : EnemyTypeCauldronElemental;
   resistance[ResistanceRecoil] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceImmune;
   canExplode = false;
@@ -50,21 +63,65 @@ void CauldronEntity::animate(float delay)
     invokeDelay -= delay;
     if (invokeDelay < 0.0f)
     {
-      new SlimeEntity(x, y, SlimeTypeViolet, true);
-      invokeDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
+      if (cauldronType == CauldronTypeElemental)
+      {
+        slimeTypeEnum slimeType;
+        switch (colorState)
+        {
+          case 0: slimeType = SlimeTypeBlue; break;
+          case 1: slimeType = SlimeTypeRed; break;
+          case 2: slimeType = SlimeTypeStandard; break;
+        }
+        new SlimeEntity(x, y, slimeType, true);
+        invokeDelay = 2.75f + (float)(rand() % 3000) / 1000.0f;
+      }
+      else
+      {
+        new SlimeEntity(x, y, SlimeTypeViolet, true);
+        invokeDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
+      }
+    }
+
+    if (cauldronType == CauldronTypeElemental)
+    {
+      colorChangeDelay -= delay;
+      if (colorChangeDelay < 0.0f)
+      {
+        colorChangeDelay = 4.0f + rand()% 50 * 0.1f;
+        if (rand() % 2 == 0)
+        {
+          colorState++;
+          if (colorState > 2) colorState = 0;
+        }
+        else
+        {
+          colorState--;
+          if (colorState < 0) colorState = 2;
+        }
+      }
     }
 
     bubbleDelay -= delay;
     if (bubbleDelay < 0.0f)
     {
       bubbleDelay = 0.3f;
+      int bubbleFrame = 32;
+      if (cauldronType == CauldronTypeElemental)
+      {
+        switch (colorState)
+        {
+          case 0: bubbleFrame = 33; break;
+          case 1: bubbleFrame = 34; break;
+          case 2: bubbleFrame = 35; break;
+        }
+      }
 
       for (int i=0; i < 2; i++)
       {
         float xBub = x - 16 + rand() % 32;
         SpriteEntity* bubble = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CAULDRON), xBub, y - 20, 8, 8);
         bubble->setZ(z);
-        bubble->setFrame(32);
+        bubble->setFrame(bubbleFrame);
         bubble->setType(ENTITY_EFFECT);
         bubble->setWeight(-20 - rand() % 40);
         bubble->setLifetime(2.0f);
@@ -73,6 +130,16 @@ void CauldronEntity::animate(float delay)
       }
     }
     frame = hp > hpMax / 2 ? 0 : 1;
+    if (cauldronType == CauldronTypeElemental)
+    {
+      switch (colorState)
+      {
+        case 0: frame += 2; break;
+        case 1: frame += 4; break;
+        case 2: frame += 6; break;
+      }
+    }
+
     EnemyEntity::animate(delay);
   }
 }
@@ -152,11 +219,18 @@ void CauldronEntity::dying()
 {
   new ExplosionEntity(x, y, ExplosionTypeViolet, 0, EnemyTypeNone, true);
 
-  SoundManager::getInstance().playSound(dyingSound);
-  isAgonising = true;
-  agonizingDelay = 0.7f;
-  drop();
-  game().addKilledEnemy(enemyType, hurtingType);
+  if (cauldronType == CauldronTypeElemental)
+    {
+      switch (colorState)
+      {
+        case 0: deathFrame = FRAME_CORPSE_CAULDRON_RED; break;
+        case 1: deathFrame = FRAME_CORPSE_CAULDRON_BLUE; break;
+        case 2: deathFrame = FRAME_CORPSE_CAULDRON_GREEN; break;
+      }
+    }
+
+  EnemyEntity::dying();
+  return;
 }
 
 void CauldronEntity::drop()

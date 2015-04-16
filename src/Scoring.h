@@ -54,6 +54,8 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeGhost:          score = 25; break;
     case EnemyTypeZombie:         score = 25; break;
     case EnemyTypeZombieDark:     score = 25; break;
+    case EnemyTypeCauldronElemental:
+                                  score = 30; break;
     case EnemyTypeBogeyman:       score = 32; break;
 
     case EnemyTypeBubble:         score = 25; break;
@@ -63,7 +65,8 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeSlimeLarge:     score = 30; break;
     case EnemyTypeSlimeBlueLarge: score = 45; break;
     case EnemyTypeSlimeRedLarge:  score = 45; break;
-    case EnemyTypeSlimeVioletLarge:  score = 45; break;
+    case EnemyTypeSlimeVioletLarge:
+                                  score = 45; break;
 
     case EnemyTypeButcher:        score = 30; break;
     case EnemyTypeSlimeBoss:      score = 60; break;
