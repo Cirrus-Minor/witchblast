@@ -36,6 +36,7 @@ SpiderWebEntity::SpiderWebEntity(float x, float y, bool isFromPlayer)
   resistance[ResistanceRecoil] = ResistanceImmune;
   resistance[ResistanceFire] = ResistanceVeryLow;
   resistance[ResistanceStone] = ResistanceVeryLow;
+  resistance[ResistancePoison] = ResistanceImmune;
 
   canExplode = false;
 
