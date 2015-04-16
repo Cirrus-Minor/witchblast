@@ -59,12 +59,13 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
 void FairyEntity::animate(float delay)
 {
   z = y + height;
+  if (game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER)) delay *= 1.75f;
 
   if (fireDelay > 0) fireDelay -= delay;
 
   float dist2 = (x - parentEntity->getX()) * (x - parentEntity->getX()) + (y - parentEntity->getY()) * (y - parentEntity->getY());
 
-  float creatureSpeed = game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) ? FAIRY_SPEED * 1.5f : FAIRY_SPEED;
+  float creatureSpeed = FAIRY_SPEED;
 
   if (dist2 > 15000.0f)
   {
@@ -109,10 +110,10 @@ void FairyEntity::animate(float delay)
 
     if (teleportDelay <= 0.0f)
     {
-      teleportDelay = 4.0f + 0.1f * (rand() % 35);
+      teleportDelay = 7.0f + 0.2f * (rand() % 35);
       SoundManager::getInstance().playSound(SOUND_TELEPORT);
 
-      for(int i=0; i < 50; i++)
+      for(int i=0; i < 6; i++)
       {
         game().generateStar(sf::Color(50, 50, 255, 255), x, y);
         game().generateStar(sf::Color(200, 200, 255, 255), x, y);
@@ -175,7 +176,7 @@ void FairyEntity::fire(int dir)
       SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
       break;
     }
-    fireDelay = game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) ? fairyFireDelay * 0.6f : fairyFireDelay;
+    fireDelay = fairyFireDelay;
 
     float velx = 0.0f;
     float vely = 0.0f;
