@@ -66,7 +66,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 5
+//#define START_LEVEL 2
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -384,7 +384,9 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/vampire_sonic.ogg",  "media/sound/vampire_laughing.ogg",
     "media/sound/vampire_transform_bolt.ogg", "media/sound/vampire_transform_bat.ogg",
     "media/sound/vampire_hypnosis.ogg", "media/sound/vampire_cry.ogg",
-    "media/sound/vampire_dying.ogg",
+    "media/sound/vampire_dying.ogg",  "media/sound/ice_block.ogg",
+    "media/sound/bogeyman_die.ogg",   "media/sound/bogeyman_attack.ogg",
+    "media/sound/bogeyman_vortex_00.ogg", "media/sound/bogeyman_vortex_01.ogg",
   };
 
   // AA in fullscreen
