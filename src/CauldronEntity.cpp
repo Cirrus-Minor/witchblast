@@ -65,7 +65,7 @@ void CauldronEntity::animate(float delay)
     {
       if (cauldronType == CauldronTypeElemental)
       {
-        slimeTypeEnum slimeType;
+        slimeTypeEnum slimeType = SlimeTypeStandard;
         switch (colorState)
         {
           case 0: slimeType = SlimeTypeBlue; break;
