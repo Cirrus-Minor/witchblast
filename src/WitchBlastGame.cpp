@@ -4426,14 +4426,17 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
   else
   {
     ItemEntity* newItem;
-    if (challengeLevel < 4 || rand() % 8 > 0) newItem = new ItemEntity(ItemBonusHealth, x, y);
-    else newItem = new ItemEntity((enumItemType)(FirstEquipItem + getRandomEquipItem()), x, y);
+
+    if (challengeLevel < 4 || rand() % (player->isEquiped(EQUIP_LUCK) ? 5 : 8) > 0)
+      newItem = new ItemEntity(ItemBonusHealth, x, y);
+    else
+      newItem = new ItemEntity((enumItemType)(FirstEquipItem + getRandomEquipItem()), x, y);
 
     if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
 
-    int gold = 2 + rand() % 9;
+    int gold = 2 + rand() % (player->isEquiped(EQUIP_LUCK) ? 9 : 14);
     for (int i = 0; i < gold; i++)
     {
       ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
