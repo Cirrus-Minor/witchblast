@@ -361,6 +361,13 @@ void generateStandardRoom05()
       game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
       game().getCurrentMap()->addRandomGrids(4);
       int r = 8 + rand() % 5;
+
+      if (rand() % 3 == 0)
+      {
+        game().findPlaceMonsters(EnemyTypeCauldronElemental, 1);
+        r -= 4;
+      }
+
       for (int i = 0; i < r; i++)
       {
         int rtype = rand() % 5;
@@ -402,7 +409,10 @@ void generateStandardRoom06()
     game().getCurrentMap()->generateRoomWithoutHoles(2 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeWitch, 2 +  + rand() % 2);
     game().findPlaceMonsters(EnemyTypeWitchRed, 2 +  + rand() % 2);
-    game().findPlaceMonsters(EnemyTypeCauldron, 1);
+    if (rand() % 5 == 0)
+      game().findPlaceMonsters(EnemyTypeCauldronElemental, 1);
+    else
+      game().findPlaceMonsters(EnemyTypeCauldron, 1);
   }
   else if (random < 40)
   {
@@ -481,6 +491,13 @@ void generateStandardRoom06()
       game().getCurrentMap()->generateRoomWithoutHoles(rand() % ROOM_TYPE_CHECKER);
       game().getCurrentMap()->addRandomGrids(4);
       int r = 8 + rand() % 5;
+
+      if (rand() % 3 == 0)
+      {
+        game().findPlaceMonsters(EnemyTypeCauldronElemental, 1);
+        r -= 4;
+      }
+
       for (int i = 0; i < r; i++)
       {
         int rtype = rand() % 5;
@@ -531,7 +548,15 @@ void generateStandardRoom07()
     game().getCurrentMap()->generateRoomWithoutHoles(2 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeWitch, 2 + rand() % 2);
     game().findPlaceMonsters(EnemyTypeWitchRed, 2 + rand() % 2);
-    game().findPlaceMonsters(EnemyTypeCauldron, 1 + rand() % 2);
+    game().findPlaceMonsters(EnemyTypeCauldron, 1);
+
+    if (rand() % 2 == 0)
+    {
+      if (rand() % 3 == 0)
+        game().findPlaceMonsters(EnemyTypeCauldronElemental, 1);
+      else
+        game().findPlaceMonsters(EnemyTypeCauldron, 1);
+    }
   }
   else if (random < 40)
   {
