@@ -58,7 +58,7 @@ Features
 - merchant,
 - spells with cooldown,
 - temples and divinities,
-- achievements,
+- achievements and bonus/items unlock,
 - candy eye effects.
 
 Credits
@@ -100,7 +100,7 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next release
+v0.5
 - ADD A new level (7)
 - ADD New boss (for level 7)
 - ADD Achievements and unlocks (16)
