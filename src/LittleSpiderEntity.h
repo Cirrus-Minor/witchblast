@@ -21,6 +21,7 @@ class LittleSpiderEntity : public EnemyEntity
 	  virtual void drop();
   private:
     float timer;
+    bool roaming;
 };
 
 #endif // LITTLESPIDERENTITY_H

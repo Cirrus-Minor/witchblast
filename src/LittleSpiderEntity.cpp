@@ -31,6 +31,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
   sprite.setOrigin(32.0f, 40.0f);
 
   resistance[ResistancePoison] = ResistanceImmune;
+  roaming = true;
 }
 
 void LittleSpiderEntity::animate(float delay)
@@ -42,8 +43,9 @@ void LittleSpiderEntity::animate(float delay)
     {
       timer = (rand() % 50) / 10.0f;
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
+      roaming = false;
     }
-    frame = ((int)(age * 5.0f)) % 3;
+    frame = ((int)(age * (roaming ? 1.5f : 5.0f))) % 3;
   }
 
   EnemyEntity::animate(delay);
