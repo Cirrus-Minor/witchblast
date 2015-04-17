@@ -2272,7 +2272,7 @@ void PlayerEntity::divineFury()
   int multBonus = 6;
   if (divinity.divinity == DivinityFighter) multBonus = 8;
 
-  for (float i = 0.0f; i < 2 * PI; i +=  PI / 16)
+  for (int i = 0; i < (divinity.divinity == DivinityAir ? 16 : 32); i ++)
   {
     BoltEntity* bolt = new BoltEntity(TILE_WIDTH * 1.5f + rand() % (MAP_WIDTH - 3) * TILE_WIDTH ,
                                       TILE_HEIGHT * 1.5f + rand() % (MAP_HEIGHT - 3) * TILE_HEIGHT,
