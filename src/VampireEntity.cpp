@@ -743,13 +743,14 @@ VampireDeadEntity::VampireDeadEntity(float myx, float myy)
   width = 96;
   height = 96;
   creatureSpeed = 0;
-  hp = 250;
-  hpMax = 250;
+  hp = 80;
+  hpMax = 80;
   shadowFrame = 30;
 
   type = ENTITY_ENEMY_NC;
   deathFrame = FRAME_CORPSE_VAMPIRE;
   dyingFrame = 14;
+  displayDamage = false;
 
   frame = 13;
   sprite.setOrigin(48.0f, 74.0f);
