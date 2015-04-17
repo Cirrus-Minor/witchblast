@@ -13,6 +13,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   : CollidingSpriteEntity (image, x, y, spriteWidth, spriteHeight )
 {
   hurting = false;
+  displayDamage = true;
   hurtingType = ShotTypeStandard;
   shadowFrame = -1;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
@@ -524,7 +525,8 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
       }
     }
 
-    if (oldHp > 0)
+    // display damage
+    if (displayDamage && oldHp > 0)
     {
       int displayedDamage = hurtParam.damage;
       if (hurtParam.goThrough && hp == 0)
