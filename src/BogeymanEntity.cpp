@@ -62,6 +62,7 @@ void BogeymanEntity::animate(float delay)
           state = 1;
           changingDelay = 2 * BOGEY_ANIM_SPEED;
           hasFired = false;
+          SoundManager::getInstance().playSound(SOUND_BOGEYMAN_ATTACK);
         }
         else if (state == 1) // attack -> move
         {
@@ -73,6 +74,7 @@ void BogeymanEntity::animate(float delay)
           state = 3;
           changingDelay = BOGEY_DISAPPEARING_TIME;
           setVelocity(Vector2D(0.0f, 0.0f));
+          SoundManager::getInstance().playSound(SOUND_BOGEYMAN_VORTEX_01);
         }
         else if (state == 3)
         {
@@ -84,6 +86,7 @@ void BogeymanEntity::animate(float delay)
           state = 0;
           changingDelay = BOGEY_APPARITION_TIME;
           teleport();
+          SoundManager::getInstance().playSound(SOUND_BOGEYMAN_VORTEX_00);
         }
         else if (state == -1) // dying
         {
@@ -115,6 +118,7 @@ void BogeymanEntity::animate(float delay)
   }
 
   EnemyEntity::animate(delay);
+  if (age > 0 && delay >= age) SoundManager::getInstance().playSound(SOUND_BOGEYMAN_VORTEX_00);
   z = y + 8;
 }
 
@@ -300,7 +304,7 @@ void BogeymanEntity::prepareDying()
   velocity.x = 0.0f;
   velocity.y = 0.0f;
 
-  SoundManager::getInstance().playSound(SOUND_VAMPIRE_DYING);
+  SoundManager::getInstance().playSound(SOUND_BOGEYMAN_DIE);
 
   type = ENTITY_ENEMY_NC;
 }
