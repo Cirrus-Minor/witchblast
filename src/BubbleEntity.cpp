@@ -150,5 +150,8 @@ void BubbleEntity::dying()
   for (int i = 0; i < 5 - bubbleSize; i++)
     game().generateBlood(x, y, bubbleType == BubbleIce ? BloodBubbleIce : BloodBubble);
 
-  SoundManager::getInstance().playSound(SOUND_BUBBLE_00 + rand() % 2);
+  if (bubbleType == BubbleIce)
+    SoundManager::getInstance().playSound(SOUND_ICE_BLOCK);
+  else
+    SoundManager::getInstance().playSound(SOUND_BUBBLE_00 + rand() % 2);
 }
