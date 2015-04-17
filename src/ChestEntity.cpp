@@ -69,7 +69,6 @@ void ChestEntity::animate(float delay)
       {
         initFallingGrid();
         for (int i = 0; i < 22; i++) fallRock();
-        SoundManager::getInstance().playSound(SOUND_TRAP);
         game().makeShake(0.25f);
       }
       else if (trap == TrapExplosion)
@@ -180,6 +179,7 @@ void ChestEntity::open()
     {
       if (rand() % 5 == 0) // trap
       {
+        SoundManager::getInstance().playSound(SOUND_TRAP);
         int r = rand() % 3;
         if (r == 0)
         {
