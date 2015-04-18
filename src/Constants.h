@@ -621,6 +621,7 @@ enum EnumMessages
   MsgInfoDivFighter,
   MsgInfoDivIce,
   MsgInfoDivStone,
+  MsgInfoDivAir,
   MsgInfoDivIntervention,
   MsgInfoDivGift,
   MsgInfoDivLevel,
