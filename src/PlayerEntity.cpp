@@ -862,7 +862,7 @@ void PlayerEntity::renderHalo(sf::RenderTarget* app)
 {
   if (frame > 2 || spriteDy > 8) return;
   // gems
-  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeFire)  && playerStatus != playerStatusDead)
+  if ((getShotType() == ShotTypeIce || getShotType() == ShotTypeLightning || getShotType() == ShotTypeFire || getShotType() == ShotTypePoison) && playerStatus != playerStatusDead)
   {
     int fade;
     sf::Color savedColor = sprite.getColor();
@@ -873,6 +873,8 @@ void PlayerEntity::renderHalo(sf::RenderTarget* app)
       fade = 150 + rand() % 105;
     if (getShotType() == ShotTypeFire)
       fade = 200 + rand() % 40;
+    if (getShotType() == ShotTypePoison)
+      fade = 150 + rand() % 40;
 
     if (getShotType() == ShotTypeIce)
       sprite.setTextureRect(sf::IntRect(448, 864, 20, 20));
@@ -880,6 +882,8 @@ void PlayerEntity::renderHalo(sf::RenderTarget* app)
       sprite.setTextureRect(sf::IntRect(448 + 20, 864, 20, 20));
     else if (getShotType() == ShotTypeFire)
       sprite.setTextureRect(sf::IntRect(448 + 40, 864, 20, 20));
+    else if (getShotType() == ShotTypePoison)
+      sprite.setTextureRect(sf::IntRect(448, 864 + 20, 20, 20));
 
     sprite.setColor(sf::Color(255, 255, 255, fade));
     if (isMirroring)
@@ -1085,11 +1089,11 @@ void PlayerEntity::render(sf::RenderTarget* app)
         }
       case DivinityAir:
         {
-          if (divinity.level > 2)
+          if (divinity.level > 1)
           {
             displayField = true;
-            fieldFrame = 14;
-            fieldFade = 80 * (divinity.level - 3);
+            fieldFrame = 18;
+            fieldFade = 40 * (divinity.level - 1);
           }
           break;
         }
