@@ -80,6 +80,7 @@ private:
   };
 
   sf::Sprite overlaySprite;
+  sf::Sprite randomSprite;
   roomTypeEnum roomType;
 
   struct structKeyRoomFX

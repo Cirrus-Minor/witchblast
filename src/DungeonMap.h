@@ -86,6 +86,39 @@ enum roomTypeEnum
   roomTypeTemple
 };
 
+struct randomDungeonTileStruct
+{
+  int width;
+  int height;
+  int xOffset;
+  int yOffset;
+  bool canRotate;
+};
+
+const int NB_RANDOM_TILES = 16;
+const int NB_RANDOM_TILE_TRY = 40;
+
+/** Array with all the items and data */
+const randomDungeonTileStruct randomDungeonTiles[NB_RANDOM_TILES] =
+{
+  { 192, 192, 0, 0, true },
+  { 192, 192, 192, 0, true },
+  { 192, 192, 384, 0, true },
+  { 192, 192, 576, 0, true },
+  { 256, 256, 0, 192, true },
+  { 512, 256, 256, 192, false },
+  { 128, 128, 0, 448, true },
+  { 128, 128, 128, 448, true },
+  { 128, 128, 256, 448, true },
+  { 128, 128, 384, 448, true },
+  { 128, 128, 512, 448, false },
+  { 128, 128, 640, 448, false },
+  { 192, 192, 0, 576, true },
+  { 192, 192, 192, 576, true },
+  { 192, 192, 384, 576, true },
+  { 192, 192, 576, 576, true },
+};
+
 class DungeonMap : public GameMap
 {
   public:
@@ -162,6 +195,10 @@ class DungeonMap : public GameMap
     std::list<chestListElement> getChestList();
     std::list<spriteListElement> getSpriteList();
 
+    struct RandomTileElement { int type; float x; float y; float rotation;};
+    RandomTileElement getRandomTileElement();
+    void setRandomTileElement (RandomTileElement rt);
+
   protected:
   private:
     GameFloor* gameFloor;
@@ -175,7 +212,10 @@ class DungeonMap : public GameMap
     SpriteList spriteList;
     ChestList chestList;
 
+    RandomTileElement randomTileElement;
+
     void generateCorridors();
+    void generateRandomTile();
 
     void restoreItems();
     void restoreSprites();

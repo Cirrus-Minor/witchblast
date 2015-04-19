@@ -23,6 +23,7 @@ DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
   overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
   roomType = roomTypeStarting;
   keyRoomEffect.delay = -1.0f;
+  randomSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RANDOM_DUNGEON));
 }
 
 void DungeonMapEntity::animate(float delay)
@@ -334,6 +335,9 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
     tiles.setTextureRect(sf::IntRect(3 * TILE_WIDTH, 0, 3 * TILE_WIDTH, 3 * TILE_HEIGHT));
     app->draw(tiles);
   }
+
+  // random tile
+  if ( game().getCurrentMap()->getRandomTileElement().type > -1) app->draw(randomSprite);
 }
 
 void DungeonMapEntity::renderPost(sf::RenderTarget* app)
@@ -500,6 +504,16 @@ void DungeonMapEntity::computeVertices()
       break;
     }
     overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
+  }
+
+  int n = game().getCurrentMap()->getRandomTileElement().type;
+  if ( n > -1)
+  {
+    randomSprite.setPosition(game().getCurrentMap()->getRandomTileElement().x + randomDungeonTiles[n].width / 2,
+                             game().getCurrentMap()->getRandomTileElement().y + randomDungeonTiles[n].height / 2);
+    randomSprite.setOrigin(randomDungeonTiles[n].width / 2, randomDungeonTiles[n].height / 2);
+    randomSprite.setTextureRect(sf::IntRect(randomDungeonTiles[n].xOffset, randomDungeonTiles[n].yOffset, randomDungeonTiles[n].width, randomDungeonTiles[n].height));
+    randomSprite.setRotation(game().getCurrentMap()->getRandomTileElement().rotation);
   }
 }
 

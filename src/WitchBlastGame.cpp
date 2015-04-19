@@ -66,7 +66,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 2
+//#define START_LEVEL 3
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -317,7 +317,7 @@ WitchBlastGame::WitchBlastGame()
     "media/splatter.png",         "media/witch_intro.png",
     "media/item_description.png", "media/death_certificate.png",
     "media/achievements.png",     "media/boss_pictures.png",
-    "media/portrait_part.png",
+    "media/portrait_part.png",    "media/dungeon_random.png",
   };
 
   for (const char *const filename : images)
@@ -4759,6 +4759,12 @@ void WitchBlastGame::saveGame()
 
               file << ilm.type << " " << ilm.frame << " " << ilm.x << " " << ilm.y << " " << ilm.scale << std::endl;
             }
+
+            // random sprite
+            file << currentFloor->getMap(i, j)->getRandomTileElement().type
+              << " " <<currentFloor->getMap(i, j)->getRandomTileElement().x
+              << " " << currentFloor->getMap(i, j)->getRandomTileElement().y
+              << " " << currentFloor->getMap(i, j)->getRandomTileElement().rotation << std::endl;
           }
         }
       }
@@ -4917,6 +4923,14 @@ bool WitchBlastGame::loadGame()
           file >> t >> f >> x >> y >> scale;
           iMap->addSprite(t, f, x, y, scale);
         }
+
+        // random sprite
+        DungeonMap::RandomTileElement rd;
+        file >> rd.type;
+        file >> rd.x;
+        file >> rd.y;
+        file >> rd.rotation;
+        iMap->setRandomTileElement(rd);
       }
     }
 
