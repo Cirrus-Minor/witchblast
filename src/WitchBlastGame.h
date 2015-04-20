@@ -448,6 +448,8 @@ protected:
    */
   void renderHudShots(sf::RenderTarget* app);
 
+  void killArtefactDescription();
+
 private:
   Config config;
   float deltaTime;

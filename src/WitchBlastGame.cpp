@@ -66,7 +66,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 3
+//#define START_LEVEL 2
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -3252,6 +3252,23 @@ int WitchBlastGame::getUndeadCount()
   return n;
 }
 
+void WitchBlastGame::killArtefactDescription()
+{
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() == ENTITY_ARTIFACT_DESCRIPTION)
+    {
+      e->setDying(true);
+    }
+  }
+}
+
 void WitchBlastGame::animateEffects()
 {
   EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
@@ -3734,6 +3751,7 @@ void WitchBlastGame::addCorpse(float x, float y, int frame)
 
 void WitchBlastGame::showArtefactDescription(enumItemType itemType)
 {
+  killArtefactDescription();
   new ArtefactDescriptionEntity(itemType);
 }
 
