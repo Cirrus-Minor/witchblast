@@ -65,15 +65,18 @@ void CauldronEntity::animate(float delay)
     {
       if (cauldronType == CauldronTypeElemental)
       {
-        slimeTypeEnum slimeType = SlimeTypeStandard;
-        switch (colorState)
+        if (game().getEnemyCount() < 9)
         {
-          case 0: slimeType = SlimeTypeBlue; break;
-          case 1: slimeType = SlimeTypeRed; break;
-          case 2: slimeType = SlimeTypeStandard; break;
+          slimeTypeEnum slimeType = SlimeTypeStandard;
+          switch (colorState)
+          {
+            case 0: slimeType = SlimeTypeBlue; break;
+            case 1: slimeType = SlimeTypeRed; break;
+            case 2: slimeType = SlimeTypeStandard; break;
+          }
+          new SlimeEntity(x, y, slimeType, true);
+          invokeDelay = 3.75f + (float)(rand() % 3000) / 1000.0f;
         }
-        new SlimeEntity(x, y, slimeType, true);
-        invokeDelay = 2.75f + (float)(rand() % 3000) / 1000.0f;
       }
       else
       {
