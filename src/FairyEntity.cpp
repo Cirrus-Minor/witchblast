@@ -128,7 +128,7 @@ void FairyEntity::animate(float delay)
         game().generateStar(sf::Color(200, 200, 255, 255), x, y);
       }
 
-      if (rand() % 6 == 0) game().getPlayer()->castTeleport();
+      if (rand() % 60 == 0) game().getPlayer()->castTeleport();
     }
   }
 
