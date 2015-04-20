@@ -1258,6 +1258,111 @@ item_floor_map_desc#Offenbart die Karte der derzeitigen Etage
 item_alcohol#Absinth
 item_alcohol_desc#erhöht vorübergehend den Schaden
 
+achiev_rats#Rattengift
+achiev_rats_desc#Töte 250 Ratten
+achiev_100#Geizig
+achiev_100_desc#Sammle 100 goldene Münzen
+achiev_piety_max#Treu
+achiev_piety_max_desc#Erreiche die höchste Pietätsstufe
+achiev_4_hits#Brochette
+achiev_4_hits_desc#Verletze 4 Monster mit demselben Schuss
+achiev_complete_set#Gekleidet
+achiev_complete_set_desc#Rüste aus: Mantel + Hut + Schuhe + Handschuhe
+achiev_giant_slime#Gigantischer Schleim Mörder
+achiev_giant_slime_desc#Töte den gigantischen Schleim
+achiev_cyclops#Zyklopen Mörder
+achiev_cyclops_desc#Töte den Steinzyklopen
+achiev_rat_king#Werratten Mörder
+achiev_rat_king_desc#Töte den Werrattenkönig
+achiev_giant_spider#Gigantischer Spinnen Mörder
+achiev_giant_spider_desc#Töte die gigantische Spinne
+achiev_francky#Ding Mörder
+achiev_francky_desc#Töte das Ding
+achiev_butcher#Metzger Mörder
+achiev_butcher_desc#Töte den Metzger
+achiev_witches#Inquisitor
+achiev_witches_desc#Töte 50 Hexen
+achiev_eggs#Schlechtes Omelett
+achiev_eggs_desc#Zerstöre 100 Eier
+achiev_vampire#Vampirjäger
+achiev_vampire_desc#Töte den Vampier
+achiev_challenges#Gladiator
+achiev_challenges_desc#Schließe 4 Herrausforderungen ab
+achiev_win#Lebe einen Traum
+achiev_win_desc#Beende die Demo
+func_achiev_screen#Erfolge Bildschirm
+func_achiev_all#Alle Beschreibungen der Erfolge
+func_double_spell#Zwei Zauber fallen
+enemy_type_evil_flower_fire#eine böse Feuerplanze
+enemy_type_bat_skeleton#eine Skelettfledermaus
+enemy_type_slime_large#ein riesiger Schleim
+enemy_type_slime_blue_large#ein riesiger blauer Schleim
+enemy_type_slime_red_large#ein riesiger roter Schleim
+enemy_type_slime_violet_large#ein riesiger violetter Schleim
+enemy_type_bogeyman#ein Schreckgespenst
+enemy_type_cauldron_elemental#ein elementarer Kessel
+menu_achievements#Erfolge
+menu_achievements_desc#Zeige die Erfolge
+achievement_complete#Erfolg freigeschaltet!
+item_spell_flower#Zauber: Rufe magische Blume
+item_spell_flower_desc#Benutze, um eine magische Blume zu rufen
+item_rapid_shots#Zauberbuch des schnellen Schusses
+item_rapid_shots_desc#Zauberer Maschinengewehr
+item_fairy_poison#Fee Vicky
+item_fairy_poison_desc#Hilft dir im Verlies
+item_luck#Vierblättriges Kleeblatt
+item_luck_desc#Erhöht kurzfristig die Chance auf Gold
+item_fairy_powder#Feenstaub
+item_fairy_powder_desc#Begeistert die Feen kurzfristig
+item_ring_poison#Smaragdring
+item_ring_poison_desc#Erhöht die Kraft des Giftes
+item_gem_poison#Giftkristall
+item_gem_poison_desc#Giftangriff
+item_book_prayer_i#Buch der Beter - Wälzer I
+item_book_prayer_i_desc#Erhöht die Pietät
+item_book_prayer_ii#Buch der Beter - Wälzer II
+item_book_prayer_ii_desc#Reduziert Kosten für die Pietät
+item_pet_slime#Schleimhaustier
+item_pet_slime_desc#Es wird dir folgen und helfen
+item_hat_advanced#Hut des Hexenmeisters
+item_hat_advanced_desc#Elementare Resistenz + Feuerate erhöht
+item_robe_advanced#Magischer Mantel des Schocks
+item_robe_advanced_desc#Reflecktiert und erhöht die Rüstung
+item_critical#Falscher magischer Bart
+item_critical_desc#Kritische Trefferchance (x2)
+item_critical_advanced#Falscher Erzmagier Bart
+item_critical_advanced_desc#Kritische Trefferchance (x3)
+item_spell_fairy#Spell: Feentransmutation
+item_spell_fairy_desc#Benutze, um dich in eine Fee zu verwandeln
+item_gloves_advanced#Ranger Handschuhe
+item_gloves_advanced_desc#Entschärft Fallen und erhöhte Schussrate
+item_boots_advanced#Ranger Schuhe
+item_boots_advanced_desc#Erhöhte Geschwindigkeit
+divinity_leveling_0#Hingabe Aufstieg!
+div_fighter_lvl#erhöht deinen Schaden
+div_healer_lvl_2#gibt dir Regeneration
+div_healer_lvl_3#erhöht deine Regeneration
+div_ice_lvl_3#erhöht deine Eisresistenz
+div_ice_lvl_4#erhöht deinen Eisangriff
+div_ice_lvl_5#erhöht deine Frostimmunität
+div_stone_lvl_3#erhöht deine Steinresistenz
+div_stone_lvl_4#erhöht deinen Steinangriff
+div_stone_lvl_5#erhöht deine Rückstoßimmunität
+enemy_vampire#Vampir
+enemy_type_vampire#der Vampir
+msg_tuto_achiev_0#Tutorial: Erfolge
+msg_tuto_achiev_1#Du hast einen Erfolg abgeschlossen.
+msg_tuto_achiev_2#Sie offenbaren neue Gegenstände oder Boni.
+msg_vampire_0#Der Vampir
+msg_vampire_1#Ich habe vergessen Knoblauch mitzunehmen!
+msg_level7_0#Die Tochter des Erzmagiers
+msg_level7_1#"Ich komme näher und näher.
+msg_level7_2#Sie kann nicht so weit weg sein von hier."
+divinity_air_0#Ostram
+divinity_air_1#Göttlichkeit von Luft und Sturm.
+divinity_air_2#Er mag den Einsatz von Blitz.
+div_air_lvl#erhöht deine Geschwindigkeit
+div_air_lvl_4#erhöht deinen Blitzangriff
 
 [spanish]
 start_new_game#Empezar nueva partida
