@@ -100,6 +100,14 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next version
+- ADD Decoration sprites in rooms
+- ADD Glowing green staff aura when poison shot equipped
+- ADD Air divinity aura
+- MOD Giant Spider difficulty slightly increases
+- MOD Elemental cauldron invoke rate decreases and is limited (no spawn when more than 8 monsters on screen)
+- FIX Wrong air divinity conversion message
+
 v0.5
 - ADD A new level (7)
 - ADD New boss (for level 7)
