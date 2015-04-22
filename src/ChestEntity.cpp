@@ -175,7 +175,7 @@ void ChestEntity::open()
     }
 
     // trap !
-    if (game().getLevel() >= 2 && !game().getPlayer()->isEquiped(EQUIP_GLOVES_ADVANCED))
+    if (game().getLevel() >= 2 && !game().getPlayer()->isEquiped(EQUIP_DISPLACEMENT_GLOVES))
     {
       if (rand() % 5 == 0) // trap
       {

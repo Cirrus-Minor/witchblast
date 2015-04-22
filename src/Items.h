@@ -228,7 +228,7 @@ const itemStuct items[NUMBER_ITEMS] =
     10, true, FamiliarNone, false, false, true, 1, RarityCommon, true, -1, ShotTypeStandard, SpellNone
   },
   {
-    ItemDisplacementGloves, "item_displacement_gloves", "item_displacement_gloves_desc",
+    ItemDisplacementGloves, "item_gloves_advanced", "item_gloves_advanced_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone
   },
   {
@@ -444,7 +444,7 @@ const itemStuct items[NUMBER_ITEMS] =
     60, true, FamiliarNone, false, false, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellFairy
   },
   {
-    ItemGlovesAdvanced, "item_gloves_advanced", "item_gloves_advanced_desc",
+    ItemGlovesAdvanced, "item_displacement_gloves", "item_displacement_gloves_desc",
     35, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemDisplacementGloves, ShotTypeStandard, SpellNone
   },
   {

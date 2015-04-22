@@ -1334,7 +1334,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
     }
   bolt->setDamages(boltDamage);
 
-  if (equip[EQUIP_DISPLACEMENT_GLOVES])
+  if (equip[EQUIP_GLOVES_ADVANCED])
   {
     if (firingDirection == 2 || firingDirection == 8)
       velx += velocity.x * 0.7f;
