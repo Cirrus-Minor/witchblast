@@ -12,7 +12,7 @@ GhostEntity::GhostEntity(float x, float y)
 {
 
   frame = 0;
-  dyingFrame = 3;
+  dyingFrame = 4;
   deathFrame = FRAME_CORPSE_GHOST;
   enemyType = EnemyTypeGhost;
   hp = GHOST_HP;
@@ -22,6 +22,7 @@ GhostEntity::GhostEntity(float x, float y)
 
   velocity = Vector2D(creatureSpeed);
   timer = 0.0f;
+  age -= 1.2f;
 
   bloodColor = BloodNone;
 
@@ -42,7 +43,6 @@ void GhostEntity::animate(float delay)
       timer = 0.25f;
 
       setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
-      computeFacingDirection();
     }
 
     frame = ((int)(age * 3.0f)) % 4;
@@ -62,24 +62,35 @@ void GhostEntity::calculateBB()
   boundingBox.height =  30;
 }
 
-int GhostEntity::getFade()
+int GhostEntity::getGhostFade()
 {
   float dist1 = 24000.f;
   float dist2 = 40000.f;
   float dist = Vector2D(x, y).distance2(game().getPlayerPosition());
 
-  if (dist < dist1) return 100;
-  else if (dist > dist2) return 0;
+  int fade;
+  if (dist < dist1) fade = 100;
+  else if (dist > dist2) fade = 0;
+  else
+  {
+    fade =((dist2 - dist) / (dist2 - dist1)) * 100;
+    if (fade < 0) fade = 0;
+    if (fade > 100) fade = 100;
+  }
 
-  int fade =((dist2 - dist) / (dist2 - dist1)) * 100;
-  if (fade < 0) fade = 0;
-  if (fade > 100) fade = 100;
+  if (age <= 0.0f)
+  {
+    int ageFade = 40;
+    if (age > -0.5f) ageFade = 0 - 80.0f * age;
+    return (fade > ageFade ? fade : ageFade);
+  }
+
   return fade;
 }
 
 void GhostEntity::render(sf::RenderTarget* app)
 {
-  int fade = getFade();
+  int fade = getGhostFade();
   if (fade == 100) SoundManager::getInstance().playSound(SOUND_GHOST);
   if (fade == 100 || isAgonising)
   {
@@ -101,28 +112,24 @@ void GhostEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
   if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else computeFacingDirection();
 }
 
 void GhostEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
   if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else computeFacingDirection();
 }
 
 void GhostEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else computeFacingDirection();
 }
 
 void GhostEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
   if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else computeFacingDirection();
 }
 
 void GhostEntity::collideWithEnemy(EnemyEntity* entity)
@@ -138,7 +145,7 @@ void GhostEntity::collideWithEnemy(EnemyEntity* entity)
 
 void GhostEntity::collideWithBolt(BoltEntity* boltEntity)
 {
-  int fade = getFade();
+  int fade = getGhostFade();
   if (fade <= 0) return;
 
   if (boltEntity->getBoltType() == ShotTypeIllusion) fade = 100;

@@ -23,7 +23,7 @@ class GhostEntity : public EnemyEntity
   private:
     float timer;
 
-    int getFade();
+    int getGhostFade();
 };
 
 #endif // GHOSTENTITY_H
