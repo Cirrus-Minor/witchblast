@@ -47,6 +47,8 @@ protected:
 
 private:
   sf::VertexArray vertices;
+  sf::VertexArray overVertices;
+  sf::VertexArray shadowVertices;
   bool hasChanged;
 
   sf::VertexArray bloodVertices;
@@ -55,6 +57,8 @@ private:
 
   bool getChanged();
   void computeVertices();
+  void computeOverVertices();
+  void computeShadowVertices();
   void computeBloodVertices();
   void computeCorpsesVertices();
 

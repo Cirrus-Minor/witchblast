@@ -30,7 +30,12 @@ void DungeonMapEntity::animate(float delay)
 {
   age += delay;
   bool needCompute = getChanged() || game().getCurrentMap()->getChanged();
-  if (needCompute) computeVertices();
+  if (needCompute)
+  {
+    computeVertices();
+    computeOverVertices();
+    computeShadowVertices();
+  }
 
   // blood
   bool moving = false;
@@ -338,12 +343,16 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
 
   // random tile
   if ( game().getCurrentMap()->getRandomTileElement().type > -1) app->draw(randomSprite);
+
+  // over tiles
+  app->draw(overVertices, ImageManager::getInstance().getImage(IMAGE_DUNGEON_OBJECTS));
 }
 
 void DungeonMapEntity::renderPost(sf::RenderTarget* app)
 {
   displayBlood(app);
   displayCorpses(app);
+  app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW));
 }
 
 void DungeonMapEntity::renderOverlay(sf::RenderTarget* app)
@@ -515,6 +524,78 @@ void DungeonMapEntity::computeVertices()
     randomSprite.setTextureRect(sf::IntRect(randomDungeonTiles[n].xOffset, randomDungeonTiles[n].yOffset, randomDungeonTiles[n].width, randomDungeonTiles[n].height));
     randomSprite.setRotation(game().getCurrentMap()->getRandomTileElement().rotation);
   }
+}
+
+void DungeonMapEntity::computeOverVertices()
+{
+  DungeonMap* gameMap = game().getCurrentMap();
+  int tilesProLine = 10;
+  int tileWidth = 64;
+  int tileHeight = 64;
+  int tileBoxWidth = 64;
+  int tileBoxHeight = 64;
+
+  overVertices.setPrimitiveType(sf::Quads);
+  overVertices.resize(gameMap->getWidth() * gameMap->getHeight() * 4);
+
+  for (int i = 0; i < gameMap->getWidth(); i++)
+    for (int j = 0; j < gameMap->getHeight(); j++)
+    {
+      //if (gameMap->getObjectTile(i, j) > 2)
+      {
+        int nx = gameMap->getObjectTile(i, j) % tilesProLine;
+        int ny = gameMap->getObjectTile(i, j) / tilesProLine;
+
+        sf::Vertex* quad = &overVertices[(i + j * gameMap->getWidth()) * 4];
+        {
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+
+        quad[0].texCoords = sf::Vector2f(nx * tileBoxWidth, ny * tileBoxHeight);
+        quad[1].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, ny * tileBoxHeight);
+        quad[2].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, (ny + 1) * tileBoxHeight);
+        quad[3].texCoords = sf::Vector2f(nx * tileBoxWidth, (ny + 1) * tileBoxHeight);
+      }
+    }
+}
+
+void DungeonMapEntity::computeShadowVertices()
+{
+  DungeonMap* gameMap = game().getCurrentMap();
+  int tilesProLine = 10;
+  int tileWidth = 64;
+  int tileHeight = 64;
+  int tileBoxWidth = 64;
+  int tileBoxHeight = 64;
+
+  shadowVertices.setPrimitiveType(sf::Quads);
+  shadowVertices.resize(gameMap->getWidth() * gameMap->getHeight() * 4);
+
+  for (int i = 0; i < gameMap->getWidth(); i++)
+    for (int j = 0; j < gameMap->getHeight(); j++)
+    {
+      //if (gameMap->getShadowTile(i, j) != MAPSHAD_EMPTY)
+      {
+        int nx = gameMap->getShadowTile(i, j) % tilesProLine;
+        int ny = gameMap->getShadowTile(i, j) / tilesProLine;
+
+        sf::Vertex* quad = &shadowVertices[(i + j * gameMap->getWidth()) * 4];
+        {
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+
+        quad[0].texCoords = sf::Vector2f(nx * tileBoxWidth, ny * tileBoxHeight);
+        quad[1].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, ny * tileBoxHeight);
+        quad[2].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, (ny + 1) * tileBoxHeight);
+        quad[3].texCoords = sf::Vector2f(nx * tileBoxWidth, (ny + 1) * tileBoxHeight);
+      }
+    }
 }
 
 void DungeonMapEntity::computeBloodVertices()

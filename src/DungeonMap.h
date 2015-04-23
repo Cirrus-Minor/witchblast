@@ -6,6 +6,66 @@
 #include "Constants.h"
 #include <list>
 
+const int MAPOBJ_NONE          =   0;
+const int MAPOBJ_DOOR_OPEN     =   1;
+const int MAPOBJ_DOOR_CLOSED   =   2;
+const int MAPOBJ_OBSTACLE      =   10;
+const int MAPOBJ_BIG_OBSTACLE  =   40;
+const int MAPOBJ_TOMB          =   49;
+const int MAPOBJ_WALL_SPECIAL  =   14;
+const int MAPOBJ_BANK_TOP      =   18;
+const int MAPOBJ_BANK          =   28;
+const int MAPOBJ_BANK_BOTTOM   =   38;
+const int MAPOBJ_LONG_LEFT     =   50;
+const int MAPOBJ_LONG          =   51;
+const int MAPOBJ_LONG_RIGHT    =   52;
+const int MAPOBJ_HOLE          =   3;
+const int MAPOBJ_HOLE_TOP      =   MAPOBJ_HOLE;
+const int MAPOBJ_HOLE_BOTTOM   =   MAPOBJ_HOLE + 1;
+const int MAPOBJ_TEMPLE_WALL   =   20;
+const int MAPOBJ_SHOP_BEGIN    =   11;
+const int MAPOBJ_SHOP_LEFT     =   0 + MAPOBJ_SHOP_BEGIN;
+const int MAPOBJ_SHOP          =   1 + MAPOBJ_SHOP_BEGIN;
+const int MAPOBJ_SHOP_RIGHT    =   2 + MAPOBJ_SHOP_BEGIN;
+
+const int MAPSHAD_7   = 0;
+const int MAPSHAD_87  = 1;
+const int MAPSHAD_8   = 2;
+const int MAPSHAD_89  = 3;
+const int MAPSHAD_9   = 4;
+const int MAPSHAD_1   = 10;
+const int MAPSHAD_21  = 11;
+const int MAPSHAD_2   = 12;
+const int MAPSHAD_23  = 13;
+const int MAPSHAD_3   = 14;
+const int MAPSHAD_47  = 5;
+const int MAPSHAD_4   = 15;
+const int MAPSHAD_41  = 25;
+const int MAPSHAD_69  = 6;
+const int MAPSHAD_6   = 16;
+const int MAPSHAD_63  = 26;
+const int MAPSHAD_77  = 20;
+const int MAPSHAD_99  = 21;
+const int MAPSHAD_11  = 30;
+const int MAPSHAD_33  = 31;
+const int MAPSHAD_EMPTY   = 18;
+const int MAPSHAD_GROUND_7   = 7;
+const int MAPSHAD_GROUND_8   = 8;
+const int MAPSHAD_GROUND_9   = 9;
+const int MAPSHAD_GROUND_4   = 17;
+const int MAPSHAD_GROUND_6   = 19;
+const int MAPSHAD_GROUND_1   = 27;
+const int MAPSHAD_GROUND_2   = 28;
+const int MAPSHAD_GROUND_3   = 29;
+const int MAPSHAD_GROUND_78   = 22;
+const int MAPSHAD_GROUND_98   = 23;
+const int MAPSHAD_GROUND_12   = 32;
+const int MAPSHAD_GROUND_32   = 33;
+const int MAPSHAD_GROUND_47   = 34;
+const int MAPSHAD_GROUND_69   = 35;
+const int MAPSHAD_GROUND_41   = 36;
+const int MAPSHAD_GROUND_63   = 37;
+
 const int MAP_NORMAL_FLOOR  =   7;
 const int MAP_STAIRS_UP     =   39;
 const int MAP_DOOR_OPEN     =   49;
@@ -70,6 +130,14 @@ const int MAP_HOLE_BOTTOM   =   MAP_HOLE + 1;
 const int ROOM_TYPE_CHECKER = 5;
 const int ROOM_TYPE_ALL     = 6;
 
+enum logicalMapStateEnum
+{
+  LogicalFloor,
+  LogicalWall,
+  LogicalObstacle,
+  LogicalHole,
+};
+
 class GameFloor;
 
 enum roomTypeEnum
@@ -92,7 +160,7 @@ struct randomDungeonTileStruct
   int height;
   int xOffset;
   int yOffset;
-  bool canRotate;
+  bool totalRandom;
 };
 
 const int NB_RANDOM_TILES = 16;
@@ -106,7 +174,7 @@ const randomDungeonTileStruct randomDungeonTiles[NB_RANDOM_TILES] =
   { 192, 192, 384, 0, true },
   { 192, 192, 576, 0, true },
   { 256, 256, 0, 192, true },
-  { 512, 256, 256, 192, false },
+  { 512, 256, 256, 192, true },
   { 128, 128, 0, 448, true },
   { 128, 128, 128, 448, true },
   { 128, 128, 256, 448, true },
@@ -136,6 +204,13 @@ class DungeonMap : public GameMap
     bool isFlyable(int x, int y);
     bool isShootable(int x, int y);
 
+    int getObjectTile(int x, int y);
+    int getShadowTile(int x, int y);
+    bool getLogicalTile(int x, int y);
+    void setObjectTile(int x, int y, int n);
+    void setShadowTile(int x, int y, int n);
+    void setLogicalTile(int x, int y, logicalMapStateEnum state);
+
     int getDivinity(int x, int y);
 
     bool containsHealth();
@@ -161,6 +236,7 @@ class DungeonMap : public GameMap
     enum patternEnum { PatternSmallChecker, PatternBigChecker, PatternBorder, PatternBigCircle, PatternSmallCircle, PatternSmallStar, PatternSmallDisc};
     void initPattern(patternEnum n);
     void generateCarpet(int x0, int y0, int w, int h, int n);
+    void generateTable(int x0, int y0, int w, int h, int n);
     void generateRoomRandom(int type);
     void generateRoomWithoutHoles(int type);
     void generateRoomWithHoles(int type);
@@ -199,6 +275,10 @@ class DungeonMap : public GameMap
     RandomTileElement getRandomTileElement();
     void setRandomTileElement (RandomTileElement rt);
 
+    void openDoor(int x, int y);
+    void closeDoor(int x, int y);
+    bool isDoor(int x, int y);
+
   protected:
   private:
     GameFloor* gameFloor;
@@ -206,6 +286,10 @@ class DungeonMap : public GameMap
     bool visited;
     bool known;
     bool cleared;
+
+    int objectsMap[MAP_WIDTH][MAP_HEIGHT];
+    int shadowMap[MAP_WIDTH][MAP_HEIGHT];
+    logicalMapStateEnum logicalMap[MAP_WIDTH][MAP_HEIGHT];
 
     roomTypeEnum roomType;
     ItemList itemList;
@@ -222,6 +306,8 @@ class DungeonMap : public GameMap
     void restoreChests();
 
     void makePatternTile(int x, int y);
+    void addHole(int x, int y);
+    void castShadows(int x0, int y0, int xf, int yf);
 };
 
 #endif // MAGICMAP_H

@@ -318,6 +318,7 @@ WitchBlastGame::WitchBlastGame()
     "media/item_description.png", "media/death_certificate.png",
     "media/achievements.png",     "media/boss_pictures.png",
     "media/portrait_part.png",    "media/dungeon_random.png",
+    "media/dungeon_objects.png",  "media/tiles_shadow.png",
   };
 
   for (const char *const filename : images)
@@ -3152,13 +3153,17 @@ void WitchBlastGame::closeDoors()
     int i;
     for(i = 0; i < MAP_WIDTH; i++)
     {
-      if (currentMap->getTile(i, 0) < 4) currentMap->setTile(i, 0, MAP_DOOR);
-      if (currentMap->getTile(i, MAP_HEIGHT - 1) < 4) currentMap->setTile(i, MAP_HEIGHT - 1, MAP_DOOR);
+      //if (currentMap->getTile(i, 0) < 4) currentMap->setTile(i, 0, MAP_DOOR);
+      //if (currentMap->getTile(i, MAP_HEIGHT - 1) < 4) currentMap->setTile(i, MAP_HEIGHT - 1, MAP_DOOR);
+      if (currentMap->isDoor(i, 0)) currentMap->closeDoor(i, 0);
+      if (currentMap->isDoor(i, MAP_HEIGHT - 1)) currentMap->closeDoor(i, MAP_HEIGHT - 1);
     }
     for(i = 0; i < MAP_HEIGHT; i++)
     {
-      if (currentMap->getTile(0, i) < 4) currentMap->setTile(0, i, MAP_DOOR);
-      if (currentMap->getTile(MAP_WIDTH - 1, i) < 4) currentMap->setTile(MAP_WIDTH - 1, i, MAP_DOOR);
+      //if (currentMap->getTile(0, i) < 4) currentMap->setTile(0, i, MAP_DOOR);
+      //if (currentMap->getTile(MAP_WIDTH - 1, i) < 4) currentMap->setTile(MAP_WIDTH - 1, i, MAP_DOOR);
+      if (currentMap->isDoor(0, i)) currentMap->closeDoor(0, i);
+      if (currentMap->isDoor(MAP_WIDTH - 1, i)) currentMap->closeDoor(MAP_WIDTH - 1, i);
     }
     roomClosed = true;
   }
@@ -3166,30 +3171,39 @@ void WitchBlastGame::closeDoors()
 
 void WitchBlastGame::openDoors()
 {
-  int i, j;
+  int i;
+
   for(i = 0; i < MAP_WIDTH; i++)
-    for(j = 0; j < MAP_WIDTH; j++)
-      if (currentMap->getTile(i, j) == MAP_DOOR) currentMap->setTile(i, j, MAP_DOOR_OPEN);
+  {
+    if (currentMap->isDoor(i, 0)) currentMap->openDoor(i, 0);
+    if (currentMap->isDoor(i, MAP_HEIGHT - 1)) currentMap->openDoor(i, MAP_HEIGHT - 1);
+  }
+  for(i = 0; i < MAP_HEIGHT; i++)
+  {
+    if (currentMap->isDoor(0, i)) currentMap->openDoor(0, i);
+    if (currentMap->isDoor(MAP_WIDTH - 1, i)) currentMap->openDoor(MAP_WIDTH - 1, i);
+  }
+
   roomClosed = false;
   SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
 
   if (currentMap->hasNeighbourUp() == 2 && !bossRoomOpened)
-    currentMap->setTile(MAP_WIDTH/2, 0, MAP_DOOR);
+    currentMap->closeDoor(MAP_WIDTH/2, 0);
   else
     doorEntity[0]->openDoor();
 
   if (currentMap->hasNeighbourLeft() == 2 && !bossRoomOpened)
-    currentMap->setTile(0, MAP_HEIGHT / 2, MAP_DOOR);
+    currentMap->closeDoor(0, MAP_HEIGHT / 2);
   else
     doorEntity[1]->openDoor();
 
   if (currentMap->hasNeighbourDown() == 2 && !bossRoomOpened)
-    currentMap->setTile(MAP_WIDTH / 2, MAP_HEIGHT - 1, MAP_DOOR);
+    currentMap->closeDoor(MAP_WIDTH / 2, MAP_HEIGHT - 1);
   else
     doorEntity[2]->openDoor();
 
   if (currentMap->hasNeighbourRight() == 2 && !bossRoomOpened)
-    currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, MAP_DOOR);
+    currentMap->closeDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
   else
     doorEntity[3]->openDoor();
 }
@@ -3388,16 +3402,16 @@ void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnu
     switch (doorId)
     {
     case 0:
-      currentMap->setTile(MAP_WIDTH/2, 0, MAP_DOOR);
+      currentMap->closeDoor(MAP_WIDTH/2, 0);
       break;
     case 1:
-      currentMap->setTile(0, MAP_HEIGHT / 2, MAP_DOOR);
+      currentMap->closeDoor(0, MAP_HEIGHT / 2);
       break;
     case 2:
-      currentMap->setTile(MAP_WIDTH/2, MAP_HEIGHT - 1, MAP_DOOR);
+      currentMap->closeDoor(MAP_WIDTH/2, MAP_HEIGHT - 1);
       break;
     case 3:
-      currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, MAP_DOOR);
+      currentMap->closeDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
       break;
     }
 
@@ -4533,7 +4547,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     if (yt <= 1 && xt >= MAP_WIDTH / 2 - 1 && xt <= MAP_WIDTH / 2 + 1 && currentMap->hasNeighbourUp() == 2)
     {
       doorEntity[0]->openDoor();
-      currentMap->setTile(MAP_WIDTH / 2, 0, 0);
+      currentMap->openDoor(MAP_WIDTH / 2, 0);
       SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
@@ -4541,7 +4555,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     if (yt >= MAP_HEIGHT - 2 && xt >= MAP_WIDTH / 2 - 1 &&xt <= MAP_WIDTH / 2 + 1 && currentMap->hasNeighbourDown() == 2)
     {
       doorEntity[2]->openDoor();
-      currentMap->setTile(MAP_WIDTH / 2, MAP_HEIGHT - 1, 0);
+      currentMap->openDoor(MAP_WIDTH / 2, MAP_HEIGHT - 1);
       SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
@@ -4550,7 +4564,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     {
 
       doorEntity[1]->openDoor();
-      currentMap->setTile(0, MAP_HEIGHT / 2, 0);
+      currentMap->openDoor(0, MAP_HEIGHT / 2);
       SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
@@ -4558,7 +4572,7 @@ void WitchBlastGame::verifyDoorUnlocking()
     if (xt >= MAP_WIDTH - 2 && yt >= MAP_HEIGHT / 2 - 1 && yt <= MAP_HEIGHT / 2 + 1 && currentMap->hasNeighbourRight() == 2)
     {
       doorEntity[3]->openDoor();
-      currentMap->setTile(MAP_WIDTH - 1, MAP_HEIGHT / 2, 0);
+      currentMap->openDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
       SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
@@ -4739,6 +4753,10 @@ void WitchBlastGame::saveGame()
                 int tile = currentFloor->getMap(i, j)->getTile(k, l);
                 if (tile == MAP_DOOR && !(k > 0 && k < MAP_WIDTH - 1 && l > 0 && l < MAP_HEIGHT - 1)) tile = 0;
                 file << tile << " ";
+                // ADD other maps
+                file << currentFloor->getMap(i, j)->getObjectTile(k, l) << " ";
+                file << currentFloor->getMap(i, j)->getShadowTile(k, l) << " ";
+                file << currentFloor->getMap(i, j)->getLogicalTile(k, l) << " ";
               }
               file << std::endl;
             }
@@ -4910,6 +4928,12 @@ bool WitchBlastGame::loadGame()
           {
             file >> n;
             iMap->setTile(i, j, n);
+            file >> n;
+            iMap->setObjectTile(i, j, n);
+            file >> n;
+            iMap->setShadowTile(i, j, n);
+            file >> n;
+            iMap->setLogicalTile(i, j, (logicalMapStateEnum)n);
           }
         }
         // items int the map
