@@ -330,68 +330,77 @@ void DungeonMap::initRoom()
   int y0 = MAP_HEIGHT / 2;
   int i, j;
 
+  // outer walls
   map[0][0] = MAP_WALL_7;
   for ( i = 1 ; i < width -1 ; i++)
   {
     if (i == width / 2)
     {
       map[i][0] = MAP_WALL_8;
-      map[i][height - 1] = MAP_WALL_2;
+      map[i][height - 1] = MAP_WALL_8;
     }
     else if (i < width / 2)
     {
       map[i][0] = MAP_WALL_87;
-      map[i][height - 1] = MAP_WALL_21;
+      map[i][height - 1] = MAP_WALL_87;
     }
     else
     {
-      map[i][0] = MAP_WALL_89;
-      map[i][height - 1] = MAP_WALL_23;
+      map[i][0] = MAP_WALL_87;
+      map[i][height - 1] = MAP_WALL_87;
     }
   }
-  map[width - 1][0] = MAP_WALL_9;
+  map[width - 1][0] = MAP_WALL_7;
   for ( int i = 1 ; i < height -1 ; i++)
   {
     if (i == height / 2)
     {
-      map[0][i] = MAP_WALL_4;
-      map[width - 1][i] = MAP_WALL_6;
+      map[0][i] = MAP_WALL_8;
+      map[width - 1][i] = MAP_WALL_8;
     }
     else if (i < height / 2)
     {
-      map[0][i] = MAP_WALL_47;
-      map[width - 1][i] = MAP_WALL_69;
+      map[0][i] = MAP_WALL_87;
+      map[width - 1][i] = MAP_WALL_87;
     }
     else
     {
-      map[0][i] = MAP_WALL_41;
-      map[width - 1][i] = MAP_WALL_63;
+      map[0][i] = MAP_WALL_87;
+      map[width - 1][i] = MAP_WALL_87;
     }
   }
-  map[0][height - 1] = MAP_WALL_1;
-  map[width - 1][height - 1] = MAP_WALL_3;
+  map[0][height - 1] = MAP_WALL_7;
+  map[width - 1][height - 1] = MAP_WALL_7;
 
-
+  // floor
+  // TODO others
+  int floorOffset = (game().getLevel() - 1) * 24;
 
   for ( j = 1 ; j < height - 1 ; j++)
+  {
     for ( i = 1 ; i < width - 1 ; i++)
     {
-      map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+      map[i][j] = floorOffset + rand()%(MAP_NORMAL_FLOOR);
       while (map[i][j] == map[i - 1][j] || map[i][j] == map[i][j - 1] || map[i][j] == map[i - 1][j - 1] || map[i][j] == map[i + 1][j - 1])
-        map[i][j] = rand()%(MAP_NORMAL_FLOOR + 1);
+        map[i][j] = floorOffset + rand()%(MAP_NORMAL_FLOOR);
     }
+  }
 
-    for ( j = 0 ; j < height; j++)
-      for ( i = 0 ; i < width; i++)
-      {
-        objectsMap[i][j] = 0;
-        shadowMap[i][j] = MAPSHAD_EMPTY;
-        if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
-          logicalMap[i][j] = LogicalWall;
-        else
-          logicalMap[i][j] = LogicalFloor;
-      }
+  // objects
+  for ( j = 0 ; j < height; j++)
+  {
+    for ( i = 0 ; i < width; i++)
+    {
+      objectsMap[i][j] = 0;
+      shadowMap[i][j] = MAPSHAD_EMPTY;
+      if (i == 0 || j == 0 || i == width - 1 || j == height - 1)
+        logicalMap[i][j] = LogicalWall;
+      else
+        logicalMap[i][j] = LogicalFloor;
+    }
+  }
 
+  // doors ?
   if (gameFloor != NULL)
   {
     if (x > 0 && gameFloor->getRoom(x-1, y) > 0)
@@ -412,7 +421,7 @@ void DungeonMap::initRoom()
   {
     if (rand() % 2 > 0)
     {
-      map[1 + rand() % (MAP_WIDTH - 2)][1 + rand() % (MAP_HEIGHT - 2)] = 20 + i;
+      map[1 + rand() % (MAP_WIDTH - 2)][1 + rand() % (MAP_HEIGHT - 2)] = floorOffset + 16 + i;
     }
   }
 
@@ -538,8 +547,8 @@ bool DungeonMap::isDoor(int x, int y)
 
 void DungeonMap::makePatternTile(int x, int y)
 {
-  if (map[x][y] < 10) map[x][y] += 10;
-  else map[x][y] = 10;
+  if (map[x][y] < 24 * 8 && (map[x][y] % 24) < 8) map[x][y] += 8;
+  else map[x][y] = (game().getLevel() - 1) * 24 + 8;
 }
 
 void DungeonMap::initPattern(patternEnum n)
@@ -759,15 +768,15 @@ Vector2D DungeonMap::generateMerchantRoom()
 
   if (!hasNeighbourUp())
   {
-    map[x0 - 1][0] = MAP_WALL_SHOP;
-    map[x0][0] = MAP_WALL_SHOP + 1;
-    map[x0 + 1][0] = MAP_WALL_SHOP + 2;
+    objectsMap[x0 - 1][0] = MAPOBJ_PNW;
+    objectsMap[x0][0] = MAPOBJ_PNW + 1;
+    objectsMap[x0 + 1][0] = MAPOBJ_PNW + 2;
   }
   else
   {
-    map[x0 - 1][MAP_HEIGHT - 1] = MAP_WALL_SHOP +3;
-    map[x0][MAP_HEIGHT - 1] = MAP_WALL_SHOP + 4;
-    map[x0 + 1][MAP_HEIGHT - 1] = MAP_WALL_SHOP + 5;
+    objectsMap[x0 - 1][MAP_HEIGHT - 1] = MAPOBJ_PNW +3;
+    objectsMap[x0][MAP_HEIGHT - 1] = MAPOBJ_PNW + 4;
+    objectsMap[x0 + 1][MAP_HEIGHT - 1] = MAPOBJ_PNW + 5;
   }
 
   generateRandomTile();
@@ -833,7 +842,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
   {
     if (roomType == roomTypeStarting)
     {
-      generateCarpet(5, 3, 5, 3, 30);
+      generateCarpet(5, 3, 5, 3, MAP_CARPET);
 
       if (game().getLevel() > 1)
       {
@@ -844,10 +853,10 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     }
     else if (roomType == roomTypeBoss && (game().getLevel() == 2 || game().getLevel() > 5) ) // giant slime
     {
-      map[1][1] = MAP_GRID;
-      map[1][MAP_HEIGHT -2] = MAP_GRID;
-      map[MAP_WIDTH - 2][1] = MAP_GRID;
-      map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
+      map[1][1] = MAP_GRID + 1;
+      map[1][MAP_HEIGHT -2] = MAP_GRID + 1;
+      map[MAP_WIDTH - 2][1] = MAP_GRID + 1;
+      map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID + 1;
     }
     if (roomType == roomTypeStandard)
     {
@@ -867,7 +876,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
     map[0][0] = MAP_WALL_X;
     map[0][1] = MAP_WALL_7;
-    map[1][1] = MAP_WALL_33;
+    map[1][1] = MAP_WALL_77;
     map[1][0] = MAP_WALL_7;
     shadowMap[0][0] = MAPSHAD_EMPTY;
     shadowMap[0][1] = MAPSHAD_7;
@@ -880,9 +889,9 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     logicalMap[1][1] = LogicalWall;
 
     map[0][MAP_HEIGHT - 1] = MAP_WALL_X;
-    map[0][MAP_HEIGHT - 2] = MAP_WALL_1;
-    map[1][MAP_HEIGHT - 2] = MAP_WALL_99;
-    map[1][MAP_HEIGHT - 1] = MAP_WALL_1;
+    map[0][MAP_HEIGHT - 2] = MAP_WALL_7;
+    map[1][MAP_HEIGHT - 2] = MAP_WALL_77;
+    map[1][MAP_HEIGHT - 1] = MAP_WALL_7;
     shadowMap[0][MAP_HEIGHT - 1] = MAPSHAD_EMPTY;
     shadowMap[0][MAP_HEIGHT - 2] = MAPSHAD_1;
     shadowMap[0][MAP_HEIGHT - 3] = MAPSHAD_41;
@@ -894,9 +903,9 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     logicalMap[1][MAP_HEIGHT -2] = LogicalWall;
 
     map[MAP_WIDTH - 1][0] = MAP_WALL_X;
-    map[MAP_WIDTH - 1][1] = MAP_WALL_9;
-    map[MAP_WIDTH - 2][1] = MAP_WALL_11;
-    map[MAP_WIDTH - 2][0] = MAP_WALL_9;
+    map[MAP_WIDTH - 1][1] = MAP_WALL_7;
+    map[MAP_WIDTH - 2][1] = MAP_WALL_77;
+    map[MAP_WIDTH - 2][0] = MAP_WALL_7;
     shadowMap[MAP_WIDTH - 1][0] = MAPSHAD_EMPTY;
     shadowMap[MAP_WIDTH - 1][1] = MAPSHAD_9;
     shadowMap[MAP_WIDTH - 1][2] = MAPSHAD_69;
@@ -908,9 +917,9 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     logicalMap[MAP_WIDTH - 2][1] = LogicalWall;
 
     map[MAP_WIDTH - 1][MAP_HEIGHT -1] = MAP_WALL_X;
-    map[MAP_WIDTH - 1][MAP_HEIGHT -2] = MAP_WALL_3;
+    map[MAP_WIDTH - 1][MAP_HEIGHT -2] = MAP_WALL_7;
     map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_WALL_77;
-    map[MAP_WIDTH - 2][MAP_HEIGHT -1] = MAP_WALL_3;
+    map[MAP_WIDTH - 2][MAP_HEIGHT -1] = MAP_WALL_7;
     shadowMap[MAP_WIDTH - 1][MAP_HEIGHT - 1] = MAPSHAD_EMPTY;
     shadowMap[MAP_WIDTH - 1][MAP_HEIGHT - 2] = MAPSHAD_3;
     shadowMap[MAP_WIDTH - 1][MAP_HEIGHT - 3] = MAPSHAD_63;
@@ -1051,7 +1060,7 @@ void DungeonMap::generateRoomWithHoles(int type)
   {
     if (roomType == roomTypeStarting)
     {
-      generateCarpet(5, 3, 5, 3, 30);
+      generateCarpet(5, 3, 5, 3, MAP_CARPET);
 
       if (game().getLevel() > 1)
       {
@@ -1272,9 +1281,9 @@ void DungeonMap::addRandomGrids(int n)
   {
     int rx = 1 + rand() % (MAP_WIDTH - 2);
     int ry = 1 + rand() % (MAP_HEIGHT - 2);
-    if (map[rx][ry] < 5)
+    if (logicalMap[rx][ry] == LogicalFloor)
     {
-      map[rx][ry] = MAP_GRID;
+      map[rx][ry] = MAP_GRID + game().getLevel() - 1;
       counter--;
     }
   }
@@ -1411,13 +1420,13 @@ void DungeonMap::generateCorridors()
           }
           else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X)
           {
-            map[i][j] = MAP_WALL_1;
+            map[i][j] = MAP_WALL_7;
           }
           else
           {
-            if (j < MAP_HEIGHT / 2) map[i][j] = MAP_WALL_47;
-            else if (j > MAP_HEIGHT / 2) map[i][j] = MAP_WALL_41;
-            else map[i][j] = MAP_WALL_4;
+            if (j < MAP_HEIGHT / 2) map[i][j] = MAP_WALL_87;
+            else if (j > MAP_HEIGHT / 2) map[i][j] = MAP_WALL_87;
+            else map[i][j] = MAP_WALL_8;
             logicalMap[i][j] = LogicalWall;
           }
 
@@ -1426,39 +1435,39 @@ void DungeonMap::generateCorridors()
         {
           if (j == 0 || getTile(i, j - 1) == MAP_WALL_X)
           {
-            map[i][j] = MAP_WALL_9;
-            map[i][j] = MAP_WALL_9;
+            map[i][j] = MAP_WALL_7;
+            map[i][j] = MAP_WALL_7;
           }
-          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X) map[i][j] = MAP_WALL_3;
+          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X) map[i][j] = MAP_WALL_7;
           else
           {
-            if (j < MAP_HEIGHT / 2) map[i][j] = MAP_WALL_69;
-            else if (j > MAP_HEIGHT / 2) map[i][j] = MAP_WALL_63;
-            else map[i][j] = MAP_WALL_6;
+            if (j < MAP_HEIGHT / 2) map[i][j] = MAP_WALL_87;
+            else if (j > MAP_HEIGHT / 2) map[i][j] = MAP_WALL_87;
+            else map[i][j] = MAP_WALL_8;
             logicalMap[i][j] = LogicalWall;
           }
         }
         else if (getTile(i, j - 1) == MAP_WALL_X)
         {
           if (i == 0) map[i][j] = MAP_WALL_7;
-          else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_9;
+          else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_7;
           else
           {
             if (i < MAP_WIDTH / 2) map[i][j] = MAP_WALL_87;
-            else if (i > MAP_WIDTH / 2) map[i][j] = MAP_WALL_89;
+            else if (i > MAP_WIDTH / 2) map[i][j] = MAP_WALL_87;
             else map[i][j] = MAP_WALL_8;
             logicalMap[i][j] = LogicalWall;
           }
         }
         else if (getTile(i, j + 1) == MAP_WALL_X)
         {
-          if (i == 0) map[i][j] = MAP_WALL_1;
-          else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_3;
+          if (i == 0) map[i][j] = MAP_WALL_7;
+          else if (i == MAP_WIDTH - 1) map[i][j] = MAP_WALL_7;
           else
           {
-            if (i < MAP_WIDTH / 2) map[i][j] = MAP_WALL_21;
-            else if (i > MAP_WIDTH / 2) map[i][j] = MAP_WALL_23;
-            else map[i][j] = MAP_WALL_2;
+            if (i < MAP_WIDTH / 2) map[i][j] = MAP_WALL_87;
+            else if (i > MAP_WIDTH / 2) map[i][j] = MAP_WALL_87;
+            else map[i][j] = MAP_WALL_8;
             logicalMap[i][j] = LogicalWall;
           }
         }

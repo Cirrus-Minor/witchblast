@@ -273,10 +273,10 @@ bool SlimePetEntity::isFalling()
   int tilexf = (boundingBox.left + boundingBox.width) / TILE_WIDTH;
   int tileyf = (boundingBox.top + boundingBox.height) / TILE_HEIGHT;
 
-  return (game().getCurrentMap()->getTile(tilex0, tiley0) >= MAP_HOLE
-          && game().getCurrentMap()->getTile(tilex0, tileyf) >= MAP_HOLE
-          && game().getCurrentMap()->getTile(tilexf, tileyf) >= MAP_HOLE
-          && game().getCurrentMap()->getTile(tilexf, tiley0) >= MAP_HOLE);
+  return (game().getCurrentMap()->getLogicalTile(tilex0, tiley0) == LogicalHole
+          && game().getCurrentMap()->getLogicalTile(tilex0, tileyf) == LogicalHole
+          && game().getCurrentMap()->getLogicalTile(tilexf, tileyf) == LogicalHole
+          && game().getCurrentMap()->getLogicalTile(tilexf, tiley0) == LogicalHole);
 }
 
 void SlimePetEntity::fall()

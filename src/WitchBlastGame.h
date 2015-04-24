@@ -399,6 +399,7 @@ public:
   std::string enemyToString(enemyTypeEnum enemyType);
   std::string sourceToString(sourceTypeEnum sourceType, enemyTypeEnum enemyType);
 
+  void saveScreen();
   void saveDeathScreen();
 
   struct StructScore

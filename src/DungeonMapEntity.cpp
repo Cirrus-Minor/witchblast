@@ -227,15 +227,15 @@ bool DungeonMapEntity::checkFalling(displayEntityStruct &particle, int boxWidth,
 {
   int tilex = (particle.x + boxWidth / 2) / TILE_WIDTH;
   int tiley = (particle.y + boxHeight / 2) / TILE_HEIGHT;
-  if (game().getCurrentMap()->getTile(tilex, tiley) < MAP_HOLE) return false;
+  if (game().getCurrentMap()->getLogicalTile(tilex, tiley) != LogicalHole) return false;
 
   tilex = (particle.x + boxWidth / 2 - boxWidth / 3) / TILE_WIDTH;
   tiley = (particle.y + boxHeight / 2 - boxHeight / 3) / TILE_HEIGHT;
-  if (game().getCurrentMap()->getTile(tilex, tiley) < MAP_HOLE) return false;
+  if (game().getCurrentMap()->getLogicalTile(tilex, tiley) != LogicalHole) return false;
 
   tilex = (particle.x + boxWidth / 2 + boxWidth / 3) / TILE_WIDTH;
   tiley = (particle.y + boxHeight / 2 + boxHeight / 3) / TILE_HEIGHT;
-  if (game().getCurrentMap()->getTile(tilex, tiley) < MAP_HOLE) return false;
+  if (game().getCurrentMap()->getLogicalTile(tilex, tiley) != LogicalHole) return false;
 
   return true;
 }
@@ -307,8 +307,8 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
           sf::Sprite tile;
           tile.setTexture(*ImageManager::getInstance().getImage(IMAGE_TILES));
           tile.setPosition(i * TILE_WIDTH, j * TILE_HEIGHT);
-          tile.setTextureRect(sf::IntRect((game().getCurrentMap()->getTile(i, j) % 10) * TILE_WIDTH,
-                                          (1 + game().getCurrentMap()->getTile(i, j) / 10) * TILE_HEIGHT,
+          tile.setTextureRect(sf::IntRect((game().getCurrentMap()->getTile(i, j) % 24) * TILE_WIDTH,
+                                          (1 + game().getCurrentMap()->getTile(i, j) / 24) * TILE_HEIGHT,
                                           TILE_WIDTH, TILE_HEIGHT));
           int fade = 127 + 127 * (cosf(6.0f * game().getAbsolutTime()));
           tile.setColor(sf::Color(255, 255, 255, fade));
@@ -398,7 +398,7 @@ void DungeonMapEntity::refreshMap()
 void DungeonMapEntity::computeVertices()
 {
   GameMap* gameMap = game().getCurrentMap();
-  int tilesProLine = 10;
+  int tilesProLine = 24;
   int tileWidth = 64;
   int tileHeight = 64;
   int tileBoxWidth = 64;
@@ -415,9 +415,13 @@ void DungeonMapEntity::computeVertices()
 
       sf::Vertex* quad = &vertices[(i + j * gameMap->getWidth()) * 4];
 
-      if (gameMap->getTile(i, j) >= MAP_WALL_ALTERN && gameMap->getTile(i, j) < 10 + MAP_WALL_ALTERN)
+      if ((gameMap->getTile(i, j) >= MAP_WALL_ALTERN && gameMap->getTile(i, j) < 10 + MAP_WALL_ALTERN)
+          || gameMap->getTile(i, j) == MAP_WALL_7
+          || gameMap->getTile(i, j) == MAP_WALL_8
+          || gameMap->getTile(i, j) == MAP_WALL_87
+          || gameMap->getTile(i, j) == MAP_WALL_77)
       {
-        if (j == 0 && i < MAP_WIDTH / 2)
+        if (j == 0 && i <= MAP_WIDTH / 2)
         {
           quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
@@ -431,7 +435,7 @@ void DungeonMapEntity::computeVertices()
           quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
           quad[2].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
-        else if (j == MAP_HEIGHT - 1 && i < MAP_WIDTH / 2)
+        else if (j == MAP_HEIGHT - 1 && i <= MAP_WIDTH / 2)
         {
           quad[3].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
@@ -445,14 +449,14 @@ void DungeonMapEntity::computeVertices()
           quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
           quad[1].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
-        else if (i == 0 && j < MAP_HEIGHT / 2)
+        else if (i == 0 && j <= MAP_HEIGHT / 2)
         {
           quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
           quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
           quad[1].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
-        else if (i == MAP_WIDTH - 1 && j < MAP_HEIGHT / 2)
+        else if (i == MAP_WIDTH - 1 && j <= MAP_HEIGHT / 2)
         {
           quad[3].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
@@ -473,6 +477,63 @@ void DungeonMapEntity::computeVertices()
           quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
           quad[0].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
+        // corridors
+        else if (i < MAP_WIDTH / 2 && j <= MAP_HEIGHT / 2 && gameMap->getTile(i, j - 1) != MAP_WALL_X)
+        {
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (i < MAP_WIDTH / 2 && j > MAP_HEIGHT / 2 && gameMap->getTile(i, j + 1) != MAP_WALL_X)
+        {
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (i > MAP_WIDTH / 2 && j <= MAP_HEIGHT / 2 && gameMap->getTile(i, j - 1) != MAP_WALL_X)
+        {
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (i > MAP_WIDTH / 2 && j > MAP_HEIGHT / 2 && gameMap->getTile(i, j + 1) != MAP_WALL_X)
+        {
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (j < MAP_HEIGHT / 2 && i <= MAP_WIDTH / 2)
+        {
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (j < MAP_HEIGHT / 2 && i > MAP_HEIGHT / 2)
+        {
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (j > MAP_HEIGHT / 2 && i <= MAP_WIDTH / 2)
+        {
+          quad[3].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[0].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
+        else if (j > MAP_HEIGHT / 2 && i > MAP_WIDTH / 2)
+        {
+          quad[2].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
+          quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
+          quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+          quad[1].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
+        }
       }
       else
       {
@@ -481,7 +542,6 @@ void DungeonMapEntity::computeVertices()
         quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
       }
-
 
       quad[0].texCoords = sf::Vector2f(nx * tileBoxWidth, ny * tileBoxHeight);
       quad[1].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, ny * tileBoxHeight);

@@ -66,7 +66,7 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 2
+//#define START_LEVEL 3
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
@@ -280,7 +280,7 @@ WitchBlastGame::WitchBlastGame()
   const char *const images[] =
   {
     "media/player_0.png",      "media/player_1.png",
-    "media/bolt.png",          "media/tiles01.png",
+    "media/bolt.png",          "media/tiles.png",
     "media/rat.png",           "media/minimap.png",
     "media/map_background.png",
     "media/items.png",         "media/items_equip.png",
@@ -713,21 +713,6 @@ void WitchBlastGame::startNewLevel()
 
 void WitchBlastGame::playLevel(bool isFight)
 {
-  if (level == 1)
-    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles01.png");
-  else if (level == 2)
-    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles02.png");
-  else if (level == 3)
-    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles03.png");
-  else if (level == 4)
-    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles04.png");
-  else if (level == 5)
-    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles05.png");
-  else if (level == 6)
-    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles06.png");
-  else
-    ImageManager::getInstance().getImage(IMAGE_TILES)->loadFromFile("media/tiles07.png");
-
   isPlayerAlive = true;
 
   if (!isFight)
@@ -1109,6 +1094,10 @@ void WitchBlastGame::updateRunningGame()
         if (!isPlayerAlive && player->getDeathAge() > 3.5f)
         {
           if (scoreSaveFile.compare("") == 0) saveDeathScreen();
+        }
+        else
+        {
+          saveScreen();
         }
       }
 
@@ -2335,14 +2324,37 @@ void WitchBlastGame::saveDeathScreen()
 
   ss << ".png";
 
-  scoreSaveFile = ss.str();
   int width = 810, height = 300, border = 4;
   int x = 80, y = 110;
   sf::Image screenShot(app->capture());
   sf::Image savedImage;
   savedImage.create(width + border * 2, height + border * 2);
   savedImage.copy(screenShot,0 , 0, sf::IntRect( x - border, y - border, width + border * 2, height + border * 2));
-  savedImage.saveToFile(scoreSaveFile);
+  savedImage.saveToFile(ss.str());
+}
+
+void WitchBlastGame::saveScreen()
+{
+  std::stringstream ss;
+  ss << "screenshot_";
+  time_t t = time(0);   // get time now
+  struct tm * now = localtime( & t );
+
+  ss << (now->tm_year + 1900);
+  if (now->tm_mon < 9) ss << "0";
+  ss << (now->tm_mon + 1);
+  if (now->tm_mday < 9) ss << "0";
+  ss << now->tm_mday;
+  if (now->tm_hour <= 9) ss << "0";
+  ss << (now->tm_hour);
+  if (now->tm_min <= 9) ss << "0";
+  ss << (now->tm_min);
+  if (now->tm_sec <= 9) ss << "0";
+  ss << (now->tm_sec);
+  ss << ".png";
+
+  sf::Image screenShot(app->capture());
+  screenShot.saveToFile(ss.str());
 }
 
 void WitchBlastGame::renderDeathScreen(float x, float y)
@@ -4751,9 +4763,7 @@ void WitchBlastGame::saveGame()
               for (k = 0; k < MAP_WIDTH; k++)
               {
                 int tile = currentFloor->getMap(i, j)->getTile(k, l);
-                if (tile == MAP_DOOR && !(k > 0 && k < MAP_WIDTH - 1 && l > 0 && l < MAP_HEIGHT - 1)) tile = 0;
                 file << tile << " ";
-                // ADD other maps
                 file << currentFloor->getMap(i, j)->getObjectTile(k, l) << " ";
                 file << currentFloor->getMap(i, j)->getShadowTile(k, l) << " ";
                 file << currentFloor->getMap(i, j)->getLogicalTile(k, l) << " ";
