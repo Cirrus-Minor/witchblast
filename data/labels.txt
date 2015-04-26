@@ -2051,3 +2051,109 @@ item_floor_map#Карта подземелья
 item_floor_map_desc#Открывает карту текущего этажа
 item_alcohol#Абсент
 item_alcohol_desc#временно увеличивает урон
+
+achiev_rats#Родентицид
+achiev_rats_desc#Убить 250 крыс
+achiev_100#Скупой
+achiev_100_desc#Собрать 100 золотых монет
+achiev_piety_max#Верующий
+achiev_piety_max_desc#Достичь максимального уровня благочестия
+achiev_4_hits#Вертел
+achiev_4_hits_desc#Ранить четырех монстров одним выстрелом
+achiev_complete_set#Одеяние
+achiev_complete_set_desc#Надеть робу, шляпу, обувь и перчатки
+achiev_giant_slime#Убийца гигантского слизня
+achiev_giant_slime_desc#Убить гигантского слизня
+achiev_cyclops#Убийца циклопов
+achiev_cyclops_desc#Убить циклопов
+achiev_rat_king#Убийца веркрыса
+achiev_rat_king_desc#Убить веркрысу
+achiev_giant_spider#Убийца гигантского паука
+achiev_giant_spider_desc#Убить гигантского паука
+achiev_francky#Убийца нечто
+achiev_francky_desc#Убить нечто
+achiev_butcher#Убийца мясника
+achiev_butcher_desc#Убить свина-мясника
+achiev_witches#Инквизитор
+achiev_witches_desc#Убить 50 ведьм
+achiev_eggs#Испорченный омлет
+achiev_eggs_desc#Уничтожить 100 яиц
+achiev_vampire#Охотник на вампиров
+achiev_vampire_desc#Убить вампира
+achiev_challenges#Гладиатор
+achiev_challenges_desc#Пройти 4 испытания
+achiev_win#Жить мечтой
+achiev_win_desc#Пройти демо
+func_achiev_screen#Экран достижений
+func_achiev_all#Описание достижений
+func_double_spell#Два заклинания на выбор
+enemy_type_evil_flower_fire#злым огненным цветком
+enemy_type_bat_skeleton#крысой-скелетом
+enemy_type_slime_large#большим слизнем
+enemy_type_slime_blue_large#большим синим слизнем
+enemy_type_slime_red_large#большим красным слизнем
+enemy_type_slime_violet_large#большим фиолетовым слизнем
+enemy_type_bogeyman#пугалом
+enemy_type_cauldron_elemental#элементалем котла
+menu_achievements#Достижения
+menu_achievements_desc#Вывод достижений
+achievement_complete#Получено достижение!
+item_spell_flower#Заклинание: Призыв волшебного цветка
+item_spell_flower_desc#Произнесите чтобы призвать волшебный цветок
+item_rapid_shots#Книга быстрой стрельбы
+item_rapid_shots_desc#Пулемет для мага
+item_fairy_poison#Фея Вики
+item_fairy_poison_desc#Помогает вам в подземелье
+item_luck#Четырехлистный клевер
+item_luck_desc#Временно увеличивает количество выпадающих денег
+item_fairy_powder#Пыльца феи
+item_fairy_powder_desc#Временно усиливает фей
+item_ring_poison#Кольцо с изумрудом
+item_ring_poison_desc#Увеличивает силу яда
+item_gem_poison#Камень яда
+item_gem_poison_desc#Атака ядом
+item_book_prayer_i#Книга молитв - Том I
+item_book_prayer_i_desc#Увеличивает благочестие
+item_book_prayer_ii#Книга молитв - Том II
+item_book_prayer_ii_desc#Уменьшает цену благочестия
+item_pet_slime#Прислужник слизень
+item_pet_slime_desc#Будет следовать за вами и помогать
+item_hat_advanced#Шляпа колдуна
+item_hat_advanced_desc#Сопротивление элементалям и увеличение скорости стрельбы
+item_robe_advanced#Шокирующая волшебная роба
+item_robe_advanced_desc#Пульсирует и увеличивает броню
+item_critical#Накладная борода мага
+item_critical_desc#Увеличивает шанс на критический удар (x2)
+item_critical_advanced#Накладная борода архимага
+item_critical_advanced_desc#Увеличивает шанс на критический удар (x3)
+item_spell_fairy#Заклинание: Трансмутация фей
+item_spell_fairy_desc#Произнесите чтобы трансмутировать фей
+item_gloves_advanced#Перчатки стрелка
+item_gloves_advanced_desc#Обезвреживает ловушки и увеличивает скорость стрельбы
+item_boots_advanced#Ботинки стрелка
+item_boots_advanced_desc#Увеличивают скорость
+divinity_leveling_0#Уровень преданности повышен!
+div_fighter_lvl#увеличивает урон
+div_healer_lvl_2#предоставляет регенерацию
+div_healer_lvl_3#увеличивает регенерацию
+div_ice_lvl_3#увеличивает сопротивление люду
+div_ice_lvl_4#усиливает атаку людом
+div_ice_lvl_5#увеличивает иммунитет к заморозке
+div_stone_lvl_3#увеличивает сопротивление камню
+div_stone_lvl_4#усиливает атаку камнем
+div_stone_lvl_5#увеличивает иммунитет пульсаций
+enemy_vampire#Вампир
+enemy_type_vampire#вампиром
+msg_tuto_achiev_0#Обучение: Достижения
+msg_tuto_achiev_1#Вы получили достижение.
+msg_tuto_achiev_2#Они открывают новые предметы и бонусы.
+msg_vampire_0#Вампир
+msg_vampire_1#Как же я забыл взять с собой чеснок?!
+msg_level7_0#Дочь архимага
+msg_level7_1#"Я все ближе и ближе.
+msg_level7_2#Она уже недалеко отсюда."
+divinity_air_0#Острам
+divinity_air_1#Божество воздуха и шторма.
+divinity_air_2#Он ценит использование молний.
+div_air_lvl#увеличивает скорость
+div_air_lvl_4#увеличивает атаку молнией
