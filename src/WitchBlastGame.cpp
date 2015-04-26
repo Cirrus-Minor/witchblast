@@ -471,6 +471,22 @@ DungeonMap* WitchBlastGame::getCurrentMap()
   return currentMap;
 }
 
+GameFloor* WitchBlastGame::getCurrentFloor()
+{
+  return currentFloor;
+}
+
+int WitchBlastGame::getFloorX()
+{
+  return floorX;
+}
+
+int WitchBlastGame::getFloorY()
+{
+  return floorY;
+}
+
+
 DungeonMapEntity* WitchBlastGame::getCurrentMapEntity()
 {
   return dungeonEntity;
@@ -3466,13 +3482,15 @@ void WitchBlastGame::refreshMap()
   checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
 
   // keystones
+  int keyStoneFrame = 12 + (currentMap->getWallOffset() / 24);
+
   if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
   {
     SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
         (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
-    keystoneEntity->setFrame(24);
+    keystoneEntity->setFrame(keyStoneFrame);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourDown())
@@ -3482,7 +3500,7 @@ void WitchBlastGame::refreshMap()
         MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(180);
-    keystoneEntity->setFrame(24);
+    keystoneEntity->setFrame(keyStoneFrame);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourLeft())
@@ -3492,7 +3510,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(270);
-    keystoneEntity->setFrame(24);
+    keystoneEntity->setFrame(keyStoneFrame);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
   if (currentMap->getNeighbourRight())
@@ -3502,7 +3520,7 @@ void WitchBlastGame::refreshMap()
         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
     keystoneEntity->setZ(1000);
     keystoneEntity->setAngle(90);
-    keystoneEntity->setFrame(24);
+    keystoneEntity->setFrame(keyStoneFrame);
     keystoneEntity->setType(ENTITY_EFFECT);
   }
 
@@ -4770,6 +4788,9 @@ void WitchBlastGame::saveGame()
               }
               file << std::endl;
             }
+            // style
+            file << currentFloor->getMap(i, j)->getFloorOffset() << " "
+              << currentFloor->getMap(i, j)->getWallOffset() << std::endl;
             // items, etc...
             std::list<DungeonMap::itemListElement> itemList = currentFloor->getMap(i, j)->getItemList();
             file << itemList.size() << std::endl;
@@ -4946,6 +4967,12 @@ bool WitchBlastGame::loadGame()
             iMap->setLogicalTile(i, j, (logicalMapStateEnum)n);
           }
         }
+        // style
+        file >> n;
+        iMap->setFloorOffset(n);
+        file >> n;
+        iMap->setWallOffset(n);
+
         // items int the map
         file >> n;
         for (i = 0; i < n; i++)
@@ -6253,6 +6280,11 @@ bool WitchBlastGame::isFunctionalityLocked(enumFunctionalityType func)
     }
   }
   return false;
+}
+
+void WitchBlastGame::renderDoors()
+{
+  for (int i = 0; i < 4; i++) doorEntity[i]->renderDoors(app);
 }
 
 WitchBlastGame &game()

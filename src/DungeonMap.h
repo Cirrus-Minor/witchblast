@@ -82,16 +82,40 @@ const int MAP_WALL_EXIT_R   =   3 + MAP_WALL_BEGIN;
 const int MAP_WALL_START_L  =   4 + MAP_WALL_BEGIN;
 const int MAP_WALL_START_M  =   5 + MAP_WALL_BEGIN;
 const int MAP_WALL_START_R  =   6 + MAP_WALL_BEGIN;
+const int MAP_WALL_EXIT_L_SPRITE =   7 + MAP_WALL_BEGIN;
 
-const int MAP_WALL_8        =   7 + MAP_WALL_BEGIN;
-const int MAP_WALL_7        =   8 + MAP_WALL_BEGIN;
-const int MAP_WALL_87       =   9 + MAP_WALL_BEGIN;
-const int MAP_WALL_77       =   10 + MAP_WALL_BEGIN;
-const int MAP_WALL_ALTERN   =   11 + MAP_WALL_BEGIN;
+const int MAP_WALL_8        =   8 + MAP_WALL_BEGIN;
+const int MAP_WALL_7        =   9 + MAP_WALL_BEGIN;
+const int MAP_WALL_87       =   10 + MAP_WALL_BEGIN;
+const int MAP_WALL_77       =   11 + MAP_WALL_BEGIN;
+const int MAP_WALL_ALTERN   =   12 + MAP_WALL_BEGIN;
+const int MAP_WALL_DOOR_7   =   22 + MAP_WALL_BEGIN;
+const int MAP_WALL_DOOR_8   =   23 + MAP_WALL_BEGIN;
 
-//const int MAP_WALL_SHOP     =   40 + MAP_WALL_BEGIN;
+const int MAP_OUTERDOOR_X   = 192;
+const int MAP_OUTERDOOR_Y   = 768;
 
+const int MAP_DOOR_BEGIN_X    = 0;
+const int MAP_DOOR_BEGIN_Y    = 1152;
 
+const int MAP_DOOR_STANDARD_W_X    = 0 + MAP_DOOR_BEGIN_X;
+const int MAP_DOOR_STANDARD_W_Y    = 0 + MAP_DOOR_BEGIN_Y;
+const int MAP_DOOR_CHALLENGE_W_X   = 0 + MAP_DOOR_BEGIN_X;
+const int MAP_DOOR_CHALLENGE_W_Y   = 0 + MAP_DOOR_BEGIN_Y;
+const int MAP_DOOR_BOSS_W_X        = 0 + MAP_DOOR_BEGIN_X;
+const int MAP_DOOR_BOSS_W_Y        = 64 + MAP_DOOR_BEGIN_Y;
+
+const int MAP_DOOR_STANDARD_H_X    = 192 + MAP_DOOR_BEGIN_X;
+const int MAP_DOOR_STANDARD_H_Y    = 0 + MAP_DOOR_BEGIN_Y;
+const int MAP_DOOR_CHALLENGE_H_X   = 192 + MAP_DOOR_BEGIN_X;
+const int MAP_DOOR_CHALLENGE_H_Y   = 0 + MAP_DOOR_BEGIN_Y;
+const int MAP_DOOR_BOSS_H_X        = 256 + MAP_DOOR_BEGIN_X;
+const int MAP_DOOR_BOSS_H_Y        = 0 + MAP_DOOR_BEGIN_Y;
+
+const int MAP_DECO_DOOR_BOSS_X   = 320 + MAP_DOOR_BEGIN_X;
+const int MAP_DECO_DOOR_BOSS_Y   = 0 + MAP_DOOR_BEGIN_Y;
+const int MAP_DECO_DOOR_CHAL_X   = 512 + MAP_DOOR_BEGIN_X;;
+const int MAP_DECO_DOOR_CHAL_Y   = 0 + MAP_DOOR_BEGIN_Y;
 
 const int ROOM_TYPE_CHECKER = 5;
 const int ROOM_TYPE_ALL     = 6;
@@ -172,7 +196,7 @@ class DungeonMap : public GameMap
 
     int getObjectTile(int x, int y);
     int getShadowTile(int x, int y);
-    bool getLogicalTile(int x, int y);
+    logicalMapStateEnum getLogicalTile(int x, int y);
     void setObjectTile(int x, int y, int n);
     void setShadowTile(int x, int y, int n);
     void setLogicalTile(int x, int y, logicalMapStateEnum state);
@@ -245,6 +269,11 @@ class DungeonMap : public GameMap
     void closeDoor(int x, int y);
     bool isDoor(int x, int y);
 
+    int getFloorOffset();
+    int getWallOffset();
+    void setFloorOffset(int n);
+    void setWallOffset(int n);
+
   protected:
   private:
     GameFloor* gameFloor;
@@ -274,6 +303,9 @@ class DungeonMap : public GameMap
     void makePatternTile(int x, int y);
     void addHole(int x, int y);
     void castShadows(int x0, int y0, int xf, int yf);
+
+    int floorOffset;
+    int wallOffset;
 };
 
 #endif // MAGICMAP_H

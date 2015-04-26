@@ -2,6 +2,8 @@
 #include "Constants.h"
 #include "sfml_game/ImageManager.h"
 
+#include "DungeonMap.h"
+
 DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_TILES))
 {
   this->direction = direction;
@@ -14,7 +16,6 @@ DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance(
   doorType = DoorStandard;
   timer = 0.0f;
 }
-
 
 void DoorEntity::animate(float delay)
 {
@@ -47,15 +48,39 @@ void DoorEntity::openDoor()
 
 void DoorEntity::render(sf::RenderTarget* app)
 {
+  return;
+}
+
+void DoorEntity::renderDoors(sf::RenderTarget* app)
+{
   if (!isVisible) return;
 
-  float xl, yl, xr, yr;
-  float yTranslate = 18 * TILE_HEIGHT;
+  float xl, yl, xr, yr, x0, y0;
+
+  if (direction == 8 || direction == 2)
+  {
+    switch (doorType)
+    {
+      case DoorStandard: x0 = MAP_DOOR_STANDARD_W_X; y0 = MAP_DOOR_STANDARD_W_Y; break;
+      case DoorBoss: x0 = MAP_DOOR_BOSS_W_X; y0 = MAP_DOOR_BOSS_W_Y; break;
+      case DoorChallenge: x0 = MAP_DOOR_CHALLENGE_W_X; y0 = MAP_DOOR_CHALLENGE_W_Y; break;
+    }
+  }
+  else
+  {
+    switch (doorType)
+    {
+      case DoorStandard: x0 = MAP_DOOR_STANDARD_H_X; y0 = MAP_DOOR_STANDARD_H_Y; break;
+      case DoorBoss: x0 = MAP_DOOR_BOSS_H_X; y0 = MAP_DOOR_BOSS_H_Y; break;
+      case DoorChallenge: x0 = MAP_DOOR_CHALLENGE_H_X; y0 = MAP_DOOR_CHALLENGE_H_Y; break;
+    }
+  }
 
   if (direction == 8)
   {
     yl = 0;
     yr = 0;
+
     if (isOpen)
     {
       if (timer > 0.0f)
@@ -87,23 +112,13 @@ void DoorEntity::render(sf::RenderTarget* app)
       }
     }
 
-    // back
-    sprite.setTextureRect(sf::IntRect(3 * width, yTranslate + doorType * height, width * 3, height));
-    sprite.setPosition((MAP_WIDTH / 2 - 1) * TILE_WIDTH, 0);
-    app->draw(sprite);
-
     // door
-    sprite.setTextureRect(sf::IntRect(0.5f * width, yTranslate + doorType * height,  width,  height));
+    sprite.setTextureRect(sf::IntRect(x0 + 0.5f * width, y0,  width,  height));
     sprite.setPosition(xl, yl);
     app->draw(sprite);
 
-    sprite.setTextureRect(sf::IntRect(1.5f * width, yTranslate + doorType * height,  width,  height));
+    sprite.setTextureRect(sf::IntRect(x0 + 1.5f * width, y0,  width,  height));
     sprite.setPosition(xr, yr);
-    app->draw(sprite);
-
-    // front
-    sprite.setTextureRect(sf::IntRect(6 * width, yTranslate + doorType * height, width * 3, height));
-    sprite.setPosition((MAP_WIDTH / 2 - 1) * TILE_WIDTH, 0);
     app->draw(sprite);
   }
 
@@ -142,27 +157,13 @@ void DoorEntity::render(sf::RenderTarget* app)
         yr = (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT /2;
       }
     }
-
-    // back
-    sprite.setTextureRect(sf::IntRect(width + (3 * width * doorType), yTranslate + 3 * height,  width , height* 3));
-    sprite.setPosition((MAP_WIDTH / 2 - 1) * TILE_WIDTH, 0);
-    sprite.setPosition(0,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT);
-    app->draw(sprite);
-
-
     // door
-    sprite.setTextureRect(sf::IntRect( 3 * width * doorType, yTranslate + 3.5 * height,  width,  height));
+    sprite.setTextureRect(sf::IntRect(x0, y0 + 0.5 * height,  width,  height));
     sprite.setPosition(xl, yl);
     app->draw(sprite);
 
-    sprite.setTextureRect(sf::IntRect( 3 * width * doorType, yTranslate + 4.5 * height,  width,  height));
+    sprite.setTextureRect(sf::IntRect(x0, y0 + 1.5 * height,  width,  height));
     sprite.setPosition(xr, yr);
-    app->draw(sprite);
-
-    // front
-    sprite.setTextureRect(sf::IntRect(2 * width + (3 * width * doorType), yTranslate + 3 * height,  width , height* 3));
-    sprite.setPosition((MAP_WIDTH / 2 - 1) * TILE_WIDTH, 0);
-    sprite.setPosition(0,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT);
     app->draw(sprite);
   }
 
@@ -202,24 +203,13 @@ void DoorEntity::render(sf::RenderTarget* app)
         xr = (MAP_WIDTH / 2 ) * TILE_WIDTH + TILE_WIDTH /2;
       }
     }
-
-    // back
-    sprite.setTextureRect(sf::IntRect(3 * width, yTranslate + (1 + doorType) * height,  width * 3,  -height));
-    sprite.setPosition((MAP_WIDTH / 2 - 1) * TILE_WIDTH, yl);
-    app->draw(sprite);
-
     // door
-    sprite.setTextureRect(sf::IntRect(0.5f * width, yTranslate + (1 + doorType) * height,  width,  -height));
+    sprite.setTextureRect(sf::IntRect(x0 + 0.5f * width, y0 + height,  width,  -height));
     sprite.setPosition(xl, yl);
     app->draw(sprite);
 
-    sprite.setTextureRect(sf::IntRect(1.5f * width,  yTranslate + (1 + doorType) * height,  width, -height));
+    sprite.setTextureRect(sf::IntRect(x0 + 1.5f * width,  y0 + height,  width, -height));
     sprite.setPosition(xr, yr);
-    app->draw(sprite);
-
-    // front
-    sprite.setTextureRect(sf::IntRect(6 * width, yTranslate + (1 + doorType) * height, width * 3,  -height));
-    sprite.setPosition((MAP_WIDTH / 2 - 1) * TILE_WIDTH, yl);
     app->draw(sprite);
   }
 
@@ -257,27 +247,13 @@ void DoorEntity::render(sf::RenderTarget* app)
         yr = (MAP_HEIGHT / 2 ) * TILE_HEIGHT + TILE_HEIGHT /2;
       }
     }
-
-    // back
-    sprite.setTextureRect(sf::IntRect(width * 2  + (3 * width * doorType), yTranslate + 3 * height,  -width , height* 3));
-    sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, 0);
-    sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT);
-    app->draw(sprite);
-
-
     // door
-    sprite.setTextureRect(sf::IntRect(1 * width + (3 * width * doorType), yTranslate + 3.5 * height,  -width,  height));
+    sprite.setTextureRect(sf::IntRect(x0 + width, y0 + 0.5 * height,  -width,  height));
     sprite.setPosition(xl, yl);
     app->draw(sprite);
 
-    sprite.setTextureRect(sf::IntRect(1* width + (3 * width * doorType), yTranslate + 4.5 * height,  -width,  height));
+    sprite.setTextureRect(sf::IntRect(x0 + width, y0 + 1.5 * height,  -width,  height));
     sprite.setPosition(xr, yr);
-    app->draw(sprite);
-
-    // front
-    sprite.setTextureRect(sf::IntRect(3 * width + (3 * width * doorType), yTranslate + 3 * height,  -width , height* 3));
-    sprite.setPosition(xl + (MAP_WIDTH / 2 - 1) * TILE_WIDTH, 0);
-    sprite.setPosition(xl,  + (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT);
     app->draw(sprite);
   }
 }

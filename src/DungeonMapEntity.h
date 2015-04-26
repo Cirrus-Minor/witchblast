@@ -21,6 +21,7 @@ public:
   DungeonMapEntity();
   virtual void animate(float delay);
   virtual void render(sf::RenderTarget* app);
+  void renderDoors(sf::RenderTarget* app);
   void renderPost(sf::RenderTarget* app);
   void renderOverlay(sf::RenderTarget* app);
 
@@ -62,6 +63,8 @@ private:
   void computeBloodVertices();
   void computeCorpsesVertices();
 
+  bool shouldBeTransformed(int part);
+
   void animateParticle(displayEntityStruct &particle, float delay, float viscosity);
   bool collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight);
   void autoSpeed(displayEntityStruct &particle, float speed);
@@ -85,6 +88,7 @@ private:
 
   sf::Sprite overlaySprite;
   sf::Sprite randomSprite;
+  sf::Sprite doorSprite;
   roomTypeEnum roomType;
 
   struct structKeyRoomFX

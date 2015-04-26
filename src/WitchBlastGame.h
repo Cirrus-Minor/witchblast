@@ -159,7 +159,9 @@ public:
   *  \return a pointer to the current dungeon map
   */
   DungeonMap* getCurrentMap();
-
+  GameFloor* getCurrentFloor();
+  int getFloorX();
+  int getFloorY();
   /*!
   *  \brief Accessor on the current dungeon map entity
   *  \return a pointer to the current dungeon map entity
@@ -421,6 +423,8 @@ public:
   void generateStar(sf::Color starColor, float xStar, float yStar);
 
   void registerAchievement(enumAchievementType achievement);
+
+  void renderDoors();
 
 protected:
   /*!
