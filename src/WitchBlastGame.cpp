@@ -3181,15 +3181,11 @@ void WitchBlastGame::closeDoors()
     int i;
     for(i = 0; i < MAP_WIDTH; i++)
     {
-      //if (currentMap->getTile(i, 0) < 4) currentMap->setTile(i, 0, MAP_DOOR);
-      //if (currentMap->getTile(i, MAP_HEIGHT - 1) < 4) currentMap->setTile(i, MAP_HEIGHT - 1, MAP_DOOR);
       if (currentMap->isDoor(i, 0)) currentMap->closeDoor(i, 0);
       if (currentMap->isDoor(i, MAP_HEIGHT - 1)) currentMap->closeDoor(i, MAP_HEIGHT - 1);
     }
     for(i = 0; i < MAP_HEIGHT; i++)
     {
-      //if (currentMap->getTile(0, i) < 4) currentMap->setTile(0, i, MAP_DOOR);
-      //if (currentMap->getTile(MAP_WIDTH - 1, i) < 4) currentMap->setTile(MAP_WIDTH - 1, i, MAP_DOOR);
       if (currentMap->isDoor(0, i)) currentMap->closeDoor(0, i);
       if (currentMap->isDoor(MAP_WIDTH - 1, i)) currentMap->closeDoor(MAP_WIDTH - 1, i);
     }
@@ -4782,7 +4778,9 @@ void WitchBlastGame::saveGame()
               {
                 int tile = currentFloor->getMap(i, j)->getTile(k, l);
                 file << tile << " ";
-                file << currentFloor->getMap(i, j)->getObjectTile(k, l) << " ";
+                tile = currentFloor->getMap(i, j)->getObjectTile(k, l);
+                if (tile == MAPOBJ_DOOR_CLOSED) tile = MAPOBJ_DOOR_OPEN;
+                file << tile << " "; //currentFloor->getMap(i, j)->getObjectTile(k, l) << " ";
                 file << currentFloor->getMap(i, j)->getShadowTile(k, l) << " ";
                 file << currentFloor->getMap(i, j)->getLogicalTile(k, l) << " ";
               }

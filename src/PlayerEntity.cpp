@@ -251,7 +251,8 @@ int PlayerEntity::getPiety()
 
 void PlayerEntity::stuck()
 {
-  castTeleport();
+  if (playerStatus != playerStatusEntering)
+    castTeleport();
 }
 
 void PlayerEntity::setEntering()
@@ -2126,6 +2127,14 @@ float PlayerEntity::getBolPositionY()
     return y - 25;
   else
     return y - 20;
+}
+
+bool PlayerEntity::collideWithMap(int direction)
+{
+  if (playerStatus == playerStatusEntering)
+    return false;
+  else
+    return BaseCreatureEntity::collideWithMap(direction);
 }
 
 // DIVINITY

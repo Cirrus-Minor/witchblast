@@ -501,6 +501,7 @@ class PlayerEntity : public BaseCreatureEntity
     ItemEntity* getItemToBuy();
 
     void castTeleport();
+    virtual bool collideWithMap(int direction) override;
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
