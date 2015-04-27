@@ -81,9 +81,9 @@ void ChestEntity::animate(float delay)
       }
       else // snakes
       {
-        new SnakeEntity(x + 1, y, SnakeEntity::SnakeTypeNormal, true);
-        new SnakeEntity(x - 1, y, SnakeEntity::SnakeTypeNormal, true);
-        new SnakeEntity(x, y + 1, SnakeEntity::SnakeTypeNormal, true);
+        new SnakeEntity(x + 1, y, SnakeEntity::SnakeTypeNormal, false);
+        new SnakeEntity(x - 1, y, SnakeEntity::SnakeTypeNormal, false);
+        new SnakeEntity(x, y + 1, SnakeEntity::SnakeTypeNormal, false);
       }
     }
   }
