@@ -889,8 +889,9 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         map[x0 + 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_R;
       }
     }
-    else if (roomType == roomTypeBoss && (game().getLevel() == 2 || game().getLevel() > 5) ) // giant slime
+    else if (roomType == roomTypeBoss && (game().getLevel() == 2) ) // giant slime
     {
+      // good ?
       map[1][1] = MAP_GRID + 1;
       map[1][MAP_HEIGHT -2] = MAP_GRID + 1;
       map[MAP_WIDTH - 2][1] = MAP_GRID + 1;
