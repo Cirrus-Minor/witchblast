@@ -299,6 +299,15 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
 {
   app->draw(vertices, ImageManager::getInstance().getImage(IMAGE_TILES));
 
+  // doors
+  renderDoors(app);
+
+  // random tile
+  if ( game().getCurrentMap()->getRandomTileElement().type > -1) app->draw(randomSprite);
+
+  // over tiles
+  app->draw(overVertices, ImageManager::getInstance().getImage(IMAGE_DUNGEON_OBJECTS));
+
   if (game().getCurrentMap()->getRoomType() == roomTypeTemple)
   {
     for (int i = 1; i < MAP_WIDTH - 2 ; i++)
@@ -342,15 +351,6 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
     tiles.setTextureRect(sf::IntRect(3 * TILE_WIDTH, 0, 3 * TILE_WIDTH, 3 * TILE_HEIGHT));
     app->draw(tiles);
   }
-
-  // doors
-  renderDoors(app);
-
-  // random tile
-  if ( game().getCurrentMap()->getRandomTileElement().type > -1) app->draw(randomSprite);
-
-  // over tiles
-  app->draw(overVertices, ImageManager::getInstance().getImage(IMAGE_DUNGEON_OBJECTS));
 }
 
 void DungeonMapEntity::renderDoors(sf::RenderTarget* app)
