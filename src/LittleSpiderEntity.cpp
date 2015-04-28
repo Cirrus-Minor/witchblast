@@ -24,7 +24,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
   deathFrame = FRAME_CORPSE_LITTLE_SPIDER;
   agonizingSound = SOUND_SPIDER_LITTLE_DIE;
 
-  timer = (rand() % 50) / 10.0f;
+  timer = -1.0f; //(rand() % 50) / 10.0f;
   if (invocated) age = 0.0f;
   frame = 8;
 
