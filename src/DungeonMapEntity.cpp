@@ -515,7 +515,7 @@ bool DungeonMapEntity::shouldBeTransformed(int part)
 
 void DungeonMapEntity::computeVertices()
 {
-  GameMap* gameMap = game().getCurrentMap();
+  DungeonMap* gameMap = game().getCurrentMap();
   int tilesProLine = 24;
   int tileWidth = 64;
   int tileHeight = 64;
@@ -663,7 +663,7 @@ void DungeonMapEntity::computeVertices()
       quad[3].texCoords = sf::Vector2f(nx * tileBoxWidth, (ny + 1) * tileBoxHeight);
     }
 
-  if (roomType != game().getCurrentMap()->getRoomType())
+  //if (roomType != game().getCurrentMap()->getRoomType())
   {
     std::stringstream ss;
     roomType = game().getCurrentMap()->getRoomType();
@@ -683,7 +683,16 @@ void DungeonMapEntity::computeVertices()
       ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile(ss.str());
       break;
     default:
-      ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_00.png");
+      if ( gameMap->getObjectTile(6, 2) == MAPOBJ_BANK_TOP
+            || gameMap->getObjectTile(6, 2) == MAPOBJ_BANK
+          || gameMap->getObjectTile(6, 2) == MAPOBJ_BANK_BOTTOM
+          || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK_TOP
+            || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK
+          || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK_BOTTOM
+          )
+        ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_temple.png");
+      else
+        ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_00.png");
       break;
     }
     overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
