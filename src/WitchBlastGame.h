@@ -426,6 +426,9 @@ public:
 
   void renderDoors();
 
+  bool isPresentItem(int n);
+  void addPresentItem(int n);
+
 protected:
   /*!
    *  \brief Rendering method
@@ -967,6 +970,9 @@ private:
   } globalData;
 
   void generateUiParticle(float x, float y);
+
+  bool presentItems[NUMBER_EQUIP_ITEMS];
+  void resetPresentItems();
 };
 
 /*!

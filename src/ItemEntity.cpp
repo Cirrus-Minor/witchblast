@@ -14,7 +14,11 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   type = ENTITY_ITEM;
   this->itemType = itemType;
   frame = itemType;
-  if (itemType >= FirstEquipItem) frame = itemType - FirstEquipItem;
+  if (itemType >= FirstEquipItem)
+  {
+    frame = itemType - FirstEquipItem;
+    game().addPresentItem(frame);
+  }
   isMerchandise = false;
   imagesProLine = 10;
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);

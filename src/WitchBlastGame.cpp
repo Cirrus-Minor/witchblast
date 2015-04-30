@@ -690,6 +690,9 @@ void WitchBlastGame::startNewLevel()
   // reset floor items
   player->resetFloorItem();
 
+  // reset present items
+  resetPresentItems();
+
   bool needShop = false;
   // create the new level
   if (currentFloor != NULL)
@@ -4343,6 +4346,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     int eq = i + FirstEquipItem;
 
     if (player->isEquiped(i)) itemOk = false;
+    if (presentItems[i]) { std::cout << items[eq].name << " already present !\n"; itemOk = false; }
     // TODO item already in floor
     if (itemOk && toSale && !items[eq].canBeSold) itemOk = false;
     if (itemOk && !toSale && !items[eq].canBeFound) itemOk = false;
@@ -4402,6 +4406,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
   int bonusType = 0;
   if (setSize > 0) bonusType = bonusSet[rand() % setSize];
 
+  //addPresentItem(bonusType);
   return (item_equip_enum) bonusType;
 }
 
@@ -4881,6 +4886,7 @@ void WitchBlastGame::saveGame()
 
 bool WitchBlastGame::loadGame()
 {
+  resetPresentItems();
   saveInFight.monsters.clear();
   std::ifstream file(SAVE_FILE.c_str(), std::ios::in);
 
@@ -6282,6 +6288,23 @@ bool WitchBlastGame::isFunctionalityLocked(enumFunctionalityType func)
 void WitchBlastGame::renderDoors()
 {
   for (int i = 0; i < 4; i++) doorEntity[i]->renderDoors(app);
+}
+
+void WitchBlastGame::resetPresentItems()
+{
+  std::cout << "RESET ITEMS\n";
+  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) presentItems[i] = false;
+}
+
+bool WitchBlastGame::isPresentItem(int n)
+{
+  if (n >= 0 && n < NUMBER_EQUIP_ITEMS) return presentItems[n];
+  else return false;
+}
+
+void WitchBlastGame::addPresentItem(int n)
+{
+  if (n >= 0 && n < NUMBER_EQUIP_ITEMS) presentItems[n] = true;
 }
 
 WitchBlastGame &game()
