@@ -203,6 +203,7 @@ class DungeonMap : public GameMap
     Vector2D generateKeyRoom();
     void generateTemple(int x, int y, enumDivinityType type);
     void generateTempleRoom();
+    void generateInselRoom();
     void addRandomGrids(int n);
 
     void addItem(int itemType, float x, float y, bool merch);

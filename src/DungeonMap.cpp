@@ -584,13 +584,71 @@ void DungeonMap::initPattern(patternEnum n)
   }
 }
 
+void DungeonMap::generateInselRoom()
+{
+  for (int i = 1; i < MAP_WIDTH - 1; i++)
+    for (int j = 1; j < MAP_HEIGHT - 1; j++)
+    {
+      if (i != MAP_WIDTH / 2 && j != MAP_HEIGHT / 2
+            && !(i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 - 1)
+            && !(i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 + 1)
+            && !(i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 - 1)
+            && !(i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 + 1)
+            )
+        addHole(i, j);
+    }
+  objectsMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 - 1] = MAPOBJ_WALL_SPECIAL;
+  objectsMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 - 2] = MAPOBJ_WALL_SPECIAL;
+  logicalMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 - 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 - 2] = LogicalObstacle;
+
+  objectsMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 - 1] = MAPOBJ_WALL_SPECIAL + 1;
+  objectsMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 - 2] = MAPOBJ_WALL_SPECIAL + 1;
+  logicalMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 - 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 - 2] = LogicalObstacle;
+
+  objectsMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 + 1] = MAPOBJ_WALL_SPECIAL + 2;
+  objectsMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 + 2] = MAPOBJ_WALL_SPECIAL + 2;
+  logicalMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 + 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 + 2] = LogicalObstacle;
+
+  objectsMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 + 1] = MAPOBJ_WALL_SPECIAL + 3;
+  objectsMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 + 2] = MAPOBJ_WALL_SPECIAL + 3;
+  logicalMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 + 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 + 2] = LogicalObstacle;
+
+  if (!hasNeighbourUp())
+    addHole(MAP_WIDTH / 2, 1);
+  if (!hasNeighbourDown())
+    addHole(MAP_WIDTH / 2, MAP_HEIGHT - 2);
+  if (!hasNeighbourLeft())
+    for (int i = 0; i < 4; i++)
+    {
+      addHole(1 + i, MAP_HEIGHT / 2);
+      addHole(1 + i, MAP_HEIGHT / 2 + 1);
+    }
+  if (!hasNeighbourRight())
+    for (int i = 0; i < 4; i++)
+    {
+      addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT / 2);
+      addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT / 2 + 1);
+    }
+
+  addHole(MAP_WIDTH / 2 - 1 , MAP_HEIGHT - 2);
+  addHole(MAP_WIDTH / 2 + 1 , MAP_HEIGHT - 2);
+  addHole(MAP_WIDTH / 2 - 2 , MAP_HEIGHT - 3);
+  addHole(MAP_WIDTH / 2 + 2 , MAP_HEIGHT - 3);
+
+  if (rand() % 2 == 0) makePatternTile(MAP_WIDTH / 2, MAP_HEIGHT / 2);
+}
+
 Vector2D DungeonMap::generateBonusRoom()
 {
   initRoom();
   int x0 = MAP_WIDTH / 2;
   int y0 = MAP_HEIGHT / 2;
 
-  if (rand() % 2 >= 0) // Not yet implemented
+  if (game().getLevel() == 1 || rand() % 2 == 0)
   {
     if (rand() % 3 == 0)
     {
@@ -610,19 +668,8 @@ Vector2D DungeonMap::generateBonusRoom()
   }
   else
   {
-    for (int i = 1; i < MAP_WIDTH - 1; i++)
-      for (int j = 1; j < MAP_HEIGHT - 1; j++)
-      {
-        if (i != MAP_WIDTH / 2 && j != MAP_HEIGHT / 2
-            && (i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 - 1)
-            && (i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 + 1)
-            && (i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 - 1)
-            && (i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 + 1)
-            )
-          addHole(i, j);
-      }
+    generateInselRoom();
   }
-
 
   generateRandomTile();
 
@@ -1084,52 +1131,61 @@ void DungeonMap::generateRoomWithHoles(int type)
   }
   else if (type == 4)
   {
-    if (rand() % 3 == 0) initPattern(PatternBigCircle);
-    int r = 6 + rand()% 5;
-    int obstacleType = rand() % 2;
-    for (int i = 0; i < r; i++)
+    if (rand() % 2 == 0)
     {
-      int rx = 1 + rand() % (MAP_WIDTH - 3);
-      int ry = 1 + rand() % (MAP_HEIGHT - 3);
-
-      bool ok = true;
-      bool isObstacle = (obstacleType == 1) && rand() % 2 == 0;
-
-      if ( (rx == 1 && ry == MAP_HEIGHT / 2)
-          || (rx == MAP_WIDTH - 2 && ry == MAP_HEIGHT / 2)
-          || (rx == MAP_WIDTH /2 && ry == MAP_HEIGHT - 2)
-          || (rx == MAP_WIDTH /2 && ry == 1) )
+      // holes and (sometimes) obstacles randomly
+      if (rand() % 3 == 0) initPattern(PatternBigCircle);
+      int r = 6 + rand()% 5;
+      int obstacleType = rand() % 2;
+      for (int i = 0; i < r; i++)
       {
-        ok = false;
-      }
+        int rx = 1 + rand() % (MAP_WIDTH - 3);
+        int ry = 1 + rand() % (MAP_HEIGHT - 3);
 
-      else
-      {
-        for (int ix = -1; ix <= 1; ix++)
-          for (int iy = -1; iy <= 1; iy++)
+        bool ok = true;
+        bool isObstacle = (obstacleType == 1) && rand() % 2 == 0;
+
+        if ( (rx == 1 && ry == MAP_HEIGHT / 2)
+            || (rx == MAP_WIDTH - 2 && ry == MAP_HEIGHT / 2)
+            || (rx == MAP_WIDTH /2 && ry == MAP_HEIGHT - 2)
+            || (rx == MAP_WIDTH /2 && ry == 1) )
         {
-          ok = ok && logicalMap[rx + ix][ry + iy] != LogicalHole;
-          ok = ok && logicalMap[rx + ix][ry + iy] != LogicalObstacle;
-        }
-      }
-
-      if (ok)
-      {
-        if (!isObstacle)
-        {
-          addHole(rx, ry);
+          ok = false;
         }
 
         else
         {
-          objectsMap[rx][ry] = MAPOBJ_OBSTACLE;
-          logicalMap[rx][ry] = LogicalObstacle;
+          for (int ix = -1; ix <= 1; ix++)
+            for (int iy = -1; iy <= 1; iy++)
+          {
+            ok = ok && logicalMap[rx + ix][ry + iy] != LogicalHole;
+            ok = ok && logicalMap[rx + ix][ry + iy] != LogicalObstacle;
+          }
+        }
+
+        if (ok)
+        {
+          if (!isObstacle)
+          {
+            addHole(rx, ry);
+          }
+
+          else
+          {
+            objectsMap[rx][ry] = MAPOBJ_OBSTACLE;
+            logicalMap[rx][ry] = LogicalObstacle;
+          }
+        }
+        else
+        {
+          i--;
         }
       }
-      else
-      {
-        i--;
-      }
+    }
+    else
+    {
+      // big holes left and right
+
     }
   }
   else  //if (type == 5)
