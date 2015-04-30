@@ -34,6 +34,7 @@ const int MAP_WALL_BEGIN    =   264;
 const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_TEMPLE          =   192;
 const int MAP_CARPET          =   200;
+const int MAP_TILE_KEY        =   209;
 const int MAP_GRID            =   240;
 const int MAP_STAIRS_UP   =   2 + MAP_WALL_BEGIN;
 
@@ -115,7 +116,7 @@ struct randomDungeonTileStruct
   bool totalRandom;
 };
 
-const int NB_RANDOM_TILES = 16;
+const int NB_RANDOM_TILES = 21;
 const int NB_RANDOM_TILE_TRY = 40;
 
 /** Array with all the items and data */
@@ -137,6 +138,12 @@ const randomDungeonTileStruct randomDungeonTiles[NB_RANDOM_TILES] =
   { 192, 192, 192, 576, true },
   { 192, 192, 384, 576, true },
   { 192, 192, 576, 576, true },
+
+  { 256, 256, 0, 768, true },
+  { 256, 256, 256, 768, true },
+  { 256, 192, 768, 0, true },
+  { 256, 192, 768, 192, true },
+  { 256, 192, 768, 384, true },
 };
 
 class DungeonMap : public GameMap
