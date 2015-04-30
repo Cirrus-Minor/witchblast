@@ -104,13 +104,19 @@ Next version
 - ADD Decoration sprites in rooms
 - ADD Glowing green staff aura when poison shot equipped
 - ADD Air divinity aura
+- ADD New room patterns
+- ADD Wall shadow
+- ADD German and Russian translations
+- MOD An item can be only dropped once in a level
 - MOD Giant Spider difficulty slightly increases
 - MOD Ghost are shortly visible at fight start
 - MOD Gloves and advanced gloves switched
+- MOD Snakes from trap can drop golds or apples
 - MOD Elemental cauldron invoke rate decreases and is limited (no spawn when more than 8 monsters on screen)
 - FIX Wrong air divinity conversion message
 - FIX Overlapping items descriptions
 - FIX No ghost dying animation
+- FIX Key zone tiles were wrong
 
 v0.5
 - ADD A new level (7)
