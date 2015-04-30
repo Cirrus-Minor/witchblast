@@ -26,6 +26,8 @@ DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
   randomSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RANDOM_DUNGEON));
   doorSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TILES));
   doorSprite.setOrigin(96, 32);
+
+  shadowType = ShadowTypeStandard;
 }
 
 void DungeonMapEntity::animate(float delay)
@@ -445,7 +447,21 @@ void DungeonMapEntity::renderPost(sf::RenderTarget* app)
 {
   displayBlood(app);
   displayCorpses(app);
-  app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW));
+  switch (shadowType)
+  {
+    case ShadowTypeStandard:
+      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW));
+      break;
+    case ShadowTypeCorner:
+      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_CORNER));
+      break;
+    case ShadowTypeSmall:
+      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_SMALL));
+      break;
+    case ShadowTypeMedium:
+      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_MEDIUM));
+      break;
+  }
 }
 
 void DungeonMapEntity::renderOverlay(sf::RenderTarget* app)
@@ -723,37 +739,166 @@ void DungeonMapEntity::computeOverVertices()
 void DungeonMapEntity::computeShadowVertices()
 {
   DungeonMap* gameMap = game().getCurrentMap();
-  int tilesProLine = 10;
   int tileWidth = 64;
   int tileHeight = 64;
   int tileBoxWidth = 64;
   int tileBoxHeight = 64;
 
-  shadowVertices.setPrimitiveType(sf::Quads);
-  shadowVertices.resize(gameMap->getWidth() * gameMap->getHeight() * 4);
+  int x0 = 0;
+  int y0 = 0;
+  int xf = MAP_WIDTH - 1;
+  int yf = MAP_HEIGHT - 1;
+  int xd = 4;
+  int yd = 4;
 
-  for (int i = 0; i < gameMap->getWidth(); i++)
-    for (int j = 0; j < gameMap->getHeight(); j++)
+  if (gameMap->getLogicalTile(1, 1) == LogicalWall
+      && gameMap->getLogicalTile(2, 1) != LogicalWall
+      && gameMap->getLogicalTile(1, 2) != LogicalWall)
+  {
+    // corner
+    shadowType = ShadowTypeCorner;
+  }
+  else
+  {
+    x0 = MAP_WIDTH / 2;
+    while (gameMap->getLogicalTile(x0, MAP_HEIGHT / 2 + 1) != LogicalWall) x0--;
+    xf = MAP_WIDTH / 2;
+    while (gameMap->getLogicalTile(xf, MAP_HEIGHT / 2 + 1) != LogicalWall) xf++;
+    y0 = MAP_HEIGHT / 2;
+    while (gameMap->getLogicalTile(MAP_WIDTH / 2 + 1, y0) != LogicalWall) y0--;
+    yf = MAP_HEIGHT / 2;
+    while (gameMap->getLogicalTile(MAP_WIDTH / 2 + 1, yf) != LogicalWall) yf++;
+
+    if (yf - y0 <= 4)
     {
-      //if (gameMap->getShadowTile(i, j) != MAPSHAD_EMPTY)
-      {
-        int nx = gameMap->getShadowTile(i, j) % tilesProLine;
-        int ny = gameMap->getShadowTile(i, j) / tilesProLine;
-
-        sf::Vertex* quad = &shadowVertices[(i + j * gameMap->getWidth()) * 4];
-        {
-          quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
-          quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
-          quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
-          quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
-        }
-
-        quad[0].texCoords = sf::Vector2f(nx * tileBoxWidth, ny * tileBoxHeight);
-        quad[1].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, ny * tileBoxHeight);
-        quad[2].texCoords = sf::Vector2f((nx + 1) * tileBoxWidth, (ny + 1) * tileBoxHeight);
-        quad[3].texCoords = sf::Vector2f(nx * tileBoxWidth, (ny + 1) * tileBoxHeight);
-      }
+      shadowType = ShadowTypeSmall;
+      xd = 3;
+      yd = 2;
     }
+    else if (yf - y0 <= 6 || xf - x0 <= 6)
+    {
+      shadowType = ShadowTypeMedium;
+      xd = 3;
+      yd = 3;
+    }
+    else
+    {
+      shadowType = ShadowTypeStandard;
+    }
+  }
+
+  shadowVertices.setPrimitiveType(sf::Quads);
+  shadowVertices.resize(8 * 4);
+
+  int xm0 = x0 + xd;
+  int xmf = xf - xd;
+  int ym0 = y0 + yd;
+  int ymf = yf - yd;
+
+  // top left
+  {
+    sf::Vertex* quad = &shadowVertices[0 * 4];
+    quad[0].position = sf::Vector2f(x0 * tileWidth, y0 * tileHeight);
+    quad[1].position = sf::Vector2f((x0 + xd)* tileWidth, y0 * tileHeight);
+    quad[2].position = sf::Vector2f((x0 + xd) * tileWidth, (y0 + yd) * tileHeight);
+    quad[3].position = sf::Vector2f(x0 * tileWidth, (y0 + yd) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f(0 * tileBoxWidth, 0 * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f(xd * tileBoxWidth, 0 * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f(xd * tileBoxWidth, yd * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f(0 * tileBoxWidth, yd * tileBoxHeight);
+  }
+  // top
+  {
+    sf::Vertex* quad = &shadowVertices[1 * 4];
+    quad[0].position = sf::Vector2f(xm0 * tileWidth, y0 * tileHeight);
+    quad[1].position = sf::Vector2f((xmf + 1)* tileWidth, y0 * tileHeight);
+    quad[2].position = sf::Vector2f((xmf + 1) * tileWidth, (y0 + yd) * tileHeight);
+    quad[3].position = sf::Vector2f(xm0 * tileWidth, (y0 + yd) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f(xd * tileBoxWidth, 0 * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, 0 * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, yd * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f(xd * tileBoxWidth, yd * tileBoxHeight);
+  }
+  // top right
+  {
+    sf::Vertex* quad = &shadowVertices[2 * 4];
+    quad[0].position = sf::Vector2f((xf - xd + 1) * tileWidth, y0 * tileHeight);
+    quad[1].position = sf::Vector2f((xf + 1)* tileWidth, y0 * tileHeight);
+    quad[2].position = sf::Vector2f((xf + 1) * tileWidth, (y0 + yd) * tileHeight);
+    quad[3].position = sf::Vector2f((xf - xd + 1) * tileWidth, (y0 + yd) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, 0 * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f((xd + xd + 1) * tileBoxWidth, 0 * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f((xd + xd + 1) * tileBoxWidth, yd * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, yd * tileBoxHeight);
+  }
+   // left
+  {
+    sf::Vertex* quad = &shadowVertices[3 * 4];
+    quad[0].position = sf::Vector2f(x0 * tileWidth, ym0 * tileHeight);
+    quad[1].position = sf::Vector2f((x0 + xd) * tileWidth, ym0 * tileHeight);
+    quad[2].position = sf::Vector2f((x0 + xd) * tileWidth, (ymf + 1) * tileHeight);
+    quad[3].position = sf::Vector2f(x0 * tileWidth, (ymf + 1) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f(0 * tileBoxWidth, yd * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f(xd * tileBoxWidth, yd * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f(xd * tileBoxWidth, (yd + 1) * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f(0 * tileBoxWidth, (yd + 1) * tileBoxHeight);
+  }
+  // right
+  {
+    sf::Vertex* quad = &shadowVertices[4 * 4];
+    quad[0].position = sf::Vector2f((xf - xd + 1) * tileWidth, ym0 * tileHeight);
+    quad[1].position = sf::Vector2f((xf + 1) * tileWidth, ym0 * tileHeight);
+    quad[2].position = sf::Vector2f((xf + 1) * tileWidth, (ymf + 1) * tileHeight);
+    quad[3].position = sf::Vector2f((xf - xd + 1) * tileWidth, (ymf + 1) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, yd * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f((xd + xd + 1) * tileBoxWidth, yd * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f((xd + xd + 1) * tileBoxWidth, (yd + 1) * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, (yd + 1) * tileBoxHeight);
+  }
+  // bottom left
+  {
+    sf::Vertex* quad = &shadowVertices[5 * 4];
+    quad[0].position = sf::Vector2f(x0 * tileWidth, (yf - yd + 1) * tileHeight);
+    quad[1].position = sf::Vector2f((x0 + xd)* tileWidth, (yf - yd + 1) * tileHeight);
+    quad[2].position = sf::Vector2f((x0 + xd) * tileWidth, (1 + yf) * tileHeight);
+    quad[3].position = sf::Vector2f(x0 * tileWidth, (1 + yf) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f(0 * tileBoxWidth, (yd + 1) * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f(xd * tileBoxWidth, (yd + 1)  * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f(xd * tileBoxWidth, (yd + yd + 1)  * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f(0 * tileBoxWidth, (yd + yd + 1)  * tileBoxHeight);
+  }
+  // bottom
+  {
+    sf::Vertex* quad = &shadowVertices[6 * 4];
+    quad[0].position = sf::Vector2f(xm0 * tileWidth, (yf - yd + 1) * tileHeight);
+    quad[1].position = sf::Vector2f((xmf + 1)* tileWidth, (yf - yd + 1) * tileHeight);
+    quad[2].position = sf::Vector2f((xmf + 1) * tileWidth, (1 + yf) * tileHeight);
+    quad[3].position = sf::Vector2f(xm0 * tileWidth, (1 + yf) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f(xd * tileBoxWidth, (yd + 1) * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, (yd + 1) * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, (yd + yd + 1) * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f(xd * tileBoxWidth, (yd + yd + 1) * tileBoxHeight);
+  }
+  // bottom right
+  {
+    sf::Vertex* quad = &shadowVertices[7 * 4];
+    quad[0].position = sf::Vector2f((xf - xd + 1) * tileWidth, (yf - yd + 1) * tileHeight);
+    quad[1].position = sf::Vector2f((xf + 1)* tileWidth, (yf - yd + 1) * tileHeight);
+    quad[2].position = sf::Vector2f((xf + 1) * tileWidth, (1 + yf) * tileHeight);
+    quad[3].position = sf::Vector2f((xf - xd + 1) * tileWidth, (1 + yf) * tileHeight);
+
+    quad[0].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, (yd + 1) * tileBoxHeight);
+    quad[1].texCoords = sf::Vector2f((xd + xd + 1) * tileBoxWidth, (yd + 1) * tileBoxHeight);
+    quad[2].texCoords = sf::Vector2f((xd + xd + 1) * tileBoxWidth, (yd + yd + 1) * tileBoxHeight);
+    quad[3].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, (yd + yd + 1) * tileBoxHeight);
+  }
 }
 
 void DungeonMapEntity::computeBloodVertices()

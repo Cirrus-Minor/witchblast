@@ -318,7 +318,9 @@ WitchBlastGame::WitchBlastGame()
     "media/item_description.png", "media/death_certificate.png",
     "media/achievements.png",     "media/boss_pictures.png",
     "media/portrait_part.png",    "media/dungeon_random.png",
-    "media/dungeon_objects.png",  "media/tiles_shadow.png",
+    "media/dungeon_objects.png",  "media/shadows_standard.png",
+    "media/shadows_corners.png",  "media/shadows_medium.png",
+    "media/shadows_small.png",
   };
 
   for (const char *const filename : images)
@@ -4780,8 +4782,7 @@ void WitchBlastGame::saveGame()
                 file << tile << " ";
                 tile = currentFloor->getMap(i, j)->getObjectTile(k, l);
                 if (tile == MAPOBJ_DOOR_CLOSED) tile = MAPOBJ_DOOR_OPEN;
-                file << tile << " "; //currentFloor->getMap(i, j)->getObjectTile(k, l) << " ";
-                file << currentFloor->getMap(i, j)->getShadowTile(k, l) << " ";
+                file << tile << " ";
                 file << currentFloor->getMap(i, j)->getLogicalTile(k, l) << " ";
               }
               file << std::endl;
@@ -4959,8 +4960,6 @@ bool WitchBlastGame::loadGame()
             iMap->setTile(i, j, n);
             file >> n;
             iMap->setObjectTile(i, j, n);
-            file >> n;
-            iMap->setShadowTile(i, j, n);
             file >> n;
             iMap->setLogicalTile(i, j, (logicalMapStateEnum)n);
           }

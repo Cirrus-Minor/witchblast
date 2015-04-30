@@ -614,7 +614,7 @@ void PlayerEntity::animate(float delay)
         TILE_HEIGHT / 2, 64, 64, 1);
     exitDoorEntityShadow->setZ(TILE_HEIGHT + 1);
     exitDoorEntityShadow->setImagesProLine(10);
-    exitDoorEntityShadow->setFrame(MAPSHAD_8);
+    exitDoorEntityShadow->setFrame(4);
     exitDoorEntityShadow->setType(ENTITY_EFFECT);
   }
 #endif

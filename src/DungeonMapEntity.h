@@ -51,6 +51,8 @@ private:
   sf::VertexArray overVertices;
   sf::VertexArray shadowVertices;
   bool hasChanged;
+  enum EnumShadowType { ShadowTypeStandard, ShadowTypeCorner, ShadowTypeMedium, ShadowTypeSmall };
+  EnumShadowType shadowType;
 
   sf::VertexArray bloodVertices;
   sf::VertexArray corpsesVertices;

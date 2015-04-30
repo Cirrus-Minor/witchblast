@@ -29,44 +29,6 @@ const int MAPOBJ_SHOP_LEFT     =   0 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP          =   1 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP_RIGHT    =   2 + MAPOBJ_SHOP_BEGIN;
 
-const int MAPSHAD_7   = 0;
-const int MAPSHAD_87  = 1;
-const int MAPSHAD_8   = 2;
-const int MAPSHAD_89  = 3;
-const int MAPSHAD_9   = 4;
-const int MAPSHAD_1   = 10;
-const int MAPSHAD_21  = 11;
-const int MAPSHAD_2   = 12;
-const int MAPSHAD_23  = 13;
-const int MAPSHAD_3   = 14;
-const int MAPSHAD_47  = 5;
-const int MAPSHAD_4   = 15;
-const int MAPSHAD_41  = 25;
-const int MAPSHAD_69  = 6;
-const int MAPSHAD_6   = 16;
-const int MAPSHAD_63  = 26;
-const int MAPSHAD_77  = 20;
-const int MAPSHAD_99  = 21;
-const int MAPSHAD_11  = 30;
-const int MAPSHAD_33  = 31;
-const int MAPSHAD_EMPTY   = 18;
-const int MAPSHAD_GROUND_7   = 7;
-const int MAPSHAD_GROUND_8   = 8;
-const int MAPSHAD_GROUND_9   = 9;
-const int MAPSHAD_GROUND_4   = 17;
-const int MAPSHAD_GROUND_6   = 19;
-const int MAPSHAD_GROUND_1   = 27;
-const int MAPSHAD_GROUND_2   = 28;
-const int MAPSHAD_GROUND_3   = 29;
-const int MAPSHAD_GROUND_78   = 22;
-const int MAPSHAD_GROUND_98   = 23;
-const int MAPSHAD_GROUND_12   = 32;
-const int MAPSHAD_GROUND_32   = 33;
-const int MAPSHAD_GROUND_47   = 34;
-const int MAPSHAD_GROUND_69   = 35;
-const int MAPSHAD_GROUND_41   = 36;
-const int MAPSHAD_GROUND_63   = 37;
-
 const int MAP_WALL_BEGIN    =   264;
 
 const int MAP_NORMAL_FLOOR    =   8;
@@ -195,10 +157,8 @@ class DungeonMap : public GameMap
     bool isShootable(int x, int y);
 
     int getObjectTile(int x, int y);
-    int getShadowTile(int x, int y);
     logicalMapStateEnum getLogicalTile(int x, int y);
     void setObjectTile(int x, int y, int n);
-    void setShadowTile(int x, int y, int n);
     void setLogicalTile(int x, int y, logicalMapStateEnum state);
 
     int getDivinity(int x, int y);
@@ -283,7 +243,6 @@ class DungeonMap : public GameMap
     bool cleared;
 
     int objectsMap[MAP_WIDTH][MAP_HEIGHT];
-    int shadowMap[MAP_WIDTH][MAP_HEIGHT];
     logicalMapStateEnum logicalMap[MAP_WIDTH][MAP_HEIGHT];
 
     roomTypeEnum roomType;
@@ -302,7 +261,6 @@ class DungeonMap : public GameMap
 
     void makePatternTile(int x, int y);
     void addHole(int x, int y);
-    void castShadows(int x0, int y0, int xf, int yf);
 
     int floorOffset;
     int wallOffset;
