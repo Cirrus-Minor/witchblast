@@ -194,6 +194,7 @@ class DungeonMap : public GameMap
     void initPattern(patternEnum n);
     void generateCarpet(int x0, int y0, int w, int h, int n);
     void generateTable(int x0, int y0, int w, int h, int n);
+    void generateLongObject(int x0, int y0, int w, int n);
     void generateRoomRandom(int type);
     void generateRoomWithoutHoles(int type);
     void generateRoomWithHoles(int type);

@@ -648,7 +648,7 @@ Vector2D DungeonMap::generateBonusRoom()
   int x0 = MAP_WIDTH / 2;
   int y0 = MAP_HEIGHT / 2;
 
-  if (game().getLevel() == 1 || rand() % 2 == 0)
+  if (game().getLevel() == 1 || rand() % 3 > 0)
   {
     if (rand() % 3 == 0)
     {
@@ -782,6 +782,20 @@ void DungeonMap::generateTable(int x0, int y0, int w, int h, int n)
   for (i = x0; i <= xf; i++)
     for (j = y0; j <= yf; j++)
       logicalMap[i][j] = LogicalObstacle;
+}
+
+void DungeonMap::generateLongObject(int x0, int y0, int w, int n)
+{
+  int xf = x0 + w - 1;
+  objectsMap[x0][y0] = n;
+  logicalMap[x0][y0] = LogicalObstacle;
+  for (int i = x0 + 1; i <= xf - 1; i++)
+  {
+    objectsMap[i][y0] = n + 1;
+    logicalMap[i][y0] = LogicalObstacle;
+  }
+  objectsMap[xf][y0] = n + 2;
+  logicalMap[xf][y0] = LogicalObstacle;
 }
 
 Vector2D DungeonMap::generateMerchantRoom()
@@ -957,7 +971,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
   if (type == 4)
   {
     // objects
-    //if (rand() % 2 == 0)
+    if (rand() % 2 == 0)
     {
       // type 1
       if (rand() % 3 == 0) initPattern(PatternSmallChecker);
@@ -1012,24 +1026,15 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         }
       }
     }
-    /*else
+    else
     {
-      map[2][2] = MAP_LONG_LEFT;
-      map[3][2] = MAP_LONG;
-      map[4][2] = MAP_LONG_RIGHT;
-
-      map[2][6] = MAP_LONG_LEFT;
-      map[3][6] = MAP_LONG;
-      map[4][6] = MAP_LONG_RIGHT;
-
-      map[10][2] = MAP_LONG_LEFT;
-      map[11][2] = MAP_LONG;
-      map[12][2] = MAP_LONG_RIGHT;
-
-      map[10][6] = MAP_LONG_LEFT;
-      map[11][6] = MAP_LONG;
-      map[12][6] = MAP_LONG_RIGHT;
-    }*/
+      initPattern(PatternSmallStar);
+      generateLongObject(2, 2, 3, MAPOBJ_LONG_LEFT);
+      generateLongObject(2, 6, 3, MAPOBJ_LONG_LEFT);
+      generateLongObject(10, 2, 3, MAPOBJ_LONG_LEFT);
+      generateLongObject(10, 6, 3, MAPOBJ_LONG_LEFT);
+      generateLongObject(6, 4, 3, MAPOBJ_LONG_LEFT);
+    }
   }
   if (type == ROOM_TYPE_CHECKER)
   {
