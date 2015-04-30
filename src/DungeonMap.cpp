@@ -1084,6 +1084,22 @@ void DungeonMap::generateRoomWithHoles(int type)
       map[MAP_WIDTH - 2][1] = MAP_GRID;
       map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
     }
+    /*else if (rand() % 2 == 0)
+    {
+      for (int i = 1; i <= MAP_WIDTH - 2; i++)
+      {
+        if (i != MAP_WIDTH / 2 || !hasNeighbourUp()) addHole(i, 1);
+      }
+      for (int i = 2; i <= MAP_HEIGHT - 3; i++)
+      {
+        if (i != MAP_HEIGHT / 2 || !hasNeighbourLeft()) addHole(1, i);
+        if (i != MAP_HEIGHT / 2 || !hasNeighbourRight()) addHole(MAP_WIDTH - 2, i);
+      }
+      for (int i = 1; i <= MAP_WIDTH - 2; i++)
+      {
+        if (i != MAP_WIDTH / 2 || !hasNeighbourDown()) addHole(i, MAP_HEIGHT - 2);
+      }
+    }*/
   }
   else if (type == 1)
   {
@@ -1185,7 +1201,26 @@ void DungeonMap::generateRoomWithHoles(int type)
     else
     {
       // big holes left and right
+      bool holesNW = rand() % 2 == 0;
+      for (int i = 0; i < 5; i++)
+      {
+        if (holesNW)
+        {
+          addHole(1 + i, 1);
+          addHole(1 + i, 2);
 
+          addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT - 3);
+          addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT - 2);
+        }
+        else
+          {
+          addHole(1 + i, MAP_HEIGHT - 3);
+          addHole(1 + i, MAP_HEIGHT - 2);
+
+          addHole(MAP_WIDTH - 2 - i, 1);
+          addHole(MAP_WIDTH - 2 - i, 2);
+        }
+      }
     }
   }
   else  //if (type == 5)
