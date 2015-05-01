@@ -978,6 +978,12 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       bool leftOriented = rand() % 2 == 0;
 
       int bankType = rand() % 3;
+      if (bankType == 2)
+      {
+        int xPlayer = game().getPlayerPosition().x;
+        if (xPlayer > GAME_WIDTH - TILE_WIDTH && xPlayer < GAME_WIDTH + TILE_WIDTH)
+          bankType = rand() % 2;
+      }
 
       int x0 = leftOriented ? 5 : 3;
 
@@ -1092,7 +1098,7 @@ void DungeonMap::generateRoomWithHoles(int type)
       map[MAP_WIDTH - 2][1] = MAP_GRID;
       map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
     }
-    /*else if (rand() % 2 == 0)
+    else if (rand() % 2 == 0)
     {
       for (int i = 1; i <= MAP_WIDTH - 2; i++)
       {
@@ -1107,7 +1113,7 @@ void DungeonMap::generateRoomWithHoles(int type)
       {
         if (i != MAP_WIDTH / 2 || !hasNeighbourDown()) addHole(i, MAP_HEIGHT - 2);
       }
-    }*/
+    }
   }
   else if (type == 1)
   {
