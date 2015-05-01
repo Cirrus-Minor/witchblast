@@ -1055,9 +1055,12 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 void DungeonMap::addHole(int x, int y)
 {
   int n = MAPOBJ_HOLE;
-  if (y > 0 && (objectsMap[x][y - 1] == MAPOBJ_HOLE || objectsMap[x][y - 1] == MAPOBJ_HOLE_BOTTOM))
+  if (y > 0 && logicalMap[x][y - 1] == LogicalHole)
     n = MAPOBJ_HOLE_BOTTOM;
-
+  else if (logicalMap[x - 1][y] == LogicalHole && logicalMap[x - 1][y - 1] == LogicalHole)
+    n = MAPOBJ_HOLE_LEFT;
+  else if (logicalMap[x + 1][y] == LogicalHole && logicalMap[x + 1][y - 1] == LogicalHole)
+    n = MAPOBJ_HOLE_RIGHT;
   objectsMap[x][y] = n;
   logicalMap[x][y] = LogicalHole;
 }
