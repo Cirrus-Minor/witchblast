@@ -127,29 +127,26 @@ void RatEntity::calculateBB()
 
 void RatEntity::collideMapRight()
 {
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else compute(true);
+  if (recoil.active) recoil.active = false;
+  compute(true);
 }
 
 void RatEntity::collideMapLeft()
 {
-  velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
-  else compute(true);
+  if (recoil.active) recoil.active = false;
+  compute(true);
 }
 
 void RatEntity::collideMapTop()
 {
-  velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else compute(true);
+  if (recoil.active) recoil.active = false;
+  compute(true);
 }
 
 void RatEntity::collideMapBottom()
 {
-  velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
-  else compute(true);
+  if (recoil.active) recoil.active = false;
+  compute(true);
 }
 
 void RatEntity::collideWithEnemy(EnemyEntity* entity)
@@ -199,6 +196,17 @@ void RatEntity::collideWithBolt(BoltEntity* boltEntity)
       SoundManager::getInstance().playSound(SOUND_CLANG_00);
 
       boltEntity->loseDamages(boltEntity->getDamages());
+
+      if (boltEntity->getBoltType() == ShotTypeStone)
+      {
+        float factor = (boltEntity->isFromPlayer() && game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT)) ? 0.25f : 1.0f;
+        float recoilVelocity = factor * STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
+        float recoilDelay = factor * STONE_DECOIL_DELAY[boltEntity->getLevel()];
+
+        Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
+                                recoilVelocity );
+        giveRecoil(true, recoilVector, recoilDelay);
+      }
     }
   }
   else EnemyEntity::collideWithBolt(boltEntity);

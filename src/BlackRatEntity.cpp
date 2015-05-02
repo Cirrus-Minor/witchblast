@@ -78,21 +78,25 @@ void BlackRatEntity::calculateBB()
 
 void BlackRatEntity::collideMapRight()
 {
+  if (recoil.active) recoil.active = false;
   findNextGoal();
 }
 
 void BlackRatEntity::collideMapLeft()
 {
+  if (recoil.active) recoil.active = false;
   findNextGoal();
 }
 
 void BlackRatEntity::collideMapTop()
 {
+  if (recoil.active) recoil.active = false;
   findNextGoal();
 }
 
 void BlackRatEntity::collideMapBottom()
 {
+  if (recoil.active) recoil.active = false;
   findNextGoal();
 }
 
@@ -244,6 +248,17 @@ void BlackRatEntity::collideWithBolt(BoltEntity* boltEntity)
       SoundManager::getInstance().playSound(SOUND_CLANG_00);
 
       boltEntity->loseDamages(boltEntity->getDamages());
+
+      if (boltEntity->getBoltType() == ShotTypeStone)
+      {
+        float factor = (boltEntity->isFromPlayer() && game().getPlayer()->isEquiped(EQUIP_RAPID_SHOT)) ? 0.25f : 1.0f;
+        float recoilVelocity = factor * STONE_DECOIL_VELOCITY[boltEntity->getLevel()];
+        float recoilDelay = factor * STONE_DECOIL_DELAY[boltEntity->getLevel()];
+
+        Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
+                                recoilVelocity );
+        giveRecoil(true, recoilVector, recoilDelay);
+      }
     }
   }
   else EnemyEntity::collideWithBolt(boltEntity);
