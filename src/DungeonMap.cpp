@@ -1360,8 +1360,6 @@ void DungeonMap::generateCorridors()
   int xCor = 1 + rand()% 4;
   int yCor = 1 + rand()% 1;
 
-  //int x0 = 0, xf = MAP_WIDTH - 1, y0 = 0, yf = MAP_HEIGHT - 1;
-
   if (!hasNeighbourLeft())
   {
     for (int i = 0; i < xCor; i++)
@@ -1369,7 +1367,6 @@ void DungeonMap::generateCorridors()
       {
         map[i][j] = wallOffset + MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
-        //x0 = xCor;
       }
 
   }
@@ -1380,7 +1377,6 @@ void DungeonMap::generateCorridors()
       {
         map[i][j] = wallOffset + MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
-        //xf = MAP_WIDTH - 1 - xCor;
       }
   }
   if (!hasNeighbourUp())
@@ -1390,7 +1386,6 @@ void DungeonMap::generateCorridors()
       {
         map[i][j] = wallOffset + MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
-        //y0 = yCor;
       }
   }
   if (!hasNeighbourDown())
@@ -1400,7 +1395,6 @@ void DungeonMap::generateCorridors()
       {
         map[i][j] = wallOffset + MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
-        //yf = MAP_HEIGHT - 1 - yCor;
       }
   }
 
@@ -1426,9 +1420,8 @@ void DungeonMap::generateCorridors()
             if (j < MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else if (j > MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else map[i][j] = wallOffset + MAP_WALL_8;
-            logicalMap[i][j] = LogicalWall;
           }
-
+          logicalMap[i][j] = LogicalWall;
         }
         else if (getTile(i + 1, j) == wallOffset + MAP_WALL_X)
         {
@@ -1443,8 +1436,8 @@ void DungeonMap::generateCorridors()
             if (j < MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else if (j > MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else map[i][j] = wallOffset + MAP_WALL_8;
-            logicalMap[i][j] = LogicalWall;
           }
+          logicalMap[i][j] = LogicalWall;
         }
         else if (getTile(i, j - 1) == wallOffset + MAP_WALL_X)
         {
@@ -1455,8 +1448,8 @@ void DungeonMap::generateCorridors()
             if (i < MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else if (i > MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else map[i][j] = wallOffset + MAP_WALL_8;
-            logicalMap[i][j] = LogicalWall;
           }
+          logicalMap[i][j] = LogicalWall;
         }
         else if (getTile(i, j + 1) == wallOffset + MAP_WALL_X)
         {
@@ -1467,8 +1460,8 @@ void DungeonMap::generateCorridors()
             if (i < MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else if (i > MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
             else map[i][j] = wallOffset + MAP_WALL_8;
-            logicalMap[i][j] = LogicalWall;
           }
+          logicalMap[i][j] = LogicalWall;
         }
       }
     }
