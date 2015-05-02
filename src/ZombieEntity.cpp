@@ -196,7 +196,7 @@ void ZombieEntity::collideMapRight()
 {
   if (recoil.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x;
+    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
     else (recoil.active = false);
   }
   else compute(true);
@@ -206,7 +206,7 @@ void ZombieEntity::collideMapLeft()
 {
   if (recoil.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x;
+    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
     else (recoil.active = false);
   }
   else compute(true);
@@ -216,7 +216,7 @@ void ZombieEntity::collideMapTop()
 {
   if (recoil.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y;
+    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
     else (recoil.active = false);
   }
   else compute(true);
@@ -226,7 +226,7 @@ void ZombieEntity::collideMapBottom()
 {
   if (recoil.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y;
+    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
     else (recoil.active = false);
   }
   else compute(true);

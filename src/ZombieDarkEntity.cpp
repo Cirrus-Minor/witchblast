@@ -72,21 +72,41 @@ void ZombieDarkEntity::calculateBB()
 
 void ZombieDarkEntity::collideMapRight()
 {
+  if (recoil.active)
+  {
+    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
+    else (recoil.active = false);
+  }
   findNextRandomGoal();
 }
 
 void ZombieDarkEntity::collideMapLeft()
 {
+  if (recoil.active)
+  {
+    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
+    else (recoil.active = false);
+  }
   findNextRandomGoal();
 }
 
 void ZombieDarkEntity::collideMapTop()
 {
+  if (recoil.active)
+  {
+    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
+    else (recoil.active = false);
+  }
   findNextRandomGoal();
 }
 
 void ZombieDarkEntity::collideMapBottom()
 {
+  if (recoil.active)
+  {
+    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
+    else (recoil.active = false);
+  }
   findNextRandomGoal();
 }
 
