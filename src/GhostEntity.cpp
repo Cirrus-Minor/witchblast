@@ -22,7 +22,7 @@ GhostEntity::GhostEntity(float x, float y)
 
   velocity = Vector2D(creatureSpeed);
   timer = 0.0f;
-  age -= 1.2f;
+  age -= 0.8f;
 
   bloodColor = BloodNone;
 
