@@ -379,9 +379,9 @@ const float STATUS_FROZEN_BOLT_DELAY[MAX_SHOT_LEVEL]   // reload time
 const float STATUS_FROZEN_MULT[MAX_SHOT_LEVEL]   // speed multiplier (= 3 times slower)
     = { 0.38f, 0.33f, 0.28f };
 const float STONE_DECOIL_DELAY[MAX_SHOT_LEVEL]   // how long the stun occurs
-    = { 0.18f, 0.3f, 0.5f };
+    = { 0.15f, 0.175f, 0.2f };
 const float STONE_DECOIL_VELOCITY[MAX_SHOT_LEVEL]   // Decoil velocity
-    = { 125.0f, 160.0f, 220.0f };
+    = { 270.0f, 320.0f, 450.0f };
 const float ILLUSION_DAMAGE_DECREASE[MAX_SHOT_LEVEL]   // Illusion damage malus
     = { 0.8f, 0.9f, 1.0f };
 const float LIGHTNING_VISCOSITY_INCREASE[MAX_SHOT_LEVEL]   // Air resistance
