@@ -858,6 +858,10 @@ Vector2D DungeonMap::generateKeyRoom()
   map[x0 + 1][y0] = MAP_TILE_KEY;
   map[x0][y0 - 1] = MAP_TILE_KEY;
   map[x0][y0 + 1] = MAP_TILE_KEY;
+  /*objectsMap[x0 -1][y0] = 70;
+  objectsMap[x0 + 1][y0] = 71;
+  objectsMap[x0][y0 - 1] = 72;
+  objectsMap[x0][y0 + 1] = 73;*/
   generateRandomTile();
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
@@ -1109,7 +1113,8 @@ void DungeonMap::generateRoomWithHoles(int type)
         if (i != MAP_HEIGHT / 2 || !hasNeighbourLeft()) addHole(1, i);
         if (i != MAP_HEIGHT / 2 || !hasNeighbourRight()) addHole(MAP_WIDTH - 2, i);
       }
-      for (int i = 1; i <= MAP_WIDTH - 2; i++)
+      addHole(MAP_WIDTH - 2, MAP_HEIGHT - 2);
+      for (int i = 1; i <= MAP_WIDTH - 3; i++)
       {
         if (i != MAP_WIDTH / 2 || !hasNeighbourDown()) addHole(i, MAP_HEIGHT - 2);
       }
