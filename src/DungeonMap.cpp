@@ -993,12 +993,12 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
       if (leftOriented)
       {
-        objectsMap[2][4] = MAPOBJ_OBSTACLE;
+        objectsMap[2][4] = MAPOBJ_CHURCH_FURN_L;
         logicalMap[2][4] = LogicalObstacle;
       }
       else
       {
-        objectsMap[12][4] = MAPOBJ_OBSTACLE;
+        objectsMap[12][4] = MAPOBJ_CHURCH_FURN_R;
         logicalMap[12][4] = LogicalObstacle;
       }
 
@@ -1073,6 +1073,11 @@ void DungeonMap::addHole(int x, int y)
     n = MAPOBJ_HOLE_RIGHT;
   objectsMap[x][y] = n;
   logicalMap[x][y] = LogicalHole;
+
+  if (logicalMap[x][y + 1] == LogicalHole && objectsMap[x - 1][y + 1] == MAPOBJ_HOLE_TOP)
+    objectsMap[x - 1][y + 1] = MAPOBJ_HOLE_LEFT;
+  if (logicalMap[x][y + 1] == LogicalHole && objectsMap[x + 1][y + 1] == MAPOBJ_HOLE_TOP)
+    objectsMap[x + 1][y + 1] = MAPOBJ_HOLE_RIGHT;
 }
 
 void DungeonMap::generateRoomWithHoles(int type)
@@ -1102,7 +1107,7 @@ void DungeonMap::generateRoomWithHoles(int type)
       map[MAP_WIDTH - 2][1] = MAP_GRID;
       map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
     }
-    else if (rand() % 2 == 0)
+    /*else if (rand() % 2 == 0)
     {
       for (int i = 1; i <= MAP_WIDTH - 2; i++)
       {
@@ -1118,7 +1123,7 @@ void DungeonMap::generateRoomWithHoles(int type)
       {
         if (i != MAP_WIDTH / 2 || !hasNeighbourDown()) addHole(i, MAP_HEIGHT - 2);
       }
-    }
+    }*/
   }
   else if (type == 1)
   {
@@ -1134,12 +1139,33 @@ void DungeonMap::generateRoomWithHoles(int type)
     // blocks in the middle
     if (rand() % 3 == 0) initPattern(PatternBorder);
 
-    r = 1 + rand() % 2;
-    for (i = x0 - r; i <= x0 + r; i++)
+    /*if (false) //irregular // TO CORRECT
+    {
+      r = 1; //rand() % 2;
+
+      for (i = x0 - r; i <= x0 + r; i++)
+      {
+        if (rand() % 3 == 0) addHole(i, y0 - 1);
+        addHole(i, y0);
+        if (rand() % 3 == 0) addHole(i, y0 + 1);
+      }
+
       for (j = y0 - 1; j <= y0 + 1; j++)
       {
-        addHole(i, j);
+        if (rand() % 3 == 0) addHole(x0 - r - 1, j);
+        if (rand() % 3 == 0) addHole(x0 + r + 1, j);
       }
+    }
+    else*/
+    {
+      r = 1 + rand() % 2;
+      for (i = x0 - r; i <= x0 + r; i++)
+        for (j = y0 - 1; j <= y0 + 1; j++)
+        {
+          addHole(i, j);
+        }
+    }
+
   }
   else if (type == 3)
   {
