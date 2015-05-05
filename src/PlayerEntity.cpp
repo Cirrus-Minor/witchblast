@@ -1037,7 +1037,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
     }
 
     // shield
-    if (specialState[DivineStateProtection].active || protection.active)
+    if (playerStatus != playerStatusStairs && (specialState[DivineStateProtection].active || protection.active))
     {
       int firstFrame = 8;
       if (specialState[DivineStateProtection].active && divinity.divinity == DivinityStone) firstFrame = 16;
