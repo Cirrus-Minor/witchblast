@@ -100,6 +100,14 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next version
+- ADD Player movement improvements
+- FIX Explosive slime can be stuck in the wall when casting "invoke slime" spell
+- FIX Horizontal lines when maximizing the screen
+- FIX Spell lost when taking two spells at the same time
+- FIX Missing art for advanced gloves and boots
+- FIX Some random sprites are misplaced
+
 v0.5.3
 - ADD Glowing green staff aura when poison shot equipped
 - ADD Air divinity aura
