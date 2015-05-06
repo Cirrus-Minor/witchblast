@@ -13,6 +13,7 @@ const int MAPOBJ_OBSTACLE      =   10;
 const int MAPOBJ_BIG_OBSTACLE  =   40;
 const int MAPOBJ_TOMB          =   49;
 const int MAPOBJ_WALL_SPECIAL  =   14;
+const int MAPOBJ_GRID          =   19;
 const int MAPOBJ_BANK_TOP      =   18;
 const int MAPOBJ_BANK          =   28;
 const int MAPOBJ_BANK_BOTTOM   =   38;
@@ -39,7 +40,7 @@ const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_TEMPLE          =   192;
 const int MAP_CARPET          =   200;
 const int MAP_TILE_KEY        =   209;
-const int MAP_GRID            =   240;
+//const int MAP_GRID            =   240;
 const int MAP_STAIRS_UP   =   2 + MAP_WALL_BEGIN;
 
 // walls

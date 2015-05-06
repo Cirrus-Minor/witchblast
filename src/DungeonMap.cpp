@@ -911,10 +911,10 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     else if (roomType == roomTypeBoss && (game().getLevel() == 2) ) // giant slime
     {
       // good ?
-      map[1][1] = MAP_GRID + 1;
-      map[1][MAP_HEIGHT -2] = MAP_GRID + 1;
-      map[MAP_WIDTH - 2][1] = MAP_GRID + 1;
-      map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID + 1;
+      objectsMap[1][1] = MAPOBJ_GRID;
+      objectsMap[1][MAP_HEIGHT -2] = MAPOBJ_GRID;
+      objectsMap[MAP_WIDTH - 2][1] = MAPOBJ_GRID;
+      objectsMap[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAPOBJ_GRID;
     }
     if (roomType == roomTypeStandard)
     {
@@ -1099,13 +1099,6 @@ void DungeonMap::generateRoomWithHoles(int type)
         map[x0][MAP_HEIGHT - 1]     = 63;
         map[x0 + 1][MAP_HEIGHT - 1] = 64;
       }
-    }
-    if (roomType == roomTypeBoss && game().getLevel() == 2) // giant slime
-    {
-      map[1][1] = MAP_GRID;
-      map[1][MAP_HEIGHT -2] = MAP_GRID;
-      map[MAP_WIDTH - 2][1] = MAP_GRID;
-      map[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAP_GRID;
     }
     /*else if (rand() % 2 == 0)
     {
@@ -1378,9 +1371,10 @@ void DungeonMap::addRandomGrids(int n)
   {
     int rx = 1 + rand() % (MAP_WIDTH - 2);
     int ry = 1 + rand() % (MAP_HEIGHT - 2);
-    if (logicalMap[rx][ry] == LogicalFloor)
+    if (logicalMap[rx][ry] == LogicalFloor
+        || objectsMap[rx][ry] == 0)
     {
-      map[rx][ry] = MAP_GRID + game().getLevel() - 1;
+      objectsMap[rx][ry] = MAPOBJ_GRID;
       counter--;
     }
   }
