@@ -554,6 +554,10 @@ class PlayerEntity : public BaseCreatureEntity
 
     int firingDirection;
 
+    int keyDirection;
+
+    bool willCollideWithMap(int dx, int dy, bool checkMiddle);
+
     std::vector<FairyEntity*> fairies;
 
     float idleAge;

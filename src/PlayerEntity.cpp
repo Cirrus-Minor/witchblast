@@ -46,6 +46,8 @@ const int yHalo[9][3] =
   { 25, 27, 25}
 };
 
+const int KEYS_MOVE_TOLERANCE = 36;
+
 PlayerEntity::PlayerEntity(float x, float y)
   : BaseCreatureEntity (ImageManager::getInstance().getImage(IMAGE_PLAYER_0), x, y, 64, 96)
 {
@@ -99,6 +101,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   firingDirection = 5;
   facingDirection = 2;
+  keyDirection = 5;
 
   sprite.setOrigin(32, 80);
 
@@ -621,6 +624,29 @@ void PlayerEntity::animate(float delay)
     {
       playerStatus = playerStatusPlaying;
       game().closeDoors();
+    }
+    else
+    {
+      if (x < 2 * TILE_WIDTH)
+      {
+        velocity.x = creatureSpeed;
+        velocity.y = 0.0f;
+      }
+      else if (x > (MAP_WIDTH - 3) * TILE_WIDTH)
+      {
+        velocity.x = -creatureSpeed;
+        velocity.y = 0.0f;
+      }
+      else if (y < 2 * TILE_HEIGHT)
+      {
+        velocity.y = creatureSpeed;
+        velocity.x = 0.0f;
+      }
+      else if (y > (MAP_HEIGHT - 3) * TILE_HEIGHT)
+      {
+        velocity.y = -creatureSpeed;
+        velocity.x = 0.0f;
+      }
     }
   }
 
@@ -1184,8 +1210,45 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   }
 }
 
+bool PlayerEntity::willCollideWithMap(int dx, int dy, bool checkMiddle)
+{
+  float oldX = x, oldY = y;
+  bool collide = true;
+
+  x = oldX + dx;
+  y = oldY + dy;
+  if (!isCollidingWithMap())
+    collide = false;
+  else if (checkMiddle)
+  {
+    x = oldX + dx / 2;
+    y = oldY + dy / 2;
+    if (!isCollidingWithMap())
+      collide = false;
+  }
+
+  x = oldX;
+  y = oldY;
+  return collide;
+}
+
 void PlayerEntity::move(int direction)
 {
+  float oldX = x, oldY = y;
+  bool touchUp, touchDown, touchLeft, touchRight;
+
+  x = oldX + 1;
+  touchRight = isCollidingWithMap();
+  x = oldX - 1;
+  touchLeft = isCollidingWithMap();
+  x = oldX;
+
+  y = oldY + 1;
+  touchDown = isCollidingWithMap();
+  y = oldY - 1;
+  touchUp = isCollidingWithMap();
+  y = oldY;
+
   if (specialState[SpecialStateConfused].active)
   {
     switch (direction)
@@ -1201,6 +1264,7 @@ void PlayerEntity::move(int direction)
       case 3: direction = 7; break;
     }
   }
+  keyDirection = direction;
 
   if (playerStatus == playerStatusAcquire && statusTimer < ACQUIRE_DELAY / 2)
   {
@@ -1208,6 +1272,102 @@ void PlayerEntity::move(int direction)
   }
   if (playerStatus == playerStatusPlaying)
   {
+    switch (keyDirection)
+    {
+    case 1:
+      if (touchDown && touchLeft)
+        direction = 5;
+      else if (touchDown)
+        direction = 4;
+      else if (touchLeft)
+        direction = 2;
+      break;
+
+    case 3:
+      if (touchDown && touchRight)
+        direction = 5;
+      else if (touchDown)
+        direction = 6;
+      else if (touchRight)
+        direction = 2;
+      break;
+
+    case 7:
+      if (touchUp && touchLeft)
+        direction = 5;
+      else if (touchUp)
+        direction = 4;
+      else if (touchRight)
+        direction = 8;
+      break;
+
+    case 9:
+      if (touchUp && touchLeft)
+        direction = 5;
+      else if (touchUp)
+        direction = 6;
+      else if (touchRight)
+        direction = 8;
+      break;
+
+    case 4:
+      if (touchLeft)
+      {
+        x = oldX - 2;
+        if (!willCollideWithMap(0, KEYS_MOVE_TOLERANCE, true))
+          direction = 2;
+        else if (!willCollideWithMap(0, -KEYS_MOVE_TOLERANCE, true))
+          direction = 8;
+        else
+          direction = 5;
+        x = oldX;
+      }
+      break;
+
+    case 6:
+      if (touchRight)
+      {
+        x = oldX + 2;
+        if (!willCollideWithMap(0, KEYS_MOVE_TOLERANCE, true))
+          direction = 2;
+        else if (!willCollideWithMap(0, -KEYS_MOVE_TOLERANCE, true))
+          direction = 8;
+        else
+          direction = 5;
+        x = oldX;
+      }
+      break;
+
+    case 8:
+      if (touchUp)
+      {
+        y = oldY - 2;
+        if (!willCollideWithMap(KEYS_MOVE_TOLERANCE, 0, true))
+          direction = 6;
+        else if (!willCollideWithMap(-KEYS_MOVE_TOLERANCE, 0, true))
+          direction = 4;
+        else
+          direction = 5;
+        y = oldY;
+      }
+      break;
+
+    case 2:
+      if (touchDown)
+      {
+        y = oldY + 2;
+        if (!willCollideWithMap(KEYS_MOVE_TOLERANCE, 0, true))
+          direction = 6;
+        else if (!willCollideWithMap(-KEYS_MOVE_TOLERANCE, 0, true))
+          direction = 4;
+        else
+          direction = 5;
+        y = oldY;
+      }
+      break;
+
+    }
+
     float speedx = 0.0f, speedy = 0.0f;
     if (direction == 4)
       speedx = - creatureSpeed;
@@ -1230,7 +1390,7 @@ void PlayerEntity::move(int direction)
     setVelocity(Vector2D(speedx, speedy));
 
     {
-      switch (direction)
+      switch (keyDirection)
       {
       case 8:
         facingDirection = 8;
