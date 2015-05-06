@@ -219,10 +219,20 @@ void SlimeEntity::render(sf::RenderTarget* app)
 
 void SlimeEntity::calculateBB()
 {
+  if (isPet)
+  {
+    boundingBox.left = (int)x - 1;
+    boundingBox.width = 2;
+    boundingBox.top = (int)y - 1;
+    boundingBox.height =  2;
+  }
+  else
+  {
     boundingBox.left = (int)x - width / 2 + SLIME_BB_LEFT;
     boundingBox.width = width - SLIME_BB_WIDTH_DIFF;
     boundingBox.top = (int)y - height / 2 + SLIME_BB_TOP - 15;
     boundingBox.height =  height - SLIME_BB_HEIGHT_DIFF;
+  }
 }
 
 void SlimeEntity::collideMapRight()
