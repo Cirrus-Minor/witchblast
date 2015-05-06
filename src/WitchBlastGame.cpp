@@ -66,8 +66,6 @@
 
 #include <algorithm>
 
-//#define START_LEVEL 3
-
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
 
@@ -452,7 +450,10 @@ void WitchBlastGame::enableAA(bool enable)
 {
   for (int i = 0; i < NB_IMAGES; i++)
   {
-    if (i != IMAGE_TILES && i != IMAGE_MINIMAP && i != IMAGE_ITEMS_PRES && i != IMAGE_ITEMS_EQUIP_PRES && i != IMAGE_CORPSES
+    if (i != IMAGE_TILES && i != IMAGE_DUNGEON_OBJECTS
+        && i != IMAGE_TILES_SHADOW && i != IMAGE_TILES_SHADOW_CORNER  && i != IMAGE_TILES_SHADOW_MEDIUM
+        && i != IMAGE_MINIMAP
+        && i != IMAGE_ITEMS_PRES && i != IMAGE_ITEMS_EQUIP_PRES && i != IMAGE_CORPSES
         && i != IMAGE_CORPSES_BIG)
       ImageManager::getInstance().getImage(i)->setSmooth(enable);
   }
@@ -555,7 +556,7 @@ void WitchBlastGame::onUpdate()
               startNewLevel();
             }
             else
-              startNewGame(false);
+              startNewGame(false, 1);
           }
         }
       }
@@ -577,7 +578,7 @@ void WitchBlastGame::onUpdate()
   }
 }
 
-void WitchBlastGame::startNewGame(bool fromSaveFile)
+void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
 {
   gameState = gameStateInit;
   level = 1;
@@ -646,40 +647,44 @@ void WitchBlastGame::startNewGame(bool fromSaveFile)
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
 
-#ifdef START_LEVEL
-
-    for (int i = 1; i < START_LEVEL; i++)
+    if (startingLevel > 1)
     {
-      level = i;
-
-      if (level == 3)
+      for (int i = 1; i < startingLevel; i++)
       {
-        player->acquireItem(getItemSpell());
-        player->acquireItemAfterStance();
-      }
+        level = i;
 
-      player->setHpMax(player->getHpMax() + 2 + rand() % 4);
-      item_equip_enum item = getRandomEquipItem(false, false);
-      player->acquireItem((enumItemType)(item + FirstEquipItem));
-      player->acquireItemAfterStance();
+        if (level == 3)
+        {
+          player->acquireItem(getItemSpell());
+          player->acquireItemAfterStance();
+        }
 
-      item = getRandomEquipItem(true, true);
-      player->acquireItem((enumItemType)(item + FirstEquipItem));
-      player->acquireItemAfterStance();
-
-      if (i % 2 == 0)
-      {
-        item = getRandomEquipItem(false, false);
+        player->setHpMax(player->getHpMax() + 2 + rand() % 4);
+        item_equip_enum item = getRandomEquipItem(false, false);
         player->acquireItem((enumItemType)(item + FirstEquipItem));
         player->acquireItemAfterStance();
+
+        item = getRandomEquipItem(true, true);
+        player->acquireItem((enumItemType)(item + FirstEquipItem));
+        player->acquireItemAfterStance();
+
+        if (i % 2 == 0)
+        {
+          item = getRandomEquipItem(false, false);
+          player->acquireItem((enumItemType)(item + FirstEquipItem));
+          player->acquireItemAfterStance();
+        }
+      }
+      level++;
+
+      player->setHp(player->getHpMax());
+      player->setGold(8 + rand() % 45);
+
+      if (startingLevel > 2)
+      {
+        player->loadDivinity(rand() % NB_DIVINITY, (startingLevel - 2) * 200, 1, 0);
       }
     }
-    level++;
-
-    player->setHp(player->getHpMax());
-    player->setGold(8 + rand() % 45);
-
-#endif // START_LEVEL
 
     startNewLevel();
   }
@@ -1107,8 +1112,30 @@ void WitchBlastGame::updateRunningGame()
 
       if (event.key.code == sf::Keyboard::X)
       {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
       }
+
+      if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
+      {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        {
+          startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
+        }
+      }
+     /* if (event.key.code == sf::Keyboard::Num3)
+      {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        {
+          startNewGame(false, 3);
+        }
+      }
+      if (event.key.code == sf::Keyboard::Num4)
+      {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        {
+          startNewGame(false, 4);
+        }
+      }*/
 
       if (event.key.code == sf::Keyboard::F1)
       {
@@ -2695,11 +2722,11 @@ void WitchBlastGame::updateMenu()
         switch (menu->items[menu->index].id)
         {
         case MenuStartNew:
-          startNewGame(false);
+          startNewGame(false, 1);
           remove(SAVE_FILE.c_str());
           break;
         case MenuStartOld:
-          startNewGame(true);
+          startNewGame(true, 1);
           break;
         case MenuKeys:
           menuState = MenuStateKeys;
@@ -4346,7 +4373,7 @@ item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noF
     int eq = i + FirstEquipItem;
 
     if (player->isEquiped(i)) itemOk = false;
-    if (presentItems[i]) { std::cout << items[eq].name << " already present !\n"; itemOk = false; }
+    if (itemOk && presentItems[i]) itemOk = false;
     // TODO item already in floor
     if (itemOk && toSale && !items[eq].canBeSold) itemOk = false;
     if (itemOk && !toSale && !items[eq].canBeFound) itemOk = false;
@@ -6292,7 +6319,6 @@ void WitchBlastGame::renderDoors()
 
 void WitchBlastGame::resetPresentItems()
 {
-  std::cout << "RESET ITEMS\n";
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) presentItems[i] = false;
 }
 
@@ -6305,6 +6331,19 @@ bool WitchBlastGame::isPresentItem(int n)
 void WitchBlastGame::addPresentItem(int n)
 {
   if (n >= 0 && n < NUMBER_EQUIP_ITEMS) presentItems[n] = true;
+}
+
+void WitchBlastGame::checkJoypad()
+{
+  bool joypadConnected = sf::Joystick::isConnected(0);
+
+  if (joypadConnected)
+  {
+    if (sf::Joystick::hasAxis(0, sf::Joystick::R) && sf::Joystick::hasAxis(0, sf::Joystick::U))
+    {
+
+    }
+  }
 }
 
 WitchBlastGame &game()

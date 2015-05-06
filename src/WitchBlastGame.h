@@ -596,7 +596,7 @@ private:
    *
    *  \param fromSaveFile : true if we want to try to load the game from a file
    */
-  void startNewGame(bool fromSaveFile);
+  void startNewGame(bool fromSaveFile, int startingLevel);
 
   /*!
    *  \brief Starts a new level
@@ -973,6 +973,8 @@ private:
 
   bool presentItems[NUMBER_EQUIP_ITEMS];
   void resetPresentItems();
+
+  void checkJoypad();
 };
 
 /*!
