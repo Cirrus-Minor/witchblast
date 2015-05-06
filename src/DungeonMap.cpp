@@ -1508,7 +1508,7 @@ void DungeonMap::generateRandomTile()
 
     int xTile, yTile;
 
-    if (randomDungeonTiles[n].totalRandom)
+    if (randomDungeonTiles[n].canBeOnWall)
     {
       xTile = rand() % (GAME_WIDTH - randomDungeonTiles[n].width);
       yTile = rand() % (GAME_HEIGHT - randomDungeonTiles[n].height);
@@ -1526,7 +1526,7 @@ void DungeonMap::generateRandomTile()
 
     ok = true;
 
-    if (!randomDungeonTiles[n].totalRandom)
+    if (!randomDungeonTiles[n].randomPlace)
     {
       for (int ix = x0; ix <= xf; ix++)
         for (int iy = y0; iy <= yf; iy++)
@@ -1540,7 +1540,7 @@ void DungeonMap::generateRandomTile()
       randomTileElement.type = n;
       randomTileElement.x = xTile;
       randomTileElement.y = yTile;
-      if (randomDungeonTiles[n].totalRandom)
+      if (randomDungeonTiles[n].canRotate)
         randomTileElement.rotation = rand()% 360;
       else
         randomTileElement.rotation = 0;

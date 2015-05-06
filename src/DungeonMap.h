@@ -117,7 +117,9 @@ struct randomDungeonTileStruct
   int height;
   int xOffset;
   int yOffset;
-  bool totalRandom;
+  bool canRotate;
+  bool canBeOnWall;
+  bool randomPlace;
 };
 
 const int NB_RANDOM_TILES = 21;
@@ -126,28 +128,28 @@ const int NB_RANDOM_TILE_TRY = 40;
 /** Array with all the items and data */
 const randomDungeonTileStruct randomDungeonTiles[NB_RANDOM_TILES] =
 {
-  { 192, 192, 0, 0, true },
-  { 192, 192, 192, 0, true },
-  { 192, 192, 384, 0, true },
-  { 192, 192, 576, 0, true },
-  { 256, 256, 0, 192, true },
-  { 512, 256, 256, 192, true },
-  { 128, 128, 0, 448, true },
-  { 128, 128, 128, 448, true },
-  { 128, 128, 256, 448, true },
-  { 128, 128, 384, 448, true },
-  { 128, 128, 512, 448, false },
-  { 128, 128, 640, 448, false },
-  { 192, 192, 0, 576, true },
-  { 192, 192, 192, 576, true },
-  { 192, 192, 384, 576, true },
-  { 192, 192, 576, 576, true },
+  { 192, 192, 0, 0, true, true, true },
+  { 192, 192, 192, 0, true, true, true },
+  { 192, 192, 384, 0, true, true, true },
+  { 192, 192, 576, 0, true, true, true },
+  { 256, 256, 0, 192, true, true, true },
+  { 512, 256, 256, 192, true, true, true },
+  { 128, 128, 0, 448, true, false, true },
+  { 128, 128, 128, 448, true, true, true },
+  { 128, 128, 256, 448, true, true, true },
+  { 128, 128, 384, 448, true, true, true },
+  { 128, 128, 512, 448, false, false, false},
+  { 128, 128, 640, 448, false, false, false },
+  { 192, 192, 0, 576, true, true, true },
+  { 192, 192, 192, 576, true, true, true },
+  { 192, 192, 384, 576, true, true, true },
+  { 192, 192, 576, 576, true, true, true },
 
-  { 256, 256, 0, 768, true },
-  { 256, 256, 256, 768, true },
-  { 256, 192, 768, 0, true },
-  { 256, 192, 768, 192, true },
-  { 256, 192, 768, 384, true },
+  { 256, 256, 0, 768, true, true, true },
+  { 256, 256, 256, 768, true, true, true },
+  { 256, 192, 768, 0, true, true, true },
+  { 256, 192, 768, 192, true, true, true },
+  { 256, 192, 768, 384, true, true, true },
 };
 
 class DungeonMap : public GameMap
