@@ -302,13 +302,6 @@ void PlayerEntity::acquireItemAfterStance()
       game().proceedEvent(EventGetSpell);
     }
 
-    // spells
-    else if (items[acquiredItem].spell != SpellNone)
-    {
-      setActiveSpell(items[acquiredItem].spell, false);
-      game().proceedEvent(EventGetSpell);
-    }
-
     // pet slime
     else if (acquiredItem == ItemPetSlime)
     {

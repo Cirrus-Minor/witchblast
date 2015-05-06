@@ -48,6 +48,8 @@ bool ItemEntity::canBePickedUp()
   if (game().getPlayer()->getHp() == game().getPlayer()->getHpMax())
     if (itemType >= ItemHealthVerySmall && itemType <= ItemHealthVerySmallPoison) return false;
 
+  if (items[itemType].generatesStance && game().getPlayer()->getPlayerStatus() == PlayerEntity::playerStatusAcquire) return false;
+
   if (isMerchandise == true && game().getPlayer()->getGold() < getPrice()) return false;
 
   if (itemType == ItemBossHeart && !game().getCurrentMap()->isCleared()) return false;
