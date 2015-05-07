@@ -1502,7 +1502,7 @@ void DungeonMap::generateRandomTile()
 
     int xTile, yTile;
 
-    if (randomDungeonTiles[n].canBeOnWall)
+    if (randomDungeonTiles[n].canBeOnWall && roomType != roomTypeKey)
     {
       xTile = rand() % (GAME_WIDTH - randomDungeonTiles[n].width);
       yTile = rand() % (GAME_HEIGHT - randomDungeonTiles[n].height);
