@@ -901,7 +901,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       if (game().getLevel() > 1)
       {
         //map[x0 - 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_L;
-        //map[x0][MAP_HEIGHT - 1]     = wallOffset + MAP_WALL_START_M;
+        map[x0][MAP_HEIGHT - 1]     = floorOffset;
         //map[x0 + 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_R;
       }
     }

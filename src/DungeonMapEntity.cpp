@@ -453,7 +453,8 @@ void DungeonMapEntity::renderDoors(sf::RenderTarget* app)
     app->draw(doorWallSprite);
   }
 
-  if (game().getCurrentMap()->hasNeighbourDown())
+  if (game().getCurrentMap()->hasNeighbourDown()
+      || (game().getLevel() > 1 && game().getCurrentMap()->getRoomType() == roomTypeStarting) )
   {
     doorWallSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT - TILE_HEIGHT / 2);
     doorWallSprite.setRotation(180);
