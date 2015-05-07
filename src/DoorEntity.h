@@ -3,7 +3,16 @@
 
 #include "sfml_game/SpriteEntity.h"
 
-enum doorEnum { DoorStandard, DoorBoss, DoorChallenge };
+enum doorEnum
+{
+  DoorStandard_0,
+  DoorStandard_1,
+  DoorStandard_2,
+  DoorStandard_3,
+  DoorStandard_4,
+  DoorBoss,
+  DoorChallenge
+};
 
 class DoorEntity : public SpriteEntity
 {

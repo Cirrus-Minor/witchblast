@@ -24,8 +24,12 @@ DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
   roomType = roomTypeStarting;
   keyRoomEffect.delay = -1.0f;
   randomSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RANDOM_DUNGEON));
-  doorSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TILES));
+  doorSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_DOORS));
   doorSprite.setOrigin(96, 32);
+  keyStoneSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_DOORS));
+  keyStoneSprite.setOrigin(96, 32);
+  doorWallSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TILES));
+  doorWallSprite.setOrigin(96, 32);
 
   shadowType = ShadowTypeStandard;
 }
@@ -106,10 +110,10 @@ void DungeonMapEntity::animate(float delay)
         if (checkFalling(corpses[i], 48, 48))
         {
           SpriteEntity* spriteEntity
-                  = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES),
-                             corpses[i].x,
-                             corpses[i].y,
-                             64, 64, 10);
+            = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_CORPSES),
+                               corpses[i].x,
+                               corpses[i].y,
+                               64, 64, 10);
           spriteEntity->setAge(0.0f);
           spriteEntity->setLifetime(3.0f);
           spriteEntity->setShrinking(true);
@@ -121,8 +125,8 @@ void DungeonMapEntity::animate(float delay)
         else
         {
           if (corpses[i].velocity.x < 15.0f && corpses[i].velocity.x > -15.0f
-            && corpses[i].velocity.y < 15.0f && corpses[i].velocity.y > -15.0f)
-          autoSpeed(corpses[i], 200);
+              && corpses[i].velocity.y < 15.0f && corpses[i].velocity.y > -15.0f)
+            autoSpeed(corpses[i], 200);
 
           animateParticle(corpses[i], delay, 1.0f);
         }
@@ -355,91 +359,234 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
   }
 }
 
+void DungeonMapEntity::renderKeyStone(sf::RenderTarget* app)
+{
+  int x = game().getFloorX();
+  int y = game().getFloorY();
+
+  int doorType = 0;
+  int doorStypeStandard = DoorStandard_0 + (game().getLevel() - 1) % 5;
+
+  if (game().getCurrentMap()->getNeighbourUp() || game().getCurrentMap()->getRoomType() == roomTypeExit)
+  {
+    if (game().getCurrentMap()->getRoomType() == roomTypeBoss
+        || game().getCurrentFloor()->getRoom(x, y - 1) == roomTypeBoss)
+      doorType = int (DoorBoss);
+    else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
+             || game().getCurrentFloor()->getRoom(x, y - 1) == roomTypeChallenge)
+      doorType = int (DoorChallenge);
+    else
+      doorType = doorStypeStandard;
+
+    keyStoneSprite.setTextureRect(sf::IntRect(64, 128 + 192 * doorType, 192, 64));
+    keyStoneSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT / 2);
+    keyStoneSprite.setRotation(0);
+    app->draw(keyStoneSprite);
+  }
+
+  if (game().getCurrentMap()->getNeighbourDown())
+  {
+    if (game().getCurrentMap()->getRoomType() == roomTypeBoss
+        || game().getCurrentFloor()->getRoom(x, y + 1) == roomTypeBoss)
+      doorType = int (DoorBoss);
+    else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
+             || game().getCurrentFloor()->getRoom(x, y + 1) == roomTypeChallenge)
+      doorType = int (DoorChallenge);
+    else
+      doorType = doorStypeStandard;
+
+    keyStoneSprite.setTextureRect(sf::IntRect(64, 128 + 192 * doorType, 192, 64));
+    keyStoneSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT - TILE_HEIGHT / 2);
+    keyStoneSprite.setRotation(180);
+    app->draw(keyStoneSprite);
+  }
+
+  if (game().getCurrentMap()->getNeighbourLeft())
+  {
+    if (game().getCurrentMap()->getRoomType() == roomTypeBoss
+        || game().getCurrentFloor()->getRoom(x - 1, y) == roomTypeBoss)
+      doorType = int (DoorBoss);
+    else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
+             || game().getCurrentFloor()->getRoom(x - 1, y) == roomTypeChallenge)
+      doorType = int (DoorChallenge);
+    else
+      doorType = doorStypeStandard;
+
+    keyStoneSprite.setTextureRect(sf::IntRect(64, 128 + 192 * doorType, 192, 64));
+    keyStoneSprite.setPosition(TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    keyStoneSprite.setRotation(270);
+    app->draw(keyStoneSprite);
+  }
+
+  if (game().getCurrentMap()->getNeighbourRight())
+  {
+    if (game().getCurrentMap()->getRoomType() == roomTypeBoss
+        || game().getCurrentFloor()->getRoom(x + 1, y) == roomTypeBoss)
+      doorType = int (DoorBoss);
+    else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
+             || game().getCurrentFloor()->getRoom(x + 1, y) == roomTypeChallenge)
+      doorType = int (DoorChallenge);
+    else
+      doorType = doorStypeStandard;
+
+    keyStoneSprite.setTextureRect(sf::IntRect(64, 128 + 192 * doorType, 192, 64));
+    keyStoneSprite.setPosition(TILE_WIDTH * MAP_WIDTH - TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    keyStoneSprite.setRotation(90);
+    app->draw(keyStoneSprite);
+  }
+}
+
 void DungeonMapEntity::renderDoors(sf::RenderTarget* app)
 {
   int x = game().getFloorX();
   int y = game().getFloorY();
 
-  game().renderDoors();
+  int doorType = 0;
+  int doorStypeStandard = DoorStandard_0 + (game().getLevel() - 1) % 5;
+
+  // fading from doors
+  doorWallSprite.setTextureRect(sf::IntRect(DOOR_SHADOW_SPRITE_X, DOOR_SHADOW_SPRITE_Y, 192, 64));
   if (game().getCurrentMap()->hasNeighbourUp())
   {
-    doorSprite.setTextureRect(sf::IntRect(MAP_OUTERDOOR_X, MAP_OUTERDOOR_Y + (128 * game().getCurrentMap()->getWallOffset() / 48), 192, 64));
-    doorSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT / 2);
-    doorSprite.setRotation(0);
-    app->draw(doorSprite);
+    doorWallSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT / 2);
+    doorWallSprite.setRotation(0);
+    app->draw(doorWallSprite);
+  }
 
+  if (game().getCurrentMap()->hasNeighbourDown())
+  {
+    doorWallSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT - TILE_HEIGHT / 2);
+    doorWallSprite.setRotation(180);
+    app->draw(doorWallSprite);
+  }
+
+  if (game().getCurrentMap()->hasNeighbourLeft())
+  {
+    doorWallSprite.setPosition(TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    doorWallSprite.setRotation(270);
+    app->draw(doorWallSprite);
+  }
+
+  if (game().getCurrentMap()->hasNeighbourRight())
+  {
+    doorWallSprite.setPosition(TILE_WIDTH * MAP_WIDTH - TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    doorWallSprite.setRotation(90);
+    app->draw(doorWallSprite);
+  }
+
+  game().renderDoors();
+  if (game().getCurrentMap()->hasNeighbourUp()
+      || game().getCurrentMap()->getRoomType() == roomTypeExit)
+  {
     if (game().getCurrentMap()->getRoomType() == roomTypeBoss
         || game().getCurrentFloor()->getRoom(x, y - 1) == roomTypeBoss)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_BOSS_X, MAP_DECO_DOOR_BOSS_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = int (DoorBoss);
     }
     else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
-        || game().getCurrentFloor()->getRoom(x, y - 1) == roomTypeChallenge)
+             || game().getCurrentFloor()->getRoom(x, y - 1) == roomTypeChallenge)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_CHAL_X, MAP_DECO_DOOR_CHAL_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = DoorChallenge;
     }
-  }
-  if (game().getCurrentMap()->hasNeighbourDown())
-  {
-    doorSprite.setTextureRect(sf::IntRect(MAP_OUTERDOOR_X, MAP_OUTERDOOR_Y + (128 * game().getCurrentMap()->getWallOffset() / 48), 192, 64));
-    doorSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT - TILE_HEIGHT / 2);
-    doorSprite.setRotation(180);
-    app->draw(doorSprite);
+    else
+      doorType = doorStypeStandard;
 
+    doorWallSprite.setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, game().getCurrentMap()->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
+    doorWallSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT / 2);
+    doorWallSprite.setRotation(0);
+    app->draw(doorWallSprite);
+
+    if (game().getCurrentMap()->getRoomType() == roomTypeExit)
+    {
+      doorWallSprite.setTextureRect(sf::IntRect(DOOR_STAIRS_SPRITE_X, DOOR_STAIRS_SPRITE_Y, 192, 64));
+      app->draw(doorWallSprite);
+    }
+
+    doorSprite.setTextureRect(sf::IntRect(64, 64 + 192 * doorType, 192, 64));
+    doorSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT / 2);
+    doorSprite.setRotation(0);
+    app->draw(doorSprite);
+  }
+  if (game().getCurrentMap()->hasNeighbourDown()
+      || (game().getLevel() > 1 && game().getCurrentMap()->getRoomType() == roomTypeStarting))
+  {
     if (game().getCurrentMap()->getRoomType() == roomTypeBoss
         || game().getCurrentFloor()->getRoom(x, y + 1) == roomTypeBoss)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_BOSS_X, MAP_DECO_DOOR_BOSS_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = int (DoorBoss);
     }
     else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
-        || game().getCurrentFloor()->getRoom(x, y + 1) == roomTypeChallenge)
+             || game().getCurrentFloor()->getRoom(x, y + 1) == roomTypeChallenge)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_CHAL_X, MAP_DECO_DOOR_CHAL_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = DoorChallenge;
     }
+    else
+      doorType = doorStypeStandard;
+
+    doorWallSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT - TILE_HEIGHT / 2);
+    doorWallSprite.setRotation(180);
+    doorWallSprite.setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, game().getCurrentMap()->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
+    app->draw(doorWallSprite);
+
+    if (game().getLevel() > 1 && game().getCurrentMap()->getRoomType() == roomTypeStarting)
+    {
+      doorWallSprite.setTextureRect(sf::IntRect(DOOR_GRID_SPRITE_X, DOOR_GRID_SPRITE_Y, 192, 64));
+      app->draw(doorWallSprite);
+    }
+    doorSprite.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT - TILE_HEIGHT / 2);
+    doorSprite.setRotation(180);
+    doorSprite.setTextureRect(sf::IntRect(64, 64 + 192 * doorType, 192, 64));
+    app->draw(doorSprite);
   }
   if (game().getCurrentMap()->hasNeighbourLeft())
   {
-    doorSprite.setTextureRect(sf::IntRect(MAP_OUTERDOOR_X, MAP_OUTERDOOR_Y + (128 * game().getCurrentMap()->getWallOffset() / 48), 192, 64));
-    doorSprite.setPosition(TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
-    doorSprite.setRotation(270);
-    app->draw(doorSprite);
-
     if (game().getCurrentMap()->getRoomType() == roomTypeBoss
         || game().getCurrentFloor()->getRoom(x - 1, y) == roomTypeBoss)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_BOSS_X, MAP_DECO_DOOR_BOSS_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = int (DoorBoss);
     }
     else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
-        || game().getCurrentFloor()->getRoom(x - 1, y) == roomTypeChallenge)
+             || game().getCurrentFloor()->getRoom(x - 1, y) == roomTypeChallenge)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_CHAL_X, MAP_DECO_DOOR_CHAL_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = DoorChallenge;
     }
+    else
+      doorType = doorStypeStandard;
+
+    doorWallSprite.setPosition(TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    doorWallSprite.setRotation(270);
+    doorWallSprite.setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, game().getCurrentMap()->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
+    app->draw(doorWallSprite);
+
+    doorSprite.setTextureRect(sf::IntRect(64, 64 + 192 * doorType, 192, 64));
+    doorSprite.setPosition(TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    doorSprite.setRotation(270);
+    app->draw(doorSprite);
   }
   if (game().getCurrentMap()->hasNeighbourRight())
   {
-    doorSprite.setTextureRect(sf::IntRect(MAP_OUTERDOOR_X, MAP_OUTERDOOR_Y + (128 * game().getCurrentMap()->getWallOffset() / 48), 192, 64));
-    doorSprite.setPosition(TILE_WIDTH * MAP_WIDTH - TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
-    doorSprite.setRotation(90);
-    app->draw(doorSprite);
-
     if (game().getCurrentMap()->getRoomType() == roomTypeBoss
         || game().getCurrentFloor()->getRoom(x + 1, y) == roomTypeBoss)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_BOSS_X, MAP_DECO_DOOR_BOSS_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = int (DoorBoss);
     }
     else if (game().getCurrentMap()->getRoomType() == roomTypeChallenge
-        || game().getCurrentFloor()->getRoom(x + 1, y) == roomTypeChallenge)
+             || game().getCurrentFloor()->getRoom(x + 1, y) == roomTypeChallenge)
     {
-      doorSprite.setTextureRect(sf::IntRect(MAP_DECO_DOOR_CHAL_X, MAP_DECO_DOOR_CHAL_Y, 192, 64));
-      app->draw(doorSprite);
+      doorType = DoorChallenge;
     }
+    else
+      doorType = doorStypeStandard;
+
+    doorWallSprite.setPosition(TILE_WIDTH * MAP_WIDTH - TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    doorWallSprite.setRotation(90);
+    doorWallSprite.setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, game().getCurrentMap()->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
+    app->draw(doorWallSprite);
+
+    doorSprite.setTextureRect(sf::IntRect(64, 64 + 192 * doorType, 192, 64));
+    doorSprite.setPosition(TILE_WIDTH * MAP_WIDTH - TILE_WIDTH / 2, TILE_HEIGHT * MAP_HEIGHT / 2);
+    doorSprite.setRotation(90);
+    app->draw(doorSprite);
   }
 }
 
@@ -449,23 +596,24 @@ void DungeonMapEntity::renderPost(sf::RenderTarget* app)
   displayCorpses(app);
   switch (shadowType)
   {
-    case ShadowTypeStandard:
-      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW));
-      break;
-    case ShadowTypeCorner:
-      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_CORNER));
-      break;
-    case ShadowTypeSmall:
-      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_SMALL));
-      break;
-    case ShadowTypeMedium:
-      app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_MEDIUM));
-      break;
+  case ShadowTypeStandard:
+    app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW));
+    break;
+  case ShadowTypeCorner:
+    app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_CORNER));
+    break;
+  case ShadowTypeSmall:
+    app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_SMALL));
+    break;
+  case ShadowTypeMedium:
+    app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_MEDIUM));
+    break;
   }
 }
 
 void DungeonMapEntity::renderOverlay(sf::RenderTarget* app)
 {
+  renderKeyStone(app);
   app->draw(overlaySprite);
 }
 
@@ -506,9 +654,9 @@ void DungeonMapEntity::refreshMap()
 
 bool DungeonMapEntity::shouldBeTransformed(int part)
 {
-  part -= game().getCurrentMap()->getWallOffset();
+  part -= game().getCurrentMap()->getWallType() * 24;
 
-  if (part >= MAP_WALL_8 && part <= MAP_WALL_DOOR_8) return true;
+  if (part >= MAP_WALL_8 && part < MAP_WALL_8 + 24) return true;
 
   else return false;
 }
@@ -592,28 +740,28 @@ void DungeonMapEntity::computeVertices()
           quad[3].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
         // corridors
-        else if (i < MAP_WIDTH / 2 && j <= MAP_HEIGHT / 2 && gameMap->getTile(i, j - 1) != game().getCurrentMap()->getWallOffset() + MAP_WALL_X)
+        else if (i < MAP_WIDTH / 2 && j <= MAP_HEIGHT / 2 && gameMap->getTile(i, j - 1) != game().getCurrentMap()->getWallType() * 24 + MAP_WALL_X)
         {
           quad[0].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
           quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
           quad[1].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
-        else if (i < MAP_WIDTH / 2 && j > MAP_HEIGHT / 2 && gameMap->getTile(i, j + 1) != game().getCurrentMap()->getWallOffset() + MAP_WALL_X)
+        else if (i < MAP_WIDTH / 2 && j > MAP_HEIGHT / 2 && gameMap->getTile(i, j + 1) != game().getCurrentMap()->getWallType() * 24 + MAP_WALL_X)
         {
           quad[1].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[2].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
           quad[3].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
           quad[0].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
-        else if (i > MAP_WIDTH / 2 && j <= MAP_HEIGHT / 2 && gameMap->getTile(i, j - 1) != game().getCurrentMap()->getWallOffset() + MAP_WALL_X)
+        else if (i > MAP_WIDTH / 2 && j <= MAP_HEIGHT / 2 && gameMap->getTile(i, j - 1) != game().getCurrentMap()->getWallType() * 24 + MAP_WALL_X)
         {
           quad[3].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[0].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
           quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
           quad[2].position = sf::Vector2f(x + i * tileWidth, y + (j + 1) * tileHeight + (tileBoxHeight - tileHeight));
         }
-        else if (i > MAP_WIDTH / 2 && j > MAP_HEIGHT / 2 && gameMap->getTile(i, j + 1) != game().getCurrentMap()->getWallOffset() + MAP_WALL_X)
+        else if (i > MAP_WIDTH / 2 && j > MAP_HEIGHT / 2 && gameMap->getTile(i, j + 1) != game().getCurrentMap()->getWallType() * 24 + MAP_WALL_X)
         {
           quad[2].position = sf::Vector2f(x + i * tileWidth, y + j * tileHeight);
           quad[1].position = sf::Vector2f(x + (i + 1) * tileWidth + (tileBoxWidth -tileWidth), y + j * tileHeight);
@@ -684,12 +832,12 @@ void DungeonMapEntity::computeVertices()
       break;
     default:
       if ( gameMap->getObjectTile(6, 2) == MAPOBJ_BANK_TOP
-            || gameMap->getObjectTile(6, 2) == MAPOBJ_BANK
-          || gameMap->getObjectTile(6, 2) == MAPOBJ_BANK_BOTTOM
-          || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK_TOP
-            || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK
-          || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK_BOTTOM
-          )
+           || gameMap->getObjectTile(6, 2) == MAPOBJ_BANK
+           || gameMap->getObjectTile(6, 2) == MAPOBJ_BANK_BOTTOM
+           || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK_TOP
+           || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK
+           || gameMap->getObjectTile(8, 2) == MAPOBJ_BANK_BOTTOM
+         )
         ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_temple.png");
       else
         ImageManager::getInstance().getImage(IMAGE_OVERLAY)->loadFromFile("media/overlay_00.png");
@@ -843,7 +991,7 @@ void DungeonMapEntity::computeShadowVertices()
     quad[2].texCoords = sf::Vector2f((xd + xd + 1) * tileBoxWidth, yd * tileBoxHeight);
     quad[3].texCoords = sf::Vector2f((xd + 1) * tileBoxWidth, yd * tileBoxHeight);
   }
-   // left
+  // left
   {
     sf::Vertex* quad = &shadowVertices[3 * 4];
     quad[0].position = sf::Vector2f(x0 * tileWidth, ym0 * tileHeight);

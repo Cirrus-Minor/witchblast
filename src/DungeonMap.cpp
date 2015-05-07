@@ -94,17 +94,17 @@ int DungeonMap::getFloorOffset()
 {
   return floorOffset;
 }
-int DungeonMap::getWallOffset()
+int DungeonMap::getWallType()
 {
-  return wallOffset;
+  return wallType;
 }
 void DungeonMap::setFloorOffset(int n)
 {
   floorOffset = n;
 }
-void DungeonMap::setWallOffset(int n)
+void DungeonMap::setWallType(int n)
 {
-  wallOffset = n;
+  wallType = n;
 }
 
 std::list<DungeonMap::itemListElement> DungeonMap::getItemList()
@@ -339,49 +339,50 @@ void DungeonMap::initRoom()
 
   // style
   floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
-  wallOffset = 0; //((game().getLevel() - 1) % 3) * 48;
+  wallType = 0; //((game().getLevel() - 1) % 3) ;
+  int wallOffset = wallType * 24;
 
   // outer walls
-  map[0][0] = wallOffset + MAP_WALL_7;
+  map[0][0] = wallOffset + MAP_WALL_7 + rand() % 2;
   for ( i = 1 ; i < width -1 ; i++)
   {
     if (i == width / 2)
     {
-      map[i][0] = wallOffset + MAP_WALL_8;
-      map[i][height - 1] = wallOffset + MAP_WALL_8;
+      map[i][0] = wallOffset + MAP_WALL_8 + rand() % 2;
+      map[i][height - 1] = wallOffset + MAP_WALL_8 + rand() % 2;
     }
     else if (i < width / 2)
     {
-      map[i][0] = wallOffset + MAP_WALL_87;
-      map[i][height - 1] = wallOffset + MAP_WALL_87;
+      map[i][0] = wallOffset + MAP_WALL_87 + rand() % 8;
+      map[i][height - 1] = wallOffset + MAP_WALL_87 + rand() % 8;
     }
     else
     {
-      map[i][0] = wallOffset + MAP_WALL_87;
-      map[i][height - 1] = wallOffset + MAP_WALL_87;
+      map[i][0] = wallOffset + MAP_WALL_87 + rand() % 8;
+      map[i][height - 1] = wallOffset + MAP_WALL_87 + rand() % 8;
     }
   }
-  map[width - 1][0] = wallOffset + MAP_WALL_7;
+  map[width - 1][0] = wallOffset + MAP_WALL_7 + rand() % 2;
   for ( int i = 1 ; i < height -1 ; i++)
   {
     if (i == height / 2)
     {
-      map[0][i] = wallOffset + MAP_WALL_8;
-      map[width - 1][i] = wallOffset + MAP_WALL_8;
+      map[0][i] = wallOffset + MAP_WALL_8 + rand() % 2;
+      map[width - 1][i] = wallOffset + MAP_WALL_8 + rand() % 2;
     }
     else if (i < height / 2)
     {
-      map[0][i] = wallOffset + MAP_WALL_87;
-      map[width - 1][i] = wallOffset + MAP_WALL_87;
+      map[0][i] = wallOffset + MAP_WALL_87 + rand() % 8;
+      map[width - 1][i] = wallOffset + MAP_WALL_87 + rand() % 8;
     }
     else
     {
-      map[0][i] = wallOffset + MAP_WALL_87;
-      map[width - 1][i] = wallOffset + MAP_WALL_87;
+      map[0][i] = wallOffset + MAP_WALL_87 + rand() % 8;
+      map[width - 1][i] = wallOffset + MAP_WALL_87 + rand() % 8;
     }
   }
-  map[0][height - 1] = wallOffset + MAP_WALL_7;
-  map[width - 1][height - 1] = wallOffset + MAP_WALL_7;
+  map[0][height - 1] = wallOffset + MAP_WALL_7 + rand() % 2;
+  map[width - 1][height - 1] = wallOffset + MAP_WALL_7 + rand() % 2;
 
   // floor
   for ( j = 1 ; j < height - 1 ; j++)
@@ -417,7 +418,7 @@ void DungeonMap::initRoom()
   }
 
   // alternative walls
-  for (i = 0; i < 9; i++)
+  for (i = 0; i < 8; i++)
   {
     if (rand() % 2 > 0)
     {
@@ -436,10 +437,10 @@ void DungeonMap::initRoom()
         yTile = 1 + rand() % 6;
         if (yTile > 3) yTile++;
       }
-      map[xTile][yTile] = i + wallOffset + MAP_WALL_ALTERN;
+      map[xTile][yTile] = i + wallOffset + MAP_WALL_87 + 8;
     }
   }
-  if (hasNeighbourUp() && rand() % 3 == 0)
+  /*if (hasNeighbourUp() && rand() % 3 == 0)
   {
     map[x0 - 2][0] = 9 + wallOffset + MAP_WALL_ALTERN;
     map[x0 + 2][0] = 9 + wallOffset + MAP_WALL_ALTERN;
@@ -458,40 +459,40 @@ void DungeonMap::initRoom()
   {
     map[MAP_WIDTH - 1][y0 - 2] = 9 + wallOffset + MAP_WALL_ALTERN;
     map[MAP_WIDTH - 1][y0 + 2] = 9 + wallOffset + MAP_WALL_ALTERN;
-  }
+  }*/
 
   // doors ?
   if (gameFloor != NULL)
   {
     if (x > 0 && gameFloor->getRoom(x - 1, y) > 0)
     {
-      map[0][MAP_HEIGHT / 2] = wallOffset + MAP_WALL_DOOR_8;
-      map[0][MAP_HEIGHT / 2 - 1] = wallOffset + MAP_WALL_DOOR_7;
-      map[0][MAP_HEIGHT / 2 + 1] = wallOffset + MAP_WALL_DOOR_7;
+      map[0][MAP_HEIGHT / 2] = floorOffset;
+      map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
+      map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
       openDoor(0, y0);
     }
 
     if (x < MAP_WIDTH - 1 && gameFloor->getRoom(x + 1, y) > 0)
     {
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = wallOffset + MAP_WALL_DOOR_8;
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = wallOffset + MAP_WALL_DOOR_7;
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = wallOffset + MAP_WALL_DOOR_7;
+      map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = floorOffset;
+      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
+      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
       openDoor(MAP_WIDTH - 1, y0);
     }
 
-    if (y > 0 && gameFloor->getRoom(x, y-1) > 0)
+    if (y > 0 && gameFloor->getRoom(x, y - 1) > 0)
     {
-      map[MAP_WIDTH / 2][0] = wallOffset + MAP_WALL_DOOR_8;
-      map[MAP_WIDTH / 2 - 1][0] = wallOffset + MAP_WALL_DOOR_7;
-      map[MAP_WIDTH / 2 + 1][0] = wallOffset + MAP_WALL_DOOR_7;
+      map[MAP_WIDTH / 2][0] = floorOffset;
+      map[MAP_WIDTH / 2 - 1][0] = floorOffset;
+      map[MAP_WIDTH / 2 + 1][0] = floorOffset;
       openDoor(x0, 0);
     }
 
-    if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y+1) > 0)
+    if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y + 1) > 0)
     {
-      map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_DOOR_8;
-      map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_DOOR_7;
-      map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_DOOR_7;
+      map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = floorOffset;
+      map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
+      map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
       openDoor(x0, MAP_HEIGHT -1);
     }
   }
@@ -858,10 +859,6 @@ Vector2D DungeonMap::generateKeyRoom()
   map[x0 + 1][y0] = MAP_TILE_KEY;
   map[x0][y0 - 1] = MAP_TILE_KEY;
   map[x0][y0 + 1] = MAP_TILE_KEY;
-  /*objectsMap[x0 -1][y0] = 70;
-  objectsMap[x0 + 1][y0] = 71;
-  objectsMap[x0][y0 - 1] = 72;
-  objectsMap[x0][y0 + 1] = 73;*/
   generateRandomTile();
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
@@ -871,9 +868,9 @@ void DungeonMap::generateExitRoom()
 {
   initRoom();
   int x0 = MAP_WIDTH / 2;
-  map[x0][0] = wallOffset + MAP_STAIRS_UP;
-  map[x0 - 1][0] = wallOffset + MAP_WALL_EXIT_L;
-  map[x0 + 1][0] = wallOffset + MAP_WALL_EXIT_R;
+  map[x0][0] = floorOffset;
+  map[x0 - 1][0] = floorOffset;
+  map[x0 + 1][0] = floorOffset;
 
   logicalMap[x0][0] = LogicalFloor;
 
@@ -903,9 +900,9 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
       if (game().getLevel() > 1)
       {
-        map[x0 - 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_L;
-        map[x0][MAP_HEIGHT - 1]     = wallOffset + MAP_WALL_START_M;
-        map[x0 + 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_R;
+        //map[x0 - 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_L;
+        //map[x0][MAP_HEIGHT - 1]     = wallOffset + MAP_WALL_START_M;
+        //map[x0 + 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_R;
       }
     }
     else if (roomType == roomTypeBoss && (game().getLevel() == 2) ) // giant slime
@@ -931,26 +928,27 @@ void DungeonMap::generateRoomWithoutHoles(int type)
   if (type == 1) // corner block
   {
     if (rand() % 3 == 0) initPattern(PatternSmallChecker);
+    int wallOffset = wallType * 24;
 
-    map[0][0] = wallOffset + MAP_WALL_X;
+    map[0][0] = MAP_WALL_X;
     map[0][1] = wallOffset + MAP_WALL_7;
     map[1][1] = wallOffset + MAP_WALL_77;
     map[1][0] = wallOffset + MAP_WALL_7;
     logicalMap[1][1] = LogicalWall;
 
-    map[0][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_X;
+    map[0][MAP_HEIGHT - 1] = MAP_WALL_X;
     map[0][MAP_HEIGHT - 2] = wallOffset + MAP_WALL_7;
     map[1][MAP_HEIGHT - 2] = wallOffset + MAP_WALL_77;
     map[1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_7;
     logicalMap[1][MAP_HEIGHT -2] = LogicalWall;
 
-    map[MAP_WIDTH - 1][0] = wallOffset + MAP_WALL_X;
+    map[MAP_WIDTH - 1][0] = MAP_WALL_X;
     map[MAP_WIDTH - 1][1] = wallOffset + MAP_WALL_7;
     map[MAP_WIDTH - 2][1] = wallOffset + MAP_WALL_77;
     map[MAP_WIDTH - 2][0] = wallOffset + MAP_WALL_7;
     logicalMap[MAP_WIDTH - 2][1] = LogicalWall;
 
-    map[MAP_WIDTH - 1][MAP_HEIGHT -1] = wallOffset + MAP_WALL_X;
+    map[MAP_WIDTH - 1][MAP_HEIGHT -1] = MAP_WALL_X;
     map[MAP_WIDTH - 1][MAP_HEIGHT -2] = wallOffset + MAP_WALL_7;
     map[MAP_WIDTH - 2][MAP_HEIGHT -2] = wallOffset + MAP_WALL_77;
     map[MAP_WIDTH - 2][MAP_HEIGHT -1] = wallOffset + MAP_WALL_7;
@@ -1385,12 +1383,14 @@ void DungeonMap::generateCorridors()
   int xCor = 1 + rand()% 4;
   int yCor = 1 + rand()% 1;
 
+  int wallOffset = wallType * 24;
+
   if (!hasNeighbourLeft())
   {
     for (int i = 0; i < xCor; i++)
       for (int j = 0; j < MAP_HEIGHT; j++)
       {
-        map[i][j] = wallOffset + MAP_WALL_X;
+        map[i][j] = MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
       }
 
@@ -1400,7 +1400,7 @@ void DungeonMap::generateCorridors()
     for (int i = MAP_WIDTH - 1; i > MAP_WIDTH - 1 - xCor; i--)
       for (int j = 0; j < MAP_HEIGHT; j++)
       {
-        map[i][j] = wallOffset + MAP_WALL_X;
+        map[i][j] = MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
       }
   }
@@ -1409,7 +1409,7 @@ void DungeonMap::generateCorridors()
     for (int i = 0; i < MAP_WIDTH; i++)
       for (int j = 0; j < yCor; j++)
       {
-        map[i][j] = wallOffset + MAP_WALL_X;
+        map[i][j] = MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
       }
   }
@@ -1418,7 +1418,7 @@ void DungeonMap::generateCorridors()
     for (int i = 0; i < MAP_WIDTH; i++)
       for (int j = MAP_HEIGHT - 1; j > MAP_HEIGHT - 1 - yCor; j--)
       {
-        map[i][j] = wallOffset + MAP_WALL_X;
+        map[i][j] = MAP_WALL_X;
         logicalMap[i][j] = LogicalWall;
       }
   }
@@ -1428,62 +1428,62 @@ void DungeonMap::generateCorridors()
   {
     for (int j = 0; j < MAP_HEIGHT; j++)
     {
-      if (map[i][j] != wallOffset + MAP_WALL_X)
+      if (map[i][j] != MAP_WALL_X)
       {
-        if (getTile(i - 1, j) == wallOffset + MAP_WALL_X)
+        if (getTile(i - 1, j) == MAP_WALL_X)
         {
-          if (j == 0 || getTile(i, j - 1) == wallOffset + MAP_WALL_X)
+          if (j == 0 || getTile(i, j - 1) == MAP_WALL_X)
           {
             map[i][j] = wallOffset + MAP_WALL_7;
           }
-          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == wallOffset + MAP_WALL_X)
+          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X)
           {
             map[i][j] = wallOffset + MAP_WALL_7;
           }
           else
           {
-            if (j < MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
-            else if (j > MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
+            if (j < MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
+            else if (j > MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
             else map[i][j] = wallOffset + MAP_WALL_8;
           }
           logicalMap[i][j] = LogicalWall;
         }
-        else if (getTile(i + 1, j) == wallOffset + MAP_WALL_X)
+        else if (getTile(i + 1, j) == MAP_WALL_X)
         {
-          if (j == 0 || getTile(i, j - 1) == wallOffset + MAP_WALL_X)
+          if (j == 0 || getTile(i, j - 1) == MAP_WALL_X)
           {
             map[i][j] = wallOffset + MAP_WALL_7;
             map[i][j] = wallOffset + MAP_WALL_7;
           }
-          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == wallOffset + MAP_WALL_X) map[i][j] = wallOffset + MAP_WALL_7;
+          else if (j == MAP_HEIGHT - 1 || getTile(i, j + 1) == MAP_WALL_X) map[i][j] = wallOffset + MAP_WALL_7;
           else
           {
-            if (j < MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
-            else if (j > MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87;
+            if (j < MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
+            else if (j > MAP_HEIGHT / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
             else map[i][j] = wallOffset + MAP_WALL_8;
           }
           logicalMap[i][j] = LogicalWall;
         }
-        else if (getTile(i, j - 1) == wallOffset + MAP_WALL_X)
+        else if (getTile(i, j - 1) == MAP_WALL_X)
         {
           if (i == 0) map[i][j] = wallOffset + MAP_WALL_7;
           else if (i == MAP_WIDTH - 1) map[i][j] = wallOffset + MAP_WALL_7;
           else
           {
-            if (i < MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
-            else if (i > MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
+            if (i < MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
+            else if (i > MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
             else map[i][j] = wallOffset + MAP_WALL_8;
           }
           logicalMap[i][j] = LogicalWall;
         }
-        else if (getTile(i, j + 1) == wallOffset + MAP_WALL_X)
+        else if (getTile(i, j + 1) == MAP_WALL_X)
         {
           if (i == 0) map[i][j] = wallOffset + MAP_WALL_7;
           else if (i == MAP_WIDTH - 1) map[i][j] = wallOffset + MAP_WALL_7;
           else
           {
-            if (i < MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
-            else if (i > MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87;
+            if (i < MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
+            else if (i > MAP_WIDTH / 2) map[i][j] = wallOffset + MAP_WALL_87 + rand() % 8;
             else map[i][j] = wallOffset + MAP_WALL_8;
           }
           logicalMap[i][j] = LogicalWall;

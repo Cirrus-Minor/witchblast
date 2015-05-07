@@ -40,26 +40,31 @@ const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_TEMPLE          =   192;
 const int MAP_CARPET          =   200;
 const int MAP_TILE_KEY        =   209;
-//const int MAP_GRID            =   240;
+const int MAP_EXIT_UP         =   210;
+const int MAP_EXIT_DOWN       =   211;
+const int MAP_EXIT_LEFT       =   212;
+const int MAP_EXIT_RIGHT      =   213;
+
 const int MAP_STAIRS_UP   =   2 + MAP_WALL_BEGIN;
 
 // walls
-const int MAP_WALL_X        =   0 + MAP_WALL_BEGIN;
+const int MAP_WALL_X        =   MAP_WALL_BEGIN - 1;
 const int MAP_WALL_EXIT_L   =   1 + MAP_WALL_BEGIN;
 const int MAP_WALL_EXIT_R   =   3 + MAP_WALL_BEGIN;
-const int MAP_WALL_START_L  =   4 + MAP_WALL_BEGIN;
-const int MAP_WALL_START_M  =   5 + MAP_WALL_BEGIN;
-const int MAP_WALL_START_R  =   6 + MAP_WALL_BEGIN;
+//const int MAP_WALL_START_L  =   4 + MAP_WALL_BEGIN;
+//const int MAP_WALL_START_M  =   5 + MAP_WALL_BEGIN;
+//const int MAP_WALL_START_R  =   6 + MAP_WALL_BEGIN;
 const int MAP_WALL_EXIT_L_SPRITE =   7 + MAP_WALL_BEGIN;
 
-const int MAP_WALL_8        =   8 + MAP_WALL_BEGIN;
-const int MAP_WALL_7        =   9 + MAP_WALL_BEGIN;
-const int MAP_WALL_87       =   10 + MAP_WALL_BEGIN;
-const int MAP_WALL_77       =   11 + MAP_WALL_BEGIN;
+const int MAP_WALL_8        =   0 + MAP_WALL_BEGIN;
+const int MAP_WALL_7        =   2 + MAP_WALL_BEGIN;
+const int MAP_WALL_77       =   4 + MAP_WALL_BEGIN;
+const int MAP_WALL_87       =   5 + MAP_WALL_BEGIN;
+
 const int MAP_WALL_ALTERN   =   12 + MAP_WALL_BEGIN;
 const int MAP_WALL_DOOR_7   =   22 + MAP_WALL_BEGIN;
 const int MAP_WALL_DOOR_8   =   23 + MAP_WALL_BEGIN;
-
+/*
 const int MAP_OUTERDOOR_X   = 192;
 const int MAP_OUTERDOOR_Y   = 768;
 
@@ -83,7 +88,19 @@ const int MAP_DOOR_BOSS_H_Y        = 0 + MAP_DOOR_BEGIN_Y;
 const int MAP_DECO_DOOR_BOSS_X   = 320 + MAP_DOOR_BEGIN_X;
 const int MAP_DECO_DOOR_BOSS_Y   = 0 + MAP_DOOR_BEGIN_Y;
 const int MAP_DECO_DOOR_CHAL_X   = 512 + MAP_DOOR_BEGIN_X;;
-const int MAP_DECO_DOOR_CHAL_Y   = 0 + MAP_DOOR_BEGIN_Y;
+const int MAP_DECO_DOOR_CHAL_Y   = 0 + MAP_DOOR_BEGIN_Y;*/
+
+const int DOOR_WALL_SPRITE_X     = 1344;
+const int DOOR_WALL_SPRITE_Y     = 704;
+
+const int DOOR_GRID_SPRITE_X   = 1280;
+const int DOOR_GRID_SPRITE_Y   = 640;
+
+const int DOOR_STAIRS_SPRITE_X   = 1088;
+const int DOOR_STAIRS_SPRITE_Y   = 640;
+
+const int DOOR_SHADOW_SPRITE_X   = 896;
+const int DOOR_SHADOW_SPRITE_Y   = 640;
 
 const int ROOM_TYPE_CHECKER = 5;
 const int ROOM_TYPE_ALL     = 6;
@@ -138,7 +155,7 @@ const randomDungeonTileStruct randomDungeonTiles[NB_RANDOM_TILES] =
   { 128, 128, 0, 448, true, false, true },
   { 128, 128, 128, 448, true, true, true },
   { 128, 128, 256, 448, true, true, true },
-  { 128, 128, 384, 448, true, true, true },
+  { 128, 128, 384, 448, false, false, false },
   { 128, 128, 512, 448, false, false, false},
   { 128, 128, 640, 448, false, false, false },
   { 192, 192, 0, 576, true, true, true },
@@ -246,9 +263,9 @@ class DungeonMap : public GameMap
     bool isDoor(int x, int y);
 
     int getFloorOffset();
-    int getWallOffset();
+    int getWallType();
     void setFloorOffset(int n);
-    void setWallOffset(int n);
+    void setWallType(int n);
 
   protected:
   private:
@@ -279,7 +296,7 @@ class DungeonMap : public GameMap
     void addHole(int x, int y);
 
     int floorOffset;
-    int wallOffset;
+    int wallType;
 };
 
 #endif // MAGICMAP_H

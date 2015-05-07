@@ -318,7 +318,7 @@ WitchBlastGame::WitchBlastGame()
     "media/portrait_part.png",    "media/dungeon_random.png",
     "media/dungeon_objects.png",  "media/shadows_standard.png",
     "media/shadows_corners.png",  "media/shadows_medium.png",
-    "media/shadows_small.png",
+    "media/shadows_small.png",    "media/doors.png",
   };
 
   for (const char *const filename : images)
@@ -453,6 +453,7 @@ void WitchBlastGame::enableAA(bool enable)
     if (i != IMAGE_TILES && i != IMAGE_DUNGEON_OBJECTS
         && i != IMAGE_TILES_SHADOW && i != IMAGE_TILES_SHADOW_CORNER  && i != IMAGE_TILES_SHADOW_MEDIUM
         && i != IMAGE_MINIMAP
+        && i != IMAGE_DOORS
         && i != IMAGE_ITEMS_PRES && i != IMAGE_ITEMS_EQUIP_PRES && i != IMAGE_CORPSES
         && i != IMAGE_CORPSES_BIG)
       ImageManager::getInstance().getImage(i)->setSmooth(enable);
@@ -3447,7 +3448,7 @@ void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnu
     return;
   }
   doorEntity[doorId]->setVisible(true);
-  doorEntity[doorId]->setDoorType(DoorStandard);
+  doorEntity[doorId]->setDoorType((doorEnum)(DoorStandard_0 + (level - 1) % 5));
   if (roomNeighbour == roomTypeBoss || roomCurrent == roomTypeBoss)
     doorEntity[doorId]->setDoorType(DoorBoss);
   if (roomNeighbour == roomTypeChallenge || roomCurrent == roomTypeChallenge)
@@ -3510,7 +3511,7 @@ void WitchBlastGame::refreshMap()
   checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
 
   // keystones
-  int keyStoneFrame = 12 + (currentMap->getWallOffset() / 24);
+  /*int keyStoneFrame = 12 + (currentMap->getWallOffset() / 24);
 
   if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
   {
@@ -3550,7 +3551,7 @@ void WitchBlastGame::refreshMap()
     keystoneEntity->setAngle(90);
     keystoneEntity->setFrame(keyStoneFrame);
     keystoneEntity->setType(ENTITY_EFFECT);
-  }
+  }*/
 
   // pet slime
   if (player->isEquiped(EQUIP_PET_SLIME) && currentMap->getRoomType() != roomTypeTemple) new SlimePetEntity();
@@ -4821,7 +4822,7 @@ void WitchBlastGame::saveGame()
             }
             // style
             file << currentFloor->getMap(i, j)->getFloorOffset() << " "
-              << currentFloor->getMap(i, j)->getWallOffset() << std::endl;
+              << currentFloor->getMap(i, j)->getWallType() << std::endl;
             // items, etc...
             std::list<DungeonMap::itemListElement> itemList = currentFloor->getMap(i, j)->getItemList();
             file << itemList.size() << std::endl;
@@ -5001,7 +5002,7 @@ bool WitchBlastGame::loadGame()
         file >> n;
         iMap->setFloorOffset(n);
         file >> n;
-        iMap->setWallOffset(n);
+        iMap->setWallType(n);
 
         // items int the map
         file >> n;

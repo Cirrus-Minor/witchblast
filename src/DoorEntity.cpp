@@ -4,7 +4,7 @@
 
 #include "DungeonMap.h"
 
-DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_TILES))
+DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_DOORS))
 {
   this->direction = direction;
   isOpen = true;
@@ -13,7 +13,7 @@ DoorEntity::DoorEntity(int direction) : SpriteEntity (ImageManager::getInstance(
   height = TILE_HEIGHT;
   z = -0.5f;
   type = ENTITY_DOOR;
-  doorType = DoorStandard;
+  doorType = DoorStandard_0;
   timer = 0.0f;
 }
 
@@ -59,21 +59,13 @@ void DoorEntity::renderDoors(sf::RenderTarget* app)
 
   if (direction == 8 || direction == 2)
   {
-    switch (doorType)
-    {
-      case DoorStandard: x0 = MAP_DOOR_STANDARD_W_X; y0 = MAP_DOOR_STANDARD_W_Y; break;
-      case DoorBoss: x0 = MAP_DOOR_BOSS_W_X; y0 = MAP_DOOR_BOSS_W_Y; break;
-      case DoorChallenge: x0 = MAP_DOOR_CHALLENGE_W_X; y0 = MAP_DOOR_CHALLENGE_W_Y; break;
-    }
+    x0 = 64;
+    y0 = 192 * (int)doorType;
   }
   else
   {
-    switch (doorType)
-    {
-      case DoorStandard: x0 = MAP_DOOR_STANDARD_H_X; y0 = MAP_DOOR_STANDARD_H_Y; break;
-      case DoorBoss: x0 = MAP_DOOR_BOSS_H_X; y0 = MAP_DOOR_BOSS_H_Y; break;
-      case DoorChallenge: x0 = MAP_DOOR_CHALLENGE_H_X; y0 = MAP_DOOR_CHALLENGE_H_Y; break;
-    }
+    x0 = 0;
+    y0 = 192 * (int)doorType;
   }
 
   if (direction == 8)

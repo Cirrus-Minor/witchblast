@@ -597,18 +597,28 @@ void PlayerEntity::animate(float delay)
     velocity.x = -creatureSpeed / 3;
     facingDirection = 4;
 
+    int doorStypeStandard = DoorStandard_0 + (game().getLevel() - 1) % 5;
+
     SpriteEntity* exitDoorEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
         (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 64, 64, 1);
     exitDoorEntity->setZ(TILE_HEIGHT);
     exitDoorEntity->setImagesProLine(24);
-    exitDoorEntity->setFrame(MAP_WALL_EXIT_L_SPRITE + game().getCurrentMap()->getWallOffset());
+    exitDoorEntity->setFrame(MAP_WALL_BEGIN + 21 + 24 * game().getCurrentMap()->getWallType());
     exitDoorEntity->setType(ENTITY_EFFECT);
+
+    SpriteEntity* exitDoorAroundEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_DOORS),
+        (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
+        TILE_HEIGHT / 2, 64, 64, 1);
+    exitDoorAroundEntity->setZ(TILE_HEIGHT + 1);
+    exitDoorAroundEntity->setImagesProLine(2);
+    exitDoorAroundEntity->setFrame(3 + 6 * doorStypeStandard);
+    exitDoorAroundEntity->setType(ENTITY_EFFECT);
 
     SpriteEntity* exitDoorEntityShadow = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW),
         (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 64, 64, 1);
-    exitDoorEntityShadow->setZ(TILE_HEIGHT + 1);
+    exitDoorEntityShadow->setZ(TILE_HEIGHT + 2);
     exitDoorEntityShadow->setImagesProLine(10);
     exitDoorEntityShadow->setFrame(4);
     exitDoorEntityShadow->setType(ENTITY_EFFECT);

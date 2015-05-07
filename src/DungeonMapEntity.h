@@ -22,6 +22,7 @@ public:
   virtual void animate(float delay);
   virtual void render(sf::RenderTarget* app);
   void renderDoors(sf::RenderTarget* app);
+  void renderKeyStone(sf::RenderTarget* app);
   void renderPost(sf::RenderTarget* app);
   void renderOverlay(sf::RenderTarget* app);
 
@@ -91,6 +92,8 @@ private:
   sf::Sprite overlaySprite;
   sf::Sprite randomSprite;
   sf::Sprite doorSprite;
+  sf::Sprite doorWallSprite;
+  sf::Sprite keyStoneSprite;
   roomTypeEnum roomType;
 
   struct structKeyRoomFX
