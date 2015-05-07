@@ -530,6 +530,7 @@ void DungeonMapEntity::renderDoors(sf::RenderTarget* app)
 
     if (game().getLevel() > 1 && game().getCurrentMap()->getRoomType() == roomTypeStarting)
     {
+      doorWallSprite.setRotation(0);
       doorWallSprite.setTextureRect(sf::IntRect(DOOR_GRID_SPRITE_X, DOOR_GRID_SPRITE_Y, 192, 64));
       app->draw(doorWallSprite);
     }
