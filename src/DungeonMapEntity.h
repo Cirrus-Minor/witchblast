@@ -66,6 +66,8 @@ private:
   void computeBloodVertices();
   void computeCorpsesVertices();
 
+  void computeDoors();
+
   bool shouldBeTransformed(int part);
 
   void animateParticle(displayEntityStruct &particle, float delay, float viscosity);
@@ -89,12 +91,25 @@ private:
     SudEast
   };
 
+  enum positionDirection
+  {
+    North, South, East, West,
+  };
+
   sf::Sprite overlaySprite;
   sf::Sprite randomSprite;
-  sf::Sprite doorSprite;
-  sf::Sprite doorWallSprite;
-  sf::Sprite keyStoneSprite;
   roomTypeEnum roomType;
+
+  sf::Sprite doorShadow[4];
+  bool isDoorShadow[4];
+  sf::Sprite doorWall[4];
+  bool isDoorWall[4];
+  sf::Sprite doorFrame[4];
+  bool isDoorFrame[4];
+  sf::Sprite doorKeyStone[4];
+  bool isDoorKeyStone[4];
+  sf::Sprite doorSpecial;
+  bool isDoorSpecial;
 
   struct structKeyRoomFX
   {
