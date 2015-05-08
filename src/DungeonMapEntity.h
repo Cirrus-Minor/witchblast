@@ -97,7 +97,7 @@ private:
   };
 
   sf::Sprite overlaySprite;
-  sf::Sprite randomSprite;
+  sf::Sprite randomSprite[NB_RANDOM_TILES_IN_ROOM];
   roomTypeEnum roomType;
 
   sf::Sprite doorShadow[4];

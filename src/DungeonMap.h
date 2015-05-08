@@ -101,6 +101,7 @@ struct randomDungeonTileStruct
 
 const int NB_RANDOM_TILES = 21;
 const int NB_RANDOM_TILE_TRY = 40;
+const int NB_RANDOM_TILES_IN_ROOM = 3;
 
 /** Array with all the items and data */
 const randomDungeonTileStruct randomDungeonTiles[NB_RANDOM_TILES] =
@@ -216,8 +217,8 @@ class DungeonMap : public GameMap
     std::list<spriteListElement> getSpriteList();
 
     struct RandomTileElement { int type; float x; float y; float rotation;};
-    RandomTileElement getRandomTileElement();
-    void setRandomTileElement (RandomTileElement rt);
+    RandomTileElement getRandomTileElement(int n);
+    void setRandomTileElement (int n, RandomTileElement rt);
 
     void openDoor(int x, int y);
     void closeDoor(int x, int y);
@@ -244,10 +245,11 @@ class DungeonMap : public GameMap
     SpriteList spriteList;
     ChestList chestList;
 
-    RandomTileElement randomTileElement;
+    RandomTileElement randomTileElements[NB_RANDOM_TILES_IN_ROOM];
 
     void generateCorridors();
-    void generateRandomTile();
+    void generateRandomTile(int index);
+    void generateRandomTiles();
 
     void restoreItems();
     void restoreSprites();

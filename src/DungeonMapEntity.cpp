@@ -23,7 +23,9 @@ DungeonMapEntity::DungeonMapEntity() : GameEntity (0.0f, 0.0f)
   overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
   roomType = roomTypeStarting;
   keyRoomEffect.delay = -1.0f;
-  randomSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_RANDOM_DUNGEON));
+
+  for (int i = 0; i < NB_RANDOM_TILES_IN_ROOM; i++)
+    randomSprite[i].setTexture(*ImageManager::getInstance().getImage(IMAGE_RANDOM_DUNGEON));
 
   shadowType = ShadowTypeStandard;
 
@@ -361,7 +363,8 @@ void DungeonMapEntity::render(sf::RenderTarget* app)
   renderDoors(app);
 
   // random tile
-  if ( game().getCurrentMap()->getRandomTileElement().type > -1) app->draw(randomSprite);
+  for (int i = 0; i < NB_RANDOM_TILES_IN_ROOM; i++)
+    if ( game().getCurrentMap()->getRandomTileElement(i).type > -1) app->draw(randomSprite[i]);
 
   // over tiles
   app->draw(overVertices, ImageManager::getInstance().getImage(IMAGE_DUNGEON_OBJECTS));
@@ -785,14 +788,17 @@ void DungeonMapEntity::computeVertices()
     overlaySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_OVERLAY));
   }
 
-  int n = game().getCurrentMap()->getRandomTileElement().type;
-  if ( n > -1)
+  for (int i = 0; i < NB_RANDOM_TILES_IN_ROOM; i++)
   {
-    randomSprite.setPosition(game().getCurrentMap()->getRandomTileElement().x + randomDungeonTiles[n].width / 2,
-                             game().getCurrentMap()->getRandomTileElement().y + randomDungeonTiles[n].height / 2);
-    randomSprite.setOrigin(randomDungeonTiles[n].width / 2, randomDungeonTiles[n].height / 2);
-    randomSprite.setTextureRect(sf::IntRect(randomDungeonTiles[n].xOffset, randomDungeonTiles[n].yOffset, randomDungeonTiles[n].width, randomDungeonTiles[n].height));
-    randomSprite.setRotation(game().getCurrentMap()->getRandomTileElement().rotation);
+    int n = game().getCurrentMap()->getRandomTileElement(i).type;
+    if ( n > -1)
+    {
+      randomSprite[i].setPosition(game().getCurrentMap()->getRandomTileElement(i).x + randomDungeonTiles[n].width / 2,
+                               game().getCurrentMap()->getRandomTileElement(i).y + randomDungeonTiles[n].height / 2);
+      randomSprite[i].setOrigin(randomDungeonTiles[n].width / 2, randomDungeonTiles[n].height / 2);
+      randomSprite[i].setTextureRect(sf::IntRect(randomDungeonTiles[n].xOffset, randomDungeonTiles[n].yOffset, randomDungeonTiles[n].width, randomDungeonTiles[n].height));
+      randomSprite[i].setRotation(game().getCurrentMap()->getRandomTileElement(i).rotation);
+    }
   }
 }
 

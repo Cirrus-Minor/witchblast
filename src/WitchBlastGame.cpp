@@ -4861,10 +4861,13 @@ void WitchBlastGame::saveGame()
             }
 
             // random sprite
-            file << currentFloor->getMap(i, j)->getRandomTileElement().type
-              << " " <<currentFloor->getMap(i, j)->getRandomTileElement().x
-              << " " << currentFloor->getMap(i, j)->getRandomTileElement().y
-              << " " << currentFloor->getMap(i, j)->getRandomTileElement().rotation << std::endl;
+            for (int k = 0; k < NB_RANDOM_TILES_IN_ROOM; k++)
+            {
+              file << currentFloor->getMap(i, j)->getRandomTileElement(k).type
+                << " " <<currentFloor->getMap(i, j)->getRandomTileElement(k).x
+                << " " << currentFloor->getMap(i, j)->getRandomTileElement(k).y
+                << " " << currentFloor->getMap(i, j)->getRandomTileElement(k).rotation << std::endl;
+            }
           }
         }
       }
@@ -5035,13 +5038,18 @@ bool WitchBlastGame::loadGame()
           iMap->addSprite(t, f, x, y, scale);
         }
 
+
         // random sprite
-        DungeonMap::RandomTileElement rd;
-        file >> rd.type;
-        file >> rd.x;
-        file >> rd.y;
-        file >> rd.rotation;
-        iMap->setRandomTileElement(rd);
+        for (int k = 0; k < NB_RANDOM_TILES_IN_ROOM; k++)
+        {
+          DungeonMap::RandomTileElement rd;
+          file >> rd.type;
+          file >> rd.x;
+          file >> rd.y;
+          file >> rd.rotation;
+          iMap->setRandomTileElement(k, rd);
+        }
+        // random sprite
       }
     }
 

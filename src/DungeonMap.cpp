@@ -20,10 +20,14 @@ DungeonMap::DungeonMap(GameFloor* gameFloor, int x, int y) : GameMap(MAP_WIDTH, 
   cleared = false;
   visited = false;
   known = false;
-  randomTileElement.type = -1;
-  randomTileElement.x = 0;
-  randomTileElement.y = 0;
-  randomTileElement.rotation = 0;
+  for (int i = 0; i < NB_RANDOM_TILES_IN_ROOM; i++)
+  {
+    randomTileElements[i].type = -1;
+    randomTileElements[i].x = 0;
+    randomTileElements[i].y = 0;
+    randomTileElements[i].rotation = 0;
+  }
+
 }
 
 DungeonMap::~DungeonMap()
@@ -193,14 +197,16 @@ std::list<DungeonMap::spriteListElement> DungeonMap::getSpriteList()
   return (spriteList);
 }
 
-DungeonMap::RandomTileElement DungeonMap::getRandomTileElement()
+DungeonMap::RandomTileElement DungeonMap::getRandomTileElement(int n)
 {
-  return randomTileElement;
+  if (n < 0 || n >= NB_RANDOM_TILES_IN_ROOM) return RandomTileElement { -1, 0, 0, 0};
+  return randomTileElements[n];
 }
 
-void DungeonMap::setRandomTileElement (RandomTileElement rt)
+void DungeonMap::setRandomTileElement (int n, RandomTileElement rt)
 {
-  randomTileElement = rt;
+  if (n < 0 || n >= NB_RANDOM_TILES_IN_ROOM) return;
+  randomTileElements[n] = rt;
   hasChanged = true;
 }
 
@@ -743,7 +749,7 @@ Vector2D DungeonMap::generateBonusRoom()
     generateInselRoom();
   }
 
-  generateRandomTile();
+  generateRandomTiles();
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
@@ -797,7 +803,7 @@ void DungeonMap::generateTempleRoom()
     generateTemple(x0 + 1, y0, (enumDivinityType)d1);
   }
 
-  generateRandomTile();
+  generateRandomTiles();
 }
 
 void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
@@ -899,7 +905,7 @@ Vector2D DungeonMap::generateMerchantRoom()
     objectsMap[x0 + 1][MAP_HEIGHT - 1] = MAPOBJ_PNW + 5;
   }
 
-  generateRandomTile();
+  generateRandomTiles();
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
@@ -930,7 +936,7 @@ Vector2D DungeonMap::generateKeyRoom()
   map[x0 + 1][y0] = MAP_TILE_KEY;
   map[x0][y0 - 1] = MAP_TILE_KEY;
   map[x0][y0 + 1] = MAP_TILE_KEY;
-  generateRandomTile();
+  generateRandomTiles();
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
@@ -947,7 +953,7 @@ void DungeonMap::generateExitRoom()
 
   if (rand() % 3 == 0) initPattern(PatternBorder);
 
-  generateRandomTile();
+  generateRandomTiles();
 }
 
 void DungeonMap::generateRoomRandom(int type)
@@ -1126,7 +1132,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       }
   }
 
-  generateRandomTile();
+  generateRandomTiles();
 }
 
 void DungeonMap::addHole(int x, int y)
@@ -1338,7 +1344,7 @@ void DungeonMap::generateRoomWithHoles(int type)
       }
   }
 
-  generateRandomTile();
+  generateRandomTiles();
 }
 
 void DungeonMap::addItem(int itemType, float x, float y, bool merch)
@@ -1562,7 +1568,13 @@ void DungeonMap::generateCorridors()
   }
 }
 
-void DungeonMap::generateRandomTile()
+void DungeonMap::generateRandomTiles()
+{
+  for (int i = 0; i < NB_RANDOM_TILES_IN_ROOM; i++)
+    generateRandomTile(i);
+}
+
+void DungeonMap::generateRandomTile(int index)
 {
   bool ok = false;
   for (int i = 0; !ok && i < NB_RANDOM_TILE_TRY; i++)
@@ -1581,7 +1593,6 @@ void DungeonMap::generateRandomTile()
       xTile = TILE_WIDTH + rand() % (GAME_WIDTH - 2 * TILE_WIDTH - randomDungeonTiles[n].width);
       yTile = TILE_HEIGHT + rand() % (GAME_HEIGHT - 2 * TILE_HEIGHT - randomDungeonTiles[n].height);
     }
-    // TODO Corridors !
 
     int x0 = xTile / TILE_WIDTH;
     int xf = (xTile + randomDungeonTiles[n].width) / TILE_WIDTH;
@@ -1590,7 +1601,7 @@ void DungeonMap::generateRandomTile()
 
     ok = true;
 
-    if (!randomDungeonTiles[n].randomPlace && roomType != roomTypeKey)
+    if (!randomDungeonTiles[n].randomPlace || roomType == roomTypeKey)
     {
       for (int ix = x0; ix <= xf; ix++)
         for (int iy = y0; iy <= yf; iy++)
@@ -1601,25 +1612,22 @@ void DungeonMap::generateRandomTile()
 
     if (ok && !randomDungeonTiles[n].canBeOnWall)
     {
-      if (!randomDungeonTiles[n].randomPlace && roomType != roomTypeKey)
-      {
-        for (int ix = x0; ix <= xf; ix++)
-          for (int iy = y0; iy <= yf; iy++)
-          {
-            ok = ok && isFlyable(ix, iy);
-          }
-      }
+      for (int ix = x0; ix <= xf; ix++)
+        for (int iy = y0; iy <= yf; iy++)
+        {
+          ok = ok && isFlyable(ix, iy);
+        }
     }
 
     if (ok)
     {
-      randomTileElement.type = n;
-      randomTileElement.x = xTile;
-      randomTileElement.y = yTile;
+      randomTileElements[index].type = n;
+      randomTileElements[index].x = xTile;
+      randomTileElements[index].y = yTile;
       if (randomDungeonTiles[n].canRotate)
-        randomTileElement.rotation = rand()% 360;
+        randomTileElements[index].rotation = rand()% 360;
       else
-        randomTileElement.rotation = 0;
+        randomTileElements[index].rotation = 0;
     }
   }
 }
