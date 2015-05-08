@@ -1286,38 +1286,74 @@ void PlayerEntity::move(int direction)
     {
     case 1:
       if (touchDown && touchLeft)
+      {
         direction = 5;
+        collidingDirection = 1;
+      }
       else if (touchDown)
+      {
         direction = 4;
+        collidingDirection = 2;
+      }
       else if (touchLeft)
+      {
         direction = 2;
+        collidingDirection = 4;
+      }
       break;
 
     case 3:
       if (touchDown && touchRight)
+      {
         direction = 5;
+        collidingDirection = 3;
+      }
       else if (touchDown)
+      {
         direction = 6;
+        collidingDirection = 2;
+      }
       else if (touchRight)
+      {
         direction = 2;
+        collidingDirection = 6;
+      }
       break;
 
     case 7:
       if (touchUp && touchLeft)
+      {
         direction = 5;
+        collidingDirection = 7;
+      }
       else if (touchUp)
+      {
         direction = 4;
+        collidingDirection = 8;
+      }
       else if (touchRight)
+      {
         direction = 8;
+        collidingDirection = 1;
+      }
       break;
 
     case 9:
-      if (touchUp && touchLeft)
+      if (touchUp && touchRight)
+      {
         direction = 5;
+        collidingDirection = 9;
+      }
       else if (touchUp)
+      {
         direction = 6;
+        collidingDirection = 8;
+      }
       else if (touchRight)
+      {
         direction = 8;
+        collidingDirection = 6;
+      }
       break;
 
     case 4:
@@ -1329,7 +1365,10 @@ void PlayerEntity::move(int direction)
         else if (!willCollideWithMap(0, -KEYS_MOVE_TOLERANCE, true))
           direction = 8;
         else
+        {
           direction = 5;
+          collidingDirection = 4;
+        }
         x = oldX;
       }
       break;
@@ -1343,7 +1382,10 @@ void PlayerEntity::move(int direction)
         else if (!willCollideWithMap(0, -KEYS_MOVE_TOLERANCE, true))
           direction = 8;
         else
+        {
           direction = 5;
+          collidingDirection = 6;
+        }
         x = oldX;
       }
       break;
@@ -1357,7 +1399,10 @@ void PlayerEntity::move(int direction)
         else if (!willCollideWithMap(-KEYS_MOVE_TOLERANCE, 0, true))
           direction = 4;
         else
+        {
           direction = 5;
+          collidingDirection = 8;
+        }
         y = oldY;
       }
       break;
@@ -1371,7 +1416,10 @@ void PlayerEntity::move(int direction)
         else if (!willCollideWithMap(-KEYS_MOVE_TOLERANCE, 0, true))
           direction = 4;
         else
+        {
           direction = 5;
+          collidingDirection = 2;
+        }
         y = oldY;
       }
       break;
@@ -2115,7 +2163,6 @@ void PlayerEntity::useBossKey()
   acquiredItem = (enumItemType)(type - FirstEquipItem);
   SoundManager::getInstance().playSound(SOUND_DOOR_OPENING_BOSS);
   equip[EQUIP_BOSS_KEY] = false;
-
 
   SpriteEntity* spriteItem = new SpriteEntity(
     ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP),
