@@ -12,6 +12,9 @@ class BubbleEntity : public EnemyEntity
     virtual void calculateBB();
     int getBubbleSize();
 
+    virtual void animate(float delay);
+    virtual void render(sf::RenderTarget* app);
+
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -19,7 +22,6 @@ class BubbleEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void dying();
-
     virtual void collideWithEnemy(EnemyEntity* entity) override;
   private:
     int bubbleSize;

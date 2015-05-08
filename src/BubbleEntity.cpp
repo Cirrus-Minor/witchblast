@@ -67,6 +67,13 @@ BubbleEntity::BubbleEntity(float x, float y, EnumBubbleType bubbleType, int bubb
     resistance[ResistanceIce] = ResistanceVeryHigh;
     resistance[ResistanceFire] = ResistanceVeryLow;
   }
+  else
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_EYE));
+    imagesProLine = 12;
+    shadowFrame = 23;
+    spin = 20 + rand() % 20;
+  }
 
   width = 128;
   height = 128;
@@ -85,6 +92,48 @@ void BubbleEntity::calculateBB()
   boundingBox.width = 100 * sprite.getScale().x;
   boundingBox.top = (int)y - 50 * sprite.getScale().x;
   boundingBox.height =  100 * sprite.getScale().x;
+}
+
+void BubbleEntity::animate(float delay)
+{
+  if (bubbleType != BubbleIce)
+  {
+    if (age > 0)
+      frame = ((int)(age * (15.0f + 4.0f * (float)bubbleSize))) % 18;
+    else
+      frame = 0;
+  }
+  EnemyEntity::animate(delay);
+}
+
+void BubbleEntity::render(sf::RenderTarget* app)
+{
+  if (bubbleType != BubbleIce)
+  {
+    // shadow
+    sprite.setPosition(x, y + 5);
+    sprite.setTextureRect(sf::IntRect(11 * width, 1 * height, width, height));
+    app->draw(sprite);
+
+    // eye
+    sprite.setRotation(age * spin);
+    sprite.setPosition(x, y);
+    int nx = frame % imagesProLine;
+    int ny = frame / imagesProLine;
+    sprite.setTextureRect(sf::IntRect(nx * width, ny * height, width, height));
+    app->draw(sprite);
+
+    // lightning
+    sprite.setRotation(0);
+    sprite.setTextureRect(sf::IntRect(6 * width, height, width, height));
+    app->draw(sprite);
+
+    nx = 7 + (int)(age * 5) % 4;
+    sprite.setTextureRect(sf::IntRect(nx * width, height, width, height));
+    app->draw(sprite);
+  }
+  else
+    EnemyEntity::render(app);
 }
 
 void BubbleEntity::collideMapRight()
