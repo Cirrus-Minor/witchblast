@@ -99,7 +99,7 @@ void BubbleEntity::animate(float delay)
   if (bubbleType != BubbleIce)
   {
     if (age > 0)
-      frame = ((int)(age * (15.0f + 4.0f * (float)bubbleSize))) % 18;
+      frame = ((int)(age * (28.0f + 5.0f * (float)bubbleSize))) % 18;
     else
       frame = 0;
   }
