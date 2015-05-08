@@ -107,6 +107,77 @@ void DungeonMap::setWallType(int n)
   wallType = n;
 }
 
+int DungeonMap::getDoorType(int direction)
+{
+  if (roomType == roomTypeBoss) return DoorBoss;
+
+  if (roomType == roomTypeChallenge) return DoorChallenge;
+
+  int doorStypeStandard = DoorStandard_0 + (game().getLevel() - 1) % 5;
+
+  if (direction == 4)
+  {
+    if (hasNeighbourLeft())
+    {
+      if (getNeighbourLeft() == roomTypeBoss)
+        return DoorBoss;
+      else if (getNeighbourLeft() == roomTypeChallenge)
+        return DoorChallenge;
+      else
+        return doorStypeStandard;
+    }
+    else return -1;
+  }
+
+  if (direction == 6)
+  {
+    if (hasNeighbourRight())
+    {
+      if (getNeighbourRight() == roomTypeBoss)
+        return DoorBoss;
+      else if (getNeighbourRight() == roomTypeChallenge)
+        return DoorChallenge;
+      else
+        return doorStypeStandard;
+    }
+    else return -1;
+  }
+
+  if (direction == 8)
+  {
+    if (hasNeighbourUp())
+    {
+      if (getNeighbourUp() == roomTypeBoss)
+        return DoorBoss;
+      else if (getNeighbourUp() == roomTypeChallenge)
+        return DoorChallenge;
+      else
+        return doorStypeStandard;
+    }
+    else if (roomType == roomTypeExit)
+      return doorStypeStandard;
+    else return -1;
+  }
+
+  if (direction == 2)
+  {
+    if (hasNeighbourDown())
+    {
+      if (getNeighbourDown() == roomTypeBoss)
+        return DoorBoss;
+      else if (getNeighbourDown() == roomTypeChallenge)
+        return DoorChallenge;
+      else
+        return doorStypeStandard;
+    }
+    else if (game().getLevel() > 1 && roomType == roomTypeStarting)
+      return doorStypeStandard;
+    else return -1;
+  }
+
+  return -1;
+}
+
 std::list<DungeonMap::itemListElement> DungeonMap::getItemList()
 {
   return (itemList);
@@ -339,7 +410,7 @@ void DungeonMap::initRoom()
 
   // style
   floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
-  wallType = 0; //((game().getLevel() - 1) % 3) ;
+  wallType = ((game().getLevel() - 1) % 2) ;
   int wallOffset = wallType * 24;
 
   // outer walls
