@@ -971,9 +971,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
       if (game().getLevel() > 1)
       {
-        //map[x0 - 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_L;
         map[x0][MAP_HEIGHT - 1]     = floorOffset;
-        //map[x0 + 1][MAP_HEIGHT - 1] = wallOffset + MAP_WALL_START_R;
       }
     }
     else if (roomType == roomTypeBoss && (game().getLevel() == 2) ) // giant slime
@@ -1573,7 +1571,7 @@ void DungeonMap::generateRandomTile()
 
     int xTile, yTile;
 
-    if (randomDungeonTiles[n].canBeOnWall && roomType != roomTypeKey)
+    if (randomDungeonTiles[n].canBeOnWall)
     {
       xTile = rand() % (GAME_WIDTH - randomDungeonTiles[n].width);
       yTile = rand() % (GAME_HEIGHT - randomDungeonTiles[n].height);
@@ -1583,6 +1581,7 @@ void DungeonMap::generateRandomTile()
       xTile = TILE_WIDTH + rand() % (GAME_WIDTH - 2 * TILE_WIDTH - randomDungeonTiles[n].width);
       yTile = TILE_HEIGHT + rand() % (GAME_HEIGHT - 2 * TILE_HEIGHT - randomDungeonTiles[n].height);
     }
+    // TODO Corridors !
 
     int x0 = xTile / TILE_WIDTH;
     int xf = (xTile + randomDungeonTiles[n].width) / TILE_WIDTH;
@@ -1591,13 +1590,25 @@ void DungeonMap::generateRandomTile()
 
     ok = true;
 
-    if (!randomDungeonTiles[n].randomPlace)
+    if (!randomDungeonTiles[n].randomPlace && roomType != roomTypeKey)
     {
       for (int ix = x0; ix <= xf; ix++)
         for (int iy = y0; iy <= yf; iy++)
         {
           ok = ok && isWalkable(ix, iy);
         }
+    }
+
+    if (ok && !randomDungeonTiles[n].canBeOnWall)
+    {
+      if (!randomDungeonTiles[n].randomPlace && roomType != roomTypeKey)
+      {
+        for (int ix = x0; ix <= xf; ix++)
+          for (int iy = y0; iy <= yf; iy++)
+          {
+            ok = ok && isFlyable(ix, iy);
+          }
+      }
     }
 
     if (ok)

@@ -40,27 +40,14 @@ const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_TEMPLE          =   192;
 const int MAP_CARPET          =   200;
 const int MAP_TILE_KEY        =   209;
-const int MAP_EXIT_UP         =   210;
-const int MAP_EXIT_DOWN       =   211;
-const int MAP_EXIT_LEFT       =   212;
-const int MAP_EXIT_RIGHT      =   213;
-
-const int MAP_STAIRS_UP   =   2 + MAP_WALL_BEGIN;
 
 // walls
 const int MAP_WALL_X        =   MAP_WALL_BEGIN - 1;
-/*const int MAP_WALL_EXIT_L   =   1 + MAP_WALL_BEGIN;
-const int MAP_WALL_EXIT_R   =   3 + MAP_WALL_BEGIN;
-const int MAP_WALL_EXIT_L_SPRITE =   7 + MAP_WALL_BEGIN;*/
 
 const int MAP_WALL_8        =   0 + MAP_WALL_BEGIN;
 const int MAP_WALL_7        =   2 + MAP_WALL_BEGIN;
 const int MAP_WALL_77       =   4 + MAP_WALL_BEGIN;
 const int MAP_WALL_87       =   5 + MAP_WALL_BEGIN;
-
-/*const int MAP_WALL_ALTERN   =   12 + MAP_WALL_BEGIN;
-const int MAP_WALL_DOOR_7   =   22 + MAP_WALL_BEGIN;
-const int MAP_WALL_DOOR_8   =   23 + MAP_WALL_BEGIN;*/
 
 const int DOOR_WALL_SPRITE_X     = 1344;
 const int DOOR_WALL_SPRITE_Y     = 704;
@@ -125,8 +112,8 @@ const randomDungeonTileStruct randomDungeonTiles[NB_RANDOM_TILES] =
   { 256, 256, 0, 192, true, true, true },
   { 512, 256, 256, 192, true, true, true },
   { 128, 128, 0, 448, true, false, true },
-  { 128, 128, 128, 448, true, true, true },
-  { 128, 128, 256, 448, true, true, true },
+  { 128, 128, 128, 448, true, false, true },
+  { 128, 128, 256, 448, true, false, true },
   { 128, 128, 384, 448, false, false, false },
   { 128, 128, 512, 448, false, false, false},
   { 128, 128, 640, 448, false, false, false },
