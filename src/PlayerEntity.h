@@ -570,6 +570,7 @@ class PlayerEntity : public BaseCreatureEntity
     void renderHalo(sf::RenderTarget* app);
 
     divinityStruct divinity;
+    bool shouldBeSavedFromDivinity;
 
     void fallRock();
     void initFallingGrid();

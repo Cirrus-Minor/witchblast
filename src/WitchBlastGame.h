@@ -429,6 +429,14 @@ public:
   bool isPresentItem(int n);
   void addPresentItem(int n);
 
+  /*!
+   *  \brief Checks if player opens a door
+   *
+   * Checks if player opens a door (collide with the door and gets the key).
+   * If positive, opens the door.
+   */
+  void verifyDoorUnlocking();
+
 protected:
   /*!
    *  \brief Rendering method
@@ -697,14 +705,6 @@ private:
    *  \param ym : y position of the monster
    */
   void addMonster(enemyTypeEnum monsterType, float xm, float ym);
-
-  /*!
-   *  \brief Checks if player opens a door
-   *
-   * Checks if player opens a door (collide with the door and gets the key).
-   * If positive, opens the door.
-   */
-  void verifyDoorUnlocking();
 
   /*!
    *  \brief Checks if player can interact with something

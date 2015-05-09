@@ -116,6 +116,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   divinity.level = 0;
   divinity.interventions = 0;
   divinity.percentsToNextLevels = 0.0f;
+  shouldBeSavedFromDivinity = false;
   isRegeneration = false;
   isFairyTransmuted = false;
 
@@ -1329,7 +1330,7 @@ void PlayerEntity::move(int direction)
         direction = 4;
         collidingDirection = 8;
       }
-      else if (touchRight)
+      else if (touchLeft)
       {
         direction = 8;
         collidingDirection = 1;
@@ -1474,6 +1475,11 @@ void PlayerEntity::move(int direction)
         break;
       }
     }
+  }
+
+  if (collidingDirection != 5)
+  {
+    game().verifyDoorUnlocking();
   }
 }
 
@@ -1767,12 +1773,16 @@ int PlayerEntity::hurt(StructHurt hurtParam)
     hurtParam.damage *= 2;
   }
 
+  shouldBeSavedFromDivinity = false;
   bool divinityInvoked = false;
   if (hp - hurtParam.damage <= hpMax / 4 && divinity.divinity >= 0)
   {
     divinityInvoked = triggerDivinityBefore();
     if (divinityInvoked)
+    {
       game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
+      shouldBeSavedFromDivinity = true;
+    }
   }
 
   if (invincibleDelay <= 0.0f || hurtParam.hurtingType == ShotTypeDeterministic)
@@ -1831,7 +1841,12 @@ void PlayerEntity::loseItem(enumItemType itemType, bool isEquip)
 
 void PlayerEntity::dying()
 {
-  if (divinity.divinity > -1 && divinity.interventions < divinity.level - 1)
+  if (shouldBeSavedFromDivinity)
+  {
+    hp = 33 * hpMax / 100;
+    return;
+  }
+  else if (divinity.divinity > -1 && divinity.interventions < divinity.level - 1)
   {
     hp = 1;
     return;
