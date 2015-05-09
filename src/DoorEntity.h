@@ -11,7 +11,8 @@ enum doorEnum
   DoorStandard_3,
   DoorStandard_4,
   DoorBoss,
-  DoorChallenge
+  DoorChallenge,
+  DoorExit
 };
 
 class DoorEntity : public SpriteEntity

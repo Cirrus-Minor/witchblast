@@ -597,8 +597,6 @@ void PlayerEntity::animate(float delay)
     velocity.x = -creatureSpeed / 3;
     facingDirection = 4;
 
-    int doorStypeStandard = DoorStandard_0 + (game().getLevel() - 1) % 5;
-
     SpriteEntity* exitDoorEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
         (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 64, 64, 1);
@@ -612,7 +610,7 @@ void PlayerEntity::animate(float delay)
         TILE_HEIGHT / 2, 64, 64, 1);
     exitDoorAroundEntity->setZ(TILE_HEIGHT + 1);
     exitDoorAroundEntity->setImagesProLine(2);
-    exitDoorAroundEntity->setFrame(3 + 6 * doorStypeStandard);
+    exitDoorAroundEntity->setFrame(3 + 6 * DoorExit);
     exitDoorAroundEntity->setType(ENTITY_EFFECT);
 
     SpriteEntity* exitDoorEntityShadow = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW),

@@ -159,7 +159,7 @@ int DungeonMap::getDoorType(int direction)
         return doorStypeStandard;
     }
     else if (roomType == roomTypeExit)
-      return doorStypeStandard;
+      return DoorExit;
     else return -1;
   }
 
