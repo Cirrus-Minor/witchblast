@@ -3449,11 +3449,9 @@ void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnu
     return;
   }
   doorEntity[doorId]->setVisible(true);
-  doorEntity[doorId]->setDoorType((doorEnum)(DoorStandard_0 + (level - 1) % 5));
-  if (roomNeighbour == roomTypeBoss || roomCurrent == roomTypeBoss)
-    doorEntity[doorId]->setDoorType(DoorBoss);
-  if (roomNeighbour == roomTypeChallenge || roomCurrent == roomTypeChallenge)
-    doorEntity[doorId]->setDoorType(DoorChallenge);
+
+  doorEntity[doorId]->setDoorType(currentMap->getDoorType(doorId));
+
   if (roomNeighbour == roomTypeBoss && !bossRoomOpened)
   {
     doorEntity[doorId]->setOpen(false);
@@ -4860,6 +4858,11 @@ void WitchBlastGame::saveGame()
               file << ilm.type << " " << ilm.frame << " " << ilm.x << " " << ilm.y << " " << ilm.scale << std::endl;
             }
 
+            // doors
+            for (int k = 0; k < 4; k++)
+              file << currentFloor->getMap(i, j)->getDoorType(k) << " ";
+            file << std::endl;
+
             // random sprite
             for (int k = 0; k < NB_RANDOM_TILES_IN_ROOM; k++)
             {
@@ -5038,16 +5041,22 @@ bool WitchBlastGame::loadGame()
           iMap->addSprite(t, f, x, y, scale);
         }
 
+        // doors
+        for (int index = 0; index < 4; index++)
+        {
+          file >> n;
+          iMap->setDoorType(index, (doorEnum)n);
+        }
 
         // random sprite
-        for (int k = 0; k < NB_RANDOM_TILES_IN_ROOM; k++)
+        for (int index = 0; index < NB_RANDOM_TILES_IN_ROOM; index++)
         {
           DungeonMap::RandomTileElement rd;
           file >> rd.type;
           file >> rd.x;
           file >> rd.y;
           file >> rd.rotation;
-          iMap->setRandomTileElement(k, rd);
+          iMap->setRandomTileElement(index, rd);
         }
         // random sprite
       }

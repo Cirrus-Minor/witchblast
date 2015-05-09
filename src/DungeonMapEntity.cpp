@@ -429,9 +429,9 @@ void DungeonMapEntity::computeDoors()
     isDoorShadow[North] = true;
     doorWall[North].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
     isDoorWall[North] = true;
-    doorFrame[North].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(8), 192, 64));
+    doorFrame[North].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(North), 192, 64));
     isDoorFrame[North] = true;
-    doorKeyStone[North].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(8), 192, 64));
+    doorKeyStone[North].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(North), 192, 64));
     isDoorKeyStone[North] = true;
   }
   else
@@ -447,9 +447,9 @@ void DungeonMapEntity::computeDoors()
     isDoorShadow[South] = true;
     doorWall[South].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
     isDoorWall[South] = true;
-    doorFrame[South].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(2), 192, 64));
+    doorFrame[South].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(South), 192, 64));
     isDoorFrame[South] = true;
-    doorKeyStone[South].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(2), 192, 64));
+    doorKeyStone[South].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(South), 192, 64));
     isDoorKeyStone[South] = true;
   }
   else
@@ -465,9 +465,9 @@ void DungeonMapEntity::computeDoors()
     isDoorShadow[West] = true;
     doorWall[West].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
     isDoorWall[West] = true;
-    doorFrame[West].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(4), 192, 64));
+    doorFrame[West].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(West), 192, 64));
     isDoorFrame[West] = true;
-    doorKeyStone[West].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(4), 192, 64));
+    doorKeyStone[West].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(West), 192, 64));
     isDoorKeyStone[West] = true;
   }
   else
@@ -483,9 +483,9 @@ void DungeonMapEntity::computeDoors()
     isDoorShadow[East] = true;
     doorWall[East].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
     isDoorWall[East] = true;
-    doorFrame[East].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(6), 192, 64));
+    doorFrame[East].setTextureRect(sf::IntRect(64, 64 + 192 * currentMap->getDoorType(East), 192, 64));
     isDoorFrame[East] = true;
-    doorKeyStone[East].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(6), 192, 64));
+    doorKeyStone[East].setTextureRect(sf::IntRect(64, 128 + 192 * currentMap->getDoorType(East), 192, 64));
     isDoorKeyStone[East] = true;
   }
   else

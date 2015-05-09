@@ -111,75 +111,14 @@ void DungeonMap::setWallType(int n)
   wallType = n;
 }
 
-int DungeonMap::getDoorType(int direction)
+doorEnum DungeonMap::getDoorType(int direction)
 {
-  if (roomType == roomTypeBoss) return DoorBoss;
+  return doorType[direction];
+}
 
-  if (roomType == roomTypeChallenge) return DoorChallenge;
-
-  int doorStypeStandard = DoorStandard_0 + (game().getLevel() - 1) % 5;
-
-  if (direction == 4)
-  {
-    if (hasNeighbourLeft())
-    {
-      if (getNeighbourLeft() == roomTypeBoss)
-        return DoorBoss;
-      else if (getNeighbourLeft() == roomTypeChallenge)
-        return DoorChallenge;
-      else
-        return doorStypeStandard;
-    }
-    else return -1;
-  }
-
-  if (direction == 6)
-  {
-    if (hasNeighbourRight())
-    {
-      if (getNeighbourRight() == roomTypeBoss)
-        return DoorBoss;
-      else if (getNeighbourRight() == roomTypeChallenge)
-        return DoorChallenge;
-      else
-        return doorStypeStandard;
-    }
-    else return -1;
-  }
-
-  if (direction == 8)
-  {
-    if (hasNeighbourUp())
-    {
-      if (getNeighbourUp() == roomTypeBoss)
-        return DoorBoss;
-      else if (getNeighbourUp() == roomTypeChallenge)
-        return DoorChallenge;
-      else
-        return doorStypeStandard;
-    }
-    else if (roomType == roomTypeExit)
-      return DoorExit;
-    else return -1;
-  }
-
-  if (direction == 2)
-  {
-    if (hasNeighbourDown())
-    {
-      if (getNeighbourDown() == roomTypeBoss)
-        return DoorBoss;
-      else if (getNeighbourDown() == roomTypeChallenge)
-        return DoorChallenge;
-      else
-        return doorStypeStandard;
-    }
-    else if (game().getLevel() > 1 && roomType == roomTypeStarting)
-      return doorStypeStandard;
-    else return -1;
-  }
-
-  return -1;
+void DungeonMap::setDoorType(int direction, doorEnum type)
+{
+  doorType[direction] = type;
 }
 
 std::list<DungeonMap::itemListElement> DungeonMap::getItemList()
@@ -408,6 +347,47 @@ int DungeonMap::getDivinity(int x, int y)
     return -1;
 }
 
+doorEnum getRandomDoor()
+{
+  int n = rand() % 12;
+
+  switch (game().getLevel())
+  {
+  case 1:
+    if (n < 6) return DoorStandard_0;
+    else return DoorStandard_1;
+
+  case 2:
+    if (n < 5) return DoorStandard_0;
+    else if (n < 10) return DoorStandard_1;
+    else return DoorStandard_2;
+
+  case 3:
+    if (n < 6) return DoorStandard_1;
+    else return DoorStandard_2;
+
+  case 4:
+    if (n < 5) return DoorStandard_1;
+    else if (n < 10) return DoorStandard_2;
+    else return DoorStandard_3;
+
+  case 5:
+    if (n < 6) return DoorStandard_2;
+    else return DoorStandard_3;
+
+  case 6:
+    if (n < 5) return DoorStandard_2;
+    else if (n < 10) return DoorStandard_3;
+    else return DoorStandard_4;
+
+  default:
+    if (n < 6) return DoorStandard_3;
+    else return DoorStandard_4;
+  }
+
+  return (doorEnum)(rand() % 5);
+}
+
 void DungeonMap::initRoom()
 {
   int x0 = MAP_WIDTH / 2;
@@ -418,6 +398,9 @@ void DungeonMap::initRoom()
   floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
   wallType = ((game().getLevel() - 1) % 2) ;
   int wallOffset = wallType * 24;
+
+  // doors
+  for (i = 0; i < 4; i++) doorType[i] = DoorNone;
 
   // outer walls
   map[0][0] = wallOffset + MAP_WALL_7 + rand() % 2;
@@ -517,26 +500,6 @@ void DungeonMap::initRoom()
       map[xTile][yTile] = i + wallOffset + MAP_WALL_87 + 8;
     }
   }
-  /*if (hasNeighbourUp() && rand() % 3 == 0)
-  {
-    map[x0 - 2][0] = 9 + wallOffset + MAP_WALL_ALTERN;
-    map[x0 + 2][0] = 9 + wallOffset + MAP_WALL_ALTERN;
-  }
-  if (hasNeighbourDown() && rand() % 3 == 0)
-  {
-    map[x0 - 2][MAP_HEIGHT - 1] = 9 + wallOffset + MAP_WALL_ALTERN;
-    map[x0 + 2][MAP_HEIGHT - 1] = 9 + wallOffset + MAP_WALL_ALTERN;
-  }
-  if (hasNeighbourLeft() && rand() % 3 == 0)
-  {
-    map[0][y0 - 2] = 9 + wallOffset + MAP_WALL_ALTERN;
-    map[0][y0 + 2] = 9 + wallOffset + MAP_WALL_ALTERN;
-  }
-  if (hasNeighbourRight() && rand() % 3 == 0)
-  {
-    map[MAP_WIDTH - 1][y0 - 2] = 9 + wallOffset + MAP_WALL_ALTERN;
-    map[MAP_WIDTH - 1][y0 + 2] = 9 + wallOffset + MAP_WALL_ALTERN;
-  }*/
 
   // doors ?
   if (gameFloor != NULL)
@@ -547,6 +510,23 @@ void DungeonMap::initRoom()
       map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
       map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
       openDoor(0, y0);
+
+      if (roomType == roomTypeBoss || gameFloor->getRoom(x - 1, y) == roomTypeBoss)
+      {
+        doorType[West] = DoorBoss;
+      }
+      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x - 1, y) == roomTypeChallenge)
+      {
+        doorType[West] = DoorChallenge;
+      }
+      else if (gameFloor->getMap(x - 1, y)->isVisited())
+      {
+        doorType[West] = gameFloor->getMap(x - 1, y)->getDoorType(East);
+      }
+      else
+      {
+        doorType[West] = getRandomDoor();
+      }
     }
 
     if (x < MAP_WIDTH - 1 && gameFloor->getRoom(x + 1, y) > 0)
@@ -555,6 +535,23 @@ void DungeonMap::initRoom()
       map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
       map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
       openDoor(MAP_WIDTH - 1, y0);
+
+      if (roomType == roomTypeBoss || gameFloor->getRoom(x + 1, y) == roomTypeBoss)
+      {
+        doorType[East] = DoorBoss;
+      }
+      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x + 1, y) == roomTypeChallenge)
+      {
+        doorType[East] = DoorChallenge;
+      }
+      else if (gameFloor->getMap(x + 1, y)->isVisited())
+      {
+        doorType[East] = gameFloor->getMap(x + 1, y)->getDoorType(West);
+      }
+      else
+      {
+        doorType[East] = getRandomDoor();
+      }
     }
 
     if (y > 0 && gameFloor->getRoom(x, y - 1) > 0)
@@ -563,6 +560,23 @@ void DungeonMap::initRoom()
       map[MAP_WIDTH / 2 - 1][0] = floorOffset;
       map[MAP_WIDTH / 2 + 1][0] = floorOffset;
       openDoor(x0, 0);
+
+      if (roomType == roomTypeBoss || gameFloor->getRoom(x, y - 1) == roomTypeBoss)
+      {
+        doorType[North] = DoorBoss;
+      }
+      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y - 1) == roomTypeChallenge)
+      {
+        doorType[North] = DoorChallenge;
+      }
+      else if (gameFloor->getMap(x, y - 1)->isVisited())
+      {
+        doorType[North] = gameFloor->getMap(x, y - 1)->getDoorType(South);
+      }
+      else
+      {
+        doorType[North] = getRandomDoor();
+      }
     }
 
     if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y + 1) > 0)
@@ -571,6 +585,32 @@ void DungeonMap::initRoom()
       map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
       map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
       openDoor(x0, MAP_HEIGHT -1);
+
+      if (roomType == roomTypeBoss || gameFloor->getRoom(x, y + 1) == roomTypeBoss)
+      {
+        doorType[South] = DoorBoss;
+      }
+      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y + 1) == roomTypeChallenge)
+      {
+        doorType[South] = DoorChallenge;
+      }
+      else if (gameFloor->getMap(x, y + 1)->isVisited())
+      {
+        doorType[South] = gameFloor->getMap(x, y + 1)->getDoorType(North);
+      }
+      else
+      {
+        doorType[South] = getRandomDoor();
+      }
+    }
+
+    if (game().getLevel() > 1 && roomType == roomTypeStarting)
+    {
+      doorType[South] = getRandomDoor();
+    }
+    else if (roomType == roomTypeExit)
+    {
+      doorType[North] = DoorExit;
     }
   }
 }

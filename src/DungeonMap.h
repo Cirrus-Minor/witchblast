@@ -4,6 +4,7 @@
 #include "sfml_game/GameMap.h"
 #include "sfml_game/MyTools.h"
 #include "Constants.h"
+#include "DoorEntity.h"
 #include <list>
 
 const int MAPOBJ_NONE          =   0;
@@ -86,6 +87,11 @@ enum roomTypeEnum
   roomTypeStarting,
   roomTypeChallenge,
   roomTypeTemple
+};
+
+enum positionDirection
+{
+  North, West, South, East,
 };
 
 struct randomDungeonTileStruct
@@ -172,7 +178,8 @@ class DungeonMap : public GameMap
     virtual bool isLeftBlocking(int x, int y);
     virtual bool isRightBlocking(int x, int y);
 
-    int getDoorType(int direction);
+    doorEnum getDoorType(int direction);
+    void setDoorType(int direction, doorEnum type);
 
     virtual void randomize(int n);
     void initRoom();
@@ -260,6 +267,8 @@ class DungeonMap : public GameMap
 
     int floorOffset;
     int wallType;
+
+    doorEnum doorType[4];
 };
 
 #endif // MAGICMAP_H

@@ -5,6 +5,7 @@
 
 enum doorEnum
 {
+  DoorNone = -1,
   DoorStandard_0,
   DoorStandard_1,
   DoorStandard_2,

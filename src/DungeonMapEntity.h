@@ -91,11 +91,6 @@ private:
     SudEast
   };
 
-  enum positionDirection
-  {
-    North, South, East, West,
-  };
-
   sf::Sprite overlaySprite;
   sf::Sprite randomSprite[NB_RANDOM_TILES_IN_ROOM];
   roomTypeEnum roomType;
