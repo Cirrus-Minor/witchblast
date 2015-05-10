@@ -35,12 +35,13 @@ const int MAPOBJ_SHOP_LEFT     =   0 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP          =   1 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP_RIGHT    =   2 + MAPOBJ_SHOP_BEGIN;
 
-const int MAP_WALL_BEGIN    =   264;
-
 const int MAP_NORMAL_FLOOR    =   8;
-const int MAP_TEMPLE          =   192;
-const int MAP_CARPET          =   200;
-const int MAP_TILE_KEY        =   209;
+const int MAP_NB_FLOORS       =   9;
+const int MAP_TEMPLE          =   MAP_NB_FLOORS * 24;
+const int MAP_CARPET          =   MAP_TEMPLE + 8;
+const int MAP_TILE_KEY        =   MAP_TEMPLE + 17;
+
+const int MAP_WALL_BEGIN    =   (MAP_NB_FLOORS + 3) * 24;
 
 // walls
 const int MAP_WALL_X        =   MAP_WALL_BEGIN - 1;
@@ -51,16 +52,16 @@ const int MAP_WALL_77       =   4 + MAP_WALL_BEGIN;
 const int MAP_WALL_87       =   5 + MAP_WALL_BEGIN;
 
 const int DOOR_WALL_SPRITE_X     = 1344;
-const int DOOR_WALL_SPRITE_Y     = 704;
+const int DOOR_WALL_SPRITE_Y     = (MAP_NB_FLOORS + 3) * 64;
 
 const int DOOR_GRID_SPRITE_X   = 1280;
-const int DOOR_GRID_SPRITE_Y   = 640;
+const int DOOR_GRID_SPRITE_Y   = (MAP_NB_FLOORS + 2) * 64;
 
 const int DOOR_STAIRS_SPRITE_X   = 1088;
-const int DOOR_STAIRS_SPRITE_Y   = 640;
+const int DOOR_STAIRS_SPRITE_Y   = DOOR_GRID_SPRITE_Y;
 
 const int DOOR_SHADOW_SPRITE_X   = 896;
-const int DOOR_SHADOW_SPRITE_Y   = 640;
+const int DOOR_SHADOW_SPRITE_Y   = DOOR_GRID_SPRITE_Y;
 
 const int ROOM_TYPE_CHECKER = 5;
 const int ROOM_TYPE_ALL     = 6;
