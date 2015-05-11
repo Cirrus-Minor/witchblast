@@ -106,6 +106,7 @@ Next version
 - ADD New doors
 - ADD New walls
 - ADD New art for the "bubble"
+- ADD Flower animation
 - FIX Explosive slime can be stuck in the wall when casting "invoke slime" spell
 - FIX Horizontal lines when maximizing the screen
 - FIX Spell lost when taking two spells at the same time
