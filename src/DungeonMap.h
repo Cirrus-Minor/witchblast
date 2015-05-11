@@ -183,7 +183,7 @@ class DungeonMap : public GameMap
     void setDoorType(int direction, doorEnum type);
 
     virtual void randomize(int n);
-    void initRoom();
+    void initRoom(int floorN = -1, int wallN = -1);
     enum patternEnum { PatternSmallChecker, PatternBigChecker, PatternBorder, PatternBigCircle, PatternSmallCircle, PatternSmallStar, PatternSmallDisc};
     void initPattern(patternEnum n);
     void generateCarpet(int x0, int y0, int w, int h, int n);
@@ -194,6 +194,7 @@ class DungeonMap : public GameMap
     void generateRoomWithHoles(int type);
     void generateExitRoom();
     Vector2D generateBonusRoom();
+    Vector2D generateChestRoom();
     Vector2D generateMerchantRoom();
     Vector2D generateKeyRoom();
     void generateTemple(int x, int y, enumDivinityType type);

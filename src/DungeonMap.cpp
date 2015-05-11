@@ -388,15 +388,19 @@ doorEnum getRandomDoor()
   return (doorEnum)(rand() % 5);
 }
 
-void DungeonMap::initRoom()
+void DungeonMap::initRoom(int floorN, int wallN)
 {
   int x0 = MAP_WIDTH / 2;
   int y0 = MAP_HEIGHT / 2;
   int i, j;
 
   // style
-  floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
-  wallType = ((game().getLevel() - 1) % 2) ;
+  if (floorN < 0) floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
+  else floorOffset = floorN;
+
+  if (wallN < 0) wallType = ((game().getLevel() - 1) % 2) ;
+  else wallType = wallN;
+
   int wallOffset = wallType * 24;
 
   // doors
@@ -634,8 +638,8 @@ bool DungeonMap::isDoor(int x, int y)
 
 void DungeonMap::makePatternTile(int x, int y)
 {
-  if (map[x][y] < 24 * 8 && (map[x][y] % 24) < 8) map[x][y] += 8;
-  else map[x][y] = (game().getLevel() - 1) * 24 + 8;
+  if (map[x][y] < 24 * MAP_NB_FLOORS && (map[x][y] % 24) < 8) map[x][y] += 8;
+  else map[x][y] = floorOffset + 8 + rand() % 8;
 }
 
 void DungeonMap::initPattern(patternEnum n)
@@ -762,9 +766,10 @@ void DungeonMap::generateInselRoom()
 
 Vector2D DungeonMap::generateBonusRoom()
 {
-  initRoom();
   int x0 = MAP_WIDTH / 2;
   int y0 = MAP_HEIGHT / 2;
+
+  initRoom();
 
   if (game().getLevel() == 1 || rand() % 3 > 0)
   {
@@ -786,6 +791,40 @@ Vector2D DungeonMap::generateBonusRoom()
   }
   else
   {
+    generateInselRoom();
+  }
+
+  generateRandomTiles();
+
+  return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
+}
+
+Vector2D DungeonMap::generateChestRoom()
+{
+  int x0 = MAP_WIDTH / 2;
+  int y0 = MAP_HEIGHT / 2;
+
+  if (game().getLevel() == 1 || rand() % 3 > 0)
+  {
+    initRoom(8 * 24, 2);
+    {
+      if (rand() % 2 == 0) initPattern(PatternSmallDisc);
+      else initPattern(PatternSmallStar);
+    }
+
+    objectsMap[x0 - 1][y0 - 1] = MAPOBJ_WALL_SPECIAL;
+    objectsMap[x0 - 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 2;
+    objectsMap[x0 + 1][y0 - 1] = MAPOBJ_WALL_SPECIAL + 1;
+    objectsMap[x0 + 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 3;
+
+    logicalMap[x0 - 1][y0 - 1] = LogicalObstacle;
+    logicalMap[x0 - 1][y0 + 1] = LogicalObstacle;
+    logicalMap[x0 + 1][y0 - 1] = LogicalObstacle;
+    logicalMap[x0 + 1][y0 + 1] = LogicalObstacle;
+  }
+  else
+  {
+    initRoom();
     generateInselRoom();
   }
 

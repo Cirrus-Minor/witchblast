@@ -41,8 +41,8 @@ void generateStandardRoom01()
   }
   else
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
-    new ChestEntity(v.x, v.y, ChestBasic, false);
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
+    new ChestEntity(MAP_WIDTH * TILE_WIDTH / 2, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
 }
@@ -71,7 +71,7 @@ void generateStandardRoom02()
   }
   else if (random < 64)
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
     new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
@@ -113,7 +113,7 @@ void generateStandardRoom03()
   }
   else if (random < 64)
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
     new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
@@ -188,7 +188,7 @@ void generateStandardRoom04()
   }
   else if (random < 64)
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
     new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
@@ -294,7 +294,7 @@ void generateStandardRoom05()
   }
   else if (random < 64)
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
     new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
@@ -515,7 +515,7 @@ void generateStandardRoom06()
   }
   else
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
     new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
@@ -649,7 +649,7 @@ void generateStandardRoom07()
   }
   else
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
     new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
@@ -788,7 +788,7 @@ void generateStandardRoom08()
   }
   else
   {
-    Vector2D v = game().getCurrentMap()->generateBonusRoom();
+    Vector2D v = game().getCurrentMap()->generateChestRoom();
     new ChestEntity(v.x, v.y, ChestBasic, false);
     game().getCurrentMap()->setCleared(true);
   }
