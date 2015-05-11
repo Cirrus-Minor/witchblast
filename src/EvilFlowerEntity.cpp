@@ -16,7 +16,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   meleeDamages = EVIL_FLOWER_MELEE_DAMAGES;
 
   setSpin(50.0f);
-  imagesProLine = 3;
+  imagesProLine = 5;
 
   this->flowerType = flowerType;
 
@@ -32,7 +32,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   }
   else if (flowerType == FlowerTypeIce)
   {
-    frame = 3;
+    frame = 1;
     enemyType = EnemyTypeEvilFlowerIce;
     deathFrame = FRAME_CORPSE_FLOWER_ICE;
 
@@ -42,7 +42,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   }
   else if (flowerType == FlowerTypeFire)
   {
-    frame = 6;
+    frame = 2;
     enemyType = EnemyTypeEvilFlowerFire;
     deathFrame = FRAME_CORPSE_FLOWER_FIRE;
 
@@ -51,7 +51,7 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   }
   else if (flowerType == FlowerTypePet)
   {
-    frame = 9;
+    frame = 3;
     enemyType = EnemyTypeNone;
     fireDelayMax = EVIL_FLOWER_FIRE_DELAY;
     fireDelay = EVIL_FLOWER_FIRE_DELAY;
@@ -60,11 +60,13 @@ EvilFlowerEntity::EvilFlowerEntity(float x, float y, flowerTypeEnum flowerType)
   }
 
   age = -1.0f + (rand() % 2500) * 0.001f;
+  ageFromGen = 0.0f;
   z = y + height * 0.5f;
 }
 
 void EvilFlowerEntity::animate(float delay)
 {
+  ageFromGen += (delay * 2.0f);
   float flowerDelay = delay;
   if (specialState[SpecialStateIce].active) flowerDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -109,6 +111,11 @@ void EvilFlowerEntity::animate(float delay)
         fireDelay = 0.35f;
     }
   }
+}
+
+bool EvilFlowerEntity::canCollide()
+{
+  return (!isAgonising && flowerType != FlowerTypePet && ageFromGen > 0.8f);
 }
 
 void EvilFlowerEntity::setFireDelayMax(float fireDelayMax)
@@ -199,11 +206,6 @@ void EvilFlowerEntity::fire()
 
 }
 
-bool EvilFlowerEntity::canCollide()
-{
-  return flowerType != FlowerTypePet;
-}
-
 void EvilFlowerEntity::render(sf::RenderTarget* app)
 {
   sprite.setPosition(x, y);
@@ -211,12 +213,37 @@ void EvilFlowerEntity::render(sf::RenderTarget* app)
   sprite.setRotation(0.0f);
 
   // shadow
-  sprite.setTextureRect(sf::IntRect(width * 2, 0,  width, height));
-  app->draw(sprite);
-  sprite.setTextureRect(sf::IntRect(width, 0,  width, height));
+  sprite.setTextureRect(sf::IntRect(width * 4, 0,  width, height));
+  if (ageFromGen > 1.0f)
+  {
+    if (ageFromGen >= 2.0f) app->draw(sprite);
+    else
+    {
+      float scale = ageFromGen - 1.0f;
+      sprite.setScale(scale, scale);
+      app->draw(sprite);
+      sprite.setScale(1.0f, 1.0f);
+    }
+  }
+
+  // stem
+  int stemFrame = 14;
+  if (ageFromGen < 1.0f) stemFrame = 5 + ageFromGen * 10;
+
+  sprite.setTextureRect(sf::IntRect(width * (stemFrame % imagesProLine), height * (stemFrame / imagesProLine),  width, height));
   app->draw(sprite);
 
   sprite.setRotation(savedAngle);
 
-  EnemyEntity::render(app);
+  if (ageFromGen > 1.0f)
+  {
+    if (ageFromGen >= 2.0f) EnemyEntity::render(app);
+    else
+    {
+      float scale = ageFromGen - 1.0f;
+      sprite.setScale(scale, scale);
+      EnemyEntity::render(app);
+      sprite.setScale(1.0f, 1.0f);
+    }
+  }
 }

@@ -17,10 +17,12 @@ class EvilFlowerEntity : public EnemyEntity
     virtual bool canCollide();
     void setFireDelayMax(float fireDelayMax);
 
+
   private:
     float fireDelay;
     float fireDelayMax;
     flowerTypeEnum flowerType;
+    float ageFromGen;
 };
 
 #endif // EVILFLOWER_H
