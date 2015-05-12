@@ -534,7 +534,7 @@ void WitchBlastGame::onUpdate()
     if (isPlayerAlive) player->setItemToBuy(NULL);
 
     EntityManager::getInstance().animate(deltaTime);
-    if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]))
+    if (isPressing(KeyTimeControl, false))
     {
       EntityManager::getInstance().animate(deltaTime);
       SoundManager::getInstance().playSound(SOUND_VIB, false);
@@ -1006,17 +1006,7 @@ void WitchBlastGame::updateRunningGame()
         else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
       }
 
-      if (event.key.code == input[KeyFireSelect])
-      {
-        if (gameState == gameStatePlaying) player->selectNextShotType();
-      }
-
-      if (event.key.code == input[KeySpell])
-      {
-        if (gameState == gameStatePlaying) player->castSpell();
-      }
-
-      if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
+      if (isPressing(KeyDown, true) || event.key.code == sf::Keyboard::Down)
       {
         // in game menu ?
         if (gameState == gameStatePlayingPause)
@@ -1026,7 +1016,7 @@ void WitchBlastGame::updateRunningGame()
           SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
         }
       }
-      else if (event.key.code == input[KeyUp] || event.key.code == sf::Keyboard::Up)
+      else if (isPressing(KeyUp, true) || event.key.code == sf::Keyboard::Up)
       {
         // in game menu ?
         if (gameState == gameStatePlayingPause)
@@ -1036,6 +1026,7 @@ void WitchBlastGame::updateRunningGame()
           SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
         }
       }
+
       else if (event.key.code == sf::Keyboard::Return)
       {
         // MENU
@@ -1046,6 +1037,7 @@ void WitchBlastGame::updateRunningGame()
           case MenuStartNew:
           case MenuStartOld:
           case MenuKeys:
+          case MenuJoystick:
           case MenuConfig:
           case MenuTutoReset:
           case MenuConfigBack:
@@ -1076,11 +1068,6 @@ void WitchBlastGame::updateRunningGame()
         }
       }
 
-      if (event.key.code == input[KeyFire])
-      {
-        if (gameState == gameStatePlaying) firingDirection = player->getFacingDirection();
-      }
-
       if (event.key.code == sf::Keyboard::Return)
       {
         if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
@@ -1106,12 +1093,6 @@ void WitchBlastGame::updateRunningGame()
         }
       }
 
-      if (event.key.code == input[KeyInteract])
-      {
-        if (!player->isDead() && interaction.active)
-          player->interact(interaction.type, interaction.id);
-      }
-
       if (event.key.code == sf::Keyboard::X)
       {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
@@ -1124,20 +1105,6 @@ void WitchBlastGame::updateRunningGame()
           startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
         }
       }
-     /* if (event.key.code == sf::Keyboard::Num3)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-        {
-          startNewGame(false, 3);
-        }
-      }
-      if (event.key.code == sf::Keyboard::Num4)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-        {
-          startNewGame(false, 4);
-        }
-      }*/
 
       if (event.key.code == sf::Keyboard::F1)
       {
@@ -1318,46 +1285,62 @@ void WitchBlastGame::updateRunningGame()
   {
     if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
 
-    if (sf::Keyboard::isKeyPressed(input[KeyLeft]))
+    if (isPressing(KeyLeft, false))
     {
-      if (sf::Keyboard::isKeyPressed(input[KeyUp]))
+      if (isPressing(KeyUp, false))
         player->move(7);
-      else if (sf::Keyboard::isKeyPressed(input[KeyDown]))
+      else if (isPressing(KeyDown, false))
         player->move(1);
       else
         player->move(4);
     }
-    else if (sf::Keyboard::isKeyPressed(input[KeyRight]))
+    else if (isPressing(KeyRight, false))
     {
-      if (sf::Keyboard::isKeyPressed(input[KeyUp]))
+      if (isPressing(KeyUp, false))
         player->move(9);
-      else if (sf::Keyboard::isKeyPressed(input[KeyDown]))
+      else if (isPressing(KeyDown, false))
         player->move(3);
       else
         player->move(6);
     }
-    else if (sf::Keyboard::isKeyPressed(input[KeyUp]))
+    else if (isPressing(KeyUp, false))
     {
       player->move(8);
     }
-    else if (sf::Keyboard::isKeyPressed(input[KeyDown]))
+    else if (isPressing(KeyDown, false))
     {
       player->move(2);
     }
 
+    if (isPressing(KeyInteract, true))
+    {
+      if (!player->isDead() && interaction.active) player->interact(interaction.type, interaction.id);
+    }
+
+    if (isPressing(KeyFireSelect, true))
+    {
+      if (gameState == gameStatePlaying) player->selectNextShotType();
+    }
+
+    if (isPressing(KeySpell, true))
+    {
+      if (gameState == gameStatePlaying) player->castSpell();
+    }
+
     player->resestFireDirection();
 
-    if (sf::Keyboard::isKeyPressed(input[KeyFireLeft]))
+    if (isPressing(KeyFireLeft, false))
       player->fire(4);
-    else if (sf::Keyboard::isKeyPressed(input[KeyFireRight]))
+    else if (isPressing(KeyFireRight, false))
       player->fire(6);
-    else if (sf::Keyboard::isKeyPressed(input[KeyFireUp]))
+    else if (isPressing(KeyFireUp, false))
       player->fire(8);
-    else if (sf::Keyboard::isKeyPressed(input[KeyFireDown]))
+    else if (isPressing(KeyFireDown, false))
       player->fire(2);
     // alternative "one button" gameplay
-    else if (sf::Keyboard::isKeyPressed(input[KeyFire]))
+    else if (isPressing(KeyFire, false))
     {
+      // TODO Fire direction
       player->fire(firingDirection);
     }
     // alternative "firing with the mouse" gameplay
@@ -1955,7 +1938,7 @@ void WitchBlastGame::renderRunningGame()
   sf::RectangleShape rectangle(sf::Vector2f(200, 25));
 
   // effects
-  if (sf::Keyboard::isKeyPressed(input[KeyTimeControl]) && gameState == gameStatePlaying)
+  if (isPressing(KeyTimeControl, false) && gameState == gameStatePlaying)
   {
     // effect
     int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
@@ -2580,6 +2563,88 @@ void WitchBlastGame::updateMenu()
         }
       }
     }
+
+    else if (menuState == MenuStateJoystick)
+    {
+      bool alreadyUsed = false;
+      int nbButtons = sf::Joystick::getButtonCount(0);
+
+      bool found = false;
+      JoystickInputStruct jInput;
+
+      // Escape = out
+      if (event.key.code == sf::Keyboard::Escape)
+      {
+        menuState = MenuStateConfig;
+        saveConfigurationToFile();
+        return;
+      }
+
+      // button pressed ?
+      for (int i = 0; !found && i < nbButtons; i++)
+      {
+        if (sf::Joystick::isButtonPressed(0, i))
+        {
+          jInput.isButton = true;
+          jInput.value = i;
+          jInput.axis = sf::Joystick::X;
+          found = true;
+        }
+      }
+
+      if (!found)
+      {
+        // axis ?
+        for (int i = sf::Joystick::X; i <= sf::Joystick::PovY; i++)
+        {
+          if (sf::Joystick::hasAxis(0, (sf::Joystick::Axis)i))
+          {
+            if (sf::Joystick::getAxisPosition(0, (sf::Joystick::Axis)i) < -50)
+            {
+              jInput.isButton = false;
+              jInput.value = -1;
+              jInput.axis = (sf::Joystick::Axis)i;
+              found = true;
+            }
+            else if (sf::Joystick::getAxisPosition(0, (sf::Joystick::Axis)i) > 50)
+            {
+              jInput.isButton = false;
+              jInput.value = 1;
+              jInput.axis = (sf::Joystick::Axis)i;
+              found = true;
+            }
+          }
+        }
+      }
+
+      if (found)
+      {
+        // already exist ?
+        for (unsigned int i = 0; i < menuKeyIndex; i++)
+        {
+          if (jInput.isButton && joystickInput[i].isButton
+              && joystickInput[i].value == jInput.value)
+            alreadyUsed = true;
+
+            if (!jInput.isButton && !joystickInput[i].isButton
+              && joystickInput[i].axis == jInput.axis
+              && joystickInput[i].value == jInput.value)
+            alreadyUsed = true;
+        }
+
+        if (!alreadyUsed)
+        {
+          joystickInput[menuKeyIndex] = jInput;
+          menuKeyIndex++;
+          if (menuKeyIndex == NumberKeys)
+          {
+            menuState = MenuStateConfig;
+            saveConfigurationToFile();
+          }
+        }
+      }
+    }
+
     else if (event.type == sf::Event::KeyPressed)
     {
       if (menuState == MenuStateCredits)
@@ -2734,6 +2799,10 @@ void WitchBlastGame::updateMenu()
           menuState = MenuStateKeys;
           menuKeyIndex = 0;
           break;
+        case MenuJoystick:
+          menuState = MenuStateJoystick;
+          menuKeyIndex = 0;
+          break;
         case MenuCredits:
           menuState = MenuStateCredits;
           break;
@@ -2845,6 +2914,27 @@ void WitchBlastGame::renderMenu()
       write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1);
     }
   }
+
+  else if (menuState == MenuStateJoystick)
+  {
+    // menu keys
+    if (config.configFileExists())
+      write(tools::getLabel("joystick_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    else
+      write(tools::getLabel("joystick_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    for (unsigned int i = 0; i < NumberKeys; i++)
+    {
+      sf::Color itemColor;
+      if (menuKeyIndex == i) itemColor = sf::Color(255, 255, 255, 255);
+      else itemColor = sf::Color(180, 180, 180, 255);
+      std::ostringstream oss;
+      oss << tools::getLabel(inputKeyString[i]) << ": ";
+      if (menuKeyIndex == i) oss << tools::getLabel("joystick_configuration_insert");
+      else if (menuKeyIndex > i) oss << "OK";
+      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1);
+    }
+  }
+
   else
   {
     // menu
@@ -3182,10 +3272,13 @@ void WitchBlastGame::startGame()
     lastTime = getAbsolutTime();
     if (deltaTime > 0.05f) deltaTime = 0.05f;
 
+    updateActionKeys();
+
     switch (gameState)
     {
     case gameStateInit:
     case gameStateKeyConfig:
+    case gameStateJoystickConfig:
     case gameStateMenu:
       updateMenu();
       break;
@@ -3760,6 +3853,7 @@ void WitchBlastGame::onRender()
   {
   case gameStateInit:
   case gameStateKeyConfig:
+  case gameStateJoystickConfig:
   case gameStateMenu:
     renderMenu();
     break;
@@ -5328,6 +5422,21 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["keyboard_time_control"] = intToString(input[KeyTimeControl]);
   newMap["keyboard_fire_select"] = intToString(input[KeyFireSelect]);
 
+  // Joystick
+  for (unsigned int i = 0; i < NumberKeys; i++)
+  {
+    std::stringstream oss_button;
+    oss_button << "joy_" << inputKeyStr[i] << "_button";
+    std::stringstream oss_value;
+    oss_value << "joy_" << inputKeyStr[i] << "_value";
+    std::stringstream oss_axis;
+    oss_axis << "joy_" << inputKeyStr[i] << "_axis";
+
+    newMap[oss_button.str()] = joystickInput[i].isButton ? "1" : "0";
+    newMap[oss_value.str()] = intToString(joystickInput[i].value);
+    newMap[oss_axis.str()] = intToString(joystickInput[i].axis);
+  }
+
   config.saveToFile(CONFIG_FILE, newMap);
 }
 
@@ -5358,6 +5467,30 @@ void WitchBlastGame::configureFromFile()
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
 
+  // Joystick
+  joystickInput[KeyUp].isButton = false;
+  joystickInput[KeyUp].axis = sf::Joystick::Y;
+  joystickInput[KeyUp].value = -1;
+
+  joystickInput[KeyDown].isButton = false;
+  joystickInput[KeyDown].axis = sf::Joystick::Y;
+  joystickInput[KeyDown].value = 1;
+
+  joystickInput[KeyLeft].isButton = false;
+  joystickInput[KeyLeft].axis = sf::Joystick::X;
+  joystickInput[KeyLeft].value = -1;
+
+  joystickInput[KeyRight].isButton = false;
+  joystickInput[KeyRight].axis = sf::Joystick::X;
+  joystickInput[KeyRight].value = 1;
+
+  for (unsigned int i = KeyFireUp; i < NumberKeys; i++)
+  {
+    joystickInput[i].isButton = true;
+    joystickInput[i].axis = sf::Joystick::X;
+    joystickInput[i].value = KeyFireUp - 4;
+  }
+
   // from file
   addKey(KeyUp, "keyboard_move_up");
   addKey(KeyDown, "keyboard_move_down");
@@ -5371,6 +5504,25 @@ void WitchBlastGame::configureFromFile()
   addKey(KeySpell, "keyboard_spell");
   addKey(KeyTimeControl, "keyboard_time_control");
   addKey(KeyFireSelect, "keyboard_fire_select");
+
+  // Joystick
+  for (unsigned int i = 0; i < NumberKeys; i++)
+  {
+    std::stringstream oss_button;
+    oss_button << "joy_" << inputKeyStr[i] << "_button";
+    std::stringstream oss_value;
+    oss_value << "joy_" << inputKeyStr[i] << "_value";
+    std::stringstream oss_axis;
+    oss_axis << "joy_" << inputKeyStr[i] << "_axis";
+
+    int isButton = config.findInt(oss_button.str());
+    joystickInput[i].isButton = isButton;
+    int n = config.findInt(oss_value.str());
+    joystickInput[i].value = n;
+    n = config.findInt(oss_axis.str());
+    if (n >= sf::Joystick::Axis::X && n <= sf::Joystick::Axis::PovY)
+      joystickInput[i].axis = (sf::Joystick::Axis)n;
+  }
 
   int i = config.findInt("language");
   if (i >= 0) parameters.language = i;
@@ -5508,6 +5660,12 @@ void WitchBlastGame::buildMenu(bool rebuild)
   itemKeys.description = tools::getLabel("redef_input");
   itemKeys.id = MenuKeys;
   menuConfig.items.push_back(itemKeys);
+
+  menuItemStuct itemJoystick;
+  itemJoystick.label = tools::getLabel("config_joystick");
+  itemJoystick.description = tools::getLabel("redef_joystick");
+  itemJoystick.id = MenuJoystick;
+  menuConfig.items.push_back(itemJoystick);
 
   menuItemStuct itemLanguage;
   itemLanguage.label = tools::getLabel("config_lang");
@@ -6362,6 +6520,42 @@ void WitchBlastGame::checkJoypad()
     {
 
     }
+  }
+}
+
+bool WitchBlastGame::isPressing(inputKeyEnum k, bool oneShot)
+{
+  return (actionKey[k].isPressed && (!oneShot || actionKey[k].isTriggered));
+}
+
+bool WitchBlastGame::getPressingState(inputKeyEnum k)
+{
+  // keyboard
+  if (sf::Keyboard::isKeyPressed(input[k])) return true;
+
+  // joystick
+  if (joystickInput[k].isButton)
+  {
+    // button
+    if (sf::Joystick::isButtonPressed(0, joystickInput[k].value)) return true;
+  }
+  else
+  {
+    // axis
+    if (joystickInput[k].value < 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) < -40) return true;
+    else if (joystickInput[k].value > 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) > 40) return true;
+  }
+
+  return false;
+}
+
+void WitchBlastGame::updateActionKeys()
+{
+  for (unsigned int i = 0; i < NumberKeys; i++)
+  {
+    bool oldState = actionKey[i].isPressed;
+    actionKey[i].isPressed = getPressingState((inputKeyEnum)i);
+    actionKey[i].isTriggered = actionKey[i].isPressed && !oldState;
   }
 }
 

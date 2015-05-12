@@ -348,9 +348,6 @@ enemy_cyclops#Stone Cyclops
 msg_cyclops_0#The Stone Cyclops
 enemy_type_boss_cyclops#the Stone Cyclops
 
-
-
-
 achiev_rats#Rodenticide
 achiev_rats_desc#Kill 250 rats
 achiev_100#Stingy
@@ -458,6 +455,16 @@ divinity_air_1#Divinity of air and storm.
 divinity_air_2#He likes the use of lightning.
 div_air_lvl#increases your speed
 div_air_lvl_4#increases your lightning attack
+
+
+
+
+
+config_joystick#Configure joystick
+redef_joystick#Redefine joystick control
+joystick_configuration#Joystick configuration
+joystick_configuration_desc#Please configure the joystick
+joystick_configuration_insert#[press button]
 
 [french]
 start_new_game#Nouvelle partie

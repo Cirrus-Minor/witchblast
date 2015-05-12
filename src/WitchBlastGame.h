@@ -546,6 +546,7 @@ private:
     gameStateIntro,     /** < Intro animation */
     gameStateMenu,      /**< Menu */
     gameStateKeyConfig,  /**< Key config */
+    gameStateJoystickConfig,  /**< Joystick config */
     gameStatePlaying,   /**< Playing */
     gameStatePlayingPause,   /**< Playing / Pause */
     gameStatePlayingDisplayBoss,   /**< Playing / DisplayBoss */
@@ -593,7 +594,33 @@ private:
     KeyFire
   };
 
+  const std::string inputKeyStr[NumberKeys] =
+  {
+    "_move_up",
+    "_move_down",
+    "_move_left",
+    "_move_right",
+    "_fire_up",
+    "_fire_down",
+    "_fire_left",
+    "_fire_right",
+    "_spell",
+    "_interact",
+    "_fire",
+    "_time_control",
+    "_fire_select"
+  };
+
   sf::Keyboard::Key input[NumberKeys];     /*!< Input key array */
+
+  struct JoystickInputStruct
+  {
+    bool isButton;
+    sf::Joystick::Axis axis;
+    int value;
+  };
+
+  JoystickInputStruct joystickInput[NumberKeys];
 
   std::string scoreSaveFile;
 
@@ -812,6 +839,7 @@ private:
     MenuStartOld,     /**< When restoring the game */
     MenuConfig,       /**< When configuring the game */
     MenuKeys,         /**< When configuring keys */
+    MenuJoystick,     /**< When configuring joystick */
     MenuConfigBack,   /**< Back to the main menu */
     MenuTutoReset,    /**< Reset the tutorials */
     MenuLanguage,     /**< When configuring the language */
@@ -835,6 +863,7 @@ private:
     MenuStateMain,
     MenuStateConfig,
     MenuStateKeys,
+    MenuStateJoystick,
     MenuStateHiScores,
     MenuStateChangeName,
     MenuStateCredits,
@@ -866,6 +895,7 @@ private:
   menuStuct menuMain;
   menuStuct menuFirst;
   menuStuct menuConfig;
+  menuStuct menuJoystick;
   menuStuct menuInGame;
   unsigned int menuKeyIndex;
   unsigned int menuAchIndex;
@@ -975,6 +1005,18 @@ private:
   void resetPresentItems();
 
   void checkJoypad();
+
+  bool isPressing(inputKeyEnum k, bool oneShot);
+  bool getPressingState(inputKeyEnum k);
+  void updateActionKeys();
+
+  struct ActionKeyStruct
+  {
+    bool isPressed;
+    bool isTriggered;
+  } actionKey[NumberKeys];
+
+  bool isInputPressed[NumberKeys];
 };
 
 /*!
