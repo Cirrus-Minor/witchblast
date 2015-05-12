@@ -20,14 +20,14 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.5.3";
+const std::string APP_VERSION =   "0.5.4";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
 const std::string SAVE_DATA_FILE =  "data/data.sav";
 const std::string HISCORES_FILE =  "data/scores.dat";
 
-const std::string SAVE_VERSION =  "SAVE_0.5.3";
+const std::string SAVE_VERSION =  "SAVE_0.5.4";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
