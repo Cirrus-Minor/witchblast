@@ -527,6 +527,11 @@ float WitchBlastGame::getDeltaTime()
   return deltaTime;
 }
 
+float WitchBlastGame::getGameTime()
+{
+  return gameTime;
+}
+
 void WitchBlastGame::onUpdate()
 {
   if (gameState == gameStatePlaying)
@@ -912,6 +917,7 @@ void WitchBlastGame::updateIntro()
   }
 
   sf::Event event;
+  bool stopDemo = false;
   while (app->pollEvent(event))
   {
     // Close window : exit
@@ -931,27 +937,29 @@ void WitchBlastGame::updateIntro()
 
     if (event.type == sf::Event::KeyPressed)
     {
-      if (event.key.code == sf::Keyboard::Return
-          || event.key.code == sf::Keyboard::Space
-          || event.key.code == sf::Keyboard::Escape)
-      {
-        if (introState < 4)
-        {
-          if (introState > 0) introSprites[2]->setDying(true);
-          if (introState == 2) introSprites[3]->setDying(true);
-          if (introState > 2) introSprites[4]->setDying(true);
-          EntityManager::getInstance().animate(deltaTime);
-
-          if (introState < 3)
-          {
-            SoundManager::getInstance().stopSound(SOUND_INTRO_WITCH);
-            SoundManager::getInstance().playSound(SOUND_SPLATCH);
-          }
-        }
-        toMenu = true;
-      }
+      if (event.key.code == sf::Keyboard::Escape) stopDemo = true;
     }
   }
+  if (isPressing(KeyFireDown, true)) stopDemo = true;
+
+  if (stopDemo)
+  {
+    if (introState < 4)
+    {
+      if (introState > 0) introSprites[2]->setDying(true);
+      if (introState == 2) introSprites[3]->setDying(true);
+      if (introState > 2) introSprites[4]->setDying(true);
+      EntityManager::getInstance().animate(deltaTime);
+
+      if (introState < 3)
+      {
+        SoundManager::getInstance().stopSound(SOUND_INTRO_WITCH);
+        SoundManager::getInstance().playSound(SOUND_SPLATCH);
+      }
+    }
+    toMenu = true;
+  }
+
   if (toMenu)
   {
     if (introSoundState <= 1) playMusic(MusicIntro);
@@ -970,6 +978,7 @@ void WitchBlastGame::renderIntro()
 void WitchBlastGame::updateRunningGame()
 {
   bool backToMenu = false;
+  bool escape = false;
 
   // Process events
   sf::Event event;
@@ -1000,288 +1009,275 @@ void WitchBlastGame::updateRunningGame()
     {
       if (event.key.code == sf::Keyboard::Escape)
       {
-        if (player->isDead()) backToMenu = true;
-        else if (gameState == gameStatePlaying) gameState = gameStatePlayingPause;
-        else if (gameState == gameStatePlayingPause) gameState = gameStatePlaying;
-        else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
+        escape = true;
       }
 
-      if (isPressing(KeyDown, true) || event.key.code == sf::Keyboard::Down)
+      if (!achievementsQueue.empty())
       {
-        // in game menu ?
-        if (gameState == gameStatePlayingPause)
-        {
-          menuInGame.index++;
-          if (menuInGame.index == menuInGame.items.size()) menuInGame.index = 0;
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-        }
+        if (achievementsQueue.front().timer > 1.0f)
+          achievementsQueue.front().timer = 1.0f;
       }
-      else if (isPressing(KeyUp, true) || event.key.code == sf::Keyboard::Up)
+      else if (!messagesQueue.empty())
       {
-        // in game menu ?
-        if (gameState == gameStatePlayingPause)
-        {
-          if (menuInGame.index == 0) menuInGame.index = menuInGame.items.size() - 1;
-          else menuInGame.index--;
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-        }
+        if (messagesQueue.front().timer > 0.5f)
+          messagesQueue.front().timer = 0.5f;
       }
-
-      else if (event.key.code == sf::Keyboard::Return)
-      {
-        // MENU
-        if (gameState == gameStatePlayingPause)
-        {
-          switch (menuInGame.items[menuInGame.index].id)
-          {
-          case MenuStartNew:
-          case MenuStartOld:
-          case MenuKeys:
-          case MenuJoystick:
-          case MenuConfig:
-          case MenuTutoReset:
-          case MenuConfigBack:
-          case MenuLanguage:
-          case MenuCredits:
-          case MenuHiScores:
-          case MenuPlayerName:
-          case MenuVolumeMusic:
-          case MenuVolumeSound:
-          case MenuAchievements:
-            std::cout << "[ERROR] Bad Menu ID\n";
-            break;
-
-          case MenuExit:
-            backToMenu = true;
-            remove(SAVE_FILE.c_str());
-            break;
-
-          case MenuContinue:
-            gameState = gameStatePlaying;
-            break;
-
-          case MenuSaveAndQuit:
-            saveGame();
-            backToMenu = true;
-            break;
-          }
-        }
-      }
-
-      if (event.key.code == sf::Keyboard::Return)
-      {
-        if (player->isDead() && !xGame[xGameTypeFade].active && sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-        {
-          if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY)
-            player->setDeathAge(DEATH_CERTIFICATE_DELAY);
-          else
-            backToMenu = true;
-        }
-        else if (gameState == gameStatePlayingDisplayBoss)
-        {
-          gameState = gameStatePlaying;
-        }
-        else if (!achievementsQueue.empty())
-        {
-          if (achievementsQueue.front().timer > 1.0f)
-            achievementsQueue.front().timer = 1.0f;
-        }
-        else if (!messagesQueue.empty())
-        {
-          if (messagesQueue.front().timer > 0.5f)
-            messagesQueue.front().timer = 0.5f;
-        }
-      }
-
-      if (event.key.code == sf::Keyboard::X)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
-      }
-
-      if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
-        {
-          startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
-        }
-      }
-
-      if (event.key.code == sf::Keyboard::F1)
-      {
-        if (!isPlayerAlive && player->getDeathAge() > 3.5f)
-        {
-          if (scoreSaveFile.compare("") == 0) saveDeathScreen();
-        }
-        else
-        {
-          saveScreen();
-        }
-      }
-
-      if (event.key.code == sf::Keyboard::F2)
-      {
-        showLogical = !showLogical;
-      }
-      if (event.key.code == sf::Keyboard::F3)
-      {
-        showGameTime = !showGameTime;
-      }
-
-      // DEBUG
-#ifdef TEST_MODE
-      /*if (event.key.code == sf::Keyboard::Delete)
-      {
-        StructHurt hurt;
-        hurt.critical = false;
-        hurt.damage = 1;
-        hurt.enemyType = EnemyTypeGhost; //EnemyTypeNone;
-        hurt.goThrough = false;
-        hurt.hurtingType = ShotTypeStandard;
-        hurt.level = 0;
-        hurt.sourceType = SourceTypeMelee;
-        player->hurt(hurt);
-      }*/
-      if (event.key.code == sf::Keyboard::F5)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 70,
-                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleTriple, 0);
-          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 70,
-                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleIce, 0);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeRat, 1);
-          findPlaceMonsters(EnemyTypeRatBlack, 1);
-          findPlaceMonsters(EnemyTypeRatGreen, 1);
-          findPlaceMonsters(EnemyTypeRatHelmet, 1);
-          findPlaceMonsters(EnemyTypeRatBlackHelmet, 1);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F6)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeBat, 1);
-          findPlaceMonsters(EnemyTypeBatSkeleton, 2);
-          findPlaceMonsters(EnemyTypeImpBlue, 1);
-          findPlaceMonsters(EnemyTypeImpRed, 1);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F7)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                               OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeEvilFlower, 1);
-          findPlaceMonsters(EnemyTypeEvilFlowerIce, 1);
-          findPlaceMonsters(EnemyTypeEvilFlowerFire, 1);
-          findPlaceMonsters(EnemyTypePumpkin, 1);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F8)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeSlime, 1);
-          findPlaceMonsters(EnemyTypeSlimeBlue, 1);
-          findPlaceMonsters(EnemyTypeSlimeRed, 1);
-          findPlaceMonsters(EnemyTypeSlimeViolet, 1);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F9)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeSnake, 2);
-          findPlaceMonsters(EnemyTypeSnakeBlood, 2);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F10)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                                OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeWitch, 1);
-          findPlaceMonsters(EnemyTypeWitchRed, 1);
-          findPlaceMonsters(EnemyTypeCauldron, 1);
-          findPlaceMonsters(EnemyTypeCauldronElemental, 1);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F11)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
-          findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F12)
-      {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-        {
-          new VampireEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-        }
-        else
-        {
-          initMonsterArray();
-          findPlaceMonsters(EnemyTypeZombie, 2);
-          findPlaceMonsters(EnemyTypeZombieDark, 2);
-          findPlaceMonsters(EnemyTypeGhost, 2);
-
-          findPlaceMonsters(EnemyTypeBogeyman, 2);
-        }
-      }
-      if (event.key.code == sf::Keyboard::F4)
-      {
-        for (int i = 0; i < NUMBER_ITEMS; i++)
-          new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
-      }
-#endif // TEST_MODE
     }
 
-    if (event.type == sf::Event::LostFocus && !player->isDead())
-      gameState = gameStatePlayingPause;
+    if (event.key.code == sf::Keyboard::X)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
+    }
+
+    if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+      {
+        startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
+      }
+    }
+
+    if (event.key.code == sf::Keyboard::F1)
+    {
+      if (!isPlayerAlive && player->getDeathAge() > 3.5f)
+      {
+        if (scoreSaveFile.compare("") == 0) saveDeathScreen();
+      }
+      else
+      {
+        saveScreen();
+      }
+    }
+
+    if (event.key.code == sf::Keyboard::F2)
+    {
+      showLogical = !showLogical;
+    }
+    if (event.key.code == sf::Keyboard::F3)
+    {
+      showGameTime = !showGameTime;
+    }
+
+    // DEBUG
+#ifdef TEST_MODE
+    /*if (event.key.code == sf::Keyboard::Delete)
+    {
+      StructHurt hurt;
+      hurt.critical = false;
+      hurt.damage = 1;
+      hurt.enemyType = EnemyTypeGhost; //EnemyTypeNone;
+      hurt.goThrough = false;
+      hurt.hurtingType = ShotTypeStandard;
+      hurt.level = 0;
+      hurt.sourceType = SourceTypeMelee;
+      player->hurt(hurt);
+    }*/
+    if (event.key.code == sf::Keyboard::F5)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 70,
+                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleTriple, 0);
+        new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 70,
+                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleIce, 0);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeRat, 1);
+        findPlaceMonsters(EnemyTypeRatBlack, 1);
+        findPlaceMonsters(EnemyTypeRatGreen, 1);
+        findPlaceMonsters(EnemyTypeRatHelmet, 1);
+        findPlaceMonsters(EnemyTypeRatBlackHelmet, 1);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F6)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeBat, 1);
+        findPlaceMonsters(EnemyTypeBatSkeleton, 2);
+        findPlaceMonsters(EnemyTypeImpBlue, 1);
+        findPlaceMonsters(EnemyTypeImpRed, 1);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F7)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                             OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeEvilFlower, 1);
+        findPlaceMonsters(EnemyTypeEvilFlowerIce, 1);
+        findPlaceMonsters(EnemyTypeEvilFlowerFire, 1);
+        findPlaceMonsters(EnemyTypePumpkin, 1);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F8)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeSlime, 1);
+        findPlaceMonsters(EnemyTypeSlimeBlue, 1);
+        findPlaceMonsters(EnemyTypeSlimeRed, 1);
+        findPlaceMonsters(EnemyTypeSlimeViolet, 1);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F9)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeSnake, 2);
+        findPlaceMonsters(EnemyTypeSnakeBlood, 2);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F10)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                              OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeWitch, 1);
+        findPlaceMonsters(EnemyTypeWitchRed, 1);
+        findPlaceMonsters(EnemyTypeCauldron, 1);
+        findPlaceMonsters(EnemyTypeCauldronElemental, 1);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F11)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
+        findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F12)
+    {
+      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      {
+        new VampireEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+      }
+      else
+      {
+        initMonsterArray();
+        findPlaceMonsters(EnemyTypeZombie, 2);
+        findPlaceMonsters(EnemyTypeZombieDark, 2);
+        findPlaceMonsters(EnemyTypeGhost, 2);
+
+        findPlaceMonsters(EnemyTypeBogeyman, 2);
+      }
+    }
+    if (event.key.code == sf::Keyboard::F4)
+    {
+      for (int i = 0; i < NUMBER_ITEMS; i++)
+        new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
+    }
+#endif // TEST_MODE
   }
 
-  if (gameState == gameStatePlaying)
+  if (event.type == sf::Event::LostFocus && !player->isDead())
+    gameState = gameStatePlayingPause;
+
+  // POST EVENT
+  if (escape)
+  {
+    if (player->isDead()) backToMenu = true;
+    else if (gameState == gameStatePlaying) gameState = gameStatePlayingPause;
+    else if (gameState == gameStatePlayingPause) gameState = gameStatePlaying;
+    else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
+  }
+
+  if (player->isDead() && !xGame[xGameTypeFade].active && isPressing(KeyFireDown, true))
+  {
+    if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
+    else backToMenu = true;
+  }
+  else if (gameState == gameStatePlayingPause)
+  {
+    if (isPressing(KeyDown, true))
+    {
+      menuInGame.index++;
+      if (menuInGame.index == menuInGame.items.size()) menuInGame.index = 0;
+      SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+    }
+    else if (isPressing(KeyUp, true))
+    {
+      if (menuInGame.index == 0) menuInGame.index = menuInGame.items.size() - 1;
+      else menuInGame.index--;
+      SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+    }
+    else if (isPressing(KeyFireDown, true))
+    {
+      switch (menuInGame.items[menuInGame.index].id)
+      {
+      case MenuStartNew:
+      case MenuStartOld:
+      case MenuKeys:
+      case MenuJoystick:
+      case MenuConfig:
+      case MenuTutoReset:
+      case MenuConfigBack:
+      case MenuLanguage:
+      case MenuCredits:
+      case MenuHiScores:
+      case MenuPlayerName:
+      case MenuVolumeMusic:
+      case MenuVolumeSound:
+      case MenuAchievements:
+        std::cout << "[ERROR] Bad Menu ID\n";
+        break;
+
+      case MenuExit:
+        backToMenu = true;
+        remove(SAVE_FILE.c_str());
+        break;
+
+      case MenuContinue:
+        gameState = gameStatePlaying;
+        break;
+
+      case MenuSaveAndQuit:
+        saveGame();
+        backToMenu = true;
+        break;
+      }
+    }
+  }
+
+  else if (gameState == gameStatePlaying)
   {
     if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
 
@@ -1340,7 +1336,8 @@ void WitchBlastGame::updateRunningGame()
     // alternative "one button" gameplay
     else if (isPressing(KeyFire, false))
     {
-      // TODO Fire direction
+      if (gameState == gameStatePlaying && isPressing(KeyFire, true))
+        firingDirection = player->getFacingDirection();
       player->fire(firingDirection);
     }
     // alternative "firing with the mouse" gameplay
@@ -1403,6 +1400,10 @@ void WitchBlastGame::updateRunningGame()
         if (achievementsQueue.empty()) music.play();
       }
     }
+  }
+  else if (gameState == gameStatePlayingDisplayBoss)
+  {
+    if (isPressing(KeyFireDown, true)) gameState = gameStatePlaying;
   }
 
   onUpdate();
@@ -2497,12 +2498,15 @@ void WitchBlastGame::updateMenu()
 {
   SoundManager::getInstance().playSound(SOUND_NIGHT, false);
   menuStuct* menu = NULL;
+
   if (menuState == MenuStateMain)
     menu = &menuMain;
   else if (menuState == MenuStateConfig)
     menu = &menuConfig;
   else if (menuState == MenuStateFirst)
     menu = &menuFirst;
+
+  bool escape = false;
 
   EntityManager::getInstance().animate(deltaTime);
   for (int i = 0; i < 2; i++)
@@ -2626,7 +2630,7 @@ void WitchBlastGame::updateMenu()
               && joystickInput[i].value == jInput.value)
             alreadyUsed = true;
 
-            if (!jInput.isButton && !joystickInput[i].isButton
+          if (!jInput.isButton && !joystickInput[i].isButton
               && joystickInput[i].axis == jInput.axis
               && joystickInput[i].value == jInput.value)
             alreadyUsed = true;
@@ -2645,214 +2649,221 @@ void WitchBlastGame::updateMenu()
       }
     }
 
-    else if (event.type == sf::Event::KeyPressed)
+    else
     {
-      if (menuState == MenuStateCredits)
+      if (event.type == sf::Event::KeyPressed)
       {
-        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
-          menuState = MenuStateMain;
-      }
-      else if (menuState == MenuStateAchievements)
-      {
-        if (event.key.code == sf::Keyboard::Escape)
-          menuState = MenuStateMain;
-        else if (event.key.code == sf::Keyboard::Return)
+        if (menuState == MenuStateChangeName)
         {
-          if (menuAchIndex / 8 >= ACHIEV_LINES) menuState = MenuStateMain;
-        }
-        else if (event.key.code == sf::Keyboard::Right || event.key.code == input[KeyRight])
-        {
-          if (menuAchIndex % 8 < 7) menuAchIndex++;
-        }
-        else if (event.key.code == sf::Keyboard::Left || event.key.code == input[KeyLeft])
-        {
-          if (menuAchIndex % 8 > 0) menuAchIndex--;
-        }
-        else if (event.key.code == sf::Keyboard::Down || event.key.code == input[KeyDown])
-        {
-          if (menuAchIndex / 8 < ACHIEV_LINES) menuAchIndex += 8;
-        }
-        else if (event.key.code == sf::Keyboard::Up || event.key.code == input[KeyUp])
-        {
-          if (menuAchIndex / 8 > 0) menuAchIndex -= 8;
-        }
-      }
-      else if (menuState == MenuStateHiScores)
-      {
-        if (parameters.playerName.size() > 0
-            && (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return))
-        {
-          menuState = MenuStateMain;
-          if (lastScore.level > 0)
+          if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
           {
-            lastScore.level = 0;
-            lastScore.score = 0;
-            playMusic(MusicIntro);
+            saveConfigurationToFile();
+            menuState = MenuStateMain;
+          }
+          else if (event.key.code == sf::Keyboard::BackSpace)
+          {
+            if (parameters.playerName.size() > 0)
+              parameters.playerName.erase(parameters.playerName.size() - 1);
           }
         }
-      }
-      else if (menuState == MenuStateChangeName)
-      {
-        if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
+        else if (event.key.code == sf::Keyboard::Escape)
         {
-          saveConfigurationToFile();
-          menuState = MenuStateMain;
-        }
-        else if (event.key.code == sf::Keyboard::BackSpace)
-        {
-          if (parameters.playerName.size() > 0)
-            parameters.playerName.erase(parameters.playerName.size() - 1);
+          escape = true;
         }
       }
-      else if (event.key.code == sf::Keyboard::Escape)
+    }
+  }
+  // END EVENT PROCESSING
+  //if (postEventsTreatment)
+  {
+    if (menuState == MenuStateAchievements)
+    {
+      if (isPressing(KeyRight, true))
       {
-        if (menuState == MenuStateConfig) menuState = MenuStateMain;
-        else
+        if (menuAchIndex % 8 < 7) menuAchIndex++;
+      }
+      else if (isPressing(KeyLeft, true))
+      {
+        if (menuAchIndex % 8 > 0) menuAchIndex--;
+      }
+      else if (isPressing(KeyDown, true))
+      {
+        if (menuAchIndex / 8 < ACHIEV_LINES) menuAchIndex += 8;
+      }
+      else if (isPressing(KeyUp, true))
+      {
+        if (menuAchIndex / 8 > 0) menuAchIndex -= 8;
+      }
+      else if (isPressing(KeyFireDown, true))
+      {
+        if (menuAchIndex / 8 >= ACHIEV_LINES) menuState = MenuStateMain;
+      }
+      if (escape) menuState = MenuStateMain;
+    }
+
+    else if (menuState == MenuStateCredits)
+    {
+      if (escape || isPressing(KeyFireDown, true)) menuState = MenuStateMain;
+    }
+
+    else if (menuState == MenuStateHiScores)
+    {
+      if (escape || isPressing(KeyFireDown, true))
+      {
+        menuState = MenuStateMain;
+        if (lastScore.level > 0)
         {
-          saveGameData();
-          app->close();
+          lastScore.level = 0;
+          lastScore.score = 0;
+          playMusic(MusicIntro);
         }
       }
-      else if (event.key.code == input[KeyDown] || event.key.code == sf::Keyboard::Down)
+    }
+
+    else if (escape)
+    {
+      saveGameData();
+      app->close();
+    }
+
+    else if (isPressing(KeyDown, true))
+    {
+      menu->index++;
+      if (menu->index == menu->items.size()) menu->index = 0;
+      SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+    }
+
+    else if (isPressing(KeyUp, true))
+    {
+      if (menu->index == 0) menu->index = menu->items.size() - 1;
+      else menu->index--;
+
+      SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+    }
+    else if (isPressing(KeyRight, true))
+    {
+      if (menu->items[menu->index].id == MenuLanguage)
       {
-        menu->index++;
-        if (menu->index == menu->items.size()) menu->index = 0;
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        parameters.language++;
+        if (parameters.language >= NB_LANGUAGES) parameters.language = 0;
+        if (menuState == MenuStateConfig) saveConfigurationToFile();
+        tools::setLanguage(languageString[parameters.language]);
+        buildMenu(true);
+      }
+      else if (menu->items[menu->index].id == MenuVolumeSound)
+      {
+        parameters.soundVolume = (parameters.soundVolume / 10) * 10 + 10;
+        if (parameters.soundVolume > 100) parameters.soundVolume = 100;
+        saveConfigurationToFile();
+        SoundManager::getInstance().setVolume(parameters.soundVolume);
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
-
-      else if (event.key.code == input[KeyUp] || event.key.code == sf::Keyboard::Up)
+      else if (menu->items[menu->index].id == MenuVolumeMusic)
       {
-        if (menu->index == 0) menu->index = menu->items.size() - 1;
-        else menu->index--;
-
+        parameters.musicVolume = (parameters.musicVolume / 10) * 10 + 10;
+        if (parameters.musicVolume > 100) parameters.musicVolume = 100;
+        saveConfigurationToFile();
+        updateMusicVolume();
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
-      else if (event.key.code == input[KeyRight] || event.key.code == sf::Keyboard::Right)
+    }
+    else if (isPressing(KeyLeft, true))
+    {
+      if (menu->items[menu->index].id == MenuLanguage)
       {
-        if (menu->items[menu->index].id == MenuLanguage)
-        {
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-          parameters.language++;
-          if (parameters.language >= NB_LANGUAGES) parameters.language = 0;
-          if (menuState == MenuStateConfig) saveConfigurationToFile();
-          tools::setLanguage(languageString[parameters.language]);
-          buildMenu(true);
-        }
-        else if (menu->items[menu->index].id == MenuVolumeSound)
-        {
-          parameters.soundVolume = (parameters.soundVolume / 10) * 10 + 10;
-          if (parameters.soundVolume > 100) parameters.soundVolume = 100;
-          saveConfigurationToFile();
-          SoundManager::getInstance().setVolume(parameters.soundVolume);
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-        }
-        else if (menu->items[menu->index].id == MenuVolumeMusic)
-        {
-          parameters.musicVolume = (parameters.musicVolume / 10) * 10 + 10;
-          if (parameters.musicVolume > 100) parameters.musicVolume = 100;
-          saveConfigurationToFile();
-          updateMusicVolume();
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-        }
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        parameters.language--;
+        if (parameters.language < 0) parameters.language = NB_LANGUAGES - 1;
+        if (menuState == MenuStateConfig) saveConfigurationToFile();
+        tools::setLanguage(languageString[parameters.language]);
+        buildMenu(true);
       }
-      else if (event.key.code == input[KeyLeft] || event.key.code == sf::Keyboard::Left)
+      else if (menu->items[menu->index].id == MenuVolumeSound)
       {
-        if (menu->items[menu->index].id == MenuLanguage)
-        {
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-          parameters.language--;
-          if (parameters.language < 0) parameters.language = NB_LANGUAGES - 1;
-          if (menuState == MenuStateConfig) saveConfigurationToFile();
-          tools::setLanguage(languageString[parameters.language]);
-          buildMenu(true);
-        }
-        else if (menu->items[menu->index].id == MenuVolumeSound)
-        {
-          parameters.soundVolume = (parameters.soundVolume / 10) * 10 - 10;
-          if (parameters.soundVolume < 0) parameters.soundVolume = 0;
-          saveConfigurationToFile();
-          SoundManager::getInstance().setVolume(parameters.soundVolume);
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-        }
-        else if (menu->items[menu->index].id == MenuVolumeMusic)
-        {
-          parameters.musicVolume = (parameters.musicVolume / 10) * 10 - 10;
-          if (parameters.musicVolume < 0) parameters.musicVolume = 0;
-          saveConfigurationToFile();
-          updateMusicVolume();
-          SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
-        }
+        parameters.soundVolume = (parameters.soundVolume / 10) * 10 - 10;
+        if (parameters.soundVolume < 0) parameters.soundVolume = 0;
+        saveConfigurationToFile();
+        SoundManager::getInstance().setVolume(parameters.soundVolume);
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
-      else if (event.key.code == sf::Keyboard::Return)
+      else if (menu->items[menu->index].id == MenuVolumeMusic)
       {
+        parameters.musicVolume = (parameters.musicVolume / 10) * 10 - 10;
+        if (parameters.musicVolume < 0) parameters.musicVolume = 0;
+        saveConfigurationToFile();
+        updateMusicVolume();
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+      }
+    }
+    else if (isPressing(KeyFireDown, true))
+    {
 
-        switch (menu->items[menu->index].id)
+      switch (menu->items[menu->index].id)
+      {
+      case MenuStartNew:
+        startNewGame(false, 1);
+        remove(SAVE_FILE.c_str());
+        break;
+      case MenuStartOld:
+        startNewGame(true, 1);
+        break;
+      case MenuKeys:
+        menuState = MenuStateKeys;
+        menuKeyIndex = 0;
+        break;
+      case MenuJoystick:
+        menuState = MenuStateJoystick;
+        menuKeyIndex = 0;
+        break;
+      case MenuCredits:
+        menuState = MenuStateCredits;
+        break;
+      case MenuHiScores:
+        menuState = MenuStateHiScores;
+        break;
+      case MenuAchievements:
+        menuState = MenuStateAchievements;
+        menuAchIndex = 0;
+        break;
+      case MenuPlayerName:
+        menuState = MenuStateChangeName;
+        break;
+      case MenuConfig:
+        menuState = MenuStateConfig;
+        break;
+      case MenuTutoReset:
+        for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
+        SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
+        saveGameData();
+        break;
+      case MenuConfigBack:
+        menuState = MenuStateMain;
+        break;
+      case MenuLanguage:
+        if (menuState == MenuStateFirst)
         {
-        case MenuStartNew:
-          startNewGame(false, 1);
-          remove(SAVE_FILE.c_str());
-          break;
-        case MenuStartOld:
-          startNewGame(true, 1);
-          break;
-        case MenuKeys:
-          menuState = MenuStateKeys;
-          menuKeyIndex = 0;
-          break;
-        case MenuJoystick:
-          menuState = MenuStateJoystick;
-          menuKeyIndex = 0;
-          break;
-        case MenuCredits:
-          menuState = MenuStateCredits;
-          break;
-        case MenuHiScores:
-          menuState = MenuStateHiScores;
-          break;
-        case MenuAchievements:
-          menuState = MenuStateAchievements;
-          menuAchIndex = 0;
-          break;
-        case MenuPlayerName:
-          menuState = MenuStateChangeName;
-          break;
-        case MenuConfig:
-          menuState = MenuStateConfig;
-          break;
-        case MenuTutoReset:
-          for (int i = 0; i < NB_MESSAGES; i++) gameMessagesToSkip[i] = false;
-          SoundManager::getInstance().playSound(SOUND_SPELL_FREEZE);
-          saveGameData();
-          break;
-        case MenuConfigBack:
-          menuState = MenuStateMain;
-          break;
-        case MenuLanguage:
-          if (menuState == MenuStateFirst)
+          registerLanguage();
+          if (parameters.playerName.compare("") == 0 )
           {
-            registerLanguage();
-            if (parameters.playerName.compare("") == 0 )
-            {
-              menuMain.index = 0;
-              menuState = MenuStateChangeName;
-            }
-            else
-              menuState = MenuStateMain;
+            menuMain.index = 0;
+            menuState = MenuStateChangeName;
           }
-          break;
-        case MenuExit:
-          saveGameData();
-          app->close();
-          break;
-        case MenuVolumeSound:
-        case MenuVolumeMusic:
-          break;
-        case MenuContinue:
-        case MenuSaveAndQuit:
-          std::cout << "[ERROR] Bad Menu ID\n";
-          break;
+          else
+            menuState = MenuStateMain;
         }
-
+        break;
+      case MenuExit:
+        saveGameData();
+        app->close();
+        break;
+      case MenuVolumeSound:
+      case MenuVolumeMusic:
+        break;
+      case MenuContinue:
+      case MenuSaveAndQuit:
+        std::cout << "[ERROR] Bad Menu ID\n";
+        break;
       }
     }
   }
@@ -3072,13 +3083,13 @@ void WitchBlastGame::renderAchievements()
     int achIndex = sortedAchievements[menuAchIndex];
 
     if (!achievementState[achIndex] == AchievementDone && (
-           achIndex == AchievementGiantSlime
-        || achIndex == AchievementCyclops
-        || achIndex == AchievementRatKing
-        || achIndex == AchievementGiantSpider
-        || achIndex == AchievementFrancky
-        || achIndex == AchievementVampire)
-        )
+          achIndex == AchievementGiantSlime
+          || achIndex == AchievementCyclops
+          || achIndex == AchievementRatKing
+          || achIndex == AchievementGiantSpider
+          || achIndex == AchievementFrancky
+          || achIndex == AchievementVampire)
+       )
       oss << "???";
     else
       oss << tools::getLabel(achievements[achIndex].label);
@@ -4915,7 +4926,7 @@ void WitchBlastGame::saveGame()
             }
             // style
             file << currentFloor->getMap(i, j)->getFloorOffset() << " "
-              << currentFloor->getMap(i, j)->getWallType() << std::endl;
+                 << currentFloor->getMap(i, j)->getWallType() << std::endl;
             // items, etc...
             std::list<DungeonMap::itemListElement> itemList = currentFloor->getMap(i, j)->getItemList();
             file << itemList.size() << std::endl;
@@ -4961,9 +4972,9 @@ void WitchBlastGame::saveGame()
             for (int k = 0; k < NB_RANDOM_TILES_IN_ROOM; k++)
             {
               file << currentFloor->getMap(i, j)->getRandomTileElement(k).type
-                << " " <<currentFloor->getMap(i, j)->getRandomTileElement(k).x
-                << " " << currentFloor->getMap(i, j)->getRandomTileElement(k).y
-                << " " << currentFloor->getMap(i, j)->getRandomTileElement(k).rotation << std::endl;
+                   << " " <<currentFloor->getMap(i, j)->getRandomTileElement(k).x
+                   << " " << currentFloor->getMap(i, j)->getRandomTileElement(k).y
+                   << " " << currentFloor->getMap(i, j)->getRandomTileElement(k).rotation << std::endl;
             }
           }
         }
@@ -6510,19 +6521,6 @@ void WitchBlastGame::addPresentItem(int n)
   if (n >= 0 && n < NUMBER_EQUIP_ITEMS) presentItems[n] = true;
 }
 
-void WitchBlastGame::checkJoypad()
-{
-  bool joypadConnected = sf::Joystick::isConnected(0);
-
-  if (joypadConnected)
-  {
-    if (sf::Joystick::hasAxis(0, sf::Joystick::R) && sf::Joystick::hasAxis(0, sf::Joystick::U))
-    {
-
-    }
-  }
-}
-
 bool WitchBlastGame::isPressing(inputKeyEnum k, bool oneShot)
 {
   return (actionKey[k].isPressed && (!oneShot || actionKey[k].isTriggered));
@@ -6530,6 +6528,17 @@ bool WitchBlastGame::isPressing(inputKeyEnum k, bool oneShot)
 
 bool WitchBlastGame::getPressingState(inputKeyEnum k)
 {
+  // arrows in menu
+  if (gameState != gameStatePlaying || player->isDead())
+  {
+    if (k == KeyLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) return true;
+    if (k == KeyRight && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) return true;
+    if (k == KeyUp && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) return true;
+    if (k == KeyDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) return true;
+
+    if (k == KeyFireDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) return true;
+  }
+
   // keyboard
   if (sf::Keyboard::isKeyPressed(input[k])) return true;
 

@@ -1610,6 +1610,7 @@ int PlayerEntity::getFireDirection()
 
 void PlayerEntity::fire(int direction)
 {
+  if (age < 0.7f) return;
   firingDirection = direction;
 
   if (playerStatus != playerStatusDead)

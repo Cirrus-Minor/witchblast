@@ -436,6 +436,7 @@ public:
    * If positive, opens the door.
    */
   void verifyDoorUnlocking();
+  float getGameTime();
 
 protected:
   /*!
@@ -1003,8 +1004,6 @@ private:
 
   bool presentItems[NUMBER_EQUIP_ITEMS];
   void resetPresentItems();
-
-  void checkJoypad();
 
   bool isPressing(inputKeyEnum k, bool oneShot);
   bool getPressingState(inputKeyEnum k);
