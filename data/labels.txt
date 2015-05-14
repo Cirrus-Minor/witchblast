@@ -465,6 +465,7 @@ redef_joystick#Redefine joystick control
 joystick_configuration#Joystick configuration
 joystick_configuration_desc#Please configure the joystick
 joystick_configuration_insert#[press button]
+joystick_not_found#Joystick not connected!
 
 [french]
 start_new_game#Nouvelle partie
@@ -917,6 +918,13 @@ divinity_air_1#Divinité de l'air et du tonnerre.
 divinity_air_2#Il apprécie l'usage de la foudre.
 div_air_lvl#augmente votre vitesse
 div_air_lvl_4#augmente le niveau d'attaque de foudre
+
+config_joystick#Configurer le joystick
+redef_joystick#Redéfinir les contrôles joystick
+joystick_configuration#Configuration du joystick
+joystick_configuration_desc#Configurez les actions du joystick
+joystick_configuration_insert#[appui bouton]
+joystick_not_found#Aucun joystick connecté !
 
 [german]
 start_new_game#Neues Spiel starten

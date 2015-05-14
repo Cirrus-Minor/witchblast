@@ -1012,15 +1012,18 @@ void WitchBlastGame::updateRunningGame()
         escape = true;
       }
 
-      if (!achievementsQueue.empty())
+      if (event.key.code == sf::Keyboard::Return && gameState == gameStatePlaying)
       {
-        if (achievementsQueue.front().timer > 1.0f)
-          achievementsQueue.front().timer = 1.0f;
-      }
-      else if (!messagesQueue.empty())
-      {
-        if (messagesQueue.front().timer > 0.5f)
-          messagesQueue.front().timer = 0.5f;
+        if (!achievementsQueue.empty())
+        {
+          if (achievementsQueue.front().timer > 1.0f)
+            achievementsQueue.front().timer = 1.0f;
+        }
+        else if (!messagesQueue.empty())
+        {
+          if (messagesQueue.front().timer > 0.5f)
+            messagesQueue.front().timer = 0.5f;
+        }
       }
     }
 
@@ -2499,12 +2502,17 @@ void WitchBlastGame::updateMenu()
   SoundManager::getInstance().playSound(SOUND_NIGHT, false);
   menuStuct* menu = NULL;
 
+  bool noMenu = false;
+
   if (menuState == MenuStateMain)
     menu = &menuMain;
   else if (menuState == MenuStateConfig)
     menu = &menuConfig;
   else if (menuState == MenuStateFirst)
     menu = &menuFirst;
+  else
+    noMenu = true;
+
 
   bool escape = false;
 
@@ -2674,7 +2682,7 @@ void WitchBlastGame::updateMenu()
     }
   }
   // END EVENT PROCESSING
-  //if (postEventsTreatment)
+  if (!noMenu)
   {
     if (menuState == MenuStateAchievements)
     {
@@ -2813,8 +2821,14 @@ void WitchBlastGame::updateMenu()
         menuKeyIndex = 0;
         break;
       case MenuJoystick:
-        menuState = MenuStateJoystick;
-        menuKeyIndex = 0;
+        if (sf::Joystick::isConnected(0))
+        {
+          buildMenu(true);
+          menuState = MenuStateJoystick;
+          menuKeyIndex = 0;
+        }
+        else
+          buildMenu(true);
         break;
       case MenuCredits:
         menuState = MenuStateCredits;
@@ -5499,7 +5513,7 @@ void WitchBlastGame::configureFromFile()
   {
     joystickInput[i].isButton = true;
     joystickInput[i].axis = sf::Joystick::X;
-    joystickInput[i].value = KeyFireUp - 4;
+    joystickInput[i].value = i - 4;
   }
 
   // from file
@@ -5527,9 +5541,11 @@ void WitchBlastGame::configureFromFile()
     oss_axis << "joy_" << inputKeyStr[i] << "_axis";
 
     int isButton = config.findInt(oss_button.str());
-    joystickInput[i].isButton = isButton;
+    if (isButton > -1000)
+      joystickInput[i].isButton = isButton;
     int n = config.findInt(oss_value.str());
-    joystickInput[i].value = n;
+    if (n > -1000)
+      joystickInput[i].value = n;
     n = config.findInt(oss_axis.str());
     if (n >= sf::Joystick::Axis::X && n <= sf::Joystick::Axis::PovY)
       joystickInput[i].axis = (sf::Joystick::Axis)n;
@@ -5674,7 +5690,10 @@ void WitchBlastGame::buildMenu(bool rebuild)
 
   menuItemStuct itemJoystick;
   itemJoystick.label = tools::getLabel("config_joystick");
-  itemJoystick.description = tools::getLabel("redef_joystick");
+  if (sf::Joystick::isConnected(0))
+    itemJoystick.description = tools::getLabel("redef_joystick");
+  else
+    itemJoystick.description = tools::getLabel("joystick_not_found");
   itemJoystick.id = MenuJoystick;
   menuConfig.items.push_back(itemJoystick);
 
@@ -6542,11 +6561,14 @@ bool WitchBlastGame::getPressingState(inputKeyEnum k)
   // keyboard
   if (sf::Keyboard::isKeyPressed(input[k])) return true;
 
+  if (!sf::Joystick::isConnected(0)) return false;
+
   // joystick
   if (joystickInput[k].isButton)
   {
     // button
-    if (sf::Joystick::isButtonPressed(0, joystickInput[k].value)) return true;
+    if (joystickInput[k].value >= 0)
+      if (sf::Joystick::isButtonPressed(0, joystickInput[k].value)) return true;
   }
   else
   {
