@@ -19,6 +19,8 @@ enum doorEnum
   DoorExit
 };
 
+const int DOORS_PRO_COLUMN = 8;
+
 class DoorEntity : public SpriteEntity
 {
   public:

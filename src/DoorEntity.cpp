@@ -59,13 +59,13 @@ void DoorEntity::renderDoors(sf::RenderTarget* app)
 
   if (direction == 8 || direction == 2)
   {
-    x0 = 64;
-    y0 = 192 * (int)doorType;
+    x0 = 64 + 256 * doorType / DOORS_PRO_COLUMN;
+    y0 = 192 * ((int)doorType % DOORS_PRO_COLUMN);
   }
   else
   {
-    x0 = 0;
-    y0 = 192 * (int)doorType;
+    x0 = 0 + 256 * doorType / DOORS_PRO_COLUMN;
+    y0 = 192 * ((int)doorType % DOORS_PRO_COLUMN);
   }
 
   if (direction == 8)
