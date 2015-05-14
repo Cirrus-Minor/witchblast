@@ -1025,190 +1025,190 @@ void WitchBlastGame::updateRunningGame()
             messagesQueue.front().timer = 0.5f;
         }
       }
-    }
 
-    if (event.key.code == sf::Keyboard::X)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
-    }
-
-    if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+      if (event.key.code == sf::Keyboard::X)
       {
-        startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
       }
-    }
 
-    if (event.key.code == sf::Keyboard::F1)
-    {
-      if (!isPlayerAlive && player->getDeathAge() > 3.5f)
+      if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
       {
-        if (scoreSaveFile.compare("") == 0) saveDeathScreen();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        {
+          startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
+        }
       }
-      else
+
+      if (event.key.code == sf::Keyboard::F1)
       {
-        saveScreen();
+        if (!isPlayerAlive && player->getDeathAge() > 3.5f)
+        {
+          if (scoreSaveFile.compare("") == 0) saveDeathScreen();
+        }
+        else
+        {
+          saveScreen();
+        }
       }
-    }
 
-    if (event.key.code == sf::Keyboard::F2)
-    {
-      showLogical = !showLogical;
-    }
-    if (event.key.code == sf::Keyboard::F3)
-    {
-      showGameTime = !showGameTime;
-    }
+      if (event.key.code == sf::Keyboard::F2)
+      {
+        showLogical = !showLogical;
+      }
+      if (event.key.code == sf::Keyboard::F3)
+      {
+        showGameTime = !showGameTime;
+      }
 
-    // DEBUG
+      // DEBUG
 #ifdef TEST_MODE
-    /*if (event.key.code == sf::Keyboard::Delete)
-    {
-      StructHurt hurt;
-      hurt.critical = false;
-      hurt.damage = 1;
-      hurt.enemyType = EnemyTypeGhost; //EnemyTypeNone;
-      hurt.goThrough = false;
-      hurt.hurtingType = ShotTypeStandard;
-      hurt.level = 0;
-      hurt.sourceType = SourceTypeMelee;
-      player->hurt(hurt);
-    }*/
-    if (event.key.code == sf::Keyboard::F5)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      /*if (event.key.code == sf::Keyboard::Delete)
       {
-        new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 70,
-                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleTriple, 0);
-        new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 70,
-                         OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleIce, 0);
+        StructHurt hurt;
+        hurt.critical = false;
+        hurt.damage = 1;
+        hurt.enemyType = EnemyTypeGhost; //EnemyTypeNone;
+        hurt.goThrough = false;
+        hurt.hurtingType = ShotTypeStandard;
+        hurt.level = 0;
+        hurt.sourceType = SourceTypeMelee;
+        player->hurt(hurt);
+      }*/
+      if (event.key.code == sf::Keyboard::F5)
+      {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 70,
+                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleTriple, 0);
+          new BubbleEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 70,
+                           OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, BubbleIce, 0);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeRat, 1);
+          findPlaceMonsters(EnemyTypeRatBlack, 1);
+          findPlaceMonsters(EnemyTypeRatGreen, 1);
+          findPlaceMonsters(EnemyTypeRatHelmet, 1);
+          findPlaceMonsters(EnemyTypeRatBlackHelmet, 1);
+        }
       }
-      else
+      if (event.key.code == sf::Keyboard::F6)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeRat, 1);
-        findPlaceMonsters(EnemyTypeRatBlack, 1);
-        findPlaceMonsters(EnemyTypeRatGreen, 1);
-        findPlaceMonsters(EnemyTypeRatHelmet, 1);
-        findPlaceMonsters(EnemyTypeRatBlackHelmet, 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeBat, 1);
+          findPlaceMonsters(EnemyTypeBatSkeleton, 2);
+          findPlaceMonsters(EnemyTypeImpBlue, 1);
+          findPlaceMonsters(EnemyTypeImpRed, 1);
+        }
       }
-    }
-    if (event.key.code == sf::Keyboard::F6)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      if (event.key.code == sf::Keyboard::F7)
       {
-        new ButcherEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                               OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeEvilFlower, 1);
+          findPlaceMonsters(EnemyTypeEvilFlowerIce, 1);
+          findPlaceMonsters(EnemyTypeEvilFlowerFire, 1);
+          findPlaceMonsters(EnemyTypePumpkin, 1);
+        }
       }
-      else
+      if (event.key.code == sf::Keyboard::F8)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeBat, 1);
-        findPlaceMonsters(EnemyTypeBatSkeleton, 2);
-        findPlaceMonsters(EnemyTypeImpBlue, 1);
-        findPlaceMonsters(EnemyTypeImpRed, 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeSlime, 1);
+          findPlaceMonsters(EnemyTypeSlimeBlue, 1);
+          findPlaceMonsters(EnemyTypeSlimeRed, 1);
+          findPlaceMonsters(EnemyTypeSlimeViolet, 1);
+        }
       }
-    }
-    if (event.key.code == sf::Keyboard::F7)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      if (event.key.code == sf::Keyboard::F9)
       {
-        new GiantSlimeEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                             OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeSnake, 2);
+          findPlaceMonsters(EnemyTypeSnakeBlood, 2);
+        }
       }
-      else
+      if (event.key.code == sf::Keyboard::F10)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeEvilFlower, 1);
-        findPlaceMonsters(EnemyTypeEvilFlowerIce, 1);
-        findPlaceMonsters(EnemyTypeEvilFlowerFire, 1);
-        findPlaceMonsters(EnemyTypePumpkin, 1);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                                OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeWitch, 1);
+          findPlaceMonsters(EnemyTypeWitchRed, 1);
+          findPlaceMonsters(EnemyTypeCauldron, 1);
+          findPlaceMonsters(EnemyTypeCauldronElemental, 1);
+        }
       }
-    }
-    if (event.key.code == sf::Keyboard::F8)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+      if (event.key.code == sf::Keyboard::F11)
       {
-        new CyclopsEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
+          findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+        }
       }
-      else
+      if (event.key.code == sf::Keyboard::F12)
       {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeSlime, 1);
-        findPlaceMonsters(EnemyTypeSlimeBlue, 1);
-        findPlaceMonsters(EnemyTypeSlimeRed, 1);
-        findPlaceMonsters(EnemyTypeSlimeViolet, 1);
-      }
-    }
-    if (event.key.code == sf::Keyboard::F9)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-      {
-        new KingRatEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      }
-      else
-      {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeSnake, 2);
-        findPlaceMonsters(EnemyTypeSnakeBlood, 2);
-      }
-    }
-    if (event.key.code == sf::Keyboard::F10)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-      {
-        new GiantSpiderEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                              OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      }
-      else
-      {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeWitch, 1);
-        findPlaceMonsters(EnemyTypeWitchRed, 1);
-        findPlaceMonsters(EnemyTypeCauldron, 1);
-        findPlaceMonsters(EnemyTypeCauldronElemental, 1);
-      }
-    }
-    if (event.key.code == sf::Keyboard::F11)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-      {
-        new FranckyEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      }
-      else
-      {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
-        findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
-      }
-    }
-    if (event.key.code == sf::Keyboard::F12)
-    {
-      if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
-      {
-        new VampireEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-                          OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      }
-      else
-      {
-        initMonsterArray();
-        findPlaceMonsters(EnemyTypeZombie, 2);
-        findPlaceMonsters(EnemyTypeZombieDark, 2);
-        findPlaceMonsters(EnemyTypeGhost, 2);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        {
+          new VampireEntity(OFFSET_X + (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
+                            OFFSET_Y + (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+        }
+        else
+        {
+          initMonsterArray();
+          findPlaceMonsters(EnemyTypeZombie, 2);
+          findPlaceMonsters(EnemyTypeZombieDark, 2);
+          findPlaceMonsters(EnemyTypeGhost, 2);
 
-        findPlaceMonsters(EnemyTypeBogeyman, 2);
+          findPlaceMonsters(EnemyTypeBogeyman, 2);
+        }
       }
-    }
-    if (event.key.code == sf::Keyboard::F4)
-    {
-      for (int i = 0; i < NUMBER_ITEMS; i++)
-        new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
-    }
+      if (event.key.code == sf::Keyboard::F4)
+      {
+        for (int i = 0; i < NUMBER_ITEMS; i++)
+          new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
+      }
 #endif // TEST_MODE
+    }
   }
 
   if (event.type == sf::Event::LostFocus && !player->isDead())
