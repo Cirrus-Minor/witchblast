@@ -2576,7 +2576,14 @@ void PlayerEntity::divineRepulse()
     if (e->getType() >= ENTITY_ENEMY && e->getType() <= ENTITY_ENEMY_MAX)
     {
       EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(e);
-
+      enemy->hurt(getHurtParams
+                           (8,
+                           ShotTypeStandard,
+                           0,
+                           false,
+                           SourceTypeBolt,
+                           EnemyTypeNone,
+                           false));
       enemy->giveRecoil(true, Vector2D(x, y).vectorTo(Vector2D(enemy->getX(), enemy->getY()), 700.0f), 2.0f);
     }
   }
@@ -2642,7 +2649,7 @@ bool PlayerEntity::triggerDivinityBefore()
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
       divineHeal(hpMax / 3);
-      if (r == 1) divineProtection(5.0f, 0.8f);
+      if (r == 1) divineProtection(10.0f, 0.8f);
       else divineFury();
       game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
       return true;
@@ -2671,15 +2678,13 @@ bool PlayerEntity::triggerDivinityBefore()
     }
     case DivinityStone:
     {
-      int r = rand() % 3;
-      r = 1;
-      divineProtection(10.0f, 0.5f);
-      if (r == 0) return false;
+      int r = rand() % 2;
+      divineProtection(12.0f, 0.5f);
 
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
       divineHeal(hpMax / 3);
-      if (r == 1)
+      if (r == 0)
       {
         divineRepulse();
         game().makeColorEffect(X_GAME_COLOR_BROWN, 3.0f);
