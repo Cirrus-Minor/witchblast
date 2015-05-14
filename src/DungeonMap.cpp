@@ -349,6 +349,9 @@ int DungeonMap::getDivinity(int x, int y)
 
 doorEnum getRandomDoor()
 {
+  return (doorEnum)(DoorStandard_0 + ((game().getLevel() - 1) % 8));
+
+  /////
   int n = rand() % 12;
 
   switch (game().getLevel())
@@ -398,7 +401,7 @@ void DungeonMap::initRoom(int floorN, int wallN)
   if (floorN < 0) floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
   else floorOffset = floorN;
 
-  if (wallN < 0) wallType = ((game().getLevel() - 1) % 2) ;
+  if (wallN < 0) wallType = ((game().getLevel() - 1) % 8) ;
   else wallType = wallN;
 
   int wallOffset = wallType * 24;
@@ -806,7 +809,7 @@ Vector2D DungeonMap::generateChestRoom()
 
   if (game().getLevel() == 1 || rand() % 3 > 0)
   {
-    initRoom(8 * 24, 2);
+    initRoom(); // (8 * 24, 2);
     {
       if (rand() % 2 == 0) initPattern(PatternSmallDisc);
       else initPattern(PatternSmallStar);

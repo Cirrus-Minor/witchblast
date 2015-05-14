@@ -36,7 +36,7 @@ const int MAPOBJ_SHOP          =   1 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP_RIGHT    =   2 + MAPOBJ_SHOP_BEGIN;
 
 const int MAP_NORMAL_FLOOR    =   8;
-const int MAP_NB_FLOORS       =   9;
+const int MAP_NB_FLOORS       =   10;
 const int MAP_TEMPLE          =   MAP_NB_FLOORS * 24;
 const int MAP_CARPET          =   MAP_TEMPLE + 8;
 const int MAP_TILE_KEY        =   MAP_TEMPLE + 17;

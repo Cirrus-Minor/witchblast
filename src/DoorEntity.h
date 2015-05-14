@@ -11,6 +11,9 @@ enum doorEnum
   DoorStandard_2,
   DoorStandard_3,
   DoorStandard_4,
+  DoorStandard_5,
+  DoorStandard_6,
+  DoorStandard_7,
   DoorBoss,
   DoorChallenge,
   DoorExit
