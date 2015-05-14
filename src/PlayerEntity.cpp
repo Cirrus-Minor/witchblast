@@ -610,8 +610,8 @@ void PlayerEntity::animate(float delay)
         (MAP_WIDTH / 2) * TILE_WIDTH - TILE_WIDTH / 2,
         TILE_HEIGHT / 2, 64, 64, 1);
     exitDoorAroundEntity->setZ(TILE_HEIGHT + 1);
-    exitDoorAroundEntity->setImagesProLine(2);
-    exitDoorAroundEntity->setFrame(3 + 6 * DoorExit);
+    exitDoorAroundEntity->setImagesProLine(8);
+    exitDoorAroundEntity->setFrame(5 + 7 * 8);
     exitDoorAroundEntity->setType(ENTITY_EFFECT);
 
     SpriteEntity* exitDoorEntityShadow = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW),
