@@ -107,6 +107,9 @@ Next version
 - ADD New walls
 - ADD New art for the "bubble"
 - ADD Flower animation
+- ADD Joystick support
+- MOD Stone divinity repulse fury causes damage now (8HP)
+- MOD Fireball (from spell) minimum damage increases (from 12 to 24 HP)
 - FIX Explosive slime can be stuck in the wall when casting "invoke slime" spell
 - FIX Horizontal lines when maximizing the screen
 - FIX Spell lost when taking two spells at the same time
