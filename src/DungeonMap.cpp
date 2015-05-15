@@ -1683,6 +1683,11 @@ void DungeonMap::generateRandomTile(int index)
 
     ok = true;
 
+    if (randomDungeonTiles[n].rarity > 1 && (rand() % randomDungeonTiles[n].rarity) != 0 )
+    {
+      ok = false;
+    }
+
     if (!randomDungeonTiles[n].randomPlace || roomType == roomTypeKey)
     {
       for (int ix = x0; ix <= xf; ix++)
