@@ -27,7 +27,6 @@ DungeonMap::DungeonMap(GameFloor* gameFloor, int x, int y) : GameMap(MAP_WIDTH, 
     randomTileElements[i].y = 0;
     randomTileElements[i].rotation = 0;
   }
-
 }
 
 DungeonMap::~DungeonMap()
@@ -885,7 +884,8 @@ void DungeonMap::generateTempleRoom()
     generateTemple(x0 + 1, y0, (enumDivinityType)d1);
   }
 
-  generateRandomTiles();
+  // no random tiles in temples
+  //generateRandomTiles();
 }
 
 void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
