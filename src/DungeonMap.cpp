@@ -1136,11 +1136,11 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       if (rand() % 3 == 0) initPattern(PatternSmallChecker);
       bool leftOriented = rand() % 2 == 0;
 
-      int bankType = rand() % 3;
+      int bankType = rand() % 4;
       if (bankType == 2)
       {
         int xPlayer = game().getPlayerPosition().x;
-        if (xPlayer > GAME_WIDTH - TILE_WIDTH && xPlayer < GAME_WIDTH + TILE_WIDTH)
+        if (xPlayer > GAME_WIDTH / 2 - TILE_WIDTH && xPlayer < GAME_WIDTH / 2 + TILE_WIDTH)
           bankType = rand() % 2;
       }
 
@@ -1179,7 +1179,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
             for (int j = 2; j <= 6; j++) logicalMap[xPos][j] = LogicalObstacle;
             break;
 
-          case 2:
+          default:
             objectsMap[xPos][1] = MAPOBJ_BANK_TOP;
             objectsMap[xPos][2] = MAPOBJ_BANK;
             objectsMap[xPos][3] = MAPOBJ_BANK_BOTTOM;
