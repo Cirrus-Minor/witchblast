@@ -180,13 +180,18 @@ void ChestEntity::open()
       if (rand() % 5 == 0) // trap
       {
         SoundManager::getInstance().playSound(SOUND_TRAP);
-        int r = rand() % 3;
-        if (r == 0)
+        int r;
+        // no "earthquake" trap in insel rooms
+        if (game().getCurrentMap()->isWalkable(1, 1))
+          r = rand() % 3;
+        else
+          r = 1 + rand() % 2;
+        if (r == 1)
         {
           timer = 1.0f;
           trap = TrapExplosion;
         }
-        else if (r == 1)
+        else if (r == 2)
         {
           timer = 1.0f;
           trap = TrapSnakes;
