@@ -1475,6 +1475,8 @@ void PlayerEntity::move(int direction)
         break;
       }
     }
+    if (firingDirection != 5)
+      facingDirection = firingDirection;
   }
 /*
   if (collidingDirection != 5)
