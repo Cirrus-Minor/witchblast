@@ -2682,53 +2682,54 @@ void WitchBlastGame::updateMenu()
     }
   }
   // END EVENT PROCESSING
+
+  if (menuState == MenuStateAchievements)
+  {
+    if (isPressing(KeyRight, true))
+    {
+      if (menuAchIndex % 8 < 7) menuAchIndex++;
+    }
+    else if (isPressing(KeyLeft, true))
+    {
+      if (menuAchIndex % 8 > 0) menuAchIndex--;
+    }
+    else if (isPressing(KeyDown, true))
+    {
+      if (menuAchIndex / 8 < ACHIEV_LINES) menuAchIndex += 8;
+    }
+    else if (isPressing(KeyUp, true))
+    {
+      if (menuAchIndex / 8 > 0) menuAchIndex -= 8;
+    }
+    else if (isPressing(KeyFireDown, true))
+    {
+      if (menuAchIndex / 8 >= ACHIEV_LINES) menuState = MenuStateMain;
+    }
+    if (escape) menuState = MenuStateMain;
+  }
+
+  else if (menuState == MenuStateCredits)
+  {
+    if (escape || isPressing(KeyFireDown, true)) menuState = MenuStateMain;
+  }
+
+  else if (menuState == MenuStateHiScores)
+  {
+    if (escape || isPressing(KeyFireDown, true))
+    {
+      menuState = MenuStateMain;
+      if (lastScore.level > 0)
+      {
+        lastScore.level = 0;
+        lastScore.score = 0;
+        playMusic(MusicIntro);
+      }
+    }
+  }
+
   if (!noMenu)
   {
-    if (menuState == MenuStateAchievements)
-    {
-      if (isPressing(KeyRight, true))
-      {
-        if (menuAchIndex % 8 < 7) menuAchIndex++;
-      }
-      else if (isPressing(KeyLeft, true))
-      {
-        if (menuAchIndex % 8 > 0) menuAchIndex--;
-      }
-      else if (isPressing(KeyDown, true))
-      {
-        if (menuAchIndex / 8 < ACHIEV_LINES) menuAchIndex += 8;
-      }
-      else if (isPressing(KeyUp, true))
-      {
-        if (menuAchIndex / 8 > 0) menuAchIndex -= 8;
-      }
-      else if (isPressing(KeyFireDown, true))
-      {
-        if (menuAchIndex / 8 >= ACHIEV_LINES) menuState = MenuStateMain;
-      }
-      if (escape) menuState = MenuStateMain;
-    }
-
-    else if (menuState == MenuStateCredits)
-    {
-      if (escape || isPressing(KeyFireDown, true)) menuState = MenuStateMain;
-    }
-
-    else if (menuState == MenuStateHiScores)
-    {
-      if (escape || isPressing(KeyFireDown, true))
-      {
-        menuState = MenuStateMain;
-        if (lastScore.level > 0)
-        {
-          lastScore.level = 0;
-          lastScore.score = 0;
-          playMusic(MusicIntro);
-        }
-      }
-    }
-
-    else if (escape)
+    if (escape)
     {
       saveGameData();
       app->close();
