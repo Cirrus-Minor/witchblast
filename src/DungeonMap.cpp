@@ -1683,9 +1683,16 @@ void DungeonMap::generateRandomTile(int index)
 
     ok = true;
 
+    // proceed rarity
     if (randomDungeonTiles[n].rarity > 1 && (rand() % randomDungeonTiles[n].rarity) != 0 )
     {
       ok = false;
+    }
+
+    // each random sprite type should be present no more that once in a room
+    for (int j = 0; j < index; j++)
+    {
+      if (n == randomTileElements[j].type) ok = false;
     }
 
     if (!randomDungeonTiles[n].randomPlace || roomType == roomTypeKey)
