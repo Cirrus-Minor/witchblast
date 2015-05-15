@@ -47,68 +47,71 @@ void PumpkinEntity::animate(float delay)
   float slimeDelay = delay;
   if (specialState[SpecialStateIce].active) slimeDelay = delay * specialState[SpecialStateIce].param1;
 
-  if (isJumping)
+  if (!isAgonising)
   {
-    hVelocity -= 700.0f * slimeDelay;
-
-    h += hVelocity * slimeDelay;
-
-    bool firstTimeGround = false;
-
-    if (h <= 0.0f)
+    if (isJumping)
     {
-      if (hp <= 0)
-        dying();
-      else
+      hVelocity -= 700.0f * slimeDelay;
+
+      h += hVelocity * slimeDelay;
+
+      bool firstTimeGround = false;
+
+      if (h <= 0.0f)
       {
-        h = 0.0f;
-        if (isFirstJumping)
-        {
-          isFirstJumping = false;
-          firstTimeGround = true;
-          hVelocity = 120.0f;
-          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT);
-        }
+        if (hp <= 0)
+          dying();
         else
         {
-          jumpingDelay = 0.05f; // + 0.1f * (rand() % 10);
-          isJumping = false;
-          SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_WEAK);
+          h = 0.0f;
+          if (isFirstJumping)
+          {
+            isFirstJumping = false;
+            firstTimeGround = true;
+            hVelocity = 120.0f;
+            SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT);
+          }
+          else
+          {
+            jumpingDelay = 0.05f;
+            isJumping = false;
+            SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_WEAK);
+          }
         }
       }
+      if (firstTimeGround) frame = 2;
+      else if (hVelocity > -60.0f) frame = 1;
+      else frame = 0;
     }
-    if (firstTimeGround) frame = 2;
-    else if (hVelocity > -60.0f) frame = 1;
-    else frame = 0;
-  }
-  else
-  {
-    jumpingDelay -= slimeDelay;
-    if (jumpingDelay < 0.0f)
+    else
     {
-      if (rand() % 2 == 0)
-        SoundManager::getInstance().playSound(SOUND_PUMPKIN_01, false);
-      else
-        SoundManager::getInstance().playSound(SOUND_PUMPKIN_00, false);
-      hVelocity = 200.0f; // + rand() % 150;
-      isJumping = true;
-      isFirstJumping = true;
+      jumpingDelay -= slimeDelay;
+      if (jumpingDelay < 0.0f)
+      {
+        if (rand() % 2 == 0)
+          SoundManager::getInstance().playSound(SOUND_PUMPKIN_01, false);
+        else
+          SoundManager::getInstance().playSound(SOUND_PUMPKIN_00, false);
+        hVelocity = 200.0f;
+        isJumping = true;
+        isFirstJumping = true;
 
-      float randVel = 280.0f; // + rand() % 250;
+        float randVel = 280.0f;
 
-      setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), randVel ));
+        setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), randVel ));
+      }
+      else if (jumpingDelay < 0.05f)
+        frame = 1;
+      else frame = 2;
     }
-    else if (jumpingDelay < 0.05f)
-      frame = 1;
+
+    if (age > 0.0f && jumpingDelay < 0.05f)
+    {
+      frame = (int)(age * 6) % 4;
+      if (frame == 3) frame = 1;
+    }
     else frame = 2;
   }
-
-  if (age > 0.0f && jumpingDelay < 0.05f)
-  {
-    frame = (int)(age * 6) % 4;
-    if (frame == 3) frame = 1;
-  }
-  else frame = 2;
 
   EnemyEntity::animate(delay);
   z = y + 14;
