@@ -4718,7 +4718,7 @@ void WitchBlastGame::verifyDoorUnlocking()
 {
   int collidingDirection = (player->getCollidingDirection());
 
-  if (collidingDirection > 0 && currentMap->isCleared() && !bossRoomOpened && player->isEquiped(EQUIP_BOSS_KEY))
+  if (collidingDirection != 5 && currentMap->isCleared() && !bossRoomOpened && player->isEquiped(EQUIP_BOSS_KEY))
   {
     int xt = (player->getX()) / TILE_WIDTH;
     int yt = (player->getY()) / TILE_HEIGHT;
@@ -4741,7 +4741,6 @@ void WitchBlastGame::verifyDoorUnlocking()
     }
     if (xt <= 1 && yt >= MAP_HEIGHT / 2 - 1 && yt <= MAP_HEIGHT / 2 + 1 && currentMap->hasNeighbourLeft() == 2)
     {
-
       doorEntity[1]->openDoor();
       currentMap->openDoor(0, MAP_HEIGHT / 2);
       SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);

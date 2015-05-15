@@ -85,7 +85,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   // init the equipment (to empty)
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++) equip[i] = false;
-  collidingDirection = 0;
+  collidingDirection = 5;
 
   // init the shots (to none)
   for (int i = 0; i < SPECIAL_SHOT_SLOTS; i++)
@@ -549,7 +549,7 @@ void PlayerEntity::animate(float delay)
     }
   }
 
-  collidingDirection = 0;
+  //collidingDirection = 0;
   BaseCreatureEntity::animate(delay);
 
   if (firingDirection != 5)
@@ -1281,6 +1281,7 @@ void PlayerEntity::move(int direction)
   }
   if (playerStatus == playerStatusPlaying)
   {
+    collidingDirection = 5;
     switch (keyDirection)
     {
     case 1:
@@ -1422,7 +1423,6 @@ void PlayerEntity::move(int direction)
         y = oldY;
       }
       break;
-
     }
 
     float speedx = 0.0f, speedy = 0.0f;
@@ -1476,11 +1476,11 @@ void PlayerEntity::move(int direction)
       }
     }
   }
-
+/*
   if (collidingDirection != 5)
   {
     game().verifyDoorUnlocking();
-  }
+  }*/
 }
 
 bool PlayerEntity::isMoving()
