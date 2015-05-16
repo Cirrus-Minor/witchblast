@@ -1446,6 +1446,9 @@ void PlayerEntity::move(int direction)
 
     setVelocity(Vector2D(speedx, speedy));
 
+    if (firingDirection != 5)
+      facingDirection = firingDirection;
+    else
     {
       switch (keyDirection)
       {
@@ -1475,14 +1478,7 @@ void PlayerEntity::move(int direction)
         break;
       }
     }
-    if (firingDirection != 5)
-      facingDirection = firingDirection;
   }
-/*
-  if (collidingDirection != 5)
-  {
-    game().verifyDoorUnlocking();
-  }*/
 }
 
 bool PlayerEntity::isMoving()
