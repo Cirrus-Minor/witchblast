@@ -253,6 +253,7 @@ WitchBlastGame::WitchBlastGame()
 {
   gameptr = this;
 
+  gameFromSaveFile = false;
   configureFromFile();
 
   if (parameters.vsync == false)
@@ -643,12 +644,18 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   if (fromSaveFile)
   {
     if (!loadGame())
+    {
       fromSaveFile = false;
+    }
     else
+    {
+      gameFromSaveFile = true;
       playLevel(saveInFight.isFight);
+    }
   }
   if (!fromSaveFile)
   {
+    gameFromSaveFile = false;
     // the player
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
@@ -692,7 +699,6 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
         player->loadDivinity(rand() % NB_DIVINITY, (startingLevel - 2) * 200, 1, 0);
       }
     }
-
     startNewLevel();
   }
 }

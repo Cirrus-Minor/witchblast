@@ -1016,6 +1016,8 @@ private:
   } actionKey[NumberKeys];
 
   bool isInputPressed[NumberKeys];
+
+  bool gameFromSaveFile;
 };
 
 /*!
