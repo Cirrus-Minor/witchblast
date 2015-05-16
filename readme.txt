@@ -116,6 +116,7 @@ Next version
 - FIX Missing art for advanced gloves and boots
 - FIX Some random sprites are misplaced
 - FIX Graphical problems on The Thing
+- FIX Pumpkin sound is playing twice
 
 v0.5.3
 - ADD Glowing green staff aura when poison shot equipped
