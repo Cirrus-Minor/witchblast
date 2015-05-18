@@ -1047,13 +1047,13 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
       }
 
-      if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
+      /*if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
       {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
         {
           startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
         }
-      }
+      }*/
 
       if (event.key.code == sf::Keyboard::F1)
       {
@@ -3096,7 +3096,7 @@ void WitchBlastGame::renderMenu()
   }
 
   std::ostringstream oss;
-  oss << APP_NAME << " v" << APP_VERSION << "  - 2014 - " << " Seby (code), Pierre \"dejam0rt\" Baron (2D art)";
+  oss << APP_NAME << " v" << APP_VERSION << "  - 2014-2015 - " << " Seby (code), Pierre \"dejam0rt\" Baron (2D art)";
   write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
 }
 
@@ -4252,6 +4252,12 @@ void WitchBlastGame::generateMap()
       KingRatEntity* b3 = new KingRatEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 100,
                                             (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b3->setLabelDy(-20);
+
+      new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 120,
+                                            (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
+
+      new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 120,
+                                            (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
 
     else // level > 6
