@@ -100,7 +100,8 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next version
+v0.6
+- ADD Online scores
 - ADD Player movement improvements
 - ADD More details in dungeons
 - ADD New doors
@@ -117,6 +118,7 @@ Next version
 - FIX Some random sprites are misplaced
 - FIX Graphical problems on The Thing
 - FIX Pumpkin sound is playing twice
+- FIX Giant slime impact sound was missing
 
 v0.5.3
 - ADD Glowing green staff aura when poison shot equipped
