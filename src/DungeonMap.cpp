@@ -1013,11 +1013,7 @@ Vector2D DungeonMap::generateKeyRoom()
     if (rand() % 2 == 0) initPattern(PatternSmallCircle);
     else initPattern(PatternSmallStar);
   }
-  map[x0][y0] = MAP_TILE_KEY;
-  map[x0 -1][y0] = MAP_TILE_KEY;
-  map[x0 + 1][y0] = MAP_TILE_KEY;
-  map[x0][y0 - 1] = MAP_TILE_KEY;
-  map[x0][y0 + 1] = MAP_TILE_KEY;
+  generateCarpet(x0 - 1, y0 - 1, 3, 3, MAP_CARPET);
   generateRandomTiles();
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));

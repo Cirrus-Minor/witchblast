@@ -39,7 +39,6 @@ const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_NB_FLOORS       =   10;
 const int MAP_TEMPLE          =   MAP_NB_FLOORS * 24;
 const int MAP_CARPET          =   MAP_TEMPLE + 8;
-const int MAP_TILE_KEY        =   MAP_TEMPLE + 17;
 
 const int MAP_WALL_BEGIN    =   (MAP_NB_FLOORS + 3) * 24;
 
