@@ -348,6 +348,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/king_rat_cry_1.ogg", "media/sound/king_rat_cry_2.ogg",
     "media/sound/king_rat_die.ogg",   "media/sound/slime_jump.ogg",
     "media/sound/slime_impact.ogg",   "media/sound/slime_impact_weak.ogg",
+    "media/sound/slime_impact_boss.ogg",
     "media/sound/slime_smash.ogg",    "media/sound/ice_charge.ogg",
     "media/sound/electric.ogg",       "media/sound/select.ogg",
     "media/sound/heart.ogg",          "media/sound/rat_die.ogg",
