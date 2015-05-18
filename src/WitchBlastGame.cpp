@@ -66,6 +66,12 @@
 
 #include <algorithm>
 
+//#define ONLINE_MODE
+
+#ifdef ONLINE_MODE
+  #include "OnlineScoring.h"
+#endif // ONLINE_SCORING
+
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
 
@@ -445,6 +451,8 @@ WitchBlastGame::WitchBlastGame()
 
   loadGameData();
   loadHiScores();
+  loadHiScoresOnline(false);
+  loadHiScoresOnline(true);
   srand(time(NULL));
 }
 
@@ -1480,6 +1488,11 @@ void WitchBlastGame::updateRunningGame()
 
       switchToMenu();
       menuState = MenuStateHiScores;
+#ifdef ONLINE_MODE
+      menuScoreIndex = 0;
+#else
+      menuScoreIndex = 2;
+#endif
     }
     else
     {
@@ -2488,6 +2501,22 @@ void WitchBlastGame::calculateScore()
   std::sort (scores.begin(), scores.end(), compareScores);
 
   saveHiScores();
+
+    // Online
+  #ifdef ONLINE_MODE
+  if (!gameFromSaveFile)
+  {
+    sendScore(lastScore.score,
+              lastScore.level,
+              lastScore.name,
+              equipToString(lastScore.equip),
+              lastScore.shotType,
+              SCORE_VERSION);
+  }
+
+  loadHiScoresOnline(false);
+  loadHiScoresOnline(true);
+  #endif // ONLINE_MODE
 }
 
 void WitchBlastGame::switchToMenu()
@@ -2723,12 +2752,16 @@ void WitchBlastGame::updateMenu()
   {
     if (escape || isPressing(KeyFireDown, true))
     {
-      menuState = MenuStateMain;
-      if (lastScore.level > 0)
+      menuScoreIndex++;
+      if (menuScoreIndex > 2)
       {
-        lastScore.level = 0;
-        lastScore.score = 0;
-        playMusic(MusicIntro);
+        menuState = MenuStateMain;
+        if (lastScore.level > 0)
+        {
+          lastScore.level = 0;
+          lastScore.score = 0;
+          playMusic(MusicIntro);
+        }
       }
     }
   }
@@ -2842,6 +2875,13 @@ void WitchBlastGame::updateMenu()
         break;
       case MenuHiScores:
         menuState = MenuStateHiScores;
+#ifdef ONLINE_MODE
+        menuScoreIndex = 0;
+#else
+        menuScoreIndex = 2;
+#endif
+        loadHiScoresOnline(false);
+        loadHiScoresOnline(true);
         break;
       case MenuAchievements:
         menuState = MenuStateAchievements;
@@ -2899,7 +2939,13 @@ void WitchBlastGame::renderMenu()
   }
   else if (menuState == MenuStateHiScores)
   {
-    renderHiScores();
+    //renderHiScores();
+    if (menuScoreIndex == 0)
+      renderScores(scoresOnline, "Best Scores (ON-LINE)");
+    else if (menuScoreIndex == 1)
+      renderScores(scoresOnlineDay, "Best TODAY Scores (ON-LINE)");
+    else
+      renderScores(scores, "Best Scores (local)");
     return;
   }
   else if (menuState == MenuStateAchievements)
@@ -3213,6 +3259,47 @@ void WitchBlastGame::renderCredits()
   yCursor += yStep;
 }
 
+void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std::string title)
+{
+  sf::Sprite bgSprite;
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  app->draw(bgSprite);
+
+  // hi-scores-title
+  write(title, 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+
+  int x0 = 25;
+  int x1 = 70;
+  int x2 = 125;
+  int x3 = 430;
+  int y0 = 130;
+  int yStep = 100;
+  int xRight = SCREEN_WIDTH / 2;
+
+  sf::RectangleShape line(sf::Vector2f(2, 600));
+  line.setPosition(SCREEN_WIDTH / 2, 80);
+  app->draw(line);
+
+  for (unsigned int i = 0; i < scoresToRender.size() && i < SCORES_MAX; i++)
+  {
+    int index = i < SCORES_MAX / 2 ? i : i - SCORES_MAX / 2;
+    sf::Color color = sf::Color( 220, 220, 220);
+    if (scoresToRender[i].score == lastScore.score && scoresToRender[i].level == lastScore.level && scoresToRender[i].name == lastScore.name)
+    {
+      int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
+      color = sf::Color(255, 128 + fade, 255);
+    }
+
+    renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scoresToRender[i].equip, scoresToRender[i].shotType, 1, 0);
+
+    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1);
+    std::stringstream ss;
+    ss << scoresToRender[i].name << " (" << scoresToRender[i].level << ")";
+    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1);
+    write(intToString(scoresToRender[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
+  }
+}
+
 void WitchBlastGame::renderHiScores()
 {
   sf::Sprite bgSprite;
@@ -3253,6 +3340,8 @@ void WitchBlastGame::renderHiScores()
     write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
   }
 }
+
+
 void WitchBlastGame::renderInGameMenu()
 {
   menuStuct* menu = &menuInGame;
@@ -5666,7 +5755,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
     menuMain.items.push_back(itemAchiev);
   }
 
-  if (scores.size() > 0)
+  //if (scores.size() > 0)
   {
     menuItemStuct itemHiScores;
     itemHiScores.label = tools::getLabel("hi_scores");
@@ -6384,6 +6473,14 @@ std::string WitchBlastGame::sourceToString(sourceTypeEnum sourceType, enemyTypeE
   return value;
 }
 
+std::string WitchBlastGame::equipToString(bool equip[NUMBER_EQUIP_ITEMS])
+{
+  std::stringstream oss;
+  for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
+    oss << (equip[i] ? 1 : 0);
+  return oss.str();
+}
+
 void WitchBlastGame::saveHiScores()
 {
   std::ofstream file(HISCORES_FILE.c_str(), std::ios::out | std::ios::trunc);
@@ -6420,7 +6517,6 @@ void WitchBlastGame::saveHiScores()
 void WitchBlastGame::loadHiScores()
 {
   scores.clear();
-
   std::ifstream file(HISCORES_FILE.c_str(), std::ios::in);
 
   if (file)
@@ -6452,6 +6548,50 @@ void WitchBlastGame::loadHiScores()
       scores.push_back(score);
     }
   }
+}
+
+void WitchBlastGame::loadHiScoresOnline(bool fromDayOnly)
+{
+  #ifdef ONLINE_MODE
+  if (fromDayOnly)
+    scoresOnlineDay.clear();
+  else
+    scoresOnline.clear();
+
+  std::vector<std::string> receivedScores = receiveScores(fromDayOnly);
+  int nbParameters = 5;
+
+  if (receivedScores.size() > 0
+      && receivedScores.size() % nbParameters == 0
+      && receivedScores.size() / nbParameters <= 10)
+  {
+    int nbScores = receivedScores.size() / nbParameters;
+    for (int i = 0; i < nbScores; i++)
+    {
+      StructScore score;
+      std::istringstream scoreStr(receivedScores[i * nbParameters]);
+      scoreStr >> score.score;
+
+      score.name = receivedScores[i * nbParameters + 1];
+
+      std::istringstream levelStr(receivedScores[i * nbParameters + 2]);
+      levelStr >> score.level;
+
+      for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
+      {
+        score.equip[j] = (receivedScores[i * nbParameters + 3])[j] == '1';
+      }
+
+      std::istringstream shotStr(receivedScores[i * nbParameters + 4]);
+      shotStr >> score.shotType;
+
+      if (fromDayOnly)
+        scoresOnlineDay.push_back(score);
+      else
+        scoresOnline.push_back(score);
+    }
+  }
+  #endif
 }
 
 void WitchBlastGame::revealFloor()

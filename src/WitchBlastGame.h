@@ -437,6 +437,7 @@ public:
    */
   void verifyDoorUnlocking();
   float getGameTime();
+  std::string equipToString(bool equip[NUMBER_EQUIP_ITEMS]);
 
 protected:
   /*!
@@ -831,6 +832,8 @@ private:
    */
   void renderHiScores();
 
+  void renderScores(std::vector <StructScore> scoresToRender, std::string title);
+
   /** Menu keys enum
    *  Identify the various keys of the menu.
    */
@@ -882,6 +885,8 @@ private:
     std::string label;            /**< Label of the menu item */
     std::string description;      /**< Description of the menu item */
   };
+
+  int menuScoreIndex;
 
   /*!
   *  \brief Menu structure
@@ -973,8 +978,11 @@ private:
   int introSoundState;
 
   std::vector <StructScore> scores;
+  std::vector <StructScore> scoresOnline;
+  std::vector <StructScore> scoresOnlineDay;
   StructScore lastScore;
   void loadHiScores();
+  void loadHiScoresOnline(bool fromDayOnly);
   void saveHiScores();
 
   struct StructInteraction
