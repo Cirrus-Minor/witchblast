@@ -464,6 +464,7 @@ void WitchBlastGame::enableAA(bool enable)
         && i != IMAGE_TILES_SHADOW && i != IMAGE_TILES_SHADOW_CORNER  && i != IMAGE_TILES_SHADOW_MEDIUM
         && i != IMAGE_MINIMAP
         && i != IMAGE_DOORS
+        && i != IMAGE_FOG
         && i != IMAGE_ITEMS_PRES && i != IMAGE_ITEMS_EQUIP_PRES && i != IMAGE_CORPSES
         && i != IMAGE_CORPSES_BIG)
       ImageManager::getInstance().getImage(i)->setSmooth(enable);
