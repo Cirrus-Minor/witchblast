@@ -28,6 +28,7 @@
 #include "Achievements.h"
 
 #include <queue>
+#include <thread>
 
 // for tests
 //#define TEST_MODE
@@ -984,6 +985,12 @@ private:
   void loadHiScores();
   void loadHiScoresOnline(bool fromDayOnly);
   void saveHiScores();
+  enum enumNetworkScoreState
+  {
+    ScoreOK,
+    ScoreLoading,
+    ScoreLoadingDay
+  } scoreState;
 
   struct StructInteraction
   {
@@ -1026,6 +1033,15 @@ private:
   bool isInputPressed[NumberKeys];
 
   bool gameFromSaveFile;
+
+  // scoring server
+  std::thread sendScoreThread;
+  void sendScoreToServer();
+  void sendScoreToServerThread();
+
+  std::thread receiveScoreThread;
+  void receiveScoreFromServer();
+  void receiveScoreFromServerThread();
 };
 
 /*!
