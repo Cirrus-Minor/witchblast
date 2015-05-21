@@ -103,5 +103,6 @@ void LittleSpiderEntity::collideWithEnemy(EnemyEntity* entity)
 
 void LittleSpiderEntity::drop()
 {
-  // no drop
+  if (enemyType == EnemyTypeSpiderLittle)
+    EnemyEntity::drop();
 }
