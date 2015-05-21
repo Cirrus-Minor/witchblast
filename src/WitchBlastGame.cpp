@@ -5647,6 +5647,7 @@ void WitchBlastGame::configureFromFile()
   addKey(KeyFireRight, "keyboard_fire_right");
   addKey(KeyFire, "keyboard_fire");
   addKey(KeySpell, "keyboard_spell");
+  addKey(KeyInteract, "keyboard_interact");
   addKey(KeyTimeControl, "keyboard_time_control");
   addKey(KeyFireSelect, "keyboard_fire_select");
 
