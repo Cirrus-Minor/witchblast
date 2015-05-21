@@ -14,3 +14,6 @@
 *.dat
 *.cscope_file_list
 DeathCertificate.png
+src/MD5.cpp
+src/OnlineScoring.h
+src/MD5.h
