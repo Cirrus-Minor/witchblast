@@ -83,6 +83,7 @@ enum enemyTypeEnum
   EnemyTypeVampireDead,
 
   EnemyTypeNone,  // player of fairy
+  EnemyTypeDestroyable,
 
   NB_ENEMY // = no enemy
 };
@@ -132,7 +133,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void dying();
     enum enumMovingStyle { movWalking, movFlying};
     virtual enumMovingStyle getMovingStyle();
-    enum enumBloodColor { BloodNone = -1, BloodRed, BloodGreen, BloodRock, BloodEgg, BloodBubble, BloodBubbleIce, BloodBlack};
+    enum enumBloodColor { BloodNone = -1, BloodRed, BloodGreen, BloodRock, BloodEgg, BloodBubble, BloodBubbleIce, BloodBlack, BloodBarrel};
     enum enumSpecialState
     {
       SpecialStateIce, // = 0

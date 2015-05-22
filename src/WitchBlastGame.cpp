@@ -50,6 +50,7 @@
 #include "SpiderEggEntity.h"
 #include "FranckyEntity.h"
 #include "VampireEntity.h"
+#include "ObstacleEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -66,7 +67,7 @@
 
 #include <algorithm>
 
-//#define ONLINE_MODE
+#define ONLINE_MODE
 
 #ifdef ONLINE_MODE
 #include "OnlineScoring.h"
@@ -327,6 +328,7 @@ WitchBlastGame::WitchBlastGame()
     "media/dungeon_objects.png",  "media/shadows_standard.png",
     "media/shadows_corners.png",  "media/shadows_medium.png",
     "media/shadows_small.png",    "media/doors.png",
+    "media/destroyable_objects.png",
   };
 
   for (const char *const filename : images)
@@ -3742,51 +3744,11 @@ void WitchBlastGame::refreshMap()
   checkDoor(2, currentMap->getRoomType(), currentMap->getNeighbourDown());
   checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
 
-  // keystones
-  /*int keyStoneFrame = 12 + (currentMap->getWallOffset() / 24);
-
-  if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-        TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }
-  if (currentMap->getNeighbourDown())
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-        MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setAngle(180);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }
-  if (currentMap->getNeighbourLeft())
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        TILE_WIDTH / 2,
-        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setAngle(270);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }
-  if (currentMap->getNeighbourRight())
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
-        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setAngle(90);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }*/
-
   // pet slime
   if (player->isEquiped(EQUIP_PET_SLIME) && currentMap->getRoomType() != roomTypeTemple) new SlimePetEntity();
+
+  // barrels
+  checkDestroyableObjects();
 }
 
 void WitchBlastGame::refreshMinimap()
@@ -6473,6 +6435,10 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     value = "enemy_type_himself";
     break;
 
+  case EnemyTypeDestroyable:
+    value = "";
+    break;
+
   case NB_ENEMY:
     break;
   }
@@ -6806,6 +6772,17 @@ void WitchBlastGame::loadHiScoresOnline(bool fromDayOnly)
 #endif
 }
 
+void WitchBlastGame::checkDestroyableObjects()
+{
+  for (int i = 0; i < MAP_WIDTH; i++)
+    for (int j = 0; j < MAP_HEIGHT; j++)
+    {
+      if (currentMap->getObjectTile(i, j) >= MAPOBJ_BARREL && currentMap->getObjectTile(i, j) < MAPOBJ_BARREL + 3)
+      {
+        new ObstacleEntity(i * TILE_WIDTH + TILE_WIDTH / 2, j * TILE_HEIGHT + TILE_HEIGHT / 2, currentMap->getObjectTile(i, j));
+      }
+    }
+}
 
 WitchBlastGame &game()
 {

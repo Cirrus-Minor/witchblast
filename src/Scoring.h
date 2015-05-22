@@ -101,6 +101,7 @@ int getMonsterScore(enemyTypeEnum monster)
       score = 0; break;
 
     case EnemyTypeNone:
+    case EnemyTypeDestroyable:
     case NB_ENEMY:
       score = 0; break;
   }

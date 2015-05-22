@@ -86,11 +86,13 @@ logicalMapStateEnum DungeonMap::getLogicalTile(int x, int y)
 void DungeonMap::setObjectTile(int x, int y, int n)
 {
   objectsMap[x][y] = n;
+  hasChanged = true;
 }
 
 void DungeonMap::setLogicalTile(int x, int y, logicalMapStateEnum state)
 {
   logicalMap[x][y] = state;
+  hasChanged = true;
 }
 
 int DungeonMap::getFloorOffset()
@@ -618,6 +620,14 @@ void DungeonMap::initRoom(int floorN, int wallN)
     {
       doorType[North] = DoorExit;
     }
+  }
+
+  // test
+  for (int i = 0; i < 8; i++)
+  {
+    int objX = 1 + rand() % (MAP_WIDTH - 2);
+    int objY = 1 + rand() % (MAP_HEIGHT - 2);
+    objectsMap[objX][objY] = MAPOBJ_BARREL;
   }
 }
 

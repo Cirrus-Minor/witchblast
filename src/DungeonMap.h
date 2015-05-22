@@ -34,6 +34,7 @@ const int MAPOBJ_SHOP_BEGIN    =   11;
 const int MAPOBJ_SHOP_LEFT     =   0 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP          =   1 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP_RIGHT    =   2 + MAPOBJ_SHOP_BEGIN;
+const int MAPOBJ_BARREL        =   1000;
 
 const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_NB_FLOORS       =   10;
@@ -71,6 +72,7 @@ enum logicalMapStateEnum
   LogicalWall,
   LogicalObstacle,
   LogicalHole,
+  LogicalDestroyable,
 };
 
 class GameFloor;

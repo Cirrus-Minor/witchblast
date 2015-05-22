@@ -126,7 +126,7 @@ void DungeonMapEntity::animate(float delay)
       {
         animateParticle(blood[i], delay, 0.95f);
 
-        if ((game().getParameters().bloodSpread && blood[i].frame < 12) || blood[i].frame >= 36)
+        if ((game().getParameters().bloodSpread && ((blood[i].frame < 12) || blood[i].frame >= 36) &&  blood[i].frame < 42))
         {
           if (blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y > 80
               && rand() % 4 == 0)
@@ -835,6 +835,11 @@ void DungeonMapEntity::computeOverVertices()
       {
         int nx = gameMap->getObjectTile(i, j) % tilesProLine;
         int ny = gameMap->getObjectTile(i, j) / tilesProLine;
+        if (gameMap->getObjectTile(i, j) >= MAPOBJ_BARREL)
+        {
+          nx = 0;
+          ny = 0;
+        }
 
         sf::Vertex* quad = &overVertices[(i + j * gameMap->getWidth()) * 4];
         {

@@ -1042,6 +1042,8 @@ private:
   std::thread receiveScoreThread;
   void receiveScoreFromServer();
   void receiveScoreFromServerThread();
+
+  void checkDestroyableObjects();
 };
 
 /*!
