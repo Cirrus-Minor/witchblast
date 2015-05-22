@@ -28,19 +28,21 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   switch (objectFrame)
   {
   case MAPOBJ_BARREL:
-    hp = 24;
-    hpMax = 24;
+    hp = 18;
+    hpMax = 18;
     initialFrame = 0;
     break;
   case MAPOBJ_BARREL + 1:
-    hp = 16;
-    hpMax = 16;
-    initialFrame = 1;
+    hp = 12;
+    hpMax = 12;
+    initialFrame = 0;
+    frame = 1;
     break;
   case MAPOBJ_BARREL + 2:
-    hp = 8;
-    hpMax = 8;
-    initialFrame = 2;
+    hp = 6;
+    hpMax = 6;
+    initialFrame = 0;
+    frame = 2;
     break;
   default:
     std::cout << "ERROR: unknown obstacle (" << objectFrame << ")\n";
@@ -117,9 +119,9 @@ void ObstacleEntity::correctFrame()
 {
   if (hp > 0)
   {
-    if ( (hp - 1) / 8 == 1) frame = initialFrame + 1;
-    else if ( (hp - 1) / 8 == 0) frame = initialFrame + 2;
-    game().getCurrentMap()->setObjectTile(xGrid, yGrid, frame);
+    if ( (hp - 1) / 6 == 1) frame = initialFrame + 1;
+    else if ( (hp - 1) / 6 == 0) frame = initialFrame + 2;
+    game().getCurrentMap()->setObjectTile(xGrid, yGrid, MAPOBJ_BARREL + frame);
   }
 }
 
