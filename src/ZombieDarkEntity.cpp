@@ -251,6 +251,8 @@ void ZombieDarkEntity::findNextRandomGoal()
 {
   currentTile = getCurrentTile();
 
+  DungeonMap* dMap = game().getCurrentMap();
+
   int backDirection = 0;
   switch (currentDirection)
   {
@@ -261,49 +263,53 @@ void ZombieDarkEntity::findNextRandomGoal()
     default: break;
   }
 
+  bool ok = false;
   {
-    bool ok = false;
     int r = 0;
     while (!ok)
     {
       r++;
       if (r == 150) // watchdog
         ok = true;
+      else if (r == 40)
+      {
+        backDirection = 5;
+      }
 
       int newDir = rand() % 4;
       if (newDir == 0)
       {
-        if (backDirection != 4 && currentTile.x > 2 && (currentTile.y % 2 != 0))
+        if (backDirection != 4 && currentTile.x > 1 && (currentTile.y % 2 != 0) && dMap->isWalkable(currentTile.x - 1, currentTile.y))
         {
           currentDirection = 4;
-          targetTile = IntCoord(currentTile.x - 2, currentTile.y);
+          targetTile = IntCoord(currentTile.x - 1, currentTile.y);
           ok = true;
         }
       }
       else if (newDir == 1)
       {
-        if (backDirection != 6 && currentTile.x < MAP_WIDTH - 2 && (currentTile.y % 2 != 0))
+        if (backDirection != 6 && currentTile.x < MAP_WIDTH - 2 && (currentTile.y % 2 != 0) && dMap->isWalkable(currentTile.x + 1, currentTile.y))
         {
           currentDirection = 6;
-          targetTile = IntCoord(currentTile.x + 2, currentTile.y);
+          targetTile = IntCoord(currentTile.x + 1, currentTile.y);
           ok = true;
         }
       }
       else if (newDir == 2)
       {
-        if (backDirection != 8 && currentTile.y > 1 && (currentTile.x % 2 != 0))
+        if (backDirection != 8 && currentTile.y > 1 && (currentTile.x % 2 != 0) && dMap->isWalkable(currentTile.x, currentTile.y - 1))
         {
           currentDirection = 8;
-          targetTile = IntCoord(currentTile.x, currentTile.y - 2);
+          targetTile = IntCoord(currentTile.x, currentTile.y - 1);
           ok = true;
         }
       }
       else
       {
-        if (backDirection != 2 && currentTile.y < MAP_HEIGHT - 2 && (currentTile.x % 2 != 0))
+        if (backDirection != 2 && currentTile.y < MAP_HEIGHT - 2 && (currentTile.x % 2 != 0) && dMap->isWalkable(currentTile.x, currentTile.y + 1))
         {
           currentDirection = 2;
-          targetTile = IntCoord(currentTile.x, currentTile.y + 2);
+          targetTile = IntCoord(currentTile.x, currentTile.y + 1);
           ok = true;
         }
       }
