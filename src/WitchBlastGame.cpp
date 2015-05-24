@@ -68,6 +68,7 @@
 #include <algorithm>
 
 #define ONLINE_MODE
+#define LEVEL_TEST_MODE
 
 #ifdef ONLINE_MODE
 #include "OnlineScoring.h"
@@ -1054,13 +1055,15 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
       }
 
-      /*if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
+      if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
       {
+#ifdef LEVEL_TEST_MODE
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
         {
           startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
         }
-      }*/
+#endif
+      }
 
       if (event.key.code == sf::Keyboard::F1)
       {
@@ -5635,7 +5638,7 @@ void WitchBlastGame::configureFromFile()
   }
 
   int i = config.findInt("language");
-  if (i >= 0) parameters.language = i;
+  if (i >= 0 && i < NB_LANGUAGES) parameters.language = i;
 
   i = config.findInt("volume_sound");
   if (i >= 0) parameters.soundVolume = i;
