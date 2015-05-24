@@ -121,7 +121,7 @@ void ObstacleEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     {
       EnemyEntity* enemyEntity = dynamic_cast<EnemyEntity*>(entity);
 
-      if (!enemyEntity->getDying() && enemyEntity->canCollide())
+      if (!enemyEntity->getDying() && enemyEntity->canCollide()&& enemyEntity->getMovingStyle() != movFlying)
       {
         hurt(getHurtParams(hp, ShotTypeStandard, 0, false, SourceTypeMelee, enemyEntity->getEnemyType(), false));
       }
