@@ -16,6 +16,9 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   movingStyle = movWalking;
   bloodColor = BloodBarrel;
 
+  dyingSound = SOUND_BARREL_SMASH;
+  hurtingSound = SOUND_BARREL_HIT;
+
   age = 0.0f;
   frame = 0;
 
@@ -118,7 +121,7 @@ void ObstacleEntity::readCollidingEntity(CollidingSpriteEntity* entity)
     {
       EnemyEntity* enemyEntity = dynamic_cast<EnemyEntity*>(entity);
 
-      if (!enemyEntity->getDying())
+      if (!enemyEntity->getDying() && enemyEntity->canCollide())
       {
         hurt(getHurtParams(hp, ShotTypeStandard, 0, false, SourceTypeMelee, enemyEntity->getEnemyType(), false));
       }

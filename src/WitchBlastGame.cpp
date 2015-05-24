@@ -400,6 +400,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/vampire_dying.ogg",  "media/sound/ice_block.ogg",
     "media/sound/bogeyman_die.ogg",   "media/sound/bogeyman_attack.ogg",
     "media/sound/bogeyman_vortex_00.ogg", "media/sound/bogeyman_vortex_01.ogg",
+    "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
   };
 
   // AA in fullscreen
