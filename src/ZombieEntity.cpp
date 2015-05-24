@@ -27,7 +27,7 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
   clockTurn = rand() % 2 == 0;
   compute(false);
   timer = 5 + rand() % 6;
-  attackTimer = 2.0f;
+  attackTimer = 0.9f;
 
   meleeDamages = ZOMBIE_DAMAGE;
 
@@ -245,4 +245,9 @@ void ZombieEntity::collideWithEnemy(EnemyEntity* entity)
 void ZombieEntity::drop()
 {
   if (!invocated) EnemyEntity::drop();
+}
+
+bool ZombieEntity::isAttacking()
+{
+  return attackTimer > 1.0f;
 }
