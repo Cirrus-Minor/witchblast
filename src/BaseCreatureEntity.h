@@ -214,6 +214,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2);
     bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile);
 
+    virtual bool isAttacking(); // true when the monster is performing a melee attack
+
   protected:
     int hp;
     int hpMax;

@@ -360,7 +360,17 @@ bool BaseCreatureEntity::collideWithMap(int direction)
     {
       if (movingStyle == movWalking)
       {
-        if ( dynamic_cast<DungeonMap*>(map)->isWalkable(xTile, yTile) == false ) return true;
+        if (isAttacking())
+        {
+          if ( dynamic_cast<DungeonMap*>(map)->isWalkable(xTile, yTile) == false
+              && dynamic_cast<DungeonMap*>(map)->getLogicalTile(xTile, yTile) != LogicalDestroyable)
+                return true;
+        }
+        else
+        {
+          if ( dynamic_cast<DungeonMap*>(map)->isWalkable(xTile, yTile) == false )
+            return true;
+        }
       }
       else if (movingStyle == movFlying)
       {
@@ -798,4 +808,9 @@ void BaseCreatureEntity::heal(int healPoints)
     text->setType(ENTITY_FLYING_TEXT);
     while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
   }
+}
+
+bool BaseCreatureEntity::isAttacking()
+{
+  return false;
 }

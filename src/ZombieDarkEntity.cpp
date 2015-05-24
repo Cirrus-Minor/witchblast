@@ -29,7 +29,7 @@ ZombieDarkEntity::ZombieDarkEntity(float x, float y)
   currentDirection = 2 + 2 * rand()%4;
   height = 80;
   sprite.setOrigin(32.0f, 60.0f);
-  attackTimer = 2.0f;
+  attackTimer = 0.9f;
 
   resistance[ResistanceFrozen] = ResistanceHigh;
   resistance[ResistanceRecoil] = ResistanceHigh;
@@ -331,4 +331,9 @@ void ZombieDarkEntity::findNextRandomGoal()
 void ZombieDarkEntity::collideWithBolt(BoltEntity* boltEntity)
 {
   EnemyEntity::collideWithBolt(boltEntity);
+}
+
+bool ZombieDarkEntity::isAttacking()
+{
+  return attackTimer > 1.0f;
 }

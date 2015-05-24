@@ -91,6 +91,7 @@ void ObstacleEntity::drop()
 
 void ObstacleEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 {
+  if (entity == this) return;
   if (!isDying && !isAgonising && collideWithEntity(entity))
   {
     if (entity->getType() == ENTITY_BOLT )
@@ -111,6 +112,15 @@ void ObstacleEntity::readCollidingEntity(CollidingSpriteEntity* entity)
       {
         EnemyEntity::collideWithBolt(boltEntity);
         correctFrame();
+      }
+    }
+    else if (entity->getType() >= ENTITY_ENEMY && entity->getType() <= ENTITY_ENEMY_MAX)
+    {
+      EnemyEntity* enemyEntity = dynamic_cast<EnemyEntity*>(entity);
+
+      if (!enemyEntity->getDying())
+      {
+        hurt(getHurtParams(hp, ShotTypeStandard, 0, false, SourceTypeMelee, enemyEntity->getEnemyType(), false));
       }
     }
   }
