@@ -86,6 +86,7 @@ void ObstacleEntity::calculateBB()
 
 void ObstacleEntity::drop()
 {
+  EnemyEntity::drop();
 }
 
 void ObstacleEntity::readCollidingEntity(CollidingSpriteEntity* entity)
