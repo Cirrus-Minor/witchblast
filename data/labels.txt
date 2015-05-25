@@ -466,6 +466,13 @@ joystick_configuration#Joystick configuration
 joystick_configuration_desc#Please configure the joystick
 joystick_configuration_insert#[press button]
 joystick_not_found#Joystick not connected!
+item_scroll_revelation#Scroll of revelation
+item_scroll_revelation_desc#Reveal secrets and potion effects
+item_potion_red#Red potion
+item_potion_green#Green potion
+item_potion_desc#Unknown effect
+item_bag#Bag
+item_bag_desc#Provides more space for consumables
 
 [french]
 start_new_game#Nouvelle partie
