@@ -94,6 +94,13 @@ PlayerEntity::PlayerEntity(float x, float y)
     specialShotLevel[i] = 0;
   }
 
+  // init the consumibles
+  for (int i = 0; i < MAX_CONSUMIBLES; i++)
+  {
+    consumable[i] = 0;
+    consumableAmount[i] = 0;
+  }
+
   specialShotIndex = 0;
   needInitShotType = false;
 
@@ -1891,6 +1898,10 @@ void PlayerEntity::displayAcquiredGold(int n)
 void PlayerEntity::acquireItem(enumItemType type)
 {
   if (items[type].generatesStance) acquireStance(type);
+  else if (items[type].consumable)
+  {
+    acquireConsumable(type);
+  }
   else switch (type)
     {
     case ItemCopperCoin:
@@ -1928,6 +1939,69 @@ void PlayerEntity::acquireItem(enumItemType type)
     default:
       break;
     }
+}
+
+int PlayerEntity::getConsumable(int n)
+{
+  if (n < 0 || n >= MAX_CONSUMIBLES) return -1;
+  else return consumable[n];
+}
+
+int PlayerEntity::getConsumableAmount(int n)
+{
+  if (n < 0 || n >= MAX_CONSUMIBLES) return 0;
+  else return consumableAmount[n];
+}
+void PlayerEntity::setConsumable(int n, int type, int amount)
+{
+  if (n < 0 || n >= MAX_CONSUMIBLES) return;
+
+  consumable[n] = type;
+  consumableAmount[n] = amount;
+}
+
+void PlayerEntity::dropConsumables(int n)
+{
+  if (n < 0 || n >= MAX_CONSUMIBLES) return;
+  if (playerStatus != playerStatusPlaying) return;
+
+  if (consumable[n] > -1 && consumableAmount[n] > 0)
+  {
+    for (int i = 0; i < consumableAmount[n]; i++)
+    {
+      ItemEntity* newItem = new ItemEntity((enumItemType)(consumable[n]), x, y);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+      newItem->setAge(-10.0f);
+    }
+    consumable[n] = -1;
+    consumableAmount[n] = 0;
+  }
+}
+
+void PlayerEntity::acquireConsumable(enumItemType type)
+{
+  int nbConsumableSlot = 4;
+  int found = -1;
+  int emptySlot = -1;
+
+  for (int i = 0; found == -1 && i < nbConsumableSlot; i++)
+  {
+    if (consumable[i] == type)
+      found = i;
+    else if (consumable[i] <= 0 || consumableAmount[i] <= 0)
+      if (emptySlot == -1) emptySlot = i;
+  }
+
+  if (found > -1)
+  {
+    consumableAmount[found]++;
+  }
+  else if (emptySlot > -1)
+  {
+    consumable[emptySlot] = type;
+    consumableAmount[emptySlot] = 1;
+  }
 }
 
 void PlayerEntity::onClearRoom()

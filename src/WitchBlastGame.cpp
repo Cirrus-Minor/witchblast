@@ -830,6 +830,11 @@ void WitchBlastGame::playLevel(bool isFight)
   text->setWeight(-36.0f);
   text->setZ(1000);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
+
+  new ItemEntity(ItemScrollRevelation, 100, 100);
+  new ItemEntity(ItemScrollRevelation, 150, 100);
+  new ItemEntity(ItemPotionGreen, 200, 100);
+  new ItemEntity(ItemPotionRed, 250, 100);
 }
 
 void WitchBlastGame::prepareIntro()
@@ -1063,7 +1068,12 @@ void WitchBlastGame::updateRunningGame()
         {
           startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
         }
+        else
 #endif
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+          player->dropConsumables(event.key.code - sf::Keyboard::Num1);
+        }
       }
 
       if (event.key.code == sf::Keyboard::F1)
@@ -2138,7 +2148,7 @@ void WitchBlastGame::renderRunningGame()
 
     // drawing the key on the interface
     if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(uiSprites.keySprite);
-
+    // drawing the level items
     if (player->isEquiped(EQUIP_FLOOR_MAP))
     {
       sf::Sprite mapSprite;
@@ -2147,7 +2157,6 @@ void WitchBlastGame::renderRunningGame()
       mapSprite.setPosition(737, 648);
       app->draw(mapSprite);
     }
-
     if (player->isEquiped(EQUIP_ALCOHOL))
     {
       sf::Sprite alcSprite;
@@ -2156,7 +2165,6 @@ void WitchBlastGame::renderRunningGame()
       alcSprite.setPosition(737, 681);
       app->draw(alcSprite);
     }
-
     if (player->isEquiped(EQUIP_LUCK))
     {
       sf::Sprite alcSprite;
@@ -2165,7 +2173,6 @@ void WitchBlastGame::renderRunningGame()
       alcSprite.setPosition(704, 681);
       app->draw(alcSprite);
     }
-
     if (player->isEquiped(EQUIP_FAIRY_POWDER))
     {
       sf::Sprite alcSprite;
@@ -2173,6 +2180,24 @@ void WitchBlastGame::renderRunningGame()
       alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 6, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
       alcSprite.setPosition(671, 681);
       app->draw(alcSprite);
+    }
+    // drawing the consumable
+    for (int i = 0; i < MAX_CONSUMIBLES; i++)
+    {
+      if (player->getConsumable(i) > -1 && player->getConsumableAmount(i) > 0)
+      {
+        int n = player->getConsumable(i);
+        sf::Sprite consSprite;
+        consSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS));
+        consSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * (n % 10), ITEM_HEIGHT * (n / 10),  ITEM_WIDTH, ITEM_HEIGHT));
+        consSprite.setPosition(315 + 37 * i, 615);
+        app->draw(consSprite);
+
+        std::stringstream oss;
+        oss << "x";
+        oss << player->getConsumableAmount(i);
+        write(oss.str(), 9, 331 + 37 * i, 645, ALIGN_CENTER, sf::Color::White,app, 0, 0);
+      }
     }
 
     // drawing message icon
@@ -5111,6 +5136,11 @@ void WitchBlastGame::saveGame()
     file << player->getShotIndex();
     for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
     file << player->getActiveSpell().spell << std::endl;
+    for (i = 0; i < MAX_CONSUMIBLES; i++)
+    {
+      file << player->getConsumable(i) << " " << player->getConsumableAmount(i) << " ";
+    }
+    file << std::endl;
     // divinity
     file << player->getDivinity().divinity << " " << player->getDivinity().piety << " "
          << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
@@ -5330,6 +5360,14 @@ bool WitchBlastGame::loadGame()
 
     file >> n;
     player->setActiveSpell((enumCastSpell)n, saveInFight.isFight);
+
+    for (i = 0; i < MAX_CONSUMIBLES; i++)
+    {
+      file >> n;
+      int amount;
+      file >> amount;
+      player->setConsumable(i, n, amount);
+    }
 
     // divinity
     {

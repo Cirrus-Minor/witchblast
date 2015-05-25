@@ -24,6 +24,8 @@ struct divinityStruct
   float percentsToNextLevels;
 };
 
+const int MAX_CONSUMIBLES = 4;
+
 /*! \class PlayerEntity
 * \brief Class for the player
 *
@@ -503,6 +505,11 @@ class PlayerEntity : public BaseCreatureEntity
     void castTeleport();
     virtual bool collideWithMap(int direction) override;
 
+    int getConsumable(int n);
+    int getConsumableAmount(int n);
+    void setConsumable(int n, int type, int amount);
+    void dropConsumables(int n);
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
@@ -605,6 +612,10 @@ class PlayerEntity : public BaseCreatureEntity
 
     float getBolPositionY();
     void incrementDivInterventions();
+
+    int consumable[MAX_CONSUMIBLES];
+    int consumableAmount[MAX_CONSUMIBLES];
+    void acquireConsumable(enumItemType type);
 };
 
 #endif // PLAYERSPRITE_H
