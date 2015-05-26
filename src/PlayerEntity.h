@@ -505,6 +505,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castTeleport();
     virtual bool collideWithMap(int direction) override;
 
+    bool canAquireConsumable(enumItemType type);
     int getConsumable(int n);
     int getConsumableAmount(int n);
     void setConsumable(int n, int type, int amount);

@@ -835,6 +835,7 @@ void WitchBlastGame::playLevel(bool isFight)
   new ItemEntity(ItemScrollRevelation, 150, 100);
   new ItemEntity(ItemPotionGreen, 200, 100);
   new ItemEntity(ItemPotionRed, 250, 100);
+  new ItemEntity(ItemBag, 450, 100);
 }
 
 void WitchBlastGame::prepareIntro()
@@ -2182,6 +2183,13 @@ void WitchBlastGame::renderRunningGame()
       app->draw(alcSprite);
     }
     // drawing the consumable
+    if (!player->isEquiped(EQUIP_BAG))
+    {
+      sf::RectangleShape shadow(sf::Vector2f(70, 33));
+      shadow.setFillColor(sf::Color(0, 0, 0, 128));
+      shadow.setPosition(sf::Vector2f(386, 614));
+      app->draw(shadow);
+    }
     for (int i = 0; i < MAX_CONSUMIBLES; i++)
     {
       if (player->getConsumable(i) > -1 && player->getConsumableAmount(i) > 0)
@@ -6819,7 +6827,7 @@ void WitchBlastGame::checkDestroyableObjects()
   for (int i = 0; i < MAP_WIDTH; i++)
     for (int j = 0; j < MAP_HEIGHT; j++)
     {
-      if (currentMap->getObjectTile(i, j) >= MAPOBJ_BARREL && currentMap->getObjectTile(i, j) < MAPOBJ_BARREL + 3)
+      if (currentMap->getObjectTile(i, j) >= MAPOBJ_BARREL && currentMap->getObjectTile(i, j) < MAPOBJ_BARREL_EXPL + 3)
       {
         new ObstacleEntity(i * TILE_WIDTH + TILE_WIDTH / 2, j * TILE_HEIGHT + TILE_HEIGHT / 2, currentMap->getObjectTile(i, j));
       }

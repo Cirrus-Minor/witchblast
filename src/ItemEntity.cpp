@@ -52,6 +52,8 @@ bool ItemEntity::canBePickedUp()
 
   if (isMerchandise == true && game().getPlayer()->getGold() < getPrice()) return false;
 
+  if (items[itemType].consumable && !game().getPlayer()->canAquireConsumable(itemType)) return false;
+
   if (itemType == ItemBossHeart && !game().getCurrentMap()->isCleared()) return false;
 
   if (itemType >= FirstEquipItem)

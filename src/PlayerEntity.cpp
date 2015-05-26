@@ -1979,9 +1979,26 @@ void PlayerEntity::dropConsumables(int n)
   }
 }
 
+bool PlayerEntity::canAquireConsumable(enumItemType type)
+{
+  int nbConsumableSlot = equip[EQUIP_BAG] ? 4 : 2;
+  int found = -1;
+  int emptySlot = -1;
+
+  for (int i = 0; found == -1 && emptySlot == -1 && i < nbConsumableSlot; i++)
+  {
+    if (consumable[i] == type)
+      found = i;
+    else if (consumable[i] <= 0 || consumableAmount[i] <= 0)
+      if (emptySlot == -1) emptySlot = i;
+  }
+
+  return (found > -1 || emptySlot > -1);
+}
+
 void PlayerEntity::acquireConsumable(enumItemType type)
 {
-  int nbConsumableSlot = 4;
+  int nbConsumableSlot = equip[EQUIP_BAG] ? 4 : 2;
   int found = -1;
   int emptySlot = -1;
 
