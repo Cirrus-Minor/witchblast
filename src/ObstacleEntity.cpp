@@ -1,5 +1,6 @@
 #include "BoltEntity.h"
 #include "EnemyBoltEntity.h"
+#include "ExplosionEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -14,10 +15,12 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   type = ENTITY_ENEMY_NC;
   enemyType = EnemyTypeDestroyable;
   movingStyle = movWalking;
-  bloodColor = BloodBarrel;
+  explosive = false;
 
   dyingSound = SOUND_BARREL_SMASH;
   hurtingSound = SOUND_BARREL_HIT;
+  bloodColor = BloodNone;
+  obstacleBloodType = BloodBarrel;
 
   age = 0.0f;
   frame = 0;
@@ -30,23 +33,59 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
 
   switch (objectFrame)
   {
+  //standard barrel
   case MAPOBJ_BARREL:
     hp = 18;
     hpMax = 18;
     initialFrame = 0;
+    deathFrame = FRAME_CORPSE_BARREL;
     break;
   case MAPOBJ_BARREL + 1:
     hp = 12;
     hpMax = 12;
     initialFrame = 0;
     frame = 1;
+    deathFrame = FRAME_CORPSE_BARREL;
     break;
   case MAPOBJ_BARREL + 2:
     hp = 6;
     hpMax = 6;
     initialFrame = 0;
     frame = 2;
+    deathFrame = FRAME_CORPSE_BARREL;
     break;
+
+  //powder barrel
+  case MAPOBJ_BARREL_EXPL:
+    hp = 18;
+    hpMax = 18;
+    initialFrame = 3;
+    frame = 3;
+    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
+    explosive = true;
+    obstacleBloodType = BloodBarrelPowder;
+    break;
+
+  case MAPOBJ_BARREL_EXPL + 1:
+    hp = 12;
+    hpMax = 12;
+    initialFrame = 3;
+    frame = 4;
+    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
+    explosive = true;
+    obstacleBloodType = BloodBarrelPowder;
+    break;
+
+  case MAPOBJ_BARREL_EXPL + 2:
+    hp = 6;
+    hpMax = 6;
+    initialFrame = 3;
+    frame = 5;
+    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
+    explosive = true;
+    obstacleBloodType = BloodBarrelPowder;
+    break;
+
   default:
     std::cout << "ERROR: unknown obstacle (" << objectFrame << ")\n";
     isDying = true;
@@ -76,6 +115,15 @@ void ObstacleEntity::dying()
   EnemyEntity::dying();
   game().getCurrentMap()->setObjectTile(xGrid, yGrid, 0);
   game().getCurrentMap()->setLogicalTile(xGrid, yGrid, LogicalFloor);
+
+  for (int i = 0; i < 10; i++)
+    game().generateBlood(x, y, obstacleBloodType);
+
+  if (explosive)
+  {
+    new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone, true);
+    SoundManager::getInstance().playSound(SOUND_BOOM_00);
+  }
 }
 
 void ObstacleEntity::calculateBB()
@@ -139,3 +187,12 @@ void ObstacleEntity::correctFrame()
   }
 }
 
+int ObstacleEntity::hurt(StructHurt hurtParam)
+{
+  int oldHp = hp;
+  int result = EnemyEntity::hurt(hurtParam);
+  int diff = oldHp - hp;
+  for (int i = 0; i < diff; i++)
+    game().generateBlood(x, y, obstacleBloodType);
+  return result;
+}

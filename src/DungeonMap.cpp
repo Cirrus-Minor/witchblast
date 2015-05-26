@@ -627,7 +627,8 @@ void DungeonMap::initRoom(int floorN, int wallN)
   {
     int objX = 1 + rand() % (MAP_WIDTH - 2);
     int objY = 1 + rand() % (MAP_HEIGHT - 2);
-    objectsMap[objX][objY] = MAPOBJ_BARREL;
+    if (i == 7) objectsMap[objX][objY] = MAPOBJ_BARREL_EXPL;
+    else objectsMap[objX][objY] = MAPOBJ_BARREL;
   }
 }
 

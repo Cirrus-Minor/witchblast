@@ -13,6 +13,7 @@ class ObstacleEntity : public EnemyEntity
 
     virtual void render(sf::RenderTarget* app);
     virtual void dying();
+    virtual int hurt(StructHurt hurtParam);
 
   protected:
 	  virtual void drop();
@@ -23,6 +24,8 @@ class ObstacleEntity : public EnemyEntity
     int initialFrame;
 
     void correctFrame();
+    bool explosive;
+    enumBloodColor obstacleBloodType;
 };
 
 #endif // OBSTACLEENTITY_H
