@@ -36,7 +36,7 @@ const int MAPOBJ_SHOP          =   1 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP_RIGHT    =   2 + MAPOBJ_SHOP_BEGIN;
 
 const int MAPOBJ_BARREL        =   1000;
-const int MAPOBJ_BARREL_EXPL   =   1010;
+const int MAPOBJ_BARREL_EXPL   =   1003;
 
 const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_NB_FLOORS       =   10;

@@ -71,7 +71,7 @@ private:
   bool shouldBeTransformed(int part);
 
   void animateParticle(displayEntityStruct &particle, float delay, float viscosity);
-  bool collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight);
+  bool collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight, bool canGoThroughObstacle = false);
   void autoSpeed(displayEntityStruct &particle, float speed);
   bool checkFalling(displayEntityStruct &particle, int boxWidth, int boxHeight);
 

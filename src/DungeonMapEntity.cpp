@@ -122,6 +122,14 @@ void DungeonMapEntity::animate(float delay)
 
         blood.erase(blood.begin() + i);
       }
+      else if (blood[i].frame >= BaseCreatureEntity::BloodBarrel * 6
+               && blood[i].frame < BaseCreatureEntity::BloodBarrelPowder * 6 + 6
+               && collideWithWall(blood[i], 16, 16, true))
+      {
+        blood[i].moving = false;
+        blood[i].velocity.x = 0.0f;
+        blood[i].velocity.y = 0.0f;
+      }
       else
       {
         animateParticle(blood[i], delay, 0.95f);
@@ -264,7 +272,7 @@ void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float dela
     particle.moving = false;
 }
 
-bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight)
+bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight, bool canGoThroughObstacle)
 {
   float x0 = particle.x - boxWidth / 2;
   float xf = particle.x + boxWidth / 2;
@@ -277,10 +285,26 @@ bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWid
   if (particle.y < TILE_HEIGHT && particle.velocity.y < -1.0f) particle.velocity.y = -particle.velocity.y;
   else if (particle.y > TILE_HEIGHT * (MAP_HEIGHT - 2) && particle.velocity.y > 1.0f) particle.velocity.y = -particle.velocity.y;
 
-  collide[NordWest] = !game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, y0 / TILE_HEIGHT);
-  collide[SudWest] = !game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, yf / TILE_HEIGHT);
-  collide[NordEast] = !game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, y0 / TILE_HEIGHT);
-  collide[SudEast] = !game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, yf / TILE_HEIGHT);
+  DungeonMap* iMap = game().getCurrentMap();
+
+  if (!canGoThroughObstacle)
+  {
+    collide[NordWest] = !iMap->isWalkable(x0 / TILE_WIDTH, y0 / TILE_HEIGHT);
+    collide[SudWest] = !iMap->isWalkable(x0 / TILE_WIDTH, yf / TILE_HEIGHT);
+    collide[NordEast] = !iMap->isWalkable(xf / TILE_WIDTH, y0 / TILE_HEIGHT);
+    collide[SudEast] = !iMap->isWalkable(xf / TILE_WIDTH, yf / TILE_HEIGHT);
+  }
+  else
+  {
+    collide[NordWest] = iMap->getLogicalTile(x0 / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(x0 / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalObstacle;
+    collide[SudWest] = iMap->getLogicalTile(x0 / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(x0 / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalObstacle;
+    collide[NordEast] = iMap->getLogicalTile(xf / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(xf / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalObstacle;
+    collide[SudEast] = iMap->getLogicalTile(xf / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(xf / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalObstacle;
+  }
 
   return collide[NordWest] || collide[SudWest] || collide[NordEast] || collide[SudEast];
 }
