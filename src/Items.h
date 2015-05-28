@@ -61,6 +61,8 @@ const std::string spellLabel[SpellNone] =
   "spell_fairy"
 };
 
+const int CONSUMABLE_MAX = 2;
+
 /** Item type enum
  *  All the items and equipments.
  */
@@ -76,8 +78,12 @@ enum enumItemType
   ItemHealth,
   ItemHealthVerySmallPoison,
   ItemScrollRevelation,
-  ItemPotionRed,
-  ItemPotionGreen,
+  // unidentified potions
+  ItemPotion01,
+  ItemPotion02,
+  // effect
+  ItemPotionHealth,
+  ItemPotionPoison,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
@@ -211,18 +217,28 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemHealthVerySmallPoison, "item_apple_green", "item_apple_green_desc",
     2, false, FamiliarNone, true, false, false, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone, false
   },
-
+  // consumables
   {
     ItemScrollRevelation, "item_scroll_revelation", "item_scroll_revelation_desc",
     10, false, FamiliarNone, true, true, false, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone, true
   },
+  // potions
   {
-    ItemPotionRed, "item_potion_red", "item_potion_desc",
+    ItemPotion01, "item_potion_01", "item_potion_desc",
     10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
   {
-    ItemPotionGreen, "item_potion_green", "item_potion_desc",
+    ItemPotion02, "item_potion_02", "item_potion_desc",
     10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  // effect
+  {
+    ItemPotionHealth, "item_potion_health", "item_potion_health_desc",
+    10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  {
+    ItemPotionPoison, "item_potion_poison", "item_potion_poison_desc",
+    10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
 
 // EQUIP ITEMS //

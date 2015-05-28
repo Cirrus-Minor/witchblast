@@ -95,7 +95,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   }
 
   // init the consumibles
-  for (int i = 0; i < MAX_CONSUMIBLES; i++)
+  for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
   {
     consumable[i] = 0;
     consumableAmount[i] = 0;
@@ -1943,18 +1943,18 @@ void PlayerEntity::acquireItem(enumItemType type)
 
 int PlayerEntity::getConsumable(int n)
 {
-  if (n < 0 || n >= MAX_CONSUMIBLES) return -1;
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return -1;
   else return consumable[n];
 }
 
 int PlayerEntity::getConsumableAmount(int n)
 {
-  if (n < 0 || n >= MAX_CONSUMIBLES) return 0;
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return 0;
   else return consumableAmount[n];
 }
 void PlayerEntity::setConsumable(int n, int type, int amount)
 {
-  if (n < 0 || n >= MAX_CONSUMIBLES) return;
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
 
   consumable[n] = type;
   consumableAmount[n] = amount;
@@ -1962,7 +1962,7 @@ void PlayerEntity::setConsumable(int n, int type, int amount)
 
 void PlayerEntity::dropConsumables(int n)
 {
-  if (n < 0 || n >= MAX_CONSUMIBLES) return;
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
   if (playerStatus != playerStatusPlaying) return;
 
   if (consumable[n] > -1 && consumableAmount[n] > 0)
@@ -1977,6 +1977,43 @@ void PlayerEntity::dropConsumables(int n)
     consumable[n] = -1;
     consumableAmount[n] = 0;
   }
+}
+
+void PlayerEntity::tryToConsume(int n)
+{
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
+  if (playerStatus != playerStatusPlaying) return;
+
+  if (consumable[n] > -1 && consumableAmount[n] > 0)
+  {
+    // unidentified
+    if (consumable[n] >= ItemPotion01 && consumable[n] <ItemPotion01 + CONSUMABLE_MAX)
+    {
+      game().setPotionToKnown((enumItemType)(consumable[n]));
+      consume(game().getPotion((enumItemType)(consumable[n])));
+    }
+    else if (items[consumable[n]].consumable)
+    // known
+    {
+      consume((enumItemType)(consumable[n]));
+    }
+    else
+    {
+      std::cout << "[ERROR] Trying to consume item: " << consumable[n] << std::endl;
+    }
+  }
+
+  consumableAmount[n] --;
+  // last ?
+  if (consumableAmount[n] < 1)
+  {
+    consumable[n] = -1;
+  }
+}
+
+void PlayerEntity::consume(enumItemType item)
+{
+
 }
 
 bool PlayerEntity::canAquireConsumable(enumItemType type)

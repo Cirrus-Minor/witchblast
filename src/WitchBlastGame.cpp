@@ -833,8 +833,8 @@ void WitchBlastGame::playLevel(bool isFight)
 
   new ItemEntity(ItemScrollRevelation, 100, 100);
   new ItemEntity(ItemScrollRevelation, 150, 100);
-  new ItemEntity(ItemPotionGreen, 200, 100);
-  new ItemEntity(ItemPotionRed, 250, 100);
+  new ItemEntity(ItemPotion02, 200, 100);
+  new ItemEntity(ItemPotion01, 250, 100);
   new ItemEntity(ItemBag, 450, 100);
 }
 
@@ -1074,6 +1074,10 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
         {
           player->dropConsumables(event.key.code - sf::Keyboard::Num1);
+        }
+        else
+        {
+          player->tryToConsume(event.key.code - sf::Keyboard::Num1);
         }
       }
 
@@ -2190,7 +2194,7 @@ void WitchBlastGame::renderRunningGame()
       shadow.setPosition(sf::Vector2f(386, 614));
       app->draw(shadow);
     }
-    for (int i = 0; i < MAX_CONSUMIBLES; i++)
+    for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
       if (player->getConsumable(i) > -1 && player->getConsumableAmount(i) > 0)
       {
@@ -5144,7 +5148,7 @@ void WitchBlastGame::saveGame()
     file << player->getShotIndex();
     for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
     file << player->getActiveSpell().spell << std::endl;
-    for (i = 0; i < MAX_CONSUMIBLES; i++)
+    for (i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
       file << player->getConsumable(i) << " " << player->getConsumableAmount(i) << " ";
     }
@@ -5369,7 +5373,7 @@ bool WitchBlastGame::loadGame()
     file >> n;
     player->setActiveSpell((enumCastSpell)n, saveInFight.isFight);
 
-    for (i = 0; i < MAX_CONSUMIBLES; i++)
+    for (i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
       file >> n;
       int amount;
@@ -6832,6 +6836,34 @@ void WitchBlastGame::checkDestroyableObjects()
         new ObstacleEntity(i * TILE_WIDTH + TILE_WIDTH / 2, j * TILE_HEIGHT + TILE_HEIGHT / 2, currentMap->getObjectTile(i, j));
       }
     }
+}
+
+void WitchBlastGame::randomizePotionMap()
+{
+  potionMap.clear();
+  // TODO
+  potionMap[ItemPotion01] = structPotionMap { ItemPotionHealth, false};
+  potionMap[ItemPotion02] = structPotionMap { ItemPotionPoison, false};
+}
+
+void WitchBlastGame::addPotionToMap(enumItemType source, enumItemType effect, bool known)
+{
+  potionMap[source] = structPotionMap { effect, known};
+}
+
+enumItemType WitchBlastGame::getPotion(enumItemType source)
+{
+  return potionMap[source].effect;
+}
+
+bool WitchBlastGame::potionEffectKnown(enumItemType source)
+{
+  return potionMap[source].known;
+}
+
+void WitchBlastGame::setPotionToKnown(enumItemType source)
+{
+  potionMap[source].known = true;
 }
 
 WitchBlastGame &game()

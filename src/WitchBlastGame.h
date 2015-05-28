@@ -123,6 +123,12 @@ struct parameterStruct
   std::string playerName;     /*!< player name */
 };
 
+struct structPotionMap
+{
+  enumItemType effect;
+  bool known;
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -439,6 +445,11 @@ public:
   void verifyDoorUnlocking();
   float getGameTime();
   std::string equipToString(bool equip[NUMBER_EQUIP_ITEMS]);
+
+  enumItemType getPotion(enumItemType source);
+  bool potionEffectKnown(enumItemType source);
+  void setPotionToKnown(enumItemType source);
+  void addPotionToMap(enumItemType source, enumItemType effect, bool known);
 
 protected:
   /*!
@@ -1044,6 +1055,9 @@ private:
   void receiveScoreFromServerThread();
 
   void checkDestroyableObjects();
+
+  std::map<enumItemType, structPotionMap> potionMap;
+  void randomizePotionMap();
 };
 
 /*!
