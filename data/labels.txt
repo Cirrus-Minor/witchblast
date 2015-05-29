@@ -477,6 +477,14 @@ item_potion_poison#Poison potion
 item_potion_poison_desc#Makes poisoned
 item_bag#Bag
 item_bag_desc#Provides more space for consumables
+msg_potion_id_0#Potion identification
+msg_potion_id_1#You've identified:
+msg_tuto_consumables_0#Tutorial: Consumables
+msg_tuto_consumables_1#[num1-num4] to use the consumable item.
+msg_tuto_consumables_2#[left shift][num1-num4] to drop it.
+msg_tuto_potions_0#Tutorial: Potions
+msg_tuto_potions_1#You have found a potion.
+msg_tuto_potions_2#You have to drink or identify it to know its effect.
 
 [french]
 start_new_game#Nouvelle partie

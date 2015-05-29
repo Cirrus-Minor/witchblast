@@ -619,6 +619,7 @@ class PlayerEntity : public BaseCreatureEntity
     int consumable[MAX_SLOT_CONSUMABLES];
     int consumableAmount[MAX_SLOT_CONSUMABLES];
     void acquireConsumable(enumItemType type);
+    void reveal();
 };
 
 #endif // PLAYERSPRITE_H

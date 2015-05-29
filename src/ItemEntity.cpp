@@ -177,6 +177,17 @@ void ItemEntity::animate(float delay)
     isBeating = true;
     timer = HEART_BEAT_DELAY;
   }
+
+  // Has been identified ?
+  if (itemType >= ItemPotion01 && itemType < ItemPotion01 + CONSUMABLE_MAX)
+  {
+    if (game().potionEffectKnown(itemType))
+    {
+      itemType = game().getPotion(itemType);
+      frame = itemType;
+    }
+  }
+
   z = y + height / 2;
 }
 

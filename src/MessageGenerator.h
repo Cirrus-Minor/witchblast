@@ -70,6 +70,8 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoDivGift,           { MessageTypeInfo, 0, "divinity_gift",              2} },
   { MsgInfoDivLevel,          { MessageTypeInfo, 0, "divinity_leveling",          2} },
 
+  { MsgInfoPotionId,          { MessageTypeInfo, 0, "msg_potion_id",              2} },
+
   { MsgTutoBasics,            { MessageTypeTutorial, 0, "msg_tuto_intro",           3} },
   { MsgTutoTips,              { MessageTypeTutorial, 0, "msg_tuto_tips",            3} },
   { MsgTutoItems,             { MessageTypeTutorial, 0, "msg_tuto_items",           3} },
@@ -81,6 +83,8 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgTutoShots,             { MessageTypeTutorial, 0, "msg_tuto_shots",           3} },
   { MsgTutoSpell,             { MessageTypeTutorial, 0, "msg_tuto_spell",           3} },
   { MsgTutoAchievements,      { MessageTypeTutorial, 0, "msg_tuto_achiev",          3} },
+  { MsgTutoConsumables,       { MessageTypeTutorial, 0, "msg_tuto_consumables",     3} },
+  { MsgTutoPotions,           { MessageTypeTutorial, 0, "msg_tuto_potions",         3} },
 };
 
 static void loadMessageData(std::string msg_array[NB_MSG_LINES], std::string key, int nbLines)

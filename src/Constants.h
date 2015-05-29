@@ -640,6 +640,8 @@ enum EnumMessages
   MsgInfoDivGift,
   MsgInfoDivLevel,
 
+  MsgInfoPotionId,
+
   MsgTutoBasics,
   MsgTutoTips,
   MsgTutoItems,
@@ -651,6 +653,8 @@ enum EnumMessages
   MsgTutoShots,
   MsgTutoSpell,
   MsgTutoAchievements,
+  MsgTutoConsumables,
+  MsgTutoPotions,
 
   NB_MESSAGES
 };
@@ -692,6 +696,8 @@ enum EnumWorldEvents
   EventGetFamiliar,
   EventGetSpell,
   EventAchievement,
+  EventConsumable,
+  EventPotion,
 
   NB_EVENTS
 };

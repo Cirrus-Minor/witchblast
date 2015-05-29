@@ -175,6 +175,8 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
   { EventGetSpecialShot,      MsgTutoShots },
   { EventGetSpell,            MsgTutoSpell },
   { EventAchievement,         MsgTutoAchievements },
+  { EventConsumable,          MsgTutoConsumables },
+  { EventPotion,              MsgTutoPotions },
 };
 
 // author: AFS
@@ -679,6 +681,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
+    randomizePotionMap();
 
     if (startingLevel > 1)
     {
@@ -718,6 +721,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
         player->loadDivinity(rand() % NB_DIVINITY, (startingLevel - 2) * 200, 1, 0);
       }
     }
+    randomizePotionMap(); // TODO Load
     startNewLevel();
   }
 }
@@ -6864,6 +6868,19 @@ bool WitchBlastGame::potionEffectKnown(enumItemType source)
 void WitchBlastGame::setPotionToKnown(enumItemType source)
 {
   potionMap[source].known = true;
+
+  // message
+  if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
+
+  messageStruct msg = getMessage(MsgInfoPotionId);
+
+  std::stringstream ss;
+  ss << msg.message[1];
+  ss << " ";
+  ss << tools::getLabel(items[getPotion(source)].name);
+
+  msg.message[1] = ss.str();
+  messagesQueue.push(msg);
 }
 
 WitchBlastGame &game()

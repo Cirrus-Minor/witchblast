@@ -1941,6 +1941,11 @@ void PlayerEntity::acquireItem(enumItemType type)
     }
 }
 
+bool isUnidentified(enumItemType item)
+{
+  return (item >= ItemPotion01 && item < ItemPotion01 + CONSUMABLE_MAX);
+}
+
 int PlayerEntity::getConsumable(int n)
 {
   if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return -1;
@@ -1987,19 +1992,19 @@ void PlayerEntity::tryToConsume(int n)
   if (consumable[n] > -1 && consumableAmount[n] > 0)
   {
     // unidentified
-    if (consumable[n] >= ItemPotion01 && consumable[n] <ItemPotion01 + CONSUMABLE_MAX)
+    if (isUnidentified((enumItemType)consumable[n]))
     {
-      game().setPotionToKnown((enumItemType)(consumable[n]));
-      consume(game().getPotion((enumItemType)(consumable[n])));
+      game().setPotionToKnown((enumItemType)consumable[n]);
+      consume(game().getPotion((enumItemType)consumable[n]));
     }
     else if (items[consumable[n]].consumable)
     // known
     {
-      consume((enumItemType)(consumable[n]));
+      consume((enumItemType)consumable[n]);
     }
     else
     {
-      std::cout << "[ERROR] Trying to consume item: " << consumable[n] << std::endl;
+      std::cout << "[ERROR] Trying to consume item: " << items[consumable[n]].name << std::endl;
     }
   }
 
@@ -2013,7 +2018,46 @@ void PlayerEntity::tryToConsume(int n)
 
 void PlayerEntity::consume(enumItemType item)
 {
+  switch(item)
+  {
+  case ItemScrollRevelation:
+    reveal();
+    break;
 
+  case ItemPotionHealth:
+    heal(equip[EQUIP_MANUAL_HEALTH] ? 28 : 18);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionPoison:
+    specialState[SpecialStatePoison].active = true;
+    specialState[SpecialStatePoison].timer = POISON_TIMER[0];
+    specialState[SpecialStatePoison].param1 = POISON_DAMAGE[0];
+    specialState[SpecialStatePoison].param2 = POISON_DELAY[0];
+    specialState[SpecialStatePoison].param3 = POISON_DELAY[0];
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("poison"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  default:
+    std::cout << "[ERROR] Trying to consume item: " << items[item].name << std::endl;
+    break;
+  }
+}
+
+void PlayerEntity::reveal()
+{
+  for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+  {
+    if (consumable[i] > -1 && consumableAmount[i] > 0)
+    {
+      if (isUnidentified((enumItemType)consumable[i]))
+      {
+        game().setPotionToKnown((enumItemType)consumable[i]);
+        consumable[i] = game().getPotion((enumItemType)consumable[i]);
+      }
+    }
+  }
 }
 
 bool PlayerEntity::canAquireConsumable(enumItemType type)
@@ -2055,6 +2099,10 @@ void PlayerEntity::acquireConsumable(enumItemType type)
   {
     consumable[emptySlot] = type;
     consumableAmount[emptySlot] = 1;
+
+    // events
+    game().proceedEvent(EventConsumable);
+    if (isUnidentified(type)) game().proceedEvent(EventPotion);
   }
 }
 
