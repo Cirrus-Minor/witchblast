@@ -568,31 +568,29 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
           crss << " X3";
         else
           crss << " X2";
-        TextEntity* textCrit = new TextEntity(crss.str(), 16, x, text->getY() - 16.0f);
-        textCrit->setColor(TextEntity::COLOR_FADING_RED);
-        textCrit->setAge(-0.6f);
-        textCrit->setLifetime(0.3f);
-        textCrit->setWeight(-60.0f);
-        textCrit->setZ(2000);
-        textCrit->setAlignment(ALIGN_CENTER);
-        textCrit->setType(ENTITY_FLYING_TEXT);
+        displayFlyingText(x, text->getY() - 16.0f, 16, crss.str(), TextEntity::COLOR_FADING_RED);
       }
 
       if (poisoned)
       {
-        TextEntity* textCrit = new TextEntity(tools::getLabel("poison"), 16, x, text->getY() - 16.0f);
-        textCrit->setColor(TextEntity::COLOR_FADING_RED);
-        textCrit->setAge(-0.6f);
-        textCrit->setLifetime(0.3f);
-        textCrit->setWeight(-60.0f);
-        textCrit->setZ(2000);
-        textCrit->setAlignment(ALIGN_CENTER);
-        textCrit->setType(ENTITY_FLYING_TEXT);
+        displayFlyingText(x, text->getY() - 16.0f, 16, tools::getLabel("poison"), TextEntity::COLOR_FADING_RED);
       }
       if (hurtParam.critical) SoundManager::getInstance().playSound(SOUND_CRITICAL);
     }
   }
   return hurtParam.damage;
+}
+
+void BaseCreatureEntity::displayFlyingText(float xText, float yText, int sizeText, std::string text, TextEntity::colorTypeEnum color)
+{
+  TextEntity* textEntity = new TextEntity(text, sizeText, xText, yText);
+  textEntity->setColor(color);
+  textEntity->setAge(-0.6f);
+  textEntity->setLifetime(0.3f);
+  textEntity->setWeight(-60.0f);
+  textEntity->setZ(2000);
+  textEntity->setAlignment(ALIGN_CENTER);
+  textEntity->setType(ENTITY_FLYING_TEXT);
 }
 
 void BaseCreatureEntity::prepareDying()

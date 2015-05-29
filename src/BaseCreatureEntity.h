@@ -128,6 +128,7 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
     virtual bool collideWithMap(int direction);
+    void displayFlyingText(float xText, float yText, int sizeText, std::string text, TextEntity::colorTypeEnum color);
     virtual int hurt(StructHurt hurtParam);
     virtual void prepareDying();
     virtual void dying();
