@@ -15,6 +15,8 @@ class ObstacleEntity : public EnemyEntity
     virtual void dying();
     virtual int hurt(StructHurt hurtParam);
 
+    int getObjectIndex();
+
   protected:
 	  virtual void drop();
 
@@ -22,6 +24,8 @@ class ObstacleEntity : public EnemyEntity
     int xGrid;
     int yGrid;
     int initialFrame;
+    int objectIndex;
+    int initialObjectIndex;
 
     void correctFrame();
     bool explosive;

@@ -21,9 +21,11 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   hurtingSound = SOUND_BARREL_HIT;
   bloodColor = BloodNone;
   obstacleBloodType = BloodBarrel;
+  deathFrame = FRAME_CORPSE_BARREL;
 
   age = 0.0f;
   frame = 0;
+  objectIndex = objectFrame;
 
   xGrid = x / TILE_WIDTH;
   yGrid = y / TILE_HEIGHT;
@@ -31,65 +33,44 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   game().getCurrentMap()->setObjectTile(xGrid, yGrid, objectFrame);
   game().getCurrentMap()->setLogicalTile(xGrid, yGrid, LogicalDestroyable);
 
-  switch (objectFrame)
+  // hp
+  if (objectIndex == MAPOBJ_BARREL || objectIndex == MAPOBJ_BARREL_NO_DROP || objectIndex == MAPOBJ_BARREL_EXPL)
   {
-  //standard barrel
-  case MAPOBJ_BARREL:
     hp = 18;
     hpMax = 18;
-    initialFrame = 0;
-    deathFrame = FRAME_CORPSE_BARREL;
-    break;
-  case MAPOBJ_BARREL + 1:
+  }
+  else if (objectIndex == MAPOBJ_BARREL + 1 || objectIndex == MAPOBJ_BARREL_NO_DROP + 1|| objectIndex == MAPOBJ_BARREL_EXPL + 1)
+  {
     hp = 12;
     hpMax = 12;
-    initialFrame = 0;
-    frame = 1;
-    deathFrame = FRAME_CORPSE_BARREL;
-    break;
-  case MAPOBJ_BARREL + 2:
+  }
+  else if (objectIndex == MAPOBJ_BARREL + 2 || objectIndex == MAPOBJ_BARREL_NO_DROP + 2|| objectIndex == MAPOBJ_BARREL_EXPL + 2)
+  {
     hp = 6;
     hpMax = 6;
+  }
+
+  if (objectIndex >= MAPOBJ_BARREL_EXPL && objectIndex < MAPOBJ_BARREL_EXPL + 3)
+  {
+    obstacleBloodType = BloodBarrelPowder;
+    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
+    explosive = true;
+
+    initialFrame = 3;
+    initialObjectIndex = MAPOBJ_BARREL_EXPL;
+    frame = 3 + objectIndex - MAPOBJ_BARREL_EXPL;
+  }
+  else if (objectIndex >= MAPOBJ_BARREL && objectIndex < MAPOBJ_BARREL + 3)
+  {
     initialFrame = 0;
-    frame = 2;
-    deathFrame = FRAME_CORPSE_BARREL;
-    break;
-
-  //powder barrel
-  case MAPOBJ_BARREL_EXPL:
-    hp = 18;
-    hpMax = 18;
-    initialFrame = 3;
-    frame = 3;
-    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
-    explosive = true;
-    obstacleBloodType = BloodBarrelPowder;
-    break;
-
-  case MAPOBJ_BARREL_EXPL + 1:
-    hp = 12;
-    hpMax = 12;
-    initialFrame = 3;
-    frame = 4;
-    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
-    explosive = true;
-    obstacleBloodType = BloodBarrelPowder;
-    break;
-
-  case MAPOBJ_BARREL_EXPL + 2:
-    hp = 6;
-    hpMax = 6;
-    initialFrame = 3;
-    frame = 5;
-    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
-    explosive = true;
-    obstacleBloodType = BloodBarrelPowder;
-    break;
-
-  default:
-    std::cout << "ERROR: unknown obstacle (" << objectFrame << ")\n";
-    isDying = true;
-    break;
+    initialObjectIndex = MAPOBJ_BARREL;
+    frame = objectIndex - MAPOBJ_BARREL;
+  }
+  else if (objectIndex >= MAPOBJ_BARREL_NO_DROP && objectIndex < MAPOBJ_BARREL_NO_DROP + 3)
+  {
+    initialFrame = 0;
+    initialObjectIndex = MAPOBJ_BARREL_NO_DROP;
+    frame = objectIndex - MAPOBJ_BARREL_NO_DROP;
   }
 
   resistance[ResistanceFrozen] = ResistanceImmune;
@@ -98,6 +79,11 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   resistance[ResistancePoison] = ResistanceImmune;
 
   canExplode = false;
+}
+
+int ObstacleEntity::getObjectIndex()
+{
+  return objectIndex;
 }
 
 void ObstacleEntity::animate(float delay)
@@ -137,7 +123,8 @@ void ObstacleEntity::calculateBB()
 
 void ObstacleEntity::drop()
 {
-  EnemyEntity::drop();
+  if (initialObjectIndex == MAPOBJ_BARREL)
+    EnemyEntity::drop();
 }
 
 void ObstacleEntity::readCollidingEntity(CollidingSpriteEntity* entity)
@@ -181,9 +168,17 @@ void ObstacleEntity::correctFrame()
 {
   if (hp > 0)
   {
-    if ( (hp - 1) / 6 == 1) frame = initialFrame + 1;
-    else if ( (hp - 1) / 6 == 0) frame = initialFrame + 2;
-    game().getCurrentMap()->setObjectTile(xGrid, yGrid, MAPOBJ_BARREL + frame);
+    if ( (hp - 1) / 6 == 1)
+    {
+      frame = initialFrame + 1;
+      objectIndex = initialObjectIndex + 1;
+    }
+    else if ( (hp - 1) / 6 == 0)
+    {
+      frame = initialFrame + 2;
+      objectIndex = initialObjectIndex + 2;
+    }
+    game().getCurrentMap()->setObjectTile(xGrid, yGrid, objectIndex);
   }
 }
 
