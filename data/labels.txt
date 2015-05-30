@@ -485,6 +485,8 @@ msg_tuto_consumables_2#[left shift][num1-num4] to drop it.
 msg_tuto_potions_0#Tutorial: Potions
 msg_tuto_potions_1#You have found a potion.
 msg_tuto_potions_2#You have to drink or identify it to know its effect.
+secret_found#Secret room found!
+
 
 [french]
 start_new_game#Nouvelle partie

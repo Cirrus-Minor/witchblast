@@ -2058,7 +2058,8 @@ void PlayerEntity::reveal()
       }
     }
   }
-  game().getCurrentMap()->callRevelation();
+  if (game().getCurrentMap()->callRevelation())
+    SoundManager::getInstance().playSound(SOUND_SECRET);
 }
 
 bool PlayerEntity::canAquireConsumable(enumItemType type)

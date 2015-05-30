@@ -295,7 +295,8 @@ enum sound_resources {
   SOUND_BOGEYMAN_VORTEX_00,
   SOUND_BOGEYMAN_VORTEX_01,
   SOUND_BARREL_HIT,
-  SOUND_BARREL_SMASH
+  SOUND_BARREL_SMASH,
+  SOUND_SECRET,
 };
 
 enum corpses_ressources{

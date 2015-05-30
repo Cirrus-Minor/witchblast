@@ -1842,6 +1842,14 @@ bool DungeonMap::callRevelation()
     game().setDoorVisible(East);
     gameFloor->getMap(x + 1, y)->setRevealed(true);
     hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    (MAP_WIDTH - 1) * TILE_WIDTH + rand() % TILE_WIDTH,
+                     (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + rand() % (TILE_HEIGHT * 3) );
+
+    return true;
   }
   else if (hasNeighbourLeft() && !gameFloor->getMap(x - 1, y)->isRevealed())
   {
@@ -1857,6 +1865,14 @@ bool DungeonMap::callRevelation()
     game().setDoorVisible(West);
     gameFloor->getMap(x - 1, y)->setRevealed(true);
     hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    rand() % TILE_WIDTH,
+                     (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + rand() % (TILE_HEIGHT * 3) );
+
+    return true;
   }
   else if (hasNeighbourUp() && !gameFloor->getMap(x, y - 1)->isRevealed())
   {
@@ -1872,6 +1888,14 @@ bool DungeonMap::callRevelation()
     game().setDoorVisible(North);
     gameFloor->getMap(x, y - 1)->setRevealed(true);
     hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    (MAP_WIDTH / 2 - 1) * TILE_WIDTH + rand() % (TILE_WIDTH * 3),
+                    rand() % TILE_HEIGHT );
+
+    return true;
   }
   else if (hasNeighbourDown() && !gameFloor->getMap(x, y + 1)->isRevealed())
   {
@@ -1887,6 +1911,14 @@ bool DungeonMap::callRevelation()
     game().setDoorVisible(South);
     gameFloor->getMap(x, y + 1)->setRevealed(true);
     hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    (MAP_WIDTH / 2 - 1) * TILE_WIDTH + rand() % (TILE_WIDTH * 3),
+                    (MAP_HEIGHT - 1) * TILE_HEIGHT + rand() % TILE_HEIGHT );
+
+    return true;
   }
 
   return false;

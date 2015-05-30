@@ -403,6 +403,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/bogeyman_die.ogg",   "media/sound/bogeyman_attack.ogg",
     "media/sound/bogeyman_vortex_00.ogg", "media/sound/bogeyman_vortex_01.ogg",
     "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
+    "media/sound/secret.ogg",
   };
 
   // AA in fullscreen
@@ -4352,6 +4353,19 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateRoomWithoutHoles(0);
     currentMap->setCleared(true);
+
+    // secret found text
+    TextEntity* text = new TextEntity(tools::getLabel("secret_found"),
+                                      20,
+                                      MAP_WIDTH * 0.5f * TILE_WIDTH,
+                                      MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f);
+    text->setAlignment(ALIGN_CENTER);
+    text->setLifetime(2.5f);
+    text->setWeight(-36.0f);
+    text->setZ(1200);
+    text->setColor(TextEntity::COLOR_FADING_WHITE);
+
+    SoundManager::getInstance().playSound(SOUND_SECRET);
   }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
