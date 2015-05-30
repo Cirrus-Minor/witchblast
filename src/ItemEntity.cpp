@@ -179,7 +179,7 @@ void ItemEntity::animate(float delay)
   }
 
   // Has been identified ?
-  if (itemType >= ItemPotion01 && itemType < ItemPotion01 + CONSUMABLE_MAX)
+  if (itemType >= ItemPotion01 && itemType < ItemPotion01 + NUMBER_UNIDENTIFIED)
   {
     if (game().potionEffectKnown(itemType))
     {

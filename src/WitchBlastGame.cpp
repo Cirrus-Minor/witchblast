@@ -721,7 +721,6 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
         player->loadDivinity(rand() % NB_DIVINITY, (startingLevel - 2) * 200, 1, 0);
       }
     }
-    randomizePotionMap(); // TODO Load
     startNewLevel();
   }
 }
@@ -5051,6 +5050,12 @@ void WitchBlastGame::saveGame()
     for (i = 0; i < NB_ENEMY; i++) file << killedEnemies[i] << " ";
     file << std::endl;
 
+    // potions
+    for(auto it = potionMap.begin(); it != potionMap.end(); ++it)
+    {
+      file << it->first << " " << it->second.effect << " " << it->second.known << std::endl;
+    }
+
     // maps
     if (currentMap->isCleared())
       saveMapItems();
@@ -5239,6 +5244,16 @@ bool WitchBlastGame::loadGame()
 
     // kill stats
     for (int i = 0; i < NB_ENEMY; i++) file >> killedEnemies[i];
+
+    // potions
+    for (i = 0; i < NUMBER_UNIDENTIFIED; i++)
+    {
+      int source, effect;
+      bool known;
+
+      file >> source >> effect >> known;
+      addPotionToMap((enumItemType)source, (enumItemType)effect, known);
+    }
 
     // maps
     int nbRooms;

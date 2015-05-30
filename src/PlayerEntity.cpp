@@ -1943,7 +1943,7 @@ void PlayerEntity::acquireItem(enumItemType type)
 
 bool isUnidentified(enumItemType item)
 {
-  return (item >= ItemPotion01 && item < ItemPotion01 + CONSUMABLE_MAX);
+  return (item >= ItemPotion01 && item < ItemPotion01 + NUMBER_UNIDENTIFIED);
 }
 
 int PlayerEntity::getConsumable(int n)

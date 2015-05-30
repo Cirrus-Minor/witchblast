@@ -61,7 +61,7 @@ const std::string spellLabel[SpellNone] =
   "spell_fairy"
 };
 
-const int CONSUMABLE_MAX = 2;
+const int NUMBER_UNIDENTIFIED = 2;
 
 /** Item type enum
  *  All the items and equipments.
