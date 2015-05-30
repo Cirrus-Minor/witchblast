@@ -91,7 +91,8 @@ enum roomTypeEnum
   roomTypeExit,
   roomTypeStarting,
   roomTypeChallenge,
-  roomTypeTemple
+  roomTypeTemple,
+  roomTypeSecret
 };
 
 enum positionDirection
@@ -153,6 +154,8 @@ class DungeonMap : public GameMap
     void setVisited(bool b);
     bool isKnown();
     void setKnown(bool b);
+    bool isRevealed();
+    void setRevealed(bool b);
     bool isCleared();
     void setCleared(bool b);
     bool isWalkable(int x, int y);
@@ -178,6 +181,8 @@ class DungeonMap : public GameMap
     int hasNeighbourRight();
     int hasNeighbourUp();
     int hasNeighbourDown();
+
+    bool hasKnownNeighbour(int direction, bool mustBeRevealed);
 
     virtual bool isDownBlocking(int x, int y);
     virtual bool isUpBlocking(int x, int y);
@@ -243,12 +248,15 @@ class DungeonMap : public GameMap
     void setFloorOffset(int n);
     void setWallType(int n);
 
+    bool callRevelation();
+
   protected:
   private:
     GameFloor* gameFloor;
     int x, y;
     bool visited;
     bool known;
+    bool revealed;
     bool cleared;
 
     int objectsMap[MAP_WIDTH][MAP_HEIGHT];

@@ -448,7 +448,7 @@ void DungeonMapEntity::computeDoors()
 {
   DungeonMap* currentMap = game().getCurrentMap();
 
-  if (currentMap->hasNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
+  if (currentMap->hasKnownNeighbour(North, true) || currentMap->getRoomType() == roomTypeExit)
   {
     isDoorShadow[North] = true;
     doorWall[North].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -470,7 +470,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[North] = false;
   }
 
-  if (currentMap->hasNeighbourDown() || (game().getLevel() > 1 &&currentMap->getRoomType() == roomTypeStarting))
+  if (currentMap->hasKnownNeighbour(South, true) || ( (game().getLevel() > 1 && currentMap->getRoomType() == roomTypeStarting)))
   {
     isDoorShadow[South] = true;
     doorWall[South].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -492,7 +492,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[South] = false;
   }
 
-  if (currentMap->hasNeighbourLeft())
+  if (currentMap->hasKnownNeighbour(West, true))
   {
     isDoorShadow[West] = true;
     doorWall[West].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -514,7 +514,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[West] = false;
   }
 
-  if (currentMap->hasNeighbourRight())
+  if (currentMap->hasKnownNeighbour(East, true))
   {
     isDoorShadow[East] = true;
     doorWall[East].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));

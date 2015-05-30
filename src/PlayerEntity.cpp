@@ -2058,6 +2058,7 @@ void PlayerEntity::reveal()
       }
     }
   }
+  game().getCurrentMap()->callRevelation();
 }
 
 bool PlayerEntity::canAquireConsumable(enumItemType type)

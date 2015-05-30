@@ -432,6 +432,7 @@ public:
   void registerAchievement(enumAchievementType achievement);
 
   void renderDoors();
+  void setDoorVisible(int n);
 
   bool isPresentItem(int n);
   void addPresentItem(int n);
@@ -688,7 +689,7 @@ private:
    *  \param roomCurrent : type of the current door
    *  \param roomNeighbour : type of the neighbour door
    */
-   void checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour);
+   void checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour, bool isNeighbourKnown);
 
   /*!
    *  \brief Refreshes the minimap

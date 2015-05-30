@@ -58,6 +58,7 @@ class GameFloor
 
     bool isSuperIsolated(int x, int y);
     std::vector<IntCoord> findSuperIsolated();
+    std::vector<IntCoord> findSecretRoom();
     void generate();
     bool finalize();
 

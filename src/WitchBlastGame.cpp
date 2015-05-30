@@ -840,6 +840,7 @@ void WitchBlastGame::playLevel(bool isFight)
   new ItemEntity(ItemPotion02, 200, 100);
   new ItemEntity(ItemPotion01, 250, 100);
   new ItemEntity(ItemBag, 450, 100);
+  new ItemEntity(ItemFloorMap, 500, 100);
 }
 
 void WitchBlastGame::prepareIntro()
@@ -3527,22 +3528,22 @@ void WitchBlastGame::openDoors()
 
   if (currentMap->hasNeighbourUp() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH/2, 0);
-  else
+  else if (currentMap->hasKnownNeighbour(North, true))
     doorEntity[0]->openDoor();
 
   if (currentMap->hasNeighbourLeft() == 2 && !bossRoomOpened)
     currentMap->closeDoor(0, MAP_HEIGHT / 2);
-  else
+  else if (currentMap->hasKnownNeighbour(West, true))
     doorEntity[1]->openDoor();
 
   if (currentMap->hasNeighbourDown() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH / 2, MAP_HEIGHT - 1);
-  else
+  else if (currentMap->hasKnownNeighbour(South, true))
     doorEntity[2]->openDoor();
 
   if (currentMap->hasNeighbourRight() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
-  else
+  else if (currentMap->hasKnownNeighbour(East, true))
     doorEntity[3]->openDoor();
 }
 
@@ -3721,14 +3722,20 @@ Vector2D WitchBlastGame::getNearestEnemy(float x, float y)
   return target;
 }
 
-void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour)
+void WitchBlastGame::setDoorVisible(int n)
+{
+  if (n >= 0 && n < 4)
+    doorEntity[n]->setVisible(true);
+}
+
+void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour, bool isNeighbourKnown)
 {
   if (roomNeighbour == roomTypeNULL)
   {
     doorEntity[doorId]->setVisible(false);
     return;
   }
-  doorEntity[doorId]->setVisible(true);
+  doorEntity[doorId]->setVisible(isNeighbourKnown);
 
   doorEntity[doorId]->setDoorType(currentMap->getDoorType(doorId));
 
@@ -3784,10 +3791,10 @@ void WitchBlastGame::refreshMap()
   }
 
   // check doors
-  checkDoor(0, currentMap->getRoomType(), currentMap->getNeighbourUp());
-  checkDoor(1, currentMap->getRoomType(), currentMap->getNeighbourLeft());
-  checkDoor(2, currentMap->getRoomType(), currentMap->getNeighbourDown());
-  checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
+  checkDoor(0, currentMap->getRoomType(), currentMap->getNeighbourUp(), currentMap->hasKnownNeighbour(North, true));
+  checkDoor(1, currentMap->getRoomType(), currentMap->getNeighbourLeft(), currentMap->hasKnownNeighbour(West, true));
+  checkDoor(2, currentMap->getRoomType(), currentMap->getNeighbourDown(), currentMap->hasKnownNeighbour(South, true));
+  checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight(), currentMap->hasKnownNeighbour(East, true));
 
   // pet slime
   if (player->isEquiped(EQUIP_PET_SLIME) && currentMap->getRoomType() != roomTypeTemple) new SlimePetEntity();
@@ -3824,6 +3831,8 @@ void WitchBlastGame::refreshMinimap()
             miniMap->setTile(i, j, 3);
           else if (currentFloor->getRoom(i, j) == roomTypeTemple)
             miniMap->setTile(i, j, 7);
+          else if (currentFloor->getRoom(i, j) == roomTypeTemple)
+            miniMap->setTile(i, j, 8);
           else
             miniMap->setTile(i, j, currentFloor->getRoom(i, j));
         }
@@ -3859,6 +3868,9 @@ void WitchBlastGame::refreshMinimap()
         case roomTypeBonus:
           miniMap->setTile(i, j,
                            game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 2 : 11 );
+          break;
+        case roomTypeSecret:
+          miniMap->setTile(i, j, 18 );
           break;
         case roomTypeStandard:
         case roomTypeStarting:
@@ -4336,6 +4348,11 @@ void WitchBlastGame::generateMap()
     currentMap->generateTempleRoom();
     currentMap->setCleared(true);
     proceedEvent(EventFindTemple);
+  }
+  else if (currentMap->getRoomType() == roomTypeSecret)
+  {
+    currentMap->generateRoomWithoutHoles(0);
+    currentMap->setCleared(true);
   }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
@@ -5049,6 +5066,7 @@ void WitchBlastGame::saveGame()
                << currentFloor->getMap(i, j)->getRoomType() << " "
                << currentFloor->getMap(i, j)->isKnown() << " "
                << currentFloor->getMap(i, j)->isVisited() << " "
+               << currentFloor->getMap(i, j)->isRevealed() << " "
                << currentFloor->getMap(i, j)->isCleared() << std::endl;
           if (currentFloor->getMap(i, j)->isVisited())
           {
@@ -5239,6 +5257,8 @@ bool WitchBlastGame::loadGame()
       iMap->setKnown(flag);
       file >> flag;
       iMap->setVisited(flag);
+      file >> flag;
+      iMap->setRevealed(flag);
       file >> flag;
       iMap->setCleared(flag);
 

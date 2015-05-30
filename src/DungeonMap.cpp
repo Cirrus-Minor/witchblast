@@ -18,6 +18,7 @@ DungeonMap::DungeonMap(GameFloor* gameFloor, int x, int y) : GameMap(MAP_WIDTH, 
   this->x = x;
   this->y = y;
   cleared = false;
+  revealed = true;
   visited = false;
   known = false;
   for (int i = 0; i < NB_RANDOM_TILES_IN_ROOM; i++)
@@ -53,6 +54,16 @@ void DungeonMap::setKnown(bool b)
   known = b;
 }
 
+bool DungeonMap::isRevealed()
+{
+  return revealed;
+}
+
+void DungeonMap::setRevealed(bool b)
+{
+  revealed = b;
+}
+
 bool DungeonMap::isCleared()
 {
   return cleared;
@@ -71,6 +82,8 @@ roomTypeEnum DungeonMap::getRoomType()
 void DungeonMap::setRoomType(roomTypeEnum roomType)
 {
   this->roomType = roomType;
+  if (roomType == roomTypeSecret)
+    revealed = false;
 }
 
 int DungeonMap::getObjectTile(int x, int y)
@@ -322,6 +335,54 @@ roomTypeEnum DungeonMap::getNeighbourLeft()
   if (x > 0) return gameFloor->getRoom(x - 1, y);
   else return roomTypeNULL;
 }
+
+bool DungeonMap::hasKnownNeighbour(int direction, bool mustBeRevealed)
+{
+  switch (direction)
+  {
+  case North:
+    if (y > 0 && gameFloor->getRoom(x, y - 1) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x, y - 1) != roomTypeSecret || gameFloor->getMap(x, y - 1)->isRevealed());
+      else
+        return (gameFloor->getRoom(x, y - 1) != roomTypeSecret || gameFloor->getMap(x, y - 1)->isKnown());
+    }
+    break;
+
+  case South:
+    if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y + 1) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x, y + 1) != roomTypeSecret || gameFloor->getMap(x, y + 1)->isRevealed());
+      else
+        return (gameFloor->getRoom(x, y + 1) != roomTypeSecret || gameFloor->getMap(x, y + 1)->isKnown());
+    }
+    break;
+
+  case West:
+    if (x > 0 && gameFloor->getRoom(x - 1, y) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x - 1, y) != roomTypeSecret || gameFloor->getMap(x - 1, y)->isRevealed());
+      else
+        return (gameFloor->getRoom(x - 1, y) != roomTypeSecret || gameFloor->getMap(x - 1, y)->isKnown());
+    }
+    break;
+
+  case East:
+    if (x < MAP_WIDTH -1 && gameFloor->getRoom(x+1, y) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x + 1, y) != roomTypeSecret || gameFloor->getMap(x + 1, y)->isRevealed());
+      else
+        return (gameFloor->getRoom(x + 1, y) != roomTypeSecret || gameFloor->getMap(x + 1, y)->isKnown());
+    }
+    break;
+  }
+  return false;
+}
+
 roomTypeEnum DungeonMap::getNeighbourRight()
 {
   if (x < MAP_WIDTH - 1) return gameFloor->getRoom(x + 1, y);
@@ -514,22 +575,30 @@ void DungeonMap::initRoom(int floorN, int wallN)
   {
     if (x > 0 && gameFloor->getRoom(x - 1, y) > 0)
     {
-      map[0][MAP_HEIGHT / 2] = floorOffset;
-      map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
-      map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
-      openDoor(0, y0);
+      if (gameFloor->getRoom(x - 1, y) != roomTypeSecret)
+      {
+        map[0][MAP_HEIGHT / 2] = floorOffset;
+        map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
+        map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
+        openDoor(0, y0);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x - 1, y) == roomTypeBoss)
-      {
-        doorType[West] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x - 1, y) == roomTypeChallenge)
-      {
-        doorType[West] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x - 1, y)->isVisited())
-      {
-        doorType[West] = gameFloor->getMap(x - 1, y)->getDoorType(East);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x - 1, y) == roomTypeBoss)
+        {
+          doorType[West] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x - 1, y) == roomTypeChallenge)
+        {
+          doorType[West] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x - 1, y)->isVisited())
+        {
+          doorType[West] = gameFloor->getMap(x - 1, y)->getDoorType(East);
+        }
+        else
+        {
+          // secret door
+          doorType[West] = getRandomDoor();
+        }
       }
       else
       {
@@ -539,75 +608,99 @@ void DungeonMap::initRoom(int floorN, int wallN)
 
     if (x < MAP_WIDTH - 1 && gameFloor->getRoom(x + 1, y) > 0)
     {
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = floorOffset;
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
-      openDoor(MAP_WIDTH - 1, y0);
+      if (gameFloor->getRoom(x + 1, y) != roomTypeSecret)
+      {
+        map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = floorOffset;
+        map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
+        map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
+        openDoor(MAP_WIDTH - 1, y0);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x + 1, y) == roomTypeBoss)
-      {
-        doorType[East] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x + 1, y) == roomTypeChallenge)
-      {
-        doorType[East] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x + 1, y)->isVisited())
-      {
-        doorType[East] = gameFloor->getMap(x + 1, y)->getDoorType(West);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x + 1, y) == roomTypeBoss)
+        {
+          doorType[East] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x + 1, y) == roomTypeChallenge)
+        {
+          doorType[East] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x + 1, y)->isVisited())
+        {
+          doorType[East] = gameFloor->getMap(x + 1, y)->getDoorType(West);
+        }
+        else
+        {
+          doorType[East] = getRandomDoor();
+        }
       }
       else
       {
+        // secret door
         doorType[East] = getRandomDoor();
       }
     }
 
     if (y > 0 && gameFloor->getRoom(x, y - 1) > 0)
     {
-      map[MAP_WIDTH / 2][0] = floorOffset;
-      map[MAP_WIDTH / 2 - 1][0] = floorOffset;
-      map[MAP_WIDTH / 2 + 1][0] = floorOffset;
-      openDoor(x0, 0);
+      if (gameFloor->getRoom(x, y - 1) != roomTypeSecret)
+      {
+        map[MAP_WIDTH / 2][0] = floorOffset;
+        map[MAP_WIDTH / 2 - 1][0] = floorOffset;
+        map[MAP_WIDTH / 2 + 1][0] = floorOffset;
+        openDoor(x0, 0);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x, y - 1) == roomTypeBoss)
-      {
-        doorType[North] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y - 1) == roomTypeChallenge)
-      {
-        doorType[North] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x, y - 1)->isVisited())
-      {
-        doorType[North] = gameFloor->getMap(x, y - 1)->getDoorType(South);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x, y - 1) == roomTypeBoss)
+        {
+          doorType[North] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y - 1) == roomTypeChallenge)
+        {
+          doorType[North] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x, y - 1)->isVisited())
+        {
+          doorType[North] = gameFloor->getMap(x, y - 1)->getDoorType(South);
+        }
+        else
+        {
+          doorType[North] = getRandomDoor();
+        }
       }
       else
       {
+        // secret door
         doorType[North] = getRandomDoor();
       }
     }
 
     if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y + 1) > 0)
     {
-      map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = floorOffset;
-      map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
-      map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
-      openDoor(x0, MAP_HEIGHT -1);
+      if (gameFloor->getRoom(x, y + 1) != roomTypeSecret)
+      {
+        map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = floorOffset;
+        map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
+        map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
+        openDoor(x0, MAP_HEIGHT -1);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x, y + 1) == roomTypeBoss)
-      {
-        doorType[South] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y + 1) == roomTypeChallenge)
-      {
-        doorType[South] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x, y + 1)->isVisited())
-      {
-        doorType[South] = gameFloor->getMap(x, y + 1)->getDoorType(North);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x, y + 1) == roomTypeBoss)
+        {
+          doorType[South] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y + 1) == roomTypeChallenge)
+        {
+          doorType[South] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x, y + 1)->isVisited())
+        {
+          doorType[South] = gameFloor->getMap(x, y + 1)->getDoorType(North);
+        }
+        else
+        {
+          doorType[South] = getRandomDoor();
+        }
       }
       else
       {
+        // secret door
         doorType[South] = getRandomDoor();
       }
     }
@@ -1731,4 +1824,70 @@ void DungeonMap::generateRandomTile(int index)
         randomTileElements[index].rotation = 0;
     }
   }
+}
+
+bool DungeonMap::callRevelation()
+{
+  if (hasNeighbourRight() && !gameFloor->getMap(x + 1, y)->isRevealed())
+  {
+    map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = floorOffset;
+    map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
+    map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
+
+    if (cleared)
+      openDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
+    else
+      closeDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
+
+    game().setDoorVisible(East);
+    gameFloor->getMap(x + 1, y)->setRevealed(true);
+    hasChanged = true;
+  }
+  else if (hasNeighbourLeft() && !gameFloor->getMap(x - 1, y)->isRevealed())
+  {
+    map[0][MAP_HEIGHT / 2] = floorOffset;
+    map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
+    map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
+
+    if (cleared)
+      openDoor(0, MAP_HEIGHT / 2);
+    else
+      closeDoor(0, MAP_HEIGHT / 2);
+
+    game().setDoorVisible(West);
+    gameFloor->getMap(x - 1, y)->setRevealed(true);
+    hasChanged = true;
+  }
+  else if (hasNeighbourUp() && !gameFloor->getMap(x, y - 1)->isRevealed())
+  {
+    map[MAP_WIDTH / 2][0] = floorOffset;
+    map[MAP_WIDTH / 2 - 1][0] = floorOffset;
+    map[MAP_WIDTH / 2 + 1][0] = floorOffset;
+
+    if (cleared)
+      openDoor(MAP_WIDTH / 2, 0);
+    else
+      closeDoor(MAP_WIDTH / 2, 0);
+
+    game().setDoorVisible(North);
+    gameFloor->getMap(x, y - 1)->setRevealed(true);
+    hasChanged = true;
+  }
+  else if (hasNeighbourDown() && !gameFloor->getMap(x, y + 1)->isRevealed())
+  {
+    map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = floorOffset;
+    map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
+    map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
+
+    if (cleared)
+      openDoor(MAP_WIDTH / 2, MAP_HEIGHT -1);
+    else
+      closeDoor(MAP_WIDTH / 2, MAP_HEIGHT -1);
+
+    game().setDoorVisible(South);
+    gameFloor->getMap(x, y + 1)->setRevealed(true);
+    hasChanged = true;
+  }
+
+  return false;
 }
