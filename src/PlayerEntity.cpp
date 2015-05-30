@@ -1995,7 +1995,8 @@ void PlayerEntity::tryToConsume(int n)
     if (isUnidentified((enumItemType)consumable[n]))
     {
       game().setPotionToKnown((enumItemType)consumable[n]);
-      consume(game().getPotion((enumItemType)consumable[n]));
+      consumable[n] = game().getPotion((enumItemType)consumable[n]);
+      consume((enumItemType)consumable[n]);
     }
     else if (items[consumable[n]].consumable)
     // known
