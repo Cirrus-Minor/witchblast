@@ -3528,22 +3528,22 @@ void WitchBlastGame::openDoors()
 
   if (currentMap->hasNeighbourUp() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH/2, 0);
-  else if (currentMap->hasKnownNeighbour(North, true))
+  else if (currentMap->hasNeighbourUp() == 1)
     doorEntity[0]->openDoor();
 
   if (currentMap->hasNeighbourLeft() == 2 && !bossRoomOpened)
     currentMap->closeDoor(0, MAP_HEIGHT / 2);
-  else if (currentMap->hasKnownNeighbour(West, true))
+  else if (currentMap->hasNeighbourLeft() == 1)
     doorEntity[1]->openDoor();
 
   if (currentMap->hasNeighbourDown() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH / 2, MAP_HEIGHT - 1);
-  else if (currentMap->hasKnownNeighbour(South, true))
+  else if (currentMap->hasNeighbourDown() == 1)
     doorEntity[2]->openDoor();
 
   if (currentMap->hasNeighbourRight() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
-  else if (currentMap->hasKnownNeighbour(East, true))
+  else if (currentMap->hasNeighbourRight() == 1)
     doorEntity[3]->openDoor();
 }
 
@@ -4356,9 +4356,9 @@ void WitchBlastGame::generateMap()
 
     // secret found text
     TextEntity* text = new TextEntity(tools::getLabel("secret_found"),
-                                      20,
+                                      25,
                                       MAP_WIDTH * 0.5f * TILE_WIDTH,
-                                      MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f);
+                                      MAP_HEIGHT * 0.5f * TILE_HEIGHT + 10.0f);
     text->setAlignment(ALIGN_CENTER);
     text->setLifetime(2.5f);
     text->setWeight(-36.0f);
