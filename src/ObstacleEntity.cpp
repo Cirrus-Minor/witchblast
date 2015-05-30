@@ -21,7 +21,7 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   hurtingSound = SOUND_BARREL_HIT;
   bloodColor = BloodNone;
   obstacleBloodType = BloodBarrel;
-  deathFrame = FRAME_CORPSE_BARREL;
+  deathFrame = FRAME_CORPSE_SLIME_VIOLET;
 
   age = 0.0f;
   frame = 0;
@@ -53,7 +53,6 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   if (objectIndex >= MAPOBJ_BARREL_EXPL && objectIndex < MAPOBJ_BARREL_EXPL + 3)
   {
     obstacleBloodType = BloodBarrelPowder;
-    deathFrame = FRAME_CORPSE_SLIME_VIOLET;
     explosive = true;
 
     initialFrame = 3;
