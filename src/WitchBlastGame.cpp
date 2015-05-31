@@ -3808,16 +3808,16 @@ void WitchBlastGame::refreshMinimap()
   for (int j=0; j < FLOOR_HEIGHT; j++)
     for (int i=0; i < FLOOR_WIDTH; i++)
     {
-      int n = currentFloor->getRoom(i, j);
+      int roomType = currentFloor->getRoom(i, j);
 
-      if (n > 0 && currentFloor->getMap(i, j)->isVisited())
+      if (roomType > roomTypeNULL && currentFloor->getMap(i, j)->isVisited())
       {
-        if (currentFloor->getRoom(i, j) == roomTypeStarting
-            || currentFloor->getRoom(i, j) == roomTypeChallenge
-            || currentFloor->getRoom(i, j) == roomTypeBonus
-            || currentFloor->getRoom(i, j) == roomTypeKey
-            || currentFloor->getRoom(i, j) == roomTypeBoss
-            || currentFloor->getRoom(i, j) == roomTypeStandard)
+        if (roomType == roomTypeStarting
+            || roomType == roomTypeChallenge
+            || roomType == roomTypeBonus
+            || roomType == roomTypeKey
+            || roomType == roomTypeBoss
+            || roomType == roomTypeStandard)
         {
           if ( currentFloor->getMap(i, j)->containsHealth())
             miniMap->setTile(i, j, 5);
@@ -3827,19 +3827,19 @@ void WitchBlastGame::refreshMinimap()
 
         else
         {
-          if (currentFloor->getRoom(i, j) == roomTypeMerchant)
+          if (roomType == roomTypeMerchant)
             miniMap->setTile(i, j, 3);
-          else if (currentFloor->getRoom(i, j) == roomTypeTemple)
+          else if (roomType == roomTypeTemple)
             miniMap->setTile(i, j, 7);
-          else if (currentFloor->getRoom(i, j) == roomTypeTemple)
+          else if (roomType == roomTypeSecret)
             miniMap->setTile(i, j, 8);
           else
             miniMap->setTile(i, j, currentFloor->getRoom(i, j));
         }
       }
-      else if (n > 0 && currentFloor->getMap(i, j)->isKnown())
+      else if (roomType > roomTypeNULL && currentFloor->getMap(i, j)->isKnown())
       {
-        switch (currentFloor->getRoom(i, j))
+        switch (roomType)
         {
         case roomTypeBoss:
           miniMap->setTile(i, j, 12);

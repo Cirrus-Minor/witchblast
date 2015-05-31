@@ -248,6 +248,15 @@ public:
   *  It's called when the room is closed : 0 enemy = room is cleared and doors shall open.
   *  \return amount of enemies
   */
+
+  /*!
+   *  \brief Refreshes the minimap
+   *
+   * Refresh the minimap.
+   * Called when the player changes room.
+   */
+  void refreshMinimap();
+
   int getEnemyCount();
 
   int getUndeadCount();
@@ -690,14 +699,6 @@ private:
    *  \param roomNeighbour : type of the neighbour door
    */
    void checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour, bool isNeighbourKnown);
-
-  /*!
-   *  \brief Refreshes the minimap
-   *
-   * Refresh the minimap.
-   * Called when the player changes room.
-   */
-  void refreshMinimap();
 
   /*!
    *  \brief Generates a room

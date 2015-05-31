@@ -62,6 +62,8 @@ bool DungeonMap::isRevealed()
 void DungeonMap::setRevealed(bool b)
 {
   revealed = b;
+  if (revealed) known = true;
+  game().refreshMinimap();
 }
 
 bool DungeonMap::isCleared()
