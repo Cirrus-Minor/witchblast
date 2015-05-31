@@ -461,8 +461,12 @@ void DungeonMap::initRoom(int floorN, int wallN)
   int i, j;
 
   // style
-  if (floorN < 0) floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
-  else floorOffset = floorN;
+  if (roomType == roomTypeSecret)
+    floorOffset = 8 * 24;
+  else if (floorN < 0)
+    floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
+  else
+    floorOffset = floorN;
 
   if (wallN < 0) wallType = ((game().getLevel() - 1) % 8) ;
   else wallType = wallN;
@@ -993,6 +997,19 @@ void DungeonMap::generateTempleRoom()
   // no random tiles in temples
   //generateRandomTiles();
 }
+
+void DungeonMap::generateSecretRoom()
+{
+  initRoom();
+
+  if (rand() % 2 == 0)
+  {
+    initPattern(PatternSmallChecker);
+  }
+
+  generateRandomTiles();
+}
+
 
 void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
 {

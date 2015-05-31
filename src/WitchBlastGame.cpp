@@ -4351,7 +4351,19 @@ void WitchBlastGame::generateMap()
   }
   else if (currentMap->getRoomType() == roomTypeSecret)
   {
-    currentMap->generateRoomWithoutHoles(0);
+    currentMap->generateSecretRoom();
+
+    // if
+    {
+      new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f + TILE_WIDTH),
+                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                    ChestBasic, false);
+
+      new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f - TILE_WIDTH),
+                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                    ChestBasic, false);
+    }
+
     currentMap->setCleared(true);
 
     // secret found text
