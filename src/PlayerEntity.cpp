@@ -2060,7 +2060,10 @@ void PlayerEntity::reveal()
     }
   }
   if (game().getCurrentMap()->callRevelation())
+  {
+    game().refreshMinimap();
     SoundManager::getInstance().playSound(SOUND_SECRET);
+  }
 }
 
 bool PlayerEntity::canAquireConsumable(enumItemType type)

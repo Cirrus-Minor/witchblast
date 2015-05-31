@@ -34,17 +34,20 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   game().getCurrentMap()->setLogicalTile(xGrid, yGrid, LogicalDestroyable);
 
   // hp
-  if (objectIndex == MAPOBJ_BARREL || objectIndex == MAPOBJ_BARREL_NO_DROP || objectIndex == MAPOBJ_BARREL_EXPL)
+  if (objectIndex == MAPOBJ_BARREL || objectIndex == MAPOBJ_BARREL_NO_DROP
+      || objectIndex == MAPOBJ_BARREL_EXPL || objectIndex == MAPOBJ_SKULL)
   {
     hp = 18;
     hpMax = 18;
   }
-  else if (objectIndex == MAPOBJ_BARREL + 1 || objectIndex == MAPOBJ_BARREL_NO_DROP + 1|| objectIndex == MAPOBJ_BARREL_EXPL + 1)
+  else if (objectIndex == MAPOBJ_BARREL + 1 || objectIndex == MAPOBJ_BARREL_NO_DROP + 1
+           || objectIndex == MAPOBJ_BARREL_EXPL + 1 || objectIndex == MAPOBJ_SKULL + 1)
   {
     hp = 12;
     hpMax = 12;
   }
-  else if (objectIndex == MAPOBJ_BARREL + 2 || objectIndex == MAPOBJ_BARREL_NO_DROP + 2|| objectIndex == MAPOBJ_BARREL_EXPL + 2)
+  else if (objectIndex == MAPOBJ_BARREL + 2 || objectIndex == MAPOBJ_BARREL_NO_DROP + 2
+           || objectIndex == MAPOBJ_BARREL_EXPL + 2 || objectIndex == MAPOBJ_SKULL + 2)
   {
     hp = 6;
     hpMax = 6;
@@ -70,6 +73,14 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
     initialFrame = 0;
     initialObjectIndex = MAPOBJ_BARREL_NO_DROP;
     frame = objectIndex - MAPOBJ_BARREL_NO_DROP;
+  }
+  else if (objectIndex >= MAPOBJ_SKULL && objectIndex < MAPOBJ_SKULL + 3)
+  {
+    obstacleBloodType = BloodSkull;
+
+    initialFrame = 6;
+    initialObjectIndex = MAPOBJ_SKULL;
+    frame = 6 + objectIndex - MAPOBJ_SKULL;
   }
 
   resistance[ResistanceFrozen] = ResistanceImmune;
@@ -108,6 +119,7 @@ void ObstacleEntity::dying()
   {
     new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone, true);
     SoundManager::getInstance().playSound(SOUND_BOOM_00);
+    game().addCorpse(x, y, deathFrame);
   }
 }
 
@@ -122,7 +134,7 @@ void ObstacleEntity::calculateBB()
 
 void ObstacleEntity::drop()
 {
-  if (initialObjectIndex == MAPOBJ_BARREL)
+  if (initialObjectIndex == MAPOBJ_BARREL || initialObjectIndex == MAPOBJ_SKULL)
     EnemyEntity::drop();
 }
 

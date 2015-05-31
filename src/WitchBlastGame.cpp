@@ -6884,7 +6884,7 @@ void WitchBlastGame::checkDestroyableObjects()
   for (int i = 0; i < MAP_WIDTH; i++)
     for (int j = 0; j < MAP_HEIGHT; j++)
     {
-      if (currentMap->getObjectTile(i, j) >= MAPOBJ_BARREL && currentMap->getObjectTile(i, j) < MAPOBJ_BARREL_EXPL + 3)
+      if (currentMap->getObjectTile(i, j) >= MAPOBJ_BARREL/* && currentMap->getObjectTile(i, j) < MAPOBJ_BARREL_EXPL + 3*/)
       {
         new ObstacleEntity(i * TILE_WIDTH + TILE_WIDTH / 2, j * TILE_HEIGHT + TILE_HEIGHT / 2, currentMap->getObjectTile(i, j));
       }

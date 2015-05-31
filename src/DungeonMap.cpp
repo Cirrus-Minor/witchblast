@@ -63,7 +63,6 @@ void DungeonMap::setRevealed(bool b)
 {
   revealed = b;
   if (revealed) known = true;
-  game().refreshMinimap();
 }
 
 bool DungeonMap::isCleared()
@@ -722,7 +721,8 @@ void DungeonMap::initRoom(int floorN, int wallN)
   {
     int objX = 1 + rand() % (MAP_WIDTH - 2);
     int objY = 1 + rand() % (MAP_HEIGHT - 2);
-    if (i == 7) objectsMap[objX][objY] = MAPOBJ_BARREL_EXPL;
+    if (i == 6) objectsMap[objX][objY] = MAPOBJ_SKULL;
+    else if (i == 7) objectsMap[objX][objY] = MAPOBJ_BARREL_EXPL;
     else objectsMap[objX][objY] = MAPOBJ_BARREL;
   }
 }
