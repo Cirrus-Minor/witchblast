@@ -213,6 +213,7 @@ class DungeonMap : public GameMap
     void generateSecretRoom();
     void generateInselRoom();
     void addRandomGrids(int n);
+    void addDestroyableObject(int x, int y, int obj);
 
     void addItem(int itemType, float x, float y, bool merch);
     void addSprite(int spriteType, int frame,  float x, float y, float scale);
