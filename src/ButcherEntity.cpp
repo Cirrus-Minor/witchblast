@@ -134,3 +134,8 @@ int ButcherEntity::hurt(StructHurt hurtParam)
   setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
   return EnemyEntity::hurt(hurtParam);
 }
+
+bool ButcherEntity::isAttacking()
+{
+  return true;
+}
