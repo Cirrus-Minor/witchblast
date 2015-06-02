@@ -507,8 +507,7 @@ class PlayerEntity : public BaseCreatureEntity
 
     bool canAquireConsumable(enumItemType type);
     int getConsumable(int n);
-    int getConsumableAmount(int n);
-    void setConsumable(int n, int type, int amount);
+    void setConsumable(int n, int type);
     void dropConsumables(int n);
     void tryToConsume(int n);
     void consume(enumItemType item);
@@ -617,7 +616,6 @@ class PlayerEntity : public BaseCreatureEntity
     void incrementDivInterventions();
 
     int consumable[MAX_SLOT_CONSUMABLES];
-    int consumableAmount[MAX_SLOT_CONSUMABLES];
     void acquireConsumable(enumItemType type);
     void reveal();
 };

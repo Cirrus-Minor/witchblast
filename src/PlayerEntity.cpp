@@ -96,10 +96,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 
   // init the consumibles
   for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
-  {
-    consumable[i] = 0;
-    consumableAmount[i] = 0;
-  }
+    consumable[i] = -1;
 
   specialShotIndex = 0;
   needInitShotType = false;
@@ -1951,18 +1948,11 @@ int PlayerEntity::getConsumable(int n)
   if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return -1;
   else return consumable[n];
 }
-
-int PlayerEntity::getConsumableAmount(int n)
-{
-  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return 0;
-  else return consumableAmount[n];
-}
-void PlayerEntity::setConsumable(int n, int type, int amount)
+void PlayerEntity::setConsumable(int n, int type)
 {
   if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
 
   consumable[n] = type;
-  consumableAmount[n] = amount;
 }
 
 void PlayerEntity::dropConsumables(int n)
@@ -1970,18 +1960,12 @@ void PlayerEntity::dropConsumables(int n)
   if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
   if (playerStatus != playerStatusPlaying) return;
 
-  if (consumable[n] > -1 && consumableAmount[n] > 0)
-  {
-    for (int i = 0; i < consumableAmount[n]; i++)
-    {
-      ItemEntity* newItem = new ItemEntity((enumItemType)(consumable[n]), x, y);
-      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-      newItem->setViscosity(0.96f);
-      newItem->setAge(-10.0f);
-    }
-    consumable[n] = -1;
-    consumableAmount[n] = 0;
-  }
+  ItemEntity* newItem = new ItemEntity((enumItemType)(consumable[n]), x, y);
+  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  newItem->setViscosity(0.96f);
+  newItem->setAge(-10.0f);
+
+  consumable[n] = -1;
 }
 
 void PlayerEntity::tryToConsume(int n)
@@ -1989,7 +1973,7 @@ void PlayerEntity::tryToConsume(int n)
   if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
   if (playerStatus != playerStatusPlaying) return;
 
-  if (consumable[n] > -1 && consumableAmount[n] > 0)
+  if (consumable[n] > -1)
   {
     // unidentified
     if (isUnidentified((enumItemType)consumable[n]))
@@ -2009,12 +1993,7 @@ void PlayerEntity::tryToConsume(int n)
     }
   }
 
-  consumableAmount[n] --;
-  // last ?
-  if (consumableAmount[n] < 1)
-  {
-    consumable[n] = -1;
-  }
+  consumable[n] = -1;
 }
 
 void PlayerEntity::consume(enumItemType item)
@@ -2050,7 +2029,7 @@ void PlayerEntity::reveal()
 {
   for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
   {
-    if (consumable[i] > -1 && consumableAmount[i] > 0)
+    if (consumable[i] > -1)
     {
       if (isUnidentified((enumItemType)consumable[i]))
       {
@@ -2069,42 +2048,28 @@ void PlayerEntity::reveal()
 bool PlayerEntity::canAquireConsumable(enumItemType type)
 {
   int nbConsumableSlot = equip[EQUIP_BAG] ? 4 : 2;
-  int found = -1;
-  int emptySlot = -1;
 
-  for (int i = 0; found == -1 && emptySlot == -1 && i < nbConsumableSlot; i++)
+  for (int i = 0; i < nbConsumableSlot; i++)
   {
-    if (consumable[i] == type)
-      found = i;
-    else if (consumable[i] <= 0 || consumableAmount[i] <= 0)
-      if (emptySlot == -1) emptySlot = i;
+    if (consumable[i] <= 0) return true;
   }
 
-  return (found > -1 || emptySlot > -1);
+  return false;
 }
 
 void PlayerEntity::acquireConsumable(enumItemType type)
 {
   int nbConsumableSlot = equip[EQUIP_BAG] ? 4 : 2;
-  int found = -1;
   int emptySlot = -1;
 
-  for (int i = 0; found == -1 && i < nbConsumableSlot; i++)
+  for (int i = 0; emptySlot == -1 && i < nbConsumableSlot; i++)
   {
-    if (consumable[i] == type)
-      found = i;
-    else if (consumable[i] <= 0 || consumableAmount[i] <= 0)
-      if (emptySlot == -1) emptySlot = i;
+    if (consumable[i] <= 0) emptySlot = i;
   }
 
-  if (found > -1)
-  {
-    consumableAmount[found]++;
-  }
-  else if (emptySlot > -1)
+  if (emptySlot > -1)
   {
     consumable[emptySlot] = type;
-    consumableAmount[emptySlot] = 1;
 
     // events
     game().proceedEvent(EventConsumable);

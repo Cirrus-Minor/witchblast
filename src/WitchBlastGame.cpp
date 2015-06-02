@@ -2201,7 +2201,7 @@ void WitchBlastGame::renderRunningGame()
     }
     for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
-      if (player->getConsumable(i) > -1 && player->getConsumableAmount(i) > 0)
+      if (player->getConsumable(i) > -1)
       {
         int n = player->getConsumable(i);
         sf::Sprite consSprite;
@@ -2209,11 +2209,6 @@ void WitchBlastGame::renderRunningGame()
         consSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * (n % 10), ITEM_HEIGHT * (n / 10),  ITEM_WIDTH, ITEM_HEIGHT));
         consSprite.setPosition(315 + 37 * i, 615);
         app->draw(consSprite);
-
-        std::stringstream oss;
-        oss << "x";
-        oss << player->getConsumableAmount(i);
-        write(oss.str(), 9, 331 + 37 * i, 645, ALIGN_CENTER, sf::Color::White,app, 0, 0);
       }
     }
 
@@ -5203,7 +5198,7 @@ void WitchBlastGame::saveGame()
     file << player->getActiveSpell().spell << std::endl;
     for (i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
-      file << player->getConsumable(i) << " " << player->getConsumableAmount(i) << " ";
+      file << player->getConsumable(i) << " ";
     }
     file << std::endl;
     // divinity
@@ -5441,9 +5436,7 @@ bool WitchBlastGame::loadGame()
     for (i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
       file >> n;
-      int amount;
-      file >> amount;
-      player->setConsumable(i, n, amount);
+      player->setConsumable(i, n);
     }
 
     // divinity
