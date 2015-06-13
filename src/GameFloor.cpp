@@ -188,6 +188,23 @@ std::vector<IntCoord> GameFloor::findSuperIsolated()
 std::vector<IntCoord> GameFloor::findSecretRoom()
 {
   std::vector<IntCoord> results;
+
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] == roomTypeNULL && neighboorCount(i, j) == 1)
+      {
+        IntCoord neighboor = getFirstNeighboor(i, j);
+        if (i >= 0 &&
+            (floor[neighboor.x][neighboor.y] == roomTypeStandard || floor[neighboor.x][neighboor.y] == roomTypeStarting))
+        {
+          IntCoord result(i, j);
+          results.push_back(result);
+        }
+      }
+    }
+  if (results.size() > 0) return results;
+
   for (int i=0; i < FLOOR_WIDTH; i++)
     for (int j=0; j < FLOOR_HEIGHT; j++)
     {
