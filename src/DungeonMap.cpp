@@ -719,19 +719,6 @@ void DungeonMap::initRoom(int floorN, int wallN)
       doorType[North] = DoorExit;
     }
   }
-
-  // test
-  if (roomType == roomTypeStarting)
-  {
-    for (int i = 0; i < 8; i++)
-    {
-      int objX = 1 + rand() % (MAP_WIDTH - 2);
-      int objY = 1 + rand() % (MAP_HEIGHT - 2);
-      if (i == 6) objectsMap[objX][objY] = MAPOBJ_SKULL;
-      else if (i == 7) objectsMap[objX][objY] = MAPOBJ_BARREL_EXPL;
-      else objectsMap[objX][objY] = MAPOBJ_BARREL;
-    }
-  }
 }
 
 void DungeonMap::addDestroyableObject(int x, int y, int obj)
@@ -1228,6 +1215,20 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         {
           generateCorridors();
           corr = true;
+          if (rand() % 2 == 0)
+          {
+            for (int i = 0; i < 5; i++)
+            {
+              int objX = 2 + rand() % (MAP_WIDTH - 4);
+              int objY = 2 + rand() % (MAP_HEIGHT - 4);
+
+              int type = MAPOBJ_BARREL_NO_DROP;
+              if (rand() % 10 == 0) type = MAPOBJ_BARREL_EXPL;
+              else if (rand() % 5 == 0) type = MAPOBJ_BARREL;
+
+              addDestroyableObject(objX, objY, type);
+            }
+          }
         }
       }
       else
@@ -1237,16 +1238,32 @@ void DungeonMap::generateRoomWithoutHoles(int type)
 
       if (!corr)  // some barrels
       {
-        for (int i = 0; i < 10; i++)
+        if (rand() % 2 == 0)
         {
-          int objX = 2 + rand() % (MAP_WIDTH - 4);
-          int objY = 2 + rand() % (MAP_HEIGHT - 4);
+          for (int i = 0; i < 10; i++)
+          {
+            int objX = 2 + rand() % (MAP_WIDTH - 4);
+            int objY = 2 + rand() % (MAP_HEIGHT - 4);
 
-          int type = MAPOBJ_BARREL_NO_DROP;
-          if (rand() % 10 == 0) type = MAPOBJ_BARREL_EXPL;
-          else if (rand() % 5 == 0) type = MAPOBJ_BARREL;
+            int type = MAPOBJ_BARREL_NO_DROP;
+            if (rand() % 10 == 0) type = MAPOBJ_BARREL_EXPL;
+            else if (rand() % 5 == 0) type = MAPOBJ_BARREL;
 
-          addDestroyableObject(objX, objY, type);
+            addDestroyableObject(objX, objY, type);
+          }
+        }
+        else
+        {
+          for (int i = 2; i < MAP_WIDTH - 3; i++)
+          {
+            addDestroyableObject(i, 2, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(i, MAP_HEIGHT - 3, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+          }
+          for (int i = 3; i < MAP_HEIGHT - 4; i++)
+          {
+            addDestroyableObject(2, i, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(MAP_WIDTH - 3, i, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+          }
         }
       }
     }
@@ -1279,6 +1296,14 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     map[MAP_WIDTH - 2][MAP_HEIGHT -2] = wallOffset + MAP_WALL_77;
     map[MAP_WIDTH - 2][MAP_HEIGHT -1] = wallOffset + MAP_WALL_7;
     logicalMap[MAP_WIDTH - 2][MAP_HEIGHT -2] = LogicalWall;
+
+    if (rand() % 4 == 0)
+    {
+      // some barrels in the middle
+      addDestroyableObject(MAP_WIDTH / 2 - 1, MAP_HEIGHT, MAPOBJ_BARREL);
+      addDestroyableObject(MAP_WIDTH / 2, MAP_HEIGHT, MAPOBJ_BARREL);
+      addDestroyableObject(MAP_WIDTH / 2 + 1, MAP_HEIGHT, MAPOBJ_BARREL);
+    }
   }
   if (type == 2) // blocks in the middle
   {
@@ -1287,6 +1312,18 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     r = 1 + rand() % 3;
 
     generateTable(x0 - r, y0 - 1, 1 + 2 * r, 3, MAPOBJ_BIG_OBSTACLE);
+
+    if (rand() / 3 == 0)
+    {
+      r = rand() % 4;
+      switch (r)
+      {
+        case 0: addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL); break;
+        case 1: addDestroyableObject(1, 1, MAPOBJ_BARREL); break;
+        case 2: addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL); break;
+        case 3: addDestroyableObject(MAP_WIDTH - 2, 1, MAPOBJ_BARREL); break;
+      }
+    }
   }
   if (type == 3)
   {
@@ -1319,11 +1356,15 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       {
         objectsMap[2][4] = MAPOBJ_CHURCH_FURN_L;
         logicalMap[2][4] = LogicalObstacle;
+        if (rand() % 2 == 0) addDestroyableObject(1, 1, MAPOBJ_BARREL);
+        else addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL);
       }
       else
       {
         objectsMap[12][4] = MAPOBJ_CHURCH_FURN_R;
         logicalMap[12][4] = LogicalObstacle;
+        if (rand() % 2 == 0) addDestroyableObject(MAP_WIDTH - 2, 1, MAPOBJ_BARREL);
+        else addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL);
       }
 
       for (int i = 0; i < 3; i++)
@@ -1381,6 +1422,23 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         objectsMap[i][j] = game().getLevel() >= 6 ? MAPOBJ_TOMB : MAPOBJ_OBSTACLE;
         logicalMap[i][j] = LogicalObstacle;
       }
+
+    if (rand() % 5 > 0)
+    {
+      int nbBarrels = 6 + rand() % 9;
+      for (int i = 0; i < nbBarrels; i++)
+      {
+        int objX = 2 + rand() % (MAP_WIDTH - 4);
+        int objY = 2 + rand() % (MAP_HEIGHT - 4);
+
+        int type = MAPOBJ_BARREL_NO_DROP;
+        if (rand() % 4 == 0) type = MAPOBJ_BARREL_EXPL;
+
+        if (! (objX == MAP_WIDTH / 2 && (objY == 1 || objY == MAP_HEIGHT - 2))
+            && ! (objY == MAP_HEIGHT / 2 && (objX == 1 || objX == MAP_WIDTH - 2)) )
+        addDestroyableObject(objX, objY, type);
+      }
+    }
   }
 
   generateRandomTiles();
@@ -1450,6 +1508,9 @@ void DungeonMap::generateRoomWithHoles(int type)
     addHole(MAP_WIDTH - 2, MAP_HEIGHT -2);
     addHole(1, MAP_HEIGHT -2);
     addHole(MAP_WIDTH - 2, 1);
+
+    if (rand() % 2 == 0)
+      addDestroyableObject(MAP_WIDTH - 2 + rand() % 5, MAP_HEIGHT - 2 + rand() % 5, MAPOBJ_BARREL_EXPL);
   }
   else if (type == 2)
   {
@@ -1506,6 +1567,18 @@ void DungeonMap::generateRoomWithHoles(int type)
     addHole(MAP_WIDTH - 4, MAP_HEIGHT - 3);
     addHole(MAP_WIDTH - 3, MAP_HEIGHT - 4);
     addHole(MAP_WIDTH - 3, MAP_HEIGHT - 3);
+
+    if (rand() % 3 == 0)
+    {
+      addDestroyableObject(4, 2, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, 3, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, MAP_HEIGHT - 4, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, MAP_HEIGHT - 3, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, 2, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, 3, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 4, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 3, MAPOBJ_BARREL_NO_DROP);
+    }
   }
   else if (type == 4)
   {
