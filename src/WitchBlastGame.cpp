@@ -331,7 +331,7 @@ WitchBlastGame::WitchBlastGame()
     "media/dungeon_objects.png",  "media/shadows_standard.png",
     "media/shadows_corners.png",  "media/shadows_medium.png",
     "media/shadows_small.png",    "media/doors.png",
-    "media/destroyable_objects.png",
+    "media/destroyable_objects.png",  "media/hall_of_fame.png",
   };
 
   for (const char *const filename : images)
@@ -2546,6 +2546,12 @@ void WitchBlastGame::calculateScore()
   lastScore.level = level;
   lastScore.shotType = player->getShotType();
 
+  lastScore.divinity = player->getDivinity().divinity;
+
+  lastScore.killedBy = player->getLastHurtingEnemy();
+
+  lastScore.time = (int)gameTime;
+
   scores.push_back(lastScore);
 
   std::sort (scores.begin(), scores.end(), compareScores);
@@ -2657,7 +2663,6 @@ void WitchBlastGame::updateMenu()
         }
       }
     }
-
     else if (menuState == MenuStateJoystick)
     {
       bool alreadyUsed = false;
@@ -2743,6 +2748,10 @@ void WitchBlastGame::updateMenu()
     {
       if (event.type == sf::Event::KeyPressed)
       {
+        if (event.key.code == sf::Keyboard::F1)
+        {
+            saveScreen();
+        }
         if (menuState == MenuStateChangeName)
         {
           if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
@@ -3310,41 +3319,87 @@ void WitchBlastGame::renderCredits()
 void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std::string title)
 {
   sf::Sprite bgSprite;
-  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HALL_OF_FAME));
   app->draw(bgSprite);
 
   // hi-scores-title
-  write(title, 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0);
 
-  int x0 = 25;
-  int x1 = 70;
-  int x2 = 125;
-  int x3 = 430;
+  int xEquip = 540;
+  //int yEquip = 360;
+
+  int xPlayerLeft = 60;
+  int xPlayerRight = 850;
+
+  int xName = 260;
+  int xTime = 420;
+  int xLevel = 480;
+  int xScore = 180;
+
   int y0 = 130;
-  int yStep = 100;
-  int xRight = SCREEN_WIDTH / 2;
-
-  sf::RectangleShape line(sf::Vector2f(2, 600));
-  line.setPosition(SCREEN_WIDTH / 2, 80);
-  app->draw(line);
+  int yStep = 50;
 
   for (unsigned int i = 0; i < scoresToRender.size() && i < SCORES_MAX; i++)
   {
-    int index = i < SCORES_MAX / 2 ? i : i - SCORES_MAX / 2;
-    sf::Color color = sf::Color( 220, 220, 220);
+    sf::Color color = sf::Color( 15, 15, 15);
     if (scoresToRender[i].score == lastScore.score && scoresToRender[i].level == lastScore.level && scoresToRender[i].name == lastScore.name)
     {
       int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
-      color = sf::Color(255, 128 + fade, 255);
+      color = sf::Color(255 - fade, 128, 255 - fade);
     }
 
-    renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scoresToRender[i].equip, scoresToRender[i].shotType, 1, 0);
+    // equipment
+    int n = 0;
+    for (auto ii: scoreEquipement)
+      if (ii != EQUIP_BOSS_KEY && scoresToRender[i].equip[ii]) n++;
 
-    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1);
-    std::stringstream ss;
-    ss << scoresToRender[i].name << " (" << scoresToRender[i].level << ")";
-    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1);
-    write(intToString(scoresToRender[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
+    int dx = 30;
+    if (n > 14) dx = 16;
+    else if (n > 8) dx = 20;
+    n = 0;
+
+    for (auto ii: scoreEquipement)
+    {
+      if (ii != EQUIP_BOSS_KEY && scoresToRender[i].equip[ii])
+      {
+        sf::Sprite itemSprite;
+        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+        itemSprite.setPosition(xEquip + n * dx, y0 + 22 + yStep * i);
+        itemSprite.setTextureRect(sf::IntRect((ii % 10) * 32, (ii / 10) * 32, 32, 32));
+        app->draw(itemSprite);
+        n++;
+      }
+    }
+
+    if (i < 2)
+      renderPlayer((i % 2 == 0) ? xPlayerLeft : xPlayerRight, y0 - 14 + yStep * i, scoresToRender[i].equip, scoresToRender[i].shotType, 2, 7);
+    else if (i >= 8)
+      renderPlayer((i % 2 == 0) ? xPlayerLeft : xPlayerRight, y0 - 14 + yStep * i, scoresToRender[i].equip, scoresToRender[i].shotType, 0, 8);
+    else
+      renderPlayer((i % 2 == 0) ? xPlayerLeft : xPlayerRight, y0 - 14 + yStep * i, scoresToRender[i].equip, scoresToRender[i].shotType, 1, 0);
+
+    write(scoresToRender[i].name, 16, xName, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
+
+    std::stringstream levelSS;
+    levelSS << "lvl " << scoresToRender[i].level;
+    write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
+    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
+
+
+    std::stringstream timeSS;
+    if (scoresToRender[i].time < 100)
+    {
+      timeSS << scoresToRender[i].time << " s";
+    }
+    else
+    {
+      int minutes = scoresToRender[i].time / 60;
+      if (minutes < 1) minutes = 1;
+      timeSS << minutes << " m";
+    }
+
+    write(timeSS.str(), 16, xTime, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
+    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
   }
 
   // retrieving from DB ?
@@ -6603,6 +6658,9 @@ void WitchBlastGame::saveHiScores()
       file << scores[i].level << " ";
       file << scores[i].score << " ";
       file << scores[i].shotType << " ";
+      file << scores[i].divinity << " ";
+      file << scores[i].killedBy << " ";
+      file << scores[i].time << " ";
       // player equip
       for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
         file << scores[i].equip[j] << " ";
@@ -6646,6 +6704,10 @@ void WitchBlastGame::loadHiScores()
       file >> score.level;
       file >> score.score;
       file >> score.shotType;
+      file >> score.divinity;
+      file >> score.killedBy;
+      file >> score.time;
+
       for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
         file >> score.equip[j];
 
@@ -6811,6 +6873,9 @@ void WitchBlastGame::sendScoreToServerThread()
             lastScore.name,
             equipToString(lastScore.equip),
             lastScore.shotType,
+            lastScore.divinity,
+            lastScore.killedBy,
+            lastScore.time,
             SCORE_VERSION);
 #endif
 }
@@ -6841,7 +6906,7 @@ void WitchBlastGame::loadHiScoresOnline(bool fromDayOnly)
   std::vector <StructScore> scoresTemp;
 
   std::vector<std::string> receivedScores = receiveScores(fromDayOnly);
-  int nbParameters = 5;
+  int nbParameters = 8;
 
   if (receivedScores.size() > 0
       && receivedScores.size() % nbParameters == 0
@@ -6866,6 +6931,15 @@ void WitchBlastGame::loadHiScoresOnline(bool fromDayOnly)
 
       std::istringstream shotStr(receivedScores[i * nbParameters + 4]);
       shotStr >> score.shotType;
+
+      std::istringstream divStr(receivedScores[i * nbParameters + 5]);
+      divStr >> score.divinity;
+
+      std::istringstream killStr(receivedScores[i * nbParameters + 6]);
+      killStr >> score.killedBy;
+
+      std::istringstream timeStr(receivedScores[i * nbParameters + 7]);
+      timeStr >> score.time;
 
       scoresTemp.push_back(score);
     }

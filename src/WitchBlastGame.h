@@ -427,6 +427,9 @@ public:
     int level;
     int shotType;
     bool equip[NUMBER_EQUIP_ITEMS];
+    int divinity;
+    int killedBy;
+    int time;
   };
   void calculateScore();
 
