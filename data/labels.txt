@@ -486,6 +486,7 @@ msg_tuto_potions_0#Tutorial: Potions
 msg_tuto_potions_1#You have found a potion.
 msg_tuto_potions_2#You have to drink or identify it to know its effect.
 secret_found#Secret room found!
+enemy_type_sausage#a sausage
 
 
 [french]

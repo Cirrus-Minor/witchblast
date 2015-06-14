@@ -32,6 +32,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeRatHelmet:      score = 5; break;
     case EnemyTypeRatBlackHelmet: score = 5; break;
     case EnemyTypeSlime:          score = 5; break;
+    case EnemyTypeSausage:        score = 5; break;
 
     case EnemyTypeImpBlue:        score = 8; break;
     case EnemyTypeImpRed:         score = 8; break;
@@ -94,6 +95,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeSpiderLittle_invocated:
     case EnemyTypeSpiderWeb:
     case EnemyTypeZombie_invocated:
+    case EnemyTypeSausage_invocated:
     case EnemyTypeFrancky:
     case EnemyTypeFranckyFoot:
     case EnemyTypeFranckyHand:

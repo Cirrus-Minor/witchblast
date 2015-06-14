@@ -1,6 +1,7 @@
 #include "ButcherEntity.h"
 #include "BoltEntity.h"
 #include "PlayerEntity.h"
+#include "SausageEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -22,6 +23,7 @@ ButcherEntity::ButcherEntity(float x, float y)
   hpMax = BUTCHER_HP;
   hpDisplay = BUTCHER_HP;
   meleeDamages = BUTCHER_DAMAGES;
+  sausages = 0;
 
   type = ENTITY_ENEMY_BOSS;
   bloodColor = BloodRed;
@@ -106,7 +108,7 @@ void ButcherEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (recoil.active && recoil.stun) return;
 
-  if (entity->getMovingStyle() == movWalking )
+  if (entity->getMovingStyle() == movWalking && entity->getEnemyType() != EnemyTypeSausage_invocated)
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );
     giveRecoil(false, vel, 0.3f);
@@ -119,6 +121,24 @@ void ButcherEntity::drop()
   newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
+
+  EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    EnemyEntity* entity = dynamic_cast<EnemyEntity*>(e);
+    if (entity != NULL)
+    {
+      if (entity->getEnemyType()== EnemyTypeSausage_invocated)
+      {
+        entity->hurt(getHurtParams(entity->getHp(), ShotTypeStandard, 0, false, SourceTypeMelee, enemyType, false));
+      }
+    }
+  }
 }
 
 void ButcherEntity::render(sf::RenderTarget* app)
@@ -132,7 +152,17 @@ int ButcherEntity::hurt(StructHurt hurtParam)
 {
   creatureSpeed = BUTCHER_VELOCITY + hpMax - hp;
   setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
-  return EnemyEntity::hurt(hurtParam);
+
+  int result = EnemyEntity::hurt(hurtParam);
+
+  int totalDamages = hpMax - hp;
+  if (hp > 0 && totalDamages / 8 > sausages)
+  {
+    sausages++;
+    new SausageEntity(x, y, true);
+  }
+
+  return result;
 }
 
 bool ButcherEntity::isAttacking()

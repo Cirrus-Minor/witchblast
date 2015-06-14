@@ -59,6 +59,7 @@
 #include "MessageGenerator.h"
 #include "TextMapper.h"
 #include "SlimePetEntity.h"
+#include "SausageEntity.h"
 
 #include <iostream>
 #include <sstream>
@@ -303,6 +304,7 @@ WitchBlastGame::WitchBlastGame()
     "media/cauldron.png",      "media/snake.png",
     "media/pumpkin.png",       "media/ghost.png",
     "media/zombie.png",        "media/bogeyman.png",
+    "media/sausage.png",
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/francky.png",
@@ -4568,6 +4570,9 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeBogeyman:
     new BogeymanEntity(xm, ym);
     break;
+  case EnemyTypeSausage:
+    new SausageEntity(xm, ym, false);
+    break;
 
   case EnemyTypeSpiderEgg_invocated:
     new SpiderEggEntity(xm, ym, true);
@@ -6518,6 +6523,10 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
     break;
   case EnemyTypeBogeyman:
     value = "enemy_type_bogeyman";
+    break;
+  case EnemyTypeSausage_invocated:
+  case EnemyTypeSausage:
+    value = "enemy_type_sausage";
     break;
 
   // mini boss

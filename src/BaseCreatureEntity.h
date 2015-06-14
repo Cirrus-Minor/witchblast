@@ -40,6 +40,7 @@ enum enemyTypeEnum
   EnemyTypeSlimeRedLarge,
   EnemyTypeSlimeBlueLarge,
   EnemyTypeSlimeVioletLarge,
+  EnemyTypeSausage,
 
   // mini boss
   EnemyTypeBubble,
@@ -71,6 +72,7 @@ enum enemyTypeEnum
   EnemyTypeSpiderEgg_invocated,
   EnemyTypeSpiderLittle_invocated,
   EnemyTypeZombie_invocated,
+  EnemyTypeSausage_invocated,
 
   EnemyTypeRockFalling,
   EnemyTypeRockMissile,

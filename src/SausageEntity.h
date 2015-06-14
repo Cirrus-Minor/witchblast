@@ -1,30 +1,32 @@
-#ifndef BUTCHERENTITY_H
-#define BUTCHERENTITY_H
+#ifndef SAUSAGEENTITY_H
+#define SAUSAGEENTITY_H
 
 #include "EnemyEntity.h"
-#include "PlayerEntity.h"
 
-class ButcherEntity : public EnemyEntity
+class SausageEntity : public EnemyEntity
 {
   public:
-    ButcherEntity(float x, float y);
+    SausageEntity(float x, float y, bool invocated);
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
-    virtual bool isAttacking();
+
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
     virtual void collideMapTop();
     virtual void collideMapBottom();
-    virtual int hurt(StructHurt hurtParam) override;
 
+    virtual void readCollidingEntity(CollidingSpriteEntity* entity) override;
     virtual void collideWithEnemy(EnemyEntity* entity) override;
 
+	  virtual void dying();
 	  virtual void drop();
+
   private:
+    bool invocated;
     float timer;
-    int sausages;
+    int state;
 };
 
-#endif // BUTCHERENTITY_H
+#endif // SAUSAGEENTITY_H
