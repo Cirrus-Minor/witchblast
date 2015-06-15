@@ -723,8 +723,16 @@ void DungeonMap::initRoom(int floorN, int wallN)
 
 void DungeonMap::addDestroyableObject(int x, int y, int obj)
 {
+  // out of map
   if (x < 0 || x >= MAP_WIDTH) return;
   if (y < 0 || y >= MAP_HEIGHT) return;
+
+  // doors
+  if (x == MAP_WIDTH / 2 && (y == 1 || y == MAP_HEIGHT - 2)) return;
+  if (y == MAP_HEIGHT / 2 && (x == 1 || x == MAP_WIDTH - 2)) return;
+
+  // wall
+  if (logicalMap[x][y] != LogicalFloor) return;
 
   objectsMap[x][y] = obj;
   logicalMap[x][y] = LogicalDestroyable;
@@ -1211,7 +1219,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       bool corr = false;
       if (rand() % 3 > 0 && gameFloor->neighboorCount(x, y) > 1)
       {
-        if (type == 0 && game().getLevel() < 6)
+        if (type == 0 && game().getLevel() < 5)
         {
           generateCorridors();
           corr = true;
@@ -1434,8 +1442,6 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         int type = MAPOBJ_BARREL_NO_DROP;
         if (rand() % 4 == 0) type = MAPOBJ_BARREL_EXPL;
 
-        if (! (objX == MAP_WIDTH / 2 && (objY == 1 || objY == MAP_HEIGHT - 2))
-            && ! (objY == MAP_HEIGHT / 2 && (objX == 1 || objX == MAP_WIDTH - 2)) )
         addDestroyableObject(objX, objY, type);
       }
     }
