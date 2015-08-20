@@ -4240,6 +4240,24 @@ void WitchBlastGame::generateMap()
       }
     }
 
+    // consumible item
+    if (rand() % 3 == 0)  // potion
+    {
+      ItemEntity* item5 = new ItemEntity(
+          (enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED),
+          (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
+      item5->setMerchandise(true);
+    }
+    else  // scroll
+    {
+      ItemEntity* item5 = new ItemEntity(
+          (enumItemType)ItemScrollRevelation,
+          (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
+      item5->setMerchandise(true);
+    }
+
     new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                   (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT,
                   0);
