@@ -196,7 +196,8 @@ std::vector<IntCoord> GameFloor::findSecretRoom()
       {
         IntCoord neighboor = getFirstNeighboor(i, j);
         if (i >= 0 &&
-            (floor[neighboor.x][neighboor.y] == roomTypeStandard || floor[neighboor.x][neighboor.y] == roomTypeStarting))
+            (floor[neighboor.x][neighboor.y] == roomTypeStandard
+             || (floor[neighboor.x][neighboor.y] == roomTypeStarting && neighboor.y != j - 1)))
         {
           IntCoord result(i, j);
           results.push_back(result);
