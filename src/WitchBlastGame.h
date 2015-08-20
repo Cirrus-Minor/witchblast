@@ -994,6 +994,8 @@ private:
   int introState;
   int introSoundState;
 
+  int currentStandardMusic;
+
   std::vector <StructScore> scores;
   std::vector <StructScore> scoresOnline;
   std::vector <StructScore> scoresOnlineDay;

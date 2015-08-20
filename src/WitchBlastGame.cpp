@@ -286,6 +286,9 @@ WitchBlastGame::WitchBlastGame()
     create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, false, parameters.vsync);
   }
 
+  // init current music
+  currentStandardMusic = 0;
+
   // loading resources
   const char *const images[] =
   {
@@ -5009,28 +5012,27 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   music.setLoop(true);
   //music.setVolume(parameters.musicVolume);
-  music.setVolume(parameters.musicVolume * 65 / 100);
+  music.setVolume(parameters.musicVolume * 60 / 100);
   bool ok = false;
 
   switch (musicChoice)
   {
   case MusicDungeon:
+    {
+      int r = currentStandardMusic;
+      while (r == currentStandardMusic) r = rand() % 5;
 
-{
+      switch (r)
+      {
+        case 0: ok = music.openFromFile("media/sound/wb.ogg"); break;
+        case 1: ok = music.openFromFile("media/sound/savage_life.ogg"); break;
+        case 2: ok = music.openFromFile("media/sound/bastion.ogg"); break;
+        case 3: ok = music.openFromFile("media/sound/hells_fire.ogg"); break;
+        case 4: ok = music.openFromFile("media/sound/haunted.ogg"); break;
+      }
 
-
-    int r = rand() % 3;
-
-    if (r == 0)
-      //ok = music.openFromFile("media/sound/dark_ambiant.ogg");
-      ok = music.openFromFile("media/sound/savage_life.ogg");
-    else if (r == 1)
-      ok = music.openFromFile("media/sound/bastion.ogg");
-    else
-      ok = music.openFromFile("media/sound/hells_fire.ogg");
-
-    //ok = music.openFromFile("media/sound/wb.ogg");
-}
+      currentStandardMusic = r;
+    }
     break;
 
   case MusicEnding:
