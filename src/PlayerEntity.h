@@ -497,7 +497,7 @@ class PlayerEntity : public BaseCreatureEntity
     enemyTypeEnum getLastHurtingEnemy();
     sourceTypeEnum getLastHurtingSource();
 
-    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2) override;
+    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2, bool waitUnclear = false) override;
 
     void setItemToBuy(ItemEntity* item);
     ItemEntity* getItemToBuy();

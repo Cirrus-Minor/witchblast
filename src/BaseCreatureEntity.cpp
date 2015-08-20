@@ -27,6 +27,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
     specialState[i].timer = 0.0f;
     specialState[i].param1 = 0.0f;
     specialState[i].param2 = 0.0f;
+    specialState[i].waitUnclear = false;
   }
   for (int i = 0; i < NB_RESISTANCES; i++)
   {
@@ -88,12 +89,13 @@ BaseCreatureEntity::specialStateStuct BaseCreatureEntity::getSpecialState(enumSp
   return specialState[state];
 }
 
-void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
+void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2,bool waitUnclear)
 {
   specialState[state].active = active;
   specialState[state].timer = timer;
   specialState[state].param1 = param1;
   specialState[state].param2 = param2;
+  specialState[state].waitUnclear = false;
 }
 
 float BaseCreatureEntity::animateStates(float delay)
@@ -104,6 +106,13 @@ float BaseCreatureEntity::animateStates(float delay)
     {
       specialState[i].timer -= delay;
       if (specialState[i].timer <= 0.0f) setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
+    }
+    else if (specialState[i].waitUnclear && !game().getCurrentMap()->isCleared())
+    {
+      std::cout << "Unclear: " << i << std::endl;
+      specialState[i].waitUnclear = false;
+      specialState[i].active = true;
+      game().getPlayer()->computePlayer();
     }
   }
   // ice
@@ -187,6 +196,12 @@ void BaseCreatureEntity::animatePhysics(float delay)
   {
     velx *= specialState[SpecialStateSlow].param1;
     vely *= specialState[SpecialStateSlow].param1;
+  }
+
+  if (specialState[SpecialStateSpeed].active)
+  {
+    velx *= specialState[SpecialStateSpeed].param1;
+    vely *= specialState[SpecialStateSpeed].param1;
   }
 
 	if (recoil.active)

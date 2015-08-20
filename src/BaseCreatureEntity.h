@@ -153,7 +153,8 @@ class BaseCreatureEntity : public CollidingSpriteEntity
     enum enumSpecialState
     {
       SpecialStateIce, // = 0
-      SpecialStateSlow,
+      SpecialStateSlow,   // param 1 = multiplier
+      SpecialStateSpeed,  // param 1 = multiplier
       SpecialStatePoison,
 
       SpecialStateConfused,
@@ -174,9 +175,10 @@ class BaseCreatureEntity : public CollidingSpriteEntity
       float param1;
       float param2;
       float param3;
+      bool waitUnclear;
     };
     specialStateStuct specialState[NB_SPECIAL_STATES];
-    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2);
+    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2, bool waitUnclear = false);
 
     enum enumResistances
     {

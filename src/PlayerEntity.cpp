@@ -677,9 +677,9 @@ bool PlayerEntity::canCollide()
   return invincibleDelay <= 0.0f;
 }
 
-void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
+void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2, bool waitUnclear)
 {
-  BaseCreatureEntity::setSpecialState(state, active, timer, param1, param2);
+  BaseCreatureEntity::setSpecialState(state, active, timer, param1, param2, waitUnclear);
   computePlayer();
 }
 
@@ -2016,6 +2016,24 @@ void PlayerEntity::consume(enumItemType item)
     specialState[SpecialStatePoison].param2 = POISON_DELAY[0];
     specialState[SpecialStatePoison].param3 = POISON_DELAY[0];
     displayFlyingText( x, y - 20.0f, 16, tools::getLabel("poison"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionSpeed:
+    specialState[SpecialStateSpeed].active = false;
+    specialState[SpecialStateSpeed].waitUnclear = true;
+    specialState[SpecialStateSpeed].timer = 30;
+    specialState[SpecialStateSpeed].param1 = 1.5f;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_speed"), TextEntity::COLOR_FADING_BLUE);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionSlow:
+    specialState[SpecialStateSlow].active = false;
+    specialState[SpecialStateSlow].waitUnclear = true;
+    specialState[SpecialStateSlow].timer = 30;
+    specialState[SpecialStateSlow].param1 = 0.35;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_slow"), TextEntity::COLOR_FADING_RED);
     SoundManager::getInstance().playSound(SOUND_DRINK);
     break;
 

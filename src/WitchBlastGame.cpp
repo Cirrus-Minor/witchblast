@@ -4990,48 +4990,59 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
   if (parameters.musicVolume <= 0) return;
 
   music.setLoop(true);
-  music.setVolume(parameters.musicVolume);
+  //music.setVolume(parameters.musicVolume);
+  music.setVolume(parameters.musicVolume * 65 / 100);
   bool ok = false;
 
   switch (musicChoice)
   {
   case MusicDungeon:
 
-    if (rand() % 2 == 0)
-    {
-      ok = music.openFromFile("media/sound/game_Fantasy_Theme_Of_Elvarim.ogg");
-    }
-    else
-    {
-      ok = music.openFromFile("media/sound/game_Marching_United.ogg");
-    }
+{
 
+
+    int r = rand() % 3;
+
+    if (r == 0)
+      //ok = music.openFromFile("media/sound/dark_ambiant.ogg");
+      ok = music.openFromFile("media/sound/savage_life.ogg");
+    else if (r == 1)
+      ok = music.openFromFile("media/sound/bastion.ogg");
+    else
+      ok = music.openFromFile("media/sound/hells_fire.ogg");
+
+    //ok = music.openFromFile("media/sound/wb.ogg");
+}
     break;
 
   case MusicEnding:
-    ok = music.openFromFile("media/sound/ending_Music_Is_His_Only_Friend.ogg");
-    music.setVolume(parameters.musicVolume * 50 / 100);
+    //ok = music.openFromFile("media/sound/ending_Music_Is_His_Only_Friend.ogg");
+    ok = music.openFromFile("media/sound/dark_ambiant.ogg");
+    //music.setVolume(parameters.musicVolume * 50 / 100);
     break;
 
   case MusicBoss:
-    if (rand() % 2 == 0)
+    /*if (rand() % 2 == 0)
     {
       ok = music.openFromFile("media/sound/boss_The_Spider_Machine.ogg");
     }
     else
     {
       ok = music.openFromFile("media/sound/boss_Pub_Stomp_Deluxe.ogg");
-    }
+    }*/
+    ok = music.openFromFile("media/sound/power.ogg");
 
     break;
 
   case MusicChallenge:
     ok = music.openFromFile("media/sound/challenge_Under_Siege.ogg");
+
     break;
 
   case MusicIntro:
-    ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
-    music.setVolume(parameters.musicVolume * 60 / 100);
+    //ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
+    ok = music.openFromFile("media/sound/wb.ogg");
+    //music.setVolume(parameters.musicVolume * 60 / 100);
     break;
   }
 
@@ -6982,9 +6993,16 @@ void WitchBlastGame::checkDestroyableObjects()
 void WitchBlastGame::randomizePotionMap()
 {
   potionMap.clear();
-  // TODO
-  potionMap[ItemPotion01] = structPotionMap { ItemPotionHealth, false};
-  potionMap[ItemPotion02] = structPotionMap { ItemPotionPoison, false};
+
+  std::vector<int> potionEffect;
+  for (int i = 0; i < NUMBER_UNIDENTIFIED; i++) potionEffect.push_back(i);
+
+  for (int i = 0; i < NUMBER_UNIDENTIFIED; i++)
+  {
+    int r = rand() % potionEffect.size();
+    potionMap[(enumItemType)(ItemPotion01 + i)] = structPotionMap { (enumItemType)(ItemPotionHealth + potionEffect[r]), false};
+    potionEffect.erase(potionEffect.begin() + r);
+  }
 }
 
 void WitchBlastGame::addPotionToMap(enumItemType source, enumItemType effect, bool known)

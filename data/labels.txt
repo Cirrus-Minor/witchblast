@@ -458,8 +458,6 @@ div_air_lvl_4#increases your lightning attack
 
 
 
-
-
 config_joystick#Configure joystick
 redef_joystick#Redefine joystick control
 joystick_configuration#Joystick configuration
@@ -470,11 +468,17 @@ item_scroll_revelation#Scroll of revelation
 item_scroll_revelation_desc#Reveal secrets and potion effects
 item_potion_01#Red potion
 item_potion_02#Green potion
+item_potion_03#Golden potion
+item_potion_04#Bright blue potion
 item_potion_desc#Unknown effect
 item_potion_health#Healing potion
 item_potion_health_desc#Restores 18 HP
 item_potion_poison#Poison potion
 item_potion_poison_desc#Makes poisoned
+item_potion_speed#Speed potion
+item_potion_speed_desc#Temporary increases speed
+item_potion_slow#Slow potion
+item_potion_slow_desc#Temporary decreases speed
 item_bag#Bag
 item_bag_desc#Provides more space for consumables
 msg_potion_id_0#Potion identification
@@ -487,7 +491,8 @@ msg_tuto_potions_1#You have found a potion.
 msg_tuto_potions_2#You have to drink or identify it to know its effect.
 secret_found#Secret room found!
 enemy_type_sausage#a sausage
-
+effect_speed#Speed up!
+effect_slow#Speed down!
 
 [french]
 start_new_game#Nouvelle partie
