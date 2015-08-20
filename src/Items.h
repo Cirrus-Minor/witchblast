@@ -86,8 +86,8 @@ enum enumItemType
   // effect
   ItemPotionHealth,
   ItemPotionPoison,
-  ItemPotionSlow,
   ItemPotionSpeed,
+  ItemPotionSlow,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
@@ -253,11 +253,11 @@ const itemStuct items[NUMBER_ITEMS] =
     10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
   {
-    ItemPotionSpeed, "item_potion_speed", "item_potion_speed_desc",
+    ItemPotionSlow, "item_potion_slow", "item_potion_slow_desc",
     10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
   {
-    ItemPotionSlow, "item_potion_slow", "item_potion_slow_desc",
+    ItemPotionSpeed, "item_potion_speed", "item_potion_speed_desc",
     10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
 
