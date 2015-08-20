@@ -86,8 +86,8 @@ enum enumItemType
   // effect
   ItemPotionHealth,
   ItemPotionPoison,
-  ItemPotionSpeed,
   ItemPotionSlow,
+  ItemPotionSpeed,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
