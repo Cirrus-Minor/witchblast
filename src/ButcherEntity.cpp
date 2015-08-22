@@ -117,10 +117,15 @@ void ButcherEntity::collideWithEnemy(EnemyEntity* entity)
 
 void ButcherEntity::drop()
 {
-  ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
-  newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-  newItem->setViscosity(0.96f);
+  //ItemEntity* itemCoin = new ItemEntity(ItemSilverCoin, x, y);
+  //itemCoin->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+  //itemCoin->setVelocity(Vector2D(100.0f + rand()% 250));
+  //itemCoin->setViscosity(0.96f);
+
+  ItemEntity* itemScroll = new ItemEntity(ItemScrollRevelation, x, y);
+  itemScroll->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+  itemScroll->setVelocity(Vector2D(100.0f + rand()% 250));
+  itemScroll->setViscosity(0.96f);
 
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;
