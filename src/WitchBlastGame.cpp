@@ -78,6 +78,8 @@
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
 
+const int VolumeModifier = 55;
+
 static std::string intToString(int n)
 {
   std::ostringstream oss;
@@ -3872,7 +3874,8 @@ void WitchBlastGame::refreshMinimap()
             || roomType == roomTypeBonus
             || roomType == roomTypeKey
             || roomType == roomTypeBoss
-            || roomType == roomTypeStandard)
+            || roomType == roomTypeStandard
+            || roomType == roomTypeSecret)
         {
           if ( currentFloor->getMap(i, j)->containsHealth())
             miniMap->setTile(i, j, 5);
@@ -4243,7 +4246,7 @@ void WitchBlastGame::generateMap()
       }
     }
 
-    // consumible item
+    // consumable item
     if (rand() % 3 == 0)  // potion
     {
       ItemEntity* item5 = new ItemEntity(
@@ -5011,8 +5014,7 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
   if (parameters.musicVolume <= 0) return;
 
   music.setLoop(true);
-  //music.setVolume(parameters.musicVolume);
-  music.setVolume(parameters.musicVolume * 60 / 100);
+  music.setVolume(parameters.musicVolume * VolumeModifier / 100);
   bool ok = false;
 
   switch (musicChoice)
@@ -5020,15 +5022,14 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
   case MusicDungeon:
     {
       int r = currentStandardMusic;
-      while (r == currentStandardMusic) r = rand() % 5;
+      while (r == currentStandardMusic) r = rand() % 4;
 
       switch (r)
       {
         case 0: ok = music.openFromFile("media/sound/wb.ogg"); break;
         case 1: ok = music.openFromFile("media/sound/savage_life.ogg"); break;
         case 2: ok = music.openFromFile("media/sound/bastion.ogg"); break;
-        case 3: ok = music.openFromFile("media/sound/hells_fire.ogg"); break;
-        case 4: ok = music.openFromFile("media/sound/haunted.ogg"); break;
+        case 3: ok = music.openFromFile("media/sound/haunted.ogg"); break;
       }
 
       currentStandardMusic = r;
@@ -5036,33 +5037,19 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
     break;
 
   case MusicEnding:
-    //ok = music.openFromFile("media/sound/ending_Music_Is_His_Only_Friend.ogg");
     ok = music.openFromFile("media/sound/dark_ambiant.ogg");
-    //music.setVolume(parameters.musicVolume * 50 / 100);
     break;
 
   case MusicBoss:
-    /*if (rand() % 2 == 0)
-    {
-      ok = music.openFromFile("media/sound/boss_The_Spider_Machine.ogg");
-    }
-    else
-    {
-      ok = music.openFromFile("media/sound/boss_Pub_Stomp_Deluxe.ogg");
-    }*/
     ok = music.openFromFile("media/sound/power.ogg");
-
     break;
 
   case MusicChallenge:
-    ok = music.openFromFile("media/sound/challenge_Under_Siege.ogg");
-
+    ok = music.openFromFile("media/sound/hells_fire.ogg");
     break;
 
   case MusicIntro:
-    //ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
     ok = music.openFromFile("media/sound/wb.ogg");
-    //music.setVolume(parameters.musicVolume * 60 / 100);
     break;
   }
 
@@ -5077,14 +5064,14 @@ void WitchBlastGame::updateMusicVolume()
     if (parameters.musicVolume == 0)
       music.stop();
     else
-      music.setVolume(parameters.musicVolume * 60 / 100);
+      music.setVolume(parameters.musicVolume * VolumeModifier / 100);
   }
   else
   {
     if (parameters.musicVolume > 0)
     {
-      bool ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
-      music.setVolume(parameters.musicVolume * 60 / 100);
+      bool ok = music.openFromFile("media/sound/wb.ogg");
+      music.setVolume(parameters.musicVolume * VolumeModifier / 100);
       if (ok) music.play();
     }
   }
