@@ -4429,7 +4429,7 @@ void WitchBlastGame::generateMap()
   {
     currentMap->generateSecretRoom();
 
-    // if
+    if (rand() % 7 > 0)
     {
       new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f + TILE_WIDTH),
                     (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
@@ -4438,6 +4438,23 @@ void WitchBlastGame::generateMap()
       new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f - TILE_WIDTH),
                     (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
                     ChestBasic, false);
+    }
+    else
+    {
+      int bonusType = getRandomEquipItem(false, false);
+
+      if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
+      {
+        new ChestEntity(TILE_WIDTH * MAP_WIDTH * 0.5f,
+                        TILE_HEIGHT * MAP_HEIGHT * 0.5f,
+                        ChestFairy + items[FirstEquipItem + bonusType].familiar, false);
+      }
+      else
+      {
+        new ItemEntity( (enumItemType)(FirstEquipItem + bonusType),
+                       TILE_WIDTH * MAP_WIDTH * 0.5f,
+                       TILE_HEIGHT * MAP_HEIGHT * 0.5f);
+      }
     }
 
     currentMap->setCleared(true);
