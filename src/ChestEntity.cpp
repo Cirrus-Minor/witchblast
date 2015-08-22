@@ -160,6 +160,21 @@ void ChestEntity::open()
     else if (r == 3 && !game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER) && game().getPlayer()->getFairieNumber() > 0)
       dropItem(ItemFairyPowder);
 
+    else if (r < 10)
+    {
+      // consumable
+      if (rand() % 3 == 0)
+      {
+        // scroll
+        dropItem(ItemScrollRevelation);
+      }
+      else
+      {
+        // potion
+        dropItem((enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED));
+      }
+    }
+
     else
     {
       // gold
