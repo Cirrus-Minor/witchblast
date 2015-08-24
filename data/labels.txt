@@ -495,6 +495,8 @@ effect_speed#Speed up!
 effect_slow#Speed down!
 item_book_alchemy#Book of alchemy
 item_book_alchemy_desc#Reveals the effect of some potions
+item_fairy_stone#Fairy Cassandra
+item_fairy_stone_desc#Helps you in the dungeon
 
 [french]
 start_new_game#Nouvelle partie

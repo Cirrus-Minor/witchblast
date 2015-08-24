@@ -1061,10 +1061,10 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
       switch (facingDirection)
       {
-        case 8: fairySprite.setTextureRect(sf::IntRect( (2 + frame) * 48, 5 * 72, 48, 72)); break;
-        case 4: fairySprite.setTextureRect(sf::IntRect( (4 + frame) * 48, 5 * 72, 48, 72)); break;
-        case 6: fairySprite.setTextureRect(sf::IntRect( (5 + frame) * 48, 5 * 72, - 48, 72)); break;
-        default: fairySprite.setTextureRect(sf::IntRect( frame * 48, 5 * 72, 48, 72)); break;
+        case 8: fairySprite.setTextureRect(sf::IntRect( (2 + frame) * 48, 6 * 72, 48, 72)); break;
+        case 4: fairySprite.setTextureRect(sf::IntRect( (4 + frame) * 48, 6 * 72, 48, 72)); break;
+        case 6: fairySprite.setTextureRect(sf::IntRect( (5 + frame) * 48, 6 * 72, - 48, 72)); break;
+        default: fairySprite.setTextureRect(sf::IntRect( frame * 48, 6 * 72, 48, 72)); break;
       }
       app->draw(fairySprite);
     }

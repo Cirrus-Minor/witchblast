@@ -49,6 +49,10 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
     shotType = ShotTypePoison;
     fairyFireDelay = ICE_FAIRY_FIRE_DELAY;
     break;
+  case FamiliarFairyStone:
+    shotType = ShotTypeStone;
+    fairyFireDelay = FAIRY_FIRE_DELAY;
+    break;
 
   case FamiliarNone:
     break;

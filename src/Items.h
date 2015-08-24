@@ -29,6 +29,7 @@ enum enumFamiliar
   FamiliarFairyFire,    /**< Fire Fairy */
   FamiliarFairyIce,     /**< Ice Fairy */
   FamiliarFairyPoison,  /**< Poison Fairy */
+  FamiliarFairyStone,   /**< Stone Fairy */
 };
 
 // spells
@@ -152,6 +153,7 @@ enum enumItemType
   ItemBootsAdvanced,
   ItemBag,
   ItemBookAlchemy,
+  ItemFairyStone,
 
   NUMBER_ITEMS
 };
@@ -515,6 +517,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemBookAlchemy, "item_book_alchemy", "item_book_alchemy_desc",
     20, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, false
   },
+  {
+    ItemFairyStone, "item_fairy_stone", "item_fairy_stone_desc",
+    30, true, FamiliarFairyStone, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone, false
+  },
 };
 
 /** Item equipment type enum
@@ -584,6 +590,7 @@ enum item_equip_enum {
   EQUIP_BOOTS_ADVANCED,
   EQUIP_BAG,
   EQUIP_BOOK_ALCHEMY,
+  EQUIP_FAIRY_STONE,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -645,6 +652,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_FAIRY_FIRE,
   EQUIP_FAIRY_POISON,
   EQUIP_FAIRY_TARGET,
+  EQUIP_FAIRY_STONE,
   EQUIP_PET_SLIME,
 
   // spells
