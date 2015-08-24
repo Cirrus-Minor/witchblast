@@ -316,6 +316,12 @@ void PlayerEntity::acquireItemAfterStance()
       new SlimePetEntity();
     }
 
+    // alchemy book
+    else if (acquiredItem == ItemBookAlchemy)
+    {
+      game().acquireAlchemyBook();
+    }
+
     // floor item
     else if (acquiredItem == ItemFloorMap)
       game().revealFloor();

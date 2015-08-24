@@ -151,6 +151,7 @@ enum enumItemType
   ItemGlovesAdvanced,
   ItemBootsAdvanced,
   ItemBag,
+  ItemBookAlchemy,
 
   NUMBER_ITEMS
 };
@@ -510,6 +511,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemBag, "item_bag", "item_bag_desc",
     20, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemLeatherBoots, ShotTypeStandard, SpellNone, false
   },
+  {
+    ItemBookAlchemy, "item_book_alchemy", "item_book_alchemy_desc",
+    20, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, false
+  },
 };
 
 /** Item equipment type enum
@@ -578,6 +583,7 @@ enum item_equip_enum {
   EQUIP_GLOVES_ADVANCED,
   EQUIP_BOOTS_ADVANCED,
   EQUIP_BAG,
+  EQUIP_BOOK_ALCHEMY,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -626,6 +632,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_BOOK_MAGIC_II,
   EQUIP_BOOK_PRAYER_I,
   EQUIP_BOOK_PRAYER_II,
+  EQUIP_BOOK_ALCHEMY,
   EQUIP_BOOK_DUAL,
   EQUIP_BOOK_TRIPLE,
   EQUIP_BOOK_DUAL_QUICK,
@@ -688,6 +695,7 @@ const std::vector<item_equip_enum> scoreEquipement =
   EQUIP_BOOK_MAGIC_II,
   EQUIP_BOOK_PRAYER_I,
   EQUIP_BOOK_PRAYER_II,
+  EQUIP_BOOK_ALCHEMY,
   EQUIP_BOOK_DUAL,
   EQUIP_BOOK_TRIPLE,
   EQUIP_BOOK_DUAL_QUICK,

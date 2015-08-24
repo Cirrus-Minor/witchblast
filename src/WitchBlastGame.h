@@ -463,6 +463,7 @@ public:
   bool potionEffectKnown(enumItemType source);
   void setPotionToKnown(enumItemType source);
   void addPotionToMap(enumItemType source, enumItemType effect, bool known);
+  void acquireAlchemyBook();
 
 protected:
   /*!

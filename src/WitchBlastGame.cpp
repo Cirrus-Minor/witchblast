@@ -842,12 +842,12 @@ void WitchBlastGame::playLevel(bool isFight)
   text->setZ(1000);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
 
-  new ItemEntity(ItemScrollRevelation, 100, 100);
+  /*new ItemEntity(ItemScrollRevelation, 100, 100);
   new ItemEntity(ItemScrollRevelation, 150, 100);
   new ItemEntity(ItemPotion02, 200, 100);
   new ItemEntity(ItemPotion01, 250, 100);
   new ItemEntity(ItemBag, 450, 100);
-  new ItemEntity(ItemFloorMap, 500, 100);
+  new ItemEntity(ItemFloorMap, 500, 100);*/
 }
 
 void WitchBlastGame::prepareIntro()
@@ -7027,6 +7027,23 @@ void WitchBlastGame::randomizePotionMap()
     potionMap[(enumItemType)(ItemPotion01 + i)] = structPotionMap { (enumItemType)(ItemPotionHealth + potionEffect[r]), false};
     potionEffect.erase(potionEffect.begin() + r);
   }
+}
+
+void WitchBlastGame::acquireAlchemyBook()
+{
+  for (int i = 0; i < NUMBER_UNIDENTIFIED; i++)
+  {
+    if (rand() % 3 > 0)
+    {
+      enumItemType potion = (enumItemType)(ItemPotion01 + i);
+      if (!potionEffectKnown(potion)) setPotionToKnown(potion);
+    }
+  }
+
+  // drop potion
+  ItemEntity* potionItem = new ItemEntity( (enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED), player->getX(), player->getY());
+  potionItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  potionItem->setViscosity(0.96f);
 }
 
 void WitchBlastGame::addPotionToMap(enumItemType source, enumItemType effect, bool known)
