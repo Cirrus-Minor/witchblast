@@ -105,6 +105,8 @@ Next release
 - ADD Potions
 - ADD Secret rooms
 - ADD New items
+- ADD New familiar
+- MOD Consumables in shops
 - MOD Evil flower damage
 - MOD Butcher can drop sausages now
 - FIX Latency when communicating with the score server
