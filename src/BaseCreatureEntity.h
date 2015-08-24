@@ -109,164 +109,182 @@ struct StructHurt
   bool goThrough;
 };
 
+enum enumSpecialState
+{
+  SpecialStateIce, // = 0
+  SpecialStateSlow,   // param 1 = multiplier
+  SpecialStateSpeed,  // param 1 = multiplier
+  SpecialStatePoison,
+
+  SpecialStateConfused,
+
+  DivineStateProtection,
+  DivineStateSpeed,
+  DivineStateFireRate,
+  DivineStateFireDamage,
+
+  NB_SPECIAL_STATES
+};
+
+enum enumStateResistance { ResistanceImmune, ResistanceVeryHigh, ResistanceHigh, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
+
+enum enumResistances
+{
+  ResistanceIce, // = 0
+  ResistanceFire,
+  ResistanceStone,
+  ResistanceLightning,
+  ResistanceIllusion,
+  ResistancePoison,
+
+  ResistanceRecoil,
+  ResistanceFrozen,
+
+  NB_RESISTANCES
+};
+
+struct specialStateStuct
+{
+  enumSpecialState type;
+  bool active;
+  float timer;
+  float param1;
+  float param2;
+  float param3;
+  bool waitUnclear;
+};
+
+const std::string specialStateToString[NB_SPECIAL_STATES] =
+{
+  "Frozen",
+  "Slow",
+  "Hasted",
+  "Poisoned",
+  "Confused",
+  "Protected (div)",
+  "Hasted (div)",
+  "Firerate+ (div)",
+  "Damage+ (div)"
+};
+
 class BaseCreatureEntity : public CollidingSpriteEntity
 {
-  public:
-    BaseCreatureEntity(sf::Texture* image, float x, float y, int spriteWidth, int spriteHeight);
-    int getHp();
-    int getHpMax();
-    void setHp(int hp);
-    void setHpMax(int hpMax);
-    int getHpDisplay();
-    float getCreatureSpeed();
+public:
+  BaseCreatureEntity(sf::Texture* image, float x, float y, int spriteWidth, int spriteHeight);
+  int getHp();
+  int getHpMax();
+  void setHp(int hp);
+  void setHpMax(int hpMax);
+  int getHpDisplay();
+  float getCreatureSpeed();
 
-    IntCoord getCurrentTile();
+  IntCoord getCurrentTile();
 
-    virtual void animate(float delay);
-    virtual float animateStates(float delay);
-    virtual void animateColors(float delay);
-    virtual void animateRecoil(float delay);
-    virtual void animatePhysics(float delay);
-    virtual void render(sf::RenderTarget* app);
-    virtual void calculateBB();
-    virtual bool collideWithMap(int direction);
-    void displayFlyingText(float xText, float yText, int sizeText, std::string text, TextEntity::colorTypeEnum color);
-    virtual int hurt(StructHurt hurtParam);
-    virtual void prepareDying();
-    virtual void dying();
-    enum enumMovingStyle { movWalking, movFlying};
-    virtual enumMovingStyle getMovingStyle();
-    enum enumBloodColor
-    {
-      BloodNone = -1,
-      BloodRed,
-      BloodGreen,
-      BloodRock,
-      BloodEgg,
-      BloodBubble,
-      BloodBubbleIce,
-      BloodBlack,
-      BloodBarrel,
-      BloodBarrelPowder,
-      BloodSkull
-    };
-    enum enumSpecialState
-    {
-      SpecialStateIce, // = 0
-      SpecialStateSlow,   // param 1 = multiplier
-      SpecialStateSpeed,  // param 1 = multiplier
-      SpecialStatePoison,
+  virtual void animate(float delay);
+  virtual float animateStates(float delay);
+  virtual void animateColors(float delay);
+  virtual void animateRecoil(float delay);
+  virtual void animatePhysics(float delay);
+  virtual void render(sf::RenderTarget* app);
+  virtual void calculateBB();
+  virtual bool collideWithMap(int direction);
+  void displayFlyingText(float xText, float yText, int sizeText, std::string text, TextEntity::colorTypeEnum color);
+  virtual int hurt(StructHurt hurtParam);
+  virtual void prepareDying();
+  virtual void dying();
+  enum enumMovingStyle { movWalking, movFlying};
+  virtual enumMovingStyle getMovingStyle();
+  enum enumBloodColor
+  {
+    BloodNone = -1,
+    BloodRed,
+    BloodGreen,
+    BloodRock,
+    BloodEgg,
+    BloodBubble,
+    BloodBubbleIce,
+    BloodBlack,
+    BloodBarrel,
+    BloodBarrelPowder,
+    BloodSkull
+  };
 
-      SpecialStateConfused,
+  specialStateStuct specialState[NB_SPECIAL_STATES];
+  virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2, bool waitUnclear = false);
 
-      DivineStateProtection,
-      DivineStateSpeed,
-      DivineStateFireRate,
-      DivineStateFireDamage,
+  enumStateResistance resistance[NB_RESISTANCES];
 
-      NB_SPECIAL_STATES
-    };
-    enum enumStateResistance { ResistanceImmune, ResistanceVeryHigh, ResistanceHigh, ResistanceStandard, ResistanceLow, ResistanceVeryLow};
-    struct specialStateStuct
-    {
-      enumSpecialState type;
-      bool active;
-      float timer;
-      float param1;
-      float param2;
-      float param3;
-      bool waitUnclear;
-    };
-    specialStateStuct specialState[NB_SPECIAL_STATES];
-    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2, bool waitUnclear = false);
+  bool isSpecialStateActive(enumSpecialState state);
+  specialStateStuct getSpecialState(enumSpecialState state);
 
-    enum enumResistances
-    {
-      ResistanceIce, // = 0
-      ResistanceFire,
-      ResistanceStone,
-      ResistanceLightning,
-      ResistanceIllusion,
-      ResistancePoison,
+  virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
+  virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+  virtual void computeFacingDirection();
+  virtual void dyingFromAge();
+  virtual bool canCollide();
+  bool canSee(float xf, float yf);
+  bool canWalkTo(float xf, float yf);
 
-      ResistanceRecoil,
-      ResistanceFrozen,
+  void heal(int healPoints);
 
-      NB_RESISTANCES
-    };
-    enumStateResistance resistance[NB_RESISTANCES];
+  static StructHurt getHurtParams(int damage,
+                                  enumShotType hurtingType,
+                                  int level,
+                                  bool critical,
+                                  sourceTypeEnum sourceType,
+                                  enemyTypeEnum enemyType,
+                                  bool goThrough)
+  {
+    StructHurt hurtParams;
+    hurtParams.damage = damage;
+    hurtParams.hurtingType = hurtingType;
+    hurtParams.level = level;
+    hurtParams.critical = critical;
+    hurtParams.sourceType = sourceType;
+    hurtParams.enemyType = enemyType;
+    hurtParams.goThrough = goThrough;
 
-    bool isSpecialStateActive(enumSpecialState state);
-    specialStateStuct getSpecialState(enumSpecialState state);
+    return hurtParams;
+  }
 
-    virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
-    virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
-    virtual void computeFacingDirection();
-    virtual void dyingFromAge();
-    virtual bool canCollide();
-    bool canSee(float xf, float yf);
-    bool canWalkTo(float xf, float yf);
+  bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2);
+  bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile);
 
-    void heal(int healPoints);
+  virtual bool isAttacking(); // true when the monster is performing a melee attack
 
-    static StructHurt getHurtParams(int damage,
-                          enumShotType hurtingType,
-                          int level,
-                          bool critical,
-                          sourceTypeEnum sourceType,
-                          enemyTypeEnum enemyType,
-                          bool goThrough)
-    {
-      StructHurt hurtParams;
-      hurtParams.damage = damage;
-      hurtParams.hurtingType = hurtingType;
-      hurtParams.level = level;
-      hurtParams.critical = critical;
-      hurtParams.sourceType = sourceType;
-      hurtParams.enemyType = enemyType;
-      hurtParams.goThrough = goThrough;
+protected:
+  int hp;
+  int hpMax;
+  int hpDisplay;
+  float creatureSpeed;
+  int shadowFrame;
+  int facingDirection;
+  float armor;
 
-      return hurtParams;
-    }
+  bool canExplode;  // true if the monster can explode with a fire attack
+  bool displayDamage;
 
-    bool intersectsSegments(Vector2D a1, Vector2D a2, Vector2D b1, Vector2D b2);
-    bool intersectsTile(Vector2D a1, Vector2D a2, int xTile, int yTile);
+  bool hurting;
+  float hurtingDelay;
+  enumShotType hurtingType;
+  enumBloodColor bloodColor;
+  enumMovingStyle movingStyle;
 
-    virtual bool isAttacking(); // true when the monster is performing a melee attack
+  struct  recoilStruct
+  {
+    bool active;
+    Vector2D velocity;
+    bool stun;
+    float timer;
+  } recoil;
 
-  protected:
-    int hp;
-    int hpMax;
-    int hpDisplay;
-    float creatureSpeed;
-    int shadowFrame;
-    int facingDirection;
-    float armor;
+  void generateStar(sf::Color starColor);
+  virtual void makeExplode();
 
-    bool canExplode;  // true if the monster can explode with a fire attack
-    bool displayDamage;
-
-    bool hurting;
-    float hurtingDelay;
-    enumShotType hurtingType;
-    enumBloodColor bloodColor;
-    enumMovingStyle movingStyle;
-
-    struct  recoilStruct
-    {
-      bool active;
-      Vector2D velocity;
-      bool stun;
-      float timer;
-    } recoil;
-
-    void generateStar(sf::Color starColor);
-    virtual void makeExplode();
-
-  private:
-    bool determineSatusChance(enumStateResistance resistance, int level);
-    int determineDamageBonus(enumStateResistance resistance, int level);
-    bool textTooClose(TextEntity* textEntity, float xDistMin, float yDistMin);
+private:
+  bool determineSatusChance(enumStateResistance resistance, int level);
+  int determineDamageBonus(enumStateResistance resistance, int level);
+  bool textTooClose(TextEntity* textEntity, float xDistMin, float yDistMin);
 };
 
 #endif // BASECREATUREENTITY_H

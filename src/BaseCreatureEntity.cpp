@@ -84,7 +84,7 @@ bool BaseCreatureEntity::isSpecialStateActive(enumSpecialState state)
   return specialState[state].active;
 }
 
-BaseCreatureEntity::specialStateStuct BaseCreatureEntity::getSpecialState(enumSpecialState state)
+specialStateStuct BaseCreatureEntity::getSpecialState(enumSpecialState state)
 {
   return specialState[state];
 }

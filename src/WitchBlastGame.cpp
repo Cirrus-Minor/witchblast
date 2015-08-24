@@ -68,7 +68,7 @@
 
 #include <algorithm>
 
-#define ONLINE_MODE
+//#define ONLINE_MODE
 #define LEVEL_TEST_MODE
 
 #ifdef ONLINE_MODE
@@ -2029,9 +2029,9 @@ void WitchBlastGame::renderRunningGame()
     rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
     app->draw(rectangle);
   }
-  if (player->isSpecialStateActive(BaseCreatureEntity::SpecialStateConfused))
+  if (player->isSpecialStateActive(SpecialStateConfused))
   {
-    BaseCreatureEntity::specialStateStuct specialState = player->getSpecialState(BaseCreatureEntity::SpecialStateConfused);
+    specialStateStuct specialState = player->getSpecialState(SpecialStateConfused);
 
     // effect
     int effectFade = 150 + cos(3.0f * getAbsolutTime()) * 100;
@@ -2383,6 +2383,23 @@ void WitchBlastGame::renderRunningGame()
     write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
   }
 
+  // show player effects
+  /*if (isPlayerAlive)
+  {
+    float x0 = 30, y0 = 30, yStep = 20;
+
+    for (int i = 0; i < NB_SPECIAL_STATES; i++)
+    {
+      if (player->isSpecialStateActive((enumSpecialState)i))
+      {
+        std::stringstream oss;
+        oss << specialStateToString[i] << " : ";
+        oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
+        write(oss.str(), 12, x0, y0, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+        y0 += yStep;
+      }
+    }
+  }*/
 }
 
 void WitchBlastGame::renderMessages()
