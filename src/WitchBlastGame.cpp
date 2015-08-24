@@ -68,12 +68,11 @@
 
 #include <algorithm>
 
-//#define ONLINE_MODE
 #define LEVEL_TEST_MODE
 
 #ifdef ONLINE_MODE
 #include "OnlineScoring.h"
-#endif // ONLINE_SCORING
+#endif // ONLINE_MODE
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const unsigned int ACHIEV_LINES = 2;
