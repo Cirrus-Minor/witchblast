@@ -2383,22 +2383,26 @@ void WitchBlastGame::renderRunningGame()
   }
 
   // show player effects
-  /*if (isPlayerAlive)
+  if (isPlayerAlive)
   {
-    float x0 = 30, y0 = 30, yStep = 20;
+    float x0 = 20, y0 = 540, yStep = -20;
 
     for (int i = 0; i < NB_SPECIAL_STATES; i++)
     {
-      if (player->isSpecialStateActive((enumSpecialState)i))
+      if ( (player->isSpecialStateActive((enumSpecialState)i) && player->getSpecialState((enumSpecialState)i).timer > 0.35f)
+          || player->getSpecialState((enumSpecialState)i).waitUnclear)
       {
         std::stringstream oss;
         oss << specialStateToString[i] << " : ";
-        oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
+        if (player->getSpecialState((enumSpecialState)i).waitUnclear)
+          oss << "waiting...";
+        else
+          oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
         write(oss.str(), 12, x0, y0, ALIGN_LEFT, sf::Color::White, app, 0, 0);
         y0 += yStep;
       }
     }
-  }*/
+  }
 }
 
 void WitchBlastGame::renderMessages()
