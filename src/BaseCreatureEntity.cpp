@@ -105,11 +105,14 @@ float BaseCreatureEntity::animateStates(float delay)
     if (specialState[i].active)
     {
       specialState[i].timer -= delay;
-      if (specialState[i].timer <= 0.0f) setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
+      if (specialState[i].timer <= 0.0f)
+      {
+        setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
+        game().getPlayer()->computePlayer();
+      }
     }
     else if (specialState[i].waitUnclear && !game().getCurrentMap()->isCleared())
     {
-      std::cout << "Unclear: " << i << std::endl;
       specialState[i].waitUnclear = false;
       specialState[i].active = true;
       game().getPlayer()->computePlayer();

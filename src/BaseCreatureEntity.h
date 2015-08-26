@@ -115,6 +115,8 @@ enum enumSpecialState
   SpecialStateSlow,   // param 1 = multiplier
   SpecialStateSpeed,  // param 1 = multiplier
   SpecialStatePoison,
+  SpecialStateWeakness,
+  SpecialStateStrength,
 
   SpecialStateConfused,
 
@@ -160,6 +162,8 @@ const std::string specialStateToString[NB_SPECIAL_STATES] =
   "Slow",
   "Hasted",
   "Poisoned",
+  "Weakness",
+  "Strength",
   "Confused",
   "Protected (div)",
   "Hasted (div)",

@@ -2038,8 +2038,26 @@ void PlayerEntity::consume(enumItemType item)
     specialState[SpecialStateSlow].active = false;
     specialState[SpecialStateSlow].waitUnclear = true;
     specialState[SpecialStateSlow].timer = 30;
-    specialState[SpecialStateSlow].param1 = 0.35;
+    specialState[SpecialStateSlow].param1 = 0.35f;
     displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_slow"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionWeakness:
+    specialState[SpecialStateWeakness].active = false;
+    specialState[SpecialStateWeakness].waitUnclear = true;
+    specialState[SpecialStateWeakness].timer = 30;
+    specialState[SpecialStateWeakness].param1 = 0.5f;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_weakness"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionStrength:
+    specialState[SpecialStateStrength].active = false;
+    specialState[SpecialStateStrength].waitUnclear = true;
+    specialState[SpecialStateStrength].timer = 30;
+    specialState[SpecialStateStrength].param1 = 1.5f;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_strength"), TextEntity::COLOR_FADING_BLUE);
     SoundManager::getInstance().playSound(SOUND_DRINK);
     break;
 
@@ -2275,6 +2293,12 @@ void PlayerEntity::computePlayer()
   {
     movingStyle = movWalking;
   }
+
+  // potions
+  if (specialState[SpecialStateWeakness].active && !specialState[SpecialStateStrength].active)
+    fireDamages *= specialState[SpecialStateWeakness].param1;
+  if (specialState[SpecialStateStrength].active && !specialState[SpecialStateWeakness].active)
+    fireDamages *= specialState[SpecialStateStrength].param1;
 }
 
 void PlayerEntity::acquireStance(enumItemType type)
