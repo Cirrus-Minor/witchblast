@@ -165,10 +165,27 @@ const std::string specialStateToString[NB_SPECIAL_STATES] =
   "Weakness",
   "Strength",
   "Confused",
+
   "Protected (div)",
   "Hasted (div)",
   "Firerate+ (div)",
   "Damage+ (div)"
+};
+
+const sf::Color specialStateToColor[NB_SPECIAL_STATES] =
+{
+  sf::Color(100, 200, 255),
+  sf::Color::Red,
+  sf::Color::White,
+  sf::Color::Green,
+  sf::Color::Red,
+  sf::Color::White,
+  sf::Color::Red,
+
+  sf::Color::Yellow,
+  sf::Color::Yellow,
+  sf::Color::Yellow,
+  sf::Color::Yellow
 };
 
 class BaseCreatureEntity : public CollidingSpriteEntity

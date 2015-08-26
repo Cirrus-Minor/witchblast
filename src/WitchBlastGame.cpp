@@ -2395,10 +2395,17 @@ void WitchBlastGame::renderRunningGame()
         std::stringstream oss;
         oss << specialStateToString[i] << " : ";
         if (player->getSpecialState((enumSpecialState)i).waitUnclear)
-          oss << "waiting...";
+        {
+          oss << "waiting";
+          int n = (int)(getAbsolutTime() * 3) % 3;
+          if (n == 0) oss << ".";
+          else if (n == 1) oss << "..";
+          else oss << "...";
+        }
         else
           oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
-        write(oss.str(), 12, x0, y0, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+
+        write(oss.str(), 12, x0, y0, ALIGN_LEFT, specialStateToColor[i], app, 0, 0);
         y0 += yStep;
       }
     }
