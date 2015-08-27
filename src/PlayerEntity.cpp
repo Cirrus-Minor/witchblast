@@ -2008,6 +2008,7 @@ void PlayerEntity::consume(enumItemType item)
   {
   case ItemScrollRevelation:
     reveal();
+    SoundManager::getInstance().playSound(SOUND_SCROLL);
     break;
 
   case ItemPotionHealth:

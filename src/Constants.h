@@ -299,6 +299,7 @@ enum sound_resources {
   SOUND_BARREL_HIT,
   SOUND_BARREL_SMASH,
   SOUND_SECRET,
+  SOUND_SCROLL,
 };
 
 enum corpses_ressources{
