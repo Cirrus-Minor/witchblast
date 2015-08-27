@@ -4770,7 +4770,12 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
 
 bool WitchBlastGame::isAdvancedLevel()
 {
-  return false; //true;
+  if (achievementState[AchievementVampire] == AchievementDone)
+  {
+    return (rand() % 150 < getAchievementsPercents());
+  }
+  else
+    return false;
 }
 
 void WitchBlastGame::generateStandardMap()
