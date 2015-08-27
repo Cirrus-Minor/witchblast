@@ -4768,11 +4768,16 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
   }
 }
 
+bool WitchBlastGame::isAdvancedLevel()
+{
+  return false; //true;
+}
+
 void WitchBlastGame::generateStandardMap()
 {
   initMonsterArray();
   saveInFight.monsters.clear();
-  generateStandardRoom(level);
+  generateStandardRoom(level, isAdvancedLevel());
 }
 
 item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noFairy = false)

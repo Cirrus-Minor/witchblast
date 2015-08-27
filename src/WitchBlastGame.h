@@ -721,6 +721,11 @@ private:
   void generateStandardMap();
 
   /*!
+   *  \brief Returns true if the difficulty for the map is "advanced"
+   */
+  bool isAdvancedLevel();
+
+  /*!
    *  \brief Checks if the room will be closed
    *
    * Checks if the room will be closed.
