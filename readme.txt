@@ -106,9 +106,11 @@ Next release
 - ADD Secret rooms
 - ADD New items
 - ADD New familiar
+- ADD New music
 - MOD Consumables in shops
 - MOD Evil flower damage
 - MOD Butcher can drop sausages now
+- MOD Game becomes harder for good players
 - FIX Latency when communicating with the score server
 - FIX Interaction key has to be redefined each game
 
