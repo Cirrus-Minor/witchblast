@@ -92,12 +92,7 @@ const std::string creditsSound[]  =
 /** Credits: Music */
 const std::string creditsMusic[]  =
 {
-  "Michael Ghelfi",
-  "JappeJ",
-  "SteveSyz",
-  "CinTer",
-  "cazok",
-  "ET16",
+  "Yan Dupuis",
   "END"
 };
 /** Credits: Translation */

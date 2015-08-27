@@ -3326,7 +3326,7 @@ void WitchBlastGame::renderCredits()
 
   ////// RIGHT
 
-  yCursor = yCursorInit - yStep;
+  yCursor = yCursorInit + yStep;
   write("Music", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
   yCursor += yStep;
   i = 0;
@@ -5071,14 +5071,13 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
   case MusicDungeon:
     {
       int r = currentStandardMusic;
-      while (r == currentStandardMusic) r = rand() % 4;
+      while (r == currentStandardMusic) r = rand() % 3;
 
       switch (r)
       {
-        case 0: ok = music.openFromFile("media/sound/wb.ogg"); break;
-        case 1: ok = music.openFromFile("media/sound/savage_life.ogg"); break;
-        case 2: ok = music.openFromFile("media/sound/bastion.ogg"); break;
-        case 3: ok = music.openFromFile("media/sound/haunted.ogg"); break;
+        case 0: ok = music.openFromFile("media/sound/WitchBlastTheme.ogg"); break;
+        case 1: ok = music.openFromFile("media/sound/SavageLife.ogg"); break;
+        case 2: ok = music.openFromFile("media/sound/HauntedLighthouse.ogg"); break;
       }
 
       currentStandardMusic = r;
@@ -5086,19 +5085,19 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
     break;
 
   case MusicEnding:
-    ok = music.openFromFile("media/sound/dark_ambiant.ogg");
+    ok = music.openFromFile("media/sound/AmbiantMedieval.ogg");
     break;
 
   case MusicBoss:
-    ok = music.openFromFile("media/sound/power.ogg");
+    ok = music.openFromFile("media/sound/ShowMeThePower.ogg");
     break;
 
   case MusicChallenge:
-    ok = music.openFromFile("media/sound/hells_fire.ogg");
+    ok = music.openFromFile("media/sound/HellsFire.ogg");
     break;
 
   case MusicIntro:
-    ok = music.openFromFile("media/sound/wb.ogg");
+    ok = music.openFromFile("media/sound/WitchBlastTheme.ogg");
     break;
   }
 
@@ -5794,8 +5793,8 @@ void WitchBlastGame::configureFromFile()
   parameters.vsync = true;
   parameters.bloodSpread = true;
   parameters.fullscreen = false;
-  parameters.musicVolume = 60;
-  parameters.soundVolume = 100;
+  parameters.musicVolume = 80;
+  parameters.soundVolume = 80;
   parameters.playerName = "";
   parameters.displayBossPortrait = false;
 
