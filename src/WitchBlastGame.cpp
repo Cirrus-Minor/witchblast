@@ -5425,7 +5425,7 @@ bool WitchBlastGame::loadGame()
       file >> flag;
       iMap->setVisited(flag);
       file >> flag;
-      iMap->setRevealed(flag);
+      if (!flag) iMap->setRevealed(flag);
       file >> flag;
       iMap->setCleared(flag);
 
