@@ -1536,6 +1536,8 @@ void WitchBlastGame::updateRunningGame()
     else
     {
       prepareIntro();
+      switchToMenu();
+      menuState = MenuStateMain;
     }
   }
 }
