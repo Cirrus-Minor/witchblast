@@ -65,21 +65,8 @@ Credits
 -------
 Seby: code and music 
 Pierre "dejam0rt" Baron: 2D art
+Jan Dupuis: Music - https://soundcloud.com/leguitaristedunord
 R0d: particles system and multilingual support coding
-
-Music
-Our Ship To Candletown from Michael Ghelfi - https://www.youtube.com/user/MichaelGhelfi
-Music Is His Only Friend from Michael Ghelfi
-Marching United from JappeJ - http://jappejj.bandcamp.com/
-Fanatsy- Theme of Elvarim from SteveSyz - http://stevesyz.newgrounds.com/
-PubStomp Deluxe from CinTer - http://cinter.newgrounds.com/
-The Spider Machine from cazok - http://cazok.newgrounds.com/
-Under Siege from ET16 - http://et16.newgrounds.com/
-
-The sound used in the game come from:
-- http://www.freesound.org/
-- http://www.freesfx.co.uk/
-- http://www.universal-soundbank.com/
 
 Licenses
 --------
