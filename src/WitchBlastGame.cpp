@@ -3034,7 +3034,7 @@ void WitchBlastGame::renderMenu()
   {
     //renderHiScores();
     if (menuScoreIndex == 0)
-      renderScores(scoresOnline, "Best Scores (ON-LINE)");
+      renderScores(scoresOnline, "Best Players (ON-LINE)");
     else if (menuScoreIndex == 1)
       renderScores(scoresOnlineDay, "Best TODAY Scores (ON-LINE)");
     else
