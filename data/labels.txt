@@ -505,6 +505,8 @@ item_book_alchemy#Book of alchemy
 item_book_alchemy_desc#Reveals the effect of some potions
 item_fairy_stone#Fairy Cassandra
 item_fairy_stone_desc#Helps you in the dungeon
+item_merchant#Merchant guild seal
+item_merchant_desc#Better prices in shop
 
 [french]
 start_new_game#Nouvelle partie

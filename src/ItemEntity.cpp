@@ -39,7 +39,10 @@ bool ItemEntity::getMerchandise()
 
 int ItemEntity::getPrice()
 {
-  return (items[itemType].price);
+  if (game().getPlayer()->isEquiped(EQUIP_MERCHANT))
+    return (items[itemType].price * 0.8f);
+  else
+    return (items[itemType].price);
 }
 
 bool ItemEntity::canBePickedUp()

@@ -158,6 +158,7 @@ enum enumItemType
   ItemBag,
   ItemBookAlchemy,
   ItemFairyStone,
+  ItemMerchant,
 
   NUMBER_ITEMS
 };
@@ -541,6 +542,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemFairyStone, "item_fairy_stone", "item_fairy_stone_desc",
     30, true, FamiliarFairyStone, false, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone, false
   },
+  {
+    ItemMerchant, "item_merchant", "item_merchant_desc",
+    25, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, false
+  },
 };
 
 /** Item equipment type enum
@@ -611,6 +616,7 @@ enum item_equip_enum {
   EQUIP_BAG,
   EQUIP_BOOK_ALCHEMY,
   EQUIP_FAIRY_STONE,
+  EQUIP_MERCHANT,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -687,6 +693,8 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_SPELL_FAIRY,
 
   // others
+  EQUIP_MERCHANT,
+
   EQUIP_BOSS_KEY,
   EQUIP_FLOOR_MAP,
   EQUIP_ALCOHOL,
@@ -742,6 +750,8 @@ const std::vector<item_equip_enum> scoreEquipement =
   EQUIP_SPELL_FAIRY,
 
   // others
+  EQUIP_MERCHANT,
+
   EQUIP_BOSS_KEY,
   EQUIP_FLOOR_MAP,
   EQUIP_ALCOHOL,
