@@ -98,6 +98,8 @@ Next release
 - MOD Evil flower damage
 - MOD Butcher can drop sausages now
 - MOD Game becomes harder for good players
+- MOD Intro is displayed just once now
+- MOD Display the best player instead of the best scores
 - FIX Latency when communicating with the score server
 - FIX Interaction key has to be redefined each game
 
