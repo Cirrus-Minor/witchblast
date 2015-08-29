@@ -2062,6 +2062,41 @@ void PlayerEntity::consume(enumItemType item)
     SoundManager::getInstance().playSound(SOUND_DRINK);
     break;
 
+  case ItemPotionOblivion:
+    game().forget();
+    for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+    {
+      if (consumable[i] > -1)
+      {
+        if (consumable[i] >= ItemPotion01 + NUMBER_UNIDENTIFIED && consumable[i] < FirstEquipItem )
+        {
+          consumable[i] = game().getPotion((enumItemType)consumable[i]);
+        }
+      }
+    }
+
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_forget"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionConfusion:
+    specialState[SpecialStateConfused].active = false;
+    specialState[SpecialStateConfused].waitUnclear = true;
+    specialState[SpecialStateConfused].timer = 10;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_confusion"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionCure:
+    for (int i = 0; i < DivineStateProtection; i++)
+    {
+      specialState[i].active = false;
+      specialState[i].waitUnclear = false;
+    }
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_cure"), TextEntity::COLOR_FADING_BLUE);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
   default:
     std::cout << "[ERROR] Trying to consume item: " << items[item].name << std::endl;
     break;

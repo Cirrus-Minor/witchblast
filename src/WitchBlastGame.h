@@ -459,6 +459,8 @@ public:
   void setPotionToKnown(enumItemType source);
   void addPotionToMap(enumItemType source, enumItemType effect, bool known);
   void acquireAlchemyBook();
+  void forget();
+  void forgetPotions();
 
 protected:
   /*!

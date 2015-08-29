@@ -62,7 +62,7 @@ const std::string spellLabel[SpellNone] =
   "spell_fairy"
 };
 
-const int NUMBER_UNIDENTIFIED = 6;
+const int NUMBER_UNIDENTIFIED = 9;
 
 /** Item type enum
  *  All the items and equipments.
@@ -86,6 +86,9 @@ enum enumItemType
   ItemPotion04,
   ItemPotion05,
   ItemPotion06,
+  ItemPotion07,
+  ItemPotion08,
+  ItemPotion09,
   // effect
   ItemPotionHealth,
   ItemPotionPoison,
@@ -93,6 +96,9 @@ enum enumItemType
   ItemPotionSpeed,
   ItemPotionWeakness,
   ItemPotionStrength,
+  ItemPotionOblivion,
+  ItemPotionConfusion,
+  ItemPotionCure,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
@@ -259,6 +265,18 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemPotion06, "item_potion_06", "item_potion_desc",
     10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
+  {
+    ItemPotion07, "item_potion_07", "item_potion_desc",
+    10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  {
+    ItemPotion08, "item_potion_08", "item_potion_desc",
+    10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  {
+    ItemPotion09, "item_potion_09", "item_potion_desc",
+    10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
   // effect
   {
     ItemPotionHealth, "item_potion_health", "item_potion_health_desc",
@@ -282,6 +300,18 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemPotionStrength, "item_potion_strength", "item_potion_strength_desc",
+    10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  {
+    ItemPotionOblivion, "item_potion_oblivion", "item_potion_oblivion_desc",
+    10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  {
+    ItemPotionConfusion, "item_potion_confusion", "item_potion_confusion_desc",
+    10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  {
+    ItemPotionCure, "item_potion_cure", "item_potion_cure_desc",
     10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
 

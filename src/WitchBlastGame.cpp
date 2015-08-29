@@ -1257,7 +1257,7 @@ void WitchBlastGame::updateRunningGame()
       }
       if (event.key.code == sf::Keyboard::F4)
       {
-        for (int i = 0; i < NUMBER_ITEMS; i++)
+        for (int i = 0; i < NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i++)
           new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
       }
 #endif // TEST_MODE
@@ -3896,7 +3896,7 @@ void WitchBlastGame::refreshMinimap()
     {
       int roomType = currentFloor->getRoom(i, j);
 
-      if (roomType > roomTypeNULL && currentFloor->getMap(i, j)->isVisited())
+      if (roomType > roomTypeNULL && currentFloor->getMap(i, j)->isVisited()&& currentFloor->getMap(i, j)->isKnown())
       {
         if (roomType == roomTypeStarting
             || roomType == roomTypeChallenge
@@ -7062,7 +7062,7 @@ void WitchBlastGame::randomizePotionMap()
   for (int i = 0; i < NUMBER_UNIDENTIFIED; i++)
   {
     int r = rand() % potionEffect.size();
-    potionMap[(enumItemType)(ItemPotion01 + i)] = structPotionMap { (enumItemType)(ItemPotionHealth + potionEffect[r]), false};
+    addPotionToMap((enumItemType)(ItemPotion01 + i), (enumItemType)(ItemPotionHealth + potionEffect[r]), false);
     potionEffect.erase(potionEffect.begin() + r);
   }
 }
@@ -7087,6 +7087,7 @@ void WitchBlastGame::acquireAlchemyBook()
 void WitchBlastGame::addPotionToMap(enumItemType source, enumItemType effect, bool known)
 {
   potionMap[source] = structPotionMap { effect, known};
+  potionMap[effect] = structPotionMap { source, known};
 }
 
 enumItemType WitchBlastGame::getPotion(enumItemType source)
@@ -7102,6 +7103,7 @@ bool WitchBlastGame::potionEffectKnown(enumItemType source)
 void WitchBlastGame::setPotionToKnown(enumItemType source)
 {
   potionMap[source].known = true;
+  potionMap[potionMap[source].effect].known = true;
 
   // message
   if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
@@ -7115,6 +7117,31 @@ void WitchBlastGame::setPotionToKnown(enumItemType source)
 
   msg.message[1] = ss.str();
   messagesQueue.push(msg);
+}
+
+void WitchBlastGame::forgetPotions()
+{
+  for (int i = ItemPotion01; i < FirstEquipItem; i++)
+  {
+    potionMap[(enumItemType)i].known = false;
+    potionMap[potionMap[(enumItemType)i].effect].known = false;
+  }
+}
+
+void WitchBlastGame::forget()
+{
+  // forget map
+  if (!player->isEquiped(EQUIP_FLOOR_MAP))
+  {
+    currentFloor->forget(floorX, floorY);
+    refreshMinimap();
+  }
+
+  // forget potions
+  if (!player->isEquiped(EQUIP_BOOK_ALCHEMY))
+  {
+    forgetPotions();
+  }
 }
 
 WitchBlastGame &game()
