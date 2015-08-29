@@ -508,6 +508,18 @@ item_fairy_stone_desc#Helps you in the dungeon
 item_merchant#Merchant guild seal
 item_merchant_desc#Better prices in shop
 
+state_frozen#Frozen
+state_slow#Slow
+state_speed#Hasted
+state_poison#Poisoned
+state_weakness#Weakness
+state_strength#Strength
+state_confusion#Confused
+state_div_protection#Protected (div)
+state_div_speed#Hasted (div)
+state_div_firerate#Firerate+ (div)
+state_div_damage#Damage+ (div)
+
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue

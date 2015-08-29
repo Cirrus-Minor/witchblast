@@ -156,20 +156,20 @@ struct specialStateStuct
   bool waitUnclear;
 };
 
-const std::string specialStateToString[NB_SPECIAL_STATES] =
+const std::string specialStateToLabel[NB_SPECIAL_STATES] =
 {
-  "Frozen",
-  "Slow",
-  "Hasted",
-  "Poisoned",
-  "Weakness",
-  "Strength",
-  "Confused",
+  "state_frozen",
+  "state_slow",
+  "state_speed",
+  "state_poison",
+  "state_weakness",
+  "state_strength",
+  "state_confusion",
 
-  "Protected (div)",
-  "Hasted (div)",
-  "Firerate+ (div)",
-  "Damage+ (div)"
+  "state_div_protection",
+  "state_div_speed",
+  "state_div_firerate",
+  "state_div_damage"
 };
 
 const sf::Color specialStateToColor[NB_SPECIAL_STATES] =

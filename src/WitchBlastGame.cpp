@@ -2395,7 +2395,7 @@ void WitchBlastGame::renderRunningGame()
           || player->getSpecialState((enumSpecialState)i).waitUnclear)
       {
         std::stringstream oss;
-        oss << specialStateToString[i] << " : ";
+        oss << tools::getLabel(specialStateToLabel[i]) << " : ";
         if (player->getSpecialState((enumSpecialState)i).waitUnclear)
         {
           oss << "waiting";
