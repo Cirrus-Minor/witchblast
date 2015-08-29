@@ -158,6 +158,19 @@ void GameFloor::reveal()
     }
 }
 
+void GameFloor::forget(int floorX, int floorY)
+{
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] > roomTypeNULL)
+      {
+        if (!((i == floorX && (j >= floorY - 1 && j <= floorY + 1)) || (j == floorY && (i >= floorX - 1 && i <= floorX + 1))))
+          maps[i][j]->setKnown(false);
+      }
+    }
+}
+
 IntCoord GameFloor::getFirstNeighboor(int x, int y)
 {
   if (x > 0 && floor[x - 1][y] > 0) return IntCoord(x - 1, y);
