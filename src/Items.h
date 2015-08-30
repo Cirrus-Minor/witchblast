@@ -62,7 +62,7 @@ const std::string spellLabel[SpellNone] =
   "spell_fairy"
 };
 
-const int NUMBER_UNIDENTIFIED = 9;
+const int NUMBER_UNIDENTIFIED = 10;
 
 /** Item type enum
  *  All the items and equipments.
@@ -89,6 +89,7 @@ enum enumItemType
   ItemPotion07,
   ItemPotion08,
   ItemPotion09,
+  ItemPotion10,
   // effect
   ItemPotionHealth,
   ItemPotionPoison,
@@ -99,6 +100,7 @@ enum enumItemType
   ItemPotionOblivion,
   ItemPotionConfusion,
   ItemPotionCure,
+  ItemPotionRage,
 
   ItemMagicianHat,    // first equip item
   ItemLeatherBoots,
@@ -277,6 +279,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemPotion09, "item_potion_09", "item_potion_desc",
     10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
+  {
+    ItemPotion10, "item_potion_10", "item_potion_desc",
+    10, false, FamiliarNone, true, true, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
   // effect
   {
     ItemPotionHealth, "item_potion_health", "item_potion_health_desc",
@@ -312,6 +318,10 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemPotionCure, "item_potion_cure", "item_potion_cure_desc",
+    10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
+  },
+  {
+    ItemPotionRage, "item_potion_rage", "item_potion_rage_desc",
     10, false, FamiliarNone, false, false, false, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, true
   },
 

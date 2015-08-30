@@ -117,6 +117,7 @@ enum enumSpecialState
   SpecialStatePoison,
   SpecialStateWeakness,
   SpecialStateStrength,
+  SpecialStateRage,
 
   SpecialStateConfused,
 
@@ -164,6 +165,7 @@ const std::string specialStateToLabel[NB_SPECIAL_STATES] =
   "state_poison",
   "state_weakness",
   "state_strength",
+  "state_rage",
   "state_confusion",
 
   "state_div_protection",
@@ -179,6 +181,7 @@ const sf::Color specialStateToColor[NB_SPECIAL_STATES] =
   sf::Color::White,
   sf::Color::Green,
   sf::Color::Red,
+  sf::Color::White,
   sf::Color::White,
   sf::Color::Red,
 

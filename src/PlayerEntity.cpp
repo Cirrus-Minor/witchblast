@@ -671,9 +671,43 @@ void PlayerEntity::animate(float delay)
 
   if (playerStatus != playerStatusDead)
   {
+    // effects
     if (invincibleDelay >= 0.0f) invincibleDelay -= delay;
     if (specialState[SpecialStateConfused].active)
       SoundManager::getInstance().playSound(SOUND_VAMPIRE_HYPNOSIS, false);
+
+    // rage
+    if (specialState[SpecialStateRage].active)
+    {
+      specialState[SpecialStateRage].param3 -= delay;
+      if (specialState[SpecialStateRage].param3 <= 0.0f)
+      {
+        specialState[SpecialStateRage].param3 += specialState[SpecialStateRage].param2;
+
+        for (int i = -1; i <= 1; i += 2)
+          for (int j = -1; j <= 1; j += 2)
+          {
+              BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
+              bolt1->setDamages(12);
+              bolt1->setFlying(isFairyTransmuted);
+              float velx = fireVelocity * 1.5f * i * 0.42f;
+              float vely = fireVelocity * 1.5f * j * 0.42f;
+              bolt1->setVelocity(Vector2D(velx, vely));
+
+              BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
+              bolt2->setDamages(12);
+              bolt2->setFlying(isFairyTransmuted);
+              float velx2 = 0.0f;
+              float vely2 = 0.0f;
+              if (i == -1 && j == -1) velx2 = -fireVelocity * 1.5f * i * 0.6f;
+              else if (i == -1 && j == 1) velx2 = fireVelocity * 1.5f * i * 0.6f;
+              else if (i == 1 && j == -1) vely2= -fireVelocity * 1.5f * i * 0.6f;
+              else if (i == 1 && j == 1) vely2 = fireVelocity * 1.5f * i * 0.6f;
+              bolt2->setVelocity(Vector2D(velx2, vely2));
+          }
+        SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
+      }
+    }
   }
   z = y + 4;
 }
@@ -2094,6 +2128,17 @@ void PlayerEntity::consume(enumItemType item)
       specialState[i].waitUnclear = false;
     }
     displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_cure"), TextEntity::COLOR_FADING_BLUE);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionRage:
+    specialState[SpecialStateRage].active = false;
+    specialState[SpecialStateRage].waitUnclear = true;
+    specialState[SpecialStateRage].timer = 30.5f;
+    specialState[SpecialStateRage].param1 = 12;
+    specialState[SpecialStateRage].param2 = 3;
+    specialState[SpecialStateRage].param3 = 3;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_rage"), TextEntity::COLOR_FADING_RED);
     SoundManager::getInstance().playSound(SOUND_DRINK);
     break;
 

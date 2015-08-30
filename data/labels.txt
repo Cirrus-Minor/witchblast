@@ -475,6 +475,7 @@ item_potion_06#Orange potion
 item_potion_07#Rosa potion
 item_potion_08#Dark potion
 item_potion_09#White potion
+item_potion_10#Rainbow potion
 item_potion_desc#Unknown effect
 item_potion_health#Healing potion
 item_potion_health_desc#Restores 18 HP
@@ -494,6 +495,8 @@ item_potion_confusion#Confusion potion
 item_potion_confusion_desc#Makes confused
 item_potion_cure#Tabula Rasa potion
 item_potion_cure_desc#Cancel all player effects
+item_potion_rage#Rage potion
+item_potion_rage_desc#Throws fireballs around the player
 item_bag#Bag
 item_bag_desc#Provides more space for consumables
 msg_potion_id_0#Potion identification
@@ -513,6 +516,7 @@ effect_weakness#Damage down!
 effect_confusion#Confused!
 effect_forget#You forget!
 effect_cure#Tabula rasa!
+effect_rage#Raaaage!
 item_book_alchemy#Book of alchemy
 item_book_alchemy_desc#Reveals the effect of some potions
 item_fairy_stone#Fairy Cassandra
@@ -526,6 +530,7 @@ state_speed#Hasted
 state_poison#Poisoned
 state_weakness#Weakness
 state_strength#Strength
+state_rage#Rage
 state_confusion#Confused
 state_div_protection#Protected (div)
 state_div_speed#Hasted (div)
