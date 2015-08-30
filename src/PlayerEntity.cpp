@@ -684,28 +684,7 @@ void PlayerEntity::animate(float delay)
       {
         specialState[SpecialStateRage].param3 += specialState[SpecialStateRage].param2;
 
-        for (int i = -1; i <= 1; i += 2)
-          for (int j = -1; j <= 1; j += 2)
-          {
-              BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
-              bolt1->setDamages(12);
-              bolt1->setFlying(isFairyTransmuted);
-              float velx = fireVelocity * 1.5f * i * 0.42f;
-              float vely = fireVelocity * 1.5f * j * 0.42f;
-              bolt1->setVelocity(Vector2D(velx, vely));
-
-              BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
-              bolt2->setDamages(12);
-              bolt2->setFlying(isFairyTransmuted);
-              float velx2 = 0.0f;
-              float vely2 = 0.0f;
-              if (i == -1 && j == -1) velx2 = -fireVelocity * 1.5f * i * 0.6f;
-              else if (i == -1 && j == 1) velx2 = fireVelocity * 1.5f * i * 0.6f;
-              else if (i == 1 && j == -1) vely2= -fireVelocity * 1.5f * i * 0.6f;
-              else if (i == 1 && j == 1) vely2 = fireVelocity * 1.5f * i * 0.6f;
-              bolt2->setVelocity(Vector2D(velx2, vely2));
-          }
-        SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
+        rageFire(specialState[SpecialStateRage].param1, true, 1.5f);
       }
     }
   }
@@ -1611,29 +1590,30 @@ void PlayerEntity::generateBolt(float velx, float vely)
   bolt->setVelocity(Vector2D(velx, vely));
 }
 
-void PlayerEntity::rageFire()
+void PlayerEntity::rageFire(float damage, bool full, float velMult)
 {
+  float tempFireVelocity = fireVelocity * velMult;
   for (int i = -1; i <= 1; i += 2)
     for (int j = -1; j <= 1; j += 2)
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
       bolt->setDamages(10);
       bolt->setFlying(isFairyTransmuted);
-      float velx = fireVelocity * i * 0.42f;
-      float vely = fireVelocity * j * 0.42f;
+      float velx = tempFireVelocity * i * 0.42f;
+      float vely = tempFireVelocity * j * 0.42f;
       bolt->setVelocity(Vector2D(velx, vely));
 
-      if (hp <= hpMax / 5)
+      if (full)
       {
         BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
         bolt->setDamages(10);
         bolt->setFlying(isFairyTransmuted);
         float velx = 0.0f;
         float vely = 0.0f;
-        if (i == -1 && j == -1) velx = -fireVelocity * i * 0.6f;
-        else if (i == -1 && j == 1) velx = fireVelocity * i * 0.6f;
-        else if (i == 1 && j == -1) vely= -fireVelocity * i * 0.6f;
-        else if (i == 1 && j == 1) vely = fireVelocity * i * 0.6f;
+        if (i == -1 && j == -1) velx = -tempFireVelocity * i * 0.6f;
+        else if (i == -1 && j == 1) velx = tempFireVelocity * i * 0.6f;
+        else if (i == 1 && j == -1) vely= -tempFireVelocity * i * 0.6f;
+        else if (i == 1 && j == 1) vely = tempFireVelocity * i * 0.6f;
         bolt->setVelocity(Vector2D(velx, vely));
       }
     }
@@ -1837,7 +1817,7 @@ int PlayerEntity::hurt(StructHurt hurtParam)
       if (hurtParam.hurtingType != ShotTypeDeterministic)
       {
         invincibleDelay = INVINCIBLE_DELAY;
-        if (equip[EQUIP_RAGE_AMULET]) rageFire();
+        if (equip[EQUIP_RAGE_AMULET]) rageFire(10, hp <= hpMax / 5, 1.0f);
         game().generateBlood(x, y, bloodColor);
       }
 
