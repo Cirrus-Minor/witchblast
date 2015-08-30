@@ -221,3 +221,50 @@ void WitchEntity::fire()
     bolt->setVelocity(Vector2D(x, y).vectorNearlyTo(game().getPlayerPosition(), flowerFireVelocity, 1.0f ));
   }
 }
+
+void WitchEntity::drop()
+{
+  if (rand() % 12 == 0)
+  {
+    if (rand() % 5 == 0)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemScrollRevelation, x, y);
+      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+    }
+    else
+    {
+      ItemEntity* newItem = new ItemEntity((enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED), x, y);
+      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+    }
+    return;
+  }
+  else
+  {
+    if (rand() % 5 == 0)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
+      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+    }
+    if (game().getPlayer()->isEquiped(EQUIP_LUCK) && rand() % 5 == 0)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
+      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+    }
+
+    if (rand() % 25 == 0)
+    {
+      ItemEntity* newItem = new ItemEntity(ItemHealthVerySmall, x, y);
+      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+      newItem->setViscosity(0.96f);
+    }
+  }
+}
