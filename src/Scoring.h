@@ -49,6 +49,9 @@ int getMonsterScore(enemyTypeEnum monster)
 
     case EnemyTypePumpkin:        score = 15; break;
 
+    case EnemyTypeSpiderTarantula:
+                                  score = 20; break;
+
     case EnemyTypeWitch:          score = 25; break;
     case EnemyTypeWitchRed:       score = 25; break;
     case EnemyTypeCauldron:       score = 25; break;
@@ -93,6 +96,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeRockMissile:
     case EnemyTypeSpiderEgg_invocated:
     case EnemyTypeSpiderLittle_invocated:
+    case EnemyTypeSpiderTarantula_invocated:
     case EnemyTypeSpiderWeb:
     case EnemyTypeZombie_invocated:
     case EnemyTypeSausage_invocated:

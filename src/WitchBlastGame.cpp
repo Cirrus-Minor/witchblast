@@ -1235,7 +1235,8 @@ void WitchBlastGame::updateRunningGame()
         {
           initMonsterArray();
           findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
-          findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+          findPlaceMonsters(EnemyTypeSpiderLittle, 2);
+          findPlaceMonsters(EnemyTypeSpiderTarantula, 2);
         }
       }
       if (event.key.code == sf::Keyboard::F12)
@@ -1257,8 +1258,12 @@ void WitchBlastGame::updateRunningGame()
       }
       if (event.key.code == sf::Keyboard::F4)
       {
-        for (int i = 0; i < NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i++)
-          new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+          for (int i = 0; i < NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i++)
+            new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
+        else
+          for (int i = NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i < NUMBER_ITEMS; i++)
+            new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
       }
 #endif // TEST_MODE
     }
@@ -3855,7 +3860,7 @@ void WitchBlastGame::refreshMap()
   EntityManager::getInstance().partialClean(10);
 
   // if new map, it has to be randomized
-  bool generateMap = !(currentFloor->getMap(floorX, floorY)->isVisited());
+  bool generateMap =  !(currentFloor->getMap(floorX, floorY)->isVisited());
   currentMap = currentFloor->getAndVisitMap(floorX, floorY);
 
   // load the map
@@ -4625,8 +4630,14 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeSpiderEgg:
     new SpiderEggEntity(xm, ym, false);
     break;
+  case EnemyTypeSpiderEgg_invocated:
+    new SpiderEggEntity(xm, ym, true);
+    break;
   case EnemyTypeSpiderLittle:
-    new LittleSpiderEntity(xm, ym, false);
+    new LittleSpiderEntity(xm, ym, SpiderTypeStandard, false);
+    break;
+  case EnemyTypeSpiderTarantula:
+    new LittleSpiderEntity(xm, ym, SpiderTypeTarantula, false);
     break;
   case EnemyTypeGhost:
     new GhostEntity(xm, ym);
@@ -4644,11 +4655,11 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
     new SausageEntity(xm, ym, false);
     break;
 
-  case EnemyTypeSpiderEgg_invocated:
-    new SpiderEggEntity(xm, ym, true);
-    break;
   case EnemyTypeSpiderLittle_invocated:
-    new LittleSpiderEntity(xm, ym, true);
+    new LittleSpiderEntity(xm, ym, SpiderTypeStandard, true);
+    break;
+  case EnemyTypeSpiderTarantula_invocated:
+    new LittleSpiderEntity(xm, ym, SpiderTypeTarantula, true);
     break;
 
   case EnemyTypeBubble:
@@ -6675,6 +6686,10 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
   case EnemyTypeSpiderLittle:
   case EnemyTypeSpiderLittle_invocated:
     value = "enemy_type_spider_little";
+    break;
+  case EnemyTypeSpiderTarantula:
+  case EnemyTypeSpiderTarantula_invocated:
+    value = "enemy_type_spider_tarantula";
     break;
   case EnemyTypeSpiderWeb:
     value = "enemy_type_spider_web";

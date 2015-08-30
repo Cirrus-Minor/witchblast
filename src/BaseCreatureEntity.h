@@ -32,6 +32,7 @@ enum enemyTypeEnum
   EnemyTypeCauldronElemental,
   EnemyTypeSpiderEgg,
   EnemyTypeSpiderLittle,
+  EnemyTypeSpiderTarantula,
   EnemyTypeGhost,
   EnemyTypeZombie,
   EnemyTypeZombieDark,
@@ -71,6 +72,7 @@ enum enemyTypeEnum
   EnemyTypePumpkin_invocated,
   EnemyTypeSpiderEgg_invocated,
   EnemyTypeSpiderLittle_invocated,
+  EnemyTypeSpiderTarantula_invocated,
   EnemyTypeZombie_invocated,
   EnemyTypeSausage_invocated,
 

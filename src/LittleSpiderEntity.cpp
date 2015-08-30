@@ -7,7 +7,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
+LittleSpiderEntity::LittleSpiderEntity(float x, float y, EnumSpiderType spideType, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_LITTLE_SPIDER), x, y)
 {
   imagesProLine = 8;
@@ -16,17 +16,33 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, bool invocated)
   hp = 16;
   meleeDamages = 5;
 
+  this->spideType = spideType;
+  if (spideType == SpiderTypeTarantula)
+  {
+    enemyType = invocated ? EnemyTypeSpiderTarantula_invocated : EnemyTypeSpiderTarantula;
+    frame = 8;
+    deathFrame = FRAME_CORPSE_LITTLE_SPIDER_TARANTULA;
+    dyingFrame = 11;
+  }
+  else
+  {
+    enemyType = invocated ? EnemyTypeSpiderLittle_invocated : EnemyTypeSpiderLittle;
+    frame = 0;
+    deathFrame = FRAME_CORPSE_LITTLE_SPIDER;
+    dyingFrame = 3;
+  }
+
+
   type = invocated ? ENTITY_ENEMY_INVOCATED : ENTITY_ENEMY;
-  enemyType = invocated ? EnemyTypeSpiderLittle_invocated : EnemyTypeSpiderLittle;
+
   bloodColor = BloodGreen;
   shadowFrame = 4;
-  dyingFrame = 3;
-  deathFrame = FRAME_CORPSE_LITTLE_SPIDER;
+
+
   agonizingSound = SOUND_SPIDER_LITTLE_DIE;
 
   timer = -1.0f; //(rand() % 50) / 10.0f;
   if (invocated) age = 0.0f;
-  frame = 8;
 
   sprite.setOrigin(32.0f, 40.0f);
 
@@ -46,6 +62,8 @@ void LittleSpiderEntity::animate(float delay)
       roaming = false;
     }
     frame = ((int)(age * (roaming ? 1.5f : 5.0f))) % 3;
+    if (spideType == SpiderTypeTarantula)
+      frame += 8;
   }
 
   EnemyEntity::animate(delay);
@@ -103,6 +121,6 @@ void LittleSpiderEntity::collideWithEnemy(EnemyEntity* entity)
 
 void LittleSpiderEntity::drop()
 {
-  if (enemyType == EnemyTypeSpiderLittle)
+  if (type == ENTITY_ENEMY)
     EnemyEntity::drop();
 }

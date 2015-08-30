@@ -509,6 +509,7 @@ msg_tuto_potions_1#You have found a potion.
 msg_tuto_potions_2#You have to drink or identify it to know its effect.
 secret_found#Secret room found!
 enemy_type_sausage#a sausage
+enemy_type_spider_tarantula#a tarantula
 effect_speed#Speed up!
 effect_slow#Speed down!
 effect_strength#Damage up!
