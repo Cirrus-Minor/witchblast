@@ -23,6 +23,7 @@ class LittleSpiderEntity : public EnemyEntity
 	  virtual void drop();
   private:
     float timer;
+    float webTimer;
     bool roaming;
     EnumSpiderType spideType;
 };

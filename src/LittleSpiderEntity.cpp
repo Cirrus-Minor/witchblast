@@ -1,6 +1,7 @@
 #include "LittleSpiderEntity.h"
 #include "BoltEntity.h"
 #include "PlayerEntity.h"
+#include "SpiderWebEntity.h"
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
@@ -13,7 +14,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, EnumSpiderType spideTyp
   imagesProLine = 8;
   creatureSpeed = 175.0f;
   velocity = Vector2D(creatureSpeed * 0.25f);
-  hp = 16;
+
   meleeDamages = 5;
 
   this->spideType = spideType;
@@ -23,6 +24,10 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, EnumSpiderType spideTyp
     frame = 8;
     deathFrame = FRAME_CORPSE_LITTLE_SPIDER_TARANTULA;
     dyingFrame = 11;
+    hp = 32;
+    webTimer = 3 + 0.1f * (float)(rand() % 50);
+    meleeType = ShotTypePoison;
+    meleeLevel = 1;
   }
   else
   {
@@ -30,6 +35,7 @@ LittleSpiderEntity::LittleSpiderEntity(float x, float y, EnumSpiderType spideTyp
     frame = 0;
     deathFrame = FRAME_CORPSE_LITTLE_SPIDER;
     dyingFrame = 3;
+    hp = 16;
   }
 
 
@@ -64,6 +70,16 @@ void LittleSpiderEntity::animate(float delay)
     frame = ((int)(age * (roaming ? 1.5f : 5.0f))) % 3;
     if (spideType == SpiderTypeTarantula)
       frame += 8;
+
+    if (spideType == SpiderTypeTarantula)
+    {
+      webTimer = webTimer - delay;
+      if (webTimer <= 0.0f)
+      {
+        webTimer = 3 + 0.1f * (float)(rand() % 50);
+        new SpiderWebEntity(x, y, false);
+      }
+    }
   }
 
   EnemyEntity::animate(delay);
