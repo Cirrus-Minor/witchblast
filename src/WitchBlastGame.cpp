@@ -5411,7 +5411,7 @@ bool WitchBlastGame::loadGame()
     for (int i = 0; i < NB_ENEMY; i++) file >> killedEnemies[i];
 
     // potions
-    for (i = 0; i < NUMBER_UNIDENTIFIED; i++)
+    for (i = 0; i < NUMBER_UNIDENTIFIED * 2; i++)
     {
       int source, effect;
       bool known;
