@@ -704,6 +704,11 @@ void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float ti
 
 void PlayerEntity::renderPlayer(sf::RenderTarget* app)
 {
+  if (invincibleDelay > 0.0f)
+  {
+    if ((int)(age * 10.0f) % 2 == 0)return;
+  }
+
   sf::Color savedColor = sprite.getColor();
   if (isPoisoned()) sprite.setColor(sf::Color(180, 255, 180, 255));
 
