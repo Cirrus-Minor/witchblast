@@ -655,7 +655,8 @@ void generateStandardRoom07()
   else if (random < 80)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeSpiderLittle, 10);
+    game().findPlaceMonsters(EnemyTypeSpiderLittle, 8);
+    game().findPlaceMonsters(EnemyTypeSpiderTarantula, 2);
     game().findPlaceMonsters(EnemyTypeSpiderEgg, 16);
   }
   else if (random < 90)
@@ -823,7 +824,8 @@ void generateStandardRoom08()
   else if (random < 80)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeSpiderLittle, 10);
+    game().findPlaceMonsters(EnemyTypeSpiderLittle, 6);
+    game().findPlaceMonsters(EnemyTypeSpiderTarantula, 4);
     game().findPlaceMonsters(EnemyTypeSpiderEgg, 20);
   }
   else if (random < 90)
@@ -1493,7 +1495,8 @@ void generateAdvancedRoom06()
   else if (random < 80)
   {
     game().getCurrentMap()->generateRoomRandom(rand() % ROOM_TYPE_CHECKER);
-    game().findPlaceMonsters(EnemyTypeSpiderLittle, 8);
+    game().findPlaceMonsters(EnemyTypeSpiderLittle, 5);
+    game().findPlaceMonsters(EnemyTypeSpiderTarantula, 3);
     game().findPlaceMonsters(EnemyTypeSpiderEgg, 18);
   }
   else if (random < 90)
