@@ -462,6 +462,11 @@ public:
   void forget();
   void forgetPotions();
 
+  /*!
+   *  \brief Returns true if the difficulty for the map is "advanced"
+   */
+  bool isAdvancedLevel();
+
 protected:
   /*!
    *  \brief Rendering method
@@ -716,11 +721,6 @@ private:
    * Called during the generation when the map has no particular type.
    */
   void generateStandardMap();
-
-  /*!
-   *  \brief Returns true if the difficulty for the map is "advanced"
-   */
-  bool isAdvancedLevel();
 
   /*!
    *  \brief Checks if the room will be closed

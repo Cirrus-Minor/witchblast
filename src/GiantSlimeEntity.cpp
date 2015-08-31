@@ -128,19 +128,24 @@ void GiantSlimeEntity::animate(float delay)
   slimeTimer -= delay;
   if (slimeTimer <= 0.0f)
   {
+    slimeTypeEnum slimeType = SlimeTypeStandard;
+    if (game().isAdvancedLevel())
+    {
+      slimeType =  (slimeTypeEnum)(slimeType + rand() % 3);
+    }
     switch (slimeCounter)
     {
     case 0:
-      new SlimeEntity(TILE_WIDTH * 1.5f, TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * 1.5f, TILE_HEIGHT * 1.5f, slimeType, true);
       break;
     case 1:
-      new SlimeEntity(TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, TILE_HEIGHT * 1.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, TILE_HEIGHT * 1.5f, slimeType, true);
       break;
     case 2:
-      new SlimeEntity(TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * (MAP_WIDTH - 2) + TILE_WIDTH * 0.5f, TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, slimeType, true);
       break;
     case 3:
-      new SlimeEntity(TILE_WIDTH * 1.5f, TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, SlimeTypeStandard, true);
+      new SlimeEntity(TILE_WIDTH * 1.5f, TILE_HEIGHT * (MAP_HEIGHT - 2) + TILE_HEIGHT * 0.5f, slimeType, true);
       break;
     }
     slimeTimer = 7.0f;
