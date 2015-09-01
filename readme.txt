@@ -95,6 +95,7 @@ Next release
 - ADD New familiar
 - ADD New music
 - ADD Player effects display
+- ADD Blinking effect when player is invincible
 - MOD Consumables in shops
 - MOD Evil flower damage
 - MOD Butcher can drop sausages now
