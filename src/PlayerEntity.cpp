@@ -2119,10 +2119,10 @@ void PlayerEntity::consume(enumItemType item)
   case ItemPotionRage:
     specialState[SpecialStateRage].active = false;
     specialState[SpecialStateRage].waitUnclear = true;
-    specialState[SpecialStateRage].timer = 30.5f;
+    specialState[SpecialStateRage].timer = 20.5f;
     specialState[SpecialStateRage].param1 = 12;
-    specialState[SpecialStateRage].param2 = 3;
-    specialState[SpecialStateRage].param3 = 3;
+    specialState[SpecialStateRage].param2 = 2;
+    specialState[SpecialStateRage].param3 = 2;
     displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_rage"), TextEntity::COLOR_FADING_RED);
     SoundManager::getInstance().playSound(SOUND_DRINK);
     break;
@@ -2131,6 +2131,17 @@ void PlayerEntity::consume(enumItemType item)
     std::cout << "[ERROR] Trying to consume item: " << items[item].name << std::endl;
     break;
   }
+
+  SpriteEntity* usedItem = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_ITEMS), x, y, 32, 32);
+  usedItem->setImagesProLine(10);
+  usedItem->setFrame((int)item);
+  usedItem->setFading(true);
+  usedItem->setZ(y - 100);
+  usedItem->setLifetime(0.7f);
+  usedItem->setAge(-0.4);
+  usedItem->setType(ENTITY_EFFECT);
+  usedItem->setSpin(150.0f);
+  usedItem->setVelocity(Vector2D(60));
 }
 
 void PlayerEntity::reveal()
