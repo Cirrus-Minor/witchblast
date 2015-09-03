@@ -463,6 +463,11 @@ public:
   void forgetPotions();
 
   /*!
+   *  \brief Returns true if the game is in "advanced" mode
+   */
+  bool isAdvanced();
+
+  /*!
    *  \brief Returns true if the difficulty for the map is "advanced"
    */
   bool isAdvancedLevel();
@@ -996,6 +1001,7 @@ private:
   SpriteEntity* introSprites[8];
   int introState;
   int introSoundState;
+  int fairySpriteOffsetY;
 
   int currentStandardMusic;
 

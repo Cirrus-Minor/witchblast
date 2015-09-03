@@ -470,6 +470,9 @@ WitchBlastGame::WitchBlastGame()
   receiveScoreFromServer();
 
   srand(time(NULL));
+
+  fairySpriteOffsetY = 0;
+  if (isAdvanced()) fairySpriteOffsetY = 72 + 72 * (rand() % 4);
 }
 
 void WitchBlastGame::enableAA(bool enable)
@@ -3123,7 +3126,7 @@ void WitchBlastGame::renderMenu()
 
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
-        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(20 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(20 *getAbsolutTime()) % 2), fairySpriteOffsetY, 48, 48));
         fairySprite.setPosition(xAlign - 60, yTop - 10 + i * yStep + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
@@ -3518,7 +3521,7 @@ void WitchBlastGame::renderInGameMenu()
 
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
-        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), fairySpriteOffsetY, 48, 48));
         fairySprite.setPosition(xAlign - 60, yAlign + i * 90 + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
@@ -4781,9 +4784,14 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
   }
 }
 
+bool WitchBlastGame::isAdvanced()
+{
+  return (achievementState[AchievementVampire] == AchievementDone);
+}
+
 bool WitchBlastGame::isAdvancedLevel()
 {
-  if (achievementState[AchievementVampire] == AchievementDone)
+  if (isAdvanced())
   {
     return (rand() % 150 < getAchievementsPercents());
   }
