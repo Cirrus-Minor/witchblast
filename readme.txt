@@ -102,6 +102,7 @@ Next release
 - MOD Game becomes harder for good players
 - MOD Intro is displayed just once now
 - MOD Display the best player instead of the best scores
+- MOD In "advanced" mode, the "fairy cursor" changes
 - FIX Latency when communicating with the score server
 - FIX Interaction key has to be redefined each game
 
