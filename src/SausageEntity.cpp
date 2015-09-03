@@ -32,6 +32,7 @@ SausageEntity::SausageEntity(float x, float y, bool invocated)
   state = 0;
   timer = 0.5f + 0.1f *( rand() % 12);
   canExplode = false;
+  isNew = true;
 }
 
 void SausageEntity::render(sf::RenderTarget* app)
@@ -56,6 +57,7 @@ void SausageEntity::render(sf::RenderTarget* app)
 
 void SausageEntity::animate(float delay)
 {
+  isNew = false;
   float sausDelay = delay;
   if (specialState[SpecialStateIce].active) sausDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -105,6 +107,11 @@ void SausageEntity::animate(float delay)
   EnemyEntity::animate(delay);
   // frame
   z = y + 14;
+}
+
+bool SausageEntity::canCollide()
+{
+  return (!isNew);
 }
 
 void SausageEntity::calculateBB()
