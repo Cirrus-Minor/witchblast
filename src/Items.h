@@ -44,6 +44,7 @@ enum enumCastSpell
   SpellWeb,
   SpellFlower,
   SpellFairy,
+  SpellTime,
 
   SpellNone
 };
@@ -167,6 +168,7 @@ enum enumItemType
   ItemBookAlchemy,
   ItemFairyStone,
   ItemMerchant,
+  ItemSpellTime,
 
   NUMBER_ITEMS
 };
@@ -586,6 +588,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemMerchant, "item_merchant", "item_merchant_desc",
     25, true, FamiliarNone, true, true, true, 1, RarityRare, false, -1, ShotTypeStandard, SpellNone, false
   },
+  {
+    ItemSpellTime, "item_spell_time", "item_spell_time_desc",
+    60, true, FamiliarNone, false, false, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellTime, false
+  },
 };
 
 /** Item equipment type enum
@@ -657,6 +663,7 @@ enum item_equip_enum {
   EQUIP_BOOK_ALCHEMY,
   EQUIP_FAIRY_STONE,
   EQUIP_MERCHANT,
+  EQUIP_SPELL_TIME,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -731,6 +738,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_SPELL_WEB,
   EQUIP_SPELL_FLOWER,
   EQUIP_SPELL_FAIRY,
+  EQUIP_SPELL_TIME,
 
   // others
   EQUIP_MERCHANT,
@@ -788,6 +796,7 @@ const std::vector<item_equip_enum> scoreEquipement =
   EQUIP_SPELL_WEB,
   EQUIP_SPELL_FLOWER,
   EQUIP_SPELL_FAIRY,
+  EQUIP_SPELL_TIME,
 
   // others
   EQUIP_MERCHANT,

@@ -410,6 +410,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/bogeyman_vortex_00.ogg", "media/sound/bogeyman_vortex_01.ogg",
     "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
     "media/sound/secret.ogg",         "media/sound/scroll.ogg",
+    "media/sound/tic_tac.ogg",
   };
 
   // AA in fullscreen
@@ -464,6 +465,7 @@ WitchBlastGame::WitchBlastGame()
   titleSprite.setOrigin(titleSprite.getTextureRect().width / 2, titleSprite.getTextureRect().height / 2);
 
   scoreState = ScoreOK;
+  loopCounter = 0;
 
   loadGameData();
   loadHiScores();
@@ -570,11 +572,26 @@ void WitchBlastGame::onUpdate()
   {
     if (isPlayerAlive) player->setItemToBuy(NULL);
 
-    EntityManager::getInstance().animate(deltaTime);
-    if (isPressing(KeyTimeControl, false))
+    // time stop
+    if (player->isSpecialStateActive(SpecialStateTime))
+    {
+      if (loopCounter == 0)
+        EntityManager::getInstance().animate(deltaTime);
+      else
+        player->animate(deltaTime);
+
+      loopCounter++;
+      if (loopCounter > 3) loopCounter = 0;
+      SoundManager::getInstance().playSound(SOUND_CLOCK, false);
+    }
+    else
     {
       EntityManager::getInstance().animate(deltaTime);
-      SoundManager::getInstance().playSound(SOUND_VIB, false);
+      if (isPressing(KeyTimeControl, false))
+      {
+        EntityManager::getInstance().animate(deltaTime);
+        SoundManager::getInstance().playSound(SOUND_VIB, false);
+      }
     }
 
     if (isPlayerAlive) gameTime += deltaTime;
@@ -2010,6 +2027,16 @@ void WitchBlastGame::renderRunningGame()
   sf::RectangleShape rectangle(sf::Vector2f(200, 25));
 
   // effects
+  if (player->isSpecialStateActive(SpecialStateTime))
+  {
+    sf::RectangleShape whiteLine = sf::RectangleShape(sf::Vector2f(GAME_WIDTH, 2));
+    whiteLine.setFillColor(sf::Color(255, 255, 255, 32));
+    for (int i = 0; i < 8; i++)
+    {
+      whiteLine.setPosition(xOffset, yOffset + rand() % GAME_HEIGHT);
+      app->draw(whiteLine);
+    }
+  }
   if (isPressing(KeyTimeControl, false) && gameState == gameStatePlaying)
   {
     // effect
@@ -4923,6 +4950,9 @@ enumItemType WitchBlastGame::getItemSpell()
       case SpellFairy:
         item = ItemSpellFairy;
         break;
+      case SpellTime:
+        item = ItemSpellTime;
+        break;
       }
       ok = !isItemLocked(item);
     }
@@ -5129,6 +5159,16 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
 
   if (ok)
     music.play();
+}
+
+void WitchBlastGame::pauseMusic()
+{
+  music.pause();
+}
+
+void WitchBlastGame::resumeMusic()
+{
+  music.play();
 }
 
 void WitchBlastGame::updateMusicVolume()
@@ -6307,6 +6347,13 @@ void WitchBlastGame::renderPlayer(float x, float y,
     sprite.setPosition(x + 20, y);
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
     sprite.setTextureRect(sf::IntRect( 0, 288, 48, 60));
+    app->draw(sprite);
+  }
+  if (equip[EQUIP_FAIRY_STONE])
+  {
+    sprite.setPosition(x - 5, y + 15);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+    sprite.setTextureRect(sf::IntRect( 0, 360, 48, 60));
     app->draw(sprite);
   }
 

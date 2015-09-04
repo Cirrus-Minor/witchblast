@@ -3214,6 +3214,11 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell, bool fromSaveInFight)
     activeSpell.frame = ItemSpellFairy - FirstEquipItem;
     break;
 
+  case SpellTime:
+    activeSpell.delayMax = 70.0f;
+    activeSpell.frame = ItemSpellTime - FirstEquipItem;
+    break;
+
   case SpellNone:
     break;
   }
@@ -3261,6 +3266,9 @@ void PlayerEntity::castSpell()
       break;
     case SpellFairy:
       castTransmuteFairy();
+      break;
+    case SpellTime:
+      castTimeStop();
       break;
 
     case SpellNone:
@@ -3484,4 +3492,11 @@ void PlayerEntity::castTransmuteFairy()
       generateStar(sf::Color(200, 200, 255, 255));
     }
   }
+}
+
+void PlayerEntity::castTimeStop()
+{
+  specialState[SpecialStateTime].active = true;
+  specialState[SpecialStateTime].timer = equip[EQUIP_BOOK_MAGIC_II] ? 7 : 5;
+  game().pauseMusic();
 }

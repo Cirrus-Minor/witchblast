@@ -300,6 +300,7 @@ enum sound_resources {
   SOUND_BARREL_SMASH,
   SOUND_SECRET,
   SOUND_SCROLL,
+  SOUND_CLOCK,
 };
 
 enum corpses_ressources{

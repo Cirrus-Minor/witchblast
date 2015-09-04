@@ -472,6 +472,9 @@ public:
    */
   bool isAdvancedLevel();
 
+  void pauseMusic();
+  void resumeMusic();
+
 protected:
   /*!
    *  \brief Rendering method
@@ -525,6 +528,7 @@ private:
   bool isPlayerAlive;         /*!< Dying sets this bool to false (trigger the ending music) */
   bool monsterArray[MAP_WIDTH][MAP_HEIGHT]; /*!<  use to remember if a case has a monster in monster spawn */
   int killedEnemies[NB_ENEMY];
+  int loopCounter;
 
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */

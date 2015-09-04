@@ -109,6 +109,8 @@ float BaseCreatureEntity::animateStates(float delay)
       {
         setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
         game().getPlayer()->computePlayer();
+
+        if (i == SpecialStateTime) game().resumeMusic();
       }
     }
     else if (specialState[i].waitUnclear && !game().getCurrentMap()->isCleared())
