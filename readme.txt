@@ -3,7 +3,7 @@
 Author / code - art - music: Seby
 Email: sebygames@gmail.com
 
-2014
+2014 - 2015
 ============================
 
 Introduction
@@ -93,6 +93,7 @@ Next release
 - ADD Secret rooms
 - ADD New items
 - ADD New familiar
+- ADD New magic spell
 - ADD New music
 - ADD Player effects display
 - ADD Blinking effect when player is invincible
