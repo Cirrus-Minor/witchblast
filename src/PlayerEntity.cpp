@@ -2027,6 +2027,7 @@ void PlayerEntity::consume(enumItemType item)
   {
   case ItemScrollRevelation:
     reveal();
+    spellAnimationDelay = spellAnimationDelayMax;
     SoundManager::getInstance().playSound(SOUND_SCROLL);
     break;
 
@@ -3268,6 +3269,7 @@ void PlayerEntity::castSpell()
       castTransmuteFairy();
       break;
     case SpellTime:
+      spellAnimationDelay = spellAnimationDelayMax;
       castTimeStop();
       break;
 
