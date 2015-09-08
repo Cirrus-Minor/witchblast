@@ -1771,6 +1771,28 @@ void PlayerEntity::fire(int direction)
       bolt->setVelocity(Vector2D(velx, vely));
     }
 
+    if (equip[EQUIP_SIDE_SHOTS])
+    {
+      BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt1->setDamages(fireDamages / 2);
+      bolt1->setFlying(isFairyTransmuted);
+
+      BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt2->setDamages(fireDamages / 2);
+      bolt2->setFlying(isFairyTransmuted);
+
+      if (direction == 4 || direction == 6)
+      {
+        bolt1->setVelocity(Vector2D(0.0f, fireVelocity * 0.75f));
+        bolt2->setVelocity(Vector2D(0.0f, -fireVelocity * 0.75f));
+      }
+      else
+      {
+        bolt1->setVelocity(Vector2D(fireVelocity * 0.75f, 0.0f));
+        bolt2->setVelocity(Vector2D(-fireVelocity * 0.75f, 0.0f));
+      }
+    }
+
     if (equip[EQUIP_BOOK_RANDOM] && randomFireDelay <= 0.0f)
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
