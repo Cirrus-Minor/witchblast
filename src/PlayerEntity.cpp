@@ -74,6 +74,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   hpDisplay = hp;
   hpMax = hp;
   gold = 0;
+  donation = 0;
   deathAge = -1.0f;
   hiccupDelay = HICCUP_DELAY;
   idleAge = 0.0f;
@@ -2639,6 +2640,8 @@ void PlayerEntity::donate(int n)
   if (gold >= n)
   {
     gold -= n;
+    donation += n;
+    if (donation >= 100) game().registerAchievement(AchievementFanatic);
     displayAcquiredGold(-n);
     SoundManager::getInstance().playSound(SOUND_PAY);
 
@@ -3102,6 +3105,7 @@ void PlayerEntity::incrementDivInterventions()
 void PlayerEntity::worship(enumDivinityType id)
 {
   int oldPiety = divinity.piety;
+  int oldLevel = divinity.level;
   bool isReconversion = divinity.divinity > -1;
 
   playerStatus = playerStatusPraying;
@@ -3129,7 +3133,7 @@ void PlayerEntity::worship(enumDivinityType id)
   // reconversion
   if (isReconversion)
   {
-    if (divinity.level >= 4)
+    if (oldLevel >= 4)
       game().registerAchievement(AchievementApostate);
     addPiety((equip[EQUIP_BOOK_PRAYER_I]) ? 0.66 * oldPiety : 0.5 * oldPiety);
     if (divinity.interventions > divinity.level - 1)

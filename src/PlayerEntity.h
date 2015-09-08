@@ -302,6 +302,24 @@ class PlayerEntity : public BaseCreatureEntity
     void setGold(int gold) { this->gold = gold; }
 
     /*!
+     *  \brief accessor on the donation
+     *
+     *  Accessor on the donation.
+     *
+     *  \return : the donation
+     */
+    int getDonation() {return donation; }
+
+     /*!
+     *  \brief mutator on the donation
+     *
+     *  Mutator on the donation.
+     *
+     *  \param gold : the new donation value
+     */
+    void setDonation(int gold) { this->donation = gold; }
+
+    /*!
      *  \brief pay some gold
      *
      *  Pay some gold. Usually in shops.
@@ -538,6 +556,7 @@ class PlayerEntity : public BaseCreatureEntity
     float hiccupDelay;
     float boltLifeTime;
     int gold;
+    int donation;
     int criticalChance;
     float invincibleDelay;
     float divineInterventionDelay;

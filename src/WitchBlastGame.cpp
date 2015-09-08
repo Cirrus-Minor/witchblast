@@ -5379,7 +5379,7 @@ void WitchBlastGame::saveGame()
     }
 
     // player
-    file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << std::endl;
+    file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << " " << player->getDonation() << std::endl;
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) file << player->isEquiped(i) << " ";
     file << std::endl;
     file << player->getX() << " " << player->getY() << std::endl;
@@ -5586,13 +5586,14 @@ bool WitchBlastGame::loadGame()
     }
 
     // player
-    int hp, hpMax, gold;
-    file >> hp >> hpMax >> gold;
+    int hp, hpMax, gold, donation;
+    file >> hp >> hpMax >> gold >> donation;
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     player->setHp(hp);
     player->setHpMax(hpMax);
     player->setGold(gold);
+    player->setDonation(donation);
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
     {
       bool eq;
