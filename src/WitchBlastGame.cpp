@@ -1283,7 +1283,7 @@ void WitchBlastGame::updateRunningGame()
             new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
         else
           for (int i = NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i < NUMBER_ITEMS; i++)
-            new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
+            new ItemEntity((enumItemType)i, 100 + ( (i - NUMBER_ITEMS + NUMBER_EQUIP_ITEMS) % 14) * 58, 100 + ((i - NUMBER_ITEMS + NUMBER_EQUIP_ITEMS) / 14) * 60);
       }
 #endif // TEST_MODE
     }
