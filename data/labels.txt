@@ -528,6 +528,8 @@ item_spell_time#Spell: Time stop
 item_spell_time_desc#Cast to slow down the time
 item_side_shots#Spellbook of side Shots
 item_side_shots_desc#Shots side bolts
+item_spell_lightning#Spell: Lightning
+item_spell_lightning_desc#Cast to invoke a lightning
 
 achiev_fairies#Charlie's Angels
 achiev_fairies_desc#Get 3 fairies

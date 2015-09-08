@@ -105,9 +105,9 @@ const achievementStuct achievements[NB_ACHIEVEMENTS] =
   { AchievementGhostbuster, "achiev_ghost",         UnlockFunctionality,  FunctionalityNothing },
   { AchievementNoob,        "achiev_noob",          UnlockFunctionality,  FunctionalityNothing },
   { AchievementNoDamage,    "achiev_no_damage",     UnlockItem,           ItemSideShots },
-  { AchievementNoDamage2,   "achiev_no_damage2",    UnlockFunctionality,  FunctionalityNothing },
+  { AchievementNoDamage2,   "achiev_no_damage2",    UnlockItem,           ItemBag },
   { AchievementNoDamage3,   "achiev_no_damage3",    UnlockFunctionality,  FunctionalityNothing },
-  { AchievementApostate,    "achiev_apostate",      UnlockFunctionality,  FunctionalityNothing },
+  { AchievementApostate,    "achiev_apostate",      UnlockItem,           ItemSpellLightning },
   { AchievementFanatic,     "achiev_fanatic",       UnlockFunctionality,  FunctionalityNothing },
 };
 

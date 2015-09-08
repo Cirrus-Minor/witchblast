@@ -4951,6 +4951,9 @@ enumItemType WitchBlastGame::getItemSpell()
       case SpellTime:
         item = ItemSpellTime;
         break;
+      case SpellLightning:
+        item = ItemSpellLightning;
+        break;
       }
       ok = !isItemLocked(item);
     }

@@ -633,6 +633,7 @@ class PlayerEntity : public BaseCreatureEntity
     void castSummonsFlower();
     void castTransmuteFairy();
     void castTimeStop();
+    void castLightning();
 
     ItemEntity* itemToBuy;
 

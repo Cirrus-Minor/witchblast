@@ -2860,7 +2860,7 @@ void PlayerEntity::divineFury()
     if (divinity.divinity == DivinityAir)
     {
       bolt->setFlying(true);
-      bolt->setLifetime(-1.0f);
+      bolt->setLifetime(10.0f);
     }
     else
     {
@@ -3283,6 +3283,11 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell, bool fromSaveInFight)
     activeSpell.frame = ItemSpellTime - FirstEquipItem;
     break;
 
+  case SpellLightning:
+    activeSpell.delayMax = 70.0f;
+    activeSpell.frame = ItemSpellLightning - FirstEquipItem;
+    break;
+
   case SpellNone:
     break;
   }
@@ -3334,6 +3339,10 @@ void PlayerEntity::castSpell()
     case SpellTime:
       spellAnimationDelay = spellAnimationDelayMax;
       castTimeStop();
+      break;
+    case SpellLightning:
+      spellAnimationDelay = spellAnimationDelayMax;
+      castLightning();
       break;
 
     case SpellNone:
@@ -3564,4 +3573,20 @@ void PlayerEntity::castTimeStop()
   specialState[SpecialStateTime].active = true;
   specialState[SpecialStateTime].timer = equip[EQUIP_BOOK_MAGIC_II] ? 7 : 5;
   game().pauseMusic();
+}
+
+void PlayerEntity::castLightning()
+{
+  game().makeColorEffect(X_GAME_COLOR_WHITE, 0.4f);
+
+  int nbBolts = equip[EQUIP_BOOK_MAGIC_II] ? 9 : 7;
+  for (int i = 0; i < nbBolts ; i++)
+  {
+    BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeLightning, 0);
+    bolt->setDamages(10);
+    float shotAngle = rand() % 360;
+    bolt->setVelocity(Vector2D(400 * cos(shotAngle), 400 * sin(shotAngle)));
+    bolt->setViscosity(1.0f);
+    bolt->setLifetime(5 + 0.1f * (float)(rand() % 50));
+  }
 }
