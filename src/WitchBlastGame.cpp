@@ -1478,7 +1478,6 @@ void WitchBlastGame::updateRunningGame()
       if (achievementsQueue.front().timer < 0.0f)
       {
         achievementsQueue.pop();
-        if (achievementsQueue.empty()) music.play();
       }
     }
   }
@@ -1740,133 +1739,6 @@ void WitchBlastGame::renderHud()
   if (lifeBar.toDisplay && gameState != gameStatePlayingDisplayBoss) renderLifeBar();
 
   renderBossPortrait();
-
-  // achievements ?
-  if (!achievementsQueue.empty() && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
-  {
-    if (!achievementsQueue.front().hasStarted)
-    {
-      music.pause();
-      SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
-      achievementsQueue.front().hasStarted = true;
-      achievementState[achievementsQueue.front().type] = AchievementDone;
-      saveGameData();
-      proceedEvent(EventAchievement);
-
-      // text
-      float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
-      float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
-      TextEntity* text = new TextEntity(tools::getLabel("achievement_complete"), 30, x0, y0);
-      text->setAlignment(ALIGN_CENTER);
-      text->setLifetime(2.5f);
-      text->setWeight(-36.0f);
-      text->setZ(1200);
-      text->setColor(TextEntity::COLOR_FADING_WHITE);
-    }
-
-    int xPos = 560;
-    int yPos = 4;
-    int opening = 384;
-    float achievAge = ACHIEVEMENT_DELAY_MAX - achievementsQueue.front().timer;
-    sf::Sprite spriteScroll;
-    if (achievAge < 1.0f)
-      opening = 32;
-    else if (achievAge < 2.0f)
-      opening = 32 + (achievAge - 1.0f) * (384 - 32);
-    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
-      opening = 32 + (ACHIEVEMENT_DELAY_MAX - achievAge) * (384 - 32);
-    if (achievAge < 0.5f)
-      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * achievAge));
-    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 0.5f)
-      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * (ACHIEVEMENT_DELAY_MAX - achievAge)));
-
-    spriteScroll.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_ACHIEV));
-    spriteScroll.setTextureRect(sf::IntRect(128 + 384 - opening, 0, opening, 64));
-    spriteScroll.setPosition(xPos + 384 - opening, yPos);
-    app->draw(spriteScroll);
-
-    if ((achievAge > 1.0f && achievAge < 2.0f) || achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
-      spriteScroll.setTextureRect(sf::IntRect(32 * ((int)(achievAge * 8) % 4), 0, 32, 64));
-    else
-      spriteScroll.setTextureRect(sf::IntRect(0, 0, 32, 64));
-    spriteScroll.setPosition(xPos + 394 - opening - 16, yPos);
-    app->draw(spriteScroll);
-
-    if (achievAge > 2.0f && achievAge < ACHIEVEMENT_DELAY_MAX - 1.0f)
-    {
-      sf::Sprite icon;
-      icon.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
-      icon.setTextureRect(sf::IntRect( ((achievementsQueue.front().type + 1) % 10) * 64,
-                                       ((achievementsQueue.front().type + 1) / 10) * 64, 64, 64));
-
-      icon.setPosition(xPos + 308, yPos + 9);
-      icon.setScale(0.7f, 0.7f);
-      app->draw(icon);
-      icon.setColor(sf::Color(255, 255, 255, 50 + 50 * cosf(getAbsolutTime() * 4)));
-      app->draw(icon, sf::BlendAdd);
-
-      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-
-      if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
-      {
-        game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
-                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-      }
-      else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
-      {
-        game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
-                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-      }
-    }
-
-    //if (achievAge < 1.0f)
-    {
-      int i = achievementsQueue.front().counter;
-
-      if (i < 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 1);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 2);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 3);
-        }
-      }
-      else if (i < 40 + 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 64, yPos);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 63, yPos);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 62, yPos);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 61, yPos);
-        }
-      }
-      else if (i < 40 + 64 + 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 1);
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 2);
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 3);
-        }
-      }
-      else if (i < 40 + 64 + 40 + 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144, yPos + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 1, yPos + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 2, yPos + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 3, yPos + 64);
-        }
-      }
-
-      achievementsQueue.front().counter += 4;
-    }
-  }
 
   // interaction text ?
   if (interaction.active)
@@ -2393,7 +2265,7 @@ void WitchBlastGame::renderRunningGame()
       }
 
     }
-    else if (currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
+    else if (currentMap->getRoomType() == roomTypeExit && level >= 7 /*LAST_LEVEL*/)
     {
       float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
 
@@ -2417,6 +2289,132 @@ void WitchBlastGame::renderRunningGame()
     if (secondes < 10) ss << "0";
     ss << secondes;
     write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
+  }
+
+// achievements ?
+  if (!achievementsQueue.empty()) // && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
+  {
+    if (!achievementsQueue.front().hasStarted)
+    {
+      SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
+      achievementsQueue.front().hasStarted = true;
+      achievementState[achievementsQueue.front().type] = AchievementDone;
+      saveGameData();
+      proceedEvent(EventAchievement);
+
+      // text
+      float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
+      float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
+      TextEntity* text = new TextEntity(tools::getLabel("achievement_complete"), 30, x0, y0);
+      text->setAlignment(ALIGN_CENTER);
+      text->setLifetime(2.5f);
+      text->setWeight(-36.0f);
+      text->setZ(1200);
+      text->setColor(TextEntity::COLOR_FADING_WHITE);
+    }
+
+    int xPos = 560;
+    int yPos = 4;
+    int opening = 384;
+    float achievAge = ACHIEVEMENT_DELAY_MAX - achievementsQueue.front().timer;
+    sf::Sprite spriteScroll;
+    if (achievAge < 1.0f)
+      opening = 32;
+    else if (achievAge < 2.0f)
+      opening = 32 + (achievAge - 1.0f) * (384 - 32);
+    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
+      opening = 32 + (ACHIEVEMENT_DELAY_MAX - achievAge) * (384 - 32);
+    if (achievAge < 0.5f)
+      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * achievAge));
+    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 0.5f)
+      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * (ACHIEVEMENT_DELAY_MAX - achievAge)));
+
+    spriteScroll.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_ACHIEV));
+    spriteScroll.setTextureRect(sf::IntRect(128 + 384 - opening, 0, opening, 64));
+    spriteScroll.setPosition(xPos + 384 - opening, yPos);
+    app->draw(spriteScroll);
+
+    if ((achievAge > 1.0f && achievAge < 2.0f) || achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
+      spriteScroll.setTextureRect(sf::IntRect(32 * ((int)(achievAge * 8) % 4), 0, 32, 64));
+    else
+      spriteScroll.setTextureRect(sf::IntRect(0, 0, 32, 64));
+    spriteScroll.setPosition(xPos + 394 - opening - 16, yPos);
+    app->draw(spriteScroll);
+
+    if (achievAge > 2.0f && achievAge < ACHIEVEMENT_DELAY_MAX - 1.0f)
+    {
+      sf::Sprite icon;
+      icon.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
+      icon.setTextureRect(sf::IntRect( ((achievementsQueue.front().type + 1) % 10) * 64,
+                                       ((achievementsQueue.front().type + 1) / 10) * 64, 64, 64));
+
+      icon.setPosition(xPos + 308, yPos + 9);
+      icon.setScale(0.7f, 0.7f);
+      app->draw(icon);
+      icon.setColor(sf::Color(255, 255, 255, 50 + 50 * cosf(getAbsolutTime() * 4)));
+      app->draw(icon, sf::BlendAdd);
+
+      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+
+      if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
+      {
+        game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+      }
+      else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
+      {
+        game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+      }
+    }
+
+    //if (achievAge < 1.0f)
+    {
+      int i = achievementsQueue.front().counter;
+
+      if (i < 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 1);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 2);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 3);
+        }
+      }
+      else if (i < 40 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 64, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 63, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 62, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 61, yPos);
+        }
+      }
+      else if (i < 40 + 64 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 1);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 2);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 3);
+        }
+      }
+      else if (i < 40 + 64 + 40 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 1, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 2, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 3, yPos + 64);
+        }
+      }
+
+      achievementsQueue.front().counter += 4;
+    }
   }
 
   // show player effects
