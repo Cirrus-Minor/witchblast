@@ -99,6 +99,10 @@ PlayerEntity::PlayerEntity(float x, float y)
   for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     consumable[i] = -1;
 
+  // init the lost HP
+  for (int i = 0; i < LAST_LEVEL; i++)
+    lostHp[i] = 0;
+
   specialShotIndex = 0;
   needInitShotType = false;
 
@@ -198,6 +202,20 @@ float PlayerEntity::getPercentSpellDelay()
   }
 }
 
+int PlayerEntity::getLostHp(int level)
+{
+  if (level >= 1 && level <= LAST_LEVEL)
+    return (lostHp[level - 1]);
+  else
+    return 0;
+}
+
+void PlayerEntity::setLostHp(int level, int n)
+{
+  if (level >= 1 && level <= LAST_LEVEL)
+    lostHp[level - 1] = n;
+}
+
 bool PlayerEntity::isPoisoned()
 {
   return (specialState[SpecialStatePoison].active);
@@ -272,6 +290,19 @@ void PlayerEntity::setEntering()
 void PlayerEntity::setLeavingLevel()
 {
   playerStatus = playerStatusGoingNext;
+
+  if (game().getLevel() <= LAST_LEVEL)
+  {
+    if (getLostHp(game().getLevel()) == 0)
+    {
+      game().registerAchievement(AchievementNoDamage);
+
+      int counter = 0;
+      for (int i = 1; i <= game().getLevel(); i++) if (getLostHp(i) == 0) counter++;
+      if (counter >= 2) game().registerAchievement(AchievementNoDamage2);
+      if (counter >= 3) game().registerAchievement(AchievementNoDamage3);
+    }
+  }
 }
 
 void PlayerEntity::pay(int price)
@@ -1852,6 +1883,9 @@ int PlayerEntity::hurt(StructHurt hurtParam)
       hurtingDelay = HURTING_DELAY * 2.0f;
       game().generateBlood(x, y, bloodColor);
       game().proceedEvent(EventBeingHurted);
+
+      if (oldHp > hp && game().getLevel() <= LAST_LEVEL)
+        lostHp[game().getLevel() - 1] += (oldHp - hp);
 
       lastHurtingEnemy = hurtParam.enemyType;
       lastHurtingSource = hurtParam.sourceType;

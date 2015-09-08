@@ -35,6 +35,8 @@ const std::string languageString[NB_LANGUAGES] = { "english", "french", "german"
 
 const unsigned int SCORES_MAX    = 10;
 
+const int LAST_LEVEL = 8;
+
 // Client size
 const int SCREEN_WIDTH = 970;
 const int SCREEN_HEIGHT = 720;

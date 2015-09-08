@@ -5380,6 +5380,10 @@ void WitchBlastGame::saveGame()
 
     // player
     file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << " " << player->getDonation() << std::endl;
+    // lost hp
+    for (i = 1; i <= LAST_LEVEL; i++) file << player->getLostHp(i) << " ";
+    file << std::endl;
+    // equip
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) file << player->isEquiped(i) << " ";
     file << std::endl;
     file << player->getX() << " " << player->getY() << std::endl;
@@ -5594,6 +5598,14 @@ bool WitchBlastGame::loadGame()
     player->setHpMax(hpMax);
     player->setGold(gold);
     player->setDonation(donation);
+    // lost hp
+    for (i = 1; i <= LAST_LEVEL; i++)
+    {
+      file >> n;
+      player->setLostHp(i, n);
+    }
+
+    // equip
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
     {
       bool eq;

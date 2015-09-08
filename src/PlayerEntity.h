@@ -283,6 +283,9 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void useBossKey();
 
+    int getLostHp(int level);
+    void setLostHp(int level, int n);
+
     /*!
      *  \brief accessor on the gold
      *
@@ -562,6 +565,7 @@ class PlayerEntity : public BaseCreatureEntity
     float divineInterventionDelay;
     bool isRegeneration;
     bool isFairyTransmuted;
+    int lostHp[LAST_LEVEL];
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
