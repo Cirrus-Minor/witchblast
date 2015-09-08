@@ -1535,7 +1535,7 @@ void PlayerEntity::setEquiped(int item, bool toggleEquipped)
                                          y - 50.0f + rand() % 100,
                                          items[FirstEquipItem + item].familiar);
     fairies.push_back(fairy);
-    //if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
+    if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
   }
   computePlayer();
 }
@@ -1899,6 +1899,7 @@ void PlayerEntity::dying()
   }
   remove(SAVE_FILE.c_str());
 
+  if (game().getLevel() == 1) game().registerAchievement(AchievementNoob);
   game().calculateScore();
 }
 
@@ -3128,6 +3129,8 @@ void PlayerEntity::worship(enumDivinityType id)
   // reconversion
   if (isReconversion)
   {
+    if (divinity.level >= 4)
+      game().registerAchievement(AchievementApostate);
     addPiety((equip[EQUIP_BOOK_PRAYER_I]) ? 0.66 * oldPiety : 0.5 * oldPiety);
     if (divinity.interventions > divinity.level - 1)
       divinity.interventions = divinity.level - 1;

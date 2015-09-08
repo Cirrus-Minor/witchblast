@@ -527,6 +527,24 @@ item_merchant_desc#Better prices in shop
 item_spell_time#Spell: Time stop
 item_spell_time_desc#Cast to slow down the time
 
+achiev_fairies#Charlie's Angels
+achiev_fairies_desc#Get 3 fairies
+achiev_ghost#Ghostbuster
+achiev_ghost_desc#Kill 75 ghosts
+achiev_noob#True noob
+achiev_noob_desc#Die in level 1
+achiev_no_damage#Tough guy
+achiev_no_damage_desc#Complete 1 level without losing life
+achiev_no_damage2#Very tough Guy
+achiev_no_damage2_desc#Complete 2 levels without losing life
+achiev_no_damage3#Very very tough Guy
+achiev_no_damage3_desc#Complete 3 levels without losing life
+achiev_apostate#Apostate
+achiev_apostate_desc#Reject a level 4 divinity
+achiev_fanatic#Fanatic
+achiev_fanatic_desc#Give 100 gold to temple
+func_nothing#Nothing!
+
 state_frozen#Frozen
 state_slow#Slow
 state_speed#Hasted

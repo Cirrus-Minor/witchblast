@@ -17,6 +17,7 @@ enum enumAchievementType
   AchievementGiantSlime,
   AchievementCyclops,
   AchievementRatKing,
+
   AchievementGiantSpider,
   AchievementFrancky,
   AchievementButcher,
@@ -25,6 +26,15 @@ enum enumAchievementType
   AchievementVampire,
   AchievementChallenges,
   AchievementWin,
+
+  AchievementFairies,
+  AchievementGhostbuster,
+  AchievementNoob,
+  AchievementNoDamage,
+  AchievementNoDamage2,
+  AchievementNoDamage3,
+  AchievementApostate,
+  AchievementFanatic,
 
   NB_ACHIEVEMENTS
 };
@@ -42,6 +52,7 @@ enum enumFunctionalityType
   FunctionalityAchievementsScreen,
   FunctionalityAllAchievements,
   FunctionalityDoubleSpellDrop,
+  FunctionalityNothing,
 
   NB_FUNCTIONALITIES
 };
@@ -51,6 +62,7 @@ const std::string functionalityLabel[NB_FUNCTIONALITIES] =
   "func_achiev_screen",
   "func_achiev_all",
   "func_double_spell",
+  "func_nothing",
 };
 
 /*!
@@ -84,23 +96,40 @@ const achievementStuct achievements[NB_ACHIEVEMENTS] =
   { AchievementButcher,     "achiev_butcher",       UnlockFunctionality,  FunctionalityAchievementsScreen },
   { AchievementWitches,     "achiev_witches",       UnlockItem,           ItemBookMagicII },
   { AchievementEggs,        "achiev_eggs",          UnlockItem,           ItemBootsAdvanced },
-  //{ AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemGlovesAdvanced },
-  { AchievementVampire,     "achiev_vampire",       UnlockItem,           ItemGlovesAdvanced },
+
+  { AchievementVampire,     "achiev_vampire",       UnlockItem,           ItemSpellTime },
   { AchievementChallenges,  "achiev_challenges",    UnlockFunctionality,  FunctionalityDoubleSpellDrop },
   { AchievementWin,         "achiev_win",           UnlockFunctionality,  FunctionalityAllAchievements },
+
+  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemGlovesAdvanced },
+  { AchievementGhostbuster, "achiev_ghost",         UnlockFunctionality,  FunctionalityNothing },
+  { AchievementNoob,        "achiev_noob",          UnlockFunctionality,  FunctionalityNothing },
+  { AchievementNoDamage,    "achiev_no_damage",     UnlockFunctionality,  FunctionalityNothing },
+  { AchievementNoDamage2,   "achiev_no_damage2",    UnlockFunctionality,  FunctionalityNothing },
+  { AchievementNoDamage3,   "achiev_no_damage3",    UnlockFunctionality,  FunctionalityNothing },
+  { AchievementApostate,    "achiev_apostate",      UnlockFunctionality,  FunctionalityNothing },
+  { AchievementFanatic,     "achiev_fanatic",       UnlockFunctionality,  FunctionalityNothing },
 };
 
 const std::vector<enumAchievementType> sortedAchievements =
 {
+  AchievementNoob,
+  AchievementNoDamage,
+  AchievementNoDamage2,
+  AchievementNoDamage3,
   AchievementRats,
   AchievementWitches,
   AchievementEggs,
+  AchievementGhostbuster,
+
   Achievement100,
   AchievementPietyMax,
+  AchievementApostate,
+  AchievementFanatic,
   Achievement4Hits,
   AchievementCompleteSet,
   AchievementChallenges,
-  //AchievementFairies,
+  AchievementFairies,
 
   // bosses
   AchievementButcher,

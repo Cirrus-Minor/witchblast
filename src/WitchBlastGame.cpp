@@ -75,7 +75,7 @@
 #endif // ONLINE_MODE
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
-const unsigned int ACHIEV_LINES = 2;
+const unsigned int ACHIEV_LINES = 3;
 
 const int VolumeModifier = 55;
 
@@ -3265,11 +3265,11 @@ void WitchBlastGame::renderAchievements()
 
   if (menuAchIndex / 8 >= ACHIEV_LINES)
   {
-    write(tools::getLabel("config_back"), 17, 485, 550, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
   }
   else
   {
-    write(tools::getLabel("config_back"), 17, 485, 550, ALIGN_CENTER, sf::Color(180, 180, 180, 255), app, 1, 1);
+    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(180, 180, 180, 255), app, 1, 1);
 
     sf::Color fontColor = sf::Color::White;
     std::stringstream oss;
@@ -6177,6 +6177,11 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       {
         if (globalData.killedMonster[EnemyTypeWitch] + globalData.killedMonster[EnemyTypeWitchRed] >= 50)
           registerAchievement(AchievementWitches);
+      }
+      else if (enemyType == EnemyTypeGhost)
+      {
+        if (globalData.killedMonster[EnemyTypeGhost] >= 75)
+          registerAchievement(AchievementGhostbuster);
       }
       else if (enemyType == EnemyTypeSpiderEgg || enemyType == EnemyTypeSpiderEgg_invocated)
       {
