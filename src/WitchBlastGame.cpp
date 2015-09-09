@@ -571,6 +571,8 @@ void WitchBlastGame::onUpdate()
   if (gameState == gameStatePlaying)
   {
     if (isPlayerAlive) player->setItemToBuy(NULL);
+    loopCounter++;
+    if (loopCounter > 3) loopCounter = 0;
 
     // time stop
     if (player->isSpecialStateActive(SpecialStateTime))
@@ -580,8 +582,6 @@ void WitchBlastGame::onUpdate()
       else
         player->animate(deltaTime);
 
-      loopCounter++;
-      if (loopCounter > 3) loopCounter = 0;
       SoundManager::getInstance().playSound(SOUND_CLOCK, false);
     }
     else
@@ -1814,6 +1814,7 @@ void WitchBlastGame::renderLifeBar()
 void WitchBlastGame::renderRunningGame()
 {
   EntityManager::getInstance().sortByZ();
+  getCurrentMapEntity()->computeBoltParticulesVertices();
 
   if (!isPlayerAlive)
   {

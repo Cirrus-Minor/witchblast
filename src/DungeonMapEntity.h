@@ -13,6 +13,10 @@ struct displayEntityStruct
   float y;
   Vector2D velocity;
   float scale;
+  float initialScale;
+  float age;
+  float lifetime;
+  sf::Color color;
 };
 
 class DungeonMapEntity : public GameEntity
@@ -40,12 +44,13 @@ public:
   void addBlood(float x, float y, int frame, float scale);
   void addCorpse(float x, float y, int frame);
 
+  displayEntityStruct& generateBoltParticle(float x, float y, Vector2D velocity, bool back, int frame, float scale, float lifetime);
+
   std::vector <displayEntityStruct> getBlood();
   std::vector <displayEntityStruct> getCorpses();
+  void computeBoltParticulesVertices();
 
   void activateKeyRoomEffect();
-
-protected:
 
 private:
   sf::VertexArray vertices;
@@ -58,6 +63,8 @@ private:
   sf::VertexArray bloodVertices;
   sf::VertexArray corpsesVertices;
   sf::VertexArray corpsesLargeVertices;
+  sf::VertexArray boltParticlesVertices;
+  sf::VertexArray backBoltParticlesVertices;
 
   bool getChanged();
   void computeVertices();
@@ -77,8 +84,11 @@ private:
 
   void displayBlood(sf::RenderTarget* app);
   void displayCorpses(sf::RenderTarget* app);
+  void displayBoltParticles(sf::RenderTarget* app);
 
   std::vector<displayEntityStruct> blood;
+  std::vector<displayEntityStruct> boltParticles;
+  std::vector<displayEntityStruct> backBoltParticles;
   std::vector<displayEntityStruct> corpses;
   std::vector<displayEntityStruct> corpsesLarge;
 
