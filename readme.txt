@@ -93,7 +93,8 @@ Next release
 - ADD Secret rooms
 - ADD New items
 - ADD New familiar
-- ADD New magic spell
+- ADD New magic spells
+- ADD New achievements
 - ADD New music
 - ADD Player effects display
 - ADD Blinking effect when player is invincible
@@ -101,9 +102,12 @@ Next release
 - MOD Evil flower damage
 - MOD Butcher can drop sausages now
 - MOD Game becomes harder for good players
+- MOD Air divinity fury has now a lifetime (was infinite)
 - MOD Intro is displayed just once now
 - MOD Display the best player instead of the best scores
+- MOD We don't have to clear the room to get the achievement now
 - MOD In "advanced" mode, the "fairy cursor" changes
+- MOD Bolt particles are now batched
 - FIX Latency when communicating with the score server
 - FIX Interaction key has to be redefined each game
 
