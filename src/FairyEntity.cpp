@@ -7,6 +7,8 @@
 #include "sfml_game/MyTools.h"
 #include <iostream>
 
+float const fireDelayAdvancedMult = 0.8f;
+
 FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_FAIRY), x, y, 48, 72)
 {
   this->x = x;
@@ -180,7 +182,8 @@ void FairyEntity::fire(int dir)
       SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
       break;
     }
-    fireDelay = fairyFireDelay;
+
+    fireDelay = game().getPlayer()->isEquiped(EQUIP_BELT_ADVANCED) ? fairyFireDelay * fireDelayAdvancedMult : fairyFireDelay;
 
     float velx = 0.0f;
     float vely = 0.0f;
@@ -259,7 +262,7 @@ void FairyEntity::tryToFire()
         bolt->setVelocity(Vector2D(x, y).vectorTo(target, FAIRY_BOLT_VELOCITY));
 
         SoundManager::getInstance().playSound(SOUND_BLAST_STANDARD);
-        fireDelay = fairyFireDelay;
+        fireDelay = game().getPlayer()->isEquiped(EQUIP_BELT_ADVANCED) ? fairyFireDelay * fireDelayAdvancedMult : fairyFireDelay;
 
         if ((target.x - x) * (target.x - x) > (target.y - y) *(target.y - y))
         {

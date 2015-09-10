@@ -85,6 +85,7 @@ const float KeyRoomFXDelay = 2.0f;
 enum enum_images {
   IMAGE_PLAYER_0,
   IMAGE_PLAYER_1,
+  IMAGE_PLAYER_2,
   IMAGE_BOLT,
   IMAGE_TILES,
   IMAGE_RAT,

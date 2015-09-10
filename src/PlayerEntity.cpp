@@ -848,7 +848,17 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_LEATHER_BELT])
+  if (equip[EQUIP_BELT_ADVANCED] && playerStatus != playerStatusDead)
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_LEATHER_BELT])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
@@ -874,7 +884,17 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_REAR_SHOT])
+  if (equip[EQUIP_REAR_SHOT_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_2));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_REAR_SHOT])
   {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
@@ -1777,7 +1797,39 @@ void PlayerEntity::fire(int direction)
       }
     }
 
-    if (equip[EQUIP_REAR_SHOT])
+    if (equip[EQUIP_REAR_SHOT_ADVANCED])
+    {
+      float shootAngle = 0.165f;
+      float boltVelocity = fireVelocity * 0.75f;
+
+      BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt1->setDamages(fireDamages / 2);
+      bolt1->setFlying(isFairyTransmuted);
+      BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt2->setDamages(fireDamages / 2);
+      bolt2->setFlying(isFairyTransmuted);
+
+      switch (direction)
+      {
+      case 4:
+        bolt1->setVelocity(Vector2D(boltVelocity * cos(shootAngle), boltVelocity * sin(shootAngle)));
+        bolt2->setVelocity(Vector2D(boltVelocity * cos(shootAngle), -boltVelocity * sin(shootAngle)));
+        break;
+      case 6:
+        bolt1->setVelocity(Vector2D(-boltVelocity * cos(shootAngle), boltVelocity * sin(shootAngle)));
+        bolt2->setVelocity(Vector2D(-boltVelocity * cos(shootAngle), -boltVelocity * sin(shootAngle)));
+        break;
+      case 2:
+        bolt1->setVelocity(Vector2D(boltVelocity * sin(shootAngle), -boltVelocity * cos(shootAngle)));
+        bolt2->setVelocity(Vector2D(-boltVelocity * sin(shootAngle), -boltVelocity * cos(shootAngle)));
+        break;
+      case 8:
+        bolt1->setVelocity(Vector2D(boltVelocity * sin(shootAngle), boltVelocity * cos(shootAngle)));
+        bolt2->setVelocity(Vector2D(-boltVelocity * sin(shootAngle), boltVelocity * cos(shootAngle)));
+        break;
+      }
+    }
+    else if (equip[EQUIP_REAR_SHOT])
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
       bolt->setDamages(fireDamages / 2);
@@ -2283,8 +2335,11 @@ void PlayerEntity::computePlayer()
 
   for (int i = 0; i < NB_RESISTANCES; i++) resistance[i] = ResistanceStandard;
 
+  // gloves
   if (equip[EQUIP_GLOVES_ADVANCED]) fireDelayBonus -= 0.15f;
   else if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
+
+  // hat
   if (equip[EQUIP_HAT_ADVANCED])
   {
     fireDelayBonus -= 0.3f;
@@ -2293,11 +2348,16 @@ void PlayerEntity::computePlayer()
     resistance[ResistanceLightning] = (enumStateResistance)(resistance[ResistanceLightning] - 1);
     resistance[ResistanceFire] = (enumStateResistance)(resistance[ResistanceFire] - 1);
   }
-
   else if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
+
+  // belt
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
+
+  // boots
   if (equip[EQUIP_BOOTS_ADVANCED]) creatureSpeedBonus += 0.25f;
   else if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
+
+  // multi-fire
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
 

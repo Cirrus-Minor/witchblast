@@ -294,6 +294,7 @@ WitchBlastGame::WitchBlastGame()
   const char *const images[] =
   {
     "media/player_0.png",      "media/player_1.png",
+    "media/player_2.png",
     "media/bolt.png",          "media/tiles.png",
     "media/rat.png",           "media/minimap.png",
     "media/map_background.png",
@@ -6485,7 +6486,17 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_LEATHER_BELT])
+  if (equip[EQUIP_BELT_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_LEATHER_BELT])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
@@ -6533,7 +6544,17 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_REAR_SHOT])
+  if (equip[EQUIP_REAR_SHOT_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_2));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_REAR_SHOT])
   {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)

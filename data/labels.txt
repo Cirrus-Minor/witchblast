@@ -530,6 +530,10 @@ item_side_shots#Spellbook of side Shots
 item_side_shots_desc#Shots side bolts
 item_spell_lightning#Spell: Lightning
 item_spell_lightning_desc#Cast to invoke a lightning
+item_belt_advanced#Black belt
+item_belt_advanced_desc#Increases fairies fire rate
+item_rear_shot_advanced#Silver staff cap
+item_rear_shot_advanced_desc#Shots two rear bolts
 
 achiev_fairies#Charlie's Angels
 achiev_fairies_desc#Get 3 fairies
