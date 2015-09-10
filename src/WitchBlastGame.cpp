@@ -552,6 +552,11 @@ int WitchBlastGame::getChallengeLevel()
   return challengeLevel;
 }
 
+int WitchBlastGame::getSecretsFound()
+{
+  return secretsFound;
+}
+
 bool WitchBlastGame::getShowLogical()
 {
   return showLogical;
@@ -640,6 +645,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   gameState = gameStateInit;
   level = 1;
   challengeLevel = 1;
+  secretsFound = 0;
   gameTime = 0.0f;
   initEvents();
   scoreSaveFile = "";
@@ -2603,7 +2609,11 @@ void WitchBlastGame::calculateScore()
   }
 
   score += getChallengeScore(challengeLevel);
+  score += getSecretScore(secretsFound);
   score += getGoldScore(player->getGold());
+
+  std::cout << getChallengeScore(challengeLevel) << " (challenge)\n" << getSecretScore(secretsFound)
+    << " (secrets)\n" << getGoldScore(player->getGold()) << " (gold)\n\n";
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
@@ -4535,6 +4545,7 @@ void WitchBlastGame::generateMap()
     text->setColor(TextEntity::COLOR_FADING_WHITE);
 
     SoundManager::getInstance().playSound(SOUND_SECRET);
+    secretsFound++;
   }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
@@ -5242,7 +5253,7 @@ void WitchBlastGame::saveGame()
     file << (now->tm_min) << std::endl;
 
     // floor
-    file << level << " " << challengeLevel << std::endl;
+    file << level << " " << challengeLevel << " " << secretsFound << std::endl;
 
     // game age
     file << (int)gameTime << std::endl;
@@ -5441,6 +5452,7 @@ bool WitchBlastGame::loadGame()
     // floor
     file >> level;
     file >> challengeLevel;
+    file >> secretsFound;
     file >> gameTime;
 
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)

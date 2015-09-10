@@ -189,10 +189,16 @@ public:
   int getLevel();
 
   /*!
-   *  \brief accessor on the level
+   *  \brief accessor on the challenge level
    *  \return : the challenge level
    */
   int getChallengeLevel();
+
+  /*!
+   *  \brief accessor on the number of found secrets
+   *  \return : the number of found secrets
+   */
+  int getSecretsFound();
 
   /*!
    *  \brief accessor on showLogical flag
@@ -519,6 +525,7 @@ private:
   int score;                  /*!< score (calculated at the end of the game) */
   int bodyCount;              /*!< killed monsters (calculated at the end of the game) */
   int challengeLevel;         /*!< Level (challenge) */
+  int secretsFound;
   float gameTime;             /*!< "age" of the current game */
   int floorX;                 /*!< X position of the room in the level */
   int floorY;                 /*!< Y position of the room in the level */

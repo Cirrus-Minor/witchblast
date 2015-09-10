@@ -74,11 +74,11 @@ int getMonsterScore(enemyTypeEnum monster)
 
     case EnemyTypeButcher:        score = 30; break;
     case EnemyTypeSlimeBoss:      score = 60; break;
-    case EnemyTypeCyclops:        score = 120; break;
-    case EnemyTypeRatKing:        score = 180; break;
-    case EnemyTypeSpiderGiant:    score = 240; break;
-    case EnemyTypeFranckyHead:    score = 300; break;
-    case EnemyTypeVampire:        score = 350; break;
+    case EnemyTypeCyclops:        score = 100; break;
+    case EnemyTypeRatKing:        score = 120; break;
+    case EnemyTypeSpiderGiant:    score = 140; break;
+    case EnemyTypeFranckyHead:    score = 160; break;
+    case EnemyTypeVampire:        score = 180; break;
 
     case EnemyTypeBat_invocated:
     case EnemyTypeBatSkeleton_invocated:
@@ -114,10 +114,16 @@ int getMonsterScore(enemyTypeEnum monster)
   return score;
 }
 
-// 100 points / completed challenge
+// 50 points / completed challenge
 int getChallengeScore(int challengeLevel)
 {
-  return 100 * (challengeLevel - 1);
+  return 50 * (challengeLevel - 1);
+}
+
+// 50 points / secret
+int getSecretScore(int nbSecrets)
+{
+  return 50 * (nbSecrets);
 }
 
 // 1 point = 1 gold
