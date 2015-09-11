@@ -17,3 +17,12 @@ DeathCertificate.png
 src/MD5.cpp
 src/OnlineScoring.h
 src/MD5.h
+
+# CMake / OS X
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+Debug/
+*.build/
+*.xcodeproj/
