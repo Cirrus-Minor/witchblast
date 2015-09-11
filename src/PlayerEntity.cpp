@@ -2245,7 +2245,10 @@ void PlayerEntity::consume(enumItemType item)
 
   SpriteEntity* usedItem = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_ITEMS), x, y, 32, 32);
   usedItem->setImagesProLine(10);
-  usedItem->setFrame((int)item);
+  if (item == ItemScrollRevelation)
+    usedItem->setFrame((int)item);
+  else
+    usedItem->setFrame(38);
   usedItem->setFading(true);
   usedItem->setZ(y - 100);
   usedItem->setLifetime(0.7f);
