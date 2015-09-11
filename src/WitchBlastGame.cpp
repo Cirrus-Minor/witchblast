@@ -1411,7 +1411,7 @@ void WitchBlastGame::updateRunningGame()
       if (gameState == gameStatePlaying) player->castSpell();
     }
 
-    player->resestFireDirection();
+    player->resetFireDirection();
 
     if (isPressing(KeyFireLeft, false))
       player->fire(4);

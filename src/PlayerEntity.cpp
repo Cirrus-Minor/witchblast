@@ -1677,7 +1677,7 @@ void PlayerEntity::rageFire(float damage, bool full, float velMult)
   SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
 }
 
-void PlayerEntity::resestFireDirection()
+void PlayerEntity::resetFireDirection()
 {
   firingDirection = 5;
 }
@@ -1889,6 +1889,10 @@ void PlayerEntity::fire(int direction)
     canFirePlayer = false;
     currentFireDelay = fireDelay;
     if (needInitShotType) initShotType();
+  }
+  else
+  {
+    resetFireDirection();
   }
 }
 
