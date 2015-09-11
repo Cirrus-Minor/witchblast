@@ -118,7 +118,7 @@ class PlayerEntity : public BaseCreatureEntity
     /*!
      *  \brief reset the fire direction of the player
      */
-    void resestFireDirection();
+    void resetFireDirection();
 
     /*!
      *  \brief accessor on the fire direction of the player
