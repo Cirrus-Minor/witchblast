@@ -552,6 +552,7 @@ class PlayerEntity : public BaseCreatureEntity
     float fireAnimationDelay;
     float fireAnimationDelayMax;
     int fireAnimationDirection;
+    bool canAnimateFire;
     float spellAnimationDelay;
     float spellAnimationDelayMax;
     float currentFireDelay;

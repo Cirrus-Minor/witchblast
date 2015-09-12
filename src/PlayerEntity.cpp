@@ -111,6 +111,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   firingDirection = 5;
   facingDirection = 2;
   keyDirection = 5;
+  canAnimateFire = true;
 
   sprite.setOrigin(32, 80);
 
@@ -598,7 +599,7 @@ void PlayerEntity::animate(float delay)
     facingDirection = firingDirection;
 
   // find the frame
-  if  (firingDirection != 5)
+  if  (firingDirection != 5 && canAnimateFire)
   {
     if (fireAnimationDelay < 0.0f)
       fireAnimationDelay = fireAnimationDelayMax;
@@ -1698,6 +1699,7 @@ void PlayerEntity::fire(int direction)
 
   if (canFirePlayer && playerStatus != playerStatusDead && playerStatus != playerStatusAcquire)
   {
+    canAnimateFire = true;
     switch (getShotType())
     {
     case ShotTypeCold:
@@ -1892,7 +1894,7 @@ void PlayerEntity::fire(int direction)
   }
   else
   {
-    resetFireDirection();
+    canAnimateFire = false;
   }
 }
 
