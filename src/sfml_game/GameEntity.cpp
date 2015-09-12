@@ -44,6 +44,8 @@ GameEntity::GameEntity(float m_x, float m_y)
 	weight = 0.0f;
 	velocity.x = 0.0f;
 	velocity.y = 0.0f;
+	acceleration.x = 0.0f;
+	acceleration.y = 0.0f;
 
 	angle = 0.0f;
 	spin = 0.0f;
