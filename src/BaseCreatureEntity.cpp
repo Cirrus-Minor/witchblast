@@ -191,6 +191,12 @@ void BaseCreatureEntity::animateRecoil(float delay)
 
 void BaseCreatureEntity::animatePhysics(float delay)
 {
+	velocity.x += acceleration.x;
+	velocity.y += acceleration.y;
+	velocity.x =
+		std::min(std::max(velocity.x, -creatureSpeed), creatureSpeed);
+	velocity.y =
+		std::min(std::max(velocity.y, -creatureSpeed), creatureSpeed);
 	velocity.x *= viscosity;
 	velocity.y *= viscosity;
 
