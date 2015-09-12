@@ -13,6 +13,7 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
   this->ratType = ratType;
   imagesProLine = 10;
   this->invocated = invocated;
+  doesAccelerate = true;
 
   if (ratType == RatTypeNormal)
   {

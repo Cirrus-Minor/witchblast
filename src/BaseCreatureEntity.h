@@ -285,6 +285,7 @@ protected:
   int hpMax;
   int hpDisplay;
   float creatureSpeed;
+  bool doesAccelerate;
   int shadowFrame;
   int facingDirection;
   float armor;
