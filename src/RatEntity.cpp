@@ -89,29 +89,30 @@ void RatEntity::compute(bool turn)
     }
   }
 
+  velocity = Vector2D{0, 0};
   switch (direction)
   {
   case 0:
-    velocity.x = 0;
-    velocity.y = -creatureSpeed;
+    acceleration.x = 0;
+    acceleration.y = -creatureSpeed / 20;
     facingDirection = 8;
     break;
 
   case 1:
-    velocity.x = creatureSpeed;
-    velocity.y = 0;
+    acceleration.x = creatureSpeed / 20;
+    acceleration.y = 0;
     facingDirection = 6;
     break;
 
   case 2:
-    velocity.x = 0;
-    velocity.y = creatureSpeed;
+    acceleration.x = 0;
+    acceleration.y = creatureSpeed / 20;
     facingDirection = 2;
     break;
 
   case 3:
-    velocity.x = -creatureSpeed;
-    velocity.y = 0;
+    acceleration.x = -creatureSpeed / 20;
+    acceleration.y = 0;
     facingDirection = 4;
     break;
   }
