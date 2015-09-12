@@ -2612,9 +2612,6 @@ void WitchBlastGame::calculateScore()
   score += getSecretScore(secretsFound);
   score += getGoldScore(player->getGold());
 
-  std::cout << getChallengeScore(challengeLevel) << " (challenge)\n" << getSecretScore(secretsFound)
-    << " (secrets)\n" << getGoldScore(player->getGold()) << " (gold)\n\n";
-
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
     if (player->isEquiped(i)) score += getItemScore((item_equip_enum)i);
