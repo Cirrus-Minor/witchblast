@@ -2618,6 +2618,12 @@ void WitchBlastGame::calculateScore()
     lastScore.equip[i] = player->isEquiped(i);
   }
 
+  // perfects
+  for (int i = 1; i < level; i++)
+  {
+    if (player->getLostHp(i) == 0) score += getPerfectScore();
+  }
+
   // to save
   lastScore.name = parameters.playerName;
   lastScore.score = score;

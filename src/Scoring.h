@@ -138,5 +138,10 @@ int getItemScore(item_equip_enum item)
   int points = items[(int) item + FirstEquipItem].price / 2;
   return points;
 }
+// 50 points / perfect
+int getPerfectScore()
+{
+  return 50;
+}
 
 #endif // SCORING_H_INCLUDED
