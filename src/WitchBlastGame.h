@@ -92,7 +92,7 @@ const std::string creditsSound[]  =
 /** Credits: Music */
 const std::string creditsMusic[]  =
 {
-  "Yan Dupuis",
+  "Le Guitariste Du Nord",
   "END"
 };
 /** Credits: Translation */

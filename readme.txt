@@ -65,7 +65,7 @@ Credits
 -------
 Seby: code and music 
 Pierre "dejam0rt" Baron: 2D art
-Jan Dupuis: Music - https://soundcloud.com/leguitaristedunord
+Le Guitariste Du Nord: Music - https://soundcloud.com/leguitaristedunord
 R0d: particles system and multilingual support coding
 
 Licenses
@@ -80,7 +80,8 @@ Thanks to
 Vetea (for the v0.4.0 2D redesign)
 Sideous and Portoss01 (they provide me 2D art in earlier versions)
 Billx (who suggested me the title "Witch Blast" + English corrections)
-Mika Attila (for his "coding" contribution during the development)
+Mika Attila (for his contribution during the development)
+Cong (for his contribution during the development)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
 AFS (for the Spanish translation)
