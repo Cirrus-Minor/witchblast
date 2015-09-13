@@ -4983,6 +4983,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
     spellItem->setVelocity(Vector2D(100.0f + rand()% 250));
     if (spellItem->getVelocity().y < 0.0f) spellItem->setVelocity(Vector2D(spellItem->getVelocity().x, -spellItem->getVelocity().y));
     spellItem->setViscosity(0.96f);
+    spellItem->startsJumping();
 
     if (!isFunctionalityLocked(FunctionalityDoubleSpellDrop))
     {
@@ -4992,15 +4993,18 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
       spellItem2->setVelocity(Vector2D(100.0f + rand()% 250));
       if (spellItem2->getVelocity().y < 0.0f) spellItem2->setVelocity(Vector2D(spellItem2->getVelocity().x, -spellItem2->getVelocity().y));
       spellItem2->setViscosity(0.96f);
+      spellItem2->startsJumping();
     }
 
     ItemEntity* healthItem1 = new ItemEntity(ItemHealthVerySmall, x, y);
     healthItem1->setVelocity(Vector2D(100.0f + rand()% 250));
     healthItem1->setViscosity(0.96f);
+    healthItem1->startsJumping();
 
     ItemEntity* healthItem2 = new ItemEntity(ItemHealthVerySmallPoison, x, y);
     healthItem2->setVelocity(Vector2D(100.0f + rand()% 250));
     healthItem2->setViscosity(0.96f);
+    healthItem2->startsJumping();
   }
   else
   {
@@ -5014,6 +5018,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
     if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
+    newItem->startsJumping();
 
     int gold = 2 + rand() % (player->isEquiped(EQUIP_LUCK) ? 9 : 14);
     for (int i = 0; i < gold; i++)
@@ -5021,6 +5026,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
       ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
       newItem->setViscosity(0.96f);
+      newItem->startsJumping();
     }
   }
 }
