@@ -24,8 +24,15 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
   isBeating = false;
   isFlying = false;
-  jumpTimer = 0;
+  jumpTimer = 1.0f + 0.1f * (rand() % 40);;
+  firstJump = false;
   h = -1.0f;
+}
+
+void ItemEntity::startsJumping()
+{
+  firstJump = true;
+  jumpTimer = 0;
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)
@@ -155,9 +162,10 @@ void ItemEntity::animate(float delay)
     else
     {
       CollidingSpriteEntity::animate(delay);
-      if (canBePickedUp() && !isMerchandise)
+      if (firstJump || (canBePickedUp() && !isMerchandise))
       {
         jumpTimer -= delay;
+        firstJump = false;
         if (jumpTimer <= 0.0f)
         {
           jumpTimer = 2.0f + 0.1f * (rand() % 40);

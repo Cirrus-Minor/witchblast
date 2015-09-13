@@ -4974,6 +4974,7 @@ enumItemType WitchBlastGame::getItemSpell()
 
 void WitchBlastGame::generateChallengeBonus(float x, float y)
 {
+  // TODO (jumping)
   // loot
   if (player->getActiveSpell().spell == SpellNone || rand() % 2 == 0)
   {

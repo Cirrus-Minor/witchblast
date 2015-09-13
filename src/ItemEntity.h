@@ -20,6 +20,8 @@ class ItemEntity : public CollidingSpriteEntity
     virtual void dying();
     enumItemType getItemType() { return itemType; };
 
+    void startsJumping();
+
   protected:
     enumItemType itemType;
 
@@ -39,6 +41,7 @@ class ItemEntity : public CollidingSpriteEntity
     float jumpTimer;
     bool isBeating;
     bool isFlying;
+    bool firstJump;
 
     float h, hVelocity;
 };

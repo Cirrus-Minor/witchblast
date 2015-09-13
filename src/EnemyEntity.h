@@ -3,6 +3,7 @@
 
 #include "BaseCreatureEntity.h"
 #include "BoltEntity.h"
+#include "Items.h"
 
 class EnemyEntity : public BaseCreatureEntity
 {
@@ -29,6 +30,7 @@ protected:
   virtual void readCollidingEntity(CollidingSpriteEntity* entity);
   virtual void dying();
   virtual void drop();
+  void dropItem(enumItemType item);
   virtual void collideWithEnemy(EnemyEntity* entity);
   virtual void collideWithBolt(BoltEntity* boltEntity);
   int getCollisionDirection(BoltEntity* boltEntity);

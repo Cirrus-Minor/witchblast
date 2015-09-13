@@ -135,9 +135,10 @@ void ChestEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 void ChestEntity::dropItem(enumItemType item)
 {
   ItemEntity* newItem = new ItemEntity(item, x, y);
-  newItem->setVelocity(Vector2D(50.0f + rand()% 150));
+  newItem->setVelocity(Vector2D(50.0f + rand()% 140));
   if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
   newItem->setViscosity(0.96f);
+  newItem->startsJumping();
 }
 
 void ChestEntity::open()
@@ -182,10 +183,7 @@ void ChestEntity::open()
       if (game().getPlayer()->isEquiped(EQUIP_LUCK)) r += 1 + rand() % 5;
       for (int i = 0; i < r; i++)
       {
-        ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
-        newItem->setVelocity(Vector2D(50.0f + rand()% 150));
-        if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-        newItem->setViscosity(0.96f);
+        dropItem(ItemCopperCoin);
       }
     }
 
@@ -243,37 +241,25 @@ void ChestEntity::open()
     {
       for (int i = 0; i < (game().getPlayer()->isEquiped(EQUIP_LUCK) ? 6 : 5); i++)
       {
-        ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
-        newItem->setVelocity(Vector2D(90.0f + rand()% 150));
-        if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-        newItem->setViscosity(0.96f);
+        dropItem(ItemSilverCoin);
       }
     }
     else if (r == 1)
     {
       for (int i = 0; i < (game().getPlayer()->isEquiped(EQUIP_LUCK) ? 4 : 3); i++)
       {
-        ItemEntity* newItem = new ItemEntity(ItemSilverCoin, x, y);
-        newItem->setVelocity(Vector2D(90.0f + rand()% 150));
-        if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-        newItem->setViscosity(0.96f);
+        dropItem(ItemSilverCoin);
       }
-      ItemEntity* newItem = new ItemEntity(ItemHealth, x, y);
-      newItem->setVelocity(Vector2D(90.0f + rand()% 150));
-      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-      newItem->setViscosity(0.96f);
+      dropItem(ItemHealth);
     }
     else
     {
       int bonusType = game().getRandomEquipItem(false, true);
-      ItemEntity* newItem;
+
       if (game().getPlayer()->isEquiped(bonusType))
-        newItem = new ItemEntity( (enumItemType)(ItemBonusHealth), x ,y);
+        dropItem(ItemBonusHealth);
       else
-        newItem = new ItemEntity( (enumItemType)(FirstEquipItem + bonusType), x ,y);
-      newItem->setVelocity(Vector2D(160.0f + rand()% 80));
-      if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
-      newItem->setViscosity(0.96f);
+        dropItem((enumItemType)(FirstEquipItem + bonusType));
     }
   }
   else if (chestType == ChestChallenge)
