@@ -24,7 +24,7 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
   isBeating = false;
   isFlying = false;
-  jumpTimer = 1.0f + 0.1f * (rand() % 40);
+  jumpTimer = 0;
   h = -1.0f;
 }
 
