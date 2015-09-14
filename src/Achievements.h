@@ -101,12 +101,12 @@ const achievementStuct achievements[NB_ACHIEVEMENTS] =
   { AchievementChallenges,  "achiev_challenges",    UnlockFunctionality,  FunctionalityDoubleSpellDrop },
   { AchievementWin,         "achiev_win",           UnlockFunctionality,  FunctionalityAllAchievements },
 
-  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemGlovesAdvanced },
+  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemRageAmulet },
   { AchievementGhostbuster, "achiev_ghost",         UnlockItem,           ItemRearShotAdvanced },
   { AchievementNoob,        "achiev_noob",          UnlockFunctionality,  FunctionalityNothing },
   { AchievementNoDamage,    "achiev_no_damage",     UnlockItem,           ItemSideShots },
   { AchievementNoDamage2,   "achiev_no_damage2",    UnlockItem,           ItemBag },
-  { AchievementNoDamage3,   "achiev_no_damage3",    UnlockFunctionality,  FunctionalityNothing },
+  { AchievementNoDamage3,   "achiev_no_damage3",    UnlockItem,           ItemGlovesAdvanced },
   { AchievementApostate,    "achiev_apostate",      UnlockItem,           ItemSpellLightning },
   { AchievementFanatic,     "achiev_fanatic",       UnlockItem,           ItemBeltAdvanced },
 };
