@@ -350,7 +350,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemRageAmulet, "item_rage_amulet", "item_rage_amulet_desc",
-    35, true, FamiliarNone, true, true, true, 1, RarityRare, false, ItemAmuletRetaliation, ShotTypeStandard, SpellNone, false
+    35, true, FamiliarNone, true, true, true, 3, RarityRare, false, ItemAmuletRetaliation, ShotTypeStandard, SpellNone, false
   },
   {
     ItemBossKey, "item_boss_key", "item_boss_key_desc",

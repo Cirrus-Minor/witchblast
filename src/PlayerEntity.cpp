@@ -53,6 +53,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 {
   currentFireDelay = -1.0f;
   randomFireDelay = -1.0f;
+  rageFireDelay = 1.0f;
   invincibleDelay = -1.0f;
   divineInterventionDelay = -1.0f;
   fireAnimationDelay = -1.0f;
@@ -717,6 +718,15 @@ void PlayerEntity::animate(float delay)
       {
         specialState[SpecialStateRage].param3 += specialState[SpecialStateRage].param2;
 
+        if (!equip[EQUIP_RAGE_AMULET]) rageFire(specialState[SpecialStateRage].param1, true, 1.5f);
+      }
+    }
+    if (equip[EQUIP_RAGE_AMULET])
+    {
+      rageFireDelay -= delay;
+      if (rageFireDelay <= 0.0f)
+      {
+        rageFireDelay += specialState[SpecialStateRage].active ? 1.5f : 8.0f;
         rageFire(specialState[SpecialStateRage].param1, true, 1.5f);
       }
     }
