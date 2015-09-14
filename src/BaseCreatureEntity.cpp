@@ -196,10 +196,14 @@ void BaseCreatureEntity::animatePhysics(float delay)
   {
     velocity.x += acceleration.x;
     velocity.y += acceleration.y;
-    velocity.x =
-      std::min(std::max(velocity.x, -creatureSpeed), creatureSpeed);
-    velocity.y =
-      std::min(std::max(velocity.y, -creatureSpeed), creatureSpeed);
+
+    if (velocity.x * velocity.x + velocity.y * velocity.y > creatureSpeed * creatureSpeed)
+    {
+      float l = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
+      velocity.x = (velocity.x / l) * creatureSpeed;
+      velocity.y = (velocity.y / l) * creatureSpeed;
+      doesAccelerate = false;
+    }
   }
 
 	velocity.x *= viscosity;

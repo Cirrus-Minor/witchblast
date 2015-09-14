@@ -92,6 +92,7 @@ void RatEntity::compute(bool turn)
 
   velocity = Vector2D{0, 0};
   float accelerationAbs = (enemyType == EnemyTypeRatHelmet || enemyType == EnemyTypeRatHelmet_invocated) ? (creatureSpeed / 10) : (creatureSpeed / 20);
+  doesAccelerate = true;
   switch (direction)
   {
   case 0:
