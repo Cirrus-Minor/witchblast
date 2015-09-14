@@ -89,8 +89,6 @@ item_velvet_boots#Velvet Boots
 item_velvet_boots_desc#Increases speed
 item_spell_dual#Spell : Dual bolts
 item_spell_dual_desc#Shoots two bolts
-item_rage_amulet#Rage Amulet
-item_rage_amulet_desc#Retaliates
 item_displacement_gloves#Displacement Gloves
 item_displacement_gloves_desc#Player's velocity impacts bolt's one
 
@@ -534,6 +532,10 @@ item_belt_advanced#Black belt
 item_belt_advanced_desc#Increases fairies fire rate
 item_rear_shot_advanced#Silver staff cap
 item_rear_shot_advanced_desc#Shots two rear bolts
+item_amulet_retaliation#Amulet of vengeance
+item_amulet_retaliation_desc#Retaliates
+item_rage_amulet#Rage Amulet
+item_rage_amulet_desc#Sends fire bolts
 
 achiev_fairies#Charlie's Angels
 achiev_fairies_desc#Get 3 fairies

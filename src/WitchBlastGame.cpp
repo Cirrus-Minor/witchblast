@@ -6499,6 +6499,16 @@ void WitchBlastGame::renderPlayer(float x, float y,
       sprite.setTextureRect(sf::IntRect( (18 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
+  else if (equip[EQUIP_AMULET_RETALIATION])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_2));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
 
   if (equip[EQUIP_BELT_ADVANCED])
   {

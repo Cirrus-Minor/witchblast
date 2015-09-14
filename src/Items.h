@@ -176,6 +176,7 @@ enum enumItemType
   ItemSpellLightning,
   ItemBeltAdvanced,
   ItemRearShotAdvanced,
+  ItemAmuletRetaliation,
 
   NUMBER_ITEMS
 };
@@ -349,7 +350,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemRageAmulet, "item_rage_amulet", "item_rage_amulet_desc",
-    20, true, FamiliarNone, true, true, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone, false
+    35, true, FamiliarNone, true, true, true, 1, RarityRare, false, ItemAmuletRetaliation, ShotTypeStandard, SpellNone, false
   },
   {
     ItemBossKey, "item_boss_key", "item_boss_key_desc",
@@ -615,6 +616,10 @@ const itemStuct items[NUMBER_ITEMS] =
     ItemRearShotAdvanced, "item_rear_shot_advanced", "item_rear_shot_advanced_desc",
     40, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemRearShot, ShotTypeStandard, SpellNone, false
   },
+  {
+    ItemAmuletRetaliation, "item_amulet_retaliation", "item_amulet_retaliation_desc",
+    20, true, FamiliarNone, true, true, true, 1, RarityCommon, false, -1, ShotTypeStandard, SpellNone, false
+  },
 };
 
 /** Item equipment type enum
@@ -691,6 +696,7 @@ enum item_equip_enum {
   EQUIP_SPELL_LIGHTNING,
   EQUIP_BELT_ADVANCED,
   EQUIP_REAR_SHOT_ADVANCED,
+  EQUIP_AMULET_RETALIATION,
 
   NUMBER_EQUIP_ITEMS
   };
@@ -709,6 +715,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_LEATHER_BELT,
   EQUIP_BELT_ADVANCED,
   EQUIP_BAG,
+  EQUIP_AMULET_RETALIATION,
   EQUIP_RAGE_AMULET,
   EQUIP_CRITICAL,
   EQUIP_CRITICAL_ADVANCED,
