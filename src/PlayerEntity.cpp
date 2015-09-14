@@ -2105,6 +2105,7 @@ void PlayerEntity::dropConsumables(int n)
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
   newItem->setAge(-10.0f);
+  newItem->startsJumping();
 
   consumable[n] = -1;
 }
@@ -2200,13 +2201,16 @@ void PlayerEntity::consume(enumItemType item)
 
   case ItemPotionOblivion:
     game().forget();
-    for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+    if (!equip[EQUIP_BOOK_ALCHEMY])
     {
-      if (consumable[i] > -1)
+      for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
       {
-        if (consumable[i] >= ItemPotion01 + NUMBER_UNIDENTIFIED && consumable[i] < FirstEquipItem )
+        if (consumable[i] > -1)
         {
-          consumable[i] = game().getPotion((enumItemType)consumable[i]);
+          if (consumable[i] >= ItemPotion01 + NUMBER_UNIDENTIFIED && consumable[i] < FirstEquipItem )
+          {
+            consumable[i] = game().getPotion((enumItemType)consumable[i]);
+          }
         }
       }
     }
@@ -2258,9 +2262,9 @@ void PlayerEntity::consume(enumItemType item)
   usedItem->setFading(true);
   usedItem->setZ(y - 100);
   usedItem->setLifetime(0.7f);
-  usedItem->setAge(-0.4);
+  usedItem->setAge(-0.7);
   usedItem->setType(ENTITY_EFFECT);
-  usedItem->setSpin(150.0f);
+  usedItem->setSpin(rand() % 400 - 200);
   usedItem->setVelocity(Vector2D(60));
 }
 
@@ -2309,6 +2313,10 @@ void PlayerEntity::acquireConsumable(enumItemType type)
   if (emptySlot > -1)
   {
     consumable[emptySlot] = type;
+    if (type == ItemScrollRevelation)
+      SoundManager::getInstance().playSound(SOUND_SCROLL);
+    else
+      SoundManager::getInstance().playSound(SOUND_BOTTLE);
 
     // events
     game().proceedEvent(EventConsumable);

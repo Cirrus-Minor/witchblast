@@ -411,7 +411,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/bogeyman_vortex_00.ogg", "media/sound/bogeyman_vortex_01.ogg",
     "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
     "media/sound/secret.ogg",         "media/sound/scroll.ogg",
-    "media/sound/tic_tac.ogg",
+    "media/sound/tic_tac.ogg",        "media/sound/bottle.ogg",
   };
 
   // AA in fullscreen
@@ -867,13 +867,6 @@ void WitchBlastGame::playLevel(bool isFight)
   text->setWeight(-36.0f);
   text->setZ(1000);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
-
-  /*new ItemEntity(ItemScrollRevelation, 100, 100);
-  new ItemEntity(ItemScrollRevelation, 150, 100);
-  new ItemEntity(ItemPotion02, 200, 100);
-  new ItemEntity(ItemPotion01, 250, 100);
-  new ItemEntity(ItemBag, 450, 100);
-  new ItemEntity(ItemFloorMap, 500, 100);*/
 }
 
 void WitchBlastGame::prepareIntro()
@@ -1285,7 +1278,7 @@ void WitchBlastGame::updateRunningGame()
       }
       if (event.key.code == sf::Keyboard::F4)
       {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
           for (int i = 0; i < NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i++)
             new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
         else
@@ -2026,9 +2019,6 @@ void WitchBlastGame::renderRunningGame()
 
   //if (gameState == gameStatePlaying)
   {
-    // life
-    // if (player->isPoisoned()) TODO
-
     sf::Sprite hpSprite;
     hpSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_LIFE));
     int hpFade = 88.0f * (float)player->getHpDisplay() / (float)player->getHpMax();
@@ -2053,17 +2043,11 @@ void WitchBlastGame::renderRunningGame()
 
     if (player->getActiveSpell().spell != SpellNone)
     {
-      //oss.str("");
-      //oss << tools::getLabel(spellLabel[player->getActiveSpell().spell]);
-      //if (player->isEquiped(EQUIP_BOOK_MAGIC_II)) oss << "+";
-      //write(oss.str(), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
-      // TODO
       sf::Sprite spellSprite;
       spellSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_SPELLS));
       spellSprite.setPosition(568, 624);
       int frame = player->getActiveSpell().spell;
       spellSprite.setTextureRect(sf::IntRect(frame * 78, 78, 78, 78));
-      //spellSprite.scale(2.0f, 2.0f);
       app->draw(spellSprite);
 
       int spellFade = player->getPercentSpellDelay() * 78;
@@ -2124,13 +2108,21 @@ void WitchBlastGame::renderRunningGame()
     }
     for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
-      if (player->getConsumable(i) > -1)
+      int item = player->getConsumable(i);
+      if (item > -1)
       {
-        int n = player->getConsumable(i);
         sf::Sprite consSprite;
         consSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS));
-        consSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * (n % 10), ITEM_HEIGHT * (n / 10),  ITEM_WIDTH, ITEM_HEIGHT));
         consSprite.setPosition(315 + 37 * i, 615);
+
+        if (item < FirstEquipItem && item >= ItemPotion01 + NUMBER_UNIDENTIFIED)
+        {
+          int bottle = (int)(getPotion((enumItemType)item));
+          consSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * (bottle % 10), ITEM_HEIGHT * (bottle / 10),  ITEM_WIDTH, ITEM_HEIGHT));
+          app->draw(consSprite);
+        }
+
+        consSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * (item % 10), ITEM_HEIGHT * (item / 10),  ITEM_WIDTH, ITEM_HEIGHT));
         app->draw(consSprite);
       }
     }
@@ -7204,7 +7196,7 @@ void WitchBlastGame::acquireAlchemyBook()
 {
   for (int i = 0; i < NUMBER_UNIDENTIFIED; i++)
   {
-    if (rand() % 3 > 0)
+    if (rand() % 2 > 0)
     {
       enumItemType potion = (enumItemType)(ItemPotion01 + i);
       if (!potionEffectKnown(potion)) setPotionToKnown(potion);
@@ -7215,6 +7207,7 @@ void WitchBlastGame::acquireAlchemyBook()
   ItemEntity* potionItem = new ItemEntity( (enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED), player->getX(), player->getY());
   potionItem->setVelocity(Vector2D(100.0f + rand()% 250));
   potionItem->setViscosity(0.96f);
+  potionItem->startsJumping();
 }
 
 void WitchBlastGame::addPotionToMap(enumItemType source, enumItemType effect, bool known)

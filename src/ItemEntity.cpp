@@ -238,7 +238,22 @@ void ItemEntity::render(sf::RenderTarget* app)
     game().write(oss.str(), 16, x, y + 35.0f, ALIGN_CENTER, fontColor, app, 1 , 1);
   }
 
-  if (h > 0.1f)
+  if (itemType < FirstEquipItem && itemType >= ItemPotion01 + NUMBER_UNIDENTIFIED)
+  {
+    float yItem = h > 0.1f ? y - h : y;
+
+    int frameBottle = game().getPotion(itemType);
+    sprite.setPosition(x, yItem);
+
+    sprite.setTextureRect(sf::IntRect(frameBottle % imagesProLine * width, frameBottle / imagesProLine * height, width, height));
+    app->draw(sprite);
+
+    sprite.setTextureRect(sf::IntRect(frame % imagesProLine * width, frame / imagesProLine * height, width, height));
+    app->draw(sprite);
+
+    sprite.setPosition(x, y);
+  }
+  else if (h > 0.1f)
   {
     sprite.setTextureRect(sf::IntRect(frame % imagesProLine * width, frame / imagesProLine * height, width, height));
     sprite.setPosition(x, y - h);

@@ -469,13 +469,13 @@ item_scroll_revelation_desc#Reveal secrets and potion effects
 item_potion_01#Red potion
 item_potion_02#Green potion
 item_potion_03#Golden potion
-item_potion_04#Bright blue potion
+item_potion_04#Blue potion
 item_potion_05#Violet potion
-item_potion_06#Orange potion
-item_potion_07#Rosa potion
-item_potion_08#Dark potion
-item_potion_09#White potion
-item_potion_10#Rainbow potion
+item_potion_06#Rosa potion
+item_potion_07#Orange potion
+item_potion_08#Turquoise potion
+item_potion_09#Brown potion
+item_potion_10#Dark potion
 item_potion_desc#Unknown effect
 item_potion_health#Healing potion
 item_potion_health_desc#Restores 18 HP

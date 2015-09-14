@@ -304,6 +304,7 @@ enum sound_resources {
   SOUND_SECRET,
   SOUND_SCROLL,
   SOUND_CLOCK,
+  SOUND_BOTTLE,
 };
 
 enum corpses_ressources{
