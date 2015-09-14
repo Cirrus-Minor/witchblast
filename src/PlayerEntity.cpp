@@ -2120,9 +2120,15 @@ void PlayerEntity::tryToConsume(int n)
     // unidentified
     if (isUnidentified((enumItemType)consumable[n]))
     {
-      game().setPotionToKnown((enumItemType)consumable[n]);
-      consumable[n] = game().getPotion((enumItemType)consumable[n]);
-      consume((enumItemType)consumable[n]);
+      enumItemType potion = (enumItemType)consumable[n];
+      enumItemType potionEffect = game().getPotion(potion);
+
+      game().setPotionToKnown(potion);
+
+      for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+        if (consumable[i] == potion) consumable[i] = potionEffect;
+
+      consume(potionEffect);
     }
     else if (items[consumable[n]].consumable)
     // known
