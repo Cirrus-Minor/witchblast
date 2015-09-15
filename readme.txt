@@ -99,10 +99,12 @@ Next release
 - ADD New music
 - ADD Player effects display
 - ADD Blinking effect when player is invincible
+- ADD Monsters
 - MOD Consumables in shops
 - MOD Evil flower damage
 - MOD Butcher can drop sausages now
 - MOD Game becomes harder for good players
+- MOD Some monsters (rats, bats) slow down when changing direction
 - MOD Air divinity fury has now a lifetime (was infinite)
 - MOD Intro is displayed just once now
 - MOD Display the best player instead of the best scores
