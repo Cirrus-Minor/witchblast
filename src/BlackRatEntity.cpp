@@ -143,6 +143,8 @@ void BlackRatEntity::findNextGoal()
   DungeonMap* dMap = game().getCurrentMap();
 
   int backDirection = 0;
+  int oldDirection = currentDirection;
+
   switch (currentDirection)
   {
     case 4: backDirection = 6; break;
@@ -205,13 +207,41 @@ void BlackRatEntity::findNextGoal()
     }
   }
 
+  float accelerationAbs = (enemyType == EnemyTypeRatBlackHelmet) ? (creatureSpeed / 8) : (creatureSpeed / 16);
+
   switch (currentDirection)
   {
-    case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
-    case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
-    case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
-    case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
+    case 4:
+      velocity.x = -creatureSpeed;
+      velocity.y = 0.0f;
+      acceleration.x = -accelerationAbs;
+      acceleration.y = 0.0f;
+      break;
+    case 6:
+      velocity.x = creatureSpeed;
+      velocity.y = 0.0f;
+      acceleration.x = accelerationAbs;
+      acceleration.y = 0;
+      break;
+    case 2:
+      velocity.y = creatureSpeed;
+      velocity.x = 0.0f;
+      acceleration.y = accelerationAbs;
+      acceleration.x = 0.0f;
+      break;
+    case 8:
+      velocity.y = -creatureSpeed;
+      velocity.x = 0.0f;
+      acceleration.y = -accelerationAbs;
+      acceleration.x = 0.0f;
+      break;
     default: break;
+  }
+
+  if (oldDirection != currentDirection)
+  {
+    velocity = Vector2D {0, 0};
+    doesAccelerate = true;
   }
 
   facingDirection = currentDirection;
