@@ -6212,7 +6212,7 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       }
       else if (enemyType == EnemyTypeGhost)
       {
-        if (globalData.killedMonster[EnemyTypeGhost] >= 75)
+        if (globalData.killedMonster[EnemyTypeGhost] >= 50)
           registerAchievement(AchievementGhostbuster);
       }
       else if (enemyType == EnemyTypeSpiderEgg || enemyType == EnemyTypeSpiderEgg_invocated)

@@ -540,7 +540,7 @@ item_rage_amulet_desc#Sends fire bolts
 achiev_fairies#Charlie's Angels
 achiev_fairies_desc#Get 3 fairies
 achiev_ghost#Ghostbuster
-achiev_ghost_desc#Kill 75 ghosts
+achiev_ghost_desc#Kill 50 ghosts
 achiev_noob#True noob
 achiev_noob_desc#Die in level 1
 achiev_no_damage#Tough guy
