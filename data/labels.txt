@@ -891,7 +891,7 @@ interact_donate#Donner 10 pièces
 interact_donate_fail#(pas assez d'argent)
 worshipping#Vous êtes maintenant un disciple de
 divinity_healer_0#Pomonos le Juste
-divinity_healer_1#Gardien de la vertue et protecteur des faibles.
+divinity_healer_1#Gardien de la vertu et protecteur des faibles.
 divinity_healer_2#Il apprécie les dons, la souffrance, et le combat contre le mal.
 divinity_fighter_0#Tello le Puissant
 divinity_fighter_1#Seigneur des guerriers et de la force.
@@ -944,7 +944,7 @@ achiev_challenges_desc#Relever 4 défis
 achiev_win#Vivre son rêve
 achiev_win_desc#Terminer la démo
 
-func_achiev_screen#Ecran des succés
+func_achiev_screen#Ecran des succès
 func_achiev_all#Description des succès
 func_double_spell#Drop de deux sorts
 
@@ -980,7 +980,7 @@ item_book_prayer_ii_desc#Reduit les coûts en piété
 item_pet_slime#Slime de compagnie
 item_pet_slime_desc#Il vous suit et se bat à vos côtés
 item_hat_advanced#Chapeau de Warlock
-item_hat_advanced_desc#Resistance élémentaire + cadence de tir+
+item_hat_advanced_desc#Résistance élémentaire + cadence de tir+
 item_robe_advanced#Robe magique de choc
 item_robe_advanced_desc#Repousse + armure augmentée
 item_critical#Barbe factice de mage
@@ -1005,7 +1005,7 @@ div_stone_lvl_4#augmente le niveau d'attaque de pierre
 div_stone_lvl_5#augmente l'immunité de repoussement
 enemy_vampire#Vampire
 enemy_type_vampire#le Vampire
-msg_tuto_achiev_0#Tutorial: Succés
+msg_tuto_achiev_0#Tutorial: Succès
 msg_tuto_achiev_1#Vous avez obtenu un succès.
 msg_tuto_achiev_2#Ils débloquent des objets ou fonctionnalités.
 msg_vampire_0#Le Vampire
