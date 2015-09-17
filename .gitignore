@@ -26,3 +26,9 @@ cmake_install.cmake
 Debug/
 *.build/
 *.xcodeproj/
+
+# Visual Studio
+*.vcxproj*
+*.opensdf
+*.sdf
+*.sln
