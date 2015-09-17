@@ -536,7 +536,6 @@ item_amulet_retaliation#Amulet of vengeance
 item_amulet_retaliation_desc#Retaliates
 item_rage_amulet#Rage Amulet
 item_rage_amulet_desc#Sends fire bolts
-
 achiev_fairies#Charlie's Angels
 achiev_fairies_desc#Get 3 fairies
 achiev_ghost#Ghostbuster
@@ -554,7 +553,6 @@ achiev_apostate_desc#Reject a level 4 divinity
 achiev_fanatic#Fanatic
 achiev_fanatic_desc#Give 100 gold to temple
 func_nothing#Nothing!
-
 state_frozen#Frozen
 state_slow#Slow
 state_speed#Hasted
@@ -665,7 +663,7 @@ item_velvet_boots_desc#Augmente la vitesse
 item_spell_dual#Sort: double-tir
 item_spell_dual_desc#Tire deux projectiles
 item_rage_amulet#Amulette de rage
-item_rage_amulet_desc#Contre-attaque
+item_rage_amulet_desc#Tire régulièrement des boules de feu
 item_displacement_gloves#Gants de déplacement
 item_displacement_gloves_desc#La vitesse du porteur impacte la trajectoire
 item_staff#Bâton d'ébène
@@ -1020,13 +1018,118 @@ divinity_air_1#Divinité de l'air et du tonnerre.
 divinity_air_2#Il apprécie l'usage de la foudre.
 div_air_lvl#augmente votre vitesse
 div_air_lvl_4#augmente le niveau d'attaque de foudre
-
 config_joystick#Configurer le joystick
 redef_joystick#Redéfinir les contrôles joystick
 joystick_configuration#Configuration du joystick
 joystick_configuration_desc#Configurez les actions du joystick
 joystick_configuration_insert#[appui bouton]
 joystick_not_found#Aucun joystick connecté !
+
+
+item_scroll_revelation#Parchemin de révélation
+item_scroll_revelation_desc#Révéler secrets et effets des potions
+item_potion_01#Potion rouge
+item_potion_02#Potion verte
+item_potion_03#Potion dorée
+item_potion_04#Potion bleue
+item_potion_05#Potion violette
+item_potion_06#Potion rose
+item_potion_07#Potion orange
+item_potion_08#Potion turquoise
+item_potion_09#Potion marron
+item_potion_10#Potion sombre
+item_potion_desc#Effet inconnu
+item_potion_health#Potion de guérison
+item_potion_health_desc#Guérit 18 PV
+item_potion_poison#Potion de poison
+item_potion_poison_desc#Empoisonne le buveur
+item_potion_speed#Potion de vitesse
+item_potion_speed_desc#Augmente temporairement la vitesse
+item_potion_slow#Potion de lenteur
+item_potion_slow_desc#Réduit temporairement la vitesse
+item_potion_weakness#Potion de faiblesse
+item_potion_weakness_desc#Réduit temporairement les dégâts
+item_potion_strength#Potion de force
+item_potion_strength_desc#Augmente temporairement les dégâts
+item_potion_oblivion#Potion d'oubli
+item_potion_oblivion_desc#Oublie la carte et les potions
+item_potion_confusion#Potion de confusion
+item_potion_confusion_desc#Rend confus
+item_potion_cure#Potion Tabula Rasa
+item_potion_cure_desc#Annule les effets du buveur
+item_potion_rage#Potion de rage
+item_potion_rage_desc#Tire des boules de feu
+item_bag#Sacoche
+item_bag_desc#Plus de place pour les consommables
+msg_potion_id_0#Identification de potion
+msg_potion_id_1#Vous avez identifié:
+msg_tuto_consumables_0#Tutoriel: Consommables
+msg_tuto_consumables_1#[num1-num4] pour utiliser un objet consommable.
+msg_tuto_consumables_2#[left shift][num1-num4] pour le jeter.
+msg_tuto_potions_0#Tutoriel: Potions
+msg_tuto_potions_1#Vous avez trouvé une potion.
+msg_tuto_potions_2#Vous devez la boire ou l'identifier pour connaitre son effet.
+secret_found#Salle secrète découverte!
+enemy_type_sausage#une saucisse
+enemy_type_spider_tarantula#une tarentule
+effect_speed#Vitesse augmentée !
+effect_slow#Vitesse réduite !
+effect_strength#Dégâts augmentés !
+effect_weakness#Dégâts réduits !
+effect_confusion#Confus !
+effect_forget#Vous oubliez !
+effect_cure#Tabula rasa !
+effect_rage#Raaaage !
+item_book_alchemy#Manuel d'alchimie
+item_book_alchemy_desc#Révèle les effets de quelques potions
+item_fairy_stone#Fairy Cassandre
+item_fairy_stone_desc#Vous aide dans le donjon
+item_merchant#Sceau des marchand
+item_merchant_desc#Meilleurs prix en magasin
+item_spell_time#Sort : Arrêter le temps
+item_spell_time_desc#Réduit le temps
+item_side_shots#Manuel de tirs latéraux
+item_side_shots_desc#Tire sur les côtés
+item_spell_lightning#Sort: Tonnerre
+item_spell_lightning_desc#Invoque un éclair
+item_belt_advanced#Ceinture noire
+item_belt_advanced_desc#Cadence de tir des fées +
+item_rear_shot_advanced#Embout de bâton en argent
+item_rear_shot_advanced_desc#Double tir arrière
+item_amulet_retaliation#Amulette de vengeance
+item_amulet_retaliation_desc#Contre-attaque
+item_rage_amulet#Amulette de rage
+item_rage_amulet_desc#Tire des boules de feu
+achiev_fairies#Charlie's Angels
+achiev_fairies_desc#Trouver 3 fées
+achiev_ghost#Ghostbuster
+achiev_ghost_desc#Tuer 50 fantômes
+achiev_noob#Vrai noob
+achiev_noob_desc#Mourir au premier niveau
+achiev_no_damage#Balèze
+achiev_no_damage_desc#Traverser un niveau sans perdre de PV
+achiev_no_damage2#Trop balèze
+achiev_no_damage2_desc#Traverser 2 niveaux sans perdre de PV
+achiev_no_damage3#Trop trop balèze
+achiev_no_damage3_desc#Traverser 3 niveaux sans perdre de PV
+achiev_apostate#Apostat
+achiev_apostate_desc#Rejeter une divinité niveau 4
+achiev_fanatic#Fanatique
+achiev_fanatic_desc#Donner 100 pièces d'or au temple
+func_nothing#Que dalle !
+state_frozen#Froid
+state_slow#Lenteur
+state_speed#Vitesse
+state_poison#Poison
+state_weakness#Faiblesse
+state_strength#Force
+state_rage#Rage
+state_confusion#Confusion
+state_time#Temps figé
+state_div_protection#Protection (div)
+state_div_speed#Vitesse (div)
+state_div_firerate#Cadence de tir+ (div)
+state_div_damage#Dégâts+ (div)
 
 [german]
 start_new_game#Neues Spiel starten
