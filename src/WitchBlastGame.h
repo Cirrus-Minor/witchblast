@@ -327,8 +327,9 @@ public:
    *  \param app : the rendering target
    *  \param xShadow : offset of the shadow (x)
    *  \param yShadow : offset of the shadow (y)
+   *  \param maxWidth : max width of the text image (0 = no limit)
    */
-  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow);
+  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth);
 
   /*!
    *  \brief Save the game

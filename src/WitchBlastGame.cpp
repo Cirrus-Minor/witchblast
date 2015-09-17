@@ -1738,15 +1738,15 @@ void WitchBlastGame::renderHud()
   // boss life bar ?
   if (lifeBar.toDisplay && gameState != gameStatePlayingDisplayBoss) renderLifeBar();
 
-  renderBossPortrait();
+  //renderBossPortrait();
 
   // interaction text ?
   if (interaction.active)
   {
     if (interaction.type == InteractionTypeTemple)
-      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2, 0);
     else if (interaction.type == InteractionTypeMerchandise)
-      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2, 0);
   }
 
   // light cone ?
@@ -1777,7 +1777,7 @@ void WitchBlastGame::renderHud()
       if (fade < 0) fade = 0;
     }
 
-    write("THE COOK", 27, GAME_WIDTH / 2, 540, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0);
+    write("THE COOK", 27, GAME_WIDTH / 2, 540, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0, 0);
   }
 }
 
@@ -1807,7 +1807,7 @@ void WitchBlastGame::renderLifeBar()
                             label_dy + 23,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
-                            app, 0 , 0);
+                            app, 0 , 0, 0);
   }
 }
 
@@ -2007,7 +2007,7 @@ void WitchBlastGame::renderRunningGame()
 
   std::ostringstream oss;
   oss << player->getGold();
-  write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+  write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
 
   myText.setColor(sf::Color(0, 0, 0, 255));
   myText.setCharacterSize(16);
@@ -2015,7 +2015,7 @@ void WitchBlastGame::renderRunningGame()
 
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   //if (gameState == gameStatePlaying)
   {
@@ -2030,7 +2030,7 @@ void WitchBlastGame::renderRunningGame()
 
     oss.str("");
     oss << player->getHp() << "/" << player->getHpMax();
-    write(oss.str(), 16, 210, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+    write(oss.str(), 16, 210, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
 
     // mana
     sf::Sprite manaSprite;
@@ -2178,7 +2178,7 @@ void WitchBlastGame::renderRunningGame()
       std::ostringstream oss;
       if (player->getDivinity().level == MAX_DIVINITY_LEVEL + 1) oss << "MAX";
       else oss << "lvl " << player->getDivinity().level;
-      write(oss.str(), 11, 122, 702, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+      write(oss.str(), 11, 122, 702, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
     }
 
     // render the shots
@@ -2212,7 +2212,7 @@ void WitchBlastGame::renderRunningGame()
       float x = 200;
       float y = 480;
       // items
-      write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
       int n = 0;
 
       for (auto i: sortedEquipement)
@@ -2245,13 +2245,13 @@ void WitchBlastGame::renderRunningGame()
 
         if (scoreSaveFile.compare("") == 0)
         {
-          write(tools::getLabel("certificate_capture"), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+          write(tools::getLabel("certificate_capture"), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
         }
         else
         {
           std::stringstream ss;
           ss << tools::getLabel("certificate_saved") << " " << scoreSaveFile;
-          write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+          write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
         }
       }
       else if (deathAge > DEATH_CERTIFICATE_DELAY - 1.0f)
@@ -2269,9 +2269,9 @@ void WitchBlastGame::renderRunningGame()
     {
       float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
 
-      write(tools::getLabel("congratulations_1"), 25, x0, 220, ALIGN_CENTER, sf::Color::White, app, 2, 2);
-      write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2);
-      write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2);
+      write(tools::getLabel("congratulations_1"), 25, x0, 220, ALIGN_CENTER, sf::Color::White, app, 2, 2, 0);
+      write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2, 0);
+      write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2, 0);
 
       registerAchievement(AchievementWin);
     }
@@ -2288,7 +2288,7 @@ void WitchBlastGame::renderRunningGame()
     ss << ":";
     if (secondes < 10) ss << "0";
     ss << secondes;
-    write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
+    write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0, 0, 0);
   }
 
 // achievements ?
@@ -2354,17 +2354,17 @@ void WitchBlastGame::renderRunningGame()
       icon.setColor(sf::Color(255, 255, 255, 50 + 50 * cosf(getAbsolutTime() * 4)));
       app->draw(icon, sf::BlendAdd);
 
-      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
 
       if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
       {
         game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
-                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
       }
       else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
       {
         game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
-                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
       }
     }
 
@@ -2440,7 +2440,7 @@ void WitchBlastGame::renderRunningGame()
         else
           oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
 
-        write(oss.str(), 12, x0, y0, ALIGN_LEFT, specialStateToColor[i], app, 0, 0);
+        write(oss.str(), 12, x0, y0, ALIGN_LEFT, specialStateToColor[i], app, 0, 0, 0);
         y0 += yStep;
       }
     }
@@ -2474,7 +2474,7 @@ void WitchBlastGame::renderMessages()
     ss << messagesQueue.front().message[2];
 
 
-    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0,0);
+    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
   }
 }
 
@@ -2543,7 +2543,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
 
   std::stringstream ss;
   ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
-  write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+  write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   ss.str(std::string());
   ss.clear();
@@ -2556,13 +2556,13 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   ss << tools::getLabel("dc_gold") << ": " << player->getGold() << std::endl;
   ss << tools::getLabel("dc_challenges") << ": " << challengeLevel - 1 << std::endl;
 
-  write(ss.str(), 16, x + 112, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write(ss.str(), 16, x + 112, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
 
   // player
   renderPlayer(x + 40, y + 48, player->getEquipment(), player->getShotType(), 1, 0);
 
   // items
-  write(tools::getLabel("inventory"), 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write(tools::getLabel("inventory"), 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
   int n = 0;
   for (auto i: sortedEquipement)
   {
@@ -2580,7 +2580,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   ss.str("");
   ss.clear();
   ss << "Score: " << score;
-  write(ss.str(), 24, x + xRect / 2, y + 240, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+  write(ss.str(), 24, x + xRect / 2, y + 240, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
 }
 
@@ -3110,9 +3110,9 @@ void WitchBlastGame::renderMenu()
   {
     // menu keys
     if (config.configFileExists())
-      write(tools::getLabel("key_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     else
-      write(tools::getLabel("key_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -3122,7 +3122,7 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menuKeyIndex == i) oss << tools::getLabel("key_configuration_insert");
       else if (menuKeyIndex > i) oss << keyToString(input[i]);
-      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1, 0);
     }
   }
 
@@ -3130,9 +3130,9 @@ void WitchBlastGame::renderMenu()
   {
     // menu keys
     if (config.configFileExists())
-      write(tools::getLabel("joystick_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("joystick_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     else
-      write(tools::getLabel("joystick_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("joystick_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -3142,7 +3142,7 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menuKeyIndex == i) oss << tools::getLabel("joystick_configuration_insert");
       else if (menuKeyIndex > i) oss << "OK";
-      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1, 0);
     }
   }
 
@@ -3195,10 +3195,10 @@ void WitchBlastGame::renderMenu()
         label = oss.str();
       }
 
-      write(label, 21, xAlign, yTop + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(label, 21, xAlign, yTop + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1, 0);
     }
     write(menu->items[menu->index].description, 18, xAlign,
-          yTop + menu->items.size() * yStep + 8, ALIGN_LEFT, sf::Color(60, 80, 220), app, 0, 0);
+          yTop + menu->items.size() * yStep + 8, ALIGN_LEFT, sf::Color(60, 80, 220), app, 0, 0, 0);
 
     // Keys
     if (menuState == MenuStateFirst)
@@ -3215,20 +3215,20 @@ void WitchBlastGame::renderMenu()
       app->draw(keysSprite);
 
       // legend
-      write(tools::getLabel("keys_move"), 16, xKeys + 190, yKeys + 10, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-      write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-      write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-      write(tools::getLabel("key_spell"), 16, xKeys + 148, yKeys + 184, ALIGN_CENTER, sf::Color::White, app, 1, 1);
+      write(tools::getLabel("keys_move"), 16, xKeys + 190, yKeys + 10, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
+      write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
+      write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
+      write(tools::getLabel("key_spell"), 16, xKeys + 148, yKeys + 184, ALIGN_CENTER, sf::Color::White, app, 1, 1, 0);
       // TODO key interact
       std::ostringstream oss;
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
-      write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+      write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
     }
   }
 
   std::ostringstream oss;
   oss << APP_NAME << " v" << APP_VERSION << "  - 2014-2015 - " << " Seby (code), Pierre \"dejam0rt\" Baron (2D art)";
-  write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 }
 
 void WitchBlastGame::renderAchievements()
@@ -3239,7 +3239,7 @@ void WitchBlastGame::renderAchievements()
   app->draw(titleSprite);
 
   // achievements
-  write(tools::getLabel("menu_achievements"), 30, 485, 280, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("menu_achievements"), 30, 485, 280, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 
   int achWidth = 64, achHeight = 64, x0 = 180, y0 = 380, xStep = 16, yStep = 16, nbProLine = 8;
 
@@ -3272,11 +3272,11 @@ void WitchBlastGame::renderAchievements()
 
   if (menuAchIndex / 8 >= ACHIEV_LINES)
   {
-    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
   }
   else
   {
-    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(180, 180, 180, 255), app, 1, 1);
+    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(180, 180, 180, 255), app, 1, 1, 0);
 
     sf::Color fontColor = sf::Color::White;
     std::stringstream oss;
@@ -3311,7 +3311,7 @@ void WitchBlastGame::renderAchievements()
       fontColor = sf::Color(150, 150, 150);
     }
 
-    write(oss.str(), 19, 100, 650, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(oss.str(), 19, 100, 650, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
   }
 }
 
@@ -3323,7 +3323,7 @@ void WitchBlastGame::renderCredits()
   app->draw(titleSprite);
 
   // credits
-  write(tools::getLabel("credits"), 30, 485, 275, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("credits"), 30, 485, 275, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 
   int yCursorInit = 365;
   int yStep = 30;
@@ -3332,34 +3332,34 @@ void WitchBlastGame::renderCredits()
   int xMarging = 20;
 
   int yCursor = yCursorInit;
-  write("Code", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("Code", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   int i = 0;
   while (creditsCode[i] != "END")
   {
-    write(creditsCode[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsCode[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
   yCursor += yStep;
 
-  write("2D Art", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("2D Art", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (credits2D[i] != "END")
   {
-    write(credits2D[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(credits2D[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
   yCursor += yStep;
 
-  write("Sound", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("Sound", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (creditsSound[i] != "END")
   {
-    write(creditsSound[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsSound[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
@@ -3369,23 +3369,23 @@ void WitchBlastGame::renderCredits()
   ////// RIGHT
 
   yCursor = yCursorInit + yStep;
-  write("Music", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("Music", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (creditsMusic[i] != "END")
   {
-    write(creditsMusic[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsMusic[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
   yCursor += yStep;
 
-  write("Translation", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("Translation", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (creditsTranslate[i] != "END")
   {
-    write(creditsTranslate[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsTranslate[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
@@ -3399,7 +3399,7 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
   app->draw(bgSprite);
 
   // hi-scores-title
-  write(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0);
+  write(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0, 0);
 
   int xEquip = 540;
   //int yEquip = 360;
@@ -3454,12 +3454,12 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
     else
       renderPlayer((i % 2 == 0) ? xPlayerLeft : xPlayerRight, y0 - 14 + yStep * i, scoresToRender[i].equip, scoresToRender[i].shotType, 1, 0);
 
-    write(scoresToRender[i].name, 16, xName, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
+    write(scoresToRender[i].name, 16, xName, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
 
     std::stringstream levelSS;
     levelSS << "lvl " << scoresToRender[i].level;
-    write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
-    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
+    write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
 
 
     std::stringstream timeSS;
@@ -3474,8 +3474,8 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
       timeSS << minutes << " m";
     }
 
-    write(timeSS.str(), 16, xTime, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
-    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0);
+    write(timeSS.str(), 16, xTime, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
   }
 
   // retrieving from DB ?
@@ -3489,7 +3489,7 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
     else if (n == 1) oss << "..";
     else oss << "...";
 
-    write(oss.str(), 15, 20, 20, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(oss.str(), 15, 20, 20, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
   }
 }
 
@@ -3500,7 +3500,7 @@ void WitchBlastGame::renderHiScores()
   app->draw(bgSprite);
 
   // hi-scores-title
-  write(tools::getLabel("hi_scores"), 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("hi_scores"), 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 
   int x0 = 25;
   int x1 = 70;
@@ -3526,11 +3526,11 @@ void WitchBlastGame::renderHiScores()
 
     renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scores[i].equip, scores[i].shotType, 1, 0);
 
-    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1);
+    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1, 0);
     std::stringstream ss;
     ss << scores[i].name << " (" << scores[i].level << ")";
-    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1);
-    write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
+    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1, 0);
+    write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1, 0);
   }
 }
 
@@ -3560,8 +3560,8 @@ void WitchBlastGame::renderInGameMenu()
       else itemColor = sf::Color(120, 120, 120, 255);
 
       std::string label = menu->items[i].label;
-      write(label, 23, xAlign, yAlign + 10 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu->items[i].description, 15, xAlign, yAlign + i * 90 + 50, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(label, 23, xAlign, yAlign + 10 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1, 0);
+      write(menu->items[i].description, 15, xAlign, yAlign + i * 90 + 50, ALIGN_LEFT, itemColor, app, 0, 0, 0);
     }
   }
 }
@@ -4181,7 +4181,7 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
       {
         std::ostringstream oss;
         oss << "lvl " << player->getShotLevel(i) + 1;
-        write(oss.str(), 10, xHud + 55 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0);
+        write(oss.str(), 10, xHud + 55 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
       }
 
       index++;
@@ -4546,12 +4546,20 @@ void WitchBlastGame::generateMap()
     currentMap->randomize(currentMap->getRoomType());
 }
 
-void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0)
+void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0)
 {
   myText.setString(str);
   myText.setString(sf::String::fromUtf8(str.begin(), str.end()));
   myText.setCharacterSize(size);
 
+  if (maxWidth > 0)
+  {
+    while (myText.getLocalBounds().width > maxWidth && size > 5)
+    {
+      size--;
+      myText.setCharacterSize(size);
+    }
+  }
   float xFont = x;
 
   if (align == ALIGN_CENTER)

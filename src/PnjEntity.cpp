@@ -88,7 +88,7 @@ void PnjEntity::render(sf::RenderTarget* app)
 
   if (isSpeaking)
   {
-    game().write(speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app, 0 , 0);
+    game().write(speech, 20, x0, y0 - 72.0f, ALIGN_CENTER, sf::Color(255, 255, 255), app, 0 , 0, 0);
   }
 
   if (game().getShowLogical())

@@ -235,7 +235,7 @@ void ItemEntity::render(sf::RenderTarget* app)
     sf::Color fontColor;
     if (getPrice() > game().getPlayer()->getGold()) fontColor = sf::Color(215, 20, 20);
     else fontColor = sf::Color(255, 255, 255);
-    game().write(oss.str(), 16, x, y + 35.0f, ALIGN_CENTER, fontColor, app, 1 , 1);
+    game().write(oss.str(), 16, x, y + 35.0f, ALIGN_CENTER, fontColor, app, 1 , 1, 0);
   }
 
   if (itemType < FirstEquipItem && itemType >= ItemPotion01 + NUMBER_UNIDENTIFIED)
