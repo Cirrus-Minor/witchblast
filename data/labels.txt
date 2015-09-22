@@ -566,6 +566,8 @@ state_div_protection#Protected (div)
 state_div_speed#Hasted (div)
 state_div_firerate#Firerate+ (div)
 state_div_damage#Damage+ (div)
+dc_victory#Victory certificate
+dc_after_victory#Victory after
 
 [french]
 start_new_game#Nouvelle partie
@@ -1130,6 +1132,8 @@ state_div_protection#Protection (div)
 state_div_speed#Vitesse (div)
 state_div_firerate#Cadence de tir+ (div)
 state_div_damage#Dégâts+ (div)
+dc_victory#Attestation de réussite
+dc_after_victory#Victoire après
 
 [german]
 start_new_game#Neues Spiel starten

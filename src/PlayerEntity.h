@@ -345,7 +345,8 @@ class PlayerEntity : public BaseCreatureEntity
       playerStatusPraying,    /**< Player is under unlocking stance */
       playerStatusStairs,     /**< Player walk the stairs */
       playerStatusGoingNext,  /**< Player goes to next level */
-      playerStatusDead        /**< Player RIP */
+      playerStatusDead,       /**< Player RIP */
+      playerStatusVictorious  /**< Game won */
     };
 
     /*!
@@ -470,17 +471,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     bool canGetNewShot(bool advancedShot);
 
-    /*!
-     *  \brief returns time since player's death
-     *  \return : time since player's death (in seconds)
-     */
-    float getDeathAge();
-
-    /*!
-     *  \brief mutator on the player's death age
-     *  \param deathAge : the new player's death (in seconds)
-     */
-    void setDeathAge(float deathAge);
+    float getEndAge();
+    void setEndAge(float endAge);
 
     virtual void setMap(GameMap* map, int tileWidth, int tileHeight, int offsetX, int offsetY) override;
 
@@ -595,7 +587,7 @@ class PlayerEntity : public BaseCreatureEntity
     std::vector<FairyEntity*> fairies;
 
     float idleAge;
-    float deathAge;
+    float endAge;
     enemyTypeEnum lastHurtingEnemy;
     sourceTypeEnum lastHurtingSource;
 

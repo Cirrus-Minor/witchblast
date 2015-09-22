@@ -714,7 +714,7 @@ void DungeonMap::initRoom(int floorN, int wallN)
     {
       doorType[South] = getRandomDoor();
     }
-    else if (roomType == roomTypeExit)
+    else if (roomType == roomTypeExit && game().getLevel() < LAST_LEVEL)
     {
       doorType[North] = DoorExit;
     }
@@ -1154,11 +1154,13 @@ void DungeonMap::generateExitRoom()
 {
   initRoom();
   int x0 = MAP_WIDTH / 2;
-  map[x0][0] = floorOffset;
-  map[x0 - 1][0] = floorOffset;
-  map[x0 + 1][0] = floorOffset;
-
-  logicalMap[x0][0] = LogicalFloor;
+  if (game().getLevel() < LAST_LEVEL)
+  {
+    map[x0][0] = floorOffset;
+    map[x0 - 1][0] = floorOffset;
+    map[x0 + 1][0] = floorOffset;
+    logicalMap[x0][0] = LogicalFloor;
+  }
 
   if (rand() % 3 == 0) initPattern(PatternBorder);
 

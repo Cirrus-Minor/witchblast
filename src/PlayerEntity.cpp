@@ -76,7 +76,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   hpMax = hp;
   gold = 0;
   donation = 0;
-  deathAge = -1.0f;
+  endAge = 0.0f;
   hiccupDelay = HICCUP_DELAY;
   idleAge = 0.0f;
 
@@ -253,14 +253,14 @@ sourceTypeEnum PlayerEntity::getLastHurtingSource()
   return lastHurtingSource;
 }
 
-float PlayerEntity::getDeathAge()
+float PlayerEntity::getEndAge()
 {
-  return deathAge;
+  return endAge;
 }
 
-void PlayerEntity::setDeathAge(float deathAge)
+void PlayerEntity::setEndAge(float endAge)
 {
-  this->deathAge = deathAge;
+  this->endAge = endAge;
 }
 
 bool PlayerEntity::getFairyTransmuted()
@@ -559,9 +559,9 @@ void PlayerEntity::animate(float delay)
       playerStatus = playerStatusPlaying;
     }
   }
-  if (playerStatus == playerStatusDead)
+  if (playerStatus == playerStatusDead || playerStatus == playerStatusVictorious)
   {
-    deathAge += delay;
+    endAge += delay;
     velocity = Vector2D(0.0f, 0.0f);
   }
   else
@@ -635,6 +635,7 @@ void PlayerEntity::animate(float delay)
     game().moveToOtherMap(2);
 #ifdef SPIRAL_STAIRCASE
   else if (playerStatus == playerStatusPlaying
+           && game().getLevel() < LAST_LEVEL
            && game().getCurrentMap()->getRoomType() == roomTypeExit && y < TILE_HEIGHT * 0.6f)
   {
     playerStatus = playerStatusStairs;
@@ -1127,7 +1128,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
   if (playerStatus == playerStatusDead)
   {
-    frame = (int)(deathAge / 0.35f);
+    frame = (int)(endAge / 0.35f);
     if (frame > 6) frame = 6;
     spriteDy = 9;
 
@@ -2016,7 +2017,7 @@ void PlayerEntity::dying()
   }
 
   playerStatus = playerStatusDead;
-  deathAge = 0.0f;
+  endAge = 0.0f;
   hp = 0;
   SoundManager::getInstance().playSound(SOUND_PLAYER_DIE);
   setVelocity(Vector2D(0.0f, 0.0f));

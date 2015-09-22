@@ -75,6 +75,7 @@
 #endif // ONLINE_MODE
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
+const float ENDING_TIMER = 10.0f;
 const unsigned int ACHIEV_LINES = 3;
 
 const int VolumeModifier = 55;
@@ -650,6 +651,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   initEvents();
   scoreSaveFile = "";
   interaction.active = false;
+  endingTimer = -1.0f;
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -1114,7 +1116,7 @@ void WitchBlastGame::updateRunningGame()
 
       if (event.key.code == sf::Keyboard::F1)
       {
-        if (!isPlayerAlive && player->getDeathAge() > 3.5f)
+        if (!isPlayerAlive && player->getEndAge() > 3.5f)
         {
           if (scoreSaveFile.compare("") == 0) saveDeathScreen();
         }
@@ -1295,17 +1297,18 @@ void WitchBlastGame::updateRunningGame()
   // POST EVENT
   if (escape)
   {
-    if (player->isDead()) backToMenu = true;
+    if (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) backToMenu = true;
     else if (gameState == gameStatePlaying) gameState = gameStatePlayingPause;
     else if (gameState == gameStatePlayingPause) gameState = gameStatePlaying;
     else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
   }
 
-  if (player->isDead() && !xGame[xGameTypeFade].active && isPressing(KeyFireDown, true))
+  if ( (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) && !xGame[xGameTypeFade].active && isPressing(KeyFireDown, true))
   {
-    if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
+    if (player->getEndAge() < DEATH_CERTIFICATE_DELAY) player->setEndAge(DEATH_CERTIFICATE_DELAY);
     else backToMenu = true;
   }
+
   else if (gameState == gameStatePlayingPause)
   {
     if (isPressing(KeyDown, true))
@@ -1480,6 +1483,19 @@ void WitchBlastGame::updateRunningGame()
         achievementsQueue.pop();
       }
     }
+
+    // victorious end of game ?
+    if (endingTimer > 0.0f)
+    {
+      endingTimer -= deltaTime;
+      if (endingTimer <= 0.0f)
+      {
+        calculateScore();
+
+        player->setPlayerStatus(PlayerEntity::playerStatusVictorious);
+        player->setVelocity(Vector2D(0, 0));
+      }
+    }
   }
   else if (gameState == gameStatePlayingDisplayBoss)
   {
@@ -1537,7 +1553,7 @@ void WitchBlastGame::updateRunningGame()
 
   if (backToMenu)
   {
-    if (player->isDead())
+    if (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
     {
       EntityManager::getInstance().clean();
 
@@ -1821,30 +1837,32 @@ void WitchBlastGame::renderRunningGame()
     sf::View view = app->getView();
     sf::View viewSave = app->getView();
 
-    if (!parameters.zoom || player->getDeathAge() > 4.0f)
+    float endAge = player->getEndAge();
+
+    if (!parameters.zoom || endAge > 4.0f)
     {
       // do nothing
     }
-    else if (player->getDeathAge() > 3.0f)
+    else if (endAge > 3.0f)
     {
-      view.zoom(1.0f - 0.75f * (4.0f - player->getDeathAge()));
+      view.zoom(1.0f - 0.75f * (4.0f - endAge));
       float xDiff = view.getCenter().x - player->getX();
       float yDiff = view.getCenter().y - player->getY();
-      view.setCenter(view.getCenter().x - xDiff * (4.0f - player->getDeathAge()),
-                     view.getCenter().y - yDiff * (4.0f - player->getDeathAge()));
+      view.setCenter(view.getCenter().x - xDiff * (4.0f - endAge),
+                     view.getCenter().y - yDiff * (4.0f - endAge));
     }
-    else if (player->getDeathAge() > 1.0f)
+    else if (endAge > 1.0f)
     {
       view.zoom(0.25f);
       view.setCenter(player->getX(), player->getY());
     }
     else
     {
-      view.zoom(1.0f - 0.75f * (player->getDeathAge()));
+      view.zoom(1.0f - 0.75f * endAge);
       float xDiff = view.getCenter().x - player->getX();
       float yDiff = view.getCenter().y - player->getY();
-      view.setCenter(view.getCenter().x - xDiff * player->getDeathAge(),
-                     view.getCenter().y - yDiff * player->getDeathAge());
+      view.setCenter(view.getCenter().x - xDiff * endAge,
+                     view.getCenter().y - yDiff * endAge);
     }
 
     view.move(-5, -5);
@@ -2232,7 +2250,7 @@ void WitchBlastGame::renderRunningGame()
 
     if (player->isDead())
     {
-      float deathAge = player->getDeathAge();
+      float deathAge = player->getEndAge();
 
       if (deathAge > DEATH_CERTIFICATE_DELAY)
       {
@@ -2265,7 +2283,39 @@ void WitchBlastGame::renderRunningGame()
       }
 
     }
-    else if (currentMap->getRoomType() == roomTypeExit && level >= 7 /*LAST_LEVEL*/)
+    else if (player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+    {
+      if (player->getEndAge() > 2.0f)
+      {
+        rectangle.setFillColor(sf::Color(0, 0, 0, 180));
+        rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+
+        renderDeathScreen(80, 110);
+
+        if (scoreSaveFile.compare("") == 0)
+        {
+          write(tools::getLabel("certificate_capture"), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+        }
+        else
+        {
+          std::stringstream ss;
+          ss << tools::getLabel("certificate_saved") << " " << scoreSaveFile;
+          write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+        }
+      }
+      else
+      {
+        rectangle.setFillColor(sf::Color(0, 0, 0, 90 * (player->getEndAge())));
+        rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+
+        renderDeathScreen(80 + (2.0f - player->getEndAge() ) * 1000, 110);
+      }
+    }
+    else if (player->getPlayerStatus() != PlayerEntity::playerStatusVictorious && currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
     {
       float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
 
@@ -2274,6 +2324,8 @@ void WitchBlastGame::renderRunningGame()
       write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2, 0);
 
       registerAchievement(AchievementWin);
+      if (endingTimer < 0.0f)
+        endingTimer = ENDING_TIMER;
     }
   }
 
@@ -2542,15 +2594,27 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   app->draw(rectangle);
 
   std::stringstream ss;
-  ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
+  if (player->isDead())
+    ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
+  else
+    ss << parameters.playerName << " - " << tools::getLabel("dc_victory");
   write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   ss.str(std::string());
   ss.clear();
-  ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
+
   int minutes = (int)gameTime / 60;
   if (minutes < 1) minutes = 1;
-  ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << minutes << " " << tools::getLabel("dc_minutes") << "." << std::endl;
+
+  if (player->isDead())
+  {
+    ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
+    ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << minutes << " " << tools::getLabel("dc_minutes") << "." << std::endl;
+  }
+  else
+  {
+    ss << tools::getLabel("dc_after_victory") << " " << minutes << " " << tools::getLabel("dc_minutes") << "." << std::endl;
+  }
 
   ss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount << std::endl;
   ss << tools::getLabel("dc_gold") << ": " << player->getGold() << std::endl;
@@ -7041,7 +7105,9 @@ bool WitchBlastGame::isPressing(inputKeyEnum k, bool oneShot)
 bool WitchBlastGame::getPressingState(inputKeyEnum k)
 {
   // arrows in menu
-  if (gameState != gameStatePlaying || player->isDead())
+  if (gameState != gameStatePlaying
+      || player->isDead()
+      || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
   {
     if (k == KeyLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) return true;
     if (k == KeyRight && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) return true;

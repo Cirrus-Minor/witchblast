@@ -537,6 +537,7 @@ private:
   bool monsterArray[MAP_WIDTH][MAP_HEIGHT]; /*!<  use to remember if a case has a monster in monster spawn */
   int killedEnemies[NB_ENEMY];
   int loopCounter;
+  float endingTimer;        /*!< Counter before end of won game */
 
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */

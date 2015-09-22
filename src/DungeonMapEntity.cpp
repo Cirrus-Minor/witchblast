@@ -484,7 +484,7 @@ void DungeonMapEntity::computeDoors()
 {
   DungeonMap* currentMap = game().getCurrentMap();
 
-  if (currentMap->hasKnownNeighbour(North, true) || currentMap->getRoomType() == roomTypeExit)
+  if (currentMap->hasKnownNeighbour(North, true) || (currentMap->getRoomType() == roomTypeExit && game().getLevel() < LAST_LEVEL))
   {
     isDoorShadow[North] = true;
     doorWall[North].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -570,7 +570,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[East] = false;
   }
 
-  if (currentMap->getRoomType() == roomTypeExit)
+  if (currentMap->getRoomType() == roomTypeExit && game().getLevel() < LAST_LEVEL)
   {
     isDoorSpecial = true;
     doorSpecial.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT / 2);
