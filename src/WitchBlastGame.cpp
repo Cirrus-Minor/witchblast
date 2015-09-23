@@ -2680,6 +2680,12 @@ void WitchBlastGame::calculateScore()
     if (player->getLostHp(i) == 0) score += getPerfectScore();
   }
 
+  // time
+  if (!player->isDead())
+  {
+    score += getTimeScore((int)(gameTime / 60.0f));
+  }
+
   // to save
   lastScore.name = parameters.playerName;
   lastScore.score = score;

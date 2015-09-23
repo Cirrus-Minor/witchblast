@@ -138,10 +138,18 @@ int getItemScore(item_equip_enum item)
   int points = items[(int) item + FirstEquipItem].price / 2;
   return points;
 }
+
 // 50 points / perfect
 int getPerfectScore()
 {
   return 50;
+}
+
+// 50 points / minute
+int getTimeScore(int timeInMinutes)
+{
+  if (timeInMinutes >= 60) return 0;
+  else return (60 - timeInMinutes) * 50;
 }
 
 #endif // SCORING_H_INCLUDED
