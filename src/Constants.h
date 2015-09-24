@@ -172,6 +172,7 @@ enum enum_images {
   IMAGE_DOORS,
   IMAGE_DESTROYABLE,
   IMAGE_HALL_OF_FAME,
+  IMAGE_LIGHTNING,
 
   NB_IMAGES
 };
@@ -305,6 +306,7 @@ enum sound_resources {
   SOUND_SCROLL,
   SOUND_CLOCK,
   SOUND_BOTTLE,
+  SOUND_THUNDER,
 };
 
 enum corpses_ressources{

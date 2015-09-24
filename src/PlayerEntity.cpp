@@ -3687,10 +3687,18 @@ void PlayerEntity::castLightning()
   for (int i = 0; i < nbBolts ; i++)
   {
     BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeLightning, 0);
-    bolt->setDamages(10);
+    bolt->setDamages(i == 0 ? 20 : 10);
     float shotAngle = rand() % 360;
     bolt->setVelocity(Vector2D(400 * cos(shotAngle), 400 * sin(shotAngle)));
     bolt->setViscosity(1.0f);
     bolt->setLifetime(5 + 0.1f * (float)(rand() % 50));
   }
+
+  SpriteEntity* lightningSprite = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_LIGHTNING), x, y - 300);
+  lightningSprite->setFading(true);
+  lightningSprite->setLifetime(0.2f);
+  lightningSprite->setAge(-0.4f);
+  lightningSprite->setRenderAdd();
+  lightningSprite->setZ(2000);
+  SoundManager::getInstance().playSound(SOUND_THUNDER);
 }

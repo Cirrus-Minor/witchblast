@@ -340,6 +340,7 @@ WitchBlastGame::WitchBlastGame()
     "media/shadows_corners.png",  "media/shadows_medium.png",
     "media/shadows_small.png",    "media/doors.png",
     "media/destroyable_objects.png",  "media/hall_of_fame.png",
+    "media/lightning.png",
   };
 
   for (const char *const filename : images)
@@ -413,6 +414,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
     "media/sound/secret.ogg",         "media/sound/scroll.ogg",
     "media/sound/tic_tac.ogg",        "media/sound/bottle.ogg",
+    "media/sound/thunder.ogg",
   };
 
   // AA in fullscreen
