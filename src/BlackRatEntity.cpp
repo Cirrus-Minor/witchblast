@@ -104,6 +104,8 @@ void BlackRatEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (entity->getMovingStyle() == movWalking)
   {
+    int oldDirection = currentDirection;
+
     if (currentDirection == 6 && entity->getX() > x)
     {
       currentDirection = 4;
@@ -124,15 +126,20 @@ void BlackRatEntity::collideWithEnemy(EnemyEntity* entity)
       currentDirection = 8;
       targetTile = IntCoord(currentTile.x, currentTile.y - 1);
     }
-    switch (currentDirection)
+
+    if (oldDirection != currentDirection)
     {
-      case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
-      case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
-      case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
-      case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
-      default: break;
+      switch (currentDirection)
+      {
+        case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
+        case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
+        case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
+        case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
+        default: break;
+      }
+      acceleration = { 0, 0 };
+      facingDirection = currentDirection;
     }
-    facingDirection = currentDirection;
   }
 }
 
