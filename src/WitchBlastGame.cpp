@@ -75,7 +75,7 @@
 #endif // ONLINE_MODE
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
-const float ENDING_TIMER = 10.0f;
+const float ENDING_TIMER = 8.0f;
 const unsigned int ACHIEV_LINES = 3;
 
 const int VolumeModifier = 55;
