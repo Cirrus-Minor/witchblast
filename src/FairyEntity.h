@@ -8,15 +8,16 @@
 class FairyEntity : public SpriteEntity
 {
   public:
-    FairyEntity(float x, float y, enumFamiliar fairyType);
+    FairyEntity(float x, float y, enumFamiliar fairyType, bool isPlayerControlled = false);
     virtual void animate(float delay);
 
-    void fire(int dir);
+    void fire(int dir, bool bySelf = false);
 
   protected:
 
   private:
     PlayerEntity* parentEntity;
+    bool isPlayer;
     float fireDelay;
     float teleportDelay;
     int facingDirection;

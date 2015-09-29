@@ -747,6 +747,8 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     // the player
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+    // Add a fairy - co op players
+	player->setEquipped(ItemFairy - FirstEquipItem, true, true);
     resetKilledEnemies();
     randomizePotionMap();
 
@@ -5827,7 +5829,7 @@ bool WitchBlastGame::loadGame()
     {
       bool eq;
       file >> eq;
-      player->setEquiped(i, eq);
+      player->setEquipped(i, eq);
     }
     float x, y;
     file >> x >> y;

@@ -9,7 +9,8 @@
 
 float const fireDelayAdvancedMult = 0.8f;
 
-FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_FAIRY), x, y, 48, 72)
+FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType, bool isPlayerControlled) : SpriteEntity (ImageManager::getInstance().getImage(IMAGE_FAIRY), x, y, 48, 72),
+  isPlayer(isPlayerControlled)
 {
   this->x = x;
   this->y = y;
@@ -65,7 +66,8 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType) : SpriteEntit
 void FairyEntity::animate(float delay)
 {
   z = y + height;
-  if (game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER)) delay *= 1.75f;
+
+  if (parentEntity->isEquiped(EQUIP_FAIRY_POWDER)) delay *= 1.75f;
 
   if (fireDelay > 0) fireDelay -= delay;
 
@@ -73,68 +75,75 @@ void FairyEntity::animate(float delay)
 
   float creatureSpeed = FAIRY_SPEED;
 
-  if (dist2 > 15000.0f)
+  if (!isPlayer)
   {
-    float tan = (parentEntity->getX() - x) / (parentEntity->getY() - y);
-    float angle = atan(tan);
+    if (dist2 > 15000.0f)
+    {
+      float tan = (parentEntity->getX() - x) / (parentEntity->getY() - y);
+      float angle = atan(tan);
 
-    if (parentEntity->getY() > y)
-      setVelocity(Vector2D(sin(angle) * creatureSpeed, cos(angle) * creatureSpeed));
-    else
-      setVelocity(Vector2D(-sin(angle) * creatureSpeed, -cos(angle) * creatureSpeed));
+      if (parentEntity->getY() > y)
+        setVelocity(Vector2D(sin(angle) * creatureSpeed, cos(angle) * creatureSpeed));
+      else
+        setVelocity(Vector2D(-sin(angle) * creatureSpeed, -cos(angle) * creatureSpeed));
 
-    viscosity = 1.0f;
-  }
-  else if (dist2 < 50000.0f)
-  {
-    viscosity = 0.96f;
-  }
-
-  if (velocity.x < 50.0f && velocity.x > -50.0f && velocity.y < 50.0f && velocity.y > -50.0f)
-  {
-    if (x < TILE_WIDTH * 1.3)
-    {
-      velocity.x = creatureSpeed;
+      viscosity = 1.0f;
     }
-    else if (x > TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3)
+    else if (dist2 < 50000.0f)
     {
-      velocity.x = -creatureSpeed;
-    }
-    if (y < TILE_HEIGHT * 1.3)
-    {
-      velocity.y = creatureSpeed;
-    }
-    else if (y > TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3)
-    {
-      velocity.y = -creatureSpeed;
+      viscosity = 0.96f;
     }
   }
-
-  if (game().getPlayer()->isEquiped(EQUIP_FAIRY_POWDER))
+  else
   {
-    teleportDelay -= delay;
+    setVelocity(Vector2D{0, 0});
+  }
 
-    if (teleportDelay <= 0.0f)
+  if (velocity.x < 50.0f && x < TILE_WIDTH * 1.3)
+  {
+    velocity.x = creatureSpeed;
+  }
+  else if (velocity.x > -50.0f && x > TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3)
+  {
+    velocity.x = -creatureSpeed;
+  }
+  if (velocity.y < 50.0f && y < TILE_HEIGHT * 1.3)
+  {
+    velocity.y = creatureSpeed;
+  }
+  else if (velocity.y > -50.0f && y > TILE_HEIGHT * (MAP_HEIGHT - 1) - TILE_HEIGHT * 0.3)
+  {
+    velocity.y = -creatureSpeed;
+  }
+
+  if (parentEntity->isEquiped(EQUIP_FAIRY_POWDER))
+  {
+    if (!isPlayer)
     {
-      teleportDelay = 7.0f + 0.2f * (rand() % 35);
-      SoundManager::getInstance().playSound(SOUND_TELEPORT);
+      teleportDelay -= delay;
 
-      for(int i=0; i < 6; i++)
+      if (teleportDelay <= 0.0f)
       {
-        game().generateStar(sf::Color(50, 50, 255, 255), x, y);
-        game().generateStar(sf::Color(200, 200, 255, 255), x, y);
+        teleportDelay = 7.0f + 0.2f * (rand() % 35);
+        SoundManager::getInstance().playSound(SOUND_TELEPORT);
+
+        for(int i=0; i < 6; i++)
+        {
+          game().generateStar(sf::Color(50, 50, 255, 255), x, y);
+          game().generateStar(sf::Color(200, 200, 255, 255), x, y);
+        }
+
+        x = TILE_WIDTH + rand() % (TILE_WIDTH * (MAP_WIDTH - 2));
+        y = TILE_HEIGHT + rand() % (TILE_HEIGHT * (MAP_HEIGHT - 2));
+
+        for(int i=0; i < 6; i++)
+        {
+          game().generateStar(sf::Color(50, 50, 255, 255), x, y);
+          game().generateStar(sf::Color(200, 200, 255, 255), x, y);
+        }
+
+        if (rand() % 60 == 0) parentEntity->castTeleport();
       }
-
-      x = TILE_WIDTH + rand() % (TILE_WIDTH * (MAP_WIDTH - 2));
-      y = TILE_HEIGHT + rand() % (TILE_HEIGHT * (MAP_HEIGHT - 2));
-
-      for(int i=0; i < 6; i++)
-      {
-        game().generateStar(sf::Color(50, 50, 255, 255), x, y);
-        game().generateStar(sf::Color(200, 200, 255, 255), x, y);
-      }
-
-      if (rand() % 60 == 0) game().getPlayer()->castTeleport();
     }
   }
 
@@ -161,8 +170,10 @@ void FairyEntity::animate(float delay)
   SpriteEntity::animate(delay);
 }
 
-void FairyEntity::fire(int dir)
+void FairyEntity::fire(int dir, bool bySelf)
 {
+  // If the fairy is player-controlled, don't fire with the main player
+  if (isPlayer && !bySelf) return;
   if (x < TILE_WIDTH * 1.3) return;
   if (y < TILE_HEIGHT * 1.3) return;
   if (x > TILE_WIDTH * (MAP_WIDTH - 1) - TILE_WIDTH * 0.3) return;
@@ -183,7 +194,7 @@ void FairyEntity::fire(int dir)
       break;
     }
 
-    fireDelay = game().getPlayer()->isEquiped(EQUIP_BELT_ADVANCED) ? fairyFireDelay * fireDelayAdvancedMult : fairyFireDelay;
+    fireDelay = parentEntity->isEquiped(EQUIP_BELT_ADVANCED) ? fairyFireDelay * fireDelayAdvancedMult : fairyFireDelay;
 
     float velx = 0.0f;
     float vely = 0.0f;
@@ -306,7 +317,7 @@ void FairyEntity::tryToFire()
 
 void FairyEntity::computeFacingDirection()
 {
-  if (parentEntity->getFireDirection() != 5)
+  if (!isPlayer && parentEntity->getFireDirection() != 5)
   {
     facingDirection = parentEntity->getFireDirection();
   }
