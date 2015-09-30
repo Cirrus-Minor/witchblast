@@ -623,7 +623,7 @@ void WitchBlastGame::onUpdate()
     else
     {
       EntityManager::getInstance().animate(deltaTime);
-      if (isPressing(KeyTimeControl, false))
+      if (isPressing(0, KeyTimeControl, false))
       {
         EntityManager::getInstance().animate(deltaTime);
         SoundManager::getInstance().playSound(SOUND_VIB, false);
@@ -1045,7 +1045,7 @@ void WitchBlastGame::updateIntro()
       if (event.key.code == sf::Keyboard::Escape) stopDemo = true;
     }
   }
-  if (isPressing(KeyFireDown, true)) stopDemo = true;
+  if (isPressing(0, KeyFireDown, true)) stopDemo = true;
 
   if (stopDemo)
   {
@@ -1341,7 +1341,7 @@ void WitchBlastGame::updateRunningGame()
     else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
   }
 
-  if ( (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) && !xGame[xGameTypeFade].active && isPressing(KeyFireDown, true))
+  if ( (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) && !xGame[xGameTypeFade].active && isPressing(0, KeyFireDown, true))
   {
     if (player->getEndAge() < DEATH_CERTIFICATE_DELAY) player->setEndAge(DEATH_CERTIFICATE_DELAY);
     else backToMenu = true;
@@ -1349,19 +1349,19 @@ void WitchBlastGame::updateRunningGame()
 
   else if (gameState == gameStatePlayingPause)
   {
-    if (isPressing(KeyDown, true))
+    if (isPressing(0, KeyDown, true))
     {
       menuInGame.index++;
       if (menuInGame.index == menuInGame.items.size()) menuInGame.index = 0;
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
-    else if (isPressing(KeyUp, true))
+    else if (isPressing(0, KeyUp, true))
     {
       if (menuInGame.index == 0) menuInGame.index = menuInGame.items.size() - 1;
       else menuInGame.index--;
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
-    else if (isPressing(KeyFireDown, true))
+    else if (isPressing(0, KeyFireDown, true))
     {
       switch (menuInGame.items[menuInGame.index].id)
       {
@@ -1403,62 +1403,62 @@ void WitchBlastGame::updateRunningGame()
   {
     if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
 
-    if (isPressing(KeyLeft, false))
+    if (isPressing(0, KeyLeft, false))
     {
-      if (isPressing(KeyUp, false))
+      if (isPressing(0, KeyUp, false))
         player->move(7);
-      else if (isPressing(KeyDown, false))
+      else if (isPressing(0, KeyDown, false))
         player->move(1);
       else
         player->move(4);
     }
-    else if (isPressing(KeyRight, false))
+    else if (isPressing(0, KeyRight, false))
     {
-      if (isPressing(KeyUp, false))
+      if (isPressing(0, KeyUp, false))
         player->move(9);
-      else if (isPressing(KeyDown, false))
+      else if (isPressing(0, KeyDown, false))
         player->move(3);
       else
         player->move(6);
     }
-    else if (isPressing(KeyUp, false))
+    else if (isPressing(0, KeyUp, false))
     {
       player->move(8);
     }
-    else if (isPressing(KeyDown, false))
+    else if (isPressing(0, KeyDown, false))
     {
       player->move(2);
     }
 
-    if (isPressing(KeyInteract, true))
+    if (isPressing(0, KeyInteract, true))
     {
       if (!player->isDead() && interaction.active) player->interact(interaction.type, interaction.id);
     }
 
-    if (isPressing(KeyFireSelect, true))
+    if (isPressing(0, KeyFireSelect, true))
     {
       if (gameState == gameStatePlaying) player->selectNextShotType();
     }
 
-    if (isPressing(KeySpell, true))
+    if (isPressing(0, KeySpell, true))
     {
       if (gameState == gameStatePlaying) player->castSpell();
     }
 
     player->resetFireDirection();
 
-    if (isPressing(KeyFireLeft, false))
+    if (isPressing(0, KeyFireLeft, false))
       player->fire(4);
-    else if (isPressing(KeyFireRight, false))
+    else if (isPressing(0, KeyFireRight, false))
       player->fire(6);
-    else if (isPressing(KeyFireUp, false))
+    else if (isPressing(0, KeyFireUp, false))
       player->fire(8);
-    else if (isPressing(KeyFireDown, false))
+    else if (isPressing(0, KeyFireDown, false))
       player->fire(2);
     // alternative "one button" gameplay
-    else if (isPressing(KeyFire, false))
+    else if (isPressing(0, KeyFire, false))
     {
-      if (gameState == gameStatePlaying && isPressing(KeyFire, true))
+      if (gameState == gameStatePlaying && isPressing(0, KeyFire, true))
         firingDirection = player->getFacingDirection();
       player->fire(firingDirection);
     }
@@ -1537,7 +1537,7 @@ void WitchBlastGame::updateRunningGame()
   }
   else if (gameState == gameStatePlayingDisplayBoss)
   {
-    if (isPressing(KeyFireDown, true)) gameState = gameStatePlaying;
+    if (isPressing(0, KeyFireDown, true)) gameState = gameStatePlaying;
   }
 
   onUpdate();
@@ -1966,7 +1966,7 @@ void WitchBlastGame::renderRunningGame()
       app->draw(whiteLine);
     }
   }
-  if (isPressing(KeyTimeControl, false) && gameState == gameStatePlaying)
+  if (isPressing(0, KeyTimeControl, false) && gameState == gameStatePlaying)
   {
     // effect
     int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
@@ -3018,23 +3018,23 @@ void WitchBlastGame::updateMenu()
 
   if (menuState == MenuStateAchievements)
   {
-    if (isPressing(KeyRight, true))
+    if (isPressing(0, KeyRight, true))
     {
       if (menuAchIndex % 8 < 7) menuAchIndex++;
     }
-    else if (isPressing(KeyLeft, true))
+    else if (isPressing(0, KeyLeft, true))
     {
       if (menuAchIndex % 8 > 0) menuAchIndex--;
     }
-    else if (isPressing(KeyDown, true))
+    else if (isPressing(0, KeyDown, true))
     {
       if (menuAchIndex / 8 < ACHIEV_LINES) menuAchIndex += 8;
     }
-    else if (isPressing(KeyUp, true))
+    else if (isPressing(0, KeyUp, true))
     {
       if (menuAchIndex / 8 > 0) menuAchIndex -= 8;
     }
-    else if (isPressing(KeyFireDown, true))
+    else if (isPressing(0, KeyFireDown, true))
     {
       if (menuAchIndex / 8 >= ACHIEV_LINES) menuState = MenuStateMain;
     }
@@ -3043,12 +3043,12 @@ void WitchBlastGame::updateMenu()
 
   else if (menuState == MenuStateCredits)
   {
-    if (escape || isPressing(KeyFireDown, true)) menuState = MenuStateMain;
+    if (escape || isPressing(0, KeyFireDown, true)) menuState = MenuStateMain;
   }
 
   else if (menuState == MenuStateHiScores)
   {
-    if (escape || isPressing(KeyFireDown, true))
+    if (escape || isPressing(0, KeyFireDown, true))
     {
       menuScoreIndex++;
       if (menuScoreIndex > 2)
@@ -3072,21 +3072,21 @@ void WitchBlastGame::updateMenu()
       app->close();
     }
 
-    else if (isPressing(KeyDown, true))
+    else if (isPressing(0, KeyDown, true))
     {
       menu->index++;
       if (menu->index == menu->items.size()) menu->index = 0;
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
 
-    else if (isPressing(KeyUp, true))
+    else if (isPressing(0, KeyUp, true))
     {
       if (menu->index == 0) menu->index = menu->items.size() - 1;
       else menu->index--;
 
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
-    else if (isPressing(KeyRight, true))
+    else if (isPressing(0, KeyRight, true))
     {
       if (menu->items[menu->index].id == MenuLanguage)
       {
@@ -3114,7 +3114,7 @@ void WitchBlastGame::updateMenu()
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
     }
-    else if (isPressing(KeyLeft, true))
+    else if (isPressing(0, KeyLeft, true))
     {
       if (menu->items[menu->index].id == MenuLanguage)
       {
@@ -3142,7 +3142,7 @@ void WitchBlastGame::updateMenu()
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
     }
-    else if (isPressing(KeyFireDown, true))
+    else if (isPressing(0, KeyFireDown, true))
     {
 
       switch (menu->items[menu->index].id)
@@ -7239,43 +7239,48 @@ void WitchBlastGame::addPresentItem(int n)
   if (n >= 0 && n < NUMBER_EQUIP_ITEMS) presentItems[n] = true;
 }
 
-bool WitchBlastGame::isPressing(inputKeyEnum k, bool oneShot)
+bool WitchBlastGame::isPressing(int p, inputKeyEnum k, bool oneShot)
 {
-  return (actionKey[k].isPressed && (!oneShot || actionKey[k].isTriggered));
+  return (actionKey[p][k].isPressed && (!oneShot || actionKey[p][k].isTriggered));
 }
 
-bool WitchBlastGame::getPressingState(inputKeyEnum k)
+bool WitchBlastGame::getPressingState(int p, inputKeyEnum k)
 {
-  // arrows in menu
-  if (gameState != gameStatePlaying
-      || player->isDead()
-      || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+  if (p == 0)
   {
-    if (k == KeyLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) return true;
-    if (k == KeyRight && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) return true;
-    if (k == KeyUp && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) return true;
-    if (k == KeyDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) return true;
+    // arrows in menu
+    if (gameState != gameStatePlaying
+        || player->isDead()
+        || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+    {
+      if (k == KeyLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) return true;
+      if (k == KeyRight && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) return true;
+      if (k == KeyUp && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) return true;
+      if (k == KeyDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) return true;
 
-    if (k == KeyFireDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) return true;
-  }
+      if (k == KeyFireDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) return true;
+    }
 
-  // keyboard
-  if (sf::Keyboard::isKeyPressed(input[k])) return true;
-
-  if (!sf::Joystick::isConnected(0)) return false;
-
-  // joystick
-  if (joystickInput[k].isButton)
-  {
-    // button
-    if (joystickInput[k].value >= 0)
-      if (sf::Joystick::isButtonPressed(0, joystickInput[k].value)) return true;
+    // keyboard
+    if (sf::Keyboard::isKeyPressed(input[k])) return true;
   }
   else
   {
-    // axis
-    if (joystickInput[k].value < 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) < -40) return true;
-    else if (joystickInput[k].value > 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) > 40) return true;
+    if (!sf::Joystick::isConnected(0)) return false;
+
+    // joystick
+    if (joystickInput[k].isButton)
+    {
+      // button
+      if (joystickInput[k].value >= 0)
+        if (sf::Joystick::isButtonPressed(0, joystickInput[k].value)) return true;
+    }
+    else
+    {
+      // axis
+      if (joystickInput[k].value < 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) < -40) return true;
+      else if (joystickInput[k].value > 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) > 40) return true;
+    }
   }
 
   return false;
@@ -7283,11 +7288,14 @@ bool WitchBlastGame::getPressingState(inputKeyEnum k)
 
 void WitchBlastGame::updateActionKeys()
 {
-  for (unsigned int i = 0; i < NumberKeys; i++)
+  for (int p = 0; p < NUM_PLAYERS; p++)
   {
-    bool oldState = actionKey[i].isPressed;
-    actionKey[i].isPressed = getPressingState((inputKeyEnum)i);
-    actionKey[i].isTriggered = actionKey[i].isPressed && !oldState;
+    for (unsigned int i = 0; i < NumberKeys; i++)
+    {
+      bool oldState = actionKey[p][i].isPressed;
+      actionKey[p][i].isPressed = getPressingState(p, (inputKeyEnum)i);
+      actionKey[p][i].isTriggered = actionKey[p][i].isPressed && !oldState;
+    }
   }
 }
 
