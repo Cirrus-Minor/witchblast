@@ -88,7 +88,7 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next release
+v0.7
 - ADD Destructible tiles
 - ADD Potions
 - ADD Secret rooms
@@ -105,6 +105,7 @@ Next release
 - MOD Butcher can drop sausages now
 - MOD Game becomes harder for good players
 - MOD Some monsters (rats, bats) slow down when changing direction
+- MOD Level 8 is the last level now
 - MOD Air divinity fury has now a lifetime (was infinite)
 - MOD Intro is displayed just once now
 - MOD Display the best player instead of the best scores
@@ -113,6 +114,7 @@ Next release
 - MOD Bolt particles are now batched
 - FIX Latency when communicating with the score server
 - FIX Interaction key has to be redefined each game
+- FIX Item description text too large
 
 v0.6
 - ADD Online scores
