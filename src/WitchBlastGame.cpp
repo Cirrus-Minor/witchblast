@@ -68,7 +68,7 @@
 
 #include <algorithm>
 
-#define LEVEL_TEST_MODE
+//#define LEVEL_TEST_MODE
 
 #ifdef ONLINE_MODE
 #include "OnlineScoring.h"
@@ -2686,12 +2686,15 @@ void WitchBlastGame::calculateScore()
   if (!player->isDead())
   {
     score += getTimeScore((int)(gameTime / 60.0f));
+    lastScore.level = -1;
   }
+  else
+    lastScore.level = level;
 
   // to save
   lastScore.name = parameters.playerName;
   lastScore.score = score;
-  lastScore.level = level;
+
   lastScore.shotType = player->getShotType();
 
   lastScore.divinity = player->getDivinity().divinity;
@@ -3529,7 +3532,8 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
     write(scoresToRender[i].name, 16, xName, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
 
     std::stringstream levelSS;
-    levelSS << "lvl " << scoresToRender[i].level;
+    if (scoresToRender[i].level == -1) levelSS << "Win";
+    else levelSS << "lvl " << scoresToRender[i].level;
     write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
     write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
 
