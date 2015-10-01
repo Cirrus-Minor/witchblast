@@ -4498,10 +4498,6 @@ void WitchBlastGame::generateMap()
     else if (level == 8)
     {
       // TODO
-      GiantSpiderEntity* b1 = new GiantSpiderEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
-          (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      b1->setLabelDy(10);
-
       FranckyEntity* b2 = new FranckyEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                                             (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b2->setLabelDy(-530);
@@ -4511,9 +4507,6 @@ void WitchBlastGame::generateMap()
       b3->setLabelDy(-20);
 
       new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 120,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-
-      new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 120,
                         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
 
