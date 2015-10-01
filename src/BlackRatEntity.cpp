@@ -104,6 +104,8 @@ void BlackRatEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (entity->getMovingStyle() == movWalking)
   {
+    int oldDirection = currentDirection;
+
     if (currentDirection == 6 && entity->getX() > x)
     {
       currentDirection = 4;
@@ -124,15 +126,20 @@ void BlackRatEntity::collideWithEnemy(EnemyEntity* entity)
       currentDirection = 8;
       targetTile = IntCoord(currentTile.x, currentTile.y - 1);
     }
-    switch (currentDirection)
+
+    if (oldDirection != currentDirection)
     {
-      case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
-      case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
-      case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
-      case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
-      default: break;
+      switch (currentDirection)
+      {
+        case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
+        case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
+        case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
+        case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
+        default: break;
+      }
+      acceleration = { 0, 0 };
+      facingDirection = currentDirection;
     }
-    facingDirection = currentDirection;
   }
 }
 
@@ -140,7 +147,11 @@ void BlackRatEntity::findNextGoal()
 {
   currentTile = getCurrentTile();
 
+  DungeonMap* dMap = game().getCurrentMap();
+
   int backDirection = 0;
+  int oldDirection = currentDirection;
+
   switch (currentDirection)
   {
     case 4: backDirection = 6; break;
@@ -150,62 +161,94 @@ void BlackRatEntity::findNextGoal()
     default: break;
   }
 
+  bool ok = false;
   {
-    bool ok = false;
     int r = 0;
     while (!ok)
     {
       r++;
       if (r == 150) // watchdog
         ok = true;
+      else if (r == 40)
+      {
+        backDirection = 5;
+      }
 
       int newDir = rand() % 4;
       if (newDir == 0)
       {
-        if (backDirection != 4 && currentTile.x > 2 && (currentTile.y % 2 != 0))
+        if (backDirection != 4 && currentTile.x > 1 && (currentTile.y % 2 != 0) && dMap->isWalkable(currentTile.x - 1, currentTile.y))
         {
           currentDirection = 4;
-          targetTile = IntCoord(currentTile.x - 2, currentTile.y);
+          targetTile = IntCoord(currentTile.x - 1, currentTile.y);
           ok = true;
         }
       }
       else if (newDir == 1)
       {
-        if (backDirection != 6 && currentTile.x < MAP_WIDTH - 2 && (currentTile.y % 2 != 0))
+        if (backDirection != 6 && currentTile.x < MAP_WIDTH - 2 && (currentTile.y % 2 != 0) && dMap->isWalkable(currentTile.x + 1, currentTile.y))
         {
           currentDirection = 6;
-          targetTile = IntCoord(currentTile.x + 2, currentTile.y);
+          targetTile = IntCoord(currentTile.x + 1, currentTile.y);
           ok = true;
         }
       }
       else if (newDir == 2)
       {
-        if (backDirection != 8 && currentTile.y > 1 && (currentTile.x % 2 != 0))
+        if (backDirection != 8 && currentTile.y > 1 && (currentTile.x % 2 != 0) && dMap->isWalkable(currentTile.x, currentTile.y - 1))
         {
           currentDirection = 8;
-          targetTile = IntCoord(currentTile.x, currentTile.y - 2);
+          targetTile = IntCoord(currentTile.x, currentTile.y - 1);
           ok = true;
         }
       }
       else
       {
-        if (backDirection != 2 && currentTile.y < MAP_HEIGHT - 2 && (currentTile.x % 2 != 0))
+        if (backDirection != 2 && currentTile.y < MAP_HEIGHT - 2 && (currentTile.x % 2 != 0) && dMap->isWalkable(currentTile.x, currentTile.y + 1))
         {
           currentDirection = 2;
-          targetTile = IntCoord(currentTile.x, currentTile.y + 2);
+          targetTile = IntCoord(currentTile.x, currentTile.y + 1);
           ok = true;
         }
       }
     }
   }
 
+  float accelerationAbs = (enemyType == EnemyTypeRatBlackHelmet) ? (creatureSpeed / 8) : (creatureSpeed / 16);
+
   switch (currentDirection)
   {
-    case 4: velocity.x = - creatureSpeed; velocity.y = 0.0f; break;
-    case 6: velocity.x = + creatureSpeed; velocity.y = 0.0f; break;
-    case 2: velocity.y = + creatureSpeed; velocity.x = 0.0f; break;
-    case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
+    case 4:
+      velocity.x = -creatureSpeed;
+      velocity.y = 0.0f;
+      acceleration.x = -accelerationAbs;
+      acceleration.y = 0.0f;
+      break;
+    case 6:
+      velocity.x = creatureSpeed;
+      velocity.y = 0.0f;
+      acceleration.x = accelerationAbs;
+      acceleration.y = 0;
+      break;
+    case 2:
+      velocity.y = creatureSpeed;
+      velocity.x = 0.0f;
+      acceleration.y = accelerationAbs;
+      acceleration.x = 0.0f;
+      break;
+    case 8:
+      velocity.y = -creatureSpeed;
+      velocity.x = 0.0f;
+      acceleration.y = -accelerationAbs;
+      acceleration.x = 0.0f;
+      break;
     default: break;
+  }
+
+  if (oldDirection != currentDirection)
+  {
+    velocity = Vector2D {0, 0};
+    doesAccelerate = true;
   }
 
   facingDirection = currentDirection;

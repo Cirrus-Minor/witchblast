@@ -32,6 +32,7 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeRatHelmet:      score = 5; break;
     case EnemyTypeRatBlackHelmet: score = 5; break;
     case EnemyTypeSlime:          score = 5; break;
+    case EnemyTypeSausage:        score = 5; break;
 
     case EnemyTypeImpBlue:        score = 8; break;
     case EnemyTypeImpRed:         score = 8; break;
@@ -47,6 +48,9 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeSlimeViolet:    score = 10; break;
 
     case EnemyTypePumpkin:        score = 15; break;
+
+    case EnemyTypeSpiderTarantula:
+                                  score = 20; break;
 
     case EnemyTypeWitch:          score = 25; break;
     case EnemyTypeWitchRed:       score = 25; break;
@@ -70,11 +74,11 @@ int getMonsterScore(enemyTypeEnum monster)
 
     case EnemyTypeButcher:        score = 30; break;
     case EnemyTypeSlimeBoss:      score = 60; break;
-    case EnemyTypeCyclops:        score = 120; break;
-    case EnemyTypeRatKing:        score = 180; break;
-    case EnemyTypeSpiderGiant:    score = 240; break;
-    case EnemyTypeFranckyHead:    score = 300; break;
-    case EnemyTypeVampire:        score = 350; break;
+    case EnemyTypeCyclops:        score = 100; break;
+    case EnemyTypeRatKing:        score = 120; break;
+    case EnemyTypeSpiderGiant:    score = 140; break;
+    case EnemyTypeFranckyHead:    score = 160; break;
+    case EnemyTypeVampire:        score = 180; break;
 
     case EnemyTypeBat_invocated:
     case EnemyTypeBatSkeleton_invocated:
@@ -92,8 +96,10 @@ int getMonsterScore(enemyTypeEnum monster)
     case EnemyTypeRockMissile:
     case EnemyTypeSpiderEgg_invocated:
     case EnemyTypeSpiderLittle_invocated:
+    case EnemyTypeSpiderTarantula_invocated:
     case EnemyTypeSpiderWeb:
     case EnemyTypeZombie_invocated:
+    case EnemyTypeSausage_invocated:
     case EnemyTypeFrancky:
     case EnemyTypeFranckyFoot:
     case EnemyTypeFranckyHand:
@@ -101,16 +107,23 @@ int getMonsterScore(enemyTypeEnum monster)
       score = 0; break;
 
     case EnemyTypeNone:
+    case EnemyTypeDestroyable:
     case NB_ENEMY:
       score = 0; break;
   }
   return score;
 }
 
-// 100 points / completed challenge
+// 50 points / completed challenge
 int getChallengeScore(int challengeLevel)
 {
-  return 100 * (challengeLevel - 1);
+  return 50 * (challengeLevel - 1);
+}
+
+// 50 points / secret
+int getSecretScore(int nbSecrets)
+{
+  return 50 * (nbSecrets);
 }
 
 // 1 point = 1 gold
@@ -124,6 +137,19 @@ int getItemScore(item_equip_enum item)
 {
   int points = items[(int) item + FirstEquipItem].price / 2;
   return points;
+}
+
+// 50 points / perfect
+int getPerfectScore()
+{
+  return 50;
+}
+
+// 50 points / minute
+int getTimeScore(int timeInMinutes)
+{
+  if (timeInMinutes >= 60) return 0;
+  else return (60 - timeInMinutes) * 50;
 }
 
 #endif // SCORING_H_INCLUDED

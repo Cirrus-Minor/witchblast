@@ -163,9 +163,7 @@ void FranckyEntity::collideMapBottom()
 
 void FranckyEntity::drop()
 {
-  ItemEntity* newItem = new ItemEntity(ItemBossHeart, x, y);
-  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-  newItem->setViscosity(0.96f);
+  dropItem(ItemBossHeart);
 }
 
 void FranckyEntity::render(sf::RenderTarget* app)

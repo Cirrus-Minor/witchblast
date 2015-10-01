@@ -74,10 +74,14 @@ DungeonMap* GameFloor::getAndVisitMap(int x, int y)
 {
   maps[x][y]->setVisited(true);
 
-  if (x > 0 && floor[x-1][y] > 0) maps[x-1][y]->setKnown(true);
-  if (x < FLOOR_WIDTH - 1 && floor[x+1][y] > 0) maps[x+1][y]->setKnown(true);;
-  if (y > 0 && floor[x][y-1] > 0) maps[x][y-1]->setKnown(true);;
-  if (y < FLOOR_HEIGHT - 1 && floor[x][y+1] > 0) maps[x][y+1]->setKnown(true);;
+  if (x > 0 && floor[x - 1][y] > 0 && getRoom(x - 1, y) != roomTypeSecret)
+    maps[x-1][y]->setKnown(true);
+  if (x < FLOOR_WIDTH - 1 && floor[x + 1][y] > 0 && getRoom(x + 1, y) != roomTypeSecret)
+    maps[x+1][y]->setKnown(true);;
+  if (y > 0 && floor[x][y - 1] > 0 && getRoom(x, y - 1) != roomTypeSecret)
+    maps[x][y-1]->setKnown(true);;
+  if (y < FLOOR_HEIGHT - 1 && floor[x][y + 1] > 0 && getRoom(x, y + 1) != roomTypeSecret)
+    maps[x][y+1]->setKnown(true);;
 
   return maps[x][y];
 }
@@ -103,7 +107,7 @@ void GameFloor::displayToConsole()
         printf("$");
         break;
       case roomTypeKey:
-        printf("!");
+        printf("k");
         break;
       case roomTypeBonus:
         printf("*");
@@ -115,10 +119,13 @@ void GameFloor::displayToConsole()
         printf("0");
         break;
       case roomTypeChallenge:
-        printf("?");
+        printf("!");
         break;
       case roomTypeTemple:
         printf("+");
+        break;
+      case roomTypeSecret:
+        printf("?");
         break;
       }
     }
@@ -151,6 +158,19 @@ void GameFloor::reveal()
     }
 }
 
+void GameFloor::forget(int floorX, int floorY)
+{
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] > roomTypeNULL)
+      {
+        if (!((i == floorX && (j >= floorY - 1 && j <= floorY + 1)) || (j == floorY && (i >= floorX - 1 && i <= floorX + 1))))
+          maps[i][j]->setKnown(false);
+      }
+    }
+}
+
 IntCoord GameFloor::getFirstNeighboor(int x, int y)
 {
   if (x > 0 && floor[x - 1][y] > 0) return IntCoord(x - 1, y);
@@ -169,6 +189,45 @@ std::vector<IntCoord> GameFloor::findSuperIsolated()
       if (floor[i][j] == roomTypeStandard && neighboorCount(i, j) == 1)
       {
         if (isSuperIsolated(i, j))
+        {
+          IntCoord result(i, j);
+          results.push_back(result);
+        }
+      }
+    }
+  return results;
+}
+
+std::vector<IntCoord> GameFloor::findSecretRoom()
+{
+  std::vector<IntCoord> results;
+
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] == roomTypeNULL && neighboorCount(i, j) == 1)
+      {
+        IntCoord neighboor = getFirstNeighboor(i, j);
+        if (i >= 0 &&
+            (floor[neighboor.x][neighboor.y] == roomTypeStandard
+             || (floor[neighboor.x][neighboor.y] == roomTypeStarting && neighboor.y != j - 1)))
+        {
+          IntCoord result(i, j);
+          results.push_back(result);
+        }
+      }
+    }
+  if (results.size() > 0) return results;
+
+  for (int i=0; i < FLOOR_WIDTH; i++)
+    for (int j=0; j < FLOOR_HEIGHT; j++)
+    {
+      if (floor[i][j] == roomTypeNULL && neighboorCount(i, j) == 1)
+      {
+        IntCoord neighboor = getFirstNeighboor(i, j);
+        if (i >= 0
+            && floor[neighboor.x][neighboor.y] != roomTypeMerchant
+            && floor[neighboor.x][neighboor.y] != roomTypeExit)
         {
           IntCoord result(i, j);
           results.push_back(result);
@@ -234,7 +293,6 @@ bool GameFloor::finalize()
   int nbIsolatedRoomsMin = 5;
   if (level == 1) nbIsolatedRoomsMin = 2;
   else if (level == 2) nbIsolatedRoomsMin = 4;
-  //if (level > 2 && game().getPlayer()->getActiveSpell().spell == SpellNone) nbIsolatedRoomsMin = 4;
 
   if (nbIsolatedRooms < nbIsolatedRoomsMin) return false;
 
@@ -280,6 +338,17 @@ void GameFloor::createFloor()
         }
     generate();
     ok = finalize();
+
+    if (ok)
+    {
+      // secret
+      std::vector<IntCoord> secretVector = findSecretRoom();
+      if (secretVector.size() > 0)
+      {
+        int index = rand() % secretVector.size();
+        floor[secretVector[index].x][secretVector[index].y] = roomTypeSecret;
+      }
+    }
 
     int x0 = FLOOR_WIDTH / 2;
     int y0 = FLOOR_HEIGHT / 2;

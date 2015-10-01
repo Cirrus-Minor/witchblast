@@ -92,12 +92,7 @@ const std::string creditsSound[]  =
 /** Credits: Music */
 const std::string creditsMusic[]  =
 {
-  "Michael Ghelfi",
-  "JappeJ",
-  "SteveSyz",
-  "CinTer",
-  "cazok",
-  "ET16",
+  "Le Guitariste Du Nord",
   "END"
 };
 /** Credits: Translation */
@@ -121,6 +116,12 @@ struct parameterStruct
   bool fullscreen;            /*!< full screen (false = disabled) */
   bool displayBossPortrait;
   std::string playerName;     /*!< player name */
+};
+
+struct structPotionMap
+{
+  enumItemType effect;
+  bool known;
 };
 
 /*! \class WitchBlastGame
@@ -188,10 +189,16 @@ public:
   int getLevel();
 
   /*!
-   *  \brief accessor on the level
+   *  \brief accessor on the challenge level
    *  \return : the challenge level
    */
   int getChallengeLevel();
+
+  /*!
+   *  \brief accessor on the number of found secrets
+   *  \return : the number of found secrets
+   */
+  int getSecretsFound();
 
   /*!
    *  \brief accessor on showLogical flag
@@ -242,6 +249,15 @@ public:
   *  It's called when the room is closed : 0 enemy = room is cleared and doors shall open.
   *  \return amount of enemies
   */
+
+  /*!
+   *  \brief Refreshes the minimap
+   *
+   * Refresh the minimap.
+   * Called when the player changes room.
+   */
+  void refreshMinimap();
+
   int getEnemyCount();
 
   int getUndeadCount();
@@ -311,8 +327,9 @@ public:
    *  \param app : the rendering target
    *  \param xShadow : offset of the shadow (x)
    *  \param yShadow : offset of the shadow (y)
+   *  \param maxWidth : max width of the text image (0 = no limit)
    */
-  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow);
+  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth);
 
   /*!
    *  \brief Save the game
@@ -412,6 +429,9 @@ public:
     int level;
     int shotType;
     bool equip[NUMBER_EQUIP_ITEMS];
+    int divinity;
+    int killedBy;
+    int time;
   };
   void calculateScore();
 
@@ -426,6 +446,7 @@ public:
   void registerAchievement(enumAchievementType achievement);
 
   void renderDoors();
+  void setDoorVisible(int n);
 
   bool isPresentItem(int n);
   void addPresentItem(int n);
@@ -439,6 +460,27 @@ public:
   void verifyDoorUnlocking();
   float getGameTime();
   std::string equipToString(bool equip[NUMBER_EQUIP_ITEMS]);
+
+  enumItemType getPotion(enumItemType source);
+  bool potionEffectKnown(enumItemType source);
+  void setPotionToKnown(enumItemType source);
+  void addPotionToMap(enumItemType source, enumItemType effect, bool known);
+  void acquireAlchemyBook();
+  void forget();
+  void forgetPotions();
+
+  /*!
+   *  \brief Returns true if the game is in "advanced" mode
+   */
+  bool isAdvanced();
+
+  /*!
+   *  \brief Returns true if the difficulty for the map is "advanced"
+   */
+  bool isAdvancedLevel();
+
+  void pauseMusic();
+  void resumeMusic();
 
 protected:
   /*!
@@ -484,6 +526,7 @@ private:
   int score;                  /*!< score (calculated at the end of the game) */
   int bodyCount;              /*!< killed monsters (calculated at the end of the game) */
   int challengeLevel;         /*!< Level (challenge) */
+  int secretsFound;
   float gameTime;             /*!< "age" of the current game */
   int floorX;                 /*!< X position of the room in the level */
   int floorY;                 /*!< Y position of the room in the level */
@@ -493,6 +536,8 @@ private:
   bool isPlayerAlive;         /*!< Dying sets this bool to false (trigger the ending music) */
   bool monsterArray[MAP_WIDTH][MAP_HEIGHT]; /*!<  use to remember if a case has a monster in monster spawn */
   int killedEnemies[NB_ENEMY];
+  int loopCounter;
+  float endingTimer;        /*!< Counter before end of won game */
 
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */
@@ -677,15 +722,7 @@ private:
    *  \param roomCurrent : type of the current door
    *  \param roomNeighbour : type of the neighbour door
    */
-   void checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour);
-
-  /*!
-   *  \brief Refreshes the minimap
-   *
-   * Refresh the minimap.
-   * Called when the player changes room.
-   */
-  void refreshMinimap();
+   void checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour, bool isNeighbourKnown);
 
   /*!
    *  \brief Generates a room
@@ -977,6 +1014,9 @@ private:
   SpriteEntity* introSprites[8];
   int introState;
   int introSoundState;
+  int fairySpriteOffsetY;
+
+  int currentStandardMusic;
 
   std::vector <StructScore> scores;
   std::vector <StructScore> scoresOnline;
@@ -1042,6 +1082,11 @@ private:
   std::thread receiveScoreThread;
   void receiveScoreFromServer();
   void receiveScoreFromServerThread();
+
+  void checkDestroyableObjects();
+
+  std::map<enumItemType, structPotionMap> potionMap;
+  void randomizePotionMap();
 };
 
 /*!

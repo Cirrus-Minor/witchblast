@@ -221,3 +221,30 @@ void WitchEntity::fire()
     bolt->setVelocity(Vector2D(x, y).vectorNearlyTo(game().getPlayerPosition(), flowerFireVelocity, 1.0f ));
   }
 }
+
+void WitchEntity::drop()
+{
+  if (rand() % 12 == 0)
+  {
+    if (rand() % 5 == 0)
+    {
+      dropItem(ItemScrollRevelation);
+    }
+    else
+    {
+      dropItem((enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED));
+    }
+    return;
+  }
+  else
+  {
+    if (rand() % 5 == 0)
+    {
+      dropItem(ItemCopperCoin);
+    }
+    if (game().getPlayer()->isEquiped(EQUIP_LUCK) && rand() % 5 == 0)
+    {
+      dropItem(ItemCopperCoin);
+    }
+  }
+}

@@ -478,19 +478,11 @@ void VampireEntity::calculateBB()
 
 void VampireEntity::drop()
 {
-  ItemEntity* newItem = new ItemEntity(ItemBossHeart, x, y);
-  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-  newItem->setViscosity(0.96f);
+  dropItem(ItemBossHeart);
 }
 
 void VampireEntity::render(sf::RenderTarget* app)
 {
-  // shadow
-  /*sprite.setPosition(x, y);
-  sprite.setTextureRect(sf::IntRect(8 * width, 0, width, height));
-  app->draw(sprite);
-  sprite.setPosition(x, y);*/
-
   if (isAgonising)
   {
     sprite.setPosition(x - 48, y - 74);
@@ -774,9 +766,7 @@ void VampireDeadEntity::calculateBB()
 
 void VampireDeadEntity::drop()
 {
-  ItemEntity* newItem = new ItemEntity(ItemGoldCoin, x, y);
-  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-  newItem->setViscosity(0.96f);
+  dropItem(ItemGoldCoin);
 }
 
 void VampireDeadEntity::animate(float delay)

@@ -35,6 +35,11 @@ const int MAPOBJ_SHOP_LEFT     =   0 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP          =   1 + MAPOBJ_SHOP_BEGIN;
 const int MAPOBJ_SHOP_RIGHT    =   2 + MAPOBJ_SHOP_BEGIN;
 
+const int MAPOBJ_BARREL         =   1000;
+const int MAPOBJ_BARREL_NO_DROP =   1010;
+const int MAPOBJ_BARREL_EXPL    =   1020;
+const int MAPOBJ_SKULL          =   1030;
+
 const int MAP_NORMAL_FLOOR    =   8;
 const int MAP_NB_FLOORS       =   10;
 const int MAP_TEMPLE          =   MAP_NB_FLOORS * 24;
@@ -71,6 +76,7 @@ enum logicalMapStateEnum
   LogicalWall,
   LogicalObstacle,
   LogicalHole,
+  LogicalDestroyable,
 };
 
 class GameFloor;
@@ -86,7 +92,8 @@ enum roomTypeEnum
   roomTypeExit,
   roomTypeStarting,
   roomTypeChallenge,
-  roomTypeTemple
+  roomTypeTemple,
+  roomTypeSecret
 };
 
 enum positionDirection
@@ -148,6 +155,8 @@ class DungeonMap : public GameMap
     void setVisited(bool b);
     bool isKnown();
     void setKnown(bool b);
+    bool isRevealed();
+    void setRevealed(bool b);
     bool isCleared();
     void setCleared(bool b);
     bool isWalkable(int x, int y);
@@ -174,6 +183,8 @@ class DungeonMap : public GameMap
     int hasNeighbourUp();
     int hasNeighbourDown();
 
+    bool hasKnownNeighbour(int direction, bool mustBeRevealed);
+
     virtual bool isDownBlocking(int x, int y);
     virtual bool isUpBlocking(int x, int y);
     virtual bool isLeftBlocking(int x, int y);
@@ -199,8 +210,10 @@ class DungeonMap : public GameMap
     Vector2D generateKeyRoom();
     void generateTemple(int x, int y, enumDivinityType type);
     void generateTempleRoom();
+    void generateSecretRoom();
     void generateInselRoom();
     void addRandomGrids(int n);
+    void addDestroyableObject(int x, int y, int obj);
 
     void addItem(int itemType, float x, float y, bool merch);
     void addSprite(int spriteType, int frame,  float x, float y, float scale);
@@ -238,12 +251,15 @@ class DungeonMap : public GameMap
     void setFloorOffset(int n);
     void setWallType(int n);
 
+    bool callRevelation();
+
   protected:
   private:
     GameFloor* gameFloor;
     int x, y;
     bool visited;
     bool known;
+    bool revealed;
     bool cleared;
 
     int objectsMap[MAP_WIDTH][MAP_HEIGHT];

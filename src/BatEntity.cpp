@@ -6,6 +6,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
+const int BAT_ACCELERATION = 10;
+
 BatEntity::BatEntity(float x, float y, EnumBatType batType, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_BAT), x, y)
 {
@@ -51,12 +53,28 @@ void BatEntity::animate(float delay)
     changingDelay -= delay;
     if (changingDelay < 0.0f)
     {
-      if (batType != BatSkeleton || rand() % 2 == 0)
+      if (batType != BatSkeleton || rand() % 3 == 0)
+      {
         velocity = Vector2D(creatureSpeed);
+        acceleration.x = velocity.x / BAT_ACCELERATION;
+        acceleration.y = velocity.y / BAT_ACCELERATION;
+        computeFacingDirection();
+        velocity = Vector2D {0, 0};
+        doesAccelerate = true;
+      }
+
       else
+      {
         setVelocity(Vector2D(x, y).vectorTo(game().getPlayerPosition(), creatureSpeed ));
+        acceleration.x = velocity.x / BAT_ACCELERATION;
+        acceleration.y = velocity.y / BAT_ACCELERATION;
+        computeFacingDirection();
+        velocity = Vector2D {0, 0};
+        doesAccelerate = true;
+      }
+
       changingDelay = 0.5f + (float)(rand() % 2500) / 1000.0f;
-      computeFacingDirection();
+
     }
 
     if (age < 0.0f)
@@ -87,28 +105,32 @@ void BatEntity::calculateBB()
 
 void BatEntity::collideMapRight()
 {
-    velocity.x = -velocity.x;
+  velocity.x = -velocity.x;
+  acceleration.x = -acceleration.x;
     if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
   else computeFacingDirection();
 }
 
 void BatEntity::collideMapLeft()
 {
-    velocity.x = -velocity.x;
+  velocity.x = -velocity.x;
+  acceleration.x = -acceleration.x;
     if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
   else computeFacingDirection();
 }
 
 void BatEntity::collideMapTop()
 {
-    velocity.y = -velocity.y;
+  velocity.y = -velocity.y;
+  acceleration.y = -acceleration.y;
     if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
   else computeFacingDirection();
 }
 
 void BatEntity::collideMapBottom()
 {
-    velocity.y = -velocity.y;
+  velocity.y = -velocity.y;
+  acceleration.y = -acceleration.y;
     if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
   else computeFacingDirection();
 }

@@ -99,6 +99,42 @@ void DungeonMapEntity::animate(float delay)
     computeDoors();
   }
 
+  // bolt particles
+  for (unsigned int i = 0; i < backBoltParticles.size(); i++)
+  {
+    backBoltParticles[i].age += delay;
+    if (backBoltParticles[i].age >= backBoltParticles[i].lifetime)
+    {
+      backBoltParticles.erase(backBoltParticles.begin() + i);
+    }
+    else
+    {
+      animateParticle(backBoltParticles[i], delay, 1.0f);
+      float fade = (backBoltParticles[i].lifetime - backBoltParticles[i].age) / backBoltParticles[i].lifetime;
+      if (fade > 1) fade = 1;
+      else if (fade < 0) fade = 0;
+      backBoltParticles[i].scale = backBoltParticles[i].initialScale * fade;
+      backBoltParticles[i].color = sf::Color(255, 255, 255, 255 * fade);
+    }
+  }
+  for (unsigned int i = 0; i < boltParticles.size(); i++)
+  {
+    boltParticles[i].age += delay;
+    if (boltParticles[i].age >= boltParticles[i].lifetime)
+    {
+      boltParticles.erase(boltParticles.begin() + i);
+    }
+    else
+    {
+      animateParticle(boltParticles[i], delay, 1.0f);
+      float fade = (boltParticles[i].lifetime - boltParticles[i].age) / boltParticles[i].lifetime;
+      if (fade > 1) fade = 1;
+      else if (fade < 0) fade = 0;
+      boltParticles[i].scale = boltParticles[i].initialScale * fade;
+      boltParticles[i].color = sf::Color(255, 255, 255, 255 * fade);
+    }
+  }
+
   // blood
   bool moving = false;
   for (unsigned int i = 0; i < blood.size(); i++)
@@ -122,11 +158,19 @@ void DungeonMapEntity::animate(float delay)
 
         blood.erase(blood.begin() + i);
       }
+      else if (blood[i].frame >= BaseCreatureEntity::BloodBarrel * 6
+               && blood[i].frame < BaseCreatureEntity::BloodBarrelPowder * 6 + 6
+               && collideWithWall(blood[i], 16, 16, true))
+      {
+        blood[i].moving = false;
+        blood[i].velocity.x = 0.0f;
+        blood[i].velocity.y = 0.0f;
+      }
       else
       {
         animateParticle(blood[i], delay, 0.95f);
 
-        if ((game().getParameters().bloodSpread && blood[i].frame < 12) || blood[i].frame >= 36)
+        if ((game().getParameters().bloodSpread && ((blood[i].frame < 12) || blood[i].frame >= 36) &&  blood[i].frame < 42))
         {
           if (blood[i].velocity.x * blood[i].velocity.x + blood[i].velocity.y * blood[i].velocity.y > 80
               && rand() % 4 == 0)
@@ -264,7 +308,7 @@ void DungeonMapEntity::animateParticle(displayEntityStruct &particle, float dela
     particle.moving = false;
 }
 
-bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight)
+bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWidth, int boxHeight, bool canGoThroughObstacle)
 {
   float x0 = particle.x - boxWidth / 2;
   float xf = particle.x + boxWidth / 2;
@@ -277,10 +321,26 @@ bool DungeonMapEntity::collideWithWall(displayEntityStruct &particle, int boxWid
   if (particle.y < TILE_HEIGHT && particle.velocity.y < -1.0f) particle.velocity.y = -particle.velocity.y;
   else if (particle.y > TILE_HEIGHT * (MAP_HEIGHT - 2) && particle.velocity.y > 1.0f) particle.velocity.y = -particle.velocity.y;
 
-  collide[NordWest] = !game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, y0 / TILE_HEIGHT);
-  collide[SudWest] = !game().getCurrentMap()->isWalkable(x0 / TILE_WIDTH, yf / TILE_HEIGHT);
-  collide[NordEast] = !game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, y0 / TILE_HEIGHT);
-  collide[SudEast] = !game().getCurrentMap()->isWalkable(xf / TILE_WIDTH, yf / TILE_HEIGHT);
+  DungeonMap* iMap = game().getCurrentMap();
+
+  if (!canGoThroughObstacle)
+  {
+    collide[NordWest] = !iMap->isWalkable(x0 / TILE_WIDTH, y0 / TILE_HEIGHT);
+    collide[SudWest] = !iMap->isWalkable(x0 / TILE_WIDTH, yf / TILE_HEIGHT);
+    collide[NordEast] = !iMap->isWalkable(xf / TILE_WIDTH, y0 / TILE_HEIGHT);
+    collide[SudEast] = !iMap->isWalkable(xf / TILE_WIDTH, yf / TILE_HEIGHT);
+  }
+  else
+  {
+    collide[NordWest] = iMap->getLogicalTile(x0 / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(x0 / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalObstacle;
+    collide[SudWest] = iMap->getLogicalTile(x0 / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(x0 / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalObstacle;
+    collide[NordEast] = iMap->getLogicalTile(xf / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(xf / TILE_WIDTH, y0 / TILE_HEIGHT) == LogicalObstacle;
+    collide[SudEast] = iMap->getLogicalTile(xf / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalWall
+      || iMap->getLogicalTile(xf / TILE_WIDTH, yf / TILE_HEIGHT) == LogicalObstacle;
+  }
 
   return collide[NordWest] || collide[SudWest] || collide[NordEast] || collide[SudEast];
 }
@@ -424,7 +484,7 @@ void DungeonMapEntity::computeDoors()
 {
   DungeonMap* currentMap = game().getCurrentMap();
 
-  if (currentMap->hasNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
+  if (currentMap->hasKnownNeighbour(North, true) || (currentMap->getRoomType() == roomTypeExit && game().getLevel() < LAST_LEVEL))
   {
     isDoorShadow[North] = true;
     doorWall[North].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -446,7 +506,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[North] = false;
   }
 
-  if (currentMap->hasNeighbourDown() || (game().getLevel() > 1 &&currentMap->getRoomType() == roomTypeStarting))
+  if (currentMap->hasKnownNeighbour(South, true) || ( (game().getLevel() > 1 && currentMap->getRoomType() == roomTypeStarting)))
   {
     isDoorShadow[South] = true;
     doorWall[South].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -468,7 +528,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[South] = false;
   }
 
-  if (currentMap->hasNeighbourLeft())
+  if (currentMap->hasKnownNeighbour(West, true))
   {
     isDoorShadow[West] = true;
     doorWall[West].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -490,7 +550,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[West] = false;
   }
 
-  if (currentMap->hasNeighbourRight())
+  if (currentMap->hasKnownNeighbour(East, true))
   {
     isDoorShadow[East] = true;
     doorWall[East].setTextureRect(sf::IntRect(DOOR_WALL_SPRITE_X, currentMap->getWallType() * 64 +  DOOR_WALL_SPRITE_Y, 192, 64));
@@ -510,7 +570,7 @@ void DungeonMapEntity::computeDoors()
     isDoorKeyStone[East] = false;
   }
 
-  if (currentMap->getRoomType() == roomTypeExit)
+  if (currentMap->getRoomType() == roomTypeExit && game().getLevel() < LAST_LEVEL)
   {
     isDoorSpecial = true;
     doorSpecial.setPosition(TILE_WIDTH * MAP_WIDTH / 2, TILE_HEIGHT / 2);
@@ -565,6 +625,7 @@ void DungeonMapEntity::renderPost(sf::RenderTarget* app)
     app->draw(shadowVertices, ImageManager::getInstance().getImage(IMAGE_TILES_SHADOW_MEDIUM));
     break;
   }
+  displayBoltParticles(app);
 }
 
 void DungeonMapEntity::renderOverlay(sf::RenderTarget* app)
@@ -596,6 +657,16 @@ void DungeonMapEntity::displayCorpses(sf::RenderTarget* app)
   app->draw(corpsesLargeVertices, ImageManager::getInstance().getImage(IMAGE_CORPSES_BIG));
 }
 
+void DungeonMapEntity::displayBoltParticles(sf::RenderTarget* app)
+{
+  app->draw(backBoltParticlesVertices, ImageManager::getInstance().getImage(IMAGE_BOLT));
+  sf::RenderStates r;
+  r.blendMode = sf::BlendAdd ;
+  r.texture = ImageManager::getInstance().getImage(IMAGE_BOLT);
+
+  app->draw(boltParticlesVertices, r); //ImageManager::getInstance().getImage(IMAGE_BOLT));
+}
+
 void DungeonMapEntity::refreshMap()
 {
   hasChanged = true;
@@ -603,9 +674,12 @@ void DungeonMapEntity::refreshMap()
   blood.clear();
   corpses.clear();
   corpsesLarge.clear();
+  boltParticles.clear();
+  backBoltParticles.clear();
 
   computeBloodVertices();
   computeCorpsesVertices();
+  computeBoltParticulesVertices();
 }
 
 bool DungeonMapEntity::shouldBeTransformed(int part)
@@ -835,6 +909,11 @@ void DungeonMapEntity::computeOverVertices()
       {
         int nx = gameMap->getObjectTile(i, j) % tilesProLine;
         int ny = gameMap->getObjectTile(i, j) / tilesProLine;
+        if (gameMap->getObjectTile(i, j) >= MAPOBJ_BARREL)
+        {
+          nx = 0;
+          ny = 0;
+        }
 
         sf::Vertex* quad = &overVertices[(i + j * gameMap->getWidth()) * 4];
         {
@@ -1044,6 +1123,67 @@ void DungeonMapEntity::computeBloodVertices()
   }
 }
 
+void DungeonMapEntity::computeBoltParticulesVertices()
+{
+  boltParticlesVertices.setPrimitiveType(sf::Quads);
+  boltParticlesVertices.resize(boltParticles.size() * 4);
+
+  for (unsigned int i = 0; i < boltParticles.size(); i++)
+  {
+    auto particle = boltParticles[i];
+
+    sf::Vertex* quad = &boltParticlesVertices[i * 4];
+
+    float middle = 12.0f * particle.scale;
+    int nx = particle.frame % BOLT_PRO_LINE;
+    int ny = particle.frame / BOLT_PRO_LINE;
+
+    quad[0].position = sf::Vector2f(particle.x - middle, particle.y - middle);
+    quad[1].position = sf::Vector2f(particle.x + middle, particle.y - middle);
+    quad[2].position = sf::Vector2f(particle.x + middle, particle.y + middle);
+    quad[3].position = sf::Vector2f(particle.x - middle, particle.y + middle);
+
+    quad[0].texCoords = sf::Vector2f(nx * 24, ny * 24);
+    quad[1].texCoords = sf::Vector2f((nx + 1) * 24, ny * 24);
+    quad[2].texCoords = sf::Vector2f((nx + 1) * 24, (ny + 1) * 24);
+    quad[3].texCoords = sf::Vector2f(nx * 24, (ny + 1) * 24);
+
+    quad[0].color = particle.color;
+    quad[1].color = particle.color;
+    quad[2].color = particle.color;
+    quad[3].color = particle.color;
+  }
+
+  backBoltParticlesVertices.setPrimitiveType(sf::Quads);
+  backBoltParticlesVertices.resize(backBoltParticles.size() * 4);
+
+  for (unsigned int i = 0; i < backBoltParticles.size(); i++)
+  {
+    auto particle = backBoltParticles[i];
+
+    sf::Vertex* quad = &backBoltParticlesVertices[i * 4];
+
+    float middle = 12.0f * particle.scale;
+    int nx = particle.frame % BOLT_PRO_LINE;
+    int ny = particle.frame / BOLT_PRO_LINE;
+
+    quad[0].position = sf::Vector2f(particle.x - middle, particle.y - middle);
+    quad[1].position = sf::Vector2f(particle.x + middle, particle.y - middle);
+    quad[2].position = sf::Vector2f(particle.x + middle, particle.y + middle);
+    quad[3].position = sf::Vector2f(particle.x - middle, particle.y + middle);
+
+    quad[0].texCoords = sf::Vector2f(nx * 24, ny * 24);
+    quad[1].texCoords = sf::Vector2f((nx + 1) * 24, ny * 24);
+    quad[2].texCoords = sf::Vector2f((nx + 1) * 24, (ny + 1) * 24);
+    quad[3].texCoords = sf::Vector2f(nx * 24, (ny + 1) * 24);
+
+    quad[0].color = particle.color;
+    quad[1].color = particle.color;
+    quad[2].color = particle.color;
+    quad[3].color = particle.color;
+  }
+}
+
 void DungeonMapEntity::computeCorpsesVertices()
 {
   corpsesVertices.setPrimitiveType(sf::Quads);
@@ -1109,6 +1249,28 @@ displayEntityStruct& DungeonMapEntity::generateBlood(float x, float y, BaseCreat
   blood.push_back(bloodEntity);
 
   return blood[blood.size() - 1];
+}
+
+displayEntityStruct& DungeonMapEntity::generateBoltParticle(float x, float y, Vector2D velocity, bool back, int frame, float scale, float lifetime)
+{
+  displayEntityStruct partEntity;
+
+  partEntity.frame = frame;
+  partEntity.velocity = velocity;
+  partEntity.x = x;
+  partEntity.y = y;
+  partEntity.scale = scale;
+  partEntity.initialScale = scale;
+
+  partEntity.moving = true;
+  partEntity.lifetime = lifetime;
+  partEntity.age = 0;
+  partEntity.color = sf::Color::White;
+
+  if (back) backBoltParticles.push_back(partEntity);
+  else boltParticles.push_back(partEntity);
+
+  return boltParticles[boltParticles.size() - 1];
 }
 
 void DungeonMapEntity::addBlood(float x, float y, int frame, float scale)

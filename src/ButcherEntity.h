@@ -11,6 +11,7 @@ class ButcherEntity : public EnemyEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
+    virtual bool isAttacking();
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -23,6 +24,7 @@ class ButcherEntity : public EnemyEntity
 	  virtual void drop();
   private:
     float timer;
+    int sausages;
 };
 
 #endif // BUTCHERENTITY_H

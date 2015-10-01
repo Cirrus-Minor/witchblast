@@ -328,9 +328,7 @@ int GiantSpiderEntity::getHealthLevel()
 
 void GiantSpiderEntity::drop()
 {
-  ItemEntity* newItem = new ItemEntity(ItemBossHeart, x, y);
-  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-  newItem->setViscosity(0.96f);
+  dropItem(ItemBossHeart);
 
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
   EntityManager::EntityList::iterator it;

@@ -20,20 +20,22 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.6";
+const std::string APP_VERSION =   "0.7";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
 const std::string SAVE_DATA_FILE =  "data/data.sav";
 const std::string HISCORES_FILE =   "data/scores.dat";
 
-const std::string SAVE_VERSION =    "SAVE_0.6";
-const std::string SCORE_VERSION =   "V060";
+const std::string SAVE_VERSION =    "SAVE_0.7";
+const std::string SCORE_VERSION =   "V070";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
 
 const unsigned int SCORES_MAX    = 10;
+
+const int LAST_LEVEL = 8;
 
 // Client size
 const int SCREEN_WIDTH = 970;
@@ -83,6 +85,7 @@ const float KeyRoomFXDelay = 2.0f;
 enum enum_images {
   IMAGE_PLAYER_0,
   IMAGE_PLAYER_1,
+  IMAGE_PLAYER_2,
   IMAGE_BOLT,
   IMAGE_TILES,
   IMAGE_RAT,
@@ -109,6 +112,7 @@ enum enum_images {
   IMAGE_GHOST,
   IMAGE_ZOMBIE,
   IMAGE_BOGEY,
+  IMAGE_SAUSAGE,
 
   IMAGE_BUTCHER,
   IMAGE_GIANT_SLIME,
@@ -166,6 +170,9 @@ enum enum_images {
   IMAGE_TILES_SHADOW_MEDIUM,
   IMAGE_TILES_SHADOW_SMALL,
   IMAGE_DOORS,
+  IMAGE_DESTROYABLE,
+  IMAGE_HALL_OF_FAME,
+  IMAGE_LIGHTNING,
 
   NB_IMAGES
 };
@@ -293,6 +300,13 @@ enum sound_resources {
   SOUND_BOGEYMAN_ATTACK,
   SOUND_BOGEYMAN_VORTEX_00,
   SOUND_BOGEYMAN_VORTEX_01,
+  SOUND_BARREL_HIT,
+  SOUND_BARREL_SMASH,
+  SOUND_SECRET,
+  SOUND_SCROLL,
+  SOUND_CLOCK,
+  SOUND_BOTTLE,
+  SOUND_THUNDER,
 };
 
 enum corpses_ressources{
@@ -332,6 +346,7 @@ enum corpses_ressources{
   FRAME_CORPSE_CAULDRON_BLUE,
   FRAME_CORPSE_CAULDRON_RED,
   FRAME_CORPSE_CAULDRON_GREEN,
+  FRAME_CORPSE_LITTLE_SPIDER_TARANTULA,
 
   FRAME_CORPSE_KING_RAT,
   FRAME_CORPSE_GIANT_SLIME,
@@ -509,8 +524,8 @@ const int ZOMBIE_DAMAGE = 10;
 
 // Evl Flower
 const int EVIL_FLOWER_HP = 16;
-const int EVIL_FLOWER_MELEE_DAMAGES = 6;
-const int EVIL_FLOWER_MISSILE_DAMAGES = 5;
+const int EVIL_FLOWER_MELEE_DAMAGES = 5;
+const int EVIL_FLOWER_MISSILE_DAMAGES = 6;
 const int EVIL_FLOWER_FIRE_MISSILE_DAMAGES = 8;
 const int EVIL_FLOWER_BB_LEFT = 14;
 const int EVIL_FLOWER_BB_WIDTH_DIFF = 28;
@@ -636,6 +651,8 @@ enum EnumMessages
   MsgInfoDivGift,
   MsgInfoDivLevel,
 
+  MsgInfoPotionId,
+
   MsgTutoBasics,
   MsgTutoTips,
   MsgTutoItems,
@@ -647,6 +664,8 @@ enum EnumMessages
   MsgTutoShots,
   MsgTutoSpell,
   MsgTutoAchievements,
+  MsgTutoConsumables,
+  MsgTutoPotions,
 
   NB_MESSAGES
 };
@@ -688,6 +707,8 @@ enum EnumWorldEvents
   EventGetFamiliar,
   EventGetSpell,
   EventAchievement,
+  EventConsumable,
+  EventPotion,
 
   NB_EVENTS
 };

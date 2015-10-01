@@ -13,6 +13,7 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
   this->ratType = ratType;
   imagesProLine = 10;
   this->invocated = invocated;
+  doesAccelerate = true;
 
   if (ratType == RatTypeNormal)
   {
@@ -38,7 +39,7 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
   direction = rand() % 4;
   clockTurn = rand() % 2 == 0;
   compute(false);
-  timer = 5 + rand() % 6;
+  timer = 6 + rand() % 6;
 
   meleeDamages = RAT_DAMAGES;
 
@@ -56,7 +57,7 @@ void RatEntity::animate(float delay)
     timer -= delay;
     if (timer < 0.0f)
     {
-      timer = 5 + rand() % 6;
+      timer = 6 + rand() % 6;
       if (rand() % 3 == 0) clockTurn = !clockTurn;
       compute(true);
     }
@@ -89,29 +90,32 @@ void RatEntity::compute(bool turn)
     }
   }
 
+  velocity = Vector2D{0, 0};
+  float accelerationAbs = (enemyType == EnemyTypeRatHelmet || enemyType == EnemyTypeRatHelmet_invocated) ? (creatureSpeed / 10) : (creatureSpeed / 20);
+  doesAccelerate = true;
   switch (direction)
   {
   case 0:
-    velocity.x = 0;
-    velocity.y = -creatureSpeed;
+    acceleration.x = 0;
+    acceleration.y = -accelerationAbs;
     facingDirection = 8;
     break;
 
   case 1:
-    velocity.x = creatureSpeed;
-    velocity.y = 0;
+    acceleration.x = accelerationAbs;
+    acceleration.y = 0;
     facingDirection = 6;
     break;
 
   case 2:
-    velocity.x = 0;
-    velocity.y = creatureSpeed;
+    acceleration.x = 0;
+    acceleration.y = accelerationAbs;
     facingDirection = 2;
     break;
 
   case 3:
-    velocity.x = -creatureSpeed;
-    velocity.y = 0;
+    acceleration.x = -accelerationAbs;
+    acceleration.y = 0;
     facingDirection = 4;
     break;
   }

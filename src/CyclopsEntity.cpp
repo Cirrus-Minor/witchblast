@@ -311,9 +311,7 @@ void CyclopsEntity::collideMapBottom()
 
 void CyclopsEntity::drop()
 {
-  ItemEntity* newItem = new ItemEntity(ItemBossHeart, x, y);
-  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-  newItem->setViscosity(0.96f);
+  dropItem(ItemBossHeart);
 }
 
 void CyclopsEntity::render(sf::RenderTarget* app)

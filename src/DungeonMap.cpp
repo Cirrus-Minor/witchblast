@@ -18,6 +18,7 @@ DungeonMap::DungeonMap(GameFloor* gameFloor, int x, int y) : GameMap(MAP_WIDTH, 
   this->x = x;
   this->y = y;
   cleared = false;
+  revealed = true;
   visited = false;
   known = false;
   for (int i = 0; i < NB_RANDOM_TILES_IN_ROOM; i++)
@@ -53,6 +54,17 @@ void DungeonMap::setKnown(bool b)
   known = b;
 }
 
+bool DungeonMap::isRevealed()
+{
+  return revealed;
+}
+
+void DungeonMap::setRevealed(bool b)
+{
+  revealed = b;
+  if (revealed) known = true;
+}
+
 bool DungeonMap::isCleared()
 {
   return cleared;
@@ -71,6 +83,8 @@ roomTypeEnum DungeonMap::getRoomType()
 void DungeonMap::setRoomType(roomTypeEnum roomType)
 {
   this->roomType = roomType;
+  if (roomType == roomTypeSecret)
+    revealed = false;
 }
 
 int DungeonMap::getObjectTile(int x, int y)
@@ -86,11 +100,13 @@ logicalMapStateEnum DungeonMap::getLogicalTile(int x, int y)
 void DungeonMap::setObjectTile(int x, int y, int n)
 {
   objectsMap[x][y] = n;
+  hasChanged = true;
 }
 
 void DungeonMap::setLogicalTile(int x, int y, logicalMapStateEnum state)
 {
   logicalMap[x][y] = state;
+  hasChanged = true;
 }
 
 int DungeonMap::getFloorOffset()
@@ -320,6 +336,54 @@ roomTypeEnum DungeonMap::getNeighbourLeft()
   if (x > 0) return gameFloor->getRoom(x - 1, y);
   else return roomTypeNULL;
 }
+
+bool DungeonMap::hasKnownNeighbour(int direction, bool mustBeRevealed)
+{
+  switch (direction)
+  {
+  case North:
+    if (y > 0 && gameFloor->getRoom(x, y - 1) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x, y - 1) != roomTypeSecret || gameFloor->getMap(x, y - 1)->isRevealed());
+      else
+        return (gameFloor->getRoom(x, y - 1) != roomTypeSecret || gameFloor->getMap(x, y - 1)->isKnown());
+    }
+    break;
+
+  case South:
+    if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y + 1) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x, y + 1) != roomTypeSecret || gameFloor->getMap(x, y + 1)->isRevealed());
+      else
+        return (gameFloor->getRoom(x, y + 1) != roomTypeSecret || gameFloor->getMap(x, y + 1)->isKnown());
+    }
+    break;
+
+  case West:
+    if (x > 0 && gameFloor->getRoom(x - 1, y) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x - 1, y) != roomTypeSecret || gameFloor->getMap(x - 1, y)->isRevealed());
+      else
+        return (gameFloor->getRoom(x - 1, y) != roomTypeSecret || gameFloor->getMap(x - 1, y)->isKnown());
+    }
+    break;
+
+  case East:
+    if (x < MAP_WIDTH -1 && gameFloor->getRoom(x+1, y) > 0)
+    {
+      if (mustBeRevealed)
+        return (gameFloor->getRoom(x + 1, y) != roomTypeSecret || gameFloor->getMap(x + 1, y)->isRevealed());
+      else
+        return (gameFloor->getRoom(x + 1, y) != roomTypeSecret || gameFloor->getMap(x + 1, y)->isKnown());
+    }
+    break;
+  }
+  return false;
+}
+
 roomTypeEnum DungeonMap::getNeighbourRight()
 {
   if (x < MAP_WIDTH - 1) return gameFloor->getRoom(x + 1, y);
@@ -397,8 +461,12 @@ void DungeonMap::initRoom(int floorN, int wallN)
   int i, j;
 
   // style
-  if (floorN < 0) floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
-  else floorOffset = floorN;
+  if (roomType == roomTypeSecret)
+    floorOffset = 8 * 24;
+  else if (floorN < 0)
+    floorOffset = ((game().getLevel() - 1) % 8) * 24 ;
+  else
+    floorOffset = floorN;
 
   if (wallN < 0) wallType = ((game().getLevel() - 1) % 8) ;
   else wallType = wallN;
@@ -512,22 +580,30 @@ void DungeonMap::initRoom(int floorN, int wallN)
   {
     if (x > 0 && gameFloor->getRoom(x - 1, y) > 0)
     {
-      map[0][MAP_HEIGHT / 2] = floorOffset;
-      map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
-      map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
-      openDoor(0, y0);
+      if (gameFloor->getRoom(x - 1, y) != roomTypeSecret)
+      {
+        map[0][MAP_HEIGHT / 2] = floorOffset;
+        map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
+        map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
+        openDoor(0, y0);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x - 1, y) == roomTypeBoss)
-      {
-        doorType[West] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x - 1, y) == roomTypeChallenge)
-      {
-        doorType[West] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x - 1, y)->isVisited())
-      {
-        doorType[West] = gameFloor->getMap(x - 1, y)->getDoorType(East);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x - 1, y) == roomTypeBoss)
+        {
+          doorType[West] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x - 1, y) == roomTypeChallenge)
+        {
+          doorType[West] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x - 1, y)->isVisited())
+        {
+          doorType[West] = gameFloor->getMap(x - 1, y)->getDoorType(East);
+        }
+        else
+        {
+          // secret door
+          doorType[West] = getRandomDoor();
+        }
       }
       else
       {
@@ -537,75 +613,99 @@ void DungeonMap::initRoom(int floorN, int wallN)
 
     if (x < MAP_WIDTH - 1 && gameFloor->getRoom(x + 1, y) > 0)
     {
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = floorOffset;
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
-      map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
-      openDoor(MAP_WIDTH - 1, y0);
+      if (gameFloor->getRoom(x + 1, y) != roomTypeSecret)
+      {
+        map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = floorOffset;
+        map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
+        map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
+        openDoor(MAP_WIDTH - 1, y0);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x + 1, y) == roomTypeBoss)
-      {
-        doorType[East] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x + 1, y) == roomTypeChallenge)
-      {
-        doorType[East] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x + 1, y)->isVisited())
-      {
-        doorType[East] = gameFloor->getMap(x + 1, y)->getDoorType(West);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x + 1, y) == roomTypeBoss)
+        {
+          doorType[East] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x + 1, y) == roomTypeChallenge)
+        {
+          doorType[East] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x + 1, y)->isVisited())
+        {
+          doorType[East] = gameFloor->getMap(x + 1, y)->getDoorType(West);
+        }
+        else
+        {
+          doorType[East] = getRandomDoor();
+        }
       }
       else
       {
+        // secret door
         doorType[East] = getRandomDoor();
       }
     }
 
     if (y > 0 && gameFloor->getRoom(x, y - 1) > 0)
     {
-      map[MAP_WIDTH / 2][0] = floorOffset;
-      map[MAP_WIDTH / 2 - 1][0] = floorOffset;
-      map[MAP_WIDTH / 2 + 1][0] = floorOffset;
-      openDoor(x0, 0);
+      if (gameFloor->getRoom(x, y - 1) != roomTypeSecret)
+      {
+        map[MAP_WIDTH / 2][0] = floorOffset;
+        map[MAP_WIDTH / 2 - 1][0] = floorOffset;
+        map[MAP_WIDTH / 2 + 1][0] = floorOffset;
+        openDoor(x0, 0);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x, y - 1) == roomTypeBoss)
-      {
-        doorType[North] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y - 1) == roomTypeChallenge)
-      {
-        doorType[North] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x, y - 1)->isVisited())
-      {
-        doorType[North] = gameFloor->getMap(x, y - 1)->getDoorType(South);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x, y - 1) == roomTypeBoss)
+        {
+          doorType[North] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y - 1) == roomTypeChallenge)
+        {
+          doorType[North] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x, y - 1)->isVisited())
+        {
+          doorType[North] = gameFloor->getMap(x, y - 1)->getDoorType(South);
+        }
+        else
+        {
+          doorType[North] = getRandomDoor();
+        }
       }
       else
       {
+        // secret door
         doorType[North] = getRandomDoor();
       }
     }
 
     if (y < MAP_HEIGHT -1 && gameFloor->getRoom(x, y + 1) > 0)
     {
-      map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = floorOffset;
-      map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
-      map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
-      openDoor(x0, MAP_HEIGHT -1);
+      if (gameFloor->getRoom(x, y + 1) != roomTypeSecret)
+      {
+        map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = floorOffset;
+        map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
+        map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
+        openDoor(x0, MAP_HEIGHT -1);
 
-      if (roomType == roomTypeBoss || gameFloor->getRoom(x, y + 1) == roomTypeBoss)
-      {
-        doorType[South] = DoorBoss;
-      }
-      else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y + 1) == roomTypeChallenge)
-      {
-        doorType[South] = DoorChallenge;
-      }
-      else if (gameFloor->getMap(x, y + 1)->isVisited())
-      {
-        doorType[South] = gameFloor->getMap(x, y + 1)->getDoorType(North);
+        if (roomType == roomTypeBoss || gameFloor->getRoom(x, y + 1) == roomTypeBoss)
+        {
+          doorType[South] = DoorBoss;
+        }
+        else if (roomType == roomTypeChallenge || gameFloor->getRoom(x, y + 1) == roomTypeChallenge)
+        {
+          doorType[South] = DoorChallenge;
+        }
+        else if (gameFloor->getMap(x, y + 1)->isVisited())
+        {
+          doorType[South] = gameFloor->getMap(x, y + 1)->getDoorType(North);
+        }
+        else
+        {
+          doorType[South] = getRandomDoor();
+        }
       }
       else
       {
+        // secret door
         doorType[South] = getRandomDoor();
       }
     }
@@ -614,11 +714,28 @@ void DungeonMap::initRoom(int floorN, int wallN)
     {
       doorType[South] = getRandomDoor();
     }
-    else if (roomType == roomTypeExit)
+    else if (roomType == roomTypeExit && game().getLevel() < LAST_LEVEL)
     {
       doorType[North] = DoorExit;
     }
   }
+}
+
+void DungeonMap::addDestroyableObject(int x, int y, int obj)
+{
+  // out of map
+  if (x < 0 || x >= MAP_WIDTH) return;
+  if (y < 0 || y >= MAP_HEIGHT) return;
+
+  // doors
+  if (x == MAP_WIDTH / 2 && (y == 1 || y == MAP_HEIGHT - 2)) return;
+  if (y == MAP_HEIGHT / 2 && (x == 1 || x == MAP_WIDTH - 2)) return;
+
+  // wall
+  if (logicalMap[x][y] != LogicalFloor) return;
+
+  objectsMap[x][y] = obj;
+  logicalMap[x][y] = LogicalDestroyable;
 }
 
 void DungeonMap::openDoor(int x, int y)
@@ -708,186 +825,7 @@ void DungeonMap::initPattern(patternEnum n)
   }
 }
 
-void DungeonMap::generateInselRoom()
-{
-  for (int i = 1; i < MAP_WIDTH - 1; i++)
-    for (int j = 1; j < MAP_HEIGHT - 1; j++)
-    {
-      if (i != MAP_WIDTH / 2 && j != MAP_HEIGHT / 2
-            && !(i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 - 1)
-            && !(i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 + 1)
-            && !(i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 - 1)
-            && !(i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 + 1)
-            )
-        addHole(i, j);
-    }
-  objectsMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 - 1] = MAPOBJ_WALL_SPECIAL;
-  objectsMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 - 2] = MAPOBJ_WALL_SPECIAL;
-  logicalMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 - 1] = LogicalObstacle;
-  logicalMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 - 2] = LogicalObstacle;
-
-  objectsMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 - 1] = MAPOBJ_WALL_SPECIAL + 1;
-  objectsMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 - 2] = MAPOBJ_WALL_SPECIAL + 1;
-  logicalMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 - 1] = LogicalObstacle;
-  logicalMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 - 2] = LogicalObstacle;
-
-  objectsMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 + 1] = MAPOBJ_WALL_SPECIAL + 2;
-  objectsMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 + 2] = MAPOBJ_WALL_SPECIAL + 2;
-  logicalMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 + 1] = LogicalObstacle;
-  logicalMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 + 2] = LogicalObstacle;
-
-  objectsMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 + 1] = MAPOBJ_WALL_SPECIAL + 3;
-  objectsMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 + 2] = MAPOBJ_WALL_SPECIAL + 3;
-  logicalMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 + 1] = LogicalObstacle;
-  logicalMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 + 2] = LogicalObstacle;
-
-  if (!hasNeighbourUp())
-    addHole(MAP_WIDTH / 2, 1);
-  if (!hasNeighbourDown())
-    addHole(MAP_WIDTH / 2, MAP_HEIGHT - 2);
-  if (!hasNeighbourLeft())
-    for (int i = 0; i < 4; i++)
-    {
-      addHole(1 + i, MAP_HEIGHT / 2);
-      addHole(1 + i, MAP_HEIGHT / 2 + 1);
-    }
-  if (!hasNeighbourRight())
-    for (int i = 0; i < 4; i++)
-    {
-      addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT / 2);
-      addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT / 2 + 1);
-    }
-
-  addHole(MAP_WIDTH / 2 - 1 , MAP_HEIGHT - 2);
-  addHole(MAP_WIDTH / 2 + 1 , MAP_HEIGHT - 2);
-  addHole(MAP_WIDTH / 2 - 2 , MAP_HEIGHT - 3);
-  addHole(MAP_WIDTH / 2 + 2 , MAP_HEIGHT - 3);
-
-  if (rand() % 2 == 0) makePatternTile(MAP_WIDTH / 2, MAP_HEIGHT / 2);
-}
-
-Vector2D DungeonMap::generateBonusRoom()
-{
-  int x0 = MAP_WIDTH / 2;
-  int y0 = MAP_HEIGHT / 2;
-
-  initRoom();
-
-  if (game().getLevel() == 1 || rand() % 3 > 0)
-  {
-    if (rand() % 3 == 0)
-    {
-      if (rand() % 2 == 0) initPattern(PatternSmallDisc);
-      else initPattern(PatternSmallStar);
-    }
-
-    objectsMap[x0 - 1][y0 - 1] = MAPOBJ_WALL_SPECIAL;
-    objectsMap[x0 - 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 2;
-    objectsMap[x0 + 1][y0 - 1] = MAPOBJ_WALL_SPECIAL + 1;
-    objectsMap[x0 + 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 3;
-
-    logicalMap[x0 - 1][y0 - 1] = LogicalObstacle;
-    logicalMap[x0 - 1][y0 + 1] = LogicalObstacle;
-    logicalMap[x0 + 1][y0 - 1] = LogicalObstacle;
-    logicalMap[x0 + 1][y0 + 1] = LogicalObstacle;
-  }
-  else
-  {
-    generateInselRoom();
-  }
-
-  generateRandomTiles();
-
-  return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
-}
-
-Vector2D DungeonMap::generateChestRoom()
-{
-  int x0 = MAP_WIDTH / 2;
-  int y0 = MAP_HEIGHT / 2;
-
-  if (game().getLevel() == 1 || rand() % 3 > 0)
-  {
-    initRoom(); // (8 * 24, 2);
-    {
-      if (rand() % 2 == 0) initPattern(PatternSmallDisc);
-      else initPattern(PatternSmallStar);
-    }
-
-    objectsMap[x0 - 1][y0 - 1] = MAPOBJ_WALL_SPECIAL;
-    objectsMap[x0 - 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 2;
-    objectsMap[x0 + 1][y0 - 1] = MAPOBJ_WALL_SPECIAL + 1;
-    objectsMap[x0 + 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 3;
-
-    logicalMap[x0 - 1][y0 - 1] = LogicalObstacle;
-    logicalMap[x0 - 1][y0 + 1] = LogicalObstacle;
-    logicalMap[x0 + 1][y0 - 1] = LogicalObstacle;
-    logicalMap[x0 + 1][y0 + 1] = LogicalObstacle;
-  }
-  else
-  {
-    initRoom();
-    generateInselRoom();
-  }
-
-  generateRandomTiles();
-
-  return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
-}
-
-void DungeonMap::generateTemple(int x, int y, enumDivinityType type)
-{
-  map[x][y] = MAP_TEMPLE + (int)type;
-  addHole(x - 1, y - 2);
-  addHole(x - 1, y - 1);
-  addHole(x - 1, y);
-  addHole(x + 1, y - 2);
-  addHole(x + 1, y - 1);
-  addHole(x + 1, y );
-
-  objectsMap[x][y - 2] = MAPOBJ_TEMPLE_WALL + (int)type;
-  objectsMap[x][y - 1] = MAPOBJ_TEMPLE_WALL + 10 + (int)type;
-  logicalMap[x][y - 2] = LogicalObstacle;
-  logicalMap[x][y - 1] = LogicalObstacle;
-}
-
-void DungeonMap::generateTempleRoom()
-{
-  initRoom();
-  int x0 = MAP_WIDTH / 2;
-  int y0 = 1 + MAP_HEIGHT / 2;
-
-  if (rand() % 3 == 0)
-  {
-    if (rand() % 2 == 0) initPattern(PatternSmallDisc);
-    else initPattern(PatternSmallStar);
-  }
-
-  int d0, d1, d2;
-  d0 = rand() % NB_DIVINITY;
-  d1 = d0;
-  while (d0 == d1) d1 = rand() % NB_DIVINITY;
-
-  if (rand() % 2 == 0)
-  {
-    // three temple
-    d2 = d0;
-    while (d0 == d2 || d1 == d2) d2 = rand() % NB_DIVINITY;
-    generateTemple(x0 - 2, y0, (enumDivinityType)d0);
-    generateTemple(x0 + 2, y0, (enumDivinityType)d1);
-    generateTemple(x0, y0, (enumDivinityType)d2);
-  }
-  else
-  {
-    // two temples
-    generateTemple(x0 - 1, y0, (enumDivinityType)d0);
-    generateTemple(x0 + 1, y0, (enumDivinityType)d1);
-  }
-
-  // no random tiles in temples
-  //generateRandomTiles();
-}
-
+///// SUB-ROOM GENERATION
 void DungeonMap::generateCarpet(int x0, int y0, int w, int h, int n)
 {
   int xf = x0 + w - 1;
@@ -958,6 +896,191 @@ void DungeonMap::generateLongObject(int x0, int y0, int w, int n)
   logicalMap[xf][y0] = LogicalObstacle;
 }
 
+void DungeonMap::generateInselRoom()
+{
+  for (int i = 1; i < MAP_WIDTH - 1; i++)
+    for (int j = 1; j < MAP_HEIGHT - 1; j++)
+    {
+      if (i != MAP_WIDTH / 2 && j != MAP_HEIGHT / 2
+            && !(i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 - 1)
+            && !(i == MAP_WIDTH / 2 - 1 && j == MAP_HEIGHT / 2 + 1)
+            && !(i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 - 1)
+            && !(i == MAP_WIDTH / 2 + 1 && j == MAP_HEIGHT / 2 + 1)
+            )
+        addHole(i, j);
+    }
+  objectsMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 - 1] = MAPOBJ_WALL_SPECIAL;
+  objectsMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 - 2] = MAPOBJ_WALL_SPECIAL;
+  logicalMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 - 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 - 2] = LogicalObstacle;
+
+  objectsMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 - 1] = MAPOBJ_WALL_SPECIAL + 1;
+  objectsMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 - 2] = MAPOBJ_WALL_SPECIAL + 1;
+  logicalMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 - 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 - 2] = LogicalObstacle;
+
+  objectsMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 + 1] = MAPOBJ_WALL_SPECIAL + 2;
+  objectsMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 + 2] = MAPOBJ_WALL_SPECIAL + 2;
+  logicalMap[MAP_WIDTH / 2 - 2][MAP_HEIGHT / 2 + 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 - 1][MAP_HEIGHT / 2 + 2] = LogicalObstacle;
+
+  objectsMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 + 1] = MAPOBJ_WALL_SPECIAL + 3;
+  objectsMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 + 2] = MAPOBJ_WALL_SPECIAL + 3;
+  logicalMap[MAP_WIDTH / 2 + 2][MAP_HEIGHT / 2 + 1] = LogicalObstacle;
+  logicalMap[MAP_WIDTH / 2 + 1][MAP_HEIGHT / 2 + 2] = LogicalObstacle;
+
+  if (!hasNeighbourUp())
+    addHole(MAP_WIDTH / 2, 1);
+  if (!hasNeighbourDown())
+    addHole(MAP_WIDTH / 2, MAP_HEIGHT - 2);
+  if (!hasNeighbourLeft())
+    for (int i = 0; i < 4; i++)
+    {
+      addHole(1 + i, MAP_HEIGHT / 2);
+      addHole(1 + i, MAP_HEIGHT / 2 + 1);
+    }
+  if (!hasNeighbourRight())
+    for (int i = 0; i < 4; i++)
+    {
+      addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT / 2);
+      addHole(MAP_WIDTH - 2 - i, MAP_HEIGHT / 2 + 1);
+    }
+
+  addHole(MAP_WIDTH / 2 - 1 , MAP_HEIGHT - 2);
+  addHole(MAP_WIDTH / 2 + 1 , MAP_HEIGHT - 2);
+  addHole(MAP_WIDTH / 2 - 2 , MAP_HEIGHT - 3);
+  addHole(MAP_WIDTH / 2 + 2 , MAP_HEIGHT - 3);
+
+  if (rand() % 2 == 0) makePatternTile(MAP_WIDTH / 2, MAP_HEIGHT / 2);
+}
+
+void DungeonMap::generateTemple(int x, int y, enumDivinityType type)
+{
+  map[x][y] = MAP_TEMPLE + (int)type;
+  addHole(x - 1, y - 2);
+  addHole(x - 1, y - 1);
+  addHole(x - 1, y);
+  addHole(x + 1, y - 2);
+  addHole(x + 1, y - 1);
+  addHole(x + 1, y );
+
+  objectsMap[x][y - 2] = MAPOBJ_TEMPLE_WALL + (int)type;
+  objectsMap[x][y - 1] = MAPOBJ_TEMPLE_WALL + 10 + (int)type;
+  logicalMap[x][y - 2] = LogicalObstacle;
+  logicalMap[x][y - 1] = LogicalObstacle;
+}
+
+///// ROOMS GENERATION
+Vector2D DungeonMap::generateBonusRoom()
+{
+  int x0 = MAP_WIDTH / 2;
+  int y0 = MAP_HEIGHT / 2;
+
+  initRoom();
+
+  if (game().getLevel() == 1 || rand() % 3 > 0)
+  {
+    if (rand() % 3 == 0)
+    {
+      if (rand() % 2 == 0) initPattern(PatternSmallDisc);
+      else initPattern(PatternSmallStar);
+    }
+
+    objectsMap[x0 - 1][y0 - 1] = MAPOBJ_WALL_SPECIAL;
+    objectsMap[x0 - 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 2;
+    objectsMap[x0 + 1][y0 - 1] = MAPOBJ_WALL_SPECIAL + 1;
+    objectsMap[x0 + 1][y0 + 1] = MAPOBJ_WALL_SPECIAL + 3;
+
+    logicalMap[x0 - 1][y0 - 1] = LogicalObstacle;
+    logicalMap[x0 - 1][y0 + 1] = LogicalObstacle;
+    logicalMap[x0 + 1][y0 - 1] = LogicalObstacle;
+    logicalMap[x0 + 1][y0 + 1] = LogicalObstacle;
+
+    if (rand() % 2 == 0)
+    {
+      if (rand() % 3 > 0) addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+      if (rand() % 3 > 0) addDestroyableObject(1, 1, MAPOBJ_BARREL);
+      if (rand() % 3 > 0) addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+      if (rand() % 3 > 0) addDestroyableObject(MAP_WIDTH - 2, 1, MAPOBJ_BARREL);
+    }
+  }
+  else
+  {
+    generateInselRoom();
+  }
+
+  generateRandomTiles();
+
+  return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
+}
+
+Vector2D DungeonMap::generateChestRoom()
+{
+  return generateBonusRoom();
+}
+
+void DungeonMap::generateTempleRoom()
+{
+  initRoom();
+  int x0 = MAP_WIDTH / 2;
+  int y0 = 1 + MAP_HEIGHT / 2;
+
+  if (rand() % 3 == 0)
+  {
+    if (rand() % 2 == 0) initPattern(PatternSmallDisc);
+    else initPattern(PatternSmallStar);
+  }
+
+  int d0, d1, d2;
+  d0 = rand() % NB_DIVINITY;
+  d1 = d0;
+  while (d0 == d1) d1 = rand() % NB_DIVINITY;
+
+  if (rand() % 2 == 0)
+  {
+    // three temple
+    d2 = d0;
+    while (d0 == d2 || d1 == d2) d2 = rand() % NB_DIVINITY;
+    generateTemple(x0 - 2, y0, (enumDivinityType)d0);
+    generateTemple(x0 + 2, y0, (enumDivinityType)d1);
+    generateTemple(x0, y0, (enumDivinityType)d2);
+  }
+  else
+  {
+    // two temples
+    generateTemple(x0 - 1, y0, (enumDivinityType)d0);
+    generateTemple(x0 + 1, y0, (enumDivinityType)d1);
+  }
+
+  if (rand() % 2 == 0)
+  {
+    addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+    addDestroyableObject(2, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+  }
+  else
+  {
+    addDestroyableObject(MAP_WIDTH - 3, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+    addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+  }
+}
+
+void DungeonMap::generateSecretRoom()
+{
+  initRoom();
+
+  if (rand() % 2 == 0)
+  {
+    initPattern(PatternSmallChecker);
+  }
+
+  addDestroyableObject(MAP_WIDTH / 2 - 2, MAP_HEIGHT / 2 - 1, MAPOBJ_SKULL);
+  addDestroyableObject(MAP_WIDTH / 2 + 2, MAP_HEIGHT / 2 - 1, MAPOBJ_SKULL);
+  addDestroyableObject(MAP_WIDTH / 2 - 2, MAP_HEIGHT / 2 + 1, MAPOBJ_SKULL);
+  addDestroyableObject(MAP_WIDTH / 2 + 2, MAP_HEIGHT / 2 + 1, MAPOBJ_SKULL);
+
+  generateRandomTiles();
+}
+
 Vector2D DungeonMap::generateMerchantRoom()
 {
   initRoom();
@@ -988,6 +1111,14 @@ Vector2D DungeonMap::generateMerchantRoom()
   }
 
   generateRandomTiles();
+
+  if (rand() % 2 == 0)
+  {
+    if (rand() % 3 == 0) addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+    if (rand() % 3 == 0) addDestroyableObject(1, 1, MAPOBJ_BARREL);
+    if (rand() % 3 == 0) addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+    if (rand() % 3 == 0) addDestroyableObject(MAP_WIDTH - 2, 1, MAPOBJ_BARREL);
+  }
 
   return (Vector2D(x0 * TILE_WIDTH + TILE_WIDTH / 2, y0 * TILE_HEIGHT + TILE_HEIGHT / 2));
 }
@@ -1023,15 +1154,25 @@ void DungeonMap::generateExitRoom()
 {
   initRoom();
   int x0 = MAP_WIDTH / 2;
-  map[x0][0] = floorOffset;
-  map[x0 - 1][0] = floorOffset;
-  map[x0 + 1][0] = floorOffset;
-
-  logicalMap[x0][0] = LogicalFloor;
+  if (game().getLevel() < LAST_LEVEL)
+  {
+    map[x0][0] = floorOffset;
+    map[x0 - 1][0] = floorOffset;
+    map[x0 + 1][0] = floorOffset;
+    logicalMap[x0][0] = LogicalFloor;
+  }
 
   if (rand() % 3 == 0) initPattern(PatternBorder);
 
   generateRandomTiles();
+
+  if (rand() % 2 == 0)
+  {
+    if (rand() % 3 == 0) addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+    if (rand() % 3 == 0) addDestroyableObject(1, 1, MAPOBJ_BARREL);
+    if (rand() % 3 == 0) addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL);
+    if (rand() % 3 == 0) addDestroyableObject(MAP_WIDTH - 2, 1, MAPOBJ_BARREL);
+  }
 }
 
 void DungeonMap::generateRoomRandom(int type)
@@ -1058,23 +1199,82 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         map[x0][MAP_HEIGHT - 1]     = floorOffset;
       }
     }
-    else if (roomType == roomTypeBoss && (game().getLevel() == 2) ) // giant slime
+    else if (roomType == roomTypeBoss)
     {
-      // good ?
-      objectsMap[1][1] = MAPOBJ_GRID;
-      objectsMap[1][MAP_HEIGHT -2] = MAPOBJ_GRID;
-      objectsMap[MAP_WIDTH - 2][1] = MAPOBJ_GRID;
-      objectsMap[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAPOBJ_GRID;
+      if (game().getLevel() == 1) // butcher
+      {
+        addDestroyableObject(1, 1, MAPOBJ_BARREL);
+        addDestroyableObject(1, 2, MAPOBJ_BARREL);
+        addDestroyableObject(2, 1, MAPOBJ_BARREL);
+        addDestroyableObject(2, 2, MAPOBJ_BARREL);
+      }
+      else if (game().getLevel() == 2) // giant slime
+      {
+        objectsMap[1][1] = MAPOBJ_GRID;
+        objectsMap[1][MAP_HEIGHT -2] = MAPOBJ_GRID;
+        objectsMap[MAP_WIDTH - 2][1] = MAPOBJ_GRID;
+        objectsMap[MAP_WIDTH - 2][MAP_HEIGHT -2] = MAPOBJ_GRID;
+      }
     }
     if (roomType == roomTypeStandard)
     {
+      bool corr = false;
       if (rand() % 3 > 0 && gameFloor->neighboorCount(x, y) > 1)
       {
-        if (type == 0 && game().getLevel() < 6) generateCorridors();
+        if (type == 0 && game().getLevel() < 5)
+        {
+          generateCorridors();
+          corr = true;
+          if (rand() % 2 == 0)
+          {
+            for (int i = 0; i < 5; i++)
+            {
+              int objX = 2 + rand() % (MAP_WIDTH - 4);
+              int objY = 2 + rand() % (MAP_HEIGHT - 4);
+
+              int type = MAPOBJ_BARREL_NO_DROP;
+              if (rand() % 10 == 0) type = MAPOBJ_BARREL_EXPL;
+              else if (rand() % 5 == 0) type = MAPOBJ_BARREL;
+
+              addDestroyableObject(objX, objY, type);
+            }
+          }
+        }
       }
       else
       {
         if (rand() % 3 == 0) initPattern((patternEnum)(rand() % 4));
+      }
+
+      if (!corr)  // some barrels
+      {
+        if (rand() % 2 == 0)
+        {
+          for (int i = 0; i < 10; i++)
+          {
+            int objX = 2 + rand() % (MAP_WIDTH - 4);
+            int objY = 2 + rand() % (MAP_HEIGHT - 4);
+
+            int type = MAPOBJ_BARREL_NO_DROP;
+            if (rand() % 10 == 0) type = MAPOBJ_BARREL_EXPL;
+            else if (rand() % 5 == 0) type = MAPOBJ_BARREL;
+
+            addDestroyableObject(objX, objY, type);
+          }
+        }
+        else
+        {
+          for (int i = 2; i < MAP_WIDTH - 3; i++)
+          {
+            addDestroyableObject(i, 2, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(i, MAP_HEIGHT - 3, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+          }
+          for (int i = 3; i < MAP_HEIGHT - 4; i++)
+          {
+            addDestroyableObject(2, i, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(MAP_WIDTH - 3, i, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+          }
+        }
       }
     }
   }
@@ -1106,6 +1306,14 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     map[MAP_WIDTH - 2][MAP_HEIGHT -2] = wallOffset + MAP_WALL_77;
     map[MAP_WIDTH - 2][MAP_HEIGHT -1] = wallOffset + MAP_WALL_7;
     logicalMap[MAP_WIDTH - 2][MAP_HEIGHT -2] = LogicalWall;
+
+    if (rand() % 4 == 0)
+    {
+      // some barrels in the middle
+      addDestroyableObject(MAP_WIDTH / 2 - 1, MAP_HEIGHT, MAPOBJ_BARREL);
+      addDestroyableObject(MAP_WIDTH / 2, MAP_HEIGHT, MAPOBJ_BARREL);
+      addDestroyableObject(MAP_WIDTH / 2 + 1, MAP_HEIGHT, MAPOBJ_BARREL);
+    }
   }
   if (type == 2) // blocks in the middle
   {
@@ -1114,6 +1322,18 @@ void DungeonMap::generateRoomWithoutHoles(int type)
     r = 1 + rand() % 3;
 
     generateTable(x0 - r, y0 - 1, 1 + 2 * r, 3, MAPOBJ_BIG_OBSTACLE);
+
+    if (rand() / 3 == 0)
+    {
+      r = rand() % 4;
+      switch (r)
+      {
+        case 0: addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL); break;
+        case 1: addDestroyableObject(1, 1, MAPOBJ_BARREL); break;
+        case 2: addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL); break;
+        case 3: addDestroyableObject(MAP_WIDTH - 2, 1, MAPOBJ_BARREL); break;
+      }
+    }
   }
   if (type == 3)
   {
@@ -1146,11 +1366,15 @@ void DungeonMap::generateRoomWithoutHoles(int type)
       {
         objectsMap[2][4] = MAPOBJ_CHURCH_FURN_L;
         logicalMap[2][4] = LogicalObstacle;
+        if (rand() % 2 == 0) addDestroyableObject(1, 1, MAPOBJ_BARREL);
+        else addDestroyableObject(1, MAP_HEIGHT - 2, MAPOBJ_BARREL);
       }
       else
       {
         objectsMap[12][4] = MAPOBJ_CHURCH_FURN_R;
         logicalMap[12][4] = LogicalObstacle;
+        if (rand() % 2 == 0) addDestroyableObject(MAP_WIDTH - 2, 1, MAPOBJ_BARREL);
+        else addDestroyableObject(MAP_WIDTH - 2, MAP_HEIGHT - 2, MAPOBJ_BARREL);
       }
 
       for (int i = 0; i < 3; i++)
@@ -1208,6 +1432,21 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         objectsMap[i][j] = game().getLevel() >= 6 ? MAPOBJ_TOMB : MAPOBJ_OBSTACLE;
         logicalMap[i][j] = LogicalObstacle;
       }
+
+    if (rand() % 5 > 0)
+    {
+      int nbBarrels = 6 + rand() % 9;
+      for (int i = 0; i < nbBarrels; i++)
+      {
+        int objX = 2 + rand() % (MAP_WIDTH - 4);
+        int objY = 2 + rand() % (MAP_HEIGHT - 4);
+
+        int type = MAPOBJ_BARREL_NO_DROP;
+        if (rand() % 4 == 0) type = MAPOBJ_BARREL_EXPL;
+
+        addDestroyableObject(objX, objY, type);
+      }
+    }
   }
 
   generateRandomTiles();
@@ -1277,6 +1516,9 @@ void DungeonMap::generateRoomWithHoles(int type)
     addHole(MAP_WIDTH - 2, MAP_HEIGHT -2);
     addHole(1, MAP_HEIGHT -2);
     addHole(MAP_WIDTH - 2, 1);
+
+    if (rand() % 2 == 0)
+      addDestroyableObject(MAP_WIDTH - 2 + rand() % 5, MAP_HEIGHT - 2 + rand() % 5, MAPOBJ_BARREL_EXPL);
   }
   else if (type == 2)
   {
@@ -1333,6 +1575,18 @@ void DungeonMap::generateRoomWithHoles(int type)
     addHole(MAP_WIDTH - 4, MAP_HEIGHT - 3);
     addHole(MAP_WIDTH - 3, MAP_HEIGHT - 4);
     addHole(MAP_WIDTH - 3, MAP_HEIGHT - 3);
+
+    if (rand() % 3 == 0)
+    {
+      addDestroyableObject(4, 2, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, 3, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, MAP_HEIGHT - 4, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, MAP_HEIGHT - 3, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, 2, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, 3, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 4, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 3, MAPOBJ_BARREL_NO_DROP);
+    }
   }
   else if (type == 4)
   {
@@ -1720,4 +1974,102 @@ void DungeonMap::generateRandomTile(int index)
         randomTileElements[index].rotation = 0;
     }
   }
+}
+
+bool DungeonMap::callRevelation()
+{
+  if (hasNeighbourRight() && !gameFloor->getMap(x + 1, y)->isRevealed())
+  {
+    map[MAP_WIDTH - 1][MAP_HEIGHT / 2] = floorOffset;
+    map[MAP_WIDTH - 1][MAP_HEIGHT / 2 - 1] = floorOffset;
+    map[MAP_WIDTH - 1][MAP_HEIGHT / 2 + 1] = floorOffset;
+
+    if (cleared)
+      openDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
+    else
+      closeDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
+
+    game().setDoorVisible(East);
+    gameFloor->getMap(x + 1, y)->setRevealed(true);
+    hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    (MAP_WIDTH - 1) * TILE_WIDTH + rand() % TILE_WIDTH,
+                     (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + rand() % (TILE_HEIGHT * 3) );
+
+    return true;
+  }
+  else if (hasNeighbourLeft() && !gameFloor->getMap(x - 1, y)->isRevealed())
+  {
+    map[0][MAP_HEIGHT / 2] = floorOffset;
+    map[0][MAP_HEIGHT / 2 - 1] = floorOffset;
+    map[0][MAP_HEIGHT / 2 + 1] = floorOffset;
+
+    if (cleared)
+      openDoor(0, MAP_HEIGHT / 2);
+    else
+      closeDoor(0, MAP_HEIGHT / 2);
+
+    game().setDoorVisible(West);
+    gameFloor->getMap(x - 1, y)->setRevealed(true);
+    hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    rand() % TILE_WIDTH,
+                     (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT + rand() % (TILE_HEIGHT * 3) );
+
+    return true;
+  }
+  else if (hasNeighbourUp() && !gameFloor->getMap(x, y - 1)->isRevealed())
+  {
+    map[MAP_WIDTH / 2][0] = floorOffset;
+    map[MAP_WIDTH / 2 - 1][0] = floorOffset;
+    map[MAP_WIDTH / 2 + 1][0] = floorOffset;
+
+    if (cleared)
+      openDoor(MAP_WIDTH / 2, 0);
+    else
+      closeDoor(MAP_WIDTH / 2, 0);
+
+    game().setDoorVisible(North);
+    gameFloor->getMap(x, y - 1)->setRevealed(true);
+    hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    (MAP_WIDTH / 2 - 1) * TILE_WIDTH + rand() % (TILE_WIDTH * 3),
+                    rand() % TILE_HEIGHT );
+
+    return true;
+  }
+  else if (hasNeighbourDown() && !gameFloor->getMap(x, y + 1)->isRevealed())
+  {
+    map[MAP_WIDTH / 2][MAP_HEIGHT - 1] = floorOffset;
+    map[MAP_WIDTH / 2 - 1][MAP_HEIGHT - 1] = floorOffset;
+    map[MAP_WIDTH / 2 + 1][MAP_HEIGHT - 1] = floorOffset;
+
+    if (cleared)
+      openDoor(MAP_WIDTH / 2, MAP_HEIGHT -1);
+    else
+      closeDoor(MAP_WIDTH / 2, MAP_HEIGHT -1);
+
+    game().setDoorVisible(South);
+    gameFloor->getMap(x, y + 1)->setRevealed(true);
+    hasChanged = true;
+
+    for (int i = 0; i < 36; i++)
+      game().generateStar(
+                    (i % 2 == 0) ? sf::Color(50, 50, 255, 255) : sf::Color(200, 200, 255, 255),
+                    (MAP_WIDTH / 2 - 1) * TILE_WIDTH + rand() % (TILE_WIDTH * 3),
+                    (MAP_HEIGHT - 1) * TILE_HEIGHT + rand() % TILE_HEIGHT );
+
+    return true;
+  }
+
+  return false;
 }

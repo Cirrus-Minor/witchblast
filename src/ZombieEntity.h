@@ -9,6 +9,7 @@ class ZombieEntity : public EnemyEntity
     ZombieEntity(float x, float y, bool invocated);
     virtual void animate(float delay);
     virtual void calculateBB();
+    virtual bool isAttacking();
 
   protected:
     virtual void collideMapRight();

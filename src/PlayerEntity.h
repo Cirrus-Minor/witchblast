@@ -24,6 +24,8 @@ struct divinityStruct
   float percentsToNextLevels;
 };
 
+const int MAX_SLOT_CONSUMABLES = 4;
+
 /*! \class PlayerEntity
 * \brief Class for the player
 *
@@ -116,7 +118,7 @@ class PlayerEntity : public BaseCreatureEntity
     /*!
      *  \brief reset the fire direction of the player
      */
-    void resestFireDirection();
+    void resetFireDirection();
 
     /*!
      *  \brief accessor on the fire direction of the player
@@ -281,6 +283,9 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void useBossKey();
 
+    int getLostHp(int level);
+    void setLostHp(int level, int n);
+
     /*!
      *  \brief accessor on the gold
      *
@@ -298,6 +303,24 @@ class PlayerEntity : public BaseCreatureEntity
      *  \param gold : the new gold value
      */
     void setGold(int gold) { this->gold = gold; }
+
+    /*!
+     *  \brief accessor on the donation
+     *
+     *  Accessor on the donation.
+     *
+     *  \return : the donation
+     */
+    int getDonation() {return donation; }
+
+     /*!
+     *  \brief mutator on the donation
+     *
+     *  Mutator on the donation.
+     *
+     *  \param gold : the new donation value
+     */
+    void setDonation(int gold) { this->donation = gold; }
 
     /*!
      *  \brief pay some gold
@@ -322,7 +345,8 @@ class PlayerEntity : public BaseCreatureEntity
       playerStatusPraying,    /**< Player is under unlocking stance */
       playerStatusStairs,     /**< Player walk the stairs */
       playerStatusGoingNext,  /**< Player goes to next level */
-      playerStatusDead        /**< Player RIP */
+      playerStatusDead,       /**< Player RIP */
+      playerStatusVictorious  /**< Game won */
     };
 
     /*!
@@ -447,17 +471,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     bool canGetNewShot(bool advancedShot);
 
-    /*!
-     *  \brief returns time since player's death
-     *  \return : time since player's death (in seconds)
-     */
-    float getDeathAge();
-
-    /*!
-     *  \brief mutator on the player's death age
-     *  \param deathAge : the new player's death (in seconds)
-     */
-    void setDeathAge(float deathAge);
+    float getEndAge();
+    void setEndAge(float endAge);
 
     virtual void setMap(GameMap* map, int tileWidth, int tileHeight, int offsetX, int offsetY) override;
 
@@ -495,7 +510,7 @@ class PlayerEntity : public BaseCreatureEntity
     enemyTypeEnum getLastHurtingEnemy();
     sourceTypeEnum getLastHurtingSource();
 
-    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2) override;
+    virtual void setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2, bool waitUnclear = false) override;
 
     void setItemToBuy(ItemEntity* item);
     ItemEntity* getItemToBuy();
@@ -503,10 +518,17 @@ class PlayerEntity : public BaseCreatureEntity
     void castTeleport();
     virtual bool collideWithMap(int direction) override;
 
+    bool canAquireConsumable(enumItemType type);
+    int getConsumable(int n);
+    void setConsumable(int n, int type);
+    void dropConsumables(int n);
+    void tryToConsume(int n);
+    void consume(enumItemType item);
+
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
     void generateBolt(float velx, float vely);
-    void rageFire();
+    void rageFire(float damage, bool full, float velMult);
 
     virtual void collideMapRight();
     virtual void collideMapLeft();
@@ -522,18 +544,22 @@ class PlayerEntity : public BaseCreatureEntity
     float fireAnimationDelay;
     float fireAnimationDelayMax;
     int fireAnimationDirection;
+    bool canAnimateFire;
     float spellAnimationDelay;
     float spellAnimationDelayMax;
     float currentFireDelay;
     float randomFireDelay;
+    float rageFireDelay;
     float hiccupDelay;
     float boltLifeTime;
     int gold;
+    int donation;
     int criticalChance;
     float invincibleDelay;
     float divineInterventionDelay;
     bool isRegeneration;
     bool isFairyTransmuted;
+    int lostHp[LAST_LEVEL];
 
     bool canFirePlayer;
     playerStatusEnum playerStatus;
@@ -561,7 +587,7 @@ class PlayerEntity : public BaseCreatureEntity
     std::vector<FairyEntity*> fairies;
 
     float idleAge;
-    float deathAge;
+    float endAge;
     enemyTypeEnum lastHurtingEnemy;
     sourceTypeEnum lastHurtingSource;
 
@@ -600,11 +626,17 @@ class PlayerEntity : public BaseCreatureEntity
     void castWeb();
     void castSummonsFlower();
     void castTransmuteFairy();
+    void castTimeStop();
+    void castLightning();
 
     ItemEntity* itemToBuy;
 
     float getBolPositionY();
     void incrementDivInterventions();
+
+    int consumable[MAX_SLOT_CONSUMABLES];
+    void acquireConsumable(enumItemType type);
+    void reveal();
 };
 
 #endif // PLAYERSPRITE_H

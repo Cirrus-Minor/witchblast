@@ -198,25 +198,16 @@ void SnakeEntity::drop()
   {
     if (rand() % 5 == 0)
     {
-      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
-      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-      newItem->setViscosity(0.96f);
+      dropItem(ItemCopperCoin);
     }
     if (game().getPlayer()->isEquiped(EQUIP_LUCK) && rand() % 5 == 0)
     {
-      ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
-      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-      newItem->setViscosity(0.96f);
+      dropItem(ItemCopperCoin);
     }
 
     if (rand() % 25 == 0)
     {
-      ItemEntity* newItem = new ItemEntity(ItemHealthVerySmallPoison, x, y);
-      newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-      newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-      newItem->setViscosity(0.96f);
+      dropItem(ItemHealthVerySmallPoison);
     }
   }
 }

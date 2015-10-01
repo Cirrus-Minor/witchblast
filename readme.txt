@@ -3,7 +3,7 @@
 Author / code - art - music: Seby
 Email: sebygames@gmail.com
 
-2014
+2014 - 2015
 ============================
 
 Introduction
@@ -65,21 +65,8 @@ Credits
 -------
 Seby: code and music 
 Pierre "dejam0rt" Baron: 2D art
+Le Guitariste Du Nord: Music - https://soundcloud.com/leguitaristedunord
 R0d: particles system and multilingual support coding
-
-Music
-Our Ship To Candletown from Michael Ghelfi - https://www.youtube.com/user/MichaelGhelfi
-Music Is His Only Friend from Michael Ghelfi
-Marching United from JappeJ - http://jappejj.bandcamp.com/
-Fanatsy- Theme of Elvarim from SteveSyz - http://stevesyz.newgrounds.com/
-PubStomp Deluxe from CinTer - http://cinter.newgrounds.com/
-The Spider Machine from cazok - http://cazok.newgrounds.com/
-Under Siege from ET16 - http://et16.newgrounds.com/
-
-The sound used in the game come from:
-- http://www.freesound.org/
-- http://www.freesfx.co.uk/
-- http://www.universal-soundbank.com/
 
 Licenses
 --------
@@ -93,13 +80,42 @@ Thanks to
 Vetea (for the v0.4.0 2D redesign)
 Sideous and Portoss01 (they provide me 2D art in earlier versions)
 Billx (who suggested me the title "Witch Blast" + English corrections)
-Mika Attila (for his "coding" contribution during the development)
+Mika Attila (for his contribution during the development)
+Cong (for his contribution during the development)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
 AFS (for the Spanish translation)
 
 Changes
 -------
+v0.7
+- ADD Destructible tiles
+- ADD Potions
+- ADD Secret rooms
+- ADD New items
+- ADD New familiar
+- ADD New magic spells
+- ADD New achievements
+- ADD New music
+- ADD Player effects display
+- ADD Blinking effect when player is invincible
+- ADD Monsters
+- MOD Consumables in shops
+- MOD Evil flower damage
+- MOD Butcher can drop sausages now
+- MOD Game becomes harder for good players
+- MOD Some monsters (rats, bats) slow down when changing direction
+- MOD Level 8 is the last level now
+- MOD Air divinity fury has now a lifetime (was infinite)
+- MOD Intro is displayed just once now
+- MOD Display the best player instead of the best scores
+- MOD We don't have to clear the room to get the achievement now
+- MOD In "advanced" mode, the "fairy cursor" changes
+- MOD Bolt particles are now batched
+- FIX Latency when communicating with the score server
+- FIX Interaction key has to be redefined each game
+- FIX Item description text too large
+
 v0.6
 - ADD Online scores
 - ADD Player movement improvements

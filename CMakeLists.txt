@@ -15,6 +15,13 @@ if(USING_GCC OR USING_CLANG)
   add_compile_options(-std=c++11 -pedantic -Wall)
 endif()
 
+# Compilation options
+option(ONLINE_MODE "Enable online mode, which requires src/OnlineScoring.h" OFF)
+
+if(ONLINE_MODE)
+  add_compile_options(-DONLINE_MODE)
+endif()
+
 include_directories(.)
 
 file(

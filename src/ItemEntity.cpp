@@ -24,8 +24,15 @@ ItemEntity::ItemEntity(enumItemType itemType, float x, float y)
   setMap(game().getCurrentMap(), TILE_WIDTH, TILE_HEIGHT, 0, 0);
   isBeating = false;
   isFlying = false;
-  jumpTimer = 1.0f + 0.1f * (rand() % 40);
+  jumpTimer = 1.0f + 0.1f * (rand() % 40);;
+  firstJump = false;
   h = -1.0f;
+}
+
+void ItemEntity::startsJumping()
+{
+  firstJump = true;
+  jumpTimer = 0;
 }
 
 void ItemEntity::setMerchandise(bool isMerchandise)
@@ -39,7 +46,10 @@ bool ItemEntity::getMerchandise()
 
 int ItemEntity::getPrice()
 {
-  return (items[itemType].price);
+  if (game().getPlayer()->isEquiped(EQUIP_MERCHANT))
+    return (items[itemType].price * 0.8f);
+  else
+    return (items[itemType].price);
 }
 
 bool ItemEntity::canBePickedUp()
@@ -51,6 +61,8 @@ bool ItemEntity::canBePickedUp()
   if (items[itemType].generatesStance && game().getPlayer()->getPlayerStatus() == PlayerEntity::playerStatusAcquire) return false;
 
   if (isMerchandise == true && game().getPlayer()->getGold() < getPrice()) return false;
+
+  if (items[itemType].consumable && !game().getPlayer()->canAquireConsumable(itemType)) return false;
 
   if (itemType == ItemBossHeart && !game().getCurrentMap()->isCleared()) return false;
 
@@ -89,6 +101,25 @@ bool ItemEntity::isOnMap()
 
 void ItemEntity::animate(float delay)
 {
+  // Has been identified ?
+  if (itemType >= ItemPotion01 && itemType < ItemPotion01 + NUMBER_UNIDENTIFIED)
+  {
+    if (game().potionEffectKnown(itemType))
+    {
+      itemType = game().getPotion(itemType);
+      frame = itemType;
+    }
+  }
+  // Has been forgotten
+  else if (itemType >= ItemPotion01 + NUMBER_UNIDENTIFIED && itemType < FirstEquipItem)
+  {
+    if (!game().potionEffectKnown(itemType))
+    {
+      itemType = game().getPotion(itemType);
+      frame = itemType;
+    }
+  }
+
   if (isMerchandise)
   {
     testSpriteCollisions();
@@ -131,9 +162,10 @@ void ItemEntity::animate(float delay)
     else
     {
       CollidingSpriteEntity::animate(delay);
-      if (canBePickedUp() && !isMerchandise)
+      if (firstJump || (canBePickedUp() && !isMerchandise))
       {
         jumpTimer -= delay;
+        firstJump = false;
         if (jumpTimer <= 0.0f)
         {
           jumpTimer = 2.0f + 0.1f * (rand() % 40);
@@ -175,6 +207,7 @@ void ItemEntity::animate(float delay)
     isBeating = true;
     timer = HEART_BEAT_DELAY;
   }
+
   z = y + height / 2;
 }
 
@@ -183,14 +216,14 @@ void ItemEntity::render(sf::RenderTarget* app)
   // shadow
   if (itemType < FirstEquipItem)
   {
-    sprite.setTextureRect(sf::IntRect(9 * width, height, width, height));
+    sprite.setTextureRect(sf::IntRect(9 * width, 3 * height, width, height));
     sprite.setPosition(x, y + 3);
     app->draw(sprite);
     sprite.setPosition(x, y);
   }
   else
   {
-    sprite.setTextureRect(sf::IntRect(9 * width, 6 * height, width, height));
+    sprite.setTextureRect(sf::IntRect(9 * width, 7 * height, width, height));
     app->draw(sprite);
   }
 
@@ -202,10 +235,25 @@ void ItemEntity::render(sf::RenderTarget* app)
     sf::Color fontColor;
     if (getPrice() > game().getPlayer()->getGold()) fontColor = sf::Color(215, 20, 20);
     else fontColor = sf::Color(255, 255, 255);
-    game().write(oss.str(), 16, x, y + 35.0f, ALIGN_CENTER, fontColor, app, 1 , 1);
+    game().write(oss.str(), 16, x, y + 35.0f, ALIGN_CENTER, fontColor, app, 1 , 1, 0);
   }
 
-  if (h > 0.1f)
+  if (itemType < FirstEquipItem && itemType >= ItemPotion01 + NUMBER_UNIDENTIFIED)
+  {
+    float yItem = h > 0.1f ? y - h : y;
+
+    int frameBottle = game().getPotion(itemType);
+    sprite.setPosition(x, yItem);
+
+    sprite.setTextureRect(sf::IntRect(frameBottle % imagesProLine * width, frameBottle / imagesProLine * height, width, height));
+    app->draw(sprite);
+
+    sprite.setTextureRect(sf::IntRect(frame % imagesProLine * width, frame / imagesProLine * height, width, height));
+    app->draw(sprite);
+
+    sprite.setPosition(x, y);
+  }
+  else if (h > 0.1f)
   {
     sprite.setTextureRect(sf::IntRect(frame % imagesProLine * width, frame / imagesProLine * height, width, height));
     sprite.setPosition(x, y - h);

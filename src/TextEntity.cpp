@@ -38,13 +38,13 @@ void TextEntity::render(sf::RenderTarget* app)
     else if (alpha < 0) alpha = 0;
 
     color = sf::Color(0, 0, 0, alpha );
-    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0);
+    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0, 0);
 
     color = sf::Color(0, 0, 0, alpha );
-    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0);
+    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0, 0);
 
     color = sf::Color(255, 50, 20, alpha );
-    game().write(text, size, x, y, alignment, color, app, 0 , 0);
+    game().write(text, size, x, y, alignment, color, app, 0 , 0, 0);
   }
   else if (colorType == COLOR_FADING_GREEN)
   {
@@ -53,13 +53,13 @@ void TextEntity::render(sf::RenderTarget* app)
     else if (alpha < 0) alpha = 0;
 
     color = sf::Color(0, 0, 0, alpha );
-    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0);
+    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0, 0);
 
     color = sf::Color(0, 0, 0, alpha );
-    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0);
+    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0, 0);
 
     color = sf::Color(20, 255, 50, alpha );
-    game().write(text, size, x, y, alignment, color, app, 0 , 0);
+    game().write(text, size, x, y, alignment, color, app, 0 , 0, 0);
   }
   else if (colorType == COLOR_FADING_YELLOW)
   {
@@ -68,16 +68,16 @@ void TextEntity::render(sf::RenderTarget* app)
     else if (alpha < 0) alpha = 0;
 
     color = sf::Color(0, 0, 0, alpha );
-    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0);
+    game().write(text, size, x - 1, y - 1, alignment, color, app, 0 , 0, 0);
 
     color = sf::Color(0, 0, 0, alpha );
-    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0);
+    game().write(text, size, x + 1, y + 1, alignment, color, app, 0 , 0, 0);
 
     color = sf::Color(255, 255, 128, alpha );
-    game().write(text, size, x, y, alignment, color, app, 0 , 0);
+    game().write(text, size, x, y, alignment, color, app, 0 , 0, 0);
   }
   else
-    game().write(text, size, x, y, alignment, color, app, 0 , 0);
+    game().write(text, size, x, y, alignment, color, app, 0 , 0, 0);
 }
 
 void TextEntity::animate(float delay)

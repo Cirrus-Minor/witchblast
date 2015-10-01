@@ -19,6 +19,7 @@ class WitchEntity : public EnemyEntity
 
     virtual void collideWithEnemy(EnemyEntity* entity) override;
     virtual void collideWithBolt(BoltEntity* boltEntity);
+    virtual void drop();
   private:
     witchTypeEnum witchType;
     float timer;

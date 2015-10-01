@@ -47,7 +47,17 @@ class GameFloor
 
     int neighboorCount(int x, int y);
 
+    /*!
+     *  \brief feveals the entire floor map
+     */
     void reveal();
+
+    /*!
+     *  \brief forgets the map
+     *  \param floorX : x position of the player in the map
+     *  \param floorY : y position of the player in the map
+     */
+    void forget(int floorX, int floorY);
 
   protected:
   private:
@@ -58,6 +68,7 @@ class GameFloor
 
     bool isSuperIsolated(int x, int y);
     std::vector<IntCoord> findSuperIsolated();
+    std::vector<IntCoord> findSecretRoom();
     void generate();
     bool finalize();
 

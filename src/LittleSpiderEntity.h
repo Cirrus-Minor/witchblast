@@ -4,10 +4,12 @@
 #include "EnemyEntity.h"
 #include "PlayerEntity.h"
 
+enum EnumSpiderType { SpiderTypeStandard, SpiderTypeTarantula };
+
 class LittleSpiderEntity : public EnemyEntity
 {
   public:
-    LittleSpiderEntity(float x, float y, bool invocated);
+    LittleSpiderEntity(float x, float y, EnumSpiderType spideType, bool invocated);
     virtual void animate(float delay);
     virtual void calculateBB();
   protected:
@@ -21,7 +23,9 @@ class LittleSpiderEntity : public EnemyEntity
 	  virtual void drop();
   private:
     float timer;
+    float webTimer;
     bool roaming;
+    EnumSpiderType spideType;
 };
 
 #endif // LITTLESPIDERENTITY_H

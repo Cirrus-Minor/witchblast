@@ -27,6 +27,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
     specialState[i].timer = 0.0f;
     specialState[i].param1 = 0.0f;
     specialState[i].param2 = 0.0f;
+    specialState[i].waitUnclear = false;
   }
   for (int i = 0; i < NB_RESISTANCES; i++)
   {
@@ -34,6 +35,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   }
   recoil.active = false;
   facingDirection = 2;
+  doesAccelerate = false;
 }
 
 int BaseCreatureEntity::getHp()
@@ -83,17 +85,18 @@ bool BaseCreatureEntity::isSpecialStateActive(enumSpecialState state)
   return specialState[state].active;
 }
 
-BaseCreatureEntity::specialStateStuct BaseCreatureEntity::getSpecialState(enumSpecialState state)
+specialStateStuct BaseCreatureEntity::getSpecialState(enumSpecialState state)
 {
   return specialState[state];
 }
 
-void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
+void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2,bool waitUnclear)
 {
   specialState[state].active = active;
   specialState[state].timer = timer;
   specialState[state].param1 = param1;
   specialState[state].param2 = param2;
+  specialState[state].waitUnclear = false;
 }
 
 float BaseCreatureEntity::animateStates(float delay)
@@ -103,7 +106,19 @@ float BaseCreatureEntity::animateStates(float delay)
     if (specialState[i].active)
     {
       specialState[i].timer -= delay;
-      if (specialState[i].timer <= 0.0f) setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
+      if (specialState[i].timer <= 0.0f)
+      {
+        setSpecialState((enumSpecialState)i, false, 0.0f, 0.0f, 0.0f);
+        game().getPlayer()->computePlayer();
+
+        if (i == SpecialStateTime) game().resumeMusic();
+      }
+    }
+    else if (specialState[i].waitUnclear && !game().getCurrentMap()->isCleared())
+    {
+      specialState[i].waitUnclear = false;
+      specialState[i].active = true;
+      game().getPlayer()->computePlayer();
     }
   }
   // ice
@@ -177,6 +192,20 @@ void BaseCreatureEntity::animateRecoil(float delay)
 
 void BaseCreatureEntity::animatePhysics(float delay)
 {
+  if (doesAccelerate)
+  {
+    velocity.x += acceleration.x;
+    velocity.y += acceleration.y;
+
+    if (velocity.x * velocity.x + velocity.y * velocity.y > creatureSpeed * creatureSpeed)
+    {
+      float l = sqrtf(velocity.x * velocity.x + velocity.y * velocity.y);
+      velocity.x = (velocity.x / l) * creatureSpeed;
+      velocity.y = (velocity.y / l) * creatureSpeed;
+      doesAccelerate = false;
+    }
+  }
+
 	velocity.x *= viscosity;
 	velocity.y *= viscosity;
 
@@ -187,6 +216,12 @@ void BaseCreatureEntity::animatePhysics(float delay)
   {
     velx *= specialState[SpecialStateSlow].param1;
     vely *= specialState[SpecialStateSlow].param1;
+  }
+
+  if (specialState[SpecialStateSpeed].active)
+  {
+    velx *= specialState[SpecialStateSpeed].param1;
+    vely *= specialState[SpecialStateSpeed].param1;
   }
 
 	if (recoil.active)
@@ -360,7 +395,17 @@ bool BaseCreatureEntity::collideWithMap(int direction)
     {
       if (movingStyle == movWalking)
       {
-        if ( dynamic_cast<DungeonMap*>(map)->isWalkable(xTile, yTile) == false ) return true;
+        if (isAttacking())
+        {
+          if ( dynamic_cast<DungeonMap*>(map)->isWalkable(xTile, yTile) == false
+              && dynamic_cast<DungeonMap*>(map)->getLogicalTile(xTile, yTile) != LogicalDestroyable)
+                return true;
+        }
+        else
+        {
+          if ( dynamic_cast<DungeonMap*>(map)->isWalkable(xTile, yTile) == false )
+            return true;
+        }
       }
       else if (movingStyle == movFlying)
       {
@@ -558,31 +603,29 @@ int BaseCreatureEntity::hurt(StructHurt hurtParam)
           crss << " X3";
         else
           crss << " X2";
-        TextEntity* textCrit = new TextEntity(crss.str(), 16, x, text->getY() - 16.0f);
-        textCrit->setColor(TextEntity::COLOR_FADING_RED);
-        textCrit->setAge(-0.6f);
-        textCrit->setLifetime(0.3f);
-        textCrit->setWeight(-60.0f);
-        textCrit->setZ(2000);
-        textCrit->setAlignment(ALIGN_CENTER);
-        textCrit->setType(ENTITY_FLYING_TEXT);
+        displayFlyingText(x, text->getY() - 16.0f, 16, crss.str(), TextEntity::COLOR_FADING_RED);
       }
 
       if (poisoned)
       {
-        TextEntity* textCrit = new TextEntity(tools::getLabel("poison"), 16, x, text->getY() - 16.0f);
-        textCrit->setColor(TextEntity::COLOR_FADING_RED);
-        textCrit->setAge(-0.6f);
-        textCrit->setLifetime(0.3f);
-        textCrit->setWeight(-60.0f);
-        textCrit->setZ(2000);
-        textCrit->setAlignment(ALIGN_CENTER);
-        textCrit->setType(ENTITY_FLYING_TEXT);
+        displayFlyingText(x, text->getY() - 16.0f, 16, tools::getLabel("poison"), TextEntity::COLOR_FADING_RED);
       }
       if (hurtParam.critical) SoundManager::getInstance().playSound(SOUND_CRITICAL);
     }
   }
   return hurtParam.damage;
+}
+
+void BaseCreatureEntity::displayFlyingText(float xText, float yText, int sizeText, std::string text, TextEntity::colorTypeEnum color)
+{
+  TextEntity* textEntity = new TextEntity(text, sizeText, xText, yText);
+  textEntity->setColor(color);
+  textEntity->setAge(-0.6f);
+  textEntity->setLifetime(0.3f);
+  textEntity->setWeight(-60.0f);
+  textEntity->setZ(2000);
+  textEntity->setAlignment(ALIGN_CENTER);
+  textEntity->setType(ENTITY_FLYING_TEXT);
 }
 
 void BaseCreatureEntity::prepareDying()
@@ -798,4 +841,9 @@ void BaseCreatureEntity::heal(int healPoints)
     text->setType(ENTITY_FLYING_TEXT);
     while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
   }
+}
+
+bool BaseCreatureEntity::isAttacking()
+{
+  return false;
 }

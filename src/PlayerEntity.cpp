@@ -53,6 +53,7 @@ PlayerEntity::PlayerEntity(float x, float y)
 {
   currentFireDelay = -1.0f;
   randomFireDelay = -1.0f;
+  rageFireDelay = 1.0f;
   invincibleDelay = -1.0f;
   divineInterventionDelay = -1.0f;
   fireAnimationDelay = -1.0f;
@@ -74,7 +75,8 @@ PlayerEntity::PlayerEntity(float x, float y)
   hpDisplay = hp;
   hpMax = hp;
   gold = 0;
-  deathAge = -1.0f;
+  donation = 0;
+  endAge = 0.0f;
   hiccupDelay = HICCUP_DELAY;
   idleAge = 0.0f;
 
@@ -94,6 +96,14 @@ PlayerEntity::PlayerEntity(float x, float y)
     specialShotLevel[i] = 0;
   }
 
+  // init the consumibles
+  for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+    consumable[i] = -1;
+
+  // init the lost HP
+  for (int i = 0; i < LAST_LEVEL; i++)
+    lostHp[i] = 0;
+
   specialShotIndex = 0;
   needInitShotType = false;
 
@@ -102,6 +112,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   firingDirection = 5;
   facingDirection = 2;
   keyDirection = 5;
+  canAnimateFire = true;
 
   sprite.setOrigin(32, 80);
 
@@ -193,6 +204,20 @@ float PlayerEntity::getPercentSpellDelay()
   }
 }
 
+int PlayerEntity::getLostHp(int level)
+{
+  if (level >= 1 && level <= LAST_LEVEL)
+    return (lostHp[level - 1]);
+  else
+    return 0;
+}
+
+void PlayerEntity::setLostHp(int level, int n)
+{
+  if (level >= 1 && level <= LAST_LEVEL)
+    lostHp[level - 1] = n;
+}
+
 bool PlayerEntity::isPoisoned()
 {
   return (specialState[SpecialStatePoison].active);
@@ -228,14 +253,14 @@ sourceTypeEnum PlayerEntity::getLastHurtingSource()
   return lastHurtingSource;
 }
 
-float PlayerEntity::getDeathAge()
+float PlayerEntity::getEndAge()
 {
-  return deathAge;
+  return endAge;
 }
 
-void PlayerEntity::setDeathAge(float deathAge)
+void PlayerEntity::setEndAge(float endAge)
 {
-  this->deathAge = deathAge;
+  this->endAge = endAge;
 }
 
 bool PlayerEntity::getFairyTransmuted()
@@ -267,6 +292,19 @@ void PlayerEntity::setEntering()
 void PlayerEntity::setLeavingLevel()
 {
   playerStatus = playerStatusGoingNext;
+
+  if (game().getLevel() <= LAST_LEVEL)
+  {
+    if (getLostHp(game().getLevel()) == 0)
+    {
+      game().registerAchievement(AchievementNoDamage);
+
+      int counter = 0;
+      for (int i = 1; i <= game().getLevel(); i++) if (getLostHp(i) == 0) counter++;
+      if (counter >= 2) game().registerAchievement(AchievementNoDamage2);
+      if (counter >= 3) game().registerAchievement(AchievementNoDamage3);
+    }
+  }
 }
 
 void PlayerEntity::pay(int price)
@@ -310,6 +348,12 @@ void PlayerEntity::acquireItemAfterStance()
     else if (acquiredItem == ItemPetSlime)
     {
       new SlimePetEntity();
+    }
+
+    // alchemy book
+    else if (acquiredItem == ItemBookAlchemy)
+    {
+      game().acquireAlchemyBook();
     }
 
     // floor item
@@ -515,9 +559,9 @@ void PlayerEntity::animate(float delay)
       playerStatus = playerStatusPlaying;
     }
   }
-  if (playerStatus == playerStatusDead)
+  if (playerStatus == playerStatusDead || playerStatus == playerStatusVictorious)
   {
-    deathAge += delay;
+    endAge += delay;
     velocity = Vector2D(0.0f, 0.0f);
   }
   else
@@ -556,7 +600,7 @@ void PlayerEntity::animate(float delay)
     facingDirection = firingDirection;
 
   // find the frame
-  if  (firingDirection != 5)
+  if  (firingDirection != 5 && canAnimateFire)
   {
     if (fireAnimationDelay < 0.0f)
       fireAnimationDelay = fireAnimationDelayMax;
@@ -591,6 +635,7 @@ void PlayerEntity::animate(float delay)
     game().moveToOtherMap(2);
 #ifdef SPIRAL_STAIRCASE
   else if (playerStatus == playerStatusPlaying
+           && game().getLevel() < LAST_LEVEL
            && game().getCurrentMap()->getRoomType() == roomTypeExit && y < TILE_HEIGHT * 0.6f)
   {
     playerStatus = playerStatusStairs;
@@ -661,9 +706,31 @@ void PlayerEntity::animate(float delay)
 
   if (playerStatus != playerStatusDead)
   {
+    // effects
     if (invincibleDelay >= 0.0f) invincibleDelay -= delay;
     if (specialState[SpecialStateConfused].active)
       SoundManager::getInstance().playSound(SOUND_VAMPIRE_HYPNOSIS, false);
+
+    // rage
+    if (specialState[SpecialStateRage].active)
+    {
+      specialState[SpecialStateRage].param3 -= delay;
+      if (specialState[SpecialStateRage].param3 <= 0.0f)
+      {
+        specialState[SpecialStateRage].param3 += specialState[SpecialStateRage].param2;
+
+        if (!equip[EQUIP_RAGE_AMULET]) rageFire(specialState[SpecialStateRage].param1, true, 1.5f);
+      }
+    }
+    if (equip[EQUIP_RAGE_AMULET])
+    {
+      rageFireDelay -= delay;
+      if (rageFireDelay <= 0.0f)
+      {
+        rageFireDelay += specialState[SpecialStateRage].active ? 1.5f : 8.0f;
+        rageFire(specialState[SpecialStateRage].param1, true, 1.5f);
+      }
+    }
   }
   z = y + 4;
 }
@@ -673,14 +740,19 @@ bool PlayerEntity::canCollide()
   return invincibleDelay <= 0.0f;
 }
 
-void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2)
+void PlayerEntity::setSpecialState(enumSpecialState state, bool active, float timer, float param1, float param2, bool waitUnclear)
 {
-  BaseCreatureEntity::setSpecialState(state, active, timer, param1, param2);
+  BaseCreatureEntity::setSpecialState(state, active, timer, param1, param2, waitUnclear);
   computePlayer();
 }
 
 void PlayerEntity::renderPlayer(sf::RenderTarget* app)
 {
+  if (invincibleDelay > 0.0f)
+  {
+    if ((int)(age * 10.0f) % 2 == 0)return;
+  }
+
   sf::Color savedColor = sprite.getColor();
   if (isPoisoned()) sprite.setColor(sf::Color(180, 255, 180, 255));
 
@@ -787,8 +859,28 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
       sprite.setTextureRect(sf::IntRect( (18 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
+  else if (equip[EQUIP_AMULET_RETALIATION])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_2));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
 
-  if (equip[EQUIP_LEATHER_BELT])
+  if (equip[EQUIP_BELT_ADVANCED] && playerStatus != playerStatusDead)
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_LEATHER_BELT])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
@@ -814,7 +906,17 @@ void PlayerEntity::renderPlayer(sf::RenderTarget* app)
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_REAR_SHOT])
+  if (equip[EQUIP_REAR_SHOT_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_2));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_REAR_SHOT])
   {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
@@ -1026,7 +1128,7 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
   if (playerStatus == playerStatusDead)
   {
-    frame = (int)(deathAge / 0.35f);
+    frame = (int)(endAge / 0.35f);
     if (frame > 6) frame = 6;
     spriteDy = 9;
 
@@ -1051,10 +1153,10 @@ void PlayerEntity::render(sf::RenderTarget* app)
 
       switch (facingDirection)
       {
-        case 8: fairySprite.setTextureRect(sf::IntRect( (2 + frame) * 48, 5 * 72, 48, 72)); break;
-        case 4: fairySprite.setTextureRect(sf::IntRect( (4 + frame) * 48, 5 * 72, 48, 72)); break;
-        case 6: fairySprite.setTextureRect(sf::IntRect( (5 + frame) * 48, 5 * 72, - 48, 72)); break;
-        default: fairySprite.setTextureRect(sf::IntRect( frame * 48, 5 * 72, 48, 72)); break;
+        case 8: fairySprite.setTextureRect(sf::IntRect( (2 + frame) * 48, 6 * 72, 48, 72)); break;
+        case 4: fairySprite.setTextureRect(sf::IntRect( (4 + frame) * 48, 6 * 72, 48, 72)); break;
+        case 6: fairySprite.setTextureRect(sf::IntRect( (5 + frame) * 48, 6 * 72, - 48, 72)); break;
+        default: fairySprite.setTextureRect(sf::IntRect( frame * 48, 6 * 72, 48, 72)); break;
       }
       app->draw(fairySprite);
     }
@@ -1507,7 +1609,7 @@ void PlayerEntity::setEquiped(int item, bool toggleEquipped)
                                          y - 50.0f + rand() % 100,
                                          items[FirstEquipItem + item].familiar);
     fairies.push_back(fairy);
-    //if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
+    if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
   }
   computePlayer();
 }
@@ -1567,36 +1669,37 @@ void PlayerEntity::generateBolt(float velx, float vely)
   bolt->setVelocity(Vector2D(velx, vely));
 }
 
-void PlayerEntity::rageFire()
+void PlayerEntity::rageFire(float damage, bool full, float velMult)
 {
+  float tempFireVelocity = fireVelocity * velMult;
   for (int i = -1; i <= 1; i += 2)
     for (int j = -1; j <= 1; j += 2)
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
       bolt->setDamages(10);
       bolt->setFlying(isFairyTransmuted);
-      float velx = fireVelocity * i * 0.42f;
-      float vely = fireVelocity * j * 0.42f;
+      float velx = tempFireVelocity * i * 0.42f;
+      float vely = tempFireVelocity * j * 0.42f;
       bolt->setVelocity(Vector2D(velx, vely));
 
-      if (hp <= hpMax / 5)
+      if (full)
       {
         BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeFire, 0);
         bolt->setDamages(10);
         bolt->setFlying(isFairyTransmuted);
         float velx = 0.0f;
         float vely = 0.0f;
-        if (i == -1 && j == -1) velx = -fireVelocity * i * 0.6f;
-        else if (i == -1 && j == 1) velx = fireVelocity * i * 0.6f;
-        else if (i == 1 && j == -1) vely= -fireVelocity * i * 0.6f;
-        else if (i == 1 && j == 1) vely = fireVelocity * i * 0.6f;
+        if (i == -1 && j == -1) velx = -tempFireVelocity * i * 0.6f;
+        else if (i == -1 && j == 1) velx = tempFireVelocity * i * 0.6f;
+        else if (i == 1 && j == -1) vely= -tempFireVelocity * i * 0.6f;
+        else if (i == 1 && j == 1) vely = tempFireVelocity * i * 0.6f;
         bolt->setVelocity(Vector2D(velx, vely));
       }
     }
   SoundManager::getInstance().playSound(SOUND_BLAST_FIRE);
 }
 
-void PlayerEntity::resestFireDirection()
+void PlayerEntity::resetFireDirection()
 {
   firingDirection = 5;
 }
@@ -1617,6 +1720,7 @@ void PlayerEntity::fire(int direction)
 
   if (canFirePlayer && playerStatus != playerStatusDead && playerStatus != playerStatusAcquire)
   {
+    canAnimateFire = true;
     switch (getShotType())
     {
     case ShotTypeCold:
@@ -1716,7 +1820,39 @@ void PlayerEntity::fire(int direction)
       }
     }
 
-    if (equip[EQUIP_REAR_SHOT])
+    if (equip[EQUIP_REAR_SHOT_ADVANCED])
+    {
+      float shootAngle = 0.165f;
+      float boltVelocity = fireVelocity * 0.75f;
+
+      BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt1->setDamages(fireDamages / 2);
+      bolt1->setFlying(isFairyTransmuted);
+      BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt2->setDamages(fireDamages / 2);
+      bolt2->setFlying(isFairyTransmuted);
+
+      switch (direction)
+      {
+      case 4:
+        bolt1->setVelocity(Vector2D(boltVelocity * cos(shootAngle), boltVelocity * sin(shootAngle)));
+        bolt2->setVelocity(Vector2D(boltVelocity * cos(shootAngle), -boltVelocity * sin(shootAngle)));
+        break;
+      case 6:
+        bolt1->setVelocity(Vector2D(-boltVelocity * cos(shootAngle), boltVelocity * sin(shootAngle)));
+        bolt2->setVelocity(Vector2D(-boltVelocity * cos(shootAngle), -boltVelocity * sin(shootAngle)));
+        break;
+      case 2:
+        bolt1->setVelocity(Vector2D(boltVelocity * sin(shootAngle), -boltVelocity * cos(shootAngle)));
+        bolt2->setVelocity(Vector2D(-boltVelocity * sin(shootAngle), -boltVelocity * cos(shootAngle)));
+        break;
+      case 8:
+        bolt1->setVelocity(Vector2D(boltVelocity * sin(shootAngle), boltVelocity * cos(shootAngle)));
+        bolt2->setVelocity(Vector2D(-boltVelocity * sin(shootAngle), boltVelocity * cos(shootAngle)));
+        break;
+      }
+    }
+    else if (equip[EQUIP_REAR_SHOT])
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
       bolt->setDamages(fireDamages / 2);
@@ -1741,6 +1877,28 @@ void PlayerEntity::fire(int direction)
       bolt->setVelocity(Vector2D(velx, vely));
     }
 
+    if (equip[EQUIP_SIDE_SHOTS])
+    {
+      BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt1->setDamages(fireDamages / 2);
+      bolt1->setFlying(isFairyTransmuted);
+
+      BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
+      bolt2->setDamages(fireDamages / 2);
+      bolt2->setFlying(isFairyTransmuted);
+
+      if (direction == 4 || direction == 6)
+      {
+        bolt1->setVelocity(Vector2D(0.0f, fireVelocity * 0.75f));
+        bolt2->setVelocity(Vector2D(0.0f, -fireVelocity * 0.75f));
+      }
+      else
+      {
+        bolt1->setVelocity(Vector2D(fireVelocity * 0.75f, 0.0f));
+        bolt2->setVelocity(Vector2D(-fireVelocity * 0.75f, 0.0f));
+      }
+    }
+
     if (equip[EQUIP_BOOK_RANDOM] && randomFireDelay <= 0.0f)
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
@@ -1754,6 +1912,10 @@ void PlayerEntity::fire(int direction)
     canFirePlayer = false;
     currentFireDelay = fireDelay;
     if (needInitShotType) initShotType();
+  }
+  else
+  {
+    canAnimateFire = false;
   }
 }
 
@@ -1793,13 +1955,16 @@ int PlayerEntity::hurt(StructHurt hurtParam)
       if (hurtParam.hurtingType != ShotTypeDeterministic)
       {
         invincibleDelay = INVINCIBLE_DELAY;
-        if (equip[EQUIP_RAGE_AMULET]) rageFire();
+        if (equip[EQUIP_AMULET_RETALIATION] && !equip[EQUIP_RAGE_AMULET]) rageFire(10, hp <= hpMax / 5, 1.0f);
         game().generateBlood(x, y, bloodColor);
       }
 
       hurtingDelay = HURTING_DELAY * 2.0f;
       game().generateBlood(x, y, bloodColor);
       game().proceedEvent(EventBeingHurted);
+
+      if (oldHp > hp && game().getLevel() <= LAST_LEVEL)
+        lostHp[game().getLevel() - 1] += (oldHp - hp);
 
       lastHurtingEnemy = hurtParam.enemyType;
       lastHurtingSource = hurtParam.sourceType;
@@ -1852,7 +2017,7 @@ void PlayerEntity::dying()
   }
 
   playerStatus = playerStatusDead;
-  deathAge = 0.0f;
+  endAge = 0.0f;
   hp = 0;
   SoundManager::getInstance().playSound(SOUND_PLAYER_DIE);
   setVelocity(Vector2D(0.0f, 0.0f));
@@ -1870,6 +2035,7 @@ void PlayerEntity::dying()
   }
   remove(SAVE_FILE.c_str());
 
+  if (game().getLevel() == 1) game().registerAchievement(AchievementNoob);
   game().calculateScore();
 }
 
@@ -1891,6 +2057,10 @@ void PlayerEntity::displayAcquiredGold(int n)
 void PlayerEntity::acquireItem(enumItemType type)
 {
   if (items[type].generatesStance) acquireStance(type);
+  else if (items[type].consumable)
+  {
+    acquireConsumable(type);
+  }
   else switch (type)
     {
     case ItemCopperCoin:
@@ -1930,6 +2100,257 @@ void PlayerEntity::acquireItem(enumItemType type)
     }
 }
 
+bool isUnidentified(enumItemType item)
+{
+  return (item >= ItemPotion01 && item < ItemPotion01 + NUMBER_UNIDENTIFIED);
+}
+
+int PlayerEntity::getConsumable(int n)
+{
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return -1;
+  else return consumable[n];
+}
+void PlayerEntity::setConsumable(int n, int type)
+{
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
+
+  consumable[n] = type;
+}
+
+void PlayerEntity::dropConsumables(int n)
+{
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
+  if (playerStatus != playerStatusPlaying) return;
+
+  ItemEntity* newItem = new ItemEntity((enumItemType)(consumable[n]), x, y);
+  newItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  newItem->setViscosity(0.96f);
+  newItem->setAge(-10.0f);
+  newItem->startsJumping();
+
+  consumable[n] = -1;
+}
+
+void PlayerEntity::tryToConsume(int n)
+{
+  if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
+  if (playerStatus != playerStatusPlaying) return;
+
+  if (consumable[n] > -1)
+  {
+    // unidentified
+    if (isUnidentified((enumItemType)consumable[n]))
+    {
+      enumItemType potion = (enumItemType)consumable[n];
+      enumItemType potionEffect = game().getPotion(potion);
+
+      game().setPotionToKnown(potion);
+
+      for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+        if (consumable[i] == potion) consumable[i] = potionEffect;
+
+      consume(potionEffect);
+    }
+    else if (items[consumable[n]].consumable)
+    // known
+    {
+      consume((enumItemType)consumable[n]);
+    }
+    else
+    {
+      std::cout << "[ERROR] Trying to consume item: " << items[consumable[n]].name << std::endl;
+    }
+  }
+
+  consumable[n] = -1;
+}
+
+void PlayerEntity::consume(enumItemType item)
+{
+  switch(item)
+  {
+  case ItemScrollRevelation:
+    reveal();
+    spellAnimationDelay = spellAnimationDelayMax;
+    SoundManager::getInstance().playSound(SOUND_SCROLL);
+    break;
+
+  case ItemPotionHealth:
+    heal(equip[EQUIP_MANUAL_HEALTH] ? 28 : 18);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionPoison:
+    specialState[SpecialStatePoison].active = true;
+    specialState[SpecialStatePoison].timer = POISON_TIMER[0];
+    specialState[SpecialStatePoison].param1 = POISON_DAMAGE[0];
+    specialState[SpecialStatePoison].param2 = POISON_DELAY[0];
+    specialState[SpecialStatePoison].param3 = POISON_DELAY[0];
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("poison"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionSpeed:
+    specialState[SpecialStateSpeed].active = false;
+    specialState[SpecialStateSpeed].waitUnclear = true;
+    specialState[SpecialStateSpeed].timer = 30;
+    specialState[SpecialStateSpeed].param1 = 1.5f;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_speed"), TextEntity::COLOR_FADING_BLUE);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionSlow:
+    specialState[SpecialStateSlow].active = false;
+    specialState[SpecialStateSlow].waitUnclear = true;
+    specialState[SpecialStateSlow].timer = 30;
+    specialState[SpecialStateSlow].param1 = 0.35f;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_slow"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionWeakness:
+    specialState[SpecialStateWeakness].active = false;
+    specialState[SpecialStateWeakness].waitUnclear = true;
+    specialState[SpecialStateWeakness].timer = 30;
+    specialState[SpecialStateWeakness].param1 = 0.5f;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_weakness"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionStrength:
+    specialState[SpecialStateStrength].active = false;
+    specialState[SpecialStateStrength].waitUnclear = true;
+    specialState[SpecialStateStrength].timer = 30;
+    specialState[SpecialStateStrength].param1 = 1.5f;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_strength"), TextEntity::COLOR_FADING_BLUE);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionOblivion:
+    game().forget();
+    if (!equip[EQUIP_BOOK_ALCHEMY])
+    {
+      for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+      {
+        if (consumable[i] > -1)
+        {
+          if (consumable[i] >= ItemPotion01 + NUMBER_UNIDENTIFIED && consumable[i] < FirstEquipItem )
+          {
+            consumable[i] = game().getPotion((enumItemType)consumable[i]);
+          }
+        }
+      }
+    }
+
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_forget"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionConfusion:
+    specialState[SpecialStateConfused].active = false;
+    specialState[SpecialStateConfused].waitUnclear = true;
+    specialState[SpecialStateConfused].timer = 10;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_confusion"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionCure:
+    for (int i = 0; i < DivineStateProtection; i++)
+    {
+      specialState[i].active = false;
+      specialState[i].waitUnclear = false;
+    }
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_cure"), TextEntity::COLOR_FADING_BLUE);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  case ItemPotionRage:
+    specialState[SpecialStateRage].active = false;
+    specialState[SpecialStateRage].waitUnclear = true;
+    specialState[SpecialStateRage].timer = 20.5f;
+    specialState[SpecialStateRage].param1 = 12;
+    specialState[SpecialStateRage].param2 = 2;
+    specialState[SpecialStateRage].param3 = 2;
+    displayFlyingText( x, y - 20.0f, 16, tools::getLabel("effect_rage"), TextEntity::COLOR_FADING_RED);
+    SoundManager::getInstance().playSound(SOUND_DRINK);
+    break;
+
+  default:
+    std::cout << "[ERROR] Trying to consume item: " << items[item].name << std::endl;
+    break;
+  }
+
+  SpriteEntity* usedItem = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_ITEMS), x, y, 32, 32);
+  usedItem->setImagesProLine(10);
+  if (item == ItemScrollRevelation)
+    usedItem->setFrame((int)item);
+  else
+    usedItem->setFrame(38);
+  usedItem->setFading(true);
+  usedItem->setZ(y - 100);
+  usedItem->setLifetime(0.7f);
+  usedItem->setAge(-0.7);
+  usedItem->setType(ENTITY_EFFECT);
+  usedItem->setSpin(rand() % 400 - 200);
+  usedItem->setVelocity(Vector2D(60));
+}
+
+void PlayerEntity::reveal()
+{
+  for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+  {
+    if (consumable[i] > -1)
+    {
+      if (isUnidentified((enumItemType)consumable[i]))
+      {
+        game().setPotionToKnown((enumItemType)consumable[i]);
+        consumable[i] = game().getPotion((enumItemType)consumable[i]);
+      }
+    }
+  }
+  if (game().getCurrentMap()->callRevelation())
+  {
+    game().refreshMinimap();
+    SoundManager::getInstance().playSound(SOUND_SECRET);
+  }
+}
+
+bool PlayerEntity::canAquireConsumable(enumItemType type)
+{
+  int nbConsumableSlot = equip[EQUIP_BAG] ? 4 : 2;
+
+  for (int i = 0; i < nbConsumableSlot; i++)
+  {
+    if (consumable[i] <= 0) return true;
+  }
+
+  return false;
+}
+
+void PlayerEntity::acquireConsumable(enumItemType type)
+{
+  int nbConsumableSlot = equip[EQUIP_BAG] ? 4 : 2;
+  int emptySlot = -1;
+
+  for (int i = 0; emptySlot == -1 && i < nbConsumableSlot; i++)
+  {
+    if (consumable[i] <= 0) emptySlot = i;
+  }
+
+  if (emptySlot > -1)
+  {
+    consumable[emptySlot] = type;
+    if (type == ItemScrollRevelation)
+      SoundManager::getInstance().playSound(SOUND_SCROLL);
+    else
+      SoundManager::getInstance().playSound(SOUND_BOTTLE);
+
+    // events
+    game().proceedEvent(EventConsumable);
+    if (isUnidentified(type)) game().proceedEvent(EventPotion);
+  }
+}
+
 void PlayerEntity::onClearRoom()
 {
   if (divinity.divinity == DivinityHealer)
@@ -1958,8 +2379,11 @@ void PlayerEntity::computePlayer()
 
   for (int i = 0; i < NB_RESISTANCES; i++) resistance[i] = ResistanceStandard;
 
+  // gloves
   if (equip[EQUIP_GLOVES_ADVANCED]) fireDelayBonus -= 0.15f;
   else if (equip[EQUIP_DISPLACEMENT_GLOVES]) fireDelayBonus -= 0.10f;
+
+  // hat
   if (equip[EQUIP_HAT_ADVANCED])
   {
     fireDelayBonus -= 0.3f;
@@ -1968,11 +2392,16 @@ void PlayerEntity::computePlayer()
     resistance[ResistanceLightning] = (enumStateResistance)(resistance[ResistanceLightning] - 1);
     resistance[ResistanceFire] = (enumStateResistance)(resistance[ResistanceFire] - 1);
   }
-
   else if (equip[EQUIP_MAGICIAN_HAT]) fireDelayBonus -= 0.2f;
+
+  // belt
   if (equip[EQUIP_LEATHER_BELT]) fireDelayBonus -= 0.15f;
+
+  // boots
   if (equip[EQUIP_BOOTS_ADVANCED]) creatureSpeedBonus += 0.25f;
   else if (equip[EQUIP_LEATHER_BOOTS]) creatureSpeedBonus += 0.15f;
+
+  // multi-fire
   if (equip[EQUIP_BOOK_TRIPLE]) fireDelayBonus += 0.7f;
   else if (equip[EQUIP_BOOK_DUAL]) fireDelayBonus += 0.5f;
 
@@ -2104,6 +2533,12 @@ void PlayerEntity::computePlayer()
   {
     movingStyle = movWalking;
   }
+
+  // potions
+  if (specialState[SpecialStateWeakness].active && !specialState[SpecialStateStrength].active)
+    fireDamages *= specialState[SpecialStateWeakness].param1;
+  if (specialState[SpecialStateStrength].active && !specialState[SpecialStateWeakness].active)
+    fireDamages *= specialState[SpecialStateStrength].param1;
 }
 
 void PlayerEntity::acquireStance(enumItemType type)
@@ -2365,6 +2800,8 @@ void PlayerEntity::donate(int n)
   if (gold >= n)
   {
     gold -= n;
+    donation += n;
+    if (donation >= 100) game().registerAchievement(AchievementFanatic);
     displayAcquiredGold(-n);
     SoundManager::getInstance().playSound(SOUND_PAY);
 
@@ -2527,7 +2964,7 @@ void PlayerEntity::divineFury()
     if (divinity.divinity == DivinityAir)
     {
       bolt->setFlying(true);
-      bolt->setLifetime(-1.0f);
+      bolt->setLifetime(10.0f);
     }
     else
     {
@@ -2828,6 +3265,7 @@ void PlayerEntity::incrementDivInterventions()
 void PlayerEntity::worship(enumDivinityType id)
 {
   int oldPiety = divinity.piety;
+  int oldLevel = divinity.level;
   bool isReconversion = divinity.divinity > -1;
 
   playerStatus = playerStatusPraying;
@@ -2855,6 +3293,8 @@ void PlayerEntity::worship(enumDivinityType id)
   // reconversion
   if (isReconversion)
   {
+    if (oldLevel >= 4)
+      game().registerAchievement(AchievementApostate);
     addPiety((equip[EQUIP_BOOK_PRAYER_I]) ? 0.66 * oldPiety : 0.5 * oldPiety);
     if (divinity.interventions > divinity.level - 1)
       divinity.interventions = divinity.level - 1;
@@ -2942,6 +3382,16 @@ void PlayerEntity::setActiveSpell(enumCastSpell spell, bool fromSaveInFight)
     activeSpell.frame = ItemSpellFairy - FirstEquipItem;
     break;
 
+  case SpellTime:
+    activeSpell.delayMax = 70.0f;
+    activeSpell.frame = ItemSpellTime - FirstEquipItem;
+    break;
+
+  case SpellLightning:
+    activeSpell.delayMax = 70.0f;
+    activeSpell.frame = ItemSpellLightning - FirstEquipItem;
+    break;
+
   case SpellNone:
     break;
   }
@@ -2989,6 +3439,14 @@ void PlayerEntity::castSpell()
       break;
     case SpellFairy:
       castTransmuteFairy();
+      break;
+    case SpellTime:
+      spellAnimationDelay = spellAnimationDelayMax;
+      castTimeStop();
+      break;
+    case SpellLightning:
+      spellAnimationDelay = spellAnimationDelayMax;
+      castLightning();
       break;
 
     case SpellNone:
@@ -3212,4 +3670,35 @@ void PlayerEntity::castTransmuteFairy()
       generateStar(sf::Color(200, 200, 255, 255));
     }
   }
+}
+
+void PlayerEntity::castTimeStop()
+{
+  specialState[SpecialStateTime].active = true;
+  specialState[SpecialStateTime].timer = equip[EQUIP_BOOK_MAGIC_II] ? 7 : 5;
+  game().pauseMusic();
+}
+
+void PlayerEntity::castLightning()
+{
+  game().makeColorEffect(X_GAME_COLOR_WHITE, 0.4f);
+
+  int nbBolts = equip[EQUIP_BOOK_MAGIC_II] ? 9 : 7;
+  for (int i = 0; i < nbBolts ; i++)
+  {
+    BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeLightning, 0);
+    bolt->setDamages(i == 0 ? 20 : 10);
+    float shotAngle = rand() % 360;
+    bolt->setVelocity(Vector2D(400 * cos(shotAngle), 400 * sin(shotAngle)));
+    bolt->setViscosity(1.0f);
+    bolt->setLifetime(5 + 0.1f * (float)(rand() % 50));
+  }
+
+  SpriteEntity* lightningSprite = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_LIGHTNING), x, y - 300);
+  lightningSprite->setFading(true);
+  lightningSprite->setLifetime(0.2f);
+  lightningSprite->setAge(-0.4f);
+  lightningSprite->setRenderAdd();
+  lightningSprite->setZ(2000);
+  SoundManager::getInstance().playSound(SOUND_THUNDER);
 }

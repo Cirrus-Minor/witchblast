@@ -278,29 +278,43 @@ void EnemyEntity::dying()
   game().addKilledEnemy(enemyType, hurtingType);
 }
 
+void EnemyEntity::dropItem(enumItemType item)
+{
+  ItemEntity* newItem = new ItemEntity(item, x, y);
+  newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
+  newItem->setVelocity(Vector2D(50.0f + rand()% 140));
+  newItem->setViscosity(0.96f);
+  newItem->startsJumping();
+}
+
 void EnemyEntity::drop()
 {
-  if (rand() % 5 == 0)
+  if (rand() % 40 == 0)
   {
-    ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
-    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-    newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-    newItem->setViscosity(0.96f);
+    if (rand() % 2 == 0)
+    {
+      dropItem(ItemScrollRevelation);
+    }
+    else
+    {
+      dropItem((enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED));
+    }
   }
-  if (game().getPlayer()->isEquiped(EQUIP_LUCK) && rand() % 5 == 0)
+  else
   {
-    ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
-    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-    newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-    newItem->setViscosity(0.96f);
-  }
+    if (rand() % 5 == 0)
+    {
+      dropItem(ItemCopperCoin);
+    }
+    if (game().getPlayer()->isEquiped(EQUIP_LUCK) && rand() % 5 == 0)
+    {
+      dropItem(ItemCopperCoin);
+    }
 
-  if (rand() % 25 == 0)
-  {
-    ItemEntity* newItem = new ItemEntity(ItemHealthVerySmall, x, y);
-    newItem->setMap(map, TILE_WIDTH, TILE_HEIGHT, 0, 0);
-    newItem->setVelocity(Vector2D(100.0f + rand()% 250));
-    newItem->setViscosity(0.96f);
+    if (rand() % 25 == 0)
+    {
+      dropItem(ItemHealthVerySmall);
+    }
   }
 }
 

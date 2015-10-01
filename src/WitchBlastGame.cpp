@@ -50,6 +50,7 @@
 #include "SpiderEggEntity.h"
 #include "FranckyEntity.h"
 #include "VampireEntity.h"
+#include "ObstacleEntity.h"
 #include "ArtefactDescriptionEntity.h"
 #include "PnjEntity.h"
 #include "TextEntity.h"
@@ -58,6 +59,7 @@
 #include "MessageGenerator.h"
 #include "TextMapper.h"
 #include "SlimePetEntity.h"
+#include "SausageEntity.h"
 
 #include <iostream>
 #include <sstream>
@@ -66,14 +68,17 @@
 
 #include <algorithm>
 
-//#define ONLINE_MODE
+//#define LEVEL_TEST_MODE
 
 #ifdef ONLINE_MODE
 #include "OnlineScoring.h"
-#endif // ONLINE_SCORING
+#endif // ONLINE_MODE
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
-const unsigned int ACHIEV_LINES = 2;
+const float ENDING_TIMER = 8.0f;
+const unsigned int ACHIEV_LINES = 3;
+
+const int VolumeModifier = 55;
 
 static std::string intToString(int n)
 {
@@ -173,6 +178,8 @@ std::map<EnumWorldEvents, EnumMessages> eventToMessage =
   { EventGetSpecialShot,      MsgTutoShots },
   { EventGetSpell,            MsgTutoSpell },
   { EventAchievement,         MsgTutoAchievements },
+  { EventConsumable,          MsgTutoConsumables },
+  { EventPotion,              MsgTutoPotions },
 };
 
 // author: AFS
@@ -281,10 +288,14 @@ WitchBlastGame::WitchBlastGame()
     create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, false, parameters.vsync);
   }
 
+  // init current music
+  currentStandardMusic = 0;
+
   // loading resources
   const char *const images[] =
   {
     "media/player_0.png",      "media/player_1.png",
+    "media/player_2.png",
     "media/bolt.png",          "media/tiles.png",
     "media/rat.png",           "media/minimap.png",
     "media/map_background.png",
@@ -299,6 +310,7 @@ WitchBlastGame::WitchBlastGame()
     "media/cauldron.png",      "media/snake.png",
     "media/pumpkin.png",       "media/ghost.png",
     "media/zombie.png",        "media/bogeyman.png",
+    "media/sausage.png",
     "media/butcher.png",       "media/giant_slime.png",
     "media/king_rat.png",      "media/cyclops.png",
     "media/giant_spider.png",  "media/francky.png",
@@ -327,6 +339,8 @@ WitchBlastGame::WitchBlastGame()
     "media/dungeon_objects.png",  "media/shadows_standard.png",
     "media/shadows_corners.png",  "media/shadows_medium.png",
     "media/shadows_small.png",    "media/doors.png",
+    "media/destroyable_objects.png",  "media/hall_of_fame.png",
+    "media/lightning.png",
   };
 
   for (const char *const filename : images)
@@ -397,6 +411,10 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/vampire_dying.ogg",  "media/sound/ice_block.ogg",
     "media/sound/bogeyman_die.ogg",   "media/sound/bogeyman_attack.ogg",
     "media/sound/bogeyman_vortex_00.ogg", "media/sound/bogeyman_vortex_01.ogg",
+    "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
+    "media/sound/secret.ogg",         "media/sound/scroll.ogg",
+    "media/sound/tic_tac.ogg",        "media/sound/bottle.ogg",
+    "media/sound/thunder.ogg",
   };
 
   // AA in fullscreen
@@ -451,12 +469,16 @@ WitchBlastGame::WitchBlastGame()
   titleSprite.setOrigin(titleSprite.getTextureRect().width / 2, titleSprite.getTextureRect().height / 2);
 
   scoreState = ScoreOK;
+  loopCounter = 0;
 
   loadGameData();
   loadHiScores();
   receiveScoreFromServer();
 
   srand(time(NULL));
+
+  fairySpriteOffsetY = 0;
+  if (isAdvanced()) fairySpriteOffsetY = 72 + 72 * (rand() % 4);
 }
 
 void WitchBlastGame::enableAA(bool enable)
@@ -533,6 +555,11 @@ int WitchBlastGame::getChallengeLevel()
   return challengeLevel;
 }
 
+int WitchBlastGame::getSecretsFound()
+{
+  return secretsFound;
+}
+
 bool WitchBlastGame::getShowLogical()
 {
   return showLogical;
@@ -553,12 +580,27 @@ void WitchBlastGame::onUpdate()
   if (gameState == gameStatePlaying)
   {
     if (isPlayerAlive) player->setItemToBuy(NULL);
+    loopCounter++;
+    if (loopCounter > 3) loopCounter = 0;
 
-    EntityManager::getInstance().animate(deltaTime);
-    if (isPressing(KeyTimeControl, false))
+    // time stop
+    if (player->isSpecialStateActive(SpecialStateTime))
+    {
+      if (loopCounter == 0)
+        EntityManager::getInstance().animate(deltaTime);
+      else
+        player->animate(deltaTime);
+
+      SoundManager::getInstance().playSound(SOUND_CLOCK, false);
+    }
+    else
     {
       EntityManager::getInstance().animate(deltaTime);
-      SoundManager::getInstance().playSound(SOUND_VIB, false);
+      if (isPressing(KeyTimeControl, false))
+      {
+        EntityManager::getInstance().animate(deltaTime);
+        SoundManager::getInstance().playSound(SOUND_VIB, false);
+      }
     }
 
     if (isPlayerAlive) gameTime += deltaTime;
@@ -606,10 +648,12 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   gameState = gameStateInit;
   level = 1;
   challengeLevel = 1;
+  secretsFound = 0;
   gameTime = 0.0f;
   initEvents();
   scoreSaveFile = "";
   interaction.active = false;
+  endingTimer = -1.0f;
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -675,6 +719,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     resetKilledEnemies();
+    randomizePotionMap();
 
     if (startingLevel > 1)
     {
@@ -1052,17 +1097,28 @@ void WitchBlastGame::updateRunningGame()
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)) startNewGame(false, 1);
       }
 
-      /*if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
+      if (event.key.code >= sf::Keyboard::Num1 && event.key.code <= sf::Keyboard::Num8)
       {
+#ifdef LEVEL_TEST_MODE
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
         {
           startNewGame(false, event.key.code - sf::Keyboard::Num1 + 1);
         }
-      }*/
+        else
+#endif
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        {
+          player->dropConsumables(event.key.code - sf::Keyboard::Num1);
+        }
+        else
+        {
+          player->tryToConsume(event.key.code - sf::Keyboard::Num1);
+        }
+      }
 
       if (event.key.code == sf::Keyboard::F1)
       {
-        if (!isPlayerAlive && player->getDeathAge() > 3.5f)
+        if (!isPlayerAlive && player->getEndAge() > 3.5f)
         {
           if (scoreSaveFile.compare("") == 0) saveDeathScreen();
         }
@@ -1203,7 +1259,8 @@ void WitchBlastGame::updateRunningGame()
         {
           initMonsterArray();
           findPlaceMonsters(EnemyTypeSpiderEgg_invocated, 2);
-          findPlaceMonsters(EnemyTypeSpiderLittle_invocated, 2);
+          findPlaceMonsters(EnemyTypeSpiderLittle, 2);
+          findPlaceMonsters(EnemyTypeSpiderTarantula, 2);
         }
       }
       if (event.key.code == sf::Keyboard::F12)
@@ -1225,8 +1282,12 @@ void WitchBlastGame::updateRunningGame()
       }
       if (event.key.code == sf::Keyboard::F4)
       {
-        for (int i = 0; i < NUMBER_ITEMS; i++)
-          new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+          for (int i = 0; i < NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i++)
+            new ItemEntity((enumItemType)i, 100 + (i % 14) * 58, 100 + (i / 14) * 60);
+        else
+          for (int i = NUMBER_ITEMS - NUMBER_EQUIP_ITEMS; i < NUMBER_ITEMS; i++)
+            new ItemEntity((enumItemType)i, 100 + ( (i - NUMBER_ITEMS + NUMBER_EQUIP_ITEMS) % 14) * 58, 100 + ((i - NUMBER_ITEMS + NUMBER_EQUIP_ITEMS) / 14) * 60);
       }
 #endif // TEST_MODE
     }
@@ -1238,17 +1299,18 @@ void WitchBlastGame::updateRunningGame()
   // POST EVENT
   if (escape)
   {
-    if (player->isDead()) backToMenu = true;
+    if (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) backToMenu = true;
     else if (gameState == gameStatePlaying) gameState = gameStatePlayingPause;
     else if (gameState == gameStatePlayingPause) gameState = gameStatePlaying;
     else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
   }
 
-  if (player->isDead() && !xGame[xGameTypeFade].active && isPressing(KeyFireDown, true))
+  if ( (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) && !xGame[xGameTypeFade].active && isPressing(KeyFireDown, true))
   {
-    if (player->getDeathAge() < DEATH_CERTIFICATE_DELAY) player->setDeathAge(DEATH_CERTIFICATE_DELAY);
+    if (player->getEndAge() < DEATH_CERTIFICATE_DELAY) player->setEndAge(DEATH_CERTIFICATE_DELAY);
     else backToMenu = true;
   }
+
   else if (gameState == gameStatePlayingPause)
   {
     if (isPressing(KeyDown, true))
@@ -1347,7 +1409,7 @@ void WitchBlastGame::updateRunningGame()
       if (gameState == gameStatePlaying) player->castSpell();
     }
 
-    player->resestFireDirection();
+    player->resetFireDirection();
 
     if (isPressing(KeyFireLeft, false))
       player->fire(4);
@@ -1421,7 +1483,19 @@ void WitchBlastGame::updateRunningGame()
       if (achievementsQueue.front().timer < 0.0f)
       {
         achievementsQueue.pop();
-        if (achievementsQueue.empty()) music.play();
+      }
+    }
+
+    // victorious end of game ?
+    if (endingTimer > 0.0f)
+    {
+      endingTimer -= deltaTime;
+      if (endingTimer <= 0.0f)
+      {
+        calculateScore();
+
+        player->setPlayerStatus(PlayerEntity::playerStatusVictorious);
+        player->setVelocity(Vector2D(0, 0));
       }
     }
   }
@@ -1481,7 +1555,7 @@ void WitchBlastGame::updateRunningGame()
 
   if (backToMenu)
   {
-    if (player->isDead())
+    if (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
     {
       EntityManager::getInstance().clean();
 
@@ -1504,6 +1578,8 @@ void WitchBlastGame::updateRunningGame()
     else
     {
       prepareIntro();
+      switchToMenu();
+      menuState = MenuStateMain;
     }
   }
 }
@@ -1680,142 +1756,15 @@ void WitchBlastGame::renderHud()
   // boss life bar ?
   if (lifeBar.toDisplay && gameState != gameStatePlayingDisplayBoss) renderLifeBar();
 
-  renderBossPortrait();
-
-  // achievements ?
-  if (!achievementsQueue.empty() && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
-  {
-    if (!achievementsQueue.front().hasStarted)
-    {
-      music.pause();
-      SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
-      achievementsQueue.front().hasStarted = true;
-      achievementState[achievementsQueue.front().type] = AchievementDone;
-      saveGameData();
-      proceedEvent(EventAchievement);
-
-      // text
-      float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
-      float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
-      TextEntity* text = new TextEntity(tools::getLabel("achievement_complete"), 30, x0, y0);
-      text->setAlignment(ALIGN_CENTER);
-      text->setLifetime(2.5f);
-      text->setWeight(-36.0f);
-      text->setZ(1200);
-      text->setColor(TextEntity::COLOR_FADING_WHITE);
-    }
-
-    int xPos = 560;
-    int yPos = 4;
-    int opening = 384;
-    float achievAge = ACHIEVEMENT_DELAY_MAX - achievementsQueue.front().timer;
-    sf::Sprite spriteScroll;
-    if (achievAge < 1.0f)
-      opening = 32;
-    else if (achievAge < 2.0f)
-      opening = 32 + (achievAge - 1.0f) * (384 - 32);
-    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
-      opening = 32 + (ACHIEVEMENT_DELAY_MAX - achievAge) * (384 - 32);
-    if (achievAge < 0.5f)
-      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * achievAge));
-    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 0.5f)
-      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * (ACHIEVEMENT_DELAY_MAX - achievAge)));
-
-    spriteScroll.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_ACHIEV));
-    spriteScroll.setTextureRect(sf::IntRect(128 + 384 - opening, 0, opening, 64));
-    spriteScroll.setPosition(xPos + 384 - opening, yPos);
-    app->draw(spriteScroll);
-
-    if ((achievAge > 1.0f && achievAge < 2.0f) || achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
-      spriteScroll.setTextureRect(sf::IntRect(32 * ((int)(achievAge * 8) % 4), 0, 32, 64));
-    else
-      spriteScroll.setTextureRect(sf::IntRect(0, 0, 32, 64));
-    spriteScroll.setPosition(xPos + 394 - opening - 16, yPos);
-    app->draw(spriteScroll);
-
-    if (achievAge > 2.0f && achievAge < ACHIEVEMENT_DELAY_MAX - 1.0f)
-    {
-      sf::Sprite icon;
-      icon.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
-      icon.setTextureRect(sf::IntRect( ((achievementsQueue.front().type + 1) % 10) * 64,
-                                       ((achievementsQueue.front().type + 1) / 10) * 64, 64, 64));
-
-      icon.setPosition(xPos + 308, yPos + 9);
-      icon.setScale(0.7f, 0.7f);
-      app->draw(icon);
-      icon.setColor(sf::Color(255, 255, 255, 50 + 50 * cosf(getAbsolutTime() * 4)));
-      app->draw(icon, sf::BlendAdd);
-
-      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-
-      if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
-      {
-        game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
-                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-      }
-      else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
-      {
-        game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
-                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
-      }
-    }
-
-    //if (achievAge < 1.0f)
-    {
-      int i = achievementsQueue.front().counter;
-
-      if (i < 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 1);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 2);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 3);
-        }
-      }
-      else if (i < 40 + 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 64, yPos);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 63, yPos);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 62, yPos);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 61, yPos);
-        }
-      }
-      else if (i < 40 + 64 + 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 1);
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 2);
-          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 3);
-        }
-      }
-      else if (i < 40 + 64 + 40 + 64)
-      {
-        for (int j = 0; j < 2; j++)
-        {
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144, yPos + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 1, yPos + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 2, yPos + 64);
-          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 3, yPos + 64);
-        }
-      }
-
-      achievementsQueue.front().counter += 4;
-    }
-  }
+  //renderBossPortrait();
 
   // interaction text ?
   if (interaction.active)
   {
     if (interaction.type == InteractionTypeTemple)
-      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2, 0);
     else if (interaction.type == InteractionTypeMerchandise)
-      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2);
+      write(interaction.label, 20, GAME_WIDTH / 2, 480, ALIGN_CENTER,sf::Color::White, app, 2, 2, 0);
   }
 
   // light cone ?
@@ -1846,7 +1795,7 @@ void WitchBlastGame::renderHud()
       if (fade < 0) fade = 0;
     }
 
-    write("THE COOK", 27, GAME_WIDTH / 2, 540, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0);
+    write("THE COOK", 27, GAME_WIDTH / 2, 540, ALIGN_CENTER, sf::Color(255, 255, 255, fade), app, 0, 0, 0);
   }
 }
 
@@ -1876,43 +1825,46 @@ void WitchBlastGame::renderLifeBar()
                             label_dy + 23,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
-                            app, 0 , 0);
+                            app, 0 , 0, 0);
   }
 }
 
 void WitchBlastGame::renderRunningGame()
 {
   EntityManager::getInstance().sortByZ();
+  getCurrentMapEntity()->computeBoltParticulesVertices();
 
   if (!isPlayerAlive)
   {
     sf::View view = app->getView();
     sf::View viewSave = app->getView();
 
-    if (!parameters.zoom || player->getDeathAge() > 4.0f)
+    float endAge = player->getEndAge();
+
+    if (!parameters.zoom || endAge > 4.0f)
     {
       // do nothing
     }
-    else if (player->getDeathAge() > 3.0f)
+    else if (endAge > 3.0f)
     {
-      view.zoom(1.0f - 0.75f * (4.0f - player->getDeathAge()));
+      view.zoom(1.0f - 0.75f * (4.0f - endAge));
       float xDiff = view.getCenter().x - player->getX();
       float yDiff = view.getCenter().y - player->getY();
-      view.setCenter(view.getCenter().x - xDiff * (4.0f - player->getDeathAge()),
-                     view.getCenter().y - yDiff * (4.0f - player->getDeathAge()));
+      view.setCenter(view.getCenter().x - xDiff * (4.0f - endAge),
+                     view.getCenter().y - yDiff * (4.0f - endAge));
     }
-    else if (player->getDeathAge() > 1.0f)
+    else if (endAge > 1.0f)
     {
       view.zoom(0.25f);
       view.setCenter(player->getX(), player->getY());
     }
     else
     {
-      view.zoom(1.0f - 0.75f * (player->getDeathAge()));
+      view.zoom(1.0f - 0.75f * endAge);
       float xDiff = view.getCenter().x - player->getX();
       float yDiff = view.getCenter().y - player->getY();
-      view.setCenter(view.getCenter().x - xDiff * player->getDeathAge(),
-                     view.getCenter().y - yDiff * player->getDeathAge());
+      view.setCenter(view.getCenter().x - xDiff * endAge,
+                     view.getCenter().y - yDiff * endAge);
     }
 
     view.move(-5, -5);
@@ -1968,6 +1920,16 @@ void WitchBlastGame::renderRunningGame()
   sf::RectangleShape rectangle(sf::Vector2f(200, 25));
 
   // effects
+  if (player->isSpecialStateActive(SpecialStateTime))
+  {
+    sf::RectangleShape whiteLine = sf::RectangleShape(sf::Vector2f(GAME_WIDTH, 2));
+    whiteLine.setFillColor(sf::Color(255, 255, 255, 32));
+    for (int i = 0; i < 8; i++)
+    {
+      whiteLine.setPosition(xOffset, yOffset + rand() % GAME_HEIGHT);
+      app->draw(whiteLine);
+    }
+  }
   if (isPressing(KeyTimeControl, false) && gameState == gameStatePlaying)
   {
     // effect
@@ -1996,9 +1958,9 @@ void WitchBlastGame::renderRunningGame()
     rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
     app->draw(rectangle);
   }
-  if (player->isSpecialStateActive(BaseCreatureEntity::SpecialStateConfused))
+  if (player->isSpecialStateActive(SpecialStateConfused))
   {
-    BaseCreatureEntity::specialStateStuct specialState = player->getSpecialState(BaseCreatureEntity::SpecialStateConfused);
+    specialStateStuct specialState = player->getSpecialState(SpecialStateConfused);
 
     // effect
     int effectFade = 150 + cos(3.0f * getAbsolutTime()) * 100;
@@ -2065,7 +2027,7 @@ void WitchBlastGame::renderRunningGame()
 
   std::ostringstream oss;
   oss << player->getGold();
-  write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+  write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
 
   myText.setColor(sf::Color(0, 0, 0, 255));
   myText.setCharacterSize(16);
@@ -2073,13 +2035,10 @@ void WitchBlastGame::renderRunningGame()
 
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   //if (gameState == gameStatePlaying)
   {
-    // life
-    // if (player->isPoisoned()) TODO
-
     sf::Sprite hpSprite;
     hpSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_LIFE));
     int hpFade = 88.0f * (float)player->getHpDisplay() / (float)player->getHpMax();
@@ -2091,7 +2050,7 @@ void WitchBlastGame::renderRunningGame()
 
     oss.str("");
     oss << player->getHp() << "/" << player->getHpMax();
-    write(oss.str(), 16, 210, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+    write(oss.str(), 16, 210, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
 
     // mana
     sf::Sprite manaSprite;
@@ -2104,17 +2063,11 @@ void WitchBlastGame::renderRunningGame()
 
     if (player->getActiveSpell().spell != SpellNone)
     {
-      //oss.str("");
-      //oss << tools::getLabel(spellLabel[player->getActiveSpell().spell]);
-      //if (player->isEquiped(EQUIP_BOOK_MAGIC_II)) oss << "+";
-      //write(oss.str(), 14, 95, 663, ALIGN_LEFT, sf::Color::White, app, 0, 0);
-      // TODO
       sf::Sprite spellSprite;
       spellSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_SPELLS));
       spellSprite.setPosition(568, 624);
       int frame = player->getActiveSpell().spell;
       spellSprite.setTextureRect(sf::IntRect(frame * 78, 78, 78, 78));
-      //spellSprite.scale(2.0f, 2.0f);
       app->draw(spellSprite);
 
       int spellFade = player->getPercentSpellDelay() * 78;
@@ -2132,7 +2085,7 @@ void WitchBlastGame::renderRunningGame()
 
     // drawing the key on the interface
     if (player->isEquiped(EQUIP_BOSS_KEY)) app->draw(uiSprites.keySprite);
-
+    // drawing the level items
     if (player->isEquiped(EQUIP_FLOOR_MAP))
     {
       sf::Sprite mapSprite;
@@ -2141,7 +2094,6 @@ void WitchBlastGame::renderRunningGame()
       mapSprite.setPosition(737, 648);
       app->draw(mapSprite);
     }
-
     if (player->isEquiped(EQUIP_ALCOHOL))
     {
       sf::Sprite alcSprite;
@@ -2150,7 +2102,6 @@ void WitchBlastGame::renderRunningGame()
       alcSprite.setPosition(737, 681);
       app->draw(alcSprite);
     }
-
     if (player->isEquiped(EQUIP_LUCK))
     {
       sf::Sprite alcSprite;
@@ -2159,7 +2110,6 @@ void WitchBlastGame::renderRunningGame()
       alcSprite.setPosition(704, 681);
       app->draw(alcSprite);
     }
-
     if (player->isEquiped(EQUIP_FAIRY_POWDER))
     {
       sf::Sprite alcSprite;
@@ -2167,6 +2117,34 @@ void WitchBlastGame::renderRunningGame()
       alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 6, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
       alcSprite.setPosition(671, 681);
       app->draw(alcSprite);
+    }
+    // drawing the consumable
+    if (!player->isEquiped(EQUIP_BAG))
+    {
+      sf::RectangleShape shadow(sf::Vector2f(70, 33));
+      shadow.setFillColor(sf::Color(0, 0, 0, 128));
+      shadow.setPosition(sf::Vector2f(386, 614));
+      app->draw(shadow);
+    }
+    for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+    {
+      int item = player->getConsumable(i);
+      if (item > -1)
+      {
+        sf::Sprite consSprite;
+        consSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS));
+        consSprite.setPosition(315 + 37 * i, 615);
+
+        if (item < FirstEquipItem && item >= ItemPotion01 + NUMBER_UNIDENTIFIED)
+        {
+          int bottle = (int)(getPotion((enumItemType)item));
+          consSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * (bottle % 10), ITEM_HEIGHT * (bottle / 10),  ITEM_WIDTH, ITEM_HEIGHT));
+          app->draw(consSprite);
+        }
+
+        consSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * (item % 10), ITEM_HEIGHT * (item / 10),  ITEM_WIDTH, ITEM_HEIGHT));
+        app->draw(consSprite);
+      }
     }
 
     // drawing message icon
@@ -2220,7 +2198,7 @@ void WitchBlastGame::renderRunningGame()
       std::ostringstream oss;
       if (player->getDivinity().level == MAX_DIVINITY_LEVEL + 1) oss << "MAX";
       else oss << "lvl " << player->getDivinity().level;
-      write(oss.str(), 11, 122, 702, ALIGN_CENTER, sf::Color::White, app, 0, 0);
+      write(oss.str(), 11, 122, 702, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
     }
 
     // render the shots
@@ -2254,7 +2232,7 @@ void WitchBlastGame::renderRunningGame()
       float x = 200;
       float y = 480;
       // items
-      write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+      write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
       int n = 0;
 
       for (auto i: sortedEquipement)
@@ -2274,7 +2252,7 @@ void WitchBlastGame::renderRunningGame()
 
     if (player->isDead())
     {
-      float deathAge = player->getDeathAge();
+      float deathAge = player->getEndAge();
 
       if (deathAge > DEATH_CERTIFICATE_DELAY)
       {
@@ -2287,13 +2265,13 @@ void WitchBlastGame::renderRunningGame()
 
         if (scoreSaveFile.compare("") == 0)
         {
-          write(tools::getLabel("certificate_capture"), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+          write(tools::getLabel("certificate_capture"), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
         }
         else
         {
           std::stringstream ss;
           ss << tools::getLabel("certificate_saved") << " " << scoreSaveFile;
-          write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0);
+          write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
         }
       }
       else if (deathAge > DEATH_CERTIFICATE_DELAY - 1.0f)
@@ -2307,15 +2285,49 @@ void WitchBlastGame::renderRunningGame()
       }
 
     }
-    else if (currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
+    else if (player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+    {
+      if (player->getEndAge() > 2.0f)
+      {
+        rectangle.setFillColor(sf::Color(0, 0, 0, 180));
+        rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+
+        renderDeathScreen(80, 110);
+
+        if (scoreSaveFile.compare("") == 0)
+        {
+          write(tools::getLabel("certificate_capture"), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+        }
+        else
+        {
+          std::stringstream ss;
+          ss << tools::getLabel("certificate_saved") << " " << scoreSaveFile;
+          write(ss.str(), 16, 80, 430, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+        }
+      }
+      else
+      {
+        rectangle.setFillColor(sf::Color(0, 0, 0, 90 * (player->getEndAge())));
+        rectangle.setPosition(sf::Vector2f(xOffset, yOffset));
+        rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH , MAP_HEIGHT * TILE_HEIGHT));
+        app->draw(rectangle);
+
+        renderDeathScreen(80 + (2.0f - player->getEndAge() ) * 1000, 110);
+      }
+    }
+    else if (player->getPlayerStatus() != PlayerEntity::playerStatusVictorious && currentMap->getRoomType() == roomTypeExit && level >= LAST_LEVEL)
     {
       float x0 = (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2;
 
-      write(tools::getLabel("congratulations_1"), 25, x0, 220, ALIGN_CENTER, sf::Color::White, app, 2, 2);
-      write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2);
-      write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2);
+      write(tools::getLabel("congratulations_1"), 25, x0, 220, ALIGN_CENTER, sf::Color::White, app, 2, 2, 0);
+      write(tools::getLabel("congratulations_2"), 23, x0, 250, ALIGN_CENTER, sf::Color::White, app, 2, 2, 0);
+      write(tools::getLabel("congratulations_3"), 23, x0, 280, ALIGN_CENTER, sf::Color::White, app, 2, 2, 0);
 
       registerAchievement(AchievementWin);
+      if (endingTimer < 0.0f)
+        endingTimer = ENDING_TIMER;
     }
   }
 
@@ -2330,9 +2342,163 @@ void WitchBlastGame::renderRunningGame()
     ss << ":";
     if (secondes < 10) ss << "0";
     ss << secondes;
-    write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0,0);
+    write(ss.str(), 14, 4, 4, ALIGN_LEFT, sf::Color::Green, app, 0, 0, 0);
   }
 
+// achievements ?
+  if (!achievementsQueue.empty()) // && (currentMap->isCleared() || achievementsQueue.front().hasStarted) )
+  {
+    if (!achievementsQueue.front().hasStarted)
+    {
+      SoundManager::getInstance().playSound(SOUND_ACHIEVEMENT);
+      achievementsQueue.front().hasStarted = true;
+      achievementState[achievementsQueue.front().type] = AchievementDone;
+      saveGameData();
+      proceedEvent(EventAchievement);
+
+      // text
+      float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
+      float y0 = MAP_HEIGHT * 0.5f * TILE_HEIGHT + 40.0f;
+      TextEntity* text = new TextEntity(tools::getLabel("achievement_complete"), 30, x0, y0);
+      text->setAlignment(ALIGN_CENTER);
+      text->setLifetime(2.5f);
+      text->setWeight(-36.0f);
+      text->setZ(1200);
+      text->setColor(TextEntity::COLOR_FADING_WHITE);
+    }
+
+    int xPos = 560;
+    int yPos = 4;
+    int opening = 384;
+    float achievAge = ACHIEVEMENT_DELAY_MAX - achievementsQueue.front().timer;
+    sf::Sprite spriteScroll;
+    if (achievAge < 1.0f)
+      opening = 32;
+    else if (achievAge < 2.0f)
+      opening = 32 + (achievAge - 1.0f) * (384 - 32);
+    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
+      opening = 32 + (ACHIEVEMENT_DELAY_MAX - achievAge) * (384 - 32);
+    if (achievAge < 0.5f)
+      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * achievAge));
+    else if (achievAge > ACHIEVEMENT_DELAY_MAX - 0.5f)
+      spriteScroll.setColor(sf::Color(255, 255, 255, 500 * (ACHIEVEMENT_DELAY_MAX - achievAge)));
+
+    spriteScroll.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_ACHIEV));
+    spriteScroll.setTextureRect(sf::IntRect(128 + 384 - opening, 0, opening, 64));
+    spriteScroll.setPosition(xPos + 384 - opening, yPos);
+    app->draw(spriteScroll);
+
+    if ((achievAge > 1.0f && achievAge < 2.0f) || achievAge > ACHIEVEMENT_DELAY_MAX - 1.0f)
+      spriteScroll.setTextureRect(sf::IntRect(32 * ((int)(achievAge * 8) % 4), 0, 32, 64));
+    else
+      spriteScroll.setTextureRect(sf::IntRect(0, 0, 32, 64));
+    spriteScroll.setPosition(xPos + 394 - opening - 16, yPos);
+    app->draw(spriteScroll);
+
+    if (achievAge > 2.0f && achievAge < ACHIEVEMENT_DELAY_MAX - 1.0f)
+    {
+      sf::Sprite icon;
+      icon.setTexture(*ImageManager::getInstance().getImage(IMAGE_ACHIEVEMENTS));
+      icon.setTextureRect(sf::IntRect( ((achievementsQueue.front().type + 1) % 10) * 64,
+                                       ((achievementsQueue.front().type + 1) / 10) * 64, 64, 64));
+
+      icon.setPosition(xPos + 308, yPos + 9);
+      icon.setScale(0.7f, 0.7f);
+      app->draw(icon);
+      icon.setColor(sf::Color(255, 255, 255, 50 + 50 * cosf(getAbsolutTime() * 4)));
+      app->draw(icon, sf::BlendAdd);
+
+      game().write(achievementsQueue.front().message, 13, xPos + 34, yPos + 10, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
+
+      if (achievements[achievementsQueue.front().type].unlockType == UnlockItem)
+      {
+        game().write(tools::getLabel(items[achievements[achievementsQueue.front().type].unlock].name),
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
+      }
+      else if (achievements[achievementsQueue.front().type].unlockType == UnlockFunctionality)
+      {
+        game().write(tools::getLabel(functionalityLabel[achievements[achievementsQueue.front().type].unlock]),
+                     13, xPos + 70, yPos + 34, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
+      }
+    }
+
+    //if (achievAge < 1.0f)
+    {
+      int i = achievementsQueue.front().counter;
+
+      if (i < 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 1);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 2);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40, yPos - i + 64 + 3);
+        }
+      }
+      else if (i < 40 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 64, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 63, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 62, yPos);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - 40 + i - 61, yPos);
+        }
+      }
+      else if (i < 40 + 64 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 1);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 2);
+          generateUiParticle(xPos + 394 + 16 + 4 - opening, yPos + i - 40 - 64 + 3);
+        }
+      }
+      else if (i < 40 + 64 + 40 + 64)
+      {
+        for (int j = 0; j < 2; j++)
+        {
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 1, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 2, yPos + 64);
+          generateUiParticle(xPos + 394 + 16 + 4 - 32 - i + 144 + 3, yPos + 64);
+        }
+      }
+
+      achievementsQueue.front().counter += 4;
+    }
+  }
+
+  // show player effects
+  if (isPlayerAlive)
+  {
+    float x0 = 20, y0 = 540, yStep = -20;
+
+    for (int i = 0; i < NB_SPECIAL_STATES; i++)
+    {
+      if ( (player->isSpecialStateActive((enumSpecialState)i) && player->getSpecialState((enumSpecialState)i).timer > 0.35f)
+          || player->getSpecialState((enumSpecialState)i).waitUnclear)
+      {
+        std::stringstream oss;
+        oss << tools::getLabel(specialStateToLabel[i]) << " : ";
+        if (player->getSpecialState((enumSpecialState)i).waitUnclear)
+        {
+          oss << "waiting";
+          int n = (int)(getAbsolutTime() * 3) % 3;
+          if (n == 0) oss << ".";
+          else if (n == 1) oss << "..";
+          else oss << "...";
+        }
+        else
+          oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
+
+        write(oss.str(), 12, x0, y0, ALIGN_LEFT, specialStateToColor[i], app, 0, 0, 0);
+        y0 += yStep;
+      }
+    }
+  }
 }
 
 void WitchBlastGame::renderMessages()
@@ -2362,7 +2528,7 @@ void WitchBlastGame::renderMessages()
     ss << messagesQueue.front().message[2];
 
 
-    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0,0);
+    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
   }
 }
 
@@ -2430,27 +2596,39 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   app->draw(rectangle);
 
   std::stringstream ss;
-  ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
-  write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+  if (player->isDead())
+    ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
+  else
+    ss << parameters.playerName << " - " << tools::getLabel("dc_victory");
+  write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   ss.str(std::string());
   ss.clear();
-  ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
+
   int minutes = (int)gameTime / 60;
   if (minutes < 1) minutes = 1;
-  ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << minutes << " " << tools::getLabel("dc_minutes") << "." << std::endl;
+
+  if (player->isDead())
+  {
+    ss << tools::getLabel("dc_killed_by") << " " << sourceToString(player->getLastHurtingSource(), player->getLastHurtingEnemy()) << "." << std::endl;
+    ss << tools::getLabel("dc_died_level") << " " << level << " " << tools::getLabel("dc_after") << " " << minutes << " " << tools::getLabel("dc_minutes") << "." << std::endl;
+  }
+  else
+  {
+    ss << tools::getLabel("dc_after_victory") << " " << minutes << " " << tools::getLabel("dc_minutes") << "." << std::endl;
+  }
 
   ss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount << std::endl;
   ss << tools::getLabel("dc_gold") << ": " << player->getGold() << std::endl;
   ss << tools::getLabel("dc_challenges") << ": " << challengeLevel - 1 << std::endl;
 
-  write(ss.str(), 16, x + 112, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write(ss.str(), 16, x + 112, y + 50, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
 
   // player
   renderPlayer(x + 40, y + 48, player->getEquipment(), player->getShotType(), 1, 0);
 
   // items
-  write(tools::getLabel("inventory"), 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0);
+  write(tools::getLabel("inventory"), 16, x + 14, y + 165, ALIGN_LEFT, sf::Color::Black, app, 0, 0, 0);
   int n = 0;
   for (auto i: sortedEquipement)
   {
@@ -2468,7 +2646,7 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   ss.str("");
   ss.clear();
   ss << "Score: " << score;
-  write(ss.str(), 24, x + xRect / 2, y + 240, ALIGN_CENTER, sf::Color::Black, app, 0, 0);
+  write(ss.str(), 24, x + xRect / 2, y + 240, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
 }
 
@@ -2489,6 +2667,7 @@ void WitchBlastGame::calculateScore()
   }
 
   score += getChallengeScore(challengeLevel);
+  score += getSecretScore(secretsFound);
   score += getGoldScore(player->getGold());
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
@@ -2497,11 +2676,32 @@ void WitchBlastGame::calculateScore()
     lastScore.equip[i] = player->isEquiped(i);
   }
 
+  // perfects
+  for (int i = 1; i < level; i++)
+  {
+    if (player->getLostHp(i) == 0) score += getPerfectScore();
+  }
+
+  // time
+  if (!player->isDead())
+  {
+    score += getTimeScore((int)(gameTime / 60.0f));
+    lastScore.level = -1;
+  }
+  else
+    lastScore.level = level;
+
   // to save
   lastScore.name = parameters.playerName;
   lastScore.score = score;
-  lastScore.level = level;
+
   lastScore.shotType = player->getShotType();
+
+  lastScore.divinity = player->getDivinity().divinity;
+
+  lastScore.killedBy = player->getLastHurtingEnemy();
+
+  lastScore.time = (int)gameTime;
 
   scores.push_back(lastScore);
 
@@ -2614,7 +2814,6 @@ void WitchBlastGame::updateMenu()
         }
       }
     }
-
     else if (menuState == MenuStateJoystick)
     {
       bool alreadyUsed = false;
@@ -2700,6 +2899,10 @@ void WitchBlastGame::updateMenu()
     {
       if (event.type == sf::Event::KeyPressed)
       {
+        if (event.key.code == sf::Keyboard::F1)
+        {
+            saveScreen();
+        }
         if (menuState == MenuStateChangeName)
         {
           if (event.key.code == sf::Keyboard::Escape || event.key.code == sf::Keyboard::Return)
@@ -2946,7 +3149,7 @@ void WitchBlastGame::renderMenu()
   {
     //renderHiScores();
     if (menuScoreIndex == 0)
-      renderScores(scoresOnline, "Best Scores (ON-LINE)");
+      renderScores(scoresOnline, "Best Players (ON-LINE)");
     else if (menuScoreIndex == 1)
       renderScores(scoresOnlineDay, "Best TODAY Scores (ON-LINE)");
     else
@@ -2982,9 +3185,9 @@ void WitchBlastGame::renderMenu()
   {
     // menu keys
     if (config.configFileExists())
-      write(tools::getLabel("key_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     else
-      write(tools::getLabel("key_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("key_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -2994,7 +3197,7 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menuKeyIndex == i) oss << tools::getLabel("key_configuration_insert");
       else if (menuKeyIndex > i) oss << keyToString(input[i]);
-      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1, 0);
     }
   }
 
@@ -3002,9 +3205,9 @@ void WitchBlastGame::renderMenu()
   {
     // menu keys
     if (config.configFileExists())
-      write(tools::getLabel("joystick_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("joystick_configuration"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     else
-      write(tools::getLabel("joystick_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+      write(tools::getLabel("joystick_configuration_desc"), 18, xAlign, 295, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
       sf::Color itemColor;
@@ -3014,7 +3217,7 @@ void WitchBlastGame::renderMenu()
       oss << tools::getLabel(inputKeyString[i]) << ": ";
       if (menuKeyIndex == i) oss << tools::getLabel("joystick_configuration_insert");
       else if (menuKeyIndex > i) oss << "OK";
-      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(oss.str(), 16, xAlign, 330 + i * 25, ALIGN_LEFT, itemColor, app, 1, 1, 0);
     }
   }
 
@@ -3030,7 +3233,7 @@ void WitchBlastGame::renderMenu()
 
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
-        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(20 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(20 *getAbsolutTime()) % 2), fairySpriteOffsetY, 48, 48));
         fairySprite.setPosition(xAlign - 60, yTop - 10 + i * yStep + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
@@ -3067,10 +3270,10 @@ void WitchBlastGame::renderMenu()
         label = oss.str();
       }
 
-      write(label, 21, xAlign, yTop + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1);
+      write(label, 21, xAlign, yTop + i * yStep, ALIGN_LEFT, itemColor, app, 1, 1, 0);
     }
     write(menu->items[menu->index].description, 18, xAlign,
-          yTop + menu->items.size() * yStep + 8, ALIGN_LEFT, sf::Color(60, 80, 220), app, 0, 0);
+          yTop + menu->items.size() * yStep + 8, ALIGN_LEFT, sf::Color(60, 80, 220), app, 0, 0, 0);
 
     // Keys
     if (menuState == MenuStateFirst)
@@ -3087,20 +3290,20 @@ void WitchBlastGame::renderMenu()
       app->draw(keysSprite);
 
       // legend
-      write(tools::getLabel("keys_move"), 16, xKeys + 190, yKeys + 10, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-      write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-      write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1);
-      write(tools::getLabel("key_spell"), 16, xKeys + 148, yKeys + 184, ALIGN_CENTER, sf::Color::White, app, 1, 1);
+      write(tools::getLabel("keys_move"), 16, xKeys + 190, yKeys + 10, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
+      write(tools::getLabel("keys_time"), 16, xKeys + 295, yKeys + 14, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
+      write(tools::getLabel("keys_fire"), 16, xKeys + 360, yKeys + 54, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
+      write(tools::getLabel("key_spell"), 16, xKeys + 148, yKeys + 184, ALIGN_CENTER, sf::Color::White, app, 1, 1, 0);
       // TODO key interact
       std::ostringstream oss;
       oss << tools::getLabel("keys_select_1") << std::endl << tools::getLabel("keys_select_2");
-      write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1);
+      write(oss.str(), 16, xKeys + 4, yKeys + 100, ALIGN_LEFT, sf::Color::White, app, 1, 1, 0);
     }
   }
 
   std::ostringstream oss;
   oss << APP_NAME << " v" << APP_VERSION << "  - 2014-2015 - " << " Seby (code), Pierre \"dejam0rt\" Baron (2D art)";
-  write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(oss.str(), 17, 5, 680, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 }
 
 void WitchBlastGame::renderAchievements()
@@ -3111,7 +3314,7 @@ void WitchBlastGame::renderAchievements()
   app->draw(titleSprite);
 
   // achievements
-  write(tools::getLabel("menu_achievements"), 30, 485, 280, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("menu_achievements"), 30, 485, 280, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 
   int achWidth = 64, achHeight = 64, x0 = 180, y0 = 380, xStep = 16, yStep = 16, nbProLine = 8;
 
@@ -3144,11 +3347,11 @@ void WitchBlastGame::renderAchievements()
 
   if (menuAchIndex / 8 >= ACHIEV_LINES)
   {
-    write(tools::getLabel("config_back"), 17, 485, 550, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
   }
   else
   {
-    write(tools::getLabel("config_back"), 17, 485, 550, ALIGN_CENTER, sf::Color(180, 180, 180, 255), app, 1, 1);
+    write(tools::getLabel("config_back"), 17, 485, 620, ALIGN_CENTER, sf::Color(180, 180, 180, 255), app, 1, 1, 0);
 
     sf::Color fontColor = sf::Color::White;
     std::stringstream oss;
@@ -3183,7 +3386,7 @@ void WitchBlastGame::renderAchievements()
       fontColor = sf::Color(150, 150, 150);
     }
 
-    write(oss.str(), 19, 100, 650, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(oss.str(), 19, 100, 650, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
   }
 }
 
@@ -3195,7 +3398,7 @@ void WitchBlastGame::renderCredits()
   app->draw(titleSprite);
 
   // credits
-  write(tools::getLabel("credits"), 30, 485, 275, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("credits"), 30, 485, 275, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 
   int yCursorInit = 365;
   int yStep = 30;
@@ -3204,34 +3407,34 @@ void WitchBlastGame::renderCredits()
   int xMarging = 20;
 
   int yCursor = yCursorInit;
-  write("Code", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("Code", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   int i = 0;
   while (creditsCode[i] != "END")
   {
-    write(creditsCode[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsCode[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
   yCursor += yStep;
 
-  write("2D Art", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("2D Art", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (credits2D[i] != "END")
   {
-    write(credits2D[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(credits2D[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
   yCursor += yStep;
 
-  write("Sound", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("Sound", 22, xLeft, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (creditsSound[i] != "END")
   {
-    write(creditsSound[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsSound[i], 19, xLeft + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
@@ -3240,24 +3443,24 @@ void WitchBlastGame::renderCredits()
 
   ////// RIGHT
 
-  yCursor = yCursorInit - yStep;
-  write("Music", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  yCursor = yCursorInit + yStep;
+  write("Music", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (creditsMusic[i] != "END")
   {
-    write(creditsMusic[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsMusic[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
   yCursor += yStep;
 
-  write("Translation", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0,0);
+  write("Translation", 22, xRight, yCursor, ALIGN_LEFT, sf::Color(210, 210, 255, 255), app, 0, 0, 0);
   yCursor += yStep;
   i = 0;
   while (creditsTranslate[i] != "END")
   {
-    write(creditsTranslate[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0,0);
+    write(creditsTranslate[i], 19, xRight + xMarging, yCursor, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
     yCursor += yStep;
     i++;
   }
@@ -3267,41 +3470,88 @@ void WitchBlastGame::renderCredits()
 void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std::string title)
 {
   sf::Sprite bgSprite;
-  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
+  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HALL_OF_FAME));
   app->draw(bgSprite);
 
   // hi-scores-title
-  write(title, 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0, 0);
 
-  int x0 = 25;
-  int x1 = 70;
-  int x2 = 125;
-  int x3 = 430;
+  int xEquip = 540;
+  //int yEquip = 360;
+
+  int xPlayerLeft = 60;
+  int xPlayerRight = 850;
+
+  int xName = 260;
+  int xTime = 420;
+  int xLevel = 480;
+  int xScore = 180;
+
   int y0 = 130;
-  int yStep = 100;
-  int xRight = SCREEN_WIDTH / 2;
-
-  sf::RectangleShape line(sf::Vector2f(2, 600));
-  line.setPosition(SCREEN_WIDTH / 2, 80);
-  app->draw(line);
+  int yStep = 50;
 
   for (unsigned int i = 0; i < scoresToRender.size() && i < SCORES_MAX; i++)
   {
-    int index = i < SCORES_MAX / 2 ? i : i - SCORES_MAX / 2;
-    sf::Color color = sf::Color( 220, 220, 220);
+    sf::Color color = sf::Color( 15, 15, 15);
     if (scoresToRender[i].score == lastScore.score && scoresToRender[i].level == lastScore.level && scoresToRender[i].name == lastScore.name)
     {
       int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
-      color = sf::Color(255, 128 + fade, 255);
+      color = sf::Color(255 - fade, 128, 255 - fade);
     }
 
-    renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scoresToRender[i].equip, scoresToRender[i].shotType, 1, 0);
+    // equipment
+    int n = 0;
+    for (auto ii: scoreEquipement)
+      if (ii != EQUIP_BOSS_KEY && scoresToRender[i].equip[ii]) n++;
 
-    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1);
-    std::stringstream ss;
-    ss << scoresToRender[i].name << " (" << scoresToRender[i].level << ")";
-    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1);
-    write(intToString(scoresToRender[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
+    int dx = 30;
+    if (n > 14) dx = 16;
+    else if (n > 8) dx = 20;
+    n = 0;
+
+    for (auto ii: scoreEquipement)
+    {
+      if (ii != EQUIP_BOSS_KEY && scoresToRender[i].equip[ii])
+      {
+        sf::Sprite itemSprite;
+        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
+        itemSprite.setPosition(xEquip + n * dx, y0 + 22 + yStep * i);
+        itemSprite.setTextureRect(sf::IntRect((ii % 10) * 32, (ii / 10) * 32, 32, 32));
+        app->draw(itemSprite);
+        n++;
+      }
+    }
+
+    if (i < 2)
+      renderPlayer((i % 2 == 0) ? xPlayerLeft : xPlayerRight, y0 - 14 + yStep * i, scoresToRender[i].equip, scoresToRender[i].shotType, 2, 7);
+    else if (i >= 8)
+      renderPlayer((i % 2 == 0) ? xPlayerLeft : xPlayerRight, y0 - 14 + yStep * i, scoresToRender[i].equip, scoresToRender[i].shotType, 0, 8);
+    else
+      renderPlayer((i % 2 == 0) ? xPlayerLeft : xPlayerRight, y0 - 14 + yStep * i, scoresToRender[i].equip, scoresToRender[i].shotType, 1, 0);
+
+    write(scoresToRender[i].name, 16, xName, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+
+    std::stringstream levelSS;
+    if (scoresToRender[i].level == -1) levelSS << "Win";
+    else levelSS << "lvl " << scoresToRender[i].level;
+    write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+
+
+    std::stringstream timeSS;
+    if (scoresToRender[i].time < 100)
+    {
+      timeSS << scoresToRender[i].time << " s";
+    }
+    else
+    {
+      int minutes = scoresToRender[i].time / 60;
+      if (minutes < 1) minutes = 1;
+      timeSS << minutes << " m";
+    }
+
+    write(timeSS.str(), 16, xTime, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
   }
 
   // retrieving from DB ?
@@ -3315,7 +3565,7 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
     else if (n == 1) oss << "..";
     else oss << "...";
 
-    write(oss.str(), 15, 20, 20, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1);
+    write(oss.str(), 15, 20, 20, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
   }
 }
 
@@ -3326,7 +3576,7 @@ void WitchBlastGame::renderHiScores()
   app->draw(bgSprite);
 
   // hi-scores-title
-  write(tools::getLabel("hi_scores"), 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1);
+  write(tools::getLabel("hi_scores"), 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
 
   int x0 = 25;
   int x1 = 70;
@@ -3352,11 +3602,11 @@ void WitchBlastGame::renderHiScores()
 
     renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scores[i].equip, scores[i].shotType, 1, 0);
 
-    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1);
+    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1, 0);
     std::stringstream ss;
     ss << scores[i].name << " (" << scores[i].level << ")";
-    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1);
-    write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1);
+    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1, 0);
+    write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1, 0);
   }
 }
 
@@ -3379,15 +3629,15 @@ void WitchBlastGame::renderInGameMenu()
 
         sf::Sprite fairySprite;
         fairySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
-        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), 0, 48, 48));
+        fairySprite.setTextureRect(sf::IntRect( 48 * ((int)(8 *getAbsolutTime()) % 2), fairySpriteOffsetY, 48, 48));
         fairySprite.setPosition(xAlign - 60, yAlign + i * 90 + 5 * cos( 6 * getAbsolutTime()));
         app->draw(fairySprite);
       }
       else itemColor = sf::Color(120, 120, 120, 255);
 
       std::string label = menu->items[i].label;
-      write(label, 23, xAlign, yAlign + 10 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1);
-      write(menu->items[i].description, 15, xAlign, yAlign + i * 90 + 50, ALIGN_LEFT, itemColor, app, 0, 0);
+      write(label, 23, xAlign, yAlign + 10 + i * 90, ALIGN_LEFT, itemColor, app, 1, 1, 0);
+      write(menu->items[i].description, 15, xAlign, yAlign + i * 90 + 50, ALIGN_LEFT, itemColor, app, 0, 0, 0);
     }
   }
 }
@@ -3480,22 +3730,22 @@ void WitchBlastGame::openDoors()
 
   if (currentMap->hasNeighbourUp() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH/2, 0);
-  else
+  else if (currentMap->hasNeighbourUp() == 1)
     doorEntity[0]->openDoor();
 
   if (currentMap->hasNeighbourLeft() == 2 && !bossRoomOpened)
     currentMap->closeDoor(0, MAP_HEIGHT / 2);
-  else
+  else if (currentMap->hasNeighbourLeft() == 1)
     doorEntity[1]->openDoor();
 
   if (currentMap->hasNeighbourDown() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH / 2, MAP_HEIGHT - 1);
-  else
+  else if (currentMap->hasNeighbourDown() == 1)
     doorEntity[2]->openDoor();
 
   if (currentMap->hasNeighbourRight() == 2 && !bossRoomOpened)
     currentMap->closeDoor(MAP_WIDTH - 1, MAP_HEIGHT / 2);
-  else
+  else if (currentMap->hasNeighbourRight() == 1)
     doorEntity[3]->openDoor();
 }
 
@@ -3674,14 +3924,20 @@ Vector2D WitchBlastGame::getNearestEnemy(float x, float y)
   return target;
 }
 
-void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour)
+void WitchBlastGame::setDoorVisible(int n)
+{
+  if (n >= 0 && n < 4)
+    doorEntity[n]->setVisible(true);
+}
+
+void WitchBlastGame::checkDoor(int doorId, roomTypeEnum roomCurrent, roomTypeEnum roomNeighbour, bool isNeighbourKnown)
 {
   if (roomNeighbour == roomTypeNULL)
   {
     doorEntity[doorId]->setVisible(false);
     return;
   }
-  doorEntity[doorId]->setVisible(true);
+  doorEntity[doorId]->setVisible(isNeighbourKnown);
 
   doorEntity[doorId]->setDoorType(currentMap->getDoorType(doorId));
 
@@ -3715,7 +3971,7 @@ void WitchBlastGame::refreshMap()
   EntityManager::getInstance().partialClean(10);
 
   // if new map, it has to be randomized
-  bool generateMap = !(currentFloor->getMap(floorX, floorY)->isVisited());
+  bool generateMap =  !(currentFloor->getMap(floorX, floorY)->isVisited());
   currentMap = currentFloor->getAndVisitMap(floorX, floorY);
 
   // load the map
@@ -3737,56 +3993,16 @@ void WitchBlastGame::refreshMap()
   }
 
   // check doors
-  checkDoor(0, currentMap->getRoomType(), currentMap->getNeighbourUp());
-  checkDoor(1, currentMap->getRoomType(), currentMap->getNeighbourLeft());
-  checkDoor(2, currentMap->getRoomType(), currentMap->getNeighbourDown());
-  checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight());
-
-  // keystones
-  /*int keyStoneFrame = 12 + (currentMap->getWallOffset() / 24);
-
-  if (currentMap->getNeighbourUp() || currentMap->getRoomType() == roomTypeExit)
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-        TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }
-  if (currentMap->getNeighbourDown())
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
-        MAP_HEIGHT * TILE_WIDTH - TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setAngle(180);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }
-  if (currentMap->getNeighbourLeft())
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        TILE_WIDTH / 2,
-        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setAngle(270);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }
-  if (currentMap->getNeighbourRight())
-  {
-    SpriteEntity* keystoneEntity = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_TILES),
-        MAP_WIDTH * TILE_WIDTH - TILE_WIDTH / 2,
-        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2, 192, 64, 1);
-    keystoneEntity->setZ(1000);
-    keystoneEntity->setAngle(90);
-    keystoneEntity->setFrame(keyStoneFrame);
-    keystoneEntity->setType(ENTITY_EFFECT);
-  }*/
+  checkDoor(0, currentMap->getRoomType(), currentMap->getNeighbourUp(), currentMap->hasKnownNeighbour(North, true));
+  checkDoor(1, currentMap->getRoomType(), currentMap->getNeighbourLeft(), currentMap->hasKnownNeighbour(West, true));
+  checkDoor(2, currentMap->getRoomType(), currentMap->getNeighbourDown(), currentMap->hasKnownNeighbour(South, true));
+  checkDoor(3, currentMap->getRoomType(), currentMap->getNeighbourRight(), currentMap->hasKnownNeighbour(East, true));
 
   // pet slime
   if (player->isEquiped(EQUIP_PET_SLIME) && currentMap->getRoomType() != roomTypeTemple) new SlimePetEntity();
+
+  // barrels
+  checkDestroyableObjects();
 }
 
 void WitchBlastGame::refreshMinimap()
@@ -3794,16 +4010,17 @@ void WitchBlastGame::refreshMinimap()
   for (int j=0; j < FLOOR_HEIGHT; j++)
     for (int i=0; i < FLOOR_WIDTH; i++)
     {
-      int n = currentFloor->getRoom(i, j);
+      int roomType = currentFloor->getRoom(i, j);
 
-      if (n > 0 && currentFloor->getMap(i, j)->isVisited())
+      if (roomType > roomTypeNULL && currentFloor->getMap(i, j)->isVisited()&& currentFloor->getMap(i, j)->isKnown())
       {
-        if (currentFloor->getRoom(i, j) == roomTypeStarting
-            || currentFloor->getRoom(i, j) == roomTypeChallenge
-            || currentFloor->getRoom(i, j) == roomTypeBonus
-            || currentFloor->getRoom(i, j) == roomTypeKey
-            || currentFloor->getRoom(i, j) == roomTypeBoss
-            || currentFloor->getRoom(i, j) == roomTypeStandard)
+        if (roomType == roomTypeStarting
+            || roomType == roomTypeChallenge
+            || roomType == roomTypeBonus
+            || roomType == roomTypeKey
+            || roomType == roomTypeBoss
+            || roomType == roomTypeStandard
+            || roomType == roomTypeSecret)
         {
           if ( currentFloor->getMap(i, j)->containsHealth())
             miniMap->setTile(i, j, 5);
@@ -3813,17 +4030,19 @@ void WitchBlastGame::refreshMinimap()
 
         else
         {
-          if (currentFloor->getRoom(i, j) == roomTypeMerchant)
+          if (roomType == roomTypeMerchant)
             miniMap->setTile(i, j, 3);
-          else if (currentFloor->getRoom(i, j) == roomTypeTemple)
+          else if (roomType == roomTypeTemple)
             miniMap->setTile(i, j, 7);
+          else if (roomType == roomTypeSecret)
+            miniMap->setTile(i, j, 8);
           else
             miniMap->setTile(i, j, currentFloor->getRoom(i, j));
         }
       }
-      else if (n > 0 && currentFloor->getMap(i, j)->isKnown())
+      else if (roomType > roomTypeNULL && currentFloor->getMap(i, j)->isKnown())
       {
-        switch (currentFloor->getRoom(i, j))
+        switch (roomType)
         {
         case roomTypeBoss:
           miniMap->setTile(i, j, 12);
@@ -3852,6 +4071,9 @@ void WitchBlastGame::refreshMinimap()
         case roomTypeBonus:
           miniMap->setTile(i, j,
                            game().getPlayer()->isEquiped(EQUIP_FLOOR_MAP) ? 2 : 11 );
+          break;
+        case roomTypeSecret:
+          miniMap->setTile(i, j, 18 );
           break;
         case roomTypeStandard:
         case roomTypeStarting:
@@ -4035,7 +4257,7 @@ void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
       {
         std::ostringstream oss;
         oss << "lvl " << player->getShotLevel(i) + 1;
-        write(oss.str(), 10, xHud + 55 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0);
+        write(oss.str(), 10, xHud + 55 * index + 10, yHud + 48, ALIGN_LEFT, sf::Color(255, 255, 255, 255), app, 0, 0, 0);
       }
 
       index++;
@@ -4169,6 +4391,24 @@ void WitchBlastGame::generateMap()
       }
     }
 
+    // consumable item
+    if (rand() % 3 == 0)  // potion
+    {
+      ItemEntity* item5 = new ItemEntity(
+          (enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED),
+          (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
+      item5->setMerchandise(true);
+    }
+    else  // scroll
+    {
+      ItemEntity* item5 = new ItemEntity(
+          (enumItemType)ItemScrollRevelation,
+          (MAP_WIDTH / 2 - 2) * TILE_WIDTH + TILE_WIDTH / 2,
+          (MAP_HEIGHT / 2) * TILE_HEIGHT + 5);
+      item5->setMerchandise(true);
+    }
+
     new PnjEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                   (MAP_HEIGHT / 2 - 1) * TILE_HEIGHT,
                   0);
@@ -4258,10 +4498,6 @@ void WitchBlastGame::generateMap()
     else if (level == 8)
     {
       // TODO
-      GiantSpiderEntity* b1 = new GiantSpiderEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 100,
-          (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-      b1->setLabelDy(10);
-
       FranckyEntity* b2 = new FranckyEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2,
                                             (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
       b2->setLabelDy(-530);
@@ -4271,9 +4507,6 @@ void WitchBlastGame::generateMap()
       b3->setLabelDy(-20);
 
       new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 120,
-                        (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
-
-      new CyclopsEntity((MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 - 120,
                         (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
 
@@ -4330,16 +4563,72 @@ void WitchBlastGame::generateMap()
     currentMap->setCleared(true);
     proceedEvent(EventFindTemple);
   }
+  else if (currentMap->getRoomType() == roomTypeSecret)
+  {
+    currentMap->generateSecretRoom();
+
+    if (rand() % 7 > 0)
+    {
+      new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f + TILE_WIDTH),
+                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                    ChestBasic, false);
+
+      new ChestEntity((TILE_WIDTH * MAP_WIDTH * 0.5f - TILE_WIDTH),
+                    (TILE_HEIGHT * MAP_HEIGHT * 0.5f),
+                    ChestBasic, false);
+    }
+    else
+    {
+      int bonusType = getRandomEquipItem(false, false);
+
+      if (items[FirstEquipItem + bonusType].familiar > FamiliarNone)
+      {
+        new ChestEntity(TILE_WIDTH * MAP_WIDTH * 0.5f,
+                        TILE_HEIGHT * MAP_HEIGHT * 0.5f,
+                        ChestFairy + items[FirstEquipItem + bonusType].familiar, false);
+      }
+      else
+      {
+        new ItemEntity( (enumItemType)(FirstEquipItem + bonusType),
+                       TILE_WIDTH * MAP_WIDTH * 0.5f,
+                       TILE_HEIGHT * MAP_HEIGHT * 0.5f);
+      }
+    }
+
+    currentMap->setCleared(true);
+
+    // secret found text
+    TextEntity* text = new TextEntity(tools::getLabel("secret_found"),
+                                      25,
+                                      MAP_WIDTH * 0.5f * TILE_WIDTH,
+                                      MAP_HEIGHT * 0.5f * TILE_HEIGHT + 10.0f);
+    text->setAlignment(ALIGN_CENTER);
+    text->setLifetime(2.5f);
+    text->setWeight(-36.0f);
+    text->setZ(1200);
+    text->setColor(TextEntity::COLOR_FADING_WHITE);
+
+    SoundManager::getInstance().playSound(SOUND_SECRET);
+    secretsFound++;
+  }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
 }
 
-void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0)
+void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0)
 {
   myText.setString(str);
   myText.setString(sf::String::fromUtf8(str.begin(), str.end()));
   myText.setCharacterSize(size);
 
+  if (maxWidth > 0)
+  {
+    while (myText.getLocalBounds().width > maxWidth && size > 5)
+    {
+      size--;
+      myText.setCharacterSize(size);
+    }
+  }
   float xFont = x;
 
   if (align == ALIGN_CENTER)
@@ -4454,8 +4743,14 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeSpiderEgg:
     new SpiderEggEntity(xm, ym, false);
     break;
+  case EnemyTypeSpiderEgg_invocated:
+    new SpiderEggEntity(xm, ym, true);
+    break;
   case EnemyTypeSpiderLittle:
-    new LittleSpiderEntity(xm, ym, false);
+    new LittleSpiderEntity(xm, ym, SpiderTypeStandard, false);
+    break;
+  case EnemyTypeSpiderTarantula:
+    new LittleSpiderEntity(xm, ym, SpiderTypeTarantula, false);
     break;
   case EnemyTypeGhost:
     new GhostEntity(xm, ym);
@@ -4469,12 +4764,15 @@ void WitchBlastGame::addMonster(enemyTypeEnum monsterType, float xm, float ym)
   case EnemyTypeBogeyman:
     new BogeymanEntity(xm, ym);
     break;
-
-  case EnemyTypeSpiderEgg_invocated:
-    new SpiderEggEntity(xm, ym, true);
+  case EnemyTypeSausage:
+    new SausageEntity(xm, ym, false);
     break;
+
   case EnemyTypeSpiderLittle_invocated:
-    new LittleSpiderEntity(xm, ym, true);
+    new LittleSpiderEntity(xm, ym, SpiderTypeStandard, true);
+    break;
+  case EnemyTypeSpiderTarantula_invocated:
+    new LittleSpiderEntity(xm, ym, SpiderTypeTarantula, true);
     break;
 
   case EnemyTypeBubble:
@@ -4596,11 +4894,26 @@ void WitchBlastGame::findPlaceMonsters(enemyTypeEnum monsterType, int amount)
   }
 }
 
+bool WitchBlastGame::isAdvanced()
+{
+  return (achievementState[AchievementVampire] == AchievementDone);
+}
+
+bool WitchBlastGame::isAdvancedLevel()
+{
+  if (isAdvanced())
+  {
+    return (rand() % 150 < getAchievementsPercents());
+  }
+  else
+    return false;
+}
+
 void WitchBlastGame::generateStandardMap()
 {
   initMonsterArray();
   saveInFight.monsters.clear();
-  generateStandardRoom(level);
+  generateStandardRoom(level, isAdvancedLevel());
 }
 
 item_equip_enum WitchBlastGame::getRandomEquipItem(bool toSale = false, bool noFairy = false)
@@ -4720,6 +5033,12 @@ enumItemType WitchBlastGame::getItemSpell()
       case SpellFairy:
         item = ItemSpellFairy;
         break;
+      case SpellTime:
+        item = ItemSpellTime;
+        break;
+      case SpellLightning:
+        item = ItemSpellLightning;
+        break;
       }
       ok = !isItemLocked(item);
     }
@@ -4730,6 +5049,7 @@ enumItemType WitchBlastGame::getItemSpell()
 
 void WitchBlastGame::generateChallengeBonus(float x, float y)
 {
+  // TODO (jumping)
   // loot
   if (player->getActiveSpell().spell == SpellNone || rand() % 2 == 0)
   {
@@ -4738,6 +5058,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
     spellItem->setVelocity(Vector2D(100.0f + rand()% 250));
     if (spellItem->getVelocity().y < 0.0f) spellItem->setVelocity(Vector2D(spellItem->getVelocity().x, -spellItem->getVelocity().y));
     spellItem->setViscosity(0.96f);
+    spellItem->startsJumping();
 
     if (!isFunctionalityLocked(FunctionalityDoubleSpellDrop))
     {
@@ -4747,15 +5068,18 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
       spellItem2->setVelocity(Vector2D(100.0f + rand()% 250));
       if (spellItem2->getVelocity().y < 0.0f) spellItem2->setVelocity(Vector2D(spellItem2->getVelocity().x, -spellItem2->getVelocity().y));
       spellItem2->setViscosity(0.96f);
+      spellItem2->startsJumping();
     }
 
     ItemEntity* healthItem1 = new ItemEntity(ItemHealthVerySmall, x, y);
     healthItem1->setVelocity(Vector2D(100.0f + rand()% 250));
     healthItem1->setViscosity(0.96f);
+    healthItem1->startsJumping();
 
     ItemEntity* healthItem2 = new ItemEntity(ItemHealthVerySmallPoison, x, y);
     healthItem2->setVelocity(Vector2D(100.0f + rand()% 250));
     healthItem2->setViscosity(0.96f);
+    healthItem2->startsJumping();
   }
   else
   {
@@ -4769,6 +5093,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
     if (newItem->getVelocity().y < 0.0f) newItem->setVelocity(Vector2D(newItem->getVelocity().x, -newItem->getVelocity().y));
     newItem->setVelocity(Vector2D(100.0f + rand()% 250));
     newItem->setViscosity(0.96f);
+    newItem->startsJumping();
 
     int gold = 2 + rand() % (player->isEquiped(EQUIP_LUCK) ? 9 : 14);
     for (int i = 0; i < gold; i++)
@@ -4776,6 +5101,7 @@ void WitchBlastGame::generateChallengeBonus(float x, float y)
       ItemEntity* newItem = new ItemEntity(ItemCopperCoin, x, y);
       newItem->setVelocity(Vector2D(90.0f + rand()% 150));
       newItem->setViscosity(0.96f);
+      newItem->startsJumping();
     }
   }
 }
@@ -4886,53 +5212,56 @@ void WitchBlastGame::playMusic(musicEnum musicChoice)
   if (parameters.musicVolume <= 0) return;
 
   music.setLoop(true);
-  music.setVolume(parameters.musicVolume);
+  music.setVolume(parameters.musicVolume * VolumeModifier / 100);
   bool ok = false;
 
   switch (musicChoice)
   {
   case MusicDungeon:
-
-    if (rand() % 2 == 0)
     {
-      ok = music.openFromFile("media/sound/game_Fantasy_Theme_Of_Elvarim.ogg");
-    }
-    else
-    {
-      ok = music.openFromFile("media/sound/game_Marching_United.ogg");
-    }
+      int r = currentStandardMusic;
+      while (r == currentStandardMusic) r = rand() % 3;
 
+      switch (r)
+      {
+        case 0: ok = music.openFromFile("media/sound/WitchBlastTheme.ogg"); break;
+        case 1: ok = music.openFromFile("media/sound/SavageLife.ogg"); break;
+        case 2: ok = music.openFromFile("media/sound/HauntedLighthouse.ogg"); break;
+      }
+
+      currentStandardMusic = r;
+    }
     break;
 
   case MusicEnding:
-    ok = music.openFromFile("media/sound/ending_Music_Is_His_Only_Friend.ogg");
-    music.setVolume(parameters.musicVolume * 50 / 100);
+    ok = music.openFromFile("media/sound/AmbiantMedieval.ogg");
     break;
 
   case MusicBoss:
-    if (rand() % 2 == 0)
-    {
-      ok = music.openFromFile("media/sound/boss_The_Spider_Machine.ogg");
-    }
-    else
-    {
-      ok = music.openFromFile("media/sound/boss_Pub_Stomp_Deluxe.ogg");
-    }
-
+    ok = music.openFromFile("media/sound/ShowMeThePower.ogg");
     break;
 
   case MusicChallenge:
-    ok = music.openFromFile("media/sound/challenge_Under_Siege.ogg");
+    ok = music.openFromFile("media/sound/HellsFire.ogg");
     break;
 
   case MusicIntro:
-    ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
-    music.setVolume(parameters.musicVolume * 60 / 100);
+    ok = music.openFromFile("media/sound/WitchBlastTheme.ogg");
     break;
   }
 
   if (ok)
     music.play();
+}
+
+void WitchBlastGame::pauseMusic()
+{
+  music.pause();
+}
+
+void WitchBlastGame::resumeMusic()
+{
+  music.play();
 }
 
 void WitchBlastGame::updateMusicVolume()
@@ -4942,14 +5271,14 @@ void WitchBlastGame::updateMusicVolume()
     if (parameters.musicVolume == 0)
       music.stop();
     else
-      music.setVolume(parameters.musicVolume * 60 / 100);
+      music.setVolume(parameters.musicVolume * VolumeModifier / 100);
   }
   else
   {
     if (parameters.musicVolume > 0)
     {
-      bool ok = music.openFromFile("media/sound/menu_Our_Ship_To_Candletown.ogg");
-      music.setVolume(parameters.musicVolume * 60 / 100);
+      bool ok = music.openFromFile("media/sound/wb.ogg");
+      music.setVolume(parameters.musicVolume * VolumeModifier / 100);
       if (ok) music.play();
     }
   }
@@ -5003,7 +5332,7 @@ void WitchBlastGame::saveGame()
     file << (now->tm_min) << std::endl;
 
     // floor
-    file << level << " " << challengeLevel << std::endl;
+    file << level << " " << challengeLevel << " " << secretsFound << std::endl;
 
     // game age
     file << (int)gameTime << std::endl;
@@ -5027,6 +5356,12 @@ void WitchBlastGame::saveGame()
     for (i = 0; i < NB_ENEMY; i++) file << killedEnemies[i] << " ";
     file << std::endl;
 
+    // potions
+    for(auto it = potionMap.begin(); it != potionMap.end(); ++it)
+    {
+      file << it->first << " " << it->second.effect << " " << it->second.known << std::endl;
+    }
+
     // maps
     if (currentMap->isCleared())
       saveMapItems();
@@ -5042,6 +5377,7 @@ void WitchBlastGame::saveGame()
                << currentFloor->getMap(i, j)->getRoomType() << " "
                << currentFloor->getMap(i, j)->isKnown() << " "
                << currentFloor->getMap(i, j)->isVisited() << " "
+               << currentFloor->getMap(i, j)->isRevealed() << " "
                << currentFloor->getMap(i, j)->isCleared() << std::endl;
           if (currentFloor->getMap(i, j)->isVisited())
           {
@@ -5138,13 +5474,22 @@ void WitchBlastGame::saveGame()
     }
 
     // player
-    file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << std::endl;
+    file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << " " << player->getDonation() << std::endl;
+    // lost hp
+    for (i = 1; i <= LAST_LEVEL; i++) file << player->getLostHp(i) << " ";
+    file << std::endl;
+    // equip
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++) file << player->isEquiped(i) << " ";
     file << std::endl;
     file << player->getX() << " " << player->getY() << std::endl;
     file << player->getShotIndex();
     for (i = 0; i < SPECIAL_SHOT_SLOTS; i++) file << " " << player->getShotType(i) << std::endl;
     file << player->getActiveSpell().spell << std::endl;
+    for (i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+    {
+      file << player->getConsumable(i) << " ";
+    }
+    file << std::endl;
     // divinity
     file << player->getDivinity().divinity << " " << player->getDivinity().piety << " "
          << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
@@ -5186,6 +5531,7 @@ bool WitchBlastGame::loadGame()
     // floor
     file >> level;
     file >> challengeLevel;
+    file >> secretsFound;
     file >> gameTime;
 
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
@@ -5210,6 +5556,16 @@ bool WitchBlastGame::loadGame()
     // kill stats
     for (int i = 0; i < NB_ENEMY; i++) file >> killedEnemies[i];
 
+    // potions
+    for (i = 0; i < NUMBER_UNIDENTIFIED * 2; i++)
+    {
+      int source, effect;
+      bool known;
+
+      file >> source >> effect >> known;
+      addPotionToMap((enumItemType)source, (enumItemType)effect, known);
+    }
+
     // maps
     int nbRooms;
     file >> nbRooms;
@@ -5227,6 +5583,8 @@ bool WitchBlastGame::loadGame()
       iMap->setKnown(flag);
       file >> flag;
       iMap->setVisited(flag);
+      file >> flag;
+      if (!flag) iMap->setRevealed(flag);
       file >> flag;
       iMap->setCleared(flag);
 
@@ -5328,13 +5686,22 @@ bool WitchBlastGame::loadGame()
     }
 
     // player
-    int hp, hpMax, gold;
-    file >> hp >> hpMax >> gold;
+    int hp, hpMax, gold, donation;
+    file >> hp >> hpMax >> gold >> donation;
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     player->setHp(hp);
     player->setHpMax(hpMax);
     player->setGold(gold);
+    player->setDonation(donation);
+    // lost hp
+    for (i = 1; i <= LAST_LEVEL; i++)
+    {
+      file >> n;
+      player->setLostHp(i, n);
+    }
+
+    // equip
     for (i = 0; i < NUMBER_EQUIP_ITEMS; i++)
     {
       bool eq;
@@ -5364,6 +5731,12 @@ bool WitchBlastGame::loadGame()
 
     file >> n;
     player->setActiveSpell((enumCastSpell)n, saveInFight.isFight);
+
+    for (i = 0; i < MAX_SLOT_CONSUMABLES; i++)
+    {
+      file >> n;
+      player->setConsumable(i, n);
+    }
 
     // divinity
     {
@@ -5593,8 +5966,8 @@ void WitchBlastGame::configureFromFile()
   parameters.vsync = true;
   parameters.bloodSpread = true;
   parameters.fullscreen = false;
-  parameters.musicVolume = 60;
-  parameters.soundVolume = 100;
+  parameters.musicVolume = 80;
+  parameters.soundVolume = 80;
   parameters.playerName = "";
   parameters.displayBossPortrait = false;
 
@@ -5673,7 +6046,7 @@ void WitchBlastGame::configureFromFile()
   }
 
   int i = config.findInt("language");
-  if (i >= 0) parameters.language = i;
+  if (i >= 0 && i < NB_LANGUAGES) parameters.language = i;
 
   i = config.findInt("volume_sound");
   if (i >= 0) parameters.soundVolume = i;
@@ -5914,6 +6287,11 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
         if (globalData.killedMonster[EnemyTypeWitch] + globalData.killedMonster[EnemyTypeWitchRed] >= 50)
           registerAchievement(AchievementWitches);
       }
+      else if (enemyType == EnemyTypeGhost)
+      {
+        if (globalData.killedMonster[EnemyTypeGhost] >= 50)
+          registerAchievement(AchievementGhostbuster);
+      }
       else if (enemyType == EnemyTypeSpiderEgg || enemyType == EnemyTypeSpiderEgg_invocated)
       {
         if (globalData.killedMonster[EnemyTypeSpiderEgg] + globalData.killedMonster[EnemyTypeSpiderEgg_invocated] >= 100)
@@ -6083,6 +6461,13 @@ void WitchBlastGame::renderPlayer(float x, float y,
     sprite.setTextureRect(sf::IntRect( 0, 288, 48, 60));
     app->draw(sprite);
   }
+  if (equip[EQUIP_FAIRY_STONE])
+  {
+    sprite.setPosition(x - 5, y + 15);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_FAIRY));
+    sprite.setTextureRect(sf::IntRect( 0, 360, 48, 60));
+    app->draw(sprite);
+  }
 
   // slime
   if (equip[EQUIP_PET_SLIME])
@@ -6191,8 +6576,28 @@ void WitchBlastGame::renderPlayer(float x, float y,
       sprite.setTextureRect(sf::IntRect( (18 + frame) * width, spriteDy * height, width, height));
     app->draw(sprite);
   }
+  else if (equip[EQUIP_AMULET_RETALIATION])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_2));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (3 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
 
-  if (equip[EQUIP_LEATHER_BELT])
+  if (equip[EQUIP_BELT_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (27 + frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_LEATHER_BELT])
   {
     if (isMirroring)
       sprite.setTextureRect(sf::IntRect( (15 + frame) * width + width, spriteDy * height, -width, height));
@@ -6240,7 +6645,17 @@ void WitchBlastGame::renderPlayer(float x, float y,
     app->draw(sprite);
   }
 
-  if (equip[EQUIP_REAR_SHOT])
+  if (equip[EQUIP_REAR_SHOT_ADVANCED])
+  {
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_2));
+    if (isMirroring)
+      sprite.setTextureRect(sf::IntRect( (frame) * width + width, spriteDy * height, -width, height));
+    else
+      sprite.setTextureRect(sf::IntRect( (frame) * width, spriteDy * height, width, height));
+    app->draw(sprite);
+    sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_0));
+  }
+  else if (equip[EQUIP_REAR_SHOT])
   {
     sprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_PLAYER_1));
     if (isMirroring)
@@ -6390,6 +6805,10 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
   case EnemyTypeBogeyman:
     value = "enemy_type_bogeyman";
     break;
+  case EnemyTypeSausage_invocated:
+  case EnemyTypeSausage:
+    value = "enemy_type_sausage";
+    break;
 
   // mini boss
   case EnemyTypeBubble:
@@ -6465,12 +6884,20 @@ std::string WitchBlastGame::enemyToString(enemyTypeEnum enemyType)
   case EnemyTypeSpiderLittle_invocated:
     value = "enemy_type_spider_little";
     break;
+  case EnemyTypeSpiderTarantula:
+  case EnemyTypeSpiderTarantula_invocated:
+    value = "enemy_type_spider_tarantula";
+    break;
   case EnemyTypeSpiderWeb:
     value = "enemy_type_spider_web";
     break;
 
   case EnemyTypeNone:
     value = "enemy_type_himself";
+    break;
+
+  case EnemyTypeDestroyable:
+    value = "";
     break;
 
   case NB_ENEMY:
@@ -6525,6 +6952,9 @@ void WitchBlastGame::saveHiScores()
       file << scores[i].level << " ";
       file << scores[i].score << " ";
       file << scores[i].shotType << " ";
+      file << scores[i].divinity << " ";
+      file << scores[i].killedBy << " ";
+      file << scores[i].time << " ";
       // player equip
       for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
         file << scores[i].equip[j] << " ";
@@ -6568,6 +6998,10 @@ void WitchBlastGame::loadHiScores()
       file >> score.level;
       file >> score.score;
       file >> score.shotType;
+      file >> score.divinity;
+      file >> score.killedBy;
+      file >> score.time;
+
       for (int j = 0; j < NUMBER_EQUIP_ITEMS; j++)
         file >> score.equip[j];
 
@@ -6676,7 +7110,9 @@ bool WitchBlastGame::isPressing(inputKeyEnum k, bool oneShot)
 bool WitchBlastGame::getPressingState(inputKeyEnum k)
 {
   // arrows in menu
-  if (gameState != gameStatePlaying || player->isDead())
+  if (gameState != gameStatePlaying
+      || player->isDead()
+      || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
   {
     if (k == KeyLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) return true;
     if (k == KeyRight && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) return true;
@@ -6733,6 +7169,9 @@ void WitchBlastGame::sendScoreToServerThread()
             lastScore.name,
             equipToString(lastScore.equip),
             lastScore.shotType,
+            lastScore.divinity,
+            lastScore.killedBy,
+            lastScore.time,
             SCORE_VERSION);
 #endif
 }
@@ -6763,7 +7202,7 @@ void WitchBlastGame::loadHiScoresOnline(bool fromDayOnly)
   std::vector <StructScore> scoresTemp;
 
   std::vector<std::string> receivedScores = receiveScores(fromDayOnly);
-  int nbParameters = 5;
+  int nbParameters = 8;
 
   if (receivedScores.size() > 0
       && receivedScores.size() % nbParameters == 0
@@ -6789,6 +7228,15 @@ void WitchBlastGame::loadHiScoresOnline(bool fromDayOnly)
       std::istringstream shotStr(receivedScores[i * nbParameters + 4]);
       shotStr >> score.shotType;
 
+      std::istringstream divStr(receivedScores[i * nbParameters + 5]);
+      divStr >> score.divinity;
+
+      std::istringstream killStr(receivedScores[i * nbParameters + 6]);
+      killStr >> score.killedBy;
+
+      std::istringstream timeStr(receivedScores[i * nbParameters + 7]);
+      timeStr >> score.time;
+
       scoresTemp.push_back(score);
     }
 
@@ -6806,6 +7254,110 @@ void WitchBlastGame::loadHiScoresOnline(bool fromDayOnly)
 #endif
 }
 
+void WitchBlastGame::checkDestroyableObjects()
+{
+  for (int i = 0; i < MAP_WIDTH; i++)
+    for (int j = 0; j < MAP_HEIGHT; j++)
+    {
+      if (currentMap->getObjectTile(i, j) >= MAPOBJ_BARREL/* && currentMap->getObjectTile(i, j) < MAPOBJ_BARREL_EXPL + 3*/)
+      {
+        new ObstacleEntity(i * TILE_WIDTH + TILE_WIDTH / 2, j * TILE_HEIGHT + TILE_HEIGHT / 2, currentMap->getObjectTile(i, j));
+      }
+    }
+}
+
+void WitchBlastGame::randomizePotionMap()
+{
+  potionMap.clear();
+
+  std::vector<int> potionEffect;
+  for (int i = 0; i < NUMBER_UNIDENTIFIED; i++) potionEffect.push_back(i);
+
+  for (int i = 0; i < NUMBER_UNIDENTIFIED; i++)
+  {
+    int r = rand() % potionEffect.size();
+    addPotionToMap((enumItemType)(ItemPotion01 + i), (enumItemType)(ItemPotionHealth + potionEffect[r]), false);
+    potionEffect.erase(potionEffect.begin() + r);
+  }
+}
+
+void WitchBlastGame::acquireAlchemyBook()
+{
+  for (int i = 0; i < NUMBER_UNIDENTIFIED; i++)
+  {
+    if (rand() % 2 > 0)
+    {
+      enumItemType potion = (enumItemType)(ItemPotion01 + i);
+      if (!potionEffectKnown(potion)) setPotionToKnown(potion);
+    }
+  }
+
+  // drop potion
+  ItemEntity* potionItem = new ItemEntity( (enumItemType)(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED), player->getX(), player->getY());
+  potionItem->setVelocity(Vector2D(100.0f + rand()% 250));
+  potionItem->setViscosity(0.96f);
+  potionItem->startsJumping();
+}
+
+void WitchBlastGame::addPotionToMap(enumItemType source, enumItemType effect, bool known)
+{
+  potionMap[source] = structPotionMap { effect, known};
+  potionMap[effect] = structPotionMap { source, known};
+}
+
+enumItemType WitchBlastGame::getPotion(enumItemType source)
+{
+  return potionMap[source].effect;
+}
+
+bool WitchBlastGame::potionEffectKnown(enumItemType source)
+{
+  return potionMap[source].known;
+}
+
+void WitchBlastGame::setPotionToKnown(enumItemType source)
+{
+  potionMap[source].known = true;
+  potionMap[potionMap[source].effect].known = true;
+
+  // message
+  if (messagesQueue.empty()) SoundManager::getInstance().playSound(SOUND_MESSAGE);
+
+  messageStruct msg = getMessage(MsgInfoPotionId);
+
+  std::stringstream ss;
+  ss << msg.message[1];
+  ss << " ";
+  ss << tools::getLabel(items[getPotion(source)].name);
+
+  msg.message[1] = ss.str();
+  messagesQueue.push(msg);
+}
+
+void WitchBlastGame::forgetPotions()
+{
+  for (int i = ItemPotion01; i < FirstEquipItem; i++)
+  {
+    potionMap[(enumItemType)i].known = false;
+    potionMap[potionMap[(enumItemType)i].effect].known = false;
+  }
+}
+
+void WitchBlastGame::forget()
+{
+  // forget map
+  if (!player->isEquiped(EQUIP_FLOOR_MAP))
+  {
+    currentFloor->forget(floorX, floorY);
+    refreshMinimap();
+  }
+
+  // forget potions
+  if (!player->isEquiped(EQUIP_BOOK_ALCHEMY))
+  {
+    forgetPotions();
+  }
+}
 
 WitchBlastGame &game()
 {
