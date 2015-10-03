@@ -1293,9 +1293,6 @@ void WitchBlastGame::updateRunningGame()
     }
   }
 
-  if (event.type == sf::Event::LostFocus && !player->isDead())
-    gameState = gameStatePlayingPause;
-
   // POST EVENT
   if (escape)
   {
@@ -3662,25 +3659,49 @@ void WitchBlastGame::startGame()
     lastTime = getAbsolutTime();
     if (deltaTime > 0.05f) deltaTime = 0.05f;
 
-    updateActionKeys();
-
-    switch (gameState)
+    if (app->hasFocus())
     {
-    case gameStateInit:
-    case gameStateKeyConfig:
-    case gameStateJoystickConfig:
-    case gameStateMenu:
-      updateMenu();
-      break;
-    case gameStateIntro:
-      updateIntro();
-      break;
-    case gameStatePlaying:
-    case gameStatePlayingPause:
-    case gameStatePlayingDisplayBoss:
-      updateRunningGame();
-      break;
+      updateActionKeys();
+
+      switch (gameState)
+      {
+      case gameStateInit:
+      case gameStateKeyConfig:
+      case gameStateJoystickConfig:
+      case gameStateMenu:
+        updateMenu();
+        break;
+      case gameStateIntro:
+        updateIntro();
+        break;
+      case gameStatePlaying:
+      case gameStatePlayingPause:
+      case gameStatePlayingDisplayBoss:
+        updateRunningGame();
+        break;
+      }
     }
+    else
+    {
+      // Process events
+      sf::Event event;
+      while (app->pollEvent(event))
+      {
+        // Close window : exit
+        if (event.type == sf::Event::Closed)
+        {
+          saveGameData();
+          app->close();
+        }
+
+        if (event.type == sf::Event::LostFocus)
+        {
+          if (gameState == gameStatePlaying && !player->isDead())
+            gameState = gameStatePlayingPause;
+        }
+      }
+    }
+
     onRender();
   }
   quitGame();
