@@ -114,6 +114,7 @@ struct parameterStruct
   bool vsync;                 /*!< monitor vsync (false = disabled) */
   bool bloodSpread;           /*!< blood spread (false = disabled) */
   bool fullscreen;            /*!< full screen (false = disabled) */
+  bool pauseOnFocusLost;       /*!< pause on focus lost (false = disabled) */
   bool displayBossPortrait;
   std::string playerName;     /*!< player name */
 };
