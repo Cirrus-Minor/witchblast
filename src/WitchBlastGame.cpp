@@ -3490,10 +3490,18 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
   for (unsigned int i = 0; i < scoresToRender.size() && i < SCORES_MAX; i++)
   {
     sf::Color color = sf::Color( 15, 15, 15);
-    if (scoresToRender[i].score == lastScore.score && scoresToRender[i].level == lastScore.level && scoresToRender[i].name == lastScore.name)
+    if (scoresToRender[i].score == lastScore.score
+        && scoresToRender[i].level == lastScore.level
+        && scoresToRender[i].name == lastScore.name
+        && scoresToRender[i].time == lastScore.time)
     {
       int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
       color = sf::Color(255 - fade, 128, 255 - fade);
+    }
+    else if (scoresToRender[i].name == parameters.playerName)
+    {
+      int fade = 70 + sinf(getAbsolutTime() * 4) * 70;
+      color = sf::Color(fade * 1.5, fade, 0);
     }
 
     // equipment
