@@ -5941,6 +5941,8 @@ void WitchBlastGame::saveConfigurationToFile()
   std::map<std::string, std::string> newMap;
 
   // parameters
+  if (parameters.playerName.length() == 0)
+    parameters.playerName = "Player";
   newMap["language"] = intToString(parameters.language);
   newMap["player_name"] = parameters.playerName;
 
