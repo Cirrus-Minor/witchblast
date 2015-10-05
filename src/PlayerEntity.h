@@ -524,6 +524,7 @@ class PlayerEntity : public BaseCreatureEntity
     void dropConsumables(int n);
     void tryToConsume(int n);
     void consume(enumItemType item);
+    int getDamage();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
