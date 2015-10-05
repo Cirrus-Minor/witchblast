@@ -1217,8 +1217,6 @@ item_velvet_boots#Samtschuhe
 item_velvet_boots_desc#Erhöht die Geschwindigkeit
 item_spell_dual#Zauber : Doppelter Schuss
 item_spell_dual_desc#Schießt zwei Schüsse
-item_rage_amulet#Wutamulett
-item_rage_amulet_desc#Revanchiert sich bei Kontakt
 item_displacement_gloves#Verschiebungs-Handschuhe
 item_displacement_gloves_desc#Die Geschwindigkeit des Spielers beeinflusst die der Schüsse
 item_staff#Elfenbeinstab
@@ -1587,6 +1585,119 @@ divinity_air_1#Göttlichkeit von Luft und Sturm.
 divinity_air_2#Er mag den Einsatz von Blitz.
 div_air_lvl#erhöht deine Geschwindigkeit
 div_air_lvl_4#erhöht deinen Blitzangriff
+
+config_joystick#Joystick konfigurieren
+redef_joystick#Joystick Steuerung neu einstellen
+joystick_configuration#Joystick Konfiguration
+joystick_configuration_desc#Bitte den Joystick konfigurieren
+joystick_configuration_insert#[Taste drücken]
+joystick_not_found#Joystick nicht verbunden!
+item_scroll_revelation#Schriftrolle der Offenbarung
+item_scroll_revelation_desc#Offenbare Geheimnisse und Trankeffekte
+item_potion_01#Roter Trank
+item_potion_02#Grüner Trank
+item_potion_03#Goldener Trank
+item_potion_04#Blauer Trank
+item_potion_05#Violetter Trank
+item_potion_06#Rosa Trank
+item_potion_07#Oranger Trank
+item_potion_08#Türkiser Trank
+item_potion_09#Brauner Trank
+item_potion_10#Dunkler Trank
+item_potion_desc#Unbekannter Effekt
+item_potion_health#Heiltrank
+item_potion_health_desc#Stellt 18 LP wieder her
+item_potion_poison#Gifttrank
+item_potion_poison_desc#Vergiftet
+item_potion_speed#Geschwindigkeitstrank
+item_potion_speed_desc#Erhöht temporär die Geschwindigkeit
+item_potion_slow#Verlangsamungstrank
+item_potion_slow_desc#Verringert temporär die Geschwindigkeit
+item_potion_weakness#Schwächetrank
+item_potion_weakness_desc#Verringert temporär den Schaden
+item_potion_strength#Stärketrank
+item_potion_strength_desc#Erhöht temporär den Schaden
+item_potion_oblivion#Vergesslichkeitstrank
+item_potion_oblivion_desc#Vergiss Trankeffekte und die Karte
+item_potion_confusion#Verwirrungstrank
+item_potion_confusion_desc#Macht verwirrt
+item_potion_cure#Tabula Rasa Trank
+item_potion_cure_desc#Bricht alle Spielereffekte ab
+item_potion_rage#Wuttrank
+item_potion_rage_desc#Wirft Feuerbälle um den Spieler
+item_bag#Tasche
+item_bag_desc#Liefert mehr Platz für Verbrauchsgüter
+msg_potion_id_0#Trank Identifikation
+msg_potion_id_1#Du hast identifiziert:
+msg_tuto_consumables_0#Tutorial: Verbrauchsgüter
+msg_tuto_consumables_1#[num1-num4] um ein Verbrauchsgut zu benutzen
+msg_tuto_consumables_2#[left shift][num1-num4] um es fallenzulassen.
+msg_tuto_potions_0#Tutorial: Tränke
+msg_tuto_potions_1#Du hast einen Trank gefunden.
+msg_tuto_potions_2#Du musst ihn trinken oder identifizieren, um den Effekt zu wissen.
+secret_found#Geheimraum gefunden!
+enemy_type_sausage#eine Wurst
+enemy_type_spider_tarantula#eine Tarantel
+effect_speed#Geschwindigkeit erhöht!
+effect_slow#Geschwindigkeit verringert!
+effect_strength#Schaden erhöht!
+effect_weakness#Schaden verringert!
+effect_confusion#Verwirrt!
+effect_forget#Du vergisst!
+effect_cure#Tabula rasa!
+effect_rage#Wuuuut!
+item_book_alchemy#Buch der Alchemie
+item_book_alchemy_desc#Offenbart den Effekt einiger Tränke
+item_fairy_stone#Fee Cassandra
+item_fairy_stone_desc#Hilft dir im Verlies
+item_merchant#Gildensiegel des Kaufmanns
+item_merchant_desc#Bessere Preise im Shop
+item_spell_time#Zauber: Zeitstopp
+item_spell_time_desc#Zaubere, um die Zeit zu verlangsamen
+item_side_shots#Zauberbuch der Seitwärtsschüsse
+item_side_shots_desc#Schießt Schüsse seitlich
+item_spell_lightning#Zauber: Blitz
+item_spell_lightning_desc#Zaubere, um einen Blitz zu beschwören
+item_belt_advanced#Schwarzer Gurt
+item_belt_advanced_desc#Erhöht die Feuerrate der Feen
+item_rear_shot_advanced#Silberne Personalkappe
+item_rear_shot_advanced_desc#Schießt zwei Schüsse rückwärts
+item_amulet_retaliation#Amulett der Rache
+item_amulet_retaliation_desc#Rächt sich
+item_rage_amulet#Wutamulett
+item_rage_amulet_desc#Sendet Feuerschüsse
+achiev_fairies#Charlie's Engel
+achiev_fairies_desc#Bekomme 3 Feen
+achiev_ghost#Ghostbuster
+achiev_ghost_desc#Töte 50 Geister
+achiev_noob#Wahrer Anfänger
+achiev_noob_desc#Sterbe in Level 1
+achiev_no_damage#Zäher Kerl
+achiev_no_damage_desc#Beende 1 Level, ohne ein Leben zu verlieren
+achiev_no_damage2#Sehr zäher Kerl
+achiev_no_damage2_desc#Beende 2 Level, ohne ein Leben zu verlieren
+achiev_no_damage3#Sehr sehr zäher Kerl
+achiev_no_damage3_desc#Beende 3 Level, ohne ein Leben zu verlieren
+achiev_apostate#Apostat
+achiev_apostate_desc#Lehne eine Level 4 Göttlichkeit ab
+achiev_fanatic#Fanatiker
+achiev_fanatic_desc#Gebe dem Tempel 100 Gold
+func_nothing#Nichts!
+state_frozen#Eingefroren
+state_slow#Langsam
+state_speed#Eilig
+state_poison#Vergiftet
+state_weakness#Schwäche
+state_strength#Stärke
+state_rage#Wut
+state_confusion#Verwirrt
+state_time#Zeitstopp
+state_div_protection#Geschützt (div)
+state_div_speed#Eilig (div)
+state_div_firerate#Feuerrate+ (div)
+state_div_damage#Schaden+ (div)
+dc_victory#Siegeszertifikat
+dc_after_victory#Sieg danach
 
 [spanish]
 start_new_game#Empezar nueva partida
