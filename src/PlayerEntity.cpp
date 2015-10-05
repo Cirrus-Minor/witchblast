@@ -218,6 +218,11 @@ void PlayerEntity::setLostHp(int level, int n)
     lostHp[level - 1] = n;
 }
 
+int PlayerEntity::getDamage()
+{
+  return fireDamages;
+}
+
 bool PlayerEntity::isPoisoned()
 {
   return (specialState[SpecialStatePoison].active);
@@ -1976,6 +1981,8 @@ int PlayerEntity::hurt(StructHurt hurtParam)
         triggerDivinityAfter();
       }
 
+      game().addHurtingStat(oldHp - hp);
+
       return true;
     }
   }
@@ -3050,11 +3057,13 @@ void PlayerEntity::divineProtection(float duration, float armorBonus)
 
 void PlayerEntity::divineHeal(int hpHealed)
 {
+  int oldHp = hp;
   hp += hpHealed;
   if (hp > hpMax) hp = hpMax;
   specialState[SpecialStatePoison].active = false;
   divineInterventionDelay = WORSHIP_DELAY;
   isRegeneration = false;
+  game().addHealingStat(hp - oldHp);
 }
 
 bool PlayerEntity::triggerDivinityBefore()

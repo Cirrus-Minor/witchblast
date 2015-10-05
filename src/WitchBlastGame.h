@@ -125,6 +125,20 @@ struct structPotionMap
   bool known;
 };
 
+struct structStats
+{
+  int hpIni;
+  int hpMax;
+  int hpEnd;
+  int hpMaxEnd;
+  int hurtCounter;
+  int healCounter;
+  int hpLost;
+  int hpHeal;
+  int dam;
+  int goldIni;
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -483,6 +497,10 @@ public:
   void pauseMusic();
   void resumeMusic();
 
+  void saveStats();
+  void addHurtingStat(int hpLost);
+  void addHealingStat(int hpHeal);
+
 protected:
   /*!
    *  \brief Rendering method
@@ -672,6 +690,9 @@ private:
   JoystickInputStruct joystickInput[NumberKeys];
 
   std::string scoreSaveFile;
+
+  structStats statsData;
+  std::string statsStr;
 
   /*!
    *  \brief Starts the game

@@ -570,6 +570,33 @@ float WitchBlastGame::getDeltaTime()
   return deltaTime;
 }
 
+void WitchBlastGame::addHurtingStat(int hpLost)
+{
+  statsData.hurtCounter ++;
+  statsData.hpLost += hpLost;
+}
+
+void WitchBlastGame::addHealingStat(int hpHeal)
+{
+  statsData.healCounter ++;
+  statsData.hpHeal += hpHeal;
+}
+
+void WitchBlastGame::saveStats()
+{
+  statsData.hpEnd = player->getHp();
+  statsData.hpMaxEnd = player->getHpMax();
+  statsData.dam = player->getDamage();
+  std::ostringstream oss;
+  oss << "{";
+  oss << "(" << statsData.hpIni << "/" << statsData.hpMax << "->(" << statsData.hpEnd << "/" << statsData.hpMaxEnd << ")[" << statsData.dam << "]";
+  oss << "(" << statsData.hurtCounter << "x[" << statsData.hpLost << "])";
+  oss << "(" << statsData.healCounter << "x[" << statsData.hpHeal << "])";
+  oss << "}";
+
+  statsStr += oss.str();
+}
+
 float WitchBlastGame::getGameTime()
 {
   return gameTime;
@@ -618,6 +645,7 @@ void WitchBlastGame::onUpdate()
             if (player->getPlayerStatus() == PlayerEntity::playerStatusGoingNext)
             {
               level++;
+              saveStats();
               startNewLevel();
             }
             else
@@ -654,6 +682,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   scoreSaveFile = "";
   interaction.active = false;
   endingTimer = -1.0f;
+  statsStr = "";
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -871,6 +900,14 @@ void WitchBlastGame::playLevel(bool isFight)
   text->setWeight(-36.0f);
   text->setZ(1000);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
+
+  statsData.goldIni = player->getGold();
+  statsData.hpIni = player->getHp();
+  statsData.hpMax = player->getHpMax();
+  statsData.hpLost = 0;
+  statsData.hpHeal = 0;
+  statsData.hurtCounter = 0;
+  statsData.healCounter = 0;
 }
 
 void WitchBlastGame::prepareIntro()
@@ -2654,6 +2691,8 @@ bool compareScores(WitchBlastGame::StructScore s1, WitchBlastGame::StructScore s
 
 void WitchBlastGame::calculateScore()
 {
+  saveStats();
+
   score = 0;
   bodyCount = 0;
 
