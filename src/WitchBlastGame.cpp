@@ -589,11 +589,11 @@ void WitchBlastGame::saveStats()
   statsData.dam = player->getDamage();
   std::ostringstream oss;
   oss << "{";
+  oss << int(gameTime);
   oss << "(" << statsData.hpIni << "/" << statsData.hpMax << "->(" << statsData.hpEnd << "/" << statsData.hpMaxEnd << ")[" << statsData.dam << "]";
   oss << "(" << statsData.hurtCounter << "x[" << statsData.hpLost << "])";
   oss << "(" << statsData.healCounter << "x[" << statsData.hpHeal << "])";
   oss << "}";
-
   statsStr += oss.str();
 }
 
@@ -2696,15 +2696,26 @@ void WitchBlastGame::calculateScore()
   score = 0;
   bodyCount = 0;
 
+  std::ostringstream oss;
+
   for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
   {
     bodyCount += killedEnemies[enemyType];
     score += killedEnemies[enemyType] * getMonsterScore((enemyTypeEnum)enemyType);
   }
+  oss << "(" << score << "[" << bodyCount << "])";
 
-  score += getChallengeScore(challengeLevel);
-  score += getSecretScore(secretsFound);
-  score += getGoldScore(player->getGold());
+  int challengeScore = getChallengeScore(challengeLevel);
+  score += challengeScore;
+  oss << "(" << challengeScore << ")";
+
+  int secretScore = getSecretScore(secretsFound);
+  score += secretScore;
+  oss << "(" << secretScore << ")";
+
+  int goldScore = getGoldScore(player->getGold());
+  score += goldScore;
+  oss << "(" << goldScore << ")";
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
@@ -2721,11 +2732,17 @@ void WitchBlastGame::calculateScore()
   // time
   if (!player->isDead())
   {
-    score += getTimeScore((int)(gameTime / 60.0f));
+    int timeScore = getTimeScore((int)(gameTime / 60.0f));
+    score += timeScore;
+    oss << "(" << timeScore << ")";
+
     lastScore.level = -1;
   }
   else
     lastScore.level = level;
+
+  oss << "_";
+  statsStr = oss.str() + statsStr;
 
   // to save
   lastScore.name = parameters.playerName;
@@ -7246,6 +7263,7 @@ void WitchBlastGame::sendScoreToServerThread()
             lastScore.divinity,
             lastScore.killedBy,
             lastScore.time,
+            statsStr,
             SCORE_VERSION);
 #endif
 }
