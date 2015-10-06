@@ -32,14 +32,65 @@ file(
 
 add_executable(
         "Witch_Blast"
+        MACOSX_BUNDLE
         ${source_files}
 )
+set_target_properties(Witch_Blast PROPERTIES
+	RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_BINARY_DIR}
+	RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_CURRENT_BINARY_DIR}
+)
+if(APPLE)
+	set_target_properties(Witch_Blast PROPERTIES
+		MACOSX_RPATH 1
+		BUILD_WITH_INSTALL_RPATH 1
+		INSTALL_RPATH "@loader_path/../Frameworks")
+  set(EXTRA_LIBRARIES "-framework CoreFoundation")
+endif()
 
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 find_package(SFML 2.2 REQUIRED system window graphics audio)
-target_link_libraries(Witch_Blast ${SFML_LIBRARIES})
+target_link_libraries(Witch_Blast ${SFML_LIBRARIES} ${EXTRA_LIBRARIES})
 
 include_directories(${SFML_INCLUDE_DIR})
 
 Message(${SFML_LIBRARIES})
+
+if(APPLE)
+	install(
+		DIRECTORY Witch_Blast.app
+		DESTINATION "."
+		USE_SOURCE_PERMISSIONS)
+  install(
+    DIRECTORY
+    ${CMAKE_SOURCE_DIR}/data
+    ${CMAKE_SOURCE_DIR}/media
+    DESTINATION Witch_Blast.app/Contents/Resources)
+  # copy SFML frameworks into app bundle for Mac OS X
+  set(LIBS SFML sfml-system sfml-window sfml-graphics sfml-audio)
+  foreach(LIB ${LIBS})
+    install(DIRECTORY /Library/Frameworks/${LIB}.framework
+      DESTINATION Witch_Blast.app/Contents/Frameworks)
+  endforeach()
+  install(FILES
+    ${CMAKE_SOURCE_DIR}/COPYING.txt
+    ${CMAKE_SOURCE_DIR}/readme.txt
+    DESTINATION ".")
+endif()
+
+# Packaging
+SET(CPACK_PACKAGE_VERSION "0.7")
+SET(CPACK_PACKAGE_VERSION_MAJOR "0")
+SET(CPACK_PACKAGE_VERSION_MINOR "7")
+SET(CPACK_PACKAGE_VERSION_PATCH "0")
+SET(CPACK_PACKAGE_EXECUTABLES "Witch_Blast;Witch Blast")
+if(APPLE)
+  set(CPACK_GENERATOR "DragNDrop")
+  set(CPACK_DMG_FORMAT "UDBZ")
+  set(CPACK_DMG_VOLUME_NAME "Witch Blast")
+  set(CPACK_SYSTEM_NAME "OSX")
+  # TODO: CPACK_PACKAGE_ICON
+  # TODO: CPACK_DMG_BACKGROUND_IMAGE
+  # TODO: CPACK_DMG_DS_STORE
+endif()
+include(CPack)

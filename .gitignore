@@ -25,6 +25,11 @@ cmake_install.cmake
 Debug/
 *.build/
 *.xcodeproj/
+_CPack_Packages/
+CPack*Config.cmake
+install_manifest.txt
+*.dmg
+*.app/
 
 # Visual Studio
 *.vcxproj*
