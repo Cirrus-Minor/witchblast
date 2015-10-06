@@ -88,6 +88,16 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next release
+- ADD Player scores are shining in score screens
+- ADD German translation
+- ADD Config option to turn off the pause while losing the focus
+- FIX Inputs are processed while the game window has no focus
+- FIX Doors don't open when there is still spider webs in room
+- FIX Spider webs slow down some spiders
+- FIX Item order in the inventory
+- FIX It's possible to let the player name blank
+
 v0.7
 - ADD Destructible tiles
 - ADD Potions
