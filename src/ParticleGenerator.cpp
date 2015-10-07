@@ -60,15 +60,53 @@ void ParticleGenerator::RandomizeColor(SpriteEntity* particle)
 
 void ParticleGenerator::GenerateBoltParticle(int frame, const Vector2D & velocity, float posX, float posY, float lifeTime, float scale)
 {
-  float particleScale = scale - 0.2f;
+    float particleScale = scale - 0.2f;
 
-  // "background" particle
-  // not for ice shots
-  if (frame != 2)
-    game().getCurrentMapEntity()->generateBoltParticle(posX, posY, velocity, true, BOLT_PRO_LINE + frame, particleScale, lifeTime);
+    // low particles -> lifetime / 2
+    if (game().getParameters().lowParticles) lifeTime *= 0.5f;
 
-  // "blend" particle
-  // same size for illusion shots
-  if (frame != 3) particleScale -= 0.1f;
-  game().getCurrentMapEntity()->generateBoltParticle(posX, posY, velocity, false, BOLT_PRO_LINE * 2 + frame, particleScale, lifeTime);
+    if (game().getParameters().particlesBatching)
+    {
+      // "background" particle
+      // not for ice shots
+      if (frame != 2)
+        game().getCurrentMapEntity()->generateBoltParticle(posX, posY, velocity, true, BOLT_PRO_LINE + frame, particleScale, lifeTime);
+
+      // "blend" particle
+      // same size for illusion shots
+      if (frame != 3) particleScale -= 0.1f;
+      game().getCurrentMapEntity()->generateBoltParticle(posX, posY, velocity, false, BOLT_PRO_LINE * 2 + frame, particleScale, lifeTime);
+    }
+    else
+    {
+      // "background" particle
+      // not for ice shots
+      if (frame != 2)
+      {
+        SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), posX, posY, BOLT_WIDTH, BOLT_HEIGHT);
+        particle->setFading(true);
+        particle->setImagesProLine(BOLT_PRO_LINE);
+        particle->setZ(10);
+        particle->setLifetime(lifeTime);
+        particle->setVelocity(velocity);
+        particle->setType(ENTITY_EFFECT);
+        particle->setFrame(BOLT_PRO_LINE + frame);
+        particle->setShrinking(true, particleScale, particleScale);
+      }
+
+      // "blend" particle
+      // same size for illusion shots
+      if (frame != 3) particleScale -= 0.1f;
+
+      SpriteEntity* particle = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_BOLT), posX, posY, BOLT_WIDTH, BOLT_HEIGHT);
+      particle->setFading(true);
+      particle->setImagesProLine(BOLT_PRO_LINE);
+      particle->setZ(11);
+      particle->setLifetime(lifeTime);
+      particle->setVelocity(velocity);
+      particle->setType(ENTITY_EFFECT);
+      particle->setFrame(BOLT_PRO_LINE * 2 + frame);
+      particle->setShrinking(true, particleScale, particleScale);
+      particle->setRenderAdd();
+    }
 }

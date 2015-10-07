@@ -6011,6 +6011,8 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["blood_spreading"] = parameters.bloodSpread ? "1" : "0";
   newMap["fullscreen"] = parameters.fullscreen ? "1" : "0";
   newMap["pause_on_focus_lost"] = parameters.pauseOnFocusLost ? "1" : "0";
+  newMap["particles_batching"] = parameters.particlesBatching ? "1" : "0";
+  newMap["low_particles"] = parameters.lowParticles ? "1" : "0";
   newMap["display_boss_portrait"] = parameters.displayBossPortrait ? "1" : "0";
 
   // Keys
@@ -6055,6 +6057,8 @@ void WitchBlastGame::configureFromFile()
   parameters.bloodSpread = true;
   parameters.fullscreen = false;
   parameters.pauseOnFocusLost = true;
+  parameters.particlesBatching = true;
+  parameters.lowParticles = false;
   parameters.musicVolume = 80;
   parameters.soundVolume = 80;
   parameters.playerName = "";
@@ -6152,6 +6156,10 @@ void WitchBlastGame::configureFromFile()
   if (i >= 0) parameters.fullscreen = i;
   i = config.findInt("pause_on_focus_lost");
   if (i >= 0) parameters.pauseOnFocusLost = i;
+  i = config.findInt("particles_batching");
+  if (i >= 0) parameters.particlesBatching = i;
+  i = config.findInt("low_particles");
+  if (i >= 0) parameters.lowParticles = i;
   i = config.findInt("display_boss_portrait");
   if (i >= 0) parameters.displayBossPortrait = i;
 
