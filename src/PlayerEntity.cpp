@@ -2128,6 +2128,7 @@ void PlayerEntity::dropConsumables(int n)
 {
   if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
   if (playerStatus != playerStatusPlaying) return;
+  if (consumable[n] < 0) return;
 
   ItemEntity* newItem = new ItemEntity((enumItemType)(consumable[n]), x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
