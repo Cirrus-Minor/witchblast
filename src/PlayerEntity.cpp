@@ -2133,7 +2133,7 @@ void PlayerEntity::dropConsumables(int n)
   ItemEntity* newItem = new ItemEntity((enumItemType)(consumable[n]), x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
-  newItem->setAge(-10.0f);
+  newItem->setAge(-5.0f);
   newItem->startsJumping();
 
   consumable[n] = -1;
