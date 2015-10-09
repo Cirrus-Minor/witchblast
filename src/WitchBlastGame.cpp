@@ -2238,6 +2238,7 @@ void WitchBlastGame::renderRunningGame()
     // render the shots
     renderHudShots(app);
 
+    // render PAUSE screen
     if (gameState == gameStatePlayingPause)
     {
       // background
@@ -2282,6 +2283,41 @@ void WitchBlastGame::renderRunningGame()
         }
       }
       renderInGameMenu();
+
+      // potions
+      int iPotion = 0;
+      for (int i = 0; i < 4; i++)
+      {
+        int currentPotion = player->getConsumable(i);
+        if (currentPotion > -1)
+        {
+          bool ok = true;
+          for (int j = 0; j < i; j++) if (currentPotion == player->getConsumable(j)) ok = false;
+          if (ok)
+          {
+            int xPotion = 630;
+            int yPotion = 20 + 70 * iPotion;
+            sf::Sprite itemSprite;
+            itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS));
+            itemSprite.setPosition(xPotion, yPotion);
+
+            if (currentPotion >= ItemPotion01 + NUMBER_UNIDENTIFIED )
+            {
+              int basisPotion = getPotion(enumItemType(currentPotion));
+              itemSprite.setTextureRect(sf::IntRect((basisPotion % 10) * 32, (basisPotion / 10) * 32, 32, 32));
+              app->draw(itemSprite);
+            }
+
+            itemSprite.setTextureRect(sf::IntRect((currentPotion % 10) * 32, (currentPotion / 10) * 32, 32, 32));
+            app->draw(itemSprite);
+
+            write(tools::getLabel(items[currentPotion].name), 13, xPotion + 37, yPotion + 11, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+            write(tools::getLabel(items[currentPotion].description), 12, xPotion + 3, yPotion + 36, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+
+            iPotion++;
+          }
+        }
+      }
     }
 
     if (player->isDead())
