@@ -7467,6 +7467,7 @@ void WitchBlastGame::setPotionToKnown(enumItemType source)
   ss << tools::getLabel(items[getPotion(source)].name);
 
   msg.message[1] = ss.str();
+  msg.message[2] = tools::getLabel(items[getPotion(source)].description);
   messagesQueue.push(msg);
 }
 
