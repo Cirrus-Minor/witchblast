@@ -30,6 +30,13 @@ file(
         src/*
 )
 
+if(APPLE)
+  set(${source_files} “${source_files} src/ressources/witchblast.icns”)
+  set_source_files_properties(src/ressources/witchblast.icns
+    PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+  set(MACOSX_BUNDLE_ICON_FILE witchblast.icns)
+endif()
+
 add_executable(
         "Witch_Blast"
         MACOSX_BUNDLE
@@ -89,7 +96,7 @@ if(APPLE)
   set(CPACK_DMG_FORMAT "UDBZ")
   set(CPACK_DMG_VOLUME_NAME "Witch Blast")
   set(CPACK_SYSTEM_NAME "OSX")
-  # TODO: CPACK_PACKAGE_ICON
+  set(CPACK_PACKAGE_ICON src/ressources/witchblast.icns)
   # TODO: CPACK_DMG_BACKGROUND_IMAGE
   # TODO: CPACK_DMG_DS_STORE
 endif()
