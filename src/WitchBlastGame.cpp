@@ -2167,7 +2167,7 @@ void WitchBlastGame::renderRunningGame()
       {
         sf::Sprite consSprite;
         consSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS));
-        consSprite.setPosition(315 + 37 * i, 615);
+        consSprite.setPosition(315 + 36 * i, 615);
 
         if (item < FirstEquipItem && item >= ItemPotion01 + NUMBER_UNIDENTIFIED)
         {
