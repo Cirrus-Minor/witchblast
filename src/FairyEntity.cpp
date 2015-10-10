@@ -75,6 +75,7 @@ void FairyEntity::animate(float delay)
 
   float creatureSpeed = FAIRY_SPEED;
 
+  viscosity = 1.0f;
   if (!isPlayer)
   {
     if (dist2 > 15000.0f)
@@ -86,17 +87,11 @@ void FairyEntity::animate(float delay)
         setVelocity(Vector2D(sin(angle) * creatureSpeed, cos(angle) * creatureSpeed));
       else
         setVelocity(Vector2D(-sin(angle) * creatureSpeed, -cos(angle) * creatureSpeed));
-
-      viscosity = 1.0f;
     }
     else if (dist2 < 50000.0f)
     {
       viscosity = 0.96f;
     }
-  }
-  else
-  {
-    setVelocity(Vector2D{0, 0});
   }
 
   if (velocity.x < 50.0f && x < TILE_WIDTH * 1.3)
@@ -170,6 +165,31 @@ void FairyEntity::animate(float delay)
   SpriteEntity::animate(delay);
 }
 
+void FairyEntity::move(int direction)
+{
+  float creatureSpeed = FAIRY_SPEED;
+  float speedx = 0.0f, speedy = 0.0f;
+  if (direction == 4)
+    speedx = - creatureSpeed;
+  else if (direction == 1 || direction == 7)
+    speedx = - creatureSpeed * 0.7f;
+  else if (direction == 6)
+    speedx = creatureSpeed;
+  else if (direction == 3 || direction == 9)
+    speedx = creatureSpeed * 0.7f;
+
+  if (direction == 2)
+    speedy = creatureSpeed;
+  else if (direction == 1 || direction == 3)
+    speedy = creatureSpeed * 0.7f;
+  else if (direction == 8)
+    speedy = - creatureSpeed;
+  else if (direction == 7 || direction == 9)
+    speedy = - creatureSpeed * 0.7f;
+
+  setVelocity(Vector2D{speedx, speedy});
+}
+
 void FairyEntity::fire(int dir, bool bySelf)
 {
   // If the fairy is player-controlled, don't fire with the main player
@@ -181,6 +201,8 @@ void FairyEntity::fire(int dir, bool bySelf)
 
   if (fireDelay <= 0.0f)
   {
+    facingDirection = dir;
+
     switch (fairyType)
     {
     case FamiliarFairyIce:

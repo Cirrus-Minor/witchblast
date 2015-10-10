@@ -11,6 +11,16 @@ class FairyEntity : public SpriteEntity
     FairyEntity(float x, float y, enumFamiliar fairyType, bool isPlayerControlled = false);
     virtual void animate(float delay);
 
+
+    /*!
+     *  \brief Moves the fairy in the given direction
+     *
+     *  Moves the fairy in the given direction.
+     *
+     *  \param direction : direction of the new move. Numeric pad, diagonals included : 4 = left, 8 = north, 7 = north-west...
+     */
+    void move(int direction);
+
     void fire(int dir, bool bySelf = false);
 
   protected:
@@ -32,4 +42,4 @@ class FairyEntity : public SpriteEntity
 
     void tryToFire();
 };
-#endif // MAGNETENTITY_H
+#endif // FAIRYENTITY_H

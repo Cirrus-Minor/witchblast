@@ -60,6 +60,7 @@
 #include "TextMapper.h"
 #include "SlimePetEntity.h"
 #include "SausageEntity.h"
+#include "FairyEntity.h"
 
 #include <iostream>
 #include <sstream>
@@ -748,7 +749,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     // Add a fairy - co op players
-	player->setEquipped(ItemFairy - FirstEquipItem, true, true);
+    player->setEquipped(ItemFairy - FirstEquipItem, true, true);
     resetKilledEnemies();
     randomizePotionMap();
 
@@ -1499,6 +1500,49 @@ void WitchBlastGame::updateRunningGame()
         else player->setFacingDirection(8);
       }
       player->castSpell();
+    }
+
+    // Joystick control for fairy
+    auto fairy = player->getFairy(0);
+    if (fairy)
+    {
+      fairy->setVelocity(Vector2D{0.0f, 0.0f});
+
+      if (isPressing(1, KeyLeft, false))
+      {
+        if (isPressing(1, KeyUp, false))
+          fairy->move(7);
+        else if (isPressing(1, KeyDown, false))
+          fairy->move(1);
+        else
+          fairy->move(4);
+      }
+      else if (isPressing(1, KeyRight, false))
+      {
+        if (isPressing(1, KeyUp, false))
+          fairy->move(9);
+        else if (isPressing(1, KeyDown, false))
+          fairy->move(3);
+        else
+          fairy->move(6);
+      }
+      else if (isPressing(1, KeyUp, false))
+      {
+        fairy->move(8);
+      }
+      else if (isPressing(1, KeyDown, false))
+      {
+        fairy->move(2);
+      }
+
+      if (isPressing(1, KeyFireLeft, false))
+        fairy->fire(4, true);
+      else if (isPressing(1, KeyFireRight, false))
+        fairy->fire(6, true);
+      else if (isPressing(1, KeyFireUp, false))
+        fairy->fire(8, true);
+      else if (isPressing(1, KeyFireDown, false))
+        fairy->fire(2, true);
     }
 
     // message queue
