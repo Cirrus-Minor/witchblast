@@ -6181,8 +6181,11 @@ void WitchBlastGame::configureFromFile()
   {
     joystickInput[i].isButton = true;
     joystickInput[i].axis = sf::Joystick::X;
-    joystickInput[i].value = i - 4;
   }
+  joystickInput[KeyFireUp].value = 3;
+  joystickInput[KeyFireDown].value = 0;
+  joystickInput[KeyFireLeft].value = 2;
+  joystickInput[KeyFireRight].value = 1;
 
   // from file
   addKey(KeyUp, "keyboard_move_up");
