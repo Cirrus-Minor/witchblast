@@ -146,6 +146,15 @@ void PlayerEntity::moveTo(float newX, float newY)
   {
     fairies[i]->setX(fairies[i]->getX() + dx);
     fairies[i]->setY(fairies[i]->getY() + dy);
+    // Keep fairies on screen
+    if (fairies[i]->getX() < 0)
+      fairies[i]->setX(0);
+    else if (fairies[i]->getX() > MAP_WIDTH * TILE_WIDTH)
+      fairies[i]->setX(MAP_WIDTH * TILE_WIDTH);
+    if (fairies[i]->getY() < 0)
+      fairies[i]->setY(0);
+    else if (fairies[i]->getY() > MAP_HEIGHT * TILE_HEIGHT)
+      fairies[i]->setY(MAP_HEIGHT * TILE_HEIGHT);
   }
 }
 
@@ -331,7 +340,7 @@ void PlayerEntity::acquireItemAfterStance()
     // familiar
     if (items[acquiredItem].familiar != FamiliarNone)
     {
-      setEquiped(acquiredItem - FirstEquipItem, true);
+      setEquipped(acquiredItem - FirstEquipItem, true);
       game().proceedEvent(EventGetFamiliar);
     }
 
@@ -1605,14 +1614,15 @@ bool* PlayerEntity::getEquipment()
   return equip;
 }
 
-void PlayerEntity::setEquiped(int item, bool toggleEquipped)
+void PlayerEntity::setEquipped(int item, bool toggleEquipped, bool isFairyPlayer)
 {
   equip[item] = toggleEquipped;
   if (toggleEquipped && items[FirstEquipItem + item].familiar > FamiliarNone)
   {
     FairyEntity* fairy = new FairyEntity(x - 50.0f + rand() % 100,
                                          y - 50.0f + rand() % 100,
-                                         items[FirstEquipItem + item].familiar);
+                                         items[FirstEquipItem + item].familiar,
+                                         isFairyPlayer);
     fairies.push_back(fairy);
     if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
   }

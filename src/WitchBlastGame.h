@@ -1084,17 +1084,21 @@ private:
   bool presentItems[NUMBER_EQUIP_ITEMS];
   void resetPresentItems();
 
-  bool isPressing(inputKeyEnum k, bool oneShot);
-  bool getPressingState(inputKeyEnum k);
+  bool isPressing(int p, inputKeyEnum k, bool oneShot);
+  bool getPressingState(int p, inputKeyEnum k);
   void updateActionKeys();
+
+// TODO: more players, multiple joysticks
+#define NUM_PLAYERS 2
 
   struct ActionKeyStruct
   {
     bool isPressed;
     bool isTriggered;
-  } actionKey[NumberKeys];
+  };
+  ActionKeyStruct actionKey[NUM_PLAYERS][NumberKeys];
 
-  bool isInputPressed[NumberKeys];
+  bool isInputPressed[NUM_PLAYERS][NumberKeys];
 
   bool gameFromSaveFile;
 

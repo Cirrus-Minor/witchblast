@@ -161,7 +161,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  \param item : the equip item ID
      *  \param toggleEquipped : True if the item has to be equipped
      */
-    void setEquiped(int item, bool toggleEquipped);
+    void setEquipped(int item, bool toggleEquipped, bool isFairyPlayer = false);
 
     divinityStruct getDivinity();
     int getPiety();
