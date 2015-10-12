@@ -146,6 +146,15 @@ void PlayerEntity::moveTo(float newX, float newY)
   {
     fairies[i]->setX(fairies[i]->getX() + dx);
     fairies[i]->setY(fairies[i]->getY() + dy);
+    // Keep fairies on screen
+    if (fairies[i]->getX() < 0)
+      fairies[i]->setX(0);
+    else if (fairies[i]->getX() > MAP_WIDTH * TILE_WIDTH)
+      fairies[i]->setX(MAP_WIDTH * TILE_WIDTH);
+    if (fairies[i]->getY() < 0)
+      fairies[i]->setY(0);
+    else if (fairies[i]->getY() > MAP_HEIGHT * TILE_HEIGHT)
+      fairies[i]->setY(MAP_HEIGHT * TILE_HEIGHT);
   }
 }
 
