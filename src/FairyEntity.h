@@ -28,6 +28,7 @@ class FairyEntity : public SpriteEntity
   private:
     PlayerEntity* parentEntity;
     bool isPlayer;
+    bool isFiring;
     float fireDelay;
     float teleportDelay;
     int facingDirection;

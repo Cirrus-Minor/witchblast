@@ -23,6 +23,7 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType, bool isPlayer
   this->fairyType = fairyType;
 
   fireDelay = -1.0f;
+  isFiring = false;
   facingDirection = 2;
   teleportDelay = 5.0f + 0.1f * (rand() % 35);
 
@@ -192,6 +193,12 @@ void FairyEntity::move(int direction)
 
 void FairyEntity::fire(int dir, bool bySelf)
 {
+  if (isPlayer)
+  {
+    facingDirection = dir;
+    isFiring = true;
+  }
+
   // If the fairy is player-controlled, don't fire with the main player
   if (isPlayer && !bySelf) return;
   if (x < TILE_WIDTH * 1.3) return;
@@ -339,6 +346,11 @@ void FairyEntity::tryToFire()
 
 void FairyEntity::computeFacingDirection()
 {
+  if (isFiring)
+  {
+    isFiring = false;
+    return;
+  }
   if (!isPlayer && parentEntity->getFireDirection() != 5)
   {
     facingDirection = parentEntity->getFireDirection();
