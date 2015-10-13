@@ -1163,7 +1163,8 @@ void WitchBlastGame::updateRunningGame()
         }
         else
 #endif
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+            || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
         {
           player->dropConsumables(event.key.code - sf::Keyboard::Num1);
         }
