@@ -559,6 +559,7 @@ private:
   int killedEnemies[NB_ENEMY];
   int loopCounter;
   float endingTimer;        /*!< Counter before end of won game */
+  bool isMultiplayer;
 
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */

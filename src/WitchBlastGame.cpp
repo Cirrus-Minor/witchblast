@@ -749,7 +749,24 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     // Add a fairy - co op players
-    player->setEquipped(ItemFairy - FirstEquipItem, true, true);
+    if (isMultiplayer)
+    {
+      int r = rand() % 10;
+      int hp = 8;
+      int fairy = ItemFairy - FirstEquipItem;
+      switch (r)
+      {
+        case 0: fairy = ItemFairyIce - FirstEquipItem; break;
+        case 1: fairy = ItemFairyStone - FirstEquipItem; break;
+        case 2: fairy = ItemFairyPoison - FirstEquipItem; break;
+        case 3: fairy = ItemFairyFire - FirstEquipItem; break;
+
+        default: hp = 12; break;
+      }
+      player->setEquipped(fairy, true, true);
+      player->setHpMax(hp);
+      player->setHp(hp);
+    }
     resetKilledEnemies();
     randomizePotionMap();
 
@@ -1503,46 +1520,49 @@ void WitchBlastGame::updateRunningGame()
     }
 
     // Joystick control for fairy
-    auto fairy = player->getFairy(0);
-    if (fairy)
+    if (isMultiplayer)
     {
-      fairy->setVelocity(Vector2D{0.0f, 0.0f});
+      auto fairy = player->getFairy(0);
+      if (fairy)
+      {
+        fairy->setVelocity(Vector2D{0.0f, 0.0f});
 
-      if (isPressing(1, KeyLeft, false))
-      {
-        if (isPressing(1, KeyUp, false))
-          fairy->move(7);
+        if (isPressing(1, KeyLeft, false))
+        {
+          if (isPressing(1, KeyUp, false))
+            fairy->move(7);
+          else if (isPressing(1, KeyDown, false))
+            fairy->move(1);
+          else
+            fairy->move(4);
+        }
+        else if (isPressing(1, KeyRight, false))
+        {
+          if (isPressing(1, KeyUp, false))
+            fairy->move(9);
+          else if (isPressing(1, KeyDown, false))
+            fairy->move(3);
+          else
+            fairy->move(6);
+        }
+        else if (isPressing(1, KeyUp, false))
+        {
+          fairy->move(8);
+        }
         else if (isPressing(1, KeyDown, false))
-          fairy->move(1);
-        else
-          fairy->move(4);
-      }
-      else if (isPressing(1, KeyRight, false))
-      {
-        if (isPressing(1, KeyUp, false))
-          fairy->move(9);
-        else if (isPressing(1, KeyDown, false))
-          fairy->move(3);
-        else
-          fairy->move(6);
-      }
-      else if (isPressing(1, KeyUp, false))
-      {
-        fairy->move(8);
-      }
-      else if (isPressing(1, KeyDown, false))
-      {
-        fairy->move(2);
-      }
+        {
+          fairy->move(2);
+        }
 
-      if (isPressing(1, KeyFireLeft, false))
-        fairy->fire(4, true);
-      else if (isPressing(1, KeyFireRight, false))
-        fairy->fire(6, true);
-      else if (isPressing(1, KeyFireUp, false))
-        fairy->fire(8, true);
-      else if (isPressing(1, KeyFireDown, false))
-        fairy->fire(2, true);
+        if (isPressing(1, KeyFireLeft, false))
+          fairy->fire(4, true);
+        else if (isPressing(1, KeyFireRight, false))
+          fairy->fire(6, true);
+        else if (isPressing(1, KeyFireUp, false))
+          fairy->fire(8, true);
+        else if (isPressing(1, KeyFireDown, false))
+          fairy->fire(2, true);
+      }
     }
 
     // message queue
@@ -1635,7 +1655,7 @@ void WitchBlastGame::updateRunningGame()
 
   if (backToMenu)
   {
-    if (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+    if (!isMultiplayer && (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious))
     {
       EntityManager::getInstance().clean();
 
@@ -2838,6 +2858,8 @@ void WitchBlastGame::calculateScore()
 
   lastScore.time = (int)gameTime;
 
+  if (isMultiplayer) return;
+
   scores.push_back(lastScore);
 
   std::sort (scores.begin(), scores.end(), compareScores);
@@ -3192,6 +3214,8 @@ void WitchBlastGame::updateMenu()
       switch (menu->items[menu->index].id)
       {
       case MenuStartNew:
+        // TEST starting a multiplayer game = pressing LShift while starting the game on the menu
+        isMultiplayer = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
         startNewGame(false, 1);
         remove(SAVE_FILE.c_str());
         break;
@@ -5467,6 +5491,8 @@ void WitchBlastGame::makeColorEffect(int color, float duration)
 
 void WitchBlastGame::saveGame()
 {
+  if (isMultiplayer) return;
+
   if (player->getPlayerStatus() == PlayerEntity::playerStatusAcquire)
     player->acquireItemAfterStance();
   std::ofstream file(SAVE_FILE.c_str(), std::ios::out | std::ios::trunc);
