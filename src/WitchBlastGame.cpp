@@ -7314,12 +7314,16 @@ void WitchBlastGame::addPresentItem(int n)
 
 bool WitchBlastGame::isPressing(int p, inputKeyEnum k, bool oneShot)
 {
-  return (actionKey[p][k].isPressed && (!oneShot || actionKey[p][k].isTriggered));
+  if (gameState != gameStatePlaying || !isMultiplayer)
+    return ((actionKey[0][k].isPressed && (!oneShot || actionKey[0][k].isTriggered))
+            || (actionKey[1][k].isPressed && (!oneShot || actionKey[1][k].isTriggered)));
+  else
+    return (actionKey[p][k].isPressed && (!oneShot || actionKey[p][k].isTriggered));
 }
 
 bool WitchBlastGame::getPressingState(int p, inputKeyEnum k)
 {
-  if (p == 0)
+  if (p == 0 || gameState != gameStatePlaying)
   {
     // arrows in menu
     if (gameState != gameStatePlaying
@@ -7337,7 +7341,8 @@ bool WitchBlastGame::getPressingState(int p, inputKeyEnum k)
     // keyboard
     if (sf::Keyboard::isKeyPressed(input[k])) return true;
   }
-  else
+
+  if (p == 1 || gameState != gameStatePlaying || !isMultiplayer)
   {
     if (!sf::Joystick::isConnected(0)) return false;
 
