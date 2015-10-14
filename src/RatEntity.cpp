@@ -48,8 +48,6 @@ RatEntity::RatEntity(float x, float y, ratTypeEnum ratType, bool invocated)
 
   agonizingSound = SOUND_RAT_DYING;
   sprite.setOrigin(32.0f, 38.0f);
-
-  nextFacingDirection = direction;
 }
 
 void RatEntity::animate(float delay)
