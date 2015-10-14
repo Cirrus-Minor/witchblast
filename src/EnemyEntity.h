@@ -19,6 +19,8 @@ public:
 
   void setLabelDy(float label_dy);
 
+  void checkNextFacing(float dt);
+
 protected:
   virtual void collideMapRight();
   virtual void collideMapLeft();
@@ -41,6 +43,8 @@ protected:
 
   float h;            /*!< Vertical position */
   float hVelocity;    /*!< Vertical velocity */
+  int nextFacingDirection;
+  float facingTimer;
 
   float label_dy;     /*!< dy of the bar label for bosses */
 
