@@ -84,6 +84,12 @@ if(APPLE)
     install(DIRECTORY ${LIB}
       DESTINATION Witch_Blast.app/Contents/Frameworks)
   endforeach()
+  set(SFML_LIBRARIES_EXTRA
+    SFML FLAC freetype ogg OpenAL vorbis vorbisenc vorbisfile)
+  foreach(LIB ${SFML_LIBRARIES_EXTRA})
+    install(DIRECTORY /Library/Frameworks/${LIB}.framework
+      DESTINATION Witch_Blast.app/Contents/Frameworks)
+  endforeach()
   install(FILES
     ${CMAKE_SOURCE_DIR}/COPYING.txt
     ${CMAKE_SOURCE_DIR}/readme.txt
