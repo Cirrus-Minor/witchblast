@@ -481,6 +481,15 @@ WitchBlastGame::WitchBlastGame()
 
   fairySpriteOffsetY = 0;
   if (isAdvanced()) fairySpriteOffsetY = 72 + 72 * (rand() % 4);
+
+  for (int p = 0; p < NUM_PLAYERS; p++)
+  {
+    for (unsigned int i = 0; i < NumberKeys; i++)
+    {
+      actionKey[p][i].isPressed = false;
+      actionKey[p][i].isTriggered = false;
+    }
+  }
 }
 
 void WitchBlastGame::enableAA(bool enable)
@@ -6216,6 +6225,8 @@ void WitchBlastGame::configureFromFile()
   {
     joystickInput[i].isButton = true;
     joystickInput[i].axis = sf::Joystick::X;
+
+    if (i > KeyFireRight) joystickInput[i].value = i - 4;
   }
   joystickInput[KeyFireUp].value = 3;
   joystickInput[KeyFireDown].value = 0;
