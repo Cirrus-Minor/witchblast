@@ -435,6 +435,7 @@ WitchBlastGame::WitchBlastGame()
   {
     myText.setFont(font);
   }
+  graphicsFont.loadFromFile("media/Caudex-Bold.ttf");
 
   miniMap = NULL;
   currentMap = NULL;
@@ -2136,7 +2137,7 @@ void WitchBlastGame::renderRunningGame()
 
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
+  writeGraphic(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   //if (gameState == gameStatePlaying)
   {
@@ -3634,7 +3635,7 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
   app->draw(bgSprite);
 
   // hi-scores-title
-  write(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0, 0);
+  writeGraphic(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0, 0);
 
   int xEquip = 540;
   //int yEquip = 360;
@@ -4807,7 +4808,7 @@ void WitchBlastGame::generateMap()
     currentMap->randomize(currentMap->getRoomType());
 }
 
-void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0)
+void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth)
 {
   myText.setString(str);
   myText.setString(sf::String::fromUtf8(str.begin(), str.end()));
@@ -4838,6 +4839,13 @@ void WitchBlastGame::write(std::string str, int size, float x, float y, int alig
   myText.setPosition(xFont, y);
   myText.setColor(color);
   app->draw(myText);
+}
+
+void WitchBlastGame::writeGraphic(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth)
+{
+  myText.setFont(graphicsFont);
+  write(str, size, x, y, align, color, app, xShadow, yShadow, maxWidth);
+  myText.setFont(font);
 }
 
 void WitchBlastGame::initMonsterArray()

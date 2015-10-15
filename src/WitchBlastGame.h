@@ -346,7 +346,9 @@ public:
    *  \param yShadow : offset of the shadow (y)
    *  \param maxWidth : max width of the text image (0 = no limit)
    */
-  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth);
+  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0);
+
+  void writeGraphic(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0);
 
   /*!
    *  \brief Save the game
@@ -568,6 +570,7 @@ private:
   // displaying objects
   DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */
   sf::Font font;              /*!< The font used for displaying text */
+  sf::Font graphicsFont;      /*!< The font used for displaying "medieval" text */
   sf::Text myText;            /*!< The text to be displayed */
   sf::Sprite introScreenSprite;
   sf::Sprite titleSprite;
