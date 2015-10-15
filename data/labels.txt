@@ -992,7 +992,7 @@ item_critical_advanced_desc#Chance de dégâts critiques (x3)
 item_spell_fairy#Sort: Transformation en fée
 item_spell_fairy_desc#Transforme le magicien en fée
 item_gloves_advanced#Gants de ranger
-item_gloves_advanced_desc#Désarmer pièges + cadence de tir+
+item_gloves_advanced_desc#Pièges désactivés + cadence de tir augmentée
 item_boots_advanced#Bottes de ranger
 item_boots_advanced_desc#Augmente la vitesse
 divinity_leveling_0#Niveau supérieur de dévotion !
