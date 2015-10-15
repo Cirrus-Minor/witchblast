@@ -4852,9 +4852,16 @@ void WitchBlastGame::write(std::string str, int size, float x, float y, int alig
 
 void WitchBlastGame::writeGraphic(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth)
 {
-  myText.setFont(graphicsFont);
-  write(str, size, x, y, align, color, app, xShadow, yShadow, maxWidth);
-  myText.setFont(font);
+  if (parameters.language == 4) // russian
+  {
+    write(str, size, x, y, align, color, app, xShadow, yShadow, maxWidth);
+  }
+  else
+  {
+    myText.setFont(graphicsFont);
+    write(str, size, x, y, align, color, app, xShadow, yShadow, maxWidth);
+    myText.setFont(font);
+  }
 }
 
 void WitchBlastGame::initMonsterArray()
