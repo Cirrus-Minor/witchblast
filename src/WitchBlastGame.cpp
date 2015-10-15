@@ -2617,11 +2617,44 @@ void WitchBlastGame::renderRunningGame()
       achievementsQueue.front().counter += 4;
     }
   }
+}
+
+void WitchBlastGame::renderMessages()
+{
+  int dy = 0;
+  // message queue
+  if (!messagesQueue.empty())
+  {
+    dy = 40;
+
+    if (messagesQueue.front().timer < 0.5f)
+    {
+      dy *= (2 * messagesQueue.front().timer);
+    }
+    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
+    {
+      dy *= (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer));
+    }
+
+    uiSprites.msgBoxSprite.setTextureRect(sf::IntRect(0, 0, 970, dy + 2));
+    uiSprites.msgBoxSprite.setPosition(0, 600 - dy);
+    app->draw(uiSprites.msgBoxSprite);
+
+    std::stringstream ss;
+    ss << messagesQueue.front().message[0];
+    ss << ": ";
+    ss << messagesQueue.front().message[1];
+    ss << std::endl;
+    ss << messagesQueue.front().message[2];
+
+
+    write(ss.str(), 16, 10, 602 - dy, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+  }
 
   // show player effects
   if (isPlayerAlive)
   {
-    float x0 = 20, y0 = 540, yStep = -20;
+    float x0 = 18, y0 = 585, xStep = 160;
 
     for (int i = 0; i < NB_SPECIAL_STATES; i++)
     {
@@ -2641,41 +2674,10 @@ void WitchBlastGame::renderRunningGame()
         else
           oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
 
-        write(oss.str(), 12, x0, y0, ALIGN_LEFT, specialStateToColor[i], app, 0, 0, 0);
-        y0 += yStep;
+        write(oss.str(), 12, x0, y0 - dy, ALIGN_LEFT, specialStateToColor[i], app, 0, 0, 0);
+        x0 += xStep;
       }
     }
-  }
-}
-
-void WitchBlastGame::renderMessages()
-{
-  // message queue
-  if (!messagesQueue.empty())
-  {
-    int dy = 30;
-
-    if (messagesQueue.front().timer < 0.5f)
-    {
-      dy *= (2 * messagesQueue.front().timer);
-    }
-    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
-    {
-      dy *= (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer));
-    }
-
-    uiSprites.msgBoxSprite.setPosition(0, 590 - dy);
-    app->draw(uiSprites.msgBoxSprite);
-
-    std::stringstream ss;
-    ss << messagesQueue.front().message[0];
-    ss << ": ";
-    ss << messagesQueue.front().message[1];
-    ss << std::endl;
-    ss << messagesQueue.front().message[2];
-
-
-    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
   }
 }
 
