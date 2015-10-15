@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12)
 
+set(CMAKE_OSX_DEPLOYMENT_TARGET 10.9)
+
 # Projet name
 project("Witch_Blast")
 
@@ -78,9 +80,8 @@ if(APPLE)
     ${CMAKE_SOURCE_DIR}/media
     DESTINATION Witch_Blast.app/Contents/Resources)
   # copy SFML frameworks into app bundle for Mac OS X
-  set(LIBS SFML sfml-system sfml-window sfml-graphics sfml-audio)
-  foreach(LIB ${LIBS})
-    install(DIRECTORY /Library/Frameworks/${LIB}.framework
+  foreach(LIB ${SFML_LIBRARIES})
+    install(DIRECTORY ${LIB}
       DESTINATION Witch_Blast.app/Contents/Frameworks)
   endforeach()
   install(FILES
