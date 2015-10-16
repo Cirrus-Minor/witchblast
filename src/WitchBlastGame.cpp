@@ -2858,9 +2858,9 @@ void WitchBlastGame::calculateScore()
   score += challengeScore;
   oss << "(" << challengeScore << ")";*/
 
-  int secretScore = getSecretScore(secretsFound);
+  /*int secretScore = getSecretScore(secretsFound);
   score += secretScore;
-  oss << "(" << secretScore << ")";
+  oss << "(" << secretScore << ")";*/
 
   int goldScore = getGoldScore(player->getGold());
   score += goldScore;
@@ -4868,6 +4868,13 @@ void WitchBlastGame::generateMap()
 
     SoundManager::getInstance().playSound(SOUND_SECRET);
     secretsFound++;
+
+    score += getSecretScore();
+
+    std::ostringstream oss;
+    oss << "Secret found! +" << getSecretScore();
+    scoreBonus = oss.str();
+    scoreBonusTimer = BONUS_TIMER;
   }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());

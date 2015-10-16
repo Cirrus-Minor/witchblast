@@ -120,10 +120,10 @@ int getChallengeScore(int challengeLevel)
   return 75 + 25 * (challengeLevel - 1);
 }
 
-// 50 points / secret
-int getSecretScore(int nbSecrets)
+// 100 points / secret
+int getSecretScore()
 {
-  return 50 * (nbSecrets);
+  return 100;
 }
 
 // 1 point = 1 gold
