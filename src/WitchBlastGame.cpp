@@ -1421,7 +1421,7 @@ void WitchBlastGame::updateRunningGame()
         break;
 
       case MenuSaveAndQuit:
-        saveGame();
+        if (currentMap->isCleared()) saveGame();
         backToMenu = true;
         break;
       }
