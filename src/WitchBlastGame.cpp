@@ -1120,7 +1120,7 @@ void WitchBlastGame::updateRunningGame()
     // Close window : exit
     if (event.type == sf::Event::Closed)
     {
-      if (gameState == gameStatePlaying && !player->isDead()) saveGame();
+      if ((gameState == gameStatePlaying && !player->isDead()) || gameState == gameStatePlayingPause) saveGame();
       saveGameData();
       app->close();
     }
