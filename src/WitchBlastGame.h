@@ -547,6 +547,9 @@ private:
   // game play
   int level;                  /*!< Level (floor) */
   int score;                  /*!< score (calculated at the end of the game) */
+  int scoreDisplayed;
+  std::string scoreBonus;
+  float scoreBonusTimer;
   int bodyCount;              /*!< killed monsters (calculated at the end of the game) */
   int challengeLevel;         /*!< Level (challenge) */
   int secretsFound;

@@ -77,6 +77,7 @@
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const float ENDING_TIMER = 8.0f;
+const float BONUS_TIMER = 4.0f;
 const unsigned int ACHIEV_LINES = 3;
 
 const int VolumeModifier = 55;
@@ -688,6 +689,9 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   gameState = gameStateInit;
   level = 1;
   score = 0;
+  scoreDisplayed = 0;
+  scoreBonus = "";
+  scoreBonusTimer = -1.0f;
   challengeLevel = 1;
   secretsFound = 0;
   gameTime = 0.0f;
@@ -1869,8 +1873,19 @@ void WitchBlastGame::renderHud()
   // boss life bar ?
   if (lifeBar.toDisplay && gameState != gameStatePlayingDisplayBoss) renderLifeBar();
 
-  // score
-  write(intToString(score), 18, 920, 20, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
+  // score TODO
+  if (scoreDisplayed < score - 300) scoreDisplayed += 100;
+  else if (scoreDisplayed < score) scoreDisplayed++;
+  write(intToString(scoreDisplayed), 18, 920, 20, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
+
+  if (scoreBonusTimer > 0.0f)
+  {
+    sf::Color color;
+    if (scoreBonusTimer < 1.0f) color = sf::Color(255, 255, 255, 255 * scoreBonusTimer);
+    else color = sf::Color::White;
+    write(scoreBonus, 13, 920, 41, ALIGN_RIGHT,color , app);
+    scoreBonusTimer -= deltaTime;
+  }
 
   //renderBossPortrait();
 
@@ -2852,10 +2867,10 @@ void WitchBlastGame::calculateScore()
   }
 
   // perfects
-  for (int i = 1; i < level; i++)
+  /*for (int i = 1; i < level; i++)
   {
     if (player->getLostHp(i) == 0) score += getPerfectScore();
-  }
+  }*/
 
   // time
   if (!player->isDead())
@@ -4387,6 +4402,17 @@ void WitchBlastGame::moveToOtherMap(int direction)
       xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
       xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
       player->setVelocity(Vector2D(0.0f, - INITIAL_PLAYER_SPEED / 2));
+
+      // SCORE perfect
+      if (player->getLostHp(level) == 0)
+      {
+        score += getPerfectScore(level);
+
+        std::ostringstream oss;
+        oss << "Perfect! +" << getPerfectScore(level);
+        scoreBonus = oss.str();
+        scoreBonusTimer = BONUS_TIMER;
+      }
     }
   }
   // go to another room

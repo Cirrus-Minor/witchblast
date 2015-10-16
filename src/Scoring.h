@@ -139,10 +139,10 @@ int getItemScore(item_equip_enum item)
   return points;
 }
 
-// 50 points / perfect
-int getPerfectScore()
+// 50 points * level / perfect
+int getPerfectScore(int level)
 {
-  return 50;
+  return 50 * level;
 }
 
 // 50 points / minute
