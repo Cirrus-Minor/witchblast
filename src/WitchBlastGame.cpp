@@ -2753,7 +2753,15 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   if (player->isDead())
     ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
   else
+  {
     ss << parameters.playerName << " - " << tools::getLabel("dc_victory");
+
+    sf::Sprite seal;
+    seal.setTexture(*ImageManager::getInstance().getImage(IMAGE_WIN_SEAL));
+    seal.setPosition(x + 650, y + 50);
+    app->draw(seal);
+  }
+
   write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   ss.str(std::string());
