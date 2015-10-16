@@ -2847,36 +2847,21 @@ void WitchBlastGame::calculateScore()
 
   std::ostringstream oss;
 
-  /*for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
-  {
-    bodyCount += killedEnemies[enemyType];
-    score += killedEnemies[enemyType] * getMonsterScore((enemyTypeEnum)enemyType);
-  }
-  oss << "(" << score << "[" << bodyCount << "])";*/
-
-  /*int challengeScore = getChallengeScore(challengeLevel);
-  score += challengeScore;
-  oss << "(" << challengeScore << ")";*/
-
-  /*int secretScore = getSecretScore(secretsFound);
-  score += secretScore;
-  oss << "(" << secretScore << ")";*/
-
   int goldScore = getGoldScore(player->getGold());
-  score += goldScore;
+
   oss << "(" << goldScore << ")";
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
-    if (player->isEquiped(i)) score += getItemScore((item_equip_enum)i);
+    if (player->isEquiped(i)) goldScore += getItemScore((item_equip_enum)i);
     lastScore.equip[i] = player->isEquiped(i);
   }
 
-  // perfects
-  /*for (int i = 1; i < level; i++)
-  {
-    if (player->getLostHp(i) == 0) score += getPerfectScore();
-  }*/
+  score += goldScore;
+  std::ostringstream ossBonus;
+  ossBonus << "Stuff: +" << goldScore;
+  scoreBonus = ossBonus.str();
+  scoreBonusTimer = BONUS_TIMER;
 
   // time
   if (!player->isDead())
