@@ -686,6 +686,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
 {
   gameState = gameStateInit;
   level = 1;
+  score = 0;
   challengeLevel = 1;
   secretsFound = 0;
   gameTime = 0.0f;
@@ -1867,6 +1868,9 @@ void WitchBlastGame::renderHud()
   // boss life bar ?
   if (lifeBar.toDisplay && gameState != gameStatePlayingDisplayBoss) renderLifeBar();
 
+  // score
+  write(intToString(score), 18, 920, 20, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
+
   //renderBossPortrait();
 
   // interaction text ?
@@ -2808,17 +2812,17 @@ void WitchBlastGame::calculateScore()
 {
   saveStats();
 
-  score = 0;
+  //score = 0;
   bodyCount = 0;
 
   std::ostringstream oss;
 
-  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
+  /*for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
   {
     bodyCount += killedEnemies[enemyType];
     score += killedEnemies[enemyType] * getMonsterScore((enemyTypeEnum)enemyType);
   }
-  oss << "(" << score << "[" << bodyCount << "])";
+  oss << "(" << score << "[" << bodyCount << "])";*/
 
   int challengeScore = getChallengeScore(challengeLevel);
   score += challengeScore;
@@ -6505,6 +6509,7 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       killedEnemies[enemyType]++;
       globalData.killedMonster[enemyType]++;
       player->offerMonster(enemyType, hurtingType);
+      score += getMonsterScore(enemyType);
 
       // achievements
       if (enemyType == EnemyTypeButcher) registerAchievement(AchievementButcher);
