@@ -1663,6 +1663,12 @@ void WitchBlastGame::updateRunningGame()
         text->setZ(1200);
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
+        score += getChallengeScore(challengeLevel);
+        std::ostringstream oss;
+        oss << "Challenge +" << getChallengeScore(challengeLevel);
+        scoreBonus = oss.str();
+        scoreBonusTimer = BONUS_TIMER;
+
         challengeLevel++;
         if (challengeLevel == 5) registerAchievement(AchievementChallenges);
         player->offerChallenge();
@@ -2848,9 +2854,9 @@ void WitchBlastGame::calculateScore()
   }
   oss << "(" << score << "[" << bodyCount << "])";*/
 
-  int challengeScore = getChallengeScore(challengeLevel);
+  /*int challengeScore = getChallengeScore(challengeLevel);
   score += challengeScore;
-  oss << "(" << challengeScore << ")";
+  oss << "(" << challengeScore << ")";*/
 
   int secretScore = getSecretScore(secretsFound);
   score += secretScore;

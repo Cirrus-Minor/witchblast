@@ -114,10 +114,10 @@ int getMonsterScore(enemyTypeEnum monster)
   return score;
 }
 
-// 50 points / completed challenge
+// 75 points / completed challenge + 25 pts / superior level
 int getChallengeScore(int challengeLevel)
 {
-  return 50 * (challengeLevel - 1);
+  return 75 + 25 * (challengeLevel - 1);
 }
 
 // 50 points / secret
