@@ -17,7 +17,7 @@ Web: https://github.com/Cirrus-Minor/witchblast
 Install
 -------
 
-If there is no binary for your version, you have to compile the application. You will need the library SFML, minimal version 2.1.
+If there is no binary for your version, you have to compile the application. You will need the library SFML, minimal version 2.2.
 A CMake file is available.
 
 
@@ -98,6 +98,8 @@ Next release
 - ADD Potion description in the pause screen
 - MOD Effect cooldown are now in the upper part of the interface
 - MOD Cooldown to pick up a potion we've dropped is now 5 seconds
+- MOD Explosive barrel is now red with an explosion symbol
+- MOD Green blood and slime corpses have been desaturated for a better game visibility
 - FIX Inputs are processed while the game window has no focus
 - FIX Doors don't open when there is still spider webs in room
 - FIX Spider webs slow down some spiders
