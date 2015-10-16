@@ -67,6 +67,7 @@ Seby: code and music
 Pierre "dejam0rt" Baron: 2D art
 Le Guitariste Du Nord: Music - https://soundcloud.com/leguitaristedunord
 R0d: particles system and multilingual support coding
+Cong: Multiplayer mode and other contributions (https://github.com/cxong)
 
 Licenses
 --------
@@ -81,7 +82,6 @@ Vetea (for the v0.4.0 2D redesign)
 Sideous and Portoss01 (they provide me 2D art in earlier versions)
 Billx (who suggested me the title "Witch Blast" + English corrections)
 Mika Attila (for his contribution during the development)
-Cong (for his contribution during the development)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
 AFS (for the Spanish translation)
@@ -89,14 +89,22 @@ AFS (for the Spanish translation)
 Changes
 -------
 Next release
+- ADD 2 players mode
 - ADD Player scores are shining in score screens
 - ADD German translation
 - ADD Config option to turn off the pause while losing the focus
+- ADD Config option to turn off sprite batching of particles
+- ADD Config option to decrease lifetime of particles (for old computers)
+- ADD Potion description in the pause screen
+- MOD Effect cooldown are now in the upper part of the interface
+- MOD Cooldown to pick up a potion we've dropped is now 5 seconds
 - FIX Inputs are processed while the game window has no focus
 - FIX Doors don't open when there is still spider webs in room
 - FIX Spider webs slow down some spiders
 - FIX Item order in the inventory
 - FIX It's possible to let the player name blank
+- FIX It's possible to drop potions we don't have
+- FIX Closing the game in the pause screen don't save the game
 
 v0.7
 - ADD Destructible tiles
