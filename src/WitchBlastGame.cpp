@@ -342,6 +342,7 @@ WitchBlastGame::WitchBlastGame()
     "media/shadows_small.png",    "media/doors.png",
     "media/destroyable_objects.png",  "media/hall_of_fame.png",
     "media/lightning.png",
+    "media/win_seal.png",         "media/hof_win_seal.png",
   };
 
   for (const char *const filename : images)
@@ -3666,6 +3667,8 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
   int y0 = 130;
   int yStep = 50;
 
+  sf::Sprite itemSprite;
+
   for (unsigned int i = 0; i < scoresToRender.size() && i < SCORES_MAX; i++)
   {
     sf::Color color = sf::Color( 15, 15, 15);
@@ -3693,12 +3696,11 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
     else if (n > 8) dx = 20;
     n = 0;
 
+    itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
     for (auto ii: scoreEquipement)
     {
       if (ii != EQUIP_BOSS_KEY && scoresToRender[i].equip[ii])
       {
-        sf::Sprite itemSprite;
-        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
         itemSprite.setPosition(xEquip + n * dx, y0 + 22 + yStep * i);
         itemSprite.setTextureRect(sf::IntRect((ii % 10) * 32, (ii / 10) * 32, 32, 32));
         app->draw(itemSprite);
@@ -3715,12 +3717,20 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
 
     write(scoresToRender[i].name, 16, xName, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
 
-    std::stringstream levelSS;
-    if (scoresToRender[i].level == -1) levelSS << "Win";
-    else levelSS << "lvl " << scoresToRender[i].level;
-    write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
-    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
-
+    if (scoresToRender[i].level == -1)
+    {
+      itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WIN_SEAL_HOF));
+      itemSprite.setTextureRect(sf::IntRect(0, 0, 48, 48));
+      itemSprite.setPosition(475, y0 + 20 + yStep * i);
+      app->draw(itemSprite);
+    }
+    else
+    {
+      std::stringstream levelSS;
+      levelSS << "lvl " << scoresToRender[i].level;
+      write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+      write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+    }
 
     std::stringstream timeSS;
     if (scoresToRender[i].time < 100)
