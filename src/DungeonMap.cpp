@@ -1777,7 +1777,7 @@ void DungeonMap::addRandomGrids(int n)
     int rx = 1 + rand() % (MAP_WIDTH - 2);
     int ry = 1 + rand() % (MAP_HEIGHT - 2);
     if (logicalMap[rx][ry] == LogicalFloor
-        || objectsMap[rx][ry] == 0)
+        && objectsMap[rx][ry] == 0)
     {
       objectsMap[rx][ry] = MAPOBJ_GRID;
       counter--;
