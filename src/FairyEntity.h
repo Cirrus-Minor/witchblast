@@ -23,6 +23,25 @@ class FairyEntity : public SpriteEntity
 
     void fire(int dir, bool bySelf = false);
 
+    void gainNewPower();
+
+    enum PowerUp
+    {
+      PowUpDamage,
+      PowUpDamage2,
+      PowUpFireRate,
+      PowUpFireRate2,
+      PowUpSpeed,
+      PowUpDouble,
+
+      PowUpTypeFire,
+      PowUpTypeIce,
+      PowUpTypePoison,
+      PowUpTypeStone,
+
+      LAST_POWER_UP
+    };
+
   protected:
 
   private:
@@ -37,10 +56,16 @@ class FairyEntity : public SpriteEntity
     float fairyFireDelay;
     int fairyDamages;
     unsigned int shotLevel;
+    float creatureSpeed;
 
     void computeFacingDirection();
     void checkCollisions();
 
     void tryToFire();
+
+    // Multiplayer
+    bool power[LAST_POWER_UP];
+
+    void compute();
 };
 #endif // FAIRYENTITY_H
