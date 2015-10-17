@@ -505,6 +505,8 @@ public:
   void addHurtingStat(int hpLost);
   void addHealingStat(int hpHeal);
 
+  void gainMultiplayerPower();
+
 protected:
   /*!
    *  \brief Rendering method

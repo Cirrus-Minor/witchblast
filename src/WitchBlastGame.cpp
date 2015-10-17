@@ -768,7 +768,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     if (isMultiplayer)
     {
       int r = rand() % 10;
-      int hp = 8;
+      int hp = 12;
       int fairy = ItemFairy - FirstEquipItem;
       switch (r)
       {
@@ -776,8 +776,6 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
         case 1: fairy = ItemFairyStone - FirstEquipItem; break;
         case 2: fairy = ItemFairyPoison - FirstEquipItem; break;
         case 3: fairy = ItemFairyFire - FirstEquipItem; break;
-
-        default: hp = 12; break;
       }
       player->setEquipped(fairy, true, true);
       player->setHpMax(hp);
@@ -1882,14 +1880,14 @@ void WitchBlastGame::renderHud()
   // score TODO
   if (scoreDisplayed < score - 300) scoreDisplayed += 100;
   else if (scoreDisplayed < score) scoreDisplayed++;
-  write(intToString(scoreDisplayed), 18, 920, 20, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
+  write(intToString(scoreDisplayed), 18, 150, 20, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
 
   if (scoreBonusTimer > 0.0f)
   {
     sf::Color color;
     if (scoreBonusTimer < 1.0f) color = sf::Color(255, 255, 255, 255 * scoreBonusTimer);
     else color = sf::Color::White;
-    write(scoreBonus, 13, 920, 41, ALIGN_RIGHT,color , app);
+    write(scoreBonus, 13, 150, 41, ALIGN_RIGHT,color , app);
     scoreBonusTimer -= deltaTime;
   }
 
@@ -7657,6 +7655,18 @@ void WitchBlastGame::forget()
   if (!player->isEquiped(EQUIP_BOOK_ALCHEMY))
   {
     forgetPotions();
+  }
+}
+
+void WitchBlastGame::gainMultiplayerPower()
+{
+  if (isMultiplayer)
+  {
+    auto fairy = player->getFairy(0);
+    if (fairy)
+    {
+      fairy->gainNewPower();
+    }
   }
 }
 

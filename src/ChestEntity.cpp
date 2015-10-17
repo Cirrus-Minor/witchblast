@@ -236,6 +236,8 @@ void ChestEntity::open()
   }
   else if (chestType == ChestExit)
   {
+    // Multiplayer bonus
+    game().gainMultiplayerPower();
     int r = rand() % 3;
     if (r == 0)
     {
