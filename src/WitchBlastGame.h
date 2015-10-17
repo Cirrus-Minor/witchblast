@@ -855,6 +855,7 @@ private:
   void renderGame();
   void renderHud();
   void renderLifeBar();
+  void renderScore();
   void renderMessages();
   void renderBossPortrait();
 

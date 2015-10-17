@@ -1877,20 +1877,6 @@ void WitchBlastGame::renderHud()
   // boss life bar ?
   if (lifeBar.toDisplay && gameState != gameStatePlayingDisplayBoss) renderLifeBar();
 
-  // score TODO
-  if (scoreDisplayed < score - 300) scoreDisplayed += 100;
-  else if (scoreDisplayed < score) scoreDisplayed++;
-  write(intToString(scoreDisplayed), 18, 150, 20, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
-
-  if (scoreBonusTimer > 0.0f)
-  {
-    sf::Color color;
-    if (scoreBonusTimer < 1.0f) color = sf::Color(255, 255, 255, 255 * scoreBonusTimer);
-    else color = sf::Color::White;
-    write(scoreBonus, 13, 150, 41, ALIGN_RIGHT,color , app);
-    scoreBonusTimer -= deltaTime;
-  }
-
   //renderBossPortrait();
 
   // interaction text ?
@@ -1934,16 +1920,40 @@ void WitchBlastGame::renderHud()
   }
 }
 
+void WitchBlastGame::renderScore()
+{
+  sf::RectangleShape rectangle(sf::Vector2f(130, 25));
+  rectangle.setFillColor(sf::Color(0, 0, 0,128));
+  rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, 22));
+  rectangle.setOutlineThickness(1);
+  rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
+  app->draw(rectangle);
+
+  if (scoreDisplayed < score - 300) scoreDisplayed += 100;
+  else if (scoreDisplayed < score) scoreDisplayed++;
+  write(intToString(scoreDisplayed), 18, 150, 23, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
+
+  if (scoreBonusTimer > 0.0f)
+  {
+    sf::Color color;
+    if (scoreBonusTimer < 1.0f) color = sf::Color(255, 255, 255, 255 * scoreBonusTimer);
+    else color = sf::Color::White;
+    write(scoreBonus, 13, 150, 50, ALIGN_RIGHT,color , app);
+    scoreBonusTimer -= deltaTime;
+  }
+}
+
 void WitchBlastGame::renderLifeBar()
 {
   if (lifeBar.toDisplay)
   {
-    float l = lifeBar.hp * ((MAP_WIDTH - 1) * TILE_WIDTH) / lifeBar.hpMax;
     int label_dy = 0;
+    int xBarOffset = 138;
+    float l = lifeBar.hp * ((MAP_WIDTH - 1) * TILE_WIDTH - xBarOffset) / lifeBar.hpMax;
 
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
+    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH - xBarOffset, 25));
     rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2 + xBarOffset, label_dy + 22));
     rectangle.setOutlineThickness(1);
     rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
     app->draw(rectangle);
@@ -1951,12 +1961,12 @@ void WitchBlastGame::renderLifeBar()
     rectangle.setSize(sf::Vector2f(l, 25));
     rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setOutlineThickness(0);
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
+    //rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
     app->draw(rectangle);
 
     game().write(           lifeBar.label,
                             18,
-                            TILE_WIDTH / 2 + 10.0f,
+                            TILE_WIDTH / 2 + 10.0f + xBarOffset,
                             label_dy + 23,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
@@ -2338,6 +2348,9 @@ void WitchBlastGame::renderRunningGame()
 
     // render the shots
     renderHudShots(app);
+
+    // score TODO
+    renderScore();
 
     // render PAUSE screen
     if (gameState == gameStatePlayingPause)
@@ -4855,7 +4868,7 @@ void WitchBlastGame::generateMap()
     score += getSecretScore();
 
     std::ostringstream oss;
-    oss << "Secret found! +" << getSecretScore();
+    oss << "Secret! +" << getSecretScore();
     scoreBonus = oss.str();
     scoreBonusTimer = BONUS_TIMER;
   }
