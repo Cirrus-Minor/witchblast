@@ -90,6 +90,7 @@ Changes
 -------
 Next release
 - ADD 2 players mode
+- ADD Score display in game
 - ADD Player scores are shining in score screens
 - ADD German translation
 - ADD Config option to turn off the pause while losing the focus
