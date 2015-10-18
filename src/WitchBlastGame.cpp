@@ -5752,6 +5752,8 @@ void WitchBlastGame::saveGame()
 
     // player
     file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << " " << player->getDonation() << std::endl;
+    // score
+    file << score << std::endl;
     // lost hp
     for (i = 1; i <= LAST_LEVEL; i++) file << player->getLostHp(i) << " ";
     file << std::endl;
@@ -5782,6 +5784,8 @@ void WitchBlastGame::saveGame()
 
 bool WitchBlastGame::loadGame()
 {
+  isMultiplayer = false;
+
   resetPresentItems();
   saveInFight.monsters.clear();
   std::ifstream file(SAVE_FILE.c_str(), std::ios::in);
@@ -5971,6 +5975,9 @@ bool WitchBlastGame::loadGame()
     player->setHpMax(hpMax);
     player->setGold(gold);
     player->setDonation(donation);
+    // score
+    file >> score;
+    scoreDisplayed = score;
     // lost hp
     for (i = 1; i <= LAST_LEVEL; i++)
     {
