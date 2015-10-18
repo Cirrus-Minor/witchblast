@@ -5856,7 +5856,7 @@ bool WitchBlastGame::loadGame()
       file >> flag;
       iMap->setVisited(flag);
       file >> flag;
-      if (!flag) iMap->setRevealed(flag);
+      if (iMap->getRoomType() == roomTypeSecret) iMap->setRevealed(flag);
       file >> flag;
       iMap->setCleared(flag);
 
