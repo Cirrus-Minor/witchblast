@@ -32,6 +32,7 @@ const std::string SCORE_VERSION =   "V070_DEV";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
+const std::string languageState[NB_LANGUAGES] = { "", "", "", " (incomplete)", " (incomplete)" };
 
 const unsigned int SCORES_MAX    = 10;
 

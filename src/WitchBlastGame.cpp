@@ -3442,6 +3442,7 @@ void WitchBlastGame::renderMenu()
       {
         std::ostringstream oss;
         oss << label << " : " << tools::getLabel(languageString[parameters.language]);
+        oss << languageState[parameters.language];
         label = oss.str();
       }
       else if (menu->items[i].id == MenuPlayerName)
