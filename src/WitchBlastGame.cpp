@@ -5774,6 +5774,18 @@ void WitchBlastGame::saveGame()
          << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
     // events
     for (i = 0; i < NB_EVENTS; i++) file << worldEvent[i] << " ";
+    file << std::endl;
+    // special states
+    for (int i = 0; i < NB_SPECIAL_STATES; i++)
+    {
+      file << player->getSpecialState((enumSpecialState)i).active << " "
+      << player->getSpecialState((enumSpecialState)i).waitUnclear << " "
+      << player->getSpecialState((enumSpecialState)i).timer << " "
+      << player->getSpecialState((enumSpecialState)i).param1 << " "
+      << player->getSpecialState((enumSpecialState)i).param2 << " "
+      << player->getSpecialState((enumSpecialState)i).param3 << std::endl;
+
+    }
     file.close();
   }
   else
@@ -6038,6 +6050,14 @@ bool WitchBlastGame::loadGame()
       bool event;
       file >> event;
       worldEvent[i] = event;
+    }
+    // special states
+    for (int i = 0; i < NB_SPECIAL_STATES; i++)
+    {
+      bool active, waitUnclear;
+      float timer, param1, param2, param3;
+      file >> active >> waitUnclear >> timer >> param1 >> param2 >> param3;
+      player->setSpecialState(enumSpecialState(i), active, timer, param1, param2, waitUnclear);
     }
 
     player->computePlayer();
