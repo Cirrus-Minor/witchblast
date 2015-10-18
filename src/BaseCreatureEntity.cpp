@@ -27,6 +27,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
     specialState[i].timer = 0.0f;
     specialState[i].param1 = 0.0f;
     specialState[i].param2 = 0.0f;
+    specialState[i].param3 = 0.0f;
     specialState[i].waitUnclear = false;
   }
   for (int i = 0; i < NB_RESISTANCES; i++)
@@ -96,7 +97,7 @@ void BaseCreatureEntity::setSpecialState(enumSpecialState state, bool active, fl
   specialState[state].timer = timer;
   specialState[state].param1 = param1;
   specialState[state].param2 = param2;
-  specialState[state].waitUnclear = false;
+  specialState[state].waitUnclear = waitUnclear;
 }
 
 float BaseCreatureEntity::animateStates(float delay)
