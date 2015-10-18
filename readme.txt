@@ -104,6 +104,9 @@ Next release
 - FIX Inputs are processed while the game window has no focus
 - FIX Doors don't open when there is still spider webs in room
 - FIX Spider webs slow down some spiders
+- FIX Grid on walls
+- FIX The player effects (poison, slow, damage up, etc...) are not saved
+- FIX No door to secret room on loaded game
 - FIX Item order in the inventory
 - FIX It's possible to let the player name blank
 - FIX It's possible to drop potions we don't have
