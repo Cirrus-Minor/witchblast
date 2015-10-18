@@ -1661,11 +1661,7 @@ void WitchBlastGame::updateRunningGame()
         text->setZ(1200);
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
-        score += getChallengeScore(challengeLevel);
-        std::ostringstream oss;
-        oss << "Challenge +" << getChallengeScore(challengeLevel);
-        scoreBonus = oss.str();
-        scoreBonusTimer = BONUS_TIMER;
+        addBonusScore(BonusChallenge, getChallengeScore(challengeLevel));
 
         challengeLevel++;
         if (challengeLevel == 5) registerAchievement(AchievementChallenges);
@@ -2868,11 +2864,7 @@ void WitchBlastGame::calculateScore()
     lastScore.equip[i] = player->isEquiped(i);
   }
 
-  score += goldScore;
-  std::ostringstream ossBonus;
-  ossBonus << "Stuff: +" << goldScore;
-  scoreBonus = ossBonus.str();
-  scoreBonusTimer = BONUS_TIMER;
+  addBonusScore(BonusPossession, goldScore);
 
   // time
   if (!player->isDead())
@@ -4406,15 +4398,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
       player->setVelocity(Vector2D(0.0f, - INITIAL_PLAYER_SPEED / 2));
 
       // SCORE perfect
-      if (player->getLostHp(level) == 0)
-      {
-        score += getPerfectScore(level);
-
-        std::ostringstream oss;
-        oss << "Perfect! +" << getPerfectScore(level);
-        scoreBonus = oss.str();
-        scoreBonusTimer = BONUS_TIMER;
-      }
+      if (player->getLostHp(level) == 0) addBonusScore(BonusPerfect, getPerfectScore(level));
     }
   }
   // go to another room
@@ -4865,12 +4849,7 @@ void WitchBlastGame::generateMap()
     SoundManager::getInstance().playSound(SOUND_SECRET);
     secretsFound++;
 
-    score += getSecretScore();
-
-    std::ostringstream oss;
-    oss << "Secret! +" << getSecretScore();
-    scoreBonus = oss.str();
-    scoreBonusTimer = BONUS_TIMER;
+    addBonusScore(BonusSecret, getSecretScore());
   }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
@@ -7706,6 +7685,26 @@ void WitchBlastGame::gainMultiplayerPower()
       fairy->gainNewPower();
     }
   }
+}
+
+void WitchBlastGame::addBonusScore(EnumScoreBonus bonusType, int points)
+{
+  if (points <= 0) return;
+
+  score += points;
+
+  std::ostringstream oss;
+  switch (bonusType)
+  {
+    case BonusSecret:  oss << "Secret!"; break;
+    case BonusPerfect:  oss << "Perfect!"; break;
+    case BonusChallenge:  oss << "Challenge!"; break;
+    case BonusPossession:  oss << "Stuff"; break;
+    case BonusTime:  oss << "Time bonus"; break;
+  }
+  oss << " +" << points;
+  scoreBonus = oss.str();
+  scoreBonusTimer = BONUS_TIMER;
 }
 
 WitchBlastGame &game()

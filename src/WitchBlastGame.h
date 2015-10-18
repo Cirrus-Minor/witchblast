@@ -141,6 +141,15 @@ struct structStats
   int goldIni;
 };
 
+enum EnumScoreBonus
+{
+  BonusSecret,
+  BonusChallenge,
+  BonusPerfect,
+  BonusTime,
+  BonusPossession,
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -1125,6 +1134,8 @@ private:
 
   std::map<enumItemType, structPotionMap> potionMap;
   void randomizePotionMap();
+
+  void addBonusScore(EnumScoreBonus bonusType, int points);
 };
 
 /*!
