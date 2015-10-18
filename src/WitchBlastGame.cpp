@@ -6624,8 +6624,6 @@ void WitchBlastGame::registerLanguage()
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
   input[KeySpell]  = sf::Keyboard::Space;
-
-  saveConfigurationToFile();
 }
 
 int WitchBlastGame::getAchievementsPercents()
