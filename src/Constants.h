@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.7.1";
+const std::string APP_VERSION =   "0.7.2";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
@@ -309,6 +309,7 @@ enum sound_resources {
   SOUND_CLOCK,
   SOUND_BOTTLE,
   SOUND_THUNDER,
+  SOUND_SCORE_BONUS
 };
 
 enum corpses_ressources{

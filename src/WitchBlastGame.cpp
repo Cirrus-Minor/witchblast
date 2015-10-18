@@ -417,7 +417,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
     "media/sound/secret.ogg",         "media/sound/scroll.ogg",
     "media/sound/tic_tac.ogg",        "media/sound/bottle.ogg",
-    "media/sound/thunder.ogg",
+    "media/sound/thunder.ogg",        "media/sound/bonus_score.ogg",
   };
 
   // AA in fullscreen
@@ -7705,6 +7705,7 @@ void WitchBlastGame::addBonusScore(EnumScoreBonus bonusType, int points)
   oss << " +" << points;
   scoreBonus = oss.str();
   scoreBonusTimer = BONUS_TIMER;
+  SoundManager::getInstance().playSound(SOUND_SCORE_BONUS);
 }
 
 WitchBlastGame &game()
