@@ -1498,7 +1498,9 @@ void WitchBlastGame::updateRunningGame()
     // alternative "firing with the mouse" gameplay
     else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
-      sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
+      sf::Vector2i mousePositionInWindow = sf::Mouse::getPosition(*app);
+      sf::Vector2f mousePosition = app->mapPixelToCoords(mousePositionInWindow);
+
       int xm = mousePosition.x - player->getX();
       int ym = mousePosition.y - player->getY();
 
@@ -1517,7 +1519,9 @@ void WitchBlastGame::updateRunningGame()
     // spell (right click)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && (gameState == gameStatePlaying))
     {
-      sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
+      sf::Vector2i mousePositionInWindow = sf::Mouse::getPosition(*app);
+      sf::Vector2f mousePosition = app->mapPixelToCoords(mousePositionInWindow);
+
       int xm = mousePosition.x - player->getX();
       int ym = mousePosition.y - player->getY();
 
