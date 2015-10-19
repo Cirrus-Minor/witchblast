@@ -2045,6 +2045,121 @@ item_floor_map_desc#Revela el mapa del piso actual.
 item_alcohol#Absenta
 item_alcohol_desc#aumenta los daños temporalmente.
 
+
+
+config_joystick#Configurar joystick
+redef_joystick#Redefinir controles joystick
+joystick_configuration#Configuración joystick
+joystick_configuration_desc#Por favor configurar joystick
+joystick_configuration_insert#[presionar botón]
+joystick_not_found#¡Joystick no conectado!
+item_scroll_revelation#Perfamino de revelaciones
+item_scroll_revelation_desc#Revela secretos y efectos de pociones
+item_potion_01#Poción roja
+item_potion_02#Poción verde
+item_potion_03#Poción dorada
+item_potion_04#Poción azul
+item_potion_05#Poción violeta
+item_potion_06#Poción rosa
+item_potion_07#Poción naranja
+item_potion_08#Poción turquesa
+item_potion_09#Poción café
+item_potion_10#Poción oscura
+item_potion_desc#Efecto desconocido
+item_potion_health#Poción de curación
+item_potion_health_desc#Restaura 18 PV
+item_potion_poison#Poción de veneno
+item_potion_poison_desc#Envenena
+item_potion_speed#Poción de velocidad
+item_potion_speed_desc#Aumenta al velocidad temporalmente
+item_potion_slow#Poción lenta
+item_potion_slow_desc#Disminuye la velocidad temporalmente
+item_potion_weakness#Poción de debilidad
+item_potion_weakness_desc#Disminuye el daño temporalmente
+item_potion_strength#Poción de fuerza
+item_potion_strength_desc#Aumenta el daño temporalmente
+item_potion_oblivion#Poción del olvido
+item_potion_oblivion_desc#Olvida el mapa y los efectos de poción
+item_potion_confusion#Poción de confusión
+item_potion_confusion_desc#Te vuelve confuso
+item_potion_cure#Poción de Tábula Rasa
+item_potion_cure_desc#Cancela todos los efectos del jugador
+item_potion_rage#Poción de rabia
+item_potion_rage_desc#Lanza bolas de fuego alrededor del jugador
+item_bag#Bolsa
+item_bag_desc#Da más espacio para objetos consumibles
+msg_potion_id_0#Identificación de poción
+msg_potion_id_1#Haz identificado:
+msg_tuto_consumables_0#Tutorial:Consumibles
+msg_tuto_consumables_1#[num1-num4] para usar items consumibles.
+msg_tuto_consumables_2#[left shift][num1-num4] para botarlos.
+msg_tuto_potions_0#Tutorial:Pociones
+msg_tuto_potions_1#Haz encontrado una poción.
+msg_tuto_potions_2#Necesitas beberla o identificarla para conocer su efecto.
+secret_found#¡Habitación secreta encontrada!
+enemy_type_sausage#una salchicha
+enemy_type_spider_tarantula#una tarántula
+effect_speed#¡Más velocidad!
+effect_slow#¡Menor velocidad!
+effect_strength#¡Más daño!
+effect_weakness#¡Menos daño!
+effect_confusion#¡Confundido!
+effect_forget#¡Olvidadiso!
+effect_cure#¡Tábula rasa!
+effect_rage#¡Raaabiaaaa!
+item_book_alchemy#Libro de alquimia
+item_book_alchemy_desc#Revela los efectos de algunas pociones
+item_fairy_stone#Hada Cassandra
+item_fairy_stone_desc#Te ayuda en el calabozo
+item_merchant#Sello del mercantil
+item_merchant_desc#Mejores precios en la tienda
+item_spell_time#Encanto:Detener tiempo
+item_spell_time_desc#Invocar para hacer el tiempo más lento
+item_side_shots#Libro de disparos laterales
+item_side_shots_desc#Dispara rayos laterales
+item_spell_lightning#Encanto: Relámpago
+item_spell_lightning_desc#Invocar para lanzar relámpagos
+item_belt_advanced#Cinturón negro
+item_belt_advanced_desc#Aumenta el tiempo de disparo de las hadas
+item_rear_shot_advanced#Báculo plateado
+item_rear_shot_advanced_desc#Dispara dos disparos hacia atrás
+item_amulet_retaliation#Amuleto de venganza
+item_amulet_retaliation_desc#Contraataca
+item_rage_amulet#Amuleto de furia
+item_rage_amulet_desc#Lanza disparos de fuego
+achiev_fairies#Los Ángles de Charlie
+achiev_fairies_desc#Obtén 3 hadas
+achiev_ghost#Cazafantasma
+achiev_ghost_desc#Mata 50 fantasmas
+achiev_noob#Novato de verdad
+achiev_noob_desc#Muere en el primer nivel
+achiev_no_damage#Tipo rudo
+achiev_no_damage_desc#Completa un nivel sin perder vida
+achiev_no_damage2#Tipo muy rudo
+achiev_no_damage2_desc#Completa dos niveles sin perder vida
+achiev_no_damage3#Tipo muy muy rudo
+achiev_no_damage3_desc#Completa tres niveles sin perder vida
+achiev_apostate#Apóstata
+achiev_apostate_desc#Rechaza una divinidad nivel 4
+achiev_fanatic#Fanático
+achiev_fanatic_desc#Da 100 de oro al templo
+func_nothing#¡Nada!
+state_frozen#Congelado
+state_slow#Lento
+state_speed#Apurado
+state_poison#Envenenado
+state_weakness#Debilidad
+state_strength#Fuerza
+state_rage#Rabia
+state_confusion#Confuso
+state_time#Detener tiempo
+state_div_protection#Protegido (div)
+state_div_speed#Apurado (div)
+state_div_firerate#Tiempo de disparo+ (div)
+state_div_damage#Daño+ (div)
+dc_victory#Certificado de victoria
+dc_after_victory#Victoria después
+
 [russian]
 start_new_game#Начать новую игру
 start_desc#Старая игра будет стёрта
