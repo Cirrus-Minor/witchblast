@@ -513,13 +513,16 @@ void FairyEntity::gainNewPower()
     }
   }
 
-  int random = rand() % setSize;
+  if (setSize == 0) return;
 
-  power[powerSet[random]] = true;
+  int random = rand() % setSize;
+  int randomPower = powerSet[random];
+
+  power[randomPower] = true;
   compute();
 
   std::string bonusText;
-  switch (PowerUp(random))
+  switch (PowerUp(randomPower))
   {
     case PowUpDamage:
     case PowUpDamage2:
