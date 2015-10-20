@@ -2709,3 +2709,115 @@ divinity_air_1#Божество воздуха и шторма.
 divinity_air_2#Он ценит использование молний.
 div_air_lvl#увеличивает скорость
 div_air_lvl_4#увеличивает атаку молнией
+config_joystick#Настройка джойстика
+redef_joystick#Изменить управление джойстиком
+joystick_configuration#Настройка джойстика
+joystick_configuration_desc#Настройте джойстик, пожалуйста
+joystick_configuration_insert#[нажмите кнопку]
+joystick_not_found#Джойстик не подключен!
+item_scroll_revelation#Свиток открытий
+item_scroll_revelation_desc#Раскрывает секреты зелий
+item_potion_01#Красное зелье
+item_potion_02#Зеленое зелье
+item_potion_03#Золотистое зелье
+item_potion_04#Синее зелье
+item_potion_05#Фиолетовое зелье
+item_potion_06#Розовое зелье
+item_potion_07#Оранжевое зелье
+item_potion_08#Бирюзовое зелье
+item_potion_09#Коричневое зелье
+item_potion_10#Темное зелье
+item_potion_desc#Эффект неизвестен
+item_potion_health#Зелье лечения
+item_potion_health_desc#Восстанавливает 18 HP
+item_potion_poison#Ядовитое зелье
+item_potion_poison_desc#Отравляет
+item_potion_speed#Зелье скорости
+item_potion_speed_desc#Временно увеличивает скорость
+item_potion_slow#Зелье замедления
+item_potion_slow_desc#Временно уменьшает скорость
+item_potion_weakness#Зелье слабости
+item_potion_weakness_desc#Временно уменьшает урон
+item_potion_strength#Зелье силы
+item_potion_strength_desc#Временно увеличивает силу
+item_potion_oblivion#Зелье забвения
+item_potion_oblivion_desc#Забыть карту и эффекты зелий
+item_potion_confusion#Зелье запутанности
+item_potion_confusion_desc#Запутывает
+item_potion_cure#Зелье Табула Раса
+item_potion_cure_desc#Отменяет все эффекты, наложенные на игрока
+item_potion_rage#Зелье ярости
+item_potion_rage_desc#Призывает олненные шары в помощь
+item_bag#Сумка
+item_bag_desc#Предоставляет больше места для предметов
+msg_potion_id_0#Идентификация зелий
+msg_potion_id_1#Вы идентифицировали:
+msg_tuto_consumables_0#Обучение: Используемые предметы
+msg_tuto_consumables_1#[num1-num4] чтобы использовать предмет.
+msg_tuto_consumables_2#[left shift][num1-num4] чтобы выбросить его.
+msg_tuto_potions_0#Обучение: Зелья
+msg_tuto_potions_1#Вы нашли зелье.
+msg_tuto_potions_2#Вы должны выпить или идентифицировать его, чтобы знать его эффект.
+secret_found#Найдена секретная комната!
+enemy_type_sausage#колбаска
+enemy_type_spider_tarantula#тарантул
+effect_speed#Ускорение!
+effect_slow#Замедление!
+effect_strength#Усиление!
+effect_weakness#Слабость!
+effect_confusion#Запутанность!
+effect_forget#Забытие!
+effect_cure#Табула Раса!
+effect_rage#ЯРОСТЬ!
+item_book_alchemy#Книга алхимии
+item_book_alchemy_desc#Раскрывает эффект некоторых зелий
+item_fairy_stone#Фея Кассандра
+item_fairy_stone_desc#Помогает вам в подземелье
+item_merchant#Печать гильдии торговцев
+item_merchant_desc#Теперь цены в магазинах куда лучше
+item_spell_time#Заклинание: Остановка времени
+item_spell_time_desc#Произнесите чтобы замедлить время
+item_side_shots#Книга боковых выстрелов
+item_side_shots_desc#Стреляет по сторонам
+item_spell_lightning#Заклинание: Молния
+item_spell_lightning_desc#Произнесите, чтобы призвать молнию
+item_belt_advanced#Черный пояс
+item_belt_advanced_desc#Увеличивает скорость стрельбы фей
+item_rear_shot_advanced#Серебряный наконечник для посоха
+item_rear_shot_advanced_desc#Стреляет двумя выстрелами назад
+item_amulet_retaliation#Амулет мести
+item_amulet_retaliation_desc#Он заступится за меня
+item_rage_amulet#Амулет ярости
+item_rage_amulet_desc#Стреляет огнем
+achiev_fairies#Ангелы чарли
+achiev_fairies_desc#Найдите трех фей
+achiev_ghost#Охотник за привидениями
+achiev_ghost_desc#Убейте 50 призраков
+achiev_noob#Рак
+achiev_noob_desc#Умрите на первом уровне
+achiev_no_damage#Крутой парень
+achiev_no_damage_desc#Пройдите один уровень без потери здоровья
+achiev_no_damage2#Очень крутой парень
+achiev_no_damage2_desc#Пройдите два уровня без потери здоровья
+achiev_no_damage3#Офигеть какой крутой парень
+achiev_no_damage3_desc#Пройдите три уровня без потери здоровья
+achiev_apostate#Отступник
+achiev_apostate_desc#Откажитесь от 4-го уровня преданности своему божеству
+achiev_fanatic#Фанатик
+achiev_fanatic_desc#Пожертвуйте 100 золотых в храм
+func_nothing#Ничего!
+state_frozen#Заморожен
+state_slow#Замедлен
+state_speed#Ускорен
+state_poison#Отравлен
+state_weakness#Ослаблен
+state_strength#Усилен
+state_rage#Яростен
+state_confusion#Запутан
+state_time#Время остановлено
+state_div_protection#Защищен (покровителем)
+state_div_speed#Ускорен (покровителем)
+state_div_firerate#Ускорена стрельба (покровителем)
+state_div_damage#Усилен (покровителем)
+dc_victory#Победный сертификат
+dc_after_victory#Победа после
