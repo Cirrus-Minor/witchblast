@@ -1783,8 +1783,6 @@ item_velvet_boots#Botas de terciopelo
 item_velvet_boots_desc#Aumenta la velocidad
 item_spell_dual#Conjuro : Rayo doble
 item_spell_dual_desc#Dispara dos rayos
-item_rage_amulet#Amuleto de furia
-item_rage_amulet_desc#Contraataca
 item_displacement_gloves#Guantes de desplazamiento
 item_displacement_gloves_desc#La velocidad del jugador afecta la velocidad del proyectil
 item_staff#Báculo Ébano
@@ -2045,7 +2043,111 @@ item_floor_map_desc#Revela el mapa del piso actual.
 item_alcohol#Absenta
 item_alcohol_desc#aumenta los daños temporalmente.
 
-
+achiev_rats#Roedoricidio
+achiev_rats_desc#Mata 250 ratas
+achiev_100#Tacaño
+achiev_100_desc#Recoleta 100 monedas de oro
+achiev_piety_max#Fiel
+achiev_piety_max_desc#Obtén el máximo nivel de devoción
+achiev_4_hits#Brocheta
+achiev_4_hits_desc#Daña a 4 monstruos con el mismo disparo
+achiev_complete_set#Vestido
+achiev_complete_set_desc#Equipar bata + sombrero + botas +guantes
+achiev_giant_slime#Cazador de Babas Gigantes
+achiev_giant_slime_desc#Mata a la Baba Gigante
+achiev_cyclops#Cazador de Cíclopes
+achiev_cyclops_desc#Mata al Cíclope de Piedra
+achiev_rat_king#Cazador de Hombres-Rata
+achiev_rat_king_desc#Mata al Rey Hombre-Rata
+achiev_giant_spider#Cazador de Arañas Gigantes
+achiev_giant_spider_desc#Mata a la Araña Gigante
+achiev_francky#Cazador de Cosas
+achiev_francky_desc#Mata a la Cosa
+achiev_butcher#Cazador de Carniceros
+achiev_butcher_desc#Mata al Carnicero
+achiev_witches#Inquisidor
+achiev_witches_desc#Mata a 50 brujas
+achiev_eggs#Mala tortilla
+achiev_eggs_desc#Destruye 100 huevos
+achiev_vampire#Caza-Vampiros
+achiev_vampire_desc#Mata al Vampiro
+achiev_challenges#Gladiador
+achiev_challenges_desc#Completa 4 desafíos
+achiev_win#Vivir el sueño
+achiev_win_desc#Completa el demo
+func_achiev_screen#Pantalla de logros
+func_achiev_all#Todas las descripciones de los logros
+func_double_spell#Dos encantos aparecen
+enemy_type_evil_flower_fire#una flor de fuego malvada
+enemy_type_bat_skeleton#un esquéleto murciélago
+enemy_type_slime_large#una baba grande
+enemy_type_slime_blue_large#una baba azul grande
+enemy_type_slime_red_large#una baba roja grande
+enemy_type_slime_violet_large#una baba violeta grande
+enemy_type_bogeyman#un hombre del saco
+enemy_type_cauldron_elemental#una caldera elemental
+menu_achievements#Logros
+menu_achievements_desc#Muestra los logros
+achievement_complete#¡Logro desbloqueado!
+item_spell_flower#Encanto:Invocar flor mágica
+item_spell_flower_desc#Usar para invocar a flor mágica
+item_rapid_shots#Libro de disparo rápido
+item_rapid_shots_desc#Ametralladora de hechiceros
+item_fairy_poison#Hada Vicky
+item_fairy_poison_desc#Te ayuda en el calabozo
+item_luck#Trébol de cuatro hojas
+item_luck_desc#Aumenta temporalmente el oro encontrado
+item_fairy_powder#Polvo de hadas
+item_fairy_powder_desc#Exalta temporalmente a las hadas
+item_ring_poison#Anillo de esmeralda
+item_ring_poison_desc#Aumenta el poder de envenenamiento
+item_gem_poison#Gema de veneno
+item_gem_poison_desc#Ataque de veneno
+item_book_prayer_i#Libro de rezos - Tomo I
+item_book_prayer_i_desc#Incrementa la devoción
+item_book_prayer_ii#Libro de rezos - Tomo II
+item_book_prayer_ii_desc#Reduce el costo de la devoción
+item_pet_slime#Baba mascota
+item_pet_slime_desc#Te seguirá y ayudará
+item_hat_advanced#Gorra de Warlock
+item_hat_advanced_desc#Resistencia elemental y aumenta velocidad de ataque
+item_robe_advanced#Bata mágica de choque
+item_robe_advanced_desc#Repulsa e incrementa la armadura
+item_critical#Barba de mago falsa
+item_critical_desc#Probabilidad de ataque crítico (x2)
+item_critical_advanced#Barba de archimago falsa
+item_critical_advanced_desc#Probabilidad de ataque crítico (x3)
+item_spell_fairy#Encanto: Transmutación de hadas
+item_spell_fairy_desc#Usar para transmutar una hada
+item_gloves_advanced#Guantes de guardabosques
+item_gloves_advanced_desc#Desarma trampas y aumenta velocidad de ataque
+item_boots_advanced#Botas de guardabosques
+item_boots_advanced_desc#Aumenta velocidad
+divinity_leveling_0#¡Mayor nivel de devoción!
+div_fighter_lvl#Incrementa tu daño
+div_healer_lvl_2#Te da regeneración
+div_healer_lvl_3#Aumenta tu regeneración
+div_ice_lvl_3#Incrementa tu resistencia al hielo
+div_ice_lvl_4#Incrementa tu ataque de hielo
+div_ice_lvl_5#Incrementa tu inmunidad al hielo
+div_stone_lvl_3#Incrementa tu resistencia a la piedra
+div_stone_lvl_4#Incrementa tu ataque de piedra
+div_stone_lvl_5#Incrementa tu repulsión a la piedra
+enemy_vampire#Vampiro
+enemy_type_vampire#El Vampiro
+msg_tuto_achiev_0#Tutorial: Logros
+msg_tuto_achiev_1#Haz completado un logro-
+msg_tuto_achiev_2#Desbloquean nuevos ítems o bonificaciones.
+msg_vampire_0#El Vampiro
+msg_vampire_1#¡Olvidé traer algo de ajo!
+msg_level7_0#La hija del Archimago
+msg_level7_1#"Me acerco más y más.
+msg_level7_2#Ella no debería estar tan lejos de aquí."
+divinity_air_0#Ostram
+divinity_air_1#Divinidad del aire y la tormenta
+divinity_air_2#Le gusta el uso de la electricidad.
+div_air_lvl#Incrementa tu velocidad
+div_air_lvl_4#increases your ataque eléctrico.
 
 config_joystick#Configurar joystick
 redef_joystick#Redefinir controles joystick
