@@ -309,7 +309,7 @@ void GiantSlimeEntity::animate(float delay)
         h = 0;
         changeToState(8);
         game().makeShake(0.8f);
-        SoundManager::getInstance().playSound(SOUND_SLIME_IMAPCT_BOSS);
+        SoundManager::getInstance().playSound(SOUND_CYCLOPS_IMPACT);
       }
     }
   }
