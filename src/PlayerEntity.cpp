@@ -3707,7 +3707,9 @@ void PlayerEntity::castLightning()
   for (int i = 0; i < nbBolts ; i++)
   {
     BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeLightning, 0);
-    bolt->setDamages(i == 0 ? 20 : 10);
+    int boltDamage = game().getLevel() + 2;
+    if (i == 0) boltDamage += 10;
+    bolt->setDamages(boltDamage);
     float shotAngle = rand() % 360;
     bolt->setVelocity(Vector2D(400 * cos(shotAngle), 400 * sin(shotAngle)));
     bolt->setViscosity(1.0f);
