@@ -10,7 +10,7 @@ SausageEntity::SausageEntity(float x, float y, bool invocated)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SAUSAGE), x, y)
 {
   creatureSpeed = 0.0f;
-  hp = 18;
+  hp = 8;
   meleeDamages = 5;
 
   this->invocated = invocated;
