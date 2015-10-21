@@ -1629,7 +1629,9 @@ void PlayerEntity::setEquipped(int item, bool toggleEquipped, bool isFairyPlayer
                                          items[FirstEquipItem + item].familiar,
                                          isFairyPlayer);
     fairies.push_back(fairy);
-    if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
+    int nbFamiliarFairies = 0;
+    for (auto fairy : fairies) if (!fairy->isPlayerControlled()) nbFamiliarFairies++;
+    if (nbFamiliarFairies == 3) game().registerAchievement(AchievementFairies);
   }
   computePlayer();
 }

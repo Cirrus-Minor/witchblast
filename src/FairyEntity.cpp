@@ -67,6 +67,10 @@ FairyEntity::FairyEntity(float x, float y, enumFamiliar fairyType, bool isPlayer
   if (isPlayer) compute();
 }
 
+bool FairyEntity::isPlayerControlled()
+{
+  return isPlayer;
+}
 
 void FairyEntity::animate(float delay)
 {

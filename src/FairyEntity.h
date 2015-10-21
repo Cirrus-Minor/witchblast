@@ -11,7 +11,7 @@ class FairyEntity : public SpriteEntity
     FairyEntity(float x, float y, enumFamiliar fairyType, bool isPlayerControlled = false);
     virtual void animate(float delay);
 
-
+    bool isPlayerControlled();
     /*!
      *  \brief Moves the fairy in the given direction
      *
