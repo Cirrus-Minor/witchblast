@@ -3063,7 +3063,7 @@ void PlayerEntity::divineRepulse()
 
 void PlayerEntity::divineProtection(float duration, float armorBonus)
 {
-  setSpecialState(DivineStateProtection, true, 4.0f, 0.8f, 0.0f);
+  setSpecialState(DivineStateProtection, true, duration, armorBonus, 0.0f);
 }
 
 void PlayerEntity::divineHeal(int hpHealed)
@@ -3104,7 +3104,7 @@ bool PlayerEntity::triggerDivinityBefore()
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
       divineHeal(hpMax / 3);
-      if (r == 1) divineProtection(10.0f, 0.8f);
+      if (r == 1) divineProtection(8.0f, 0.8f);
       else divineFury();
       game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
       return true;
@@ -3134,7 +3134,7 @@ bool PlayerEntity::triggerDivinityBefore()
     case DivinityStone:
     {
       int r = rand() % 2;
-      divineProtection(12.0f, 0.5f);
+      divineProtection(10.0f, 0.75f);
 
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
