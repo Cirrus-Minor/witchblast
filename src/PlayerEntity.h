@@ -183,6 +183,8 @@ class PlayerEntity : public BaseCreatureEntity
      */
     void setLeavingLevel();
 
+    float getFireRate();
+
      /*!
      *  \brief returns if the player can move or not
      *

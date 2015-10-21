@@ -321,6 +321,11 @@ void PlayerEntity::setLeavingLevel()
   }
 }
 
+float PlayerEntity::getFireRate()
+{
+  return 1.0f / fireDelay;
+}
+
 void PlayerEntity::pay(int price)
 {
   gold -= price;
