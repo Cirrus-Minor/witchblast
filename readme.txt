@@ -92,11 +92,14 @@ Next release
 - ADD 2 players mode
 - ADD Score display in game
 - ADD Player scores are shining in score screens
-- ADD German translation
+- ADD German, Spanish and Russian translations
 - ADD Config option to turn off the pause while losing the focus
 - ADD Config option to turn off sprite batching of particles
 - ADD Config option to decrease lifetime of particles (for old computers)
 - ADD Potion description in the pause screen
+- MOD Sausages can now be killed in one shot (standard damage)
+- MOD Lightning spell deals progressive damage (5 dam in level 3, 6 in level 4, etc...)
+- MOD Increase of the divine protection duration
 - MOD Effect cooldown are now in the upper part of the interface
 - MOD Cooldown to pick up a potion we've dropped is now 5 seconds
 - MOD Explosive barrel is now red with an explosion symbol
