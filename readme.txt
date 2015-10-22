@@ -91,6 +91,7 @@ Changes
 Next release
 - ADD 2 players mode
 - ADD Score display in game
+- ADD New game and pause UI
 - ADD Player scores are shining in score screens
 - ADD German, Spanish and Russian translations
 - ADD Config option to turn off the pause while losing the focus
