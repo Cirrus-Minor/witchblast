@@ -70,6 +70,11 @@ const std::string inputKeyString[NumberKeys] =
   "key_fire"
 };
 
+// TODO: more players, multiple joysticks
+const int NB_PLAYERS_MAX = 2;
+
+
+
 /** Credits: coder */
 const std::string creditsCode[]  =
 {
@@ -577,7 +582,7 @@ private:
   int loopCounter;
   float endingTimer;        /*!< Counter before end of won game */
   bool isBonusTimeAdded;
-  bool isMultiplayer;
+  int nbPlayers;
 
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */
@@ -1108,17 +1113,14 @@ private:
   bool getPressingState(int p, inputKeyEnum k);
   void updateActionKeys();
 
-// TODO: more players, multiple joysticks
-#define NUM_PLAYERS 2
-
   struct ActionKeyStruct
   {
     bool isPressed;
     bool isTriggered;
   };
-  ActionKeyStruct actionKey[NUM_PLAYERS][NumberKeys];
+  ActionKeyStruct actionKey[NB_PLAYERS_MAX][NumberKeys];
 
-  bool isInputPressed[NUM_PLAYERS][NumberKeys];
+  bool isInputPressed[NB_PLAYERS_MAX][NumberKeys];
 
   bool gameFromSaveFile;
 

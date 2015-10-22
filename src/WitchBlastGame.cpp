@@ -487,7 +487,7 @@ WitchBlastGame::WitchBlastGame()
   fairySpriteOffsetY = 0;
   if (isAdvanced()) fairySpriteOffsetY = 72 + 72 * (rand() % 4);
 
-  for (int p = 0; p < NUM_PLAYERS; p++)
+  for (int p = 0; p < NB_PLAYERS_MAX; p++)
   {
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
@@ -495,6 +495,7 @@ WitchBlastGame::WitchBlastGame()
       actionKey[p][i].isTriggered = false;
     }
   }
+  nbPlayers = 1;
 }
 
 void WitchBlastGame::enableAA(bool enable)
@@ -769,7 +770,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
     // Add a fairy - co op players
-    if (isMultiplayer)
+    if (nbPlayers == 2)
     {
       int r = rand() % 10;
       int hp = 12;
@@ -1543,7 +1544,7 @@ void WitchBlastGame::updateRunningGame()
     }
 
     // Joystick control for fairy
-    if (isMultiplayer)
+    if (nbPlayers == 2)
     {
       auto fairy = player->getFairy(0);
       if (fairy)
@@ -1686,7 +1687,7 @@ void WitchBlastGame::updateRunningGame()
 
   if (backToMenu)
   {
-    if (!isMultiplayer && (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious))
+    if (!nbPlayers == 1 && (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious))
     {
       EntityManager::getInstance().clean();
 
@@ -2922,7 +2923,7 @@ void WitchBlastGame::calculateScore()
 
   lastScore.time = (int)gameTime;
 
-  if (isMultiplayer) return;
+  if (nbPlayers > 1) return;
 
   scores.push_back(lastScore);
 
@@ -3243,6 +3244,13 @@ void WitchBlastGame::updateMenu()
         updateMusicVolume();
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
+      else if (menu->items[menu->index].id == MenuStartNew)
+      {
+        nbPlayers++;
+        if (nbPlayers > NB_PLAYERS_MAX) nbPlayers = 1;
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        buildMenu(true);
+      }
     }
     else if (isPressing(0, KeyLeft, true))
     {
@@ -3271,6 +3279,13 @@ void WitchBlastGame::updateMenu()
         updateMusicVolume();
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
+      else if (menu->items[menu->index].id == MenuStartNew)
+      {
+        nbPlayers--;
+        if (nbPlayers < 0) nbPlayers = NB_PLAYERS_MAX;
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        buildMenu(true);
+      }
     }
     else if (isPressing(0, KeyFireDown, true))
     {
@@ -3279,7 +3294,7 @@ void WitchBlastGame::updateMenu()
       {
       case MenuStartNew:
         // TEST starting a multiplayer game = pressing LShift while starting the game on the menu
-        isMultiplayer = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+        // TODO
         startNewGame(false, 1);
         remove(SAVE_FILE.c_str());
         break;
@@ -5551,7 +5566,7 @@ void WitchBlastGame::makeColorEffect(int color, float duration)
 
 void WitchBlastGame::saveGame()
 {
-  if (isMultiplayer) return;
+  if (nbPlayers > 1) return;
 
   if (player->getPlayerStatus() == PlayerEntity::playerStatusAcquire)
     player->acquireItemAfterStance();
@@ -5772,7 +5787,7 @@ void WitchBlastGame::saveGame()
 
 bool WitchBlastGame::loadGame()
 {
-  isMultiplayer = false;
+  nbPlayers = 1;
 
   resetPresentItems();
   saveInFight.monsters.clear();
@@ -6400,7 +6415,11 @@ void WitchBlastGame::buildMenu(bool rebuild)
   if (saveHeader.ok)
   {
     menuItemStuct itemStart;
-    itemStart.label = tools::getLabel("start_new_game");
+    std::ostringstream oss;
+    oss << tools::getLabel("start_new_game");
+    if (nbPlayers == 1) oss << " (1 " << tools::getLabel("player") << ")";
+    else oss << " (" << nbPlayers << " " << tools::getLabel("players") << ")";
+    itemStart.label = oss.str();
     itemStart.description = tools::getLabel("start_desc");
 
     itemStart.id = MenuStartNew;
@@ -6409,7 +6428,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
     menuItemStuct itemLoad;
     itemStart.label = tools::getLabel("restore");
 
-    std::ostringstream oss;
+    oss.str("");
     oss << saveHeader.date << " " << tools::getLabel("at") << " " << saveHeader.time << " - " << tools::getLabel("level") << " " << saveHeader.level;
 
     itemStart.description = oss.str();
@@ -6421,7 +6440,11 @@ void WitchBlastGame::buildMenu(bool rebuild)
   else
   {
     menuItemStuct itemStart;
-    itemStart.label = tools::getLabel("start_new_game");
+    std::ostringstream oss;
+    oss << tools::getLabel("start_new_game");
+    if (nbPlayers == 1) oss << " (1 " << tools::getLabel("player") << ")";
+    else oss << " (" << nbPlayers << " " << tools::getLabel("players") << ")";
+    itemStart.label = oss.str();
     itemStart.description = tools::getLabel("begin_journey");
 
     itemStart.id = MenuStartNew;
@@ -7402,7 +7425,7 @@ void WitchBlastGame::addPresentItem(int n)
 
 bool WitchBlastGame::isPressing(int p, inputKeyEnum k, bool oneShot)
 {
-  if (gameState != gameStatePlaying || !isMultiplayer)
+  if (gameState != gameStatePlaying || nbPlayers == 0)
     return ((actionKey[0][k].isPressed && (!oneShot || actionKey[0][k].isTriggered))
             || (actionKey[1][k].isPressed && (!oneShot || actionKey[1][k].isTriggered)));
   else
@@ -7430,7 +7453,7 @@ bool WitchBlastGame::getPressingState(int p, inputKeyEnum k)
     if (sf::Keyboard::isKeyPressed(input[k])) return true;
   }
 
-  if (p == 1 || gameState != gameStatePlaying || !isMultiplayer)
+  if (p == 1 || gameState != gameStatePlaying || nbPlayers == 1)
   {
     if (!sf::Joystick::isConnected(0)) return false;
 
@@ -7454,7 +7477,7 @@ bool WitchBlastGame::getPressingState(int p, inputKeyEnum k)
 
 void WitchBlastGame::updateActionKeys()
 {
-  for (int p = 0; p < NUM_PLAYERS; p++)
+  for (int p = 0; p < NB_PLAYERS_MAX; p++)
   {
     for (unsigned int i = 0; i < NumberKeys; i++)
     {
@@ -7674,7 +7697,7 @@ void WitchBlastGame::forget()
 
 void WitchBlastGame::gainMultiplayerPower()
 {
-  if (isMultiplayer)
+  if (nbPlayers == 2)
   {
     auto fairy = player->getFairy(0);
     if (fairy)

@@ -454,8 +454,6 @@ divinity_air_2#He likes the use of lightning.
 div_air_lvl#increases your speed
 div_air_lvl_4#increases your lightning attack
 
-
-
 config_joystick#Configure joystick
 redef_joystick#Redefine joystick control
 joystick_configuration#Joystick configuration
@@ -569,6 +567,8 @@ state_div_damage#Damage+ (div)
 dc_victory#Victory certificate
 dc_after_victory#Victory after
 
+player#player
+players#players
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
@@ -1027,7 +1027,6 @@ joystick_configuration_desc#Configurez les actions du joystick
 joystick_configuration_insert#[appui bouton]
 joystick_not_found#Aucun joystick connecté !
 
-
 item_scroll_revelation#Parchemin de révélation
 item_scroll_revelation_desc#Révéler secrets et effets des potions
 item_potion_01#Potion rouge
@@ -1135,6 +1134,8 @@ state_div_damage#Dégâts+ (div)
 dc_victory#Attestation de réussite
 dc_after_victory#Victoire après
 
+player#joueur
+players#joueurs
 [german]
 start_new_game#Neues Spiel starten
 start_desc#Alter Speicherstand wird überschrieben !
@@ -1699,6 +1700,8 @@ state_div_damage#Schaden+ (div)
 dc_victory#Siegeszertifikat
 dc_after_victory#Sieg danach
 
+player#Spieler
+players#Spieler
 [spanish]
 start_new_game#Empezar nueva partida
 start_desc#La partida anterior se perderá
@@ -2262,6 +2265,8 @@ state_div_damage#Daño+ (div)
 dc_victory#Certificado de victoria
 dc_after_victory#Victoria después
 
+player#jugador
+players#jugadores
 [russian]
 start_new_game#Начать новую игру
 start_desc#Старая игра будет стёрта
@@ -2821,3 +2826,6 @@ state_div_firerate#Ускорена стрельба (покровителем)
 state_div_damage#Усилен (покровителем)
 dc_victory#Победный сертификат
 dc_after_victory#Победа после
+
+player#player
+players#players
