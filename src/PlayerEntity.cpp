@@ -179,8 +179,6 @@ float PlayerEntity::getPercentFireDelay()
 
 float PlayerEntity::getFadingDivinity(bool showCone)
 {
-  if (!this->showCone && showCone) return -1.0f;
-
   if (playerStatus == playerStatusPraying)
   {
     float result = 1.0f;
@@ -190,7 +188,25 @@ float PlayerEntity::getFadingDivinity(bool showCone)
       result = (WORSHIP_DELAY - statusTimer) * 4;
     return result;
   }
-  else if (divineInterventionDelay > 0.0f)
+
+  if (!this->showCone && showCone) return -1.0f;
+  if (divineInterventionDelay <= 0.0f) return -1.0f;
+
+  if (!this->showCone)
+  {
+    if (int(age * 12) % 2 == 0) return 1.0f;
+    else return -1.0f;
+  }
+  else if (playerStatus == playerStatusPraying)
+  {
+    float result = 1.0f;
+    if (statusTimer < 0.25f)
+      result = 4 * statusTimer;
+    else if (statusTimer > WORSHIP_DELAY - 0.25f)
+      result = (WORSHIP_DELAY - statusTimer) * 4;
+    return result;
+  }
+  else
   {
     float result = 1.0f;
     if (divineInterventionDelay < 0.25f)
@@ -202,7 +218,6 @@ float PlayerEntity::getFadingDivinity(bool showCone)
 
     return result;
   }
-  else return -1.0f;
 }
 
 float PlayerEntity::getPercentSpellDelay()
@@ -3247,7 +3262,7 @@ void PlayerEntity::addPiety(int n)
   if (divinity.level > oldLevel)
   {
     SoundManager::getInstance().playSound(SOUND_OM);
-    divineInterventionDelay = WORSHIP_DELAY / 2;
+    divineInterventionDelay = WORSHIP_DELAY * 1.5f;
     showCone = false;
     isRegeneration = false;
     pietyLevelUp();
