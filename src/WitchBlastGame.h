@@ -1137,6 +1137,7 @@ private:
   void randomizePotionMap();
 
   void addBonusScore(EnumScoreBonus bonusType, int points);
+  sf::Vector2i levelStrPosition;
 };
 
 /*!

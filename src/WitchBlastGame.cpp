@@ -2190,11 +2190,8 @@ void WitchBlastGame::renderRunningGame()
 
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  int yLevel = 602;
-  if (miniMap->getTile(FLOOR_WIDTH / 2 - 1, 0) > 0
-      || miniMap->getTile(FLOOR_WIDTH / 2, 0) > 0
-      || miniMap->getTile(FLOOR_WIDTH / 2 + 1, 0) > 0 ) yLevel = 594;
-  writeGraphic(oss.str(), 16, 824, yLevel, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
+
+  writeGraphic(oss.str(), 16, levelStrPosition.x, levelStrPosition.y, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   //if (gameState == gameStatePlaying)
   {
@@ -4313,6 +4310,28 @@ void WitchBlastGame::refreshMinimap()
         miniMap->setTile(i, j, 0);
     }
   miniMap->setTile(floorX, floorY, 10);
+
+  levelStrPosition.x = 824;
+  levelStrPosition.y = 602;
+
+  if (miniMap->getTile(FLOOR_WIDTH / 2 - 1, 0) > 0
+      || miniMap->getTile(FLOOR_WIDTH / 2, 0) > 0
+      || miniMap->getTile(FLOOR_WIDTH / 2 + 1, 0) > 0 )
+  {
+    if (miniMap->getTile(0, 0) <= 0
+      || miniMap->getTile(1, 0) <= 0
+      || miniMap->getTile(2, 0) <= 0 )
+      // no place top-middle
+      levelStrPosition.x = 729;
+  else if (miniMap->getTile(FLOOR_WIDTH - 1, 0) <= 0
+      || miniMap->getTile(FLOOR_WIDTH - 2, 0) <= 0
+      || miniMap->getTile(FLOOR_WIDTH - 3, 0) <= 0 )
+      // no place top-left
+      levelStrPosition.x = 921;
+  else
+    // no place top
+    levelStrPosition.y = 594;
+  }
 }
 
 void WitchBlastGame::checkEntering()
