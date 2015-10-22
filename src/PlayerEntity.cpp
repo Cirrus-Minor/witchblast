@@ -56,6 +56,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   rageFireDelay = 1.0f;
   invincibleDelay = -1.0f;
   divineInterventionDelay = -1.0f;
+  showCone = false;
   fireAnimationDelay = -1.0f;
   fireAnimationDelayMax = 0.4f;
   spellAnimationDelay = -1.0f;
@@ -176,8 +177,10 @@ float PlayerEntity::getPercentFireDelay()
   else return (1.0f - currentFireDelay / fireDelay);
 }
 
-float PlayerEntity::getLightCone()
+float PlayerEntity::getFadingDivinity(bool showCone)
 {
+  if (!this->showCone && showCone) return -1.0f;
+
   if (playerStatus == playerStatusPraying)
   {
     float result = 1.0f;
@@ -2384,6 +2387,7 @@ void PlayerEntity::onClearRoom()
     {
       divineInterventionDelay = WORSHIP_DELAY / 2;
       isRegeneration = true;
+      showCone = true;
       if (divinity.level >= 5) heal(4);
       else if (divinity.level >= 4) heal(3);
       else if (divinity.level >= 3) heal(2);
@@ -2873,6 +2877,7 @@ void PlayerEntity::donate(int n)
       new ItemEntity(itemType, xItem, yItem);
       SoundManager::getInstance().playSound(SOUND_OM);
       divineInterventionDelay = WORSHIP_DELAY / 2;
+      showCone = true;
       isRegeneration = false;
       for (int i = 0; i < 8; i++)
       {
@@ -3080,6 +3085,7 @@ void PlayerEntity::divineHeal(int hpHealed)
   if (hp > hpMax) hp = hpMax;
   specialState[SpecialStatePoison].active = false;
   divineInterventionDelay = WORSHIP_DELAY;
+  showCone = true;
   isRegeneration = false;
   game().addHealingStat(hp - oldHp);
 }
@@ -3242,6 +3248,7 @@ void PlayerEntity::addPiety(int n)
   {
     SoundManager::getInstance().playSound(SOUND_OM);
     divineInterventionDelay = WORSHIP_DELAY / 2;
+    showCone = false;
     isRegeneration = false;
     pietyLevelUp();
     computePlayer();

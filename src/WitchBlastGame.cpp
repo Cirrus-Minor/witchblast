@@ -1899,7 +1899,7 @@ void WitchBlastGame::renderHud()
   }
 
   // light cone ?
-  float fade = player->getLightCone();
+  float fade = player->getFadingDivinity(true);
   if (fade > 0.0f)
   {
     sf::Sprite cone;
@@ -2316,7 +2316,7 @@ void WitchBlastGame::renderRunningGame()
       divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 0, 48, 85));
       app->draw(divSprite);
 
-      float fade = player->getLightCone();
+      float fade = player->getFadingDivinity(false);
       if (fade > 0.0f && player->getPlayerStatus() != PlayerEntity::playerStatusPraying)
       {
         divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 85, 48, 85));

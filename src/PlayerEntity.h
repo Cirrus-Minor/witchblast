@@ -238,7 +238,7 @@ class PlayerEntity : public BaseCreatureEntity
      *
      *  \return : the percentage (between 0.0f for empty to 1.0 for full) or -1.0f if no light cone
      */
-    float getLightCone();
+    float getFadingDivinity(bool showCone);
 
     /*!
      *  \brief called when the player get an item
@@ -560,6 +560,7 @@ class PlayerEntity : public BaseCreatureEntity
     int criticalChance;
     float invincibleDelay;
     float divineInterventionDelay;
+    bool showCone;
     bool isRegeneration;
     bool isFairyTransmuted;
     int lostHp[LAST_LEVEL];
