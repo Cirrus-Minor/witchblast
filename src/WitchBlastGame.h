@@ -21,6 +21,7 @@
 #include "sfml_game/TileMapEntity.h"
 #include "PlayerEntity.h"
 #include "DungeonMapEntity.h"
+#include "MiniMapEntity.h"
 #include "EnemyEntity.h"
 #include "DoorEntity.h"
 #include "GameFloor.h"
@@ -575,12 +576,13 @@ private:
   int killedEnemies[NB_ENEMY];
   int loopCounter;
   float endingTimer;        /*!< Counter before end of won game */
+  bool isBonusTimeAdded;
   bool isMultiplayer;
 
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */
   DungeonMapEntity* dungeonEntity;  /*!< TileMap of the room (main game board) + blood, items, etc...*/
-  TileMapEntity* miniMapEntity;
+  MiniMapEntity* miniMapEntity;
   // displaying objects
   DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */
   sf::Font font;              /*!< The font used for displaying text */
@@ -596,8 +598,9 @@ private:
     sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
     sf::Sprite topLayer;
     sf::Sprite msgBoxSprite;
-    sf::Sprite iconSprite;
     sf::Sprite mapBgSprite;
+    sf::Sprite bagSprite;
+    sf::Sprite pauseSprite;
   } uiSprites;
 
   struct lifeBarStruct
@@ -911,9 +914,7 @@ private:
   /*!
    *  \brief Render the scores screen
    */
-  void renderHiScores();
-
-  void renderScores(std::vector <StructScore> scoresToRender, std::string title);
+  void renderScores(std::vector <StructScore> scoresToRender, std::string title, bool blinkingName);
 
   /** Menu keys enum
    *  Identify the various keys of the menu.

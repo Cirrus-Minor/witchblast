@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.7.2";
+const std::string APP_VERSION =   "0.7.3";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
@@ -32,7 +32,7 @@ const std::string SCORE_VERSION =   "V070_DEV";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
-const std::string languageState[NB_LANGUAGES] = { "", "", "", " (incomplete)", " (incomplete)" };
+const std::string languageState[NB_LANGUAGES] = { "", "", "", "", "" };
 
 const unsigned int SCORES_MAX    = 10;
 
@@ -136,7 +136,6 @@ enum enum_images {
   IMAGE_EXPLOSION,
   IMAGE_KEYS_QWER,
   IMAGE_KEYS_AZER,
-  IMAGE_MESSAGE_ICONS,
   IMAGE_INTRO,
   IMAGE_TITLE,
   IMAGE_OVERLAY,
@@ -176,6 +175,8 @@ enum enum_images {
   IMAGE_LIGHTNING,
   IMAGE_WIN_SEAL,
   IMAGE_WIN_SEAL_HOF,
+  IMAGE_BAG,
+  IMAGE_UI_PAUSE,
 
   NB_IMAGES
 };
@@ -682,7 +683,6 @@ enum EnumMessagesType
 
 struct messageStruct
 {
-  int icon;
   EnumMessagesType messageType;
   EnumMessages type;
   std::string message[NB_MSG_LINES];

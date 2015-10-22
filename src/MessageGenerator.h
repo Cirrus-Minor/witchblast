@@ -103,7 +103,6 @@ static messageStruct getMessage(EnumMessages type)
   messageBuilderStruct msgBuilder = msgMap[type];
 
   // init
-  msg.icon = msgBuilder.icon; //-1;
   msg.messageType = msgBuilder.type; //MessageTypeInfo;
   msg.type = type;
   msg.timer = msgBuilder.nbLines == 3 ? MESSAGE_DURATION : MESSAGE_DURATION_SHORT;
@@ -112,11 +111,6 @@ static messageStruct getMessage(EnumMessages type)
   msg.message[1] = "";
   msg.message[2] = "";
   loadMessageData(msg.message, msgBuilder.key, msgBuilder.nbLines);
-
-  if (type == MsgInfoDivHealer)       msg.icon = 2;
-  else if (type == MsgInfoDivFighter) msg.icon = 3;
-  else if (type == MsgInfoDivIce)     msg.icon = 4;
-  else if (type == MsgInfoDivStone)   msg.icon = 5;
 
   return msg;
 }
