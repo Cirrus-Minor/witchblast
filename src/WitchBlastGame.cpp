@@ -2406,23 +2406,24 @@ void WitchBlastGame::renderRunningGame()
       writeGraphic(oss.str(), 18, 734, 143, ALIGN_CENTER, sf::Color::Black, app);
 
       oss.str("");
-      oss << "Base damage: " << player->getDamage();
+      oss << tools::getLabel("ui_base_damage") << ": " << player->getDamage();
       writeGraphic(oss.str(), 17, 588, 190, ALIGN_LEFT, sf::Color::Black, app);
 
       oss.str("");
-      oss << "Fire rate: " << std::fixed << std::setprecision(1) << player->getFireRate() << " / second";
+      oss << tools::getLabel("ui_fire_rate") << ": " << std::fixed << std::setprecision(1) << player->getFireRate()
+        << " / " << tools::getLabel("ui_second");
       writeGraphic(oss.str(), 17, 588, 222, ALIGN_LEFT, sf::Color::Black, app);
 
       oss.str("");
-      oss << "Monsters killed: " << bodyCount;
+      oss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount;
       writeGraphic(oss.str(), 17, 588, 254, ALIGN_LEFT, sf::Color::Black, app);
 
       oss.str("");
-      oss << "Challenges completed: " << challengeLevel - 1;
+      oss << tools::getLabel("dc_challenges") << ": " << challengeLevel - 1;
       writeGraphic(oss.str(), 17, 588, 286, ALIGN_LEFT, sf::Color::Black, app);
 
       oss.str("");
-      oss << "Temple donation: " << player->getDonation();
+      oss << tools::getLabel("ui_temple_donation") << ": " << player->getDonation();
       writeGraphic(oss.str(), 17, 588, 318, ALIGN_LEFT, sf::Color::Black, app);
 
       // potions

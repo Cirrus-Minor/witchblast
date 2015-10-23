@@ -569,6 +569,10 @@ dc_after_victory#Victory after
 
 player#player
 players#players
+ui_base_damage#Base damage
+ui_fire_rate#Base damage
+ui_second#second
+ui_temple_donation#Temple donation
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
@@ -1136,6 +1140,10 @@ dc_after_victory#Victoire après
 
 player#joueur
 players#joueurs
+ui_base_damage#Dégâts de base
+ui_fire_rate#Cadence de tir
+ui_second#seconde
+ui_temple_donation#Donation au temple
 [german]
 start_new_game#Neues Spiel starten
 start_desc#Alter Speicherstand wird überschrieben !
