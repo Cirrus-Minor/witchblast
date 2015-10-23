@@ -195,7 +195,7 @@ float PlayerEntity::getFadingDivinity(bool showCone)
   if (!this->showCone)
   {
     if (int(age * 12) % 2 == 0) return 1.0f;
-    else return -1.0f;
+    else return 0.3f;
   }
   else if (playerStatus == playerStatusPraying)
   {
