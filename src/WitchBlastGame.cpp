@@ -3248,6 +3248,7 @@ void WitchBlastGame::updateMenu()
       {
         nbPlayers++;
         if (nbPlayers > NB_PLAYERS_MAX) nbPlayers = 1;
+        if (nbPlayers > 1 && !sf::Joystick::isConnected(0)) nbPlayers = 1;
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
         buildMenu(true);
       }
@@ -3282,19 +3283,17 @@ void WitchBlastGame::updateMenu()
       else if (menu->items[menu->index].id == MenuStartNew)
       {
         nbPlayers--;
-        if (nbPlayers < 0) nbPlayers = NB_PLAYERS_MAX;
+        if (nbPlayers <= 0) nbPlayers = NB_PLAYERS_MAX;
+        if (nbPlayers > 1 && !sf::Joystick::isConnected(0)) nbPlayers = 1;
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
         buildMenu(true);
       }
     }
     else if (isPressing(0, KeyFireDown, true))
     {
-
       switch (menu->items[menu->index].id)
       {
       case MenuStartNew:
-        // TEST starting a multiplayer game = pressing LShift while starting the game on the menu
-        // TODO
         startNewGame(false, 1);
         remove(SAVE_FILE.c_str());
         break;
