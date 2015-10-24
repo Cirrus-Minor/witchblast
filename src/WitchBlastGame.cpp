@@ -1687,7 +1687,7 @@ void WitchBlastGame::updateRunningGame()
 
   if (backToMenu)
   {
-    if (!nbPlayers == 1 && (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious))
+    if (nbPlayers == 1 && (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious))
     {
       EntityManager::getInstance().clean();
 
@@ -3326,8 +3326,6 @@ void WitchBlastGame::updateMenu()
         menuScoreIndex = 2;
 #endif
         receiveScoreFromServer();
-        //loadHiScoresOnline(false);
-        //loadHiScoresOnline(true);
         break;
       case MenuAchievements:
         menuState = MenuStateAchievements;
