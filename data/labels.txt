@@ -570,7 +570,7 @@ dc_after_victory#Victory after
 player#player
 players#players
 ui_base_damage#Base damage
-ui_fire_rate#Base damage
+ui_fire_rate#Fire rate
 ui_second#second
 ui_temple_donation#Temple donation
 [french]
