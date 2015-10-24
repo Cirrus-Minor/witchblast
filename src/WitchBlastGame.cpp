@@ -1700,6 +1700,8 @@ void WitchBlastGame::updateRunningGame()
       introSprites[1]->setY(SCREEN_HEIGHT - 202);
 
       switchToMenu();
+      updateActionKeys();
+
       menuState = MenuStateHiScores;
 #ifdef ONLINE_MODE
       menuScoreIndex = 0;
