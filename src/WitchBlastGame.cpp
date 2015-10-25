@@ -487,6 +487,7 @@ WitchBlastGame::WitchBlastGame()
   fairySpriteOffsetY = 0;
   if (isAdvanced()) fairySpriteOffsetY = 72 + 72 * (rand() % 4);
 
+  // init keys
   for (int p = 0; p < NB_PLAYERS_MAX; p++)
   {
     for (unsigned int i = 0; i < NumberKeys; i++)
@@ -496,6 +497,10 @@ WitchBlastGame::WitchBlastGame()
     }
   }
   nbPlayers = 1;
+
+  // click zones
+  for (int i = 0; i < 4; i++)
+    buttons.push_back(ButtonStruct { sf::IntRect(161 + 36 * i, 615, 32, 32), ButtonConsumable, i });
 }
 
 void WitchBlastGame::enableAA(bool enable)
@@ -1147,6 +1152,20 @@ void WitchBlastGame::updateRunningGame()
       if (gameState == gameStatePlaying) player->selectNextShotType();
     }
 
+    if (event.type == sf::Event::MouseButtonPressed)
+    {
+      if (gameState == gameStatePlaying)
+      {
+        sf::Vector2i mousePositionInWindow = sf::Mouse::getPosition(*app);
+        sf::Vector2f mousePosition = app->mapPixelToCoords(mousePositionInWindow);
+
+        int mouseButton = 1;
+        if (event.mouseButton.button == sf::Mouse::Left) mouseButton = 0;
+
+        tryToClick(mousePosition.x, mousePosition.y, mouseButton);
+      }
+    }
+
     if (event.type == sf::Event::KeyPressed)
     {
       if (event.key.code == sf::Keyboard::Escape)
@@ -1509,15 +1528,19 @@ void WitchBlastGame::updateRunningGame()
       int xm = mousePosition.x - player->getX();
       int ym = mousePosition.y - player->getY();
 
-      if (abs(xm) >= abs(ym))
+      if (mousePosition.x >= xOffset && mousePosition.x <= xOffset + GAME_WIDTH
+          && mousePosition.y >= yOffset && mousePosition.y <= yOffset + GAME_HEIGHT)
       {
-        if (xm > 0) player->fire(6);
-        else player->fire(4);
-      }
-      else
-      {
-        if (ym > 0) player->fire(2);
-        else player->fire(8);
+        if (abs(xm) >= abs(ym))
+        {
+          if (xm > 0) player->fire(6);
+          else player->fire(4);
+        }
+        else
+        {
+          if (ym > 0) player->fire(2);
+          else player->fire(8);
+        }
       }
     }
 
@@ -1527,20 +1550,24 @@ void WitchBlastGame::updateRunningGame()
       sf::Vector2i mousePositionInWindow = sf::Mouse::getPosition(*app);
       sf::Vector2f mousePosition = app->mapPixelToCoords(mousePositionInWindow);
 
-      int xm = mousePosition.x - player->getX();
-      int ym = mousePosition.y - player->getY();
+      if (mousePosition.x >= xOffset && mousePosition.x <= xOffset + GAME_WIDTH
+          && mousePosition.y >= yOffset && mousePosition.y <= yOffset + GAME_HEIGHT)
+      {
+        int xm = mousePosition.x - player->getX();
+        int ym = mousePosition.y - player->getY();
 
-      if (abs(xm) >= abs(ym))
-      {
-        if (xm > 0) player->setFacingDirection(6);
-        else player->setFacingDirection(4);
+        if (abs(xm) >= abs(ym))
+        {
+          if (xm > 0) player->setFacingDirection(6);
+          else player->setFacingDirection(4);
+        }
+        else
+        {
+          if (ym > 0) player->setFacingDirection(2);
+          else player->setFacingDirection(8);
+        }
+        player->castSpell();
       }
-      else
-      {
-        if (ym > 0) player->setFacingDirection(2);
-        else player->setFacingDirection(8);
-      }
-      player->castSpell();
     }
 
     // Joystick control for fairy
@@ -7726,6 +7753,24 @@ void WitchBlastGame::addBonusScore(EnumScoreBonus bonusType, int points)
   scoreBonus = oss.str();
   scoreBonusTimer = BONUS_TIMER;
   SoundManager::getInstance().playSound(SOUND_SCORE_BONUS);
+}
+
+void WitchBlastGame::tryToClick(int xMouse, int yMouse, int mouseButton)
+{
+  for (ButtonStruct but : buttons)
+  {
+    if (xMouse >= but.zone.left && xMouse <= but.zone.left + but.zone.width
+        && yMouse >= but.zone.top && yMouse <= but.zone.top + but.zone.height)
+    {
+      if (but.type == ButtonConsumable)
+      {
+        if (mouseButton == 0) player->tryToConsume(but.index);
+        else player->dropConsumables(but.index);
+      }
+
+      return;
+    }
+  }
 }
 
 WitchBlastGame &game()

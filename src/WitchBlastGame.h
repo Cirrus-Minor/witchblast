@@ -156,6 +156,18 @@ enum EnumScoreBonus
   BonusPossession,
 };
 
+enum EnumButtonType
+{
+  ButtonConsumable,
+};
+
+struct ButtonStruct
+{
+  sf::IntRect zone;
+  EnumButtonType type;
+  int index;
+};
+
 /*! \class WitchBlastGame
 * \brief Main class of the game
 *
@@ -1140,6 +1152,9 @@ private:
 
   void addBonusScore(EnumScoreBonus bonusType, int points);
   sf::Vector2i levelStrPosition;
+
+  std::vector<ButtonStruct> buttons;
+  void tryToClick(int xMouse, int yMouse, int mouseButton);
 };
 
 /*!
