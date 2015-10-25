@@ -582,7 +582,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBag, "item_bag", "item_bag_desc",
-    20, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemLeatherBoots, ShotTypeStandard, SpellNone, false
+    20, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone, false
   },
   {
     ItemBookAlchemy, "item_book_alchemy", "item_book_alchemy_desc",
