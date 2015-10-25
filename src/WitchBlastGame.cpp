@@ -501,6 +501,9 @@ WitchBlastGame::WitchBlastGame()
   // click zones
   for (int i = 0; i < 4; i++)
     buttons.push_back(ButtonStruct { sf::IntRect(161 + 36 * i, 615, 32, 32), ButtonConsumable, i });
+
+  for (int i = 0; i < 5; i++)
+    buttons.push_back(ButtonStruct { sf::IntRect(124 + 55 * i, 655, 48, 48), ButtonShotType, i });
 }
 
 void WitchBlastGame::enableAA(bool enable)
@@ -796,6 +799,9 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
 
     if (startingLevel > 1)
     {
+      player->acquireItem(ItemScrollRevelation);
+      player->acquireItem(enumItemType(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED));
+
       for (int i = 1; i < startingLevel; i++)
       {
         level = i;
@@ -7762,12 +7768,16 @@ void WitchBlastGame::tryToClick(int xMouse, int yMouse, int mouseButton)
     if (xMouse >= but.zone.left && xMouse <= but.zone.left + but.zone.width
         && yMouse >= but.zone.top && yMouse <= but.zone.top + but.zone.height)
     {
+      //std::cout << "Click: type=" << but.type << ", index=" << but.index << std::endl;
       if (but.type == ButtonConsumable)
       {
         if (mouseButton == 0) player->tryToConsume(but.index);
         else player->dropConsumables(but.index);
       }
-
+      else if (but.type == ButtonShotType)
+      {
+        player->selectShotType(but.index);
+      }
       return;
     }
   }

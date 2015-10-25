@@ -159,6 +159,7 @@ enum EnumScoreBonus
 enum EnumButtonType
 {
   ButtonConsumable,
+  ButtonShotType,
 };
 
 struct ButtonStruct
