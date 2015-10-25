@@ -453,6 +453,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  Select the next shot type.
      */
     void selectNextShotType();
+    void selectShotType(int n);
 
     /*!
      *  \brief accessor on the fairies number

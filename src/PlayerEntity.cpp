@@ -2708,6 +2708,17 @@ void PlayerEntity::registerSpecialShot(int item)
   }
 }
 
+void PlayerEntity::selectShotType(int n)
+{
+  if (n == specialShotIndex) return;
+  if (n > 0 && getShotType(n) == ShotTypeStandard) return;
+
+  specialShotIndex = n;
+  initShotType();
+  SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+  computePlayer();
+}
+
 void PlayerEntity::selectNextShotType()
 {
   int index = specialShotIndex + 1;
