@@ -94,6 +94,7 @@ Next release
 - ADD New game and pause UI
 - ADD Player scores are shining in score screens
 - ADD German, Spanish and Russian translations
+- ADD Mouse support for using/dropping consumables and switching bolt type
 - ADD Config option to turn off the pause while losing the focus
 - ADD Config option to turn off sprite batching of particles
 - ADD Config option to decrease lifetime of particles (for old computers)
@@ -105,6 +106,7 @@ Next release
 - MOD Cooldown to pick up a potion we've dropped is now 5 seconds
 - MOD Explosive barrel is now red with an explosion symbol
 - MOD Green blood and slime corpses have been desaturated for a better game visibility
+- MOD Level up divinity effect has been changed (was too close of the divinity intervention effect)
 - FIX Inputs are processed while the game window has no focus
 - FIX Doors don't open when there is still spider webs in room
 - FIX Spider webs slow down some spiders
