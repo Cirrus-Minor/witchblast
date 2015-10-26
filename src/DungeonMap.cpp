@@ -1232,9 +1232,8 @@ void DungeonMap::generateRoomWithoutHoles(int type)
               int objX = 2 + rand() % (MAP_WIDTH - 4);
               int objY = 2 + rand() % (MAP_HEIGHT - 4);
 
-              int type = MAPOBJ_BARREL_NO_DROP;
-              if (rand() % 10 == 0) type = MAPOBJ_BARREL_EXPL;
-              else if (rand() % 5 == 0) type = MAPOBJ_BARREL;
+              int type = (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP;
+              if (rand() % 5 == 0) type = MAPOBJ_BARREL;
 
               addDestroyableObject(objX, objY, type);
             }
@@ -1256,8 +1255,8 @@ void DungeonMap::generateRoomWithoutHoles(int type)
             int objY = 2 + rand() % (MAP_HEIGHT - 4);
 
             int type = MAPOBJ_BARREL_NO_DROP;
-            if (rand() % 10 == 0) type = MAPOBJ_BARREL_EXPL;
-            else if (rand() % 5 == 0) type = MAPOBJ_BARREL;
+            if (rand() % 2 == 0) type += (rand() % 2 == 0) ? 1 : 2;
+            if (rand() % 5 == 0) type = MAPOBJ_BARREL;
 
             addDestroyableObject(objX, objY, type);
           }
@@ -1266,13 +1265,13 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         {
           for (int i = 2; i < MAP_WIDTH - 3; i++)
           {
-            addDestroyableObject(i, 2, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
-            addDestroyableObject(i, MAP_HEIGHT - 3, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(i, 2, (rand() % 4) % 3 + (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(i, MAP_HEIGHT - 3, (rand() % 4) % 3 + (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
           }
           for (int i = 3; i < MAP_HEIGHT - 4; i++)
           {
-            addDestroyableObject(2, i, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
-            addDestroyableObject(MAP_WIDTH - 3, i, (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(2, i, (rand() % 4) % 3 + (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
+            addDestroyableObject(MAP_WIDTH - 3, i, (rand() % 4) % 3 + (rand() % 5 == 0) ? MAPOBJ_BARREL_EXPL : MAPOBJ_BARREL_NO_DROP);
           }
         }
       }
@@ -1441,7 +1440,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         int objX = 2 + rand() % (MAP_WIDTH - 4);
         int objY = 2 + rand() % (MAP_HEIGHT - 4);
 
-        int type = MAPOBJ_BARREL_NO_DROP;
+        int type = (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP;
         if (rand() % 4 == 0) type = MAPOBJ_BARREL_EXPL;
 
         addDestroyableObject(objX, objY, type);
@@ -1578,14 +1577,14 @@ void DungeonMap::generateRoomWithHoles(int type)
 
     if (rand() % 3 == 0)
     {
-      addDestroyableObject(4, 2, MAPOBJ_BARREL_NO_DROP);
-      addDestroyableObject(4, 3, MAPOBJ_BARREL_NO_DROP);
-      addDestroyableObject(4, MAP_HEIGHT - 4, MAPOBJ_BARREL_NO_DROP);
-      addDestroyableObject(4, MAP_HEIGHT - 3, MAPOBJ_BARREL_NO_DROP);
-      addDestroyableObject(MAP_WIDTH - 5, 2, MAPOBJ_BARREL_NO_DROP);
-      addDestroyableObject(MAP_WIDTH - 5, 3, MAPOBJ_BARREL_NO_DROP);
-      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 4, MAPOBJ_BARREL_NO_DROP);
-      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 3, MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, 2, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, 3, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, MAP_HEIGHT - 4, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(4, MAP_HEIGHT - 3, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, 2, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, 3, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 4, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
+      addDestroyableObject(MAP_WIDTH - 5, MAP_HEIGHT - 3, (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP);
     }
   }
   else if (type == 4)
