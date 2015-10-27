@@ -269,12 +269,22 @@ void FairyEntity::fire(int dir, bool bySelf)
 
       BoltEntity* bolt1 = new BoltEntity(x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
       bolt1->setDamages(fairyDamages);
+      if (power[PowUpCritical] && rand() % 20 == 0)
+      {
+        bolt1->setDamages(fairyDamages * 2);
+        bolt1->setCritical(true);
+      }
       bolt1->setVelocity(Vector2D(velx1, vely1));
       bolt1->setFlying(true);
       bolt1->setFromPlayer(false);
 
       BoltEntity* bolt2 = new BoltEntity(x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
       bolt2->setDamages(fairyDamages);
+      if (power[PowUpCritical] && rand() % 20 == 0)
+      {
+        bolt2->setDamages(fairyDamages * 2);
+        bolt2->setCritical(true);
+      }
       bolt2->setVelocity(Vector2D(velx2, vely2));
       bolt2->setFlying(true);
       bolt2->setFromPlayer(false);
@@ -291,6 +301,11 @@ void FairyEntity::fire(int dir, bool bySelf)
 
       BoltEntity* bolt = new BoltEntity(x, y, FAIRY_BOLT_LIFE, shotType, shotLevel);
       bolt->setDamages(fairyDamages);
+      if (power[PowUpCritical] && rand() % 20 == 0)
+      {
+        bolt->setDamages(fairyDamages * 2);
+        bolt->setCritical(true);
+      }
       bolt->setVelocity(Vector2D(velx, vely));
       bolt->setFlying(true);
       bolt->setFromPlayer(false);
@@ -538,6 +553,9 @@ void FairyEntity::gainNewPower()
       bonusText = "Double shot!"; break;
     case PowUpSpeed:
       bonusText = "Speed up!"; break;
+    case PowUpCritical:
+      bonusText = "Critical hit chance!"; break;
+
     case PowUpTypeFire:
       bonusText = "Fire attack!"; break;
     case PowUpTypeIce:

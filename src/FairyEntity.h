@@ -33,6 +33,7 @@ class FairyEntity : public SpriteEntity
       PowUpFireRate2,
       PowUpSpeed,
       PowUpDouble,
+      PowUpCritical,
 
       PowUpTypeFire,
       PowUpTypeIce,
