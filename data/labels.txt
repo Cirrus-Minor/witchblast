@@ -1710,6 +1710,10 @@ dc_after_victory#Sieg danach
 
 player#Spieler
 players#Spieler
+ui_base_damage#Basisschaden
+ui_fire_rate#Feuerrate
+ui_second#Sekunde
+ui_temple_donation#Tempelspende
 [spanish]
 start_new_game#Empezar nueva partida
 start_desc#La partida anterior se perderá
