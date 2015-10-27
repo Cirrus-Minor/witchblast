@@ -619,6 +619,7 @@ private:
     sf::Sprite mapBgSprite;
     sf::Sprite bagSprite;
     sf::Sprite pauseSprite;
+    sf::Sprite numberSprite;
   } uiSprites;
 
   struct lifeBarStruct

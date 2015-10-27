@@ -345,6 +345,7 @@ WitchBlastGame::WitchBlastGame()
     "media/lightning.png",
     "media/win_seal.png",         "media/hof_win_seal.png",
     "media/bag.png",              "media/ui_pause.png",
+    "media/score_font.png",
   };
 
   for (const char *const filename : images)
@@ -470,6 +471,7 @@ WitchBlastGame::WitchBlastGame()
   uiSprites.pauseSprite.setPosition(SCREEN_WIDTH - 453, 0);
   uiSprites.bagSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BAG));
   uiSprites.bagSprite.setPosition(116, 606);
+  uiSprites.numberSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SCORE_FONT));
 
   introScreenSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
   titleSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TITLE));
@@ -1969,23 +1971,46 @@ void WitchBlastGame::renderHud()
 
 void WitchBlastGame::renderScore()
 {
-  sf::RectangleShape rectangle(sf::Vector2f(130, 25));
-  rectangle.setFillColor(sf::Color(0, 0, 0,128));
-  rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, 22));
-  rectangle.setOutlineThickness(1);
-  rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
-  app->draw(rectangle);
-
   if (scoreDisplayed < score - 300) scoreDisplayed += 100;
   else if (scoreDisplayed < score) scoreDisplayed++;
-  write(intToString(scoreDisplayed), 18, 150, 23, ALIGN_RIGHT,sf::Color::White, app, 2, 2, 0);
+
+  float x = 24, y = 19;
+  int scoretemp = scoreDisplayed;
+  int n = scoretemp / 10000;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x , y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 10000;
+  n = scoretemp / 1000;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 17, y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 1000;
+  n = scoretemp / 100;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 2 * 17, y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 100;
+  n = scoretemp / 10;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 3 * 17, y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 10;
+  n = scoretemp;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 4 * 17, y);
+  app->draw(uiSprites.numberSprite);
 
   if (scoreBonusTimer > 0.0f)
   {
     sf::Color color;
     if (scoreBonusTimer < 1.0f) color = sf::Color(255, 255, 255, 255 * scoreBonusTimer);
     else color = sf::Color::White;
-    write(scoreBonus, 13, 150, 50, ALIGN_RIGHT,color , app);
+    write(scoreBonus, 13, 116, 51, ALIGN_RIGHT,color, app, 0, 0, 116);
     scoreBonusTimer -= deltaTime;
   }
 }
@@ -1995,17 +2020,17 @@ void WitchBlastGame::renderLifeBar()
   if (lifeBar.toDisplay)
   {
     int label_dy = 0;
-    int xBarOffset = 138;
+    int xBarOffset = 100;
     float l = lifeBar.hp * ((MAP_WIDTH - 1) * TILE_WIDTH - xBarOffset) / lifeBar.hpMax;
 
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH - xBarOffset, 25));
+    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH - xBarOffset, 24));
     rectangle.setFillColor(sf::Color(0, 0, 0,128));
     rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2 + xBarOffset, label_dy + 22));
     rectangle.setOutlineThickness(1);
     rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
     app->draw(rectangle);
 
-    rectangle.setSize(sf::Vector2f(l, 25));
+    rectangle.setSize(sf::Vector2f(l, 24));
     rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setOutlineThickness(0);
     //rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
@@ -2014,7 +2039,7 @@ void WitchBlastGame::renderLifeBar()
     game().write(           lifeBar.label,
                             18,
                             TILE_WIDTH / 2 + 10.0f + xBarOffset,
-                            label_dy + 23,
+                            label_dy + 22,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
                             app, 0 , 0, 0);
@@ -7767,7 +7792,6 @@ void WitchBlastGame::tryToClick(int xMouse, int yMouse, int mouseButton)
     if (xMouse >= but.zone.left && xMouse <= but.zone.left + but.zone.width
         && yMouse >= but.zone.top && yMouse <= but.zone.top + but.zone.height)
     {
-      //std::cout << "Click: type=" << but.type << ", index=" << but.index << std::endl;
       if (but.type == ButtonConsumable)
       {
         if (mouseButton == 0) player->tryToConsume(but.index);

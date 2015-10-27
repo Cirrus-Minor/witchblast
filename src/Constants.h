@@ -177,6 +177,7 @@ enum enum_images {
   IMAGE_WIN_SEAL_HOF,
   IMAGE_BAG,
   IMAGE_UI_PAUSE,
+  IMAGE_SCORE_FONT,
 
   NB_IMAGES
 };
