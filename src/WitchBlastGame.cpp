@@ -618,6 +618,7 @@ void WitchBlastGame::saveStats()
   oss << "(" << statsData.hpIni << "/" << statsData.hpMax << "->(" << statsData.hpEnd << "/" << statsData.hpMaxEnd << ")[" << statsData.dam << "]";
   oss << "(" << statsData.hurtCounter << "x[" << statsData.hpLost << "])";
   oss << "(" << statsData.healCounter << "x[" << statsData.hpHeal << "])";
+  oss << "$" << player->getGold();
   oss << "}";
   statsStr += oss.str();
 }
@@ -2926,8 +2927,6 @@ void WitchBlastGame::calculateScore()
 
   int goldScore = getGoldScore(player->getGold());
 
-  oss << "(" << goldScore << ")";
-
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
     if (player->isEquiped(i)) goldScore += getItemScore((item_equip_enum)i);
@@ -2943,9 +2942,6 @@ void WitchBlastGame::calculateScore()
   }
   else
     lastScore.level = level;
-
-  oss << "_";
-  statsStr = oss.str() + statsStr;
 
   // to save
   lastScore.name = parameters.playerName;
@@ -7747,14 +7743,17 @@ void WitchBlastGame::addBonusScore(EnumScoreBonus bonusType, int points)
   score += points;
 
   std::ostringstream oss;
+  std::ostringstream ossStats;
+  ossStats << ":";
   switch (bonusType)
   {
-    case BonusSecret:  oss << "Secret!"; break;
-    case BonusPerfect:  oss << "Perfect!"; break;
-    case BonusChallenge:  oss << "Challenge!"; break;
-    case BonusPossession:  oss << "Stuff"; break;
-    case BonusTime:  oss << "Time bonus"; break;
+    case BonusSecret:  oss << "Secret!"; ossStats << "S"; break;
+    case BonusPerfect:  oss << "Perfect!"; ossStats << "P"; break;
+    case BonusChallenge:  oss << "Challenge!"; ossStats << "C"; break;
+    case BonusPossession:  oss << "Stuff"; ossStats << "E=" << points; break;
+    case BonusTime:  oss << "Time bonus"; ossStats << "T=" << points; break;
   }
+  statsStr += ossStats.str();
   oss << " +" << points;
   scoreBonus = oss.str();
   scoreBonusTimer = BONUS_TIMER;
