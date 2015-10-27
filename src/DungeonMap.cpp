@@ -1432,7 +1432,7 @@ void DungeonMap::generateRoomWithoutHoles(int type)
         logicalMap[i][j] = LogicalObstacle;
       }
 
-    if (rand() % 5 > 0)
+    if (game().getLevel() >= 4 || rand() % 4 > 0)
     {
       int nbBarrels = 6 + rand() % 9;
       for (int i = 0; i < nbBarrels; i++)
@@ -1673,6 +1673,21 @@ void DungeonMap::generateRoomWithHoles(int type)
       {
         addHole(i, j);
       }
+
+    if (game().getLevel() >= 4 || rand() % 4 > 0)
+    {
+      int nbBarrels = 6 + rand() % 9;
+      for (int i = 0; i < nbBarrels; i++)
+      {
+        int objX = 2 + rand() % (MAP_WIDTH - 4);
+        int objY = 2 + rand() % (MAP_HEIGHT - 4);
+
+        int type = (rand() % 4) % 3 + MAPOBJ_BARREL_NO_DROP;
+        if (rand() % 4 == 0) type = MAPOBJ_BARREL_EXPL;
+
+        addDestroyableObject(objX, objY, type);
+      }
+    }
   }
 
   generateRandomTiles();
