@@ -2839,5 +2839,9 @@ state_div_damage#Усилен (покровителем)
 dc_victory#Победный сертификат
 dc_after_victory#Победа после
 
-player#player
-players#players
+player#игрок
+players#игрока
+ui_base_damage#Базовый урон
+ui_fire_rate#Скорость стрельбы
+ui_second#в секунду
+ui_temple_donation#Пожертвования
