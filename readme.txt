@@ -88,7 +88,7 @@ AFS (for the Spanish translation)
 
 Changes
 -------
-Next release
+v0.7.5
 - ADD 2 players mode
 - ADD Score display in game
 - ADD New game and pause UI
