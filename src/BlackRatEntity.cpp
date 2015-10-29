@@ -55,6 +55,8 @@ void BlackRatEntity::animate(float delay)
     else if (currentDirection == 2 && y > (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 - 5) ) findNextGoal();
     else if (currentDirection == 8 && y < (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 - 5) ) findNextGoal();
 
+    checkNextFacing(delay);
+
     frame = ((int)(age * 5.0f)) % 4;
     if (frame == 3) frame = 1;
     if (facingDirection == 4 || facingDirection == 6) frame += 3;
@@ -138,7 +140,7 @@ void BlackRatEntity::collideWithEnemy(EnemyEntity* entity)
         default: break;
       }
       acceleration = { 0, 0 };
-      facingDirection = currentDirection;
+      nextFacingDirection = currentDirection;
     }
   }
 }
@@ -251,7 +253,7 @@ void BlackRatEntity::findNextGoal()
     doesAccelerate = true;
   }
 
-  facingDirection = currentDirection;
+  nextFacingDirection = currentDirection;
 }
 
 void BlackRatEntity::collideWithBolt(BoltEntity* boltEntity)

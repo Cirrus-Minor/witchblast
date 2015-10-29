@@ -27,6 +27,9 @@ ZombieDarkEntity::ZombieDarkEntity(float x, float y)
   agonizingSound = SOUND_ZOMBIE_DYING;
 
   currentDirection = 2 + 2 * rand()%4;
+  facingDirection = currentDirection;
+  nextFacingDirection = currentDirection;
+
   height = 80;
   sprite.setOrigin(32.0f, 60.0f);
   attackTimer = 0.9f;
@@ -47,6 +50,8 @@ void ZombieDarkEntity::animate(float delay)
     else if (currentDirection == 4 && x < (targetTile.x * TILE_WIDTH + TILE_WIDTH / 2) ) findNextGoal();
     else if (currentDirection == 2 && y > (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 - 5) ) findNextGoal();
     else if (currentDirection == 8 && y < (targetTile.y * TILE_HEIGHT + TILE_HEIGHT / 2 - 5) ) findNextGoal();
+
+    checkNextFacing(delay);
 
     frame = ((int)(age * 4.0f)) % 4;
     if (frame == 3) frame = 1;
@@ -142,7 +147,7 @@ void ZombieDarkEntity::collideWithEnemy(EnemyEntity* entity)
       case 8: velocity.y = - creatureSpeed; velocity.x = 0.0f; break;
       default: break;
     }
-    facingDirection = currentDirection;
+    nextFacingDirection = currentDirection;
   }
 }
 
@@ -235,13 +240,14 @@ void ZombieDarkEntity::findNextGoal()
       break;
     default: break;
   }
-  facingDirection = currentDirection;
+  nextFacingDirection = currentDirection;
 
   if (currentDirection == playerDirecion && attackTimer <= 0.0f)
   {
     giveRecoil(false, Vector2D(velocity.x * 2.0f, velocity.y * 2.0f), 1.5f);
     attackTimer = 2.0f;
     SoundManager::getInstance().playSound(SOUND_ZOMBIE_ATTACKING);
+    facingTimer = -1.0f;
   }
   else
     SoundManager::getInstance().playSound(SOUND_ZOMBIE_00 + rand() % 2);
@@ -325,7 +331,7 @@ void ZombieDarkEntity::findNextRandomGoal()
     default: break;
   }
 
-  facingDirection = currentDirection;
+  nextFacingDirection = currentDirection;
 }
 
 void ZombieDarkEntity::collideWithBolt(BoltEntity* boltEntity)

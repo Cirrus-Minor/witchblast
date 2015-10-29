@@ -114,16 +114,16 @@ int getMonsterScore(enemyTypeEnum monster)
   return score;
 }
 
-// 50 points / completed challenge
+// 75 points / completed challenge + 25 pts / superior level
 int getChallengeScore(int challengeLevel)
 {
-  return 50 * (challengeLevel - 1);
+  return 75 + 25 * (challengeLevel - 1);
 }
 
-// 50 points / secret
-int getSecretScore(int nbSecrets)
+// 100 points / secret
+int getSecretScore()
 {
-  return 50 * (nbSecrets);
+  return 100;
 }
 
 // 1 point = 1 gold
@@ -139,10 +139,10 @@ int getItemScore(item_equip_enum item)
   return points;
 }
 
-// 50 points / perfect
-int getPerfectScore()
+// 50 points * level / perfect
+int getPerfectScore(int level)
 {
-  return 50;
+  return 50 * level;
 }
 
 // 50 points / minute

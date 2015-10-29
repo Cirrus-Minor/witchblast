@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.7";
+const std::string APP_VERSION =   "0.7.5";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
@@ -28,10 +28,11 @@ const std::string SAVE_DATA_FILE =  "data/data.sav";
 const std::string HISCORES_FILE =   "data/scores.dat";
 
 const std::string SAVE_VERSION =    "SAVE_0.7";
-const std::string SCORE_VERSION =   "V070";
+const std::string SCORE_VERSION =   "V075";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
+const std::string languageState[NB_LANGUAGES] = { "", "", "", "", "" };
 
 const unsigned int SCORES_MAX    = 10;
 
@@ -135,7 +136,6 @@ enum enum_images {
   IMAGE_EXPLOSION,
   IMAGE_KEYS_QWER,
   IMAGE_KEYS_AZER,
-  IMAGE_MESSAGE_ICONS,
   IMAGE_INTRO,
   IMAGE_TITLE,
   IMAGE_OVERLAY,
@@ -173,6 +173,11 @@ enum enum_images {
   IMAGE_DESTROYABLE,
   IMAGE_HALL_OF_FAME,
   IMAGE_LIGHTNING,
+  IMAGE_WIN_SEAL,
+  IMAGE_WIN_SEAL_HOF,
+  IMAGE_BAG,
+  IMAGE_UI_PAUSE,
+  IMAGE_SCORE_FONT,
 
   NB_IMAGES
 };
@@ -307,6 +312,7 @@ enum sound_resources {
   SOUND_CLOCK,
   SOUND_BOTTLE,
   SOUND_THUNDER,
+  SOUND_SCORE_BONUS
 };
 
 enum corpses_ressources{
@@ -678,7 +684,6 @@ enum EnumMessagesType
 
 struct messageStruct
 {
-  int icon;
   EnumMessagesType messageType;
   EnumMessages type;
   std::string message[NB_MSG_LINES];

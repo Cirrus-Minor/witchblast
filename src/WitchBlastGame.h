@@ -21,6 +21,7 @@
 #include "sfml_game/TileMapEntity.h"
 #include "PlayerEntity.h"
 #include "DungeonMapEntity.h"
+#include "MiniMapEntity.h"
 #include "EnemyEntity.h"
 #include "DoorEntity.h"
 #include "GameFloor.h"
@@ -69,6 +70,11 @@ const std::string inputKeyString[NumberKeys] =
   "key_fire"
 };
 
+// TODO: more players, multiple joysticks
+const int NB_PLAYERS_MAX = 2;
+
+
+
 /** Credits: coder */
 const std::string creditsCode[]  =
 {
@@ -114,6 +120,9 @@ struct parameterStruct
   bool vsync;                 /*!< monitor vsync (false = disabled) */
   bool bloodSpread;           /*!< blood spread (false = disabled) */
   bool fullscreen;            /*!< full screen (false = disabled) */
+  bool pauseOnFocusLost;      /*!< pause on focus lost (false = disabled) */
+  bool particlesBatching;
+  bool lowParticles;
   bool displayBossPortrait;
   std::string playerName;     /*!< player name */
 };
@@ -122,6 +131,42 @@ struct structPotionMap
 {
   enumItemType effect;
   bool known;
+};
+
+struct structStats
+{
+  int hpIni;
+  int hpMax;
+  int hpEnd;
+  int hpMaxEnd;
+  int hurtCounter;
+  int healCounter;
+  int hpLost;
+  int hpHeal;
+  int dam;
+  int goldIni;
+};
+
+enum EnumScoreBonus
+{
+  BonusSecret,
+  BonusChallenge,
+  BonusPerfect,
+  BonusTime,
+  BonusPossession,
+};
+
+enum EnumButtonType
+{
+  ButtonConsumable,
+  ButtonShotType,
+};
+
+struct ButtonStruct
+{
+  sf::IntRect zone;
+  EnumButtonType type;
+  int index;
 };
 
 /*! \class WitchBlastGame
@@ -329,7 +374,9 @@ public:
    *  \param yShadow : offset of the shadow (y)
    *  \param maxWidth : max width of the text image (0 = no limit)
    */
-  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth);
+  void write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0);
+
+  void writeGraphic(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0);
 
   /*!
    *  \brief Save the game
@@ -482,6 +529,12 @@ public:
   void pauseMusic();
   void resumeMusic();
 
+  void saveStats();
+  void addHurtingStat(int hpLost);
+  void addHealingStat(int hpHeal);
+
+  void gainMultiplayerPower();
+
 protected:
   /*!
    *  \brief Rendering method
@@ -524,6 +577,9 @@ private:
   // game play
   int level;                  /*!< Level (floor) */
   int score;                  /*!< score (calculated at the end of the game) */
+  int scoreDisplayed;
+  std::string scoreBonus;
+  float scoreBonusTimer;
   int bodyCount;              /*!< killed monsters (calculated at the end of the game) */
   int challengeLevel;         /*!< Level (challenge) */
   int secretsFound;
@@ -538,14 +594,17 @@ private:
   int killedEnemies[NB_ENEMY];
   int loopCounter;
   float endingTimer;        /*!< Counter before end of won game */
+  bool isBonusTimeAdded;
+  int nbPlayers;
 
   // game objects
   PlayerEntity* player;             /*!< Pointer to the player entity */
   DungeonMapEntity* dungeonEntity;  /*!< TileMap of the room (main game board) + blood, items, etc...*/
-  TileMapEntity* miniMapEntity;
+  MiniMapEntity* miniMapEntity;
   // displaying objects
   DoorEntity* doorEntity[4];  /*!< Pointers to the door graphical entity */
   sf::Font font;              /*!< The font used for displaying text */
+  sf::Font graphicsFont;      /*!< The font used for displaying "medieval" text */
   sf::Text myText;            /*!< The text to be displayed */
   sf::Sprite introScreenSprite;
   sf::Sprite titleSprite;
@@ -557,8 +616,10 @@ private:
     sf::Sprite shotsSprite;     /*!< A simple sprite for the available shot types (displayed on the HUD) */
     sf::Sprite topLayer;
     sf::Sprite msgBoxSprite;
-    sf::Sprite iconSprite;
     sf::Sprite mapBgSprite;
+    sf::Sprite bagSprite;
+    sf::Sprite pauseSprite;
+    sf::Sprite numberSprite;
   } uiSprites;
 
   struct lifeBarStruct
@@ -671,6 +732,9 @@ private:
   JoystickInputStruct joystickInput[NumberKeys];
 
   std::string scoreSaveFile;
+
+  structStats statsData;
+  std::string statsStr;
 
   /*!
    *  \brief Starts the game
@@ -822,6 +886,7 @@ private:
   void renderGame();
   void renderHud();
   void renderLifeBar();
+  void renderScore();
   void renderMessages();
   void renderBossPortrait();
 
@@ -868,9 +933,7 @@ private:
   /*!
    *  \brief Render the scores screen
    */
-  void renderHiScores();
-
-  void renderScores(std::vector <StructScore> scoresToRender, std::string title);
+  void renderScores(std::vector <StructScore> scoresToRender, std::string title, bool blinkingName);
 
   /** Menu keys enum
    *  Identify the various keys of the menu.
@@ -1060,17 +1123,18 @@ private:
   bool presentItems[NUMBER_EQUIP_ITEMS];
   void resetPresentItems();
 
-  bool isPressing(inputKeyEnum k, bool oneShot);
-  bool getPressingState(inputKeyEnum k);
+  bool isPressing(int p, inputKeyEnum k, bool oneShot);
+  bool getPressingState(int p, inputKeyEnum k);
   void updateActionKeys();
 
   struct ActionKeyStruct
   {
     bool isPressed;
     bool isTriggered;
-  } actionKey[NumberKeys];
+  };
+  ActionKeyStruct actionKey[NB_PLAYERS_MAX][NumberKeys];
 
-  bool isInputPressed[NumberKeys];
+  bool isInputPressed[NB_PLAYERS_MAX][NumberKeys];
 
   bool gameFromSaveFile;
 
@@ -1087,6 +1151,12 @@ private:
 
   std::map<enumItemType, structPotionMap> potionMap;
   void randomizePotionMap();
+
+  void addBonusScore(EnumScoreBonus bonusType, int points);
+  sf::Vector2i levelStrPosition;
+
+  std::vector<ButtonStruct> buttons;
+  void tryToClick(int xMouse, int yMouse, int mouseButton);
 };
 
 /*!

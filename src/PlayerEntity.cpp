@@ -56,6 +56,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   rageFireDelay = 1.0f;
   invincibleDelay = -1.0f;
   divineInterventionDelay = -1.0f;
+  showCone = false;
   fireAnimationDelay = -1.0f;
   fireAnimationDelayMax = 0.4f;
   spellAnimationDelay = -1.0f;
@@ -146,6 +147,15 @@ void PlayerEntity::moveTo(float newX, float newY)
   {
     fairies[i]->setX(fairies[i]->getX() + dx);
     fairies[i]->setY(fairies[i]->getY() + dy);
+    // Keep fairies on screen
+    if (fairies[i]->getX() < 0)
+      fairies[i]->setX(0);
+    else if (fairies[i]->getX() > MAP_WIDTH * TILE_WIDTH)
+      fairies[i]->setX(MAP_WIDTH * TILE_WIDTH);
+    if (fairies[i]->getY() < 0)
+      fairies[i]->setY(0);
+    else if (fairies[i]->getY() > MAP_HEIGHT * TILE_HEIGHT)
+      fairies[i]->setY(MAP_HEIGHT * TILE_HEIGHT);
   }
 }
 
@@ -167,7 +177,7 @@ float PlayerEntity::getPercentFireDelay()
   else return (1.0f - currentFireDelay / fireDelay);
 }
 
-float PlayerEntity::getLightCone()
+float PlayerEntity::getFadingDivinity(bool showCone)
 {
   if (playerStatus == playerStatusPraying)
   {
@@ -178,7 +188,25 @@ float PlayerEntity::getLightCone()
       result = (WORSHIP_DELAY - statusTimer) * 4;
     return result;
   }
-  else if (divineInterventionDelay > 0.0f)
+
+  if (!this->showCone && showCone) return -1.0f;
+  if (divineInterventionDelay <= 0.0f) return -1.0f;
+
+  if (!this->showCone)
+  {
+    if (int(age * 12) % 2 == 0) return 1.0f;
+    else return 0.3f;
+  }
+  else if (playerStatus == playerStatusPraying)
+  {
+    float result = 1.0f;
+    if (statusTimer < 0.25f)
+      result = 4 * statusTimer;
+    else if (statusTimer > WORSHIP_DELAY - 0.25f)
+      result = (WORSHIP_DELAY - statusTimer) * 4;
+    return result;
+  }
+  else
   {
     float result = 1.0f;
     if (divineInterventionDelay < 0.25f)
@@ -190,7 +218,6 @@ float PlayerEntity::getLightCone()
 
     return result;
   }
-  else return -1.0f;
 }
 
 float PlayerEntity::getPercentSpellDelay()
@@ -216,6 +243,11 @@ void PlayerEntity::setLostHp(int level, int n)
 {
   if (level >= 1 && level <= LAST_LEVEL)
     lostHp[level - 1] = n;
+}
+
+int PlayerEntity::getDamage()
+{
+  return fireDamages;
 }
 
 bool PlayerEntity::isPoisoned()
@@ -307,6 +339,11 @@ void PlayerEntity::setLeavingLevel()
   }
 }
 
+float PlayerEntity::getFireRate()
+{
+  return 1.0f / fireDelay;
+}
+
 void PlayerEntity::pay(int price)
 {
   gold -= price;
@@ -326,7 +363,7 @@ void PlayerEntity::acquireItemAfterStance()
     // familiar
     if (items[acquiredItem].familiar != FamiliarNone)
     {
-      setEquiped(acquiredItem - FirstEquipItem, true);
+      setEquipped(acquiredItem - FirstEquipItem, true);
       game().proceedEvent(EventGetFamiliar);
     }
 
@@ -1600,16 +1637,19 @@ bool* PlayerEntity::getEquipment()
   return equip;
 }
 
-void PlayerEntity::setEquiped(int item, bool toggleEquipped)
+void PlayerEntity::setEquipped(int item, bool toggleEquipped, bool isFairyPlayer)
 {
   equip[item] = toggleEquipped;
   if (toggleEquipped && items[FirstEquipItem + item].familiar > FamiliarNone)
   {
     FairyEntity* fairy = new FairyEntity(x - 50.0f + rand() % 100,
                                          y - 50.0f + rand() % 100,
-                                         items[FirstEquipItem + item].familiar);
+                                         items[FirstEquipItem + item].familiar,
+                                         isFairyPlayer);
     fairies.push_back(fairy);
-    if (fairies.size() == 3) game().registerAchievement(AchievementFairies);
+    int nbFamiliarFairies = 0;
+    for (auto fairy : fairies) if (!fairy->isPlayerControlled()) nbFamiliarFairies++;
+    if (nbFamiliarFairies == 3) game().registerAchievement(AchievementFairies);
   }
   computePlayer();
 }
@@ -1976,6 +2016,8 @@ int PlayerEntity::hurt(StructHurt hurtParam)
         triggerDivinityAfter();
       }
 
+      game().addHurtingStat(oldHp - hp);
+
       return true;
     }
   }
@@ -2121,11 +2163,12 @@ void PlayerEntity::dropConsumables(int n)
 {
   if (n < 0 || n >= MAX_SLOT_CONSUMABLES) return;
   if (playerStatus != playerStatusPlaying) return;
+  if (consumable[n] < 0) return;
 
   ItemEntity* newItem = new ItemEntity((enumItemType)(consumable[n]), x, y);
   newItem->setVelocity(Vector2D(100.0f + rand()% 250));
   newItem->setViscosity(0.96f);
-  newItem->setAge(-10.0f);
+  newItem->setAge(-5.0f);
   newItem->startsJumping();
 
   consumable[n] = -1;
@@ -2359,6 +2402,7 @@ void PlayerEntity::onClearRoom()
     {
       divineInterventionDelay = WORSHIP_DELAY / 2;
       isRegeneration = true;
+      showCone = true;
       if (divinity.level >= 5) heal(4);
       else if (divinity.level >= 4) heal(3);
       else if (divinity.level >= 3) heal(2);
@@ -2664,6 +2708,17 @@ void PlayerEntity::registerSpecialShot(int item)
   }
 }
 
+void PlayerEntity::selectShotType(int n)
+{
+  if (n == specialShotIndex) return;
+  if (n > 0 && getShotType(n) == ShotTypeStandard) return;
+
+  specialShotIndex = n;
+  initShotType();
+  SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+  computePlayer();
+}
+
 void PlayerEntity::selectNextShotType()
 {
   int index = specialShotIndex + 1;
@@ -2848,6 +2903,7 @@ void PlayerEntity::donate(int n)
       new ItemEntity(itemType, xItem, yItem);
       SoundManager::getInstance().playSound(SOUND_OM);
       divineInterventionDelay = WORSHIP_DELAY / 2;
+      showCone = true;
       isRegeneration = false;
       for (int i = 0; i < 8; i++)
       {
@@ -3045,16 +3101,19 @@ void PlayerEntity::divineRepulse()
 
 void PlayerEntity::divineProtection(float duration, float armorBonus)
 {
-  setSpecialState(DivineStateProtection, true, 4.0f, 0.8f, 0.0f);
+  setSpecialState(DivineStateProtection, true, duration, armorBonus, 0.0f);
 }
 
 void PlayerEntity::divineHeal(int hpHealed)
 {
+  int oldHp = hp;
   hp += hpHealed;
   if (hp > hpMax) hp = hpMax;
   specialState[SpecialStatePoison].active = false;
   divineInterventionDelay = WORSHIP_DELAY;
+  showCone = true;
   isRegeneration = false;
+  game().addHealingStat(hp - oldHp);
 }
 
 bool PlayerEntity::triggerDivinityBefore()
@@ -3084,7 +3143,7 @@ bool PlayerEntity::triggerDivinityBefore()
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
       divineHeal(hpMax / 3);
-      if (r == 1) divineProtection(10.0f, 0.8f);
+      if (r == 1) divineProtection(8.0f, 0.8f);
       else divineFury();
       game().makeColorEffect(X_GAME_COLOR_RED, 0.45f);
       return true;
@@ -3114,7 +3173,7 @@ bool PlayerEntity::triggerDivinityBefore()
     case DivinityStone:
     {
       int r = rand() % 2;
-      divineProtection(12.0f, 0.5f);
+      divineProtection(10.0f, 0.75f);
 
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
@@ -3214,7 +3273,8 @@ void PlayerEntity::addPiety(int n)
   if (divinity.level > oldLevel)
   {
     SoundManager::getInstance().playSound(SOUND_OM);
-    divineInterventionDelay = WORSHIP_DELAY / 2;
+    divineInterventionDelay = WORSHIP_DELAY * 1.5f;
+    showCone = false;
     isRegeneration = false;
     pietyLevelUp();
     computePlayer();
@@ -3687,7 +3747,9 @@ void PlayerEntity::castLightning()
   for (int i = 0; i < nbBolts ; i++)
   {
     BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeLightning, 0);
-    bolt->setDamages(i == 0 ? 20 : 10);
+    int boltDamage = game().getLevel() + 2;
+    if (i == 0) boltDamage += 10;
+    bolt->setDamages(boltDamage);
     float shotAngle = rand() % 360;
     bolt->setVelocity(Vector2D(400 * cos(shotAngle), 400 * sin(shotAngle)));
     bolt->setViscosity(1.0f);

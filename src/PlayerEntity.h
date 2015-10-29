@@ -161,7 +161,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  \param item : the equip item ID
      *  \param toggleEquipped : True if the item has to be equipped
      */
-    void setEquiped(int item, bool toggleEquipped);
+    void setEquipped(int item, bool toggleEquipped, bool isFairyPlayer = false);
 
     divinityStruct getDivinity();
     int getPiety();
@@ -182,6 +182,8 @@ class PlayerEntity : public BaseCreatureEntity
      *  Used when the player is leaving a level.
      */
     void setLeavingLevel();
+
+    float getFireRate();
 
      /*!
      *  \brief returns if the player can move or not
@@ -236,7 +238,7 @@ class PlayerEntity : public BaseCreatureEntity
      *
      *  \return : the percentage (between 0.0f for empty to 1.0 for full) or -1.0f if no light cone
      */
-    float getLightCone();
+    float getFadingDivinity(bool showCone);
 
     /*!
      *  \brief called when the player get an item
@@ -451,6 +453,7 @@ class PlayerEntity : public BaseCreatureEntity
      *  Select the next shot type.
      */
     void selectNextShotType();
+    void selectShotType(int n);
 
     /*!
      *  \brief accessor on the fairies number
@@ -524,6 +527,7 @@ class PlayerEntity : public BaseCreatureEntity
     void dropConsumables(int n);
     void tryToConsume(int n);
     void consume(enumItemType item);
+    int getDamage();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
@@ -557,6 +561,7 @@ class PlayerEntity : public BaseCreatureEntity
     int criticalChance;
     float invincibleDelay;
     float divineInterventionDelay;
+    bool showCone;
     bool isRegeneration;
     bool isFairyTransmuted;
     int lostHp[LAST_LEVEL];

@@ -11,8 +11,7 @@ SpiderWebEntity::SpiderWebEntity(float x, float y, bool isFromPlayer)
   : EnemyEntity (ImageManager::getInstance().getImage(IMAGE_SPIDER_WEB), x, y)
 {
   imagesProLine = 20;
-  if (isFromPlayer) type = ENTITY_ENEMY_NC;
-  else type = ENTITY_ENEMY_INVOCATED;
+  type = ENTITY_ENEMY_NC;
   enemyType = EnemyTypeSpiderWeb;
   movingStyle = movFlying;
   bloodColor = BloodNone; // web don't bleed
@@ -95,7 +94,11 @@ void SpiderWebEntity::collideWall()
 void SpiderWebEntity::collideWithEnemy(EnemyEntity* enemyEntity)
 {
   if (enemyEntity->getEnemyType() != EnemyTypeSpiderLittle_invocated
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderLittle
       && enemyEntity->getEnemyType() != EnemyTypeSpiderGiant
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderTarantula
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderTarantula_invocated
+      && enemyEntity->getEnemyType() != EnemyTypeSpiderEgg
       && enemyEntity->getEnemyType() != EnemyTypeSpiderEgg_invocated
       && enemyEntity->getEnemyType() != EnemyTypeSpiderWeb)
   {

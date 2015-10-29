@@ -17,7 +17,7 @@ Web: https://github.com/Cirrus-Minor/witchblast
 Install
 -------
 
-If there is no binary for your version, you have to compile the application. You will need the library SFML, minimal version 2.1.
+If there is no binary for your version, you have to compile the application. You will need the library SFML, minimal version 2.2.
 A CMake file is available.
 
 
@@ -67,6 +67,7 @@ Seby: code and music
 Pierre "dejam0rt" Baron: 2D art
 Le Guitariste Du Nord: Music - https://soundcloud.com/leguitaristedunord
 R0d: particles system and multilingual support coding
+Cong: Multiplayer mode and other contributions (https://github.com/cxong)
 
 Licenses
 --------
@@ -81,13 +82,45 @@ Vetea (for the v0.4.0 2D redesign)
 Sideous and Portoss01 (they provide me 2D art in earlier versions)
 Billx (who suggested me the title "Witch Blast" + English corrections)
 Mika Attila (for his contribution during the development)
-Cong (for his contribution during the development)
 Geheim (for the German translation)
 Achpile (for the Russian version and his help in the code)
 AFS (for the Spanish translation)
 
 Changes
 -------
+Next release
+- ADD 2 players mode
+- ADD Score display in game
+- ADD New game and pause UI
+- ADD Player scores are shining in score screens
+- ADD German, Spanish and Russian translations
+- ADD Mouse support for using/dropping consumables and switching bolt type
+- ADD Config option to turn off the pause while losing the focus
+- ADD Config option to turn off sprite batching of particles
+- ADD Config option to decrease lifetime of particles (for old computers)
+- ADD Potion description in the pause screen
+- MOD Sausages can now be killed in one shot (standard damage)
+- MOD Lightning spell deals progressive damage (5 dam in level 3, 6 in level 4, etc...)
+- MOD Increase of the divine protection duration
+- MOD Effect cooldown are now in the upper part of the interface
+- MOD Cooldown to pick up a potion we've dropped is now 5 seconds
+- MOD Explosive barrel is now red with an explosion symbol
+- MOD Some barrels are damaged at generation
+- MOD "Bomberman"-type rooms have always barrels at level 4 and above now
+- MOD Green blood and slime corpses have been desaturated for a better game visibility
+- MOD Level up divinity effect has been changed (was too close of the divinity intervention effect)
+- FIX Inputs are processed while the game window has no focus
+- FIX Doors don't open when there is still spider webs in room
+- FIX Spider webs slow down some spiders
+- FIX Grid on walls
+- FIX The player effects (poison, slow, damage up, etc...) are not saved
+- FIX Bag appears only when the player has boots
+- FIX No door to secret room on loaded game
+- FIX Item order in the inventory
+- FIX It's possible to let the player name blank
+- FIX It's possible to drop potions we don't have
+- FIX Closing the game in the pause screen don't save the game
+
 v0.7
 - ADD Destructible tiles
 - ADD Potions

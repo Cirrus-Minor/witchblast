@@ -62,6 +62,8 @@ void RatEntity::animate(float delay)
       compute(true);
     }
 
+    checkNextFacing(delay);
+
     frame = ((int)(age * 7.0f)) % 4;
     if (frame == 3) frame = 1;
     if (facingDirection == 4 || facingDirection == 6) frame += 3;
@@ -98,25 +100,25 @@ void RatEntity::compute(bool turn)
   case 0:
     acceleration.x = 0;
     acceleration.y = -accelerationAbs;
-    facingDirection = 8;
+    nextFacingDirection = 8;
     break;
 
   case 1:
     acceleration.x = accelerationAbs;
     acceleration.y = 0;
-    facingDirection = 6;
+    nextFacingDirection = 6;
     break;
 
   case 2:
     acceleration.x = 0;
     acceleration.y = accelerationAbs;
-    facingDirection = 2;
+    nextFacingDirection = 2;
     break;
 
   case 3:
     acceleration.x = -accelerationAbs;
     acceleration.y = 0;
-    facingDirection = 4;
+    nextFacingDirection = 4;
     break;
   }
 }

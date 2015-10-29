@@ -8,15 +8,47 @@
 class FairyEntity : public SpriteEntity
 {
   public:
-    FairyEntity(float x, float y, enumFamiliar fairyType);
+    FairyEntity(float x, float y, enumFamiliar fairyType, bool isPlayerControlled = false);
     virtual void animate(float delay);
 
-    void fire(int dir);
+    bool isPlayerControlled();
+    /*!
+     *  \brief Moves the fairy in the given direction
+     *
+     *  Moves the fairy in the given direction.
+     *
+     *  \param direction : direction of the new move. Numeric pad, diagonals included : 4 = left, 8 = north, 7 = north-west...
+     */
+    void move(int direction);
+
+    void fire(int dir, bool bySelf = false);
+
+    void gainNewPower();
+
+    enum PowerUp
+    {
+      PowUpDamage,
+      PowUpDamage2,
+      PowUpFireRate,
+      PowUpFireRate2,
+      PowUpSpeed,
+      PowUpDouble,
+      PowUpCritical,
+
+      PowUpTypeFire,
+      PowUpTypeIce,
+      PowUpTypePoison,
+      PowUpTypeStone,
+
+      LAST_POWER_UP
+    };
 
   protected:
 
   private:
     PlayerEntity* parentEntity;
+    bool isPlayer;
+    bool isFiring;
     float fireDelay;
     float teleportDelay;
     int facingDirection;
@@ -25,10 +57,16 @@ class FairyEntity : public SpriteEntity
     float fairyFireDelay;
     int fairyDamages;
     unsigned int shotLevel;
+    float creatureSpeed;
 
     void computeFacingDirection();
     void checkCollisions();
 
     void tryToFire();
+
+    // Multiplayer
+    bool power[LAST_POWER_UP];
+
+    void compute();
 };
-#endif // MAGNETENTITY_H
+#endif // FAIRYENTITY_H

@@ -582,7 +582,7 @@ const itemStuct items[NUMBER_ITEMS] =
   },
   {
     ItemBag, "item_bag", "item_bag_desc",
-    20, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, ItemLeatherBoots, ShotTypeStandard, SpellNone, false
+    20, true, FamiliarNone, true, true, true, 2, RarityUncommon, false, -1, ShotTypeStandard, SpellNone, false
   },
   {
     ItemBookAlchemy, "item_book_alchemy", "item_book_alchemy_desc",
@@ -765,6 +765,9 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_FAIRY_STONE,
   EQUIP_PET_SLIME,
 
+  // others
+  EQUIP_MERCHANT,
+
   // spells
   EQUIP_SPELL_TELEPORT,
   EQUIP_SPELL_SLIME_EXPLODE,
@@ -778,9 +781,7 @@ const std::vector<item_equip_enum> sortedEquipement =
   EQUIP_SPELL_TIME,
   EQUIP_SPELL_LIGHTNING,
 
-  // others
-  EQUIP_MERCHANT,
-
+  // level items
   EQUIP_BOSS_KEY,
   EQUIP_FLOOR_MAP,
   EQUIP_ALCOHOL,
@@ -825,6 +826,9 @@ const std::vector<item_equip_enum> scoreEquipement =
   EQUIP_BOOK_TRIPLE_QUICK,
   EQUIP_RAPID_SHOT,
 
+  // others
+  EQUIP_MERCHANT,
+
   // spells
   EQUIP_SPELL_TELEPORT,
   EQUIP_SPELL_SLIME_EXPLODE,
@@ -838,9 +842,7 @@ const std::vector<item_equip_enum> scoreEquipement =
   EQUIP_SPELL_TIME,
   EQUIP_SPELL_LIGHTNING,
 
-  // others
-  EQUIP_MERCHANT,
-
+  // level items
   EQUIP_BOSS_KEY,
   EQUIP_FLOOR_MAP,
   EQUIP_ALCOHOL,

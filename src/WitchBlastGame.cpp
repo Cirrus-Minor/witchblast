@@ -60,12 +60,13 @@
 #include "TextMapper.h"
 #include "SlimePetEntity.h"
 #include "SausageEntity.h"
+#include "FairyEntity.h"
 
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <ctime>
-
+#include <iomanip>
 #include <algorithm>
 
 //#define LEVEL_TEST_MODE
@@ -76,6 +77,7 @@
 
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const float ENDING_TIMER = 8.0f;
+const float BONUS_TIMER = 4.0f;
 const unsigned int ACHIEV_LINES = 3;
 
 const int VolumeModifier = 55;
@@ -322,7 +324,7 @@ WitchBlastGame::WitchBlastGame()
     "media/hurt_impact.png",
     "media/interface.png",     "media/hud_shots.png",
     "media/explosion.png",     "media/keys_qwer.png",
-    "media/keys_azer.png",     "media/message_icons.png",
+    "media/keys_azer.png",
     "media/night.png",         "media/title.png",
     "media/overlay_00.png",    "media/light_cone.png",
     "media/divinity.png",
@@ -341,6 +343,9 @@ WitchBlastGame::WitchBlastGame()
     "media/shadows_small.png",    "media/doors.png",
     "media/destroyable_objects.png",  "media/hall_of_fame.png",
     "media/lightning.png",
+    "media/win_seal.png",         "media/hof_win_seal.png",
+    "media/bag.png",              "media/ui_pause.png",
+    "media/score_font.png",
   };
 
   for (const char *const filename : images)
@@ -414,7 +419,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/barrel_hit.ogg",     "media/sound/barrel_smash.ogg",
     "media/sound/secret.ogg",         "media/sound/scroll.ogg",
     "media/sound/tic_tac.ogg",        "media/sound/bottle.ogg",
-    "media/sound/thunder.ogg",
+    "media/sound/thunder.ogg",        "media/sound/bonus_score.ogg",
   };
 
   // AA in fullscreen
@@ -434,6 +439,7 @@ WitchBlastGame::WitchBlastGame()
   {
     myText.setFont(font);
   }
+  graphicsFont.loadFromFile("media/Caudex-Bold.ttf");
 
   miniMap = NULL;
   currentMap = NULL;
@@ -457,12 +463,15 @@ WitchBlastGame::WitchBlastGame()
 
   uiSprites.shotsSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HUD_SHOTS));
   uiSprites.topLayer.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_TOP_LAYER));
-  uiSprites.topLayer.setPosition(0, 602);
+  uiSprites.topLayer.setPosition(0, SCREEN_HEIGHT - 124);
   uiSprites.msgBoxSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MESSAGE));
-  uiSprites.iconSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MESSAGE_ICONS));
-  uiSprites.iconSprite.setPosition(12, 614);
   uiSprites.mapBgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_MAP_BACKGROUND));
   uiSprites.mapBgSprite.setPosition(342, 23);
+  uiSprites.pauseSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_PAUSE));
+  uiSprites.pauseSprite.setPosition(SCREEN_WIDTH - 453, 0);
+  uiSprites.bagSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_BAG));
+  uiSprites.bagSprite.setPosition(116, 606);
+  uiSprites.numberSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_SCORE_FONT));
 
   introScreenSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
   titleSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_TITLE));
@@ -479,6 +488,24 @@ WitchBlastGame::WitchBlastGame()
 
   fairySpriteOffsetY = 0;
   if (isAdvanced()) fairySpriteOffsetY = 72 + 72 * (rand() % 4);
+
+  // init keys
+  for (int p = 0; p < NB_PLAYERS_MAX; p++)
+  {
+    for (unsigned int i = 0; i < NumberKeys; i++)
+    {
+      actionKey[p][i].isPressed = false;
+      actionKey[p][i].isTriggered = false;
+    }
+  }
+  nbPlayers = 1;
+
+  // click zones
+  for (int i = 0; i < 4; i++)
+    buttons.push_back(ButtonStruct { sf::IntRect(161 + 36 * i, 615, 32, 32), ButtonConsumable, i });
+
+  for (int i = 0; i < 5; i++)
+    buttons.push_back(ButtonStruct { sf::IntRect(124 + 55 * i, 655, 48, 48), ButtonShotType, i });
 }
 
 void WitchBlastGame::enableAA(bool enable)
@@ -570,6 +597,34 @@ float WitchBlastGame::getDeltaTime()
   return deltaTime;
 }
 
+void WitchBlastGame::addHurtingStat(int hpLost)
+{
+  statsData.hurtCounter ++;
+  statsData.hpLost += hpLost;
+}
+
+void WitchBlastGame::addHealingStat(int hpHeal)
+{
+  statsData.healCounter ++;
+  statsData.hpHeal += hpHeal;
+}
+
+void WitchBlastGame::saveStats()
+{
+  statsData.hpEnd = player->getHp();
+  statsData.hpMaxEnd = player->getHpMax();
+  statsData.dam = player->getDamage();
+  std::ostringstream oss;
+  oss << "{";
+  oss << int(gameTime);
+  oss << "(" << statsData.hpIni << "/" << statsData.hpMax << "->(" << statsData.hpEnd << "/" << statsData.hpMaxEnd << ")[" << statsData.dam << "]";
+  oss << "(" << statsData.hurtCounter << "x[" << statsData.hpLost << "])";
+  oss << "(" << statsData.healCounter << "x[" << statsData.hpHeal << "])";
+  oss << "$" << player->getGold();
+  oss << "}";
+  statsStr += oss.str();
+}
+
 float WitchBlastGame::getGameTime()
 {
   return gameTime;
@@ -596,7 +651,7 @@ void WitchBlastGame::onUpdate()
     else
     {
       EntityManager::getInstance().animate(deltaTime);
-      if (isPressing(KeyTimeControl, false))
+      if (isPressing(0, KeyTimeControl, false))
       {
         EntityManager::getInstance().animate(deltaTime);
         SoundManager::getInstance().playSound(SOUND_VIB, false);
@@ -618,6 +673,7 @@ void WitchBlastGame::onUpdate()
             if (player->getPlayerStatus() == PlayerEntity::playerStatusGoingNext)
             {
               level++;
+              saveStats();
               startNewLevel();
             }
             else
@@ -647,6 +703,11 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
 {
   gameState = gameStateInit;
   level = 1;
+  score = 0;
+  bodyCount = 0;
+  scoreDisplayed = 0;
+  scoreBonus = "";
+  scoreBonusTimer = -1.0f;
   challengeLevel = 1;
   secretsFound = 0;
   gameTime = 0.0f;
@@ -654,6 +715,7 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   scoreSaveFile = "";
   interaction.active = false;
   endingTimer = -1.0f;
+  statsStr = "";
 
   // cleaning all entities
   EntityManager::getInstance().clean();
@@ -683,14 +745,14 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
   // key symbol on the interface
   uiSprites.keySprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
   uiSprites.keySprite.setTextureRect(sf::IntRect(ITEM_WIDTH * EQUIP_BOSS_KEY, 0,  ITEM_WIDTH, ITEM_HEIGHT));
-  uiSprites.keySprite.setPosition(737, 612);
+  uiSprites.keySprite.setPosition(582, 612);
 
   miniMap = new GameMap(FLOOR_WIDTH, FLOOR_HEIGHT);
   // minimap on the interface
-  miniMapEntity = new TileMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 19, 15, 10);
+  miniMapEntity = new MiniMapEntity(ImageManager::getInstance().getImage(IMAGE_MINIMAP), miniMap, 19, 15, 10);
   miniMapEntity->setTileBox(20, 16);
-  miniMapEntity->setX(800);
-  miniMapEntity->setY(645);
+  miniMapEntity->setX(705);
+  miniMapEntity->setY(610);
   miniMapEntity->setZ(10001.0f);
 
   // doors
@@ -718,11 +780,31 @@ void WitchBlastGame::startNewGame(bool fromSaveFile, int startingLevel)
     // the player
     player = new PlayerEntity((TILE_WIDTH * MAP_WIDTH * 0.5f),
                               (TILE_HEIGHT * MAP_HEIGHT * 0.5f));
+    // Add a fairy - co op players
+    if (nbPlayers == 2)
+    {
+      int r = rand() % 10;
+      int hp = 12;
+      int fairy = ItemFairy - FirstEquipItem;
+      switch (r)
+      {
+        case 0: fairy = ItemFairyIce - FirstEquipItem; break;
+        case 1: fairy = ItemFairyStone - FirstEquipItem; break;
+        case 2: fairy = ItemFairyPoison - FirstEquipItem; break;
+        case 3: fairy = ItemFairyFire - FirstEquipItem; break;
+      }
+      player->setEquipped(fairy, true, true);
+      player->setHpMax(hp);
+      player->setHp(hp);
+    }
     resetKilledEnemies();
     randomizePotionMap();
 
     if (startingLevel > 1)
     {
+      player->acquireItem(ItemScrollRevelation);
+      player->acquireItem(enumItemType(ItemPotion01 + rand() % NUMBER_UNIDENTIFIED));
+
       for (int i = 1; i < startingLevel; i++)
       {
         level = i;
@@ -871,6 +953,14 @@ void WitchBlastGame::playLevel(bool isFight)
   text->setWeight(-36.0f);
   text->setZ(1000);
   text->setColor(TextEntity::COLOR_FADING_WHITE);
+
+  statsData.goldIni = player->getGold();
+  statsData.hpIni = player->getHp();
+  statsData.hpMax = player->getHpMax();
+  statsData.hpLost = 0;
+  statsData.hpHeal = 0;
+  statsData.hurtCounter = 0;
+  statsData.healCounter = 0;
 }
 
 void WitchBlastGame::prepareIntro()
@@ -1006,7 +1096,7 @@ void WitchBlastGame::updateIntro()
       if (event.key.code == sf::Keyboard::Escape) stopDemo = true;
     }
   }
-  if (isPressing(KeyFireDown, true)) stopDemo = true;
+  if (isPressing(0, KeyFireDown, true)) stopDemo = true;
 
   if (stopDemo)
   {
@@ -1053,7 +1143,7 @@ void WitchBlastGame::updateRunningGame()
     // Close window : exit
     if (event.type == sf::Event::Closed)
     {
-      if (gameState == gameStatePlaying && !player->isDead()) saveGame();
+      if ((gameState == gameStatePlaying && !player->isDead()) || gameState == gameStatePlayingPause) saveGame();
       saveGameData();
       app->close();
     }
@@ -1069,6 +1159,20 @@ void WitchBlastGame::updateRunningGame()
     if (event.type == sf::Event::MouseWheelMoved)
     {
       if (gameState == gameStatePlaying) player->selectNextShotType();
+    }
+
+    if (event.type == sf::Event::MouseButtonPressed)
+    {
+      if (gameState == gameStatePlaying)
+      {
+        sf::Vector2i mousePositionInWindow = sf::Mouse::getPosition(*app);
+        sf::Vector2f mousePosition = app->mapPixelToCoords(mousePositionInWindow);
+
+        int mouseButton = 1;
+        if (event.mouseButton.button == sf::Mouse::Left) mouseButton = 0;
+
+        tryToClick(mousePosition.x, mousePosition.y, mouseButton);
+      }
     }
 
     if (event.type == sf::Event::KeyPressed)
@@ -1106,7 +1210,8 @@ void WitchBlastGame::updateRunningGame()
         }
         else
 #endif
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+            || sf::Keyboard::isKeyPressed(sf::Keyboard::RShift))
         {
           player->dropConsumables(event.key.code - sf::Keyboard::Num1);
         }
@@ -1293,9 +1398,6 @@ void WitchBlastGame::updateRunningGame()
     }
   }
 
-  if (event.type == sf::Event::LostFocus && !player->isDead())
-    gameState = gameStatePlayingPause;
-
   // POST EVENT
   if (escape)
   {
@@ -1305,7 +1407,7 @@ void WitchBlastGame::updateRunningGame()
     else if (gameState == gameStatePlayingDisplayBoss) gameState = gameStatePlaying;
   }
 
-  if ( (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) && !xGame[xGameTypeFade].active && isPressing(KeyFireDown, true))
+  if ( (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious) && !xGame[xGameTypeFade].active && isPressing(0, KeyFireDown, true))
   {
     if (player->getEndAge() < DEATH_CERTIFICATE_DELAY) player->setEndAge(DEATH_CERTIFICATE_DELAY);
     else backToMenu = true;
@@ -1313,19 +1415,19 @@ void WitchBlastGame::updateRunningGame()
 
   else if (gameState == gameStatePlayingPause)
   {
-    if (isPressing(KeyDown, true))
+    if (isPressing(0, KeyDown, true))
     {
       menuInGame.index++;
       if (menuInGame.index == menuInGame.items.size()) menuInGame.index = 0;
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
-    else if (isPressing(KeyUp, true))
+    else if (isPressing(0, KeyUp, true))
     {
       if (menuInGame.index == 0) menuInGame.index = menuInGame.items.size() - 1;
       else menuInGame.index--;
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
-    else if (isPressing(KeyFireDown, true))
+    else if (isPressing(0, KeyFireDown, true))
     {
       switch (menuInGame.items[menuInGame.index].id)
       {
@@ -1356,7 +1458,7 @@ void WitchBlastGame::updateRunningGame()
         break;
 
       case MenuSaveAndQuit:
-        saveGame();
+        if (currentMap->isCleared()) saveGame();
         backToMenu = true;
         break;
       }
@@ -1367,102 +1469,160 @@ void WitchBlastGame::updateRunningGame()
   {
     if (player->canMove()) player->setVelocity(Vector2D(0.0f, 0.0f));
 
-    if (isPressing(KeyLeft, false))
+    if (isPressing(0, KeyLeft, false))
     {
-      if (isPressing(KeyUp, false))
+      if (isPressing(0, KeyUp, false))
         player->move(7);
-      else if (isPressing(KeyDown, false))
+      else if (isPressing(0, KeyDown, false))
         player->move(1);
       else
         player->move(4);
     }
-    else if (isPressing(KeyRight, false))
+    else if (isPressing(0, KeyRight, false))
     {
-      if (isPressing(KeyUp, false))
+      if (isPressing(0, KeyUp, false))
         player->move(9);
-      else if (isPressing(KeyDown, false))
+      else if (isPressing(0, KeyDown, false))
         player->move(3);
       else
         player->move(6);
     }
-    else if (isPressing(KeyUp, false))
+    else if (isPressing(0, KeyUp, false))
     {
       player->move(8);
     }
-    else if (isPressing(KeyDown, false))
+    else if (isPressing(0, KeyDown, false))
     {
       player->move(2);
     }
 
-    if (isPressing(KeyInteract, true))
+    if (isPressing(0, KeyInteract, true))
     {
       if (!player->isDead() && interaction.active) player->interact(interaction.type, interaction.id);
     }
 
-    if (isPressing(KeyFireSelect, true))
+    if (isPressing(0, KeyFireSelect, true))
     {
       if (gameState == gameStatePlaying) player->selectNextShotType();
     }
 
-    if (isPressing(KeySpell, true))
+    if (isPressing(0, KeySpell, true))
     {
       if (gameState == gameStatePlaying) player->castSpell();
     }
 
     player->resetFireDirection();
 
-    if (isPressing(KeyFireLeft, false))
+    if (isPressing(0, KeyFireLeft, false))
       player->fire(4);
-    else if (isPressing(KeyFireRight, false))
+    else if (isPressing(0, KeyFireRight, false))
       player->fire(6);
-    else if (isPressing(KeyFireUp, false))
+    else if (isPressing(0, KeyFireUp, false))
       player->fire(8);
-    else if (isPressing(KeyFireDown, false))
+    else if (isPressing(0, KeyFireDown, false))
       player->fire(2);
     // alternative "one button" gameplay
-    else if (isPressing(KeyFire, false))
+    else if (isPressing(0, KeyFire, false))
     {
-      if (gameState == gameStatePlaying && isPressing(KeyFire, true))
+      if (gameState == gameStatePlaying && isPressing(0, KeyFire, true))
         firingDirection = player->getFacingDirection();
       player->fire(firingDirection);
     }
     // alternative "firing with the mouse" gameplay
     else if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
     {
-      sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
+      sf::Vector2i mousePositionInWindow = sf::Mouse::getPosition(*app);
+      sf::Vector2f mousePosition = app->mapPixelToCoords(mousePositionInWindow);
+
       int xm = mousePosition.x - player->getX();
       int ym = mousePosition.y - player->getY();
 
-      if (abs(xm) >= abs(ym))
+      if (mousePosition.x >= xOffset && mousePosition.x <= xOffset + GAME_WIDTH
+          && mousePosition.y >= yOffset && mousePosition.y <= yOffset + GAME_HEIGHT)
       {
-        if (xm > 0) player->fire(6);
-        else player->fire(4);
-      }
-      else
-      {
-        if (ym > 0) player->fire(2);
-        else player->fire(8);
+        if (abs(xm) >= abs(ym))
+        {
+          if (xm > 0) player->fire(6);
+          else player->fire(4);
+        }
+        else
+        {
+          if (ym > 0) player->fire(2);
+          else player->fire(8);
+        }
       }
     }
 
     // spell (right click)
     if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && (gameState == gameStatePlaying))
     {
-      sf::Vector2i mousePosition = sf::Mouse::getPosition(*app);
-      int xm = mousePosition.x - player->getX();
-      int ym = mousePosition.y - player->getY();
+      sf::Vector2i mousePositionInWindow = sf::Mouse::getPosition(*app);
+      sf::Vector2f mousePosition = app->mapPixelToCoords(mousePositionInWindow);
 
-      if (abs(xm) >= abs(ym))
+      if (mousePosition.x >= xOffset && mousePosition.x <= xOffset + GAME_WIDTH
+          && mousePosition.y >= yOffset && mousePosition.y <= yOffset + GAME_HEIGHT)
       {
-        if (xm > 0) player->setFacingDirection(6);
-        else player->setFacingDirection(4);
+        int xm = mousePosition.x - player->getX();
+        int ym = mousePosition.y - player->getY();
+
+        if (abs(xm) >= abs(ym))
+        {
+          if (xm > 0) player->setFacingDirection(6);
+          else player->setFacingDirection(4);
+        }
+        else
+        {
+          if (ym > 0) player->setFacingDirection(2);
+          else player->setFacingDirection(8);
+        }
+        player->castSpell();
       }
-      else
+    }
+
+    // Joystick control for fairy
+    if (nbPlayers == 2)
+    {
+      auto fairy = player->getFairy(0);
+      if (fairy)
       {
-        if (ym > 0) player->setFacingDirection(2);
-        else player->setFacingDirection(8);
+        fairy->setVelocity(Vector2D{0.0f, 0.0f});
+
+        if (isPressing(1, KeyLeft, false))
+        {
+          if (isPressing(1, KeyUp, false))
+            fairy->move(7);
+          else if (isPressing(1, KeyDown, false))
+            fairy->move(1);
+          else
+            fairy->move(4);
+        }
+        else if (isPressing(1, KeyRight, false))
+        {
+          if (isPressing(1, KeyUp, false))
+            fairy->move(9);
+          else if (isPressing(1, KeyDown, false))
+            fairy->move(3);
+          else
+            fairy->move(6);
+        }
+        else if (isPressing(1, KeyUp, false))
+        {
+          fairy->move(8);
+        }
+        else if (isPressing(1, KeyDown, false))
+        {
+          fairy->move(2);
+        }
+
+        if (isPressing(1, KeyFireLeft, false))
+          fairy->fire(4, true);
+        else if (isPressing(1, KeyFireRight, false))
+          fairy->fire(6, true);
+        else if (isPressing(1, KeyFireUp, false))
+          fairy->fire(8, true);
+        else if (isPressing(1, KeyFireDown, false))
+          fairy->fire(2, true);
       }
-      player->castSpell();
     }
 
     // message queue
@@ -1497,11 +1657,17 @@ void WitchBlastGame::updateRunningGame()
         player->setPlayerStatus(PlayerEntity::playerStatusVictorious);
         player->setVelocity(Vector2D(0, 0));
       }
+      else if (endingTimer <= 5.5f && !isBonusTimeAdded)
+      {
+        isBonusTimeAdded = true;
+        int timeScore = getTimeScore((int)(gameTime / 60.0f));
+        addBonusScore(BonusTime, timeScore);
+      }
     }
   }
   else if (gameState == gameStatePlayingDisplayBoss)
   {
-    if (isPressing(KeyFireDown, true)) gameState = gameStatePlaying;
+    if (isPressing(0, KeyFireDown, true)) gameState = gameStatePlaying;
   }
 
   onUpdate();
@@ -1546,6 +1712,8 @@ void WitchBlastGame::updateRunningGame()
         text->setZ(1200);
         text->setColor(TextEntity::COLOR_FADING_WHITE);
 
+        addBonusScore(BonusChallenge, getChallengeScore(challengeLevel));
+
         challengeLevel++;
         if (challengeLevel == 5) registerAchievement(AchievementChallenges);
         player->offerChallenge();
@@ -1555,7 +1723,7 @@ void WitchBlastGame::updateRunningGame()
 
   if (backToMenu)
   {
-    if (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+    if (nbPlayers == 1 && (player->isDead() || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious))
     {
       EntityManager::getInstance().clean();
 
@@ -1568,6 +1736,8 @@ void WitchBlastGame::updateRunningGame()
       introSprites[1]->setY(SCREEN_HEIGHT - 202);
 
       switchToMenu();
+      updateActionKeys();
+
       menuState = MenuStateHiScores;
 #ifdef ONLINE_MODE
       menuScoreIndex = 0;
@@ -1768,7 +1938,7 @@ void WitchBlastGame::renderHud()
   }
 
   // light cone ?
-  float fade = player->getLightCone();
+  float fade = player->getFadingDivinity(true);
   if (fade > 0.0f)
   {
     sf::Sprite cone;
@@ -1799,30 +1969,77 @@ void WitchBlastGame::renderHud()
   }
 }
 
+void WitchBlastGame::renderScore()
+{
+  if (scoreDisplayed < score - 300) scoreDisplayed += 100;
+  else if (scoreDisplayed < score) scoreDisplayed++;
+
+  float x = 24, y = 19;
+  int scoretemp = scoreDisplayed;
+  int n = scoretemp / 10000;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x , y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 10000;
+  n = scoretemp / 1000;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 17, y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 1000;
+  n = scoretemp / 100;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 2 * 17, y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 100;
+  n = scoretemp / 10;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 3 * 17, y);
+  app->draw(uiSprites.numberSprite);
+
+  scoretemp %= 10;
+  n = scoretemp;
+  uiSprites.numberSprite.setTextureRect(sf::IntRect(n * 20, 0, 20, 28));
+  uiSprites.numberSprite.setPosition(x + 4 * 17, y);
+  app->draw(uiSprites.numberSprite);
+
+  if (scoreBonusTimer > 0.0f)
+  {
+    sf::Color color;
+    if (scoreBonusTimer < 1.0f) color = sf::Color(255, 255, 255, 255 * scoreBonusTimer);
+    else color = sf::Color::White;
+    write(scoreBonus, 13, 116, 51, ALIGN_RIGHT,color, app, 0, 0, 116);
+    scoreBonusTimer -= deltaTime;
+  }
+}
+
 void WitchBlastGame::renderLifeBar()
 {
   if (lifeBar.toDisplay)
   {
-    float l = lifeBar.hp * ((MAP_WIDTH - 1) * TILE_WIDTH) / lifeBar.hpMax;
     int label_dy = 0;
+    int xBarOffset = 100;
+    float l = lifeBar.hp * ((MAP_WIDTH - 1) * TILE_WIDTH - xBarOffset) / lifeBar.hpMax;
 
-    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH, 25));
+    sf::RectangleShape rectangle(sf::Vector2f((MAP_WIDTH - 1) * TILE_WIDTH - xBarOffset, 24));
     rectangle.setFillColor(sf::Color(0, 0, 0,128));
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
+    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2 + xBarOffset, label_dy + 22));
     rectangle.setOutlineThickness(1);
     rectangle.setOutlineColor(sf::Color(200, 200, 200, 200));
     app->draw(rectangle);
 
-    rectangle.setSize(sf::Vector2f(l, 25));
+    rectangle.setSize(sf::Vector2f(l, 24));
     rectangle.setFillColor(sf::Color(190, 20, 20));
     rectangle.setOutlineThickness(0);
-    rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
+    //rectangle.setPosition(sf::Vector2f(TILE_WIDTH / 2, label_dy + 22));
     app->draw(rectangle);
 
     game().write(           lifeBar.label,
                             18,
-                            TILE_WIDTH / 2 + 10.0f,
-                            label_dy + 23,
+                            TILE_WIDTH / 2 + 10.0f + xBarOffset,
+                            label_dy + 22,
                             ALIGN_LEFT,
                             sf::Color(255, 255, 255),
                             app, 0 , 0, 0);
@@ -1930,7 +2147,7 @@ void WitchBlastGame::renderRunningGame()
       app->draw(whiteLine);
     }
   }
-  if (isPressing(KeyTimeControl, false) && gameState == gameStatePlaying)
+  if (isPressing(0, KeyTimeControl, false) && gameState == gameStatePlaying)
   {
     // effect
     int effectFade = 10 + 20 * (1.0f + cos(12.0f * getAbsolutTime())) * 0.5f;
@@ -2024,18 +2241,19 @@ void WitchBlastGame::renderRunningGame()
 
   if (gameState != gameStatePlayingDisplayBoss) renderMessages();
   app->draw(uiSprites.topLayer);
+  miniMapEntity->display(app);
 
   std::ostringstream oss;
   oss << player->getGold();
-  write(oss.str(), 18, 518, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
+  write(oss.str(), 18, 367, 619, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
 
   myText.setColor(sf::Color(0, 0, 0, 255));
   myText.setCharacterSize(16);
 
-
   oss.str("");
   oss << tools::getLabel("level") << " " << level;
-  write(oss.str(), 16, 880, 610, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
+
+  writeGraphic(oss.str(), 16, levelStrPosition.x, levelStrPosition.y, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   //if (gameState == gameStatePlaying)
   {
@@ -2044,19 +2262,19 @@ void WitchBlastGame::renderRunningGame()
     int hpFade = 88.0f * (float)player->getHpDisplay() / (float)player->getHpMax();
     if (hpFade < 0) hpFade = 0;
     else if (hpFade > 88) hpFade = 88;
-    hpSprite.setPosition(170, 619 + 88 - hpFade);
+    hpSprite.setPosition(477, 619 + 88 - hpFade);
     hpSprite.setTextureRect(sf::IntRect(0, 88 - hpFade, 88, hpFade));
     app->draw(hpSprite);
 
     oss.str("");
     oss << player->getHp() << "/" << player->getHpMax();
-    write(oss.str(), 16, 210, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
+    write(oss.str(), 16, 521, 654, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
 
     // mana
     sf::Sprite manaSprite;
     manaSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_MANA));
     int manaFade = player->getPercentFireDelay() * 98;
-    manaSprite.setPosition(558, 614 + 98 - manaFade);
+    manaSprite.setPosition(10, 614 + 98 - manaFade);
     manaSprite.setTextureRect(sf::IntRect(0, 98 - manaFade, 98, manaFade));
     app->draw(manaSprite);
 
@@ -2065,13 +2283,13 @@ void WitchBlastGame::renderRunningGame()
     {
       sf::Sprite spellSprite;
       spellSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_UI_SPELLS));
-      spellSprite.setPosition(568, 624);
+      spellSprite.setPosition(20, 624);
       int frame = player->getActiveSpell().spell;
       spellSprite.setTextureRect(sf::IntRect(frame * 78, 78, 78, 78));
       app->draw(spellSprite);
 
       int spellFade = player->getPercentSpellDelay() * 78;
-      spellSprite.setPosition(568, 624 + 78 - spellFade);
+      spellSprite.setPosition(20, 624 + 78 - spellFade);
       spellSprite.setTextureRect(sf::IntRect(frame * 78, 78 - spellFade, 78, spellFade));
       app->draw(spellSprite);
 
@@ -2091,7 +2309,7 @@ void WitchBlastGame::renderRunningGame()
       sf::Sprite mapSprite;
       mapSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
       mapSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 3, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
-      mapSprite.setPosition(737, 648);
+      mapSprite.setPosition(582, 647);
       app->draw(mapSprite);
     }
     if (player->isEquiped(EQUIP_ALCOHOL))
@@ -2099,7 +2317,7 @@ void WitchBlastGame::renderRunningGame()
       sf::Sprite alcSprite;
       alcSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
       alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 4, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
-      alcSprite.setPosition(737, 681);
+      alcSprite.setPosition(582, 680);
       app->draw(alcSprite);
     }
     if (player->isEquiped(EQUIP_LUCK))
@@ -2107,7 +2325,7 @@ void WitchBlastGame::renderRunningGame()
       sf::Sprite alcSprite;
       alcSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
       alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 5, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
-      alcSprite.setPosition(704, 681);
+      alcSprite.setPosition(615, 680);
       app->draw(alcSprite);
     }
     if (player->isEquiped(EQUIP_FAIRY_POWDER))
@@ -2115,7 +2333,7 @@ void WitchBlastGame::renderRunningGame()
       sf::Sprite alcSprite;
       alcSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
       alcSprite.setTextureRect(sf::IntRect(ITEM_WIDTH * 6, ITEM_HEIGHT * 4,  ITEM_WIDTH, ITEM_HEIGHT));
-      alcSprite.setPosition(671, 681);
+      alcSprite.setPosition(648, 680);
       app->draw(alcSprite);
     }
     // drawing the consumable
@@ -2123,8 +2341,12 @@ void WitchBlastGame::renderRunningGame()
     {
       sf::RectangleShape shadow(sf::Vector2f(70, 33));
       shadow.setFillColor(sf::Color(0, 0, 0, 128));
-      shadow.setPosition(sf::Vector2f(386, 614));
+      shadow.setPosition(sf::Vector2f(231, 614));
       app->draw(shadow);
+    }
+    else
+    {
+      app->draw(uiSprites.bagSprite);
     }
     for (int i = 0; i < MAX_SLOT_CONSUMABLES; i++)
     {
@@ -2133,7 +2355,7 @@ void WitchBlastGame::renderRunningGame()
       {
         sf::Sprite consSprite;
         consSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS));
-        consSprite.setPosition(315 + 37 * i, 615);
+        consSprite.setPosition(161 + 36 * i, 615);
 
         if (item < FirstEquipItem && item >= ItemPotion01 + NUMBER_UNIDENTIFIED)
         {
@@ -2147,33 +2369,16 @@ void WitchBlastGame::renderRunningGame()
       }
     }
 
-    // drawing message icon
-    if (!messagesQueue.empty())
-    {
-      int fade = 255;
-      if (messagesQueue.front().timer < 0.5f)
-      {
-        fade = (2 * messagesQueue.front().timer) * 255;
-      }
-      else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
-      {
-        fade = (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer)) * 255;
-      }
-      uiSprites.iconSprite.setColor(sf::Color(255, 255, 255, fade));
-      uiSprites.iconSprite.setTextureRect(sf::IntRect((messagesQueue.front().icon % 10) * 72, (messagesQueue.front().icon / 10) * 96, 72, 96));
-      app->draw(uiSprites.iconSprite);
-    }
-
     // drawing the divinity
     if (player->getDivinity().divinity >= 0)
     {
       sf::Sprite divSprite;
       divSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_DIVINITY));
-      divSprite.setPosition(100, 614);
+      divSprite.setPosition(405, 616);
       divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 0, 48, 85));
       app->draw(divSprite);
 
-      float fade = player->getLightCone();
+      float fade = player->getFadingDivinity(false);
       if (fade > 0.0f && player->getPlayerStatus() != PlayerEntity::playerStatusPraying)
       {
         divSprite.setTextureRect(sf::IntRect(player->getDivinity().divinity * 48, 85, 48, 85));
@@ -2191,19 +2396,20 @@ void WitchBlastGame::renderRunningGame()
       else
         rectangle.setFillColor(sf::Color(100, 100, 200, 255));
 
-      rectangle.setPosition(sf::Vector2f(101, 689));
-      rectangle.setSize(sf::Vector2f(46 * player->getDivinity().percentsToNextLevels, 9));
+      rectangle.setPosition(sf::Vector2f(407, 692));
+      rectangle.setSize(sf::Vector2f(45 * player->getDivinity().percentsToNextLevels, 8));
       app->draw(rectangle);
 
       std::ostringstream oss;
       if (player->getDivinity().level == MAX_DIVINITY_LEVEL + 1) oss << "MAX";
       else oss << "lvl " << player->getDivinity().level;
-      write(oss.str(), 11, 122, 702, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
+      write(oss.str(), 11, 429, 702, ALIGN_CENTER, sf::Color::White, app, 0, 0, 0);
     }
 
     // render the shots
     renderHudShots(app);
 
+    // render PAUSE screen
     if (gameState == gameStatePlayingPause)
     {
       // background
@@ -2212,43 +2418,113 @@ void WitchBlastGame::renderRunningGame()
       rectangle.setSize(sf::Vector2f(MAP_WIDTH * TILE_WIDTH, MAP_HEIGHT * TILE_HEIGHT));
       app->draw(rectangle);
 
-      // minimap
-      int mapx = 350;
-      int mapy = 30;
-      // background
-      app->draw(rectangle);
-      app->draw(uiSprites.mapBgSprite);
-      // map
-      float miniX = miniMapEntity->getX();
-      float miniY = miniMapEntity->getY();
-      miniMapEntity->setX(mapx);
-      miniMapEntity->setY(mapy);
-      miniMapEntity->computeVertices();
-      miniMapEntity->render(app);
-      miniMapEntity->setX(miniX);
-      miniMapEntity->setY(miniY);
-      miniMapEntity->computeVertices();
+      app->draw(uiSprites.pauseSprite);
 
-      float x = 200;
-      float y = 480;
+      float x = 588;
+      float y = 388;
       // items
-      write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+      //write(tools::getLabel("inventory"), 16, x, y, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
       int n = 0;
 
       for (auto i: sortedEquipement)
       {
-        if (i != EQUIP_BOSS_KEY && player->isEquiped(i))
+        if (i != EQUIP_BOSS_KEY && i != EQUIP_FLOOR_MAP &&
+            i != EQUIP_LUCK && i != EQUIP_ALCOHOL &&
+            i != EQUIP_FAIRY_POWDER && player->isEquiped(i))
         {
           sf::Sprite itemSprite;
           itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
-          itemSprite.setPosition(x + n * 32, y + 20);
+          itemSprite.setPosition(x + (n % 8) * 40, y + (n / 8) * 40);
           itemSprite.setTextureRect(sf::IntRect((i % 10) * 32, (i / 10) * 32, 32, 32));
           app->draw(itemSprite);
           n++;
         }
       }
       renderInGameMenu();
+
+      // texts in the right UI part
+
+      // player name
+      writeGraphic(parameters.playerName, 32, 734, 52, ALIGN_CENTER, sf::Color::Black, app);
+
+      // game time
+      std::ostringstream oss;
+      oss << "Game time: ";
+      int time = int(gameTime);
+      if (time > 3600)
+      {
+        int hours = time / 3600;
+        oss << hours << ":";
+        time -= 3600 * hours;
+      }
+      int minutes = time / 60;
+      if (minutes < 10) oss << "0";
+      oss << minutes;
+      time -= 60 * minutes;
+      oss << ":";
+      if (time < 10) oss << "0";
+      oss << time;
+      writeGraphic(oss.str(), 18, 734, 143, ALIGN_CENTER, sf::Color::Black, app);
+
+      oss.str("");
+      oss << tools::getLabel("ui_base_damage") << ": " << player->getDamage();
+      writeGraphic(oss.str(), 17, 588, 190, ALIGN_LEFT, sf::Color::Black, app);
+
+      oss.str("");
+      oss << tools::getLabel("ui_fire_rate") << ": " << std::fixed << std::setprecision(1) << player->getFireRate()
+        << " / " << tools::getLabel("ui_second");
+      writeGraphic(oss.str(), 17, 588, 222, ALIGN_LEFT, sf::Color::Black, app);
+
+      oss.str("");
+      oss << tools::getLabel("dc_killed_monsters") << ": " << bodyCount;
+      writeGraphic(oss.str(), 17, 588, 254, ALIGN_LEFT, sf::Color::Black, app);
+
+      oss.str("");
+      oss << tools::getLabel("dc_challenges") << ": " << challengeLevel - 1;
+      writeGraphic(oss.str(), 17, 588, 286, ALIGN_LEFT, sf::Color::Black, app);
+
+      oss.str("");
+      oss << tools::getLabel("ui_temple_donation") << ": " << player->getDonation();
+      writeGraphic(oss.str(), 17, 588, 318, ALIGN_LEFT, sf::Color::Black, app);
+
+      // potions
+      int iPotion = 0;
+      for (int i = 0; i < 4; i++)
+      {
+        int currentPotion = player->getConsumable(i);
+        if (currentPotion > -1)
+        {
+          bool ok = true;
+          for (int j = 0; j < i; j++) if (currentPotion == player->getConsumable(j)) ok = false;
+          if (ok)
+          {
+            int xPotion = 40;
+            int yPotion = 440 + 30 * iPotion;
+            sf::Sprite itemSprite;
+            itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS));
+            itemSprite.setPosition(xPotion, yPotion);
+
+            if (currentPotion >= ItemPotion01 + NUMBER_UNIDENTIFIED )
+            {
+              int basisPotion = getPotion(enumItemType(currentPotion));
+              itemSprite.setTextureRect(sf::IntRect((basisPotion % 10) * 32, (basisPotion / 10) * 32, 32, 32));
+              app->draw(itemSprite);
+            }
+
+            itemSprite.setTextureRect(sf::IntRect((currentPotion % 10) * 32, (currentPotion / 10) * 32, 32, 32));
+            app->draw(itemSprite);
+
+            // write(tools::getLabel(items[currentPotion].name), 13, xPotion + 37, yPotion + 11, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+            // write(tools::getLabel(items[currentPotion].description), 12, xPotion + 3, yPotion + 36, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+            write(tools::getLabel(items[currentPotion].description), 12, xPotion + 37, yPotion + 11, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+
+            iPotion++;
+          }
+        }
+      }
     }
+    // score TODO
+    renderScore();
 
     if (player->isDead())
     {
@@ -2327,7 +2603,10 @@ void WitchBlastGame::renderRunningGame()
 
       registerAchievement(AchievementWin);
       if (endingTimer < 0.0f)
+      {
         endingTimer = ENDING_TIMER;
+        isBonusTimeAdded = false;
+      }
     }
   }
 
@@ -2470,11 +2749,44 @@ void WitchBlastGame::renderRunningGame()
       achievementsQueue.front().counter += 4;
     }
   }
+}
+
+void WitchBlastGame::renderMessages()
+{
+  int dy = 0;
+  // message queue
+  if (!messagesQueue.empty())
+  {
+    dy = 40;
+
+    if (messagesQueue.front().timer < 0.5f)
+    {
+      dy *= (2 * messagesQueue.front().timer);
+    }
+    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
+    {
+      dy *= (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer));
+    }
+
+    uiSprites.msgBoxSprite.setTextureRect(sf::IntRect(0, 0, 970, dy + 2));
+    uiSprites.msgBoxSprite.setPosition(0, 600 - dy);
+    app->draw(uiSprites.msgBoxSprite);
+
+    std::stringstream ss;
+    ss << messagesQueue.front().message[0];
+    ss << ": ";
+    ss << messagesQueue.front().message[1];
+    ss << std::endl;
+    ss << messagesQueue.front().message[2];
+
+
+    write(ss.str(), 16, 10, 602 - dy, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
+  }
 
   // show player effects
   if (isPlayerAlive)
   {
-    float x0 = 20, y0 = 540, yStep = -20;
+    float x0 = 18, y0 = 585, xStep = 160;
 
     for (int i = 0; i < NB_SPECIAL_STATES; i++)
     {
@@ -2494,41 +2806,10 @@ void WitchBlastGame::renderRunningGame()
         else
           oss << (int)(player->getSpecialState((enumSpecialState)i).timer);
 
-        write(oss.str(), 12, x0, y0, ALIGN_LEFT, specialStateToColor[i], app, 0, 0, 0);
-        y0 += yStep;
+        write(oss.str(), 12, x0, y0 - dy, ALIGN_LEFT, specialStateToColor[i], app, 0, 0, 0);
+        x0 += xStep;
       }
     }
-  }
-}
-
-void WitchBlastGame::renderMessages()
-{
-  // message queue
-  if (!messagesQueue.empty())
-  {
-    int dy = 30;
-
-    if (messagesQueue.front().timer < 0.5f)
-    {
-      dy *= (2 * messagesQueue.front().timer);
-    }
-    else if (messagesQueue.front().timerMax - messagesQueue.front().timer < 0.5f)
-    {
-      dy *= (2 * (messagesQueue.front().timerMax - messagesQueue.front().timer));
-    }
-
-    uiSprites.msgBoxSprite.setPosition(0, 590 - dy);
-    app->draw(uiSprites.msgBoxSprite);
-
-    std::stringstream ss;
-    ss << messagesQueue.front().message[0];
-    ss << ": ";
-    ss << messagesQueue.front().message[1];
-    ss << std::endl;
-    ss << messagesQueue.front().message[2];
-
-
-    write(ss.str(), 16, 10, 592 - dy, ALIGN_LEFT, sf::Color::White, app, 0, 0, 0);
   }
 }
 
@@ -2599,7 +2880,15 @@ void WitchBlastGame::renderDeathScreen(float x, float y)
   if (player->isDead())
     ss << parameters.playerName << " - " << tools::getLabel("dc_certificate");
   else
+  {
     ss << parameters.playerName << " - " << tools::getLabel("dc_victory");
+
+    sf::Sprite seal;
+    seal.setTexture(*ImageManager::getInstance().getImage(IMAGE_WIN_SEAL));
+    seal.setPosition(x + 650, y + 50);
+    app->draw(seal);
+  }
+
   write(ss.str(), 18, x + xRect / 2, y + 5, ALIGN_CENTER, sf::Color::Black, app, 0, 0, 0);
 
   ss.str(std::string());
@@ -2657,35 +2946,23 @@ bool compareScores(WitchBlastGame::StructScore s1, WitchBlastGame::StructScore s
 
 void WitchBlastGame::calculateScore()
 {
-  score = 0;
-  bodyCount = 0;
+  saveStats();
 
-  for (int enemyType = EnemyTypeBat; enemyType < EnemyTypeRockFalling; enemyType++)
-  {
-    bodyCount += killedEnemies[enemyType];
-    score += killedEnemies[enemyType] * getMonsterScore((enemyTypeEnum)enemyType);
-  }
+  std::ostringstream oss;
 
-  score += getChallengeScore(challengeLevel);
-  score += getSecretScore(secretsFound);
-  score += getGoldScore(player->getGold());
+  int goldScore = getGoldScore(player->getGold());
 
   for (int i = 0; i < NUMBER_EQUIP_ITEMS; i++)
   {
-    if (player->isEquiped(i)) score += getItemScore((item_equip_enum)i);
+    if (player->isEquiped(i)) goldScore += getItemScore((item_equip_enum)i);
     lastScore.equip[i] = player->isEquiped(i);
   }
 
-  // perfects
-  for (int i = 1; i < level; i++)
-  {
-    if (player->getLostHp(i) == 0) score += getPerfectScore();
-  }
+  addBonusScore(BonusPossession, goldScore);
 
   // time
   if (!player->isDead())
   {
-    score += getTimeScore((int)(gameTime / 60.0f));
     lastScore.level = -1;
   }
   else
@@ -2702,6 +2979,8 @@ void WitchBlastGame::calculateScore()
   lastScore.killedBy = player->getLastHurtingEnemy();
 
   lastScore.time = (int)gameTime;
+
+  if (nbPlayers > 1) return;
 
   scores.push_back(lastScore);
 
@@ -2927,23 +3206,23 @@ void WitchBlastGame::updateMenu()
 
   if (menuState == MenuStateAchievements)
   {
-    if (isPressing(KeyRight, true))
+    if (isPressing(0, KeyRight, true))
     {
       if (menuAchIndex % 8 < 7) menuAchIndex++;
     }
-    else if (isPressing(KeyLeft, true))
+    else if (isPressing(0, KeyLeft, true))
     {
       if (menuAchIndex % 8 > 0) menuAchIndex--;
     }
-    else if (isPressing(KeyDown, true))
+    else if (isPressing(0, KeyDown, true))
     {
       if (menuAchIndex / 8 < ACHIEV_LINES) menuAchIndex += 8;
     }
-    else if (isPressing(KeyUp, true))
+    else if (isPressing(0, KeyUp, true))
     {
       if (menuAchIndex / 8 > 0) menuAchIndex -= 8;
     }
-    else if (isPressing(KeyFireDown, true))
+    else if (isPressing(0, KeyFireDown, true))
     {
       if (menuAchIndex / 8 >= ACHIEV_LINES) menuState = MenuStateMain;
     }
@@ -2952,12 +3231,12 @@ void WitchBlastGame::updateMenu()
 
   else if (menuState == MenuStateCredits)
   {
-    if (escape || isPressing(KeyFireDown, true)) menuState = MenuStateMain;
+    if (escape || isPressing(0, KeyFireDown, true)) menuState = MenuStateMain;
   }
 
   else if (menuState == MenuStateHiScores)
   {
-    if (escape || isPressing(KeyFireDown, true))
+    if (escape || isPressing(0, KeyFireDown, true))
     {
       menuScoreIndex++;
       if (menuScoreIndex > 2)
@@ -2981,21 +3260,21 @@ void WitchBlastGame::updateMenu()
       app->close();
     }
 
-    else if (isPressing(KeyDown, true))
+    else if (isPressing(0, KeyDown, true))
     {
       menu->index++;
       if (menu->index == menu->items.size()) menu->index = 0;
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
 
-    else if (isPressing(KeyUp, true))
+    else if (isPressing(0, KeyUp, true))
     {
       if (menu->index == 0) menu->index = menu->items.size() - 1;
       else menu->index--;
 
       SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
     }
-    else if (isPressing(KeyRight, true))
+    else if (isPressing(0, KeyRight, true))
     {
       if (menu->items[menu->index].id == MenuLanguage)
       {
@@ -3022,8 +3301,16 @@ void WitchBlastGame::updateMenu()
         updateMusicVolume();
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
+      else if (menu->items[menu->index].id == MenuStartNew)
+      {
+        nbPlayers++;
+        if (nbPlayers > NB_PLAYERS_MAX) nbPlayers = 1;
+        if (nbPlayers > 1 && !sf::Joystick::isConnected(0)) nbPlayers = 1;
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        buildMenu(true);
+      }
     }
-    else if (isPressing(KeyLeft, true))
+    else if (isPressing(0, KeyLeft, true))
     {
       if (menu->items[menu->index].id == MenuLanguage)
       {
@@ -3050,10 +3337,17 @@ void WitchBlastGame::updateMenu()
         updateMusicVolume();
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
+      else if (menu->items[menu->index].id == MenuStartNew)
+      {
+        nbPlayers--;
+        if (nbPlayers <= 0) nbPlayers = NB_PLAYERS_MAX;
+        if (nbPlayers > 1 && !sf::Joystick::isConnected(0)) nbPlayers = 1;
+        SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
+        buildMenu(true);
+      }
     }
-    else if (isPressing(KeyFireDown, true))
+    else if (isPressing(0, KeyFireDown, true))
     {
-
       switch (menu->items[menu->index].id)
       {
       case MenuStartNew:
@@ -3088,8 +3382,6 @@ void WitchBlastGame::updateMenu()
         menuScoreIndex = 2;
 #endif
         receiveScoreFromServer();
-        //loadHiScoresOnline(false);
-        //loadHiScoresOnline(true);
         break;
       case MenuAchievements:
         menuState = MenuStateAchievements;
@@ -3147,13 +3439,12 @@ void WitchBlastGame::renderMenu()
   }
   else if (menuState == MenuStateHiScores)
   {
-    //renderHiScores();
     if (menuScoreIndex == 0)
-      renderScores(scoresOnline, "Best Players (ON-LINE)");
+      renderScores(scoresOnline, "Best Players (ON-LINE)", true);
     else if (menuScoreIndex == 1)
-      renderScores(scoresOnlineDay, "Best TODAY Scores (ON-LINE)");
+      renderScores(scoresOnlineDay, "Best TODAY Scores (ON-LINE)", true);
     else
-      renderScores(scores, "Best Scores (local)");
+      renderScores(scores, "Best Scores (local)", false);
     return;
   }
   else if (menuState == MenuStateAchievements)
@@ -3244,6 +3535,7 @@ void WitchBlastGame::renderMenu()
       {
         std::ostringstream oss;
         oss << label << " : " << tools::getLabel(languageString[parameters.language]);
+        oss << languageState[parameters.language];
         label = oss.str();
       }
       else if (menu->items[i].id == MenuPlayerName)
@@ -3467,14 +3759,14 @@ void WitchBlastGame::renderCredits()
   yCursor += yStep;
 }
 
-void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std::string title)
+void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std::string title, bool blinkingName)
 {
   sf::Sprite bgSprite;
   bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_HALL_OF_FAME));
   app->draw(bgSprite);
 
   // hi-scores-title
-  write(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0, 0);
+  writeGraphic(title, 30, 485, 60, ALIGN_CENTER, sf::Color(0, 0, 0, 255), app, 0, 0, 0);
 
   int xEquip = 540;
   //int yEquip = 360;
@@ -3490,13 +3782,23 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
   int y0 = 130;
   int yStep = 50;
 
+  sf::Sprite itemSprite;
+
   for (unsigned int i = 0; i < scoresToRender.size() && i < SCORES_MAX; i++)
   {
     sf::Color color = sf::Color( 15, 15, 15);
-    if (scoresToRender[i].score == lastScore.score && scoresToRender[i].level == lastScore.level && scoresToRender[i].name == lastScore.name)
+    if (scoresToRender[i].score == lastScore.score
+        && scoresToRender[i].level == lastScore.level
+        && scoresToRender[i].name == lastScore.name
+        && scoresToRender[i].time == lastScore.time)
     {
       int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
       color = sf::Color(255 - fade, 128, 255 - fade);
+    }
+    else if (blinkingName && scoresToRender[i].name == parameters.playerName)
+    {
+      int fade = 70 + sinf(getAbsolutTime() * 4) * 70;
+      color = sf::Color(fade * 1.5, fade, 0);
     }
 
     // equipment
@@ -3509,12 +3811,11 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
     else if (n > 8) dx = 20;
     n = 0;
 
+    itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
     for (auto ii: scoreEquipement)
     {
       if (ii != EQUIP_BOSS_KEY && scoresToRender[i].equip[ii])
       {
-        sf::Sprite itemSprite;
-        itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_ITEMS_EQUIP));
         itemSprite.setPosition(xEquip + n * dx, y0 + 22 + yStep * i);
         itemSprite.setTextureRect(sf::IntRect((ii % 10) * 32, (ii / 10) * 32, 32, 32));
         app->draw(itemSprite);
@@ -3531,12 +3832,20 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
 
     write(scoresToRender[i].name, 16, xName, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
 
-    std::stringstream levelSS;
-    if (scoresToRender[i].level == -1) levelSS << "Win";
-    else levelSS << "lvl " << scoresToRender[i].level;
-    write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
-    write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
-
+    if (scoresToRender[i].level == -1)
+    {
+      itemSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_WIN_SEAL_HOF));
+      itemSprite.setTextureRect(sf::IntRect(0, 0, 48, 48));
+      itemSprite.setPosition(475, y0 + 20 + yStep * i);
+      app->draw(itemSprite);
+    }
+    else
+    {
+      std::stringstream levelSS;
+      levelSS << "lvl " << scoresToRender[i].level;
+      write(levelSS.str(), 16, xLevel, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+      write(intToString(scoresToRender[i].score), 17, xScore, y0 + 28 + yStep * i, ALIGN_LEFT, color, app, 0, 0, 0);
+    }
 
     std::stringstream timeSS;
     if (scoresToRender[i].time < 100)
@@ -3569,54 +3878,12 @@ void WitchBlastGame::renderScores(std::vector <StructScore> scoresToRender, std:
   }
 }
 
-void WitchBlastGame::renderHiScores()
-{
-  sf::Sprite bgSprite;
-  bgSprite.setTexture(*ImageManager::getInstance().getImage(IMAGE_INTRO));
-  app->draw(bgSprite);
-
-  // hi-scores-title
-  write(tools::getLabel("hi_scores"), 30, 485, 20, ALIGN_CENTER, sf::Color(255, 255, 255, 255), app, 1, 1, 0);
-
-  int x0 = 25;
-  int x1 = 70;
-  int x2 = 125;
-  int x3 = 430;
-  int y0 = 130;
-  int yStep = 100;
-  int xRight = SCREEN_WIDTH / 2;
-
-  sf::RectangleShape line(sf::Vector2f(2, 600));
-  line.setPosition(SCREEN_WIDTH / 2, 80);
-  app->draw(line);
-
-  for (unsigned int i = 0; i < scores.size() && i < SCORES_MAX; i++)
-  {
-    int index = i < SCORES_MAX / 2 ? i : i - SCORES_MAX / 2;
-    sf::Color color = sf::Color( 220, 220, 220);
-    if (scores[i].score == lastScore.score && scores[i].level == lastScore.level && scores[i].name == lastScore.name)
-    {
-      int fade = 1 + cosf(getAbsolutTime() * 8) * 63;
-      color = sf::Color(255, 128 + fade, 255);
-    }
-
-    renderPlayer(x1 + (i / 5) * xRight, y0 + yStep * index, scores[i].equip, scores[i].shotType, 1, 0);
-
-    write(intToString(i + 1), 24, x0 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_CENTER, color, app, 1, 1, 0);
-    std::stringstream ss;
-    ss << scores[i].name << " (" << scores[i].level << ")";
-    write(ss.str(), 17, x2 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_LEFT, color, app, 1, 1, 0);
-    write(intToString(scores[i].score), 17, x3 + (i / 5) * xRight, y0 + 30 + yStep * index, ALIGN_RIGHT, color, app, 1, 1, 0);
-  }
-}
-
-
 void WitchBlastGame::renderInGameMenu()
 {
   menuStuct* menu = &menuInGame;
 
-  int xAlign = 290;
-  int yAlign = 200;
+  int xAlign = 90;
+  int yAlign = 100;
 
   {
     // menu
@@ -3662,25 +3929,49 @@ void WitchBlastGame::startGame()
     lastTime = getAbsolutTime();
     if (deltaTime > 0.05f) deltaTime = 0.05f;
 
-    updateActionKeys();
-
-    switch (gameState)
+    if (app->hasFocus())
     {
-    case gameStateInit:
-    case gameStateKeyConfig:
-    case gameStateJoystickConfig:
-    case gameStateMenu:
-      updateMenu();
-      break;
-    case gameStateIntro:
-      updateIntro();
-      break;
-    case gameStatePlaying:
-    case gameStatePlayingPause:
-    case gameStatePlayingDisplayBoss:
-      updateRunningGame();
-      break;
+      updateActionKeys();
+
+      switch (gameState)
+      {
+      case gameStateInit:
+      case gameStateKeyConfig:
+      case gameStateJoystickConfig:
+      case gameStateMenu:
+        updateMenu();
+        break;
+      case gameStateIntro:
+        updateIntro();
+        break;
+      case gameStatePlaying:
+      case gameStatePlayingPause:
+      case gameStatePlayingDisplayBoss:
+        updateRunningGame();
+        break;
+      }
     }
+    else
+    {
+      // Process events
+      sf::Event event;
+      while (app->pollEvent(event))
+      {
+        // Close window : exit
+        if (event.type == sf::Event::Closed)
+        {
+          saveGameData();
+          app->close();
+        }
+
+        if (event.type == sf::Event::LostFocus)
+        {
+          if (parameters.pauseOnFocusLost && gameState == gameStatePlaying && !player->isDead())
+            gameState = gameStatePlayingPause;
+        }
+      }
+    }
+
     onRender();
   }
   quitGame();
@@ -4089,17 +4380,27 @@ void WitchBlastGame::refreshMinimap()
     }
   miniMap->setTile(floorX, floorY, 10);
 
+  levelStrPosition.x = 824;
+  levelStrPosition.y = 602;
 
-  int xMap = 760 + (6 - floorX) * 19;
-  if (xMap < 710) xMap = 710;
-  else if (xMap > 795) xMap = 795;
-
-  int yMap = 620 + (3 - floorY) * 15;
-  if (yMap < 596) yMap = 596;
-  else if (yMap > 640) yMap = 640;
-
-  miniMapEntity->setX(xMap);
-  miniMapEntity->setY(yMap);
+  if (miniMap->getTile(FLOOR_WIDTH / 2 - 1, 0) > 0
+      || miniMap->getTile(FLOOR_WIDTH / 2, 0) > 0
+      || miniMap->getTile(FLOOR_WIDTH / 2 + 1, 0) > 0 )
+  {
+    if (miniMap->getTile(0, 0) <= 0
+      || miniMap->getTile(1, 0) <= 0
+      || miniMap->getTile(2, 0) <= 0 )
+      // no place top-middle
+      levelStrPosition.x = 729;
+  else if (miniMap->getTile(FLOOR_WIDTH - 1, 0) <= 0
+      || miniMap->getTile(FLOOR_WIDTH - 2, 0) <= 0
+      || miniMap->getTile(FLOOR_WIDTH - 3, 0) <= 0 )
+      // no place top-left
+      levelStrPosition.x = 921;
+  else
+    // no place top
+    levelStrPosition.y = 594;
+  }
 }
 
 void WitchBlastGame::checkEntering()
@@ -4161,6 +4462,9 @@ void WitchBlastGame::moveToOtherMap(int direction)
       xGame[xGameTypeFade].param = X_GAME_FADE_OUT;
       xGame[xGameTypeFade].timer = FADE_OUT_DELAY;
       player->setVelocity(Vector2D(0.0f, - INITIAL_PLAYER_SPEED / 2));
+
+      // SCORE perfect
+      if (player->getLostHp(level) == 0) addBonusScore(BonusPerfect, getPerfectScore(level));
     }
   }
   // go to another room
@@ -4234,7 +4538,7 @@ void WitchBlastGame::onRender()
 
 void WitchBlastGame::renderHudShots(sf::RenderTarget* app)
 {
-  int xHud = 277;
+  int xHud = 124;
   int yHud = 655;
   int index = 0;
 
@@ -4610,12 +4914,14 @@ void WitchBlastGame::generateMap()
 
     SoundManager::getInstance().playSound(SOUND_SECRET);
     secretsFound++;
+
+    addBonusScore(BonusSecret, getSecretScore());
   }
   else  // "normal" room
     currentMap->randomize(currentMap->getRoomType());
 }
 
-void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow = 0, int yShadow = 0, int maxWidth = 0)
+void WitchBlastGame::write(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth)
 {
   myText.setString(str);
   myText.setString(sf::String::fromUtf8(str.begin(), str.end()));
@@ -4646,6 +4952,20 @@ void WitchBlastGame::write(std::string str, int size, float x, float y, int alig
   myText.setPosition(xFont, y);
   myText.setColor(color);
   app->draw(myText);
+}
+
+void WitchBlastGame::writeGraphic(std::string str, int size, float x, float y, int align, sf::Color color, sf::RenderTarget* app, int xShadow, int yShadow, int maxWidth)
+{
+  if (parameters.language == 4) // russian
+  {
+    write(str, size, x, y, align, color, app, xShadow, yShadow, maxWidth);
+  }
+  else
+  {
+    myText.setFont(graphicsFont);
+    write(str, size, x, y, align, color, app, xShadow, yShadow, maxWidth);
+    myText.setFont(font);
+  }
 }
 
 void WitchBlastGame::initMonsterArray()
@@ -5300,6 +5620,8 @@ void WitchBlastGame::makeColorEffect(int color, float duration)
 
 void WitchBlastGame::saveGame()
 {
+  if (nbPlayers > 1) return;
+
   if (player->getPlayerStatus() == PlayerEntity::playerStatusAcquire)
     player->acquireItemAfterStance();
   std::ofstream file(SAVE_FILE.c_str(), std::ios::out | std::ios::trunc);
@@ -5475,6 +5797,8 @@ void WitchBlastGame::saveGame()
 
     // player
     file << player->getHp() << " " << player->getHpMax() << " " << player->getGold() << " " << player->getDonation() << std::endl;
+    // score
+    file << score << " " << bodyCount << std::endl;
     // lost hp
     for (i = 1; i <= LAST_LEVEL; i++) file << player->getLostHp(i) << " ";
     file << std::endl;
@@ -5495,6 +5819,18 @@ void WitchBlastGame::saveGame()
          << player->getDivinity().level << " " << player->getDivinity().interventions << std::endl;
     // events
     for (i = 0; i < NB_EVENTS; i++) file << worldEvent[i] << " ";
+    file << std::endl;
+    // special states
+    for (int i = 0; i < NB_SPECIAL_STATES; i++)
+    {
+      file << player->getSpecialState((enumSpecialState)i).active << " "
+      << player->getSpecialState((enumSpecialState)i).waitUnclear << " "
+      << player->getSpecialState((enumSpecialState)i).timer << " "
+      << player->getSpecialState((enumSpecialState)i).param1 << " "
+      << player->getSpecialState((enumSpecialState)i).param2 << " "
+      << player->getSpecialState((enumSpecialState)i).param3 << std::endl;
+
+    }
     file.close();
   }
   else
@@ -5505,6 +5841,8 @@ void WitchBlastGame::saveGame()
 
 bool WitchBlastGame::loadGame()
 {
+  nbPlayers = 1;
+
   resetPresentItems();
   saveInFight.monsters.clear();
   std::ifstream file(SAVE_FILE.c_str(), std::ios::in);
@@ -5584,7 +5922,7 @@ bool WitchBlastGame::loadGame()
       file >> flag;
       iMap->setVisited(flag);
       file >> flag;
-      if (!flag) iMap->setRevealed(flag);
+      if (iMap->getRoomType() == roomTypeSecret) iMap->setRevealed(flag);
       file >> flag;
       iMap->setCleared(flag);
 
@@ -5694,6 +6032,10 @@ bool WitchBlastGame::loadGame()
     player->setHpMax(hpMax);
     player->setGold(gold);
     player->setDonation(donation);
+    // score
+    file >> score;
+    scoreDisplayed = score;
+    file >> bodyCount;
     // lost hp
     for (i = 1; i <= LAST_LEVEL; i++)
     {
@@ -5706,7 +6048,7 @@ bool WitchBlastGame::loadGame()
     {
       bool eq;
       file >> eq;
-      player->setEquiped(i, eq);
+      player->setEquipped(i, eq);
     }
     float x, y;
     file >> x >> y;
@@ -5754,6 +6096,14 @@ bool WitchBlastGame::loadGame()
       bool event;
       file >> event;
       worldEvent[i] = event;
+    }
+    // special states
+    for (int i = 0; i < NB_SPECIAL_STATES; i++)
+    {
+      bool active, waitUnclear;
+      float timer, param1, param2, param3;
+      file >> active >> waitUnclear >> timer >> param1 >> param2 >> param3;
+      player->setSpecialState(enumSpecialState(i), active, timer, param1, param2, waitUnclear);
     }
 
     player->computePlayer();
@@ -5912,6 +6262,8 @@ void WitchBlastGame::saveConfigurationToFile()
   std::map<std::string, std::string> newMap;
 
   // parameters
+  if (parameters.playerName.length() == 0)
+    parameters.playerName = "Player";
   newMap["language"] = intToString(parameters.language);
   newMap["player_name"] = parameters.playerName;
 
@@ -5923,6 +6275,9 @@ void WitchBlastGame::saveConfigurationToFile()
   newMap["vsync_enabled"] = parameters.vsync ? "1" : "0";
   newMap["blood_spreading"] = parameters.bloodSpread ? "1" : "0";
   newMap["fullscreen"] = parameters.fullscreen ? "1" : "0";
+  newMap["pause_on_focus_lost"] = parameters.pauseOnFocusLost ? "1" : "0";
+  newMap["particles_batching"] = parameters.particlesBatching ? "1" : "0";
+  newMap["low_particles"] = parameters.lowParticles ? "1" : "0";
   newMap["display_boss_portrait"] = parameters.displayBossPortrait ? "1" : "0";
 
   // Keys
@@ -5966,6 +6321,9 @@ void WitchBlastGame::configureFromFile()
   parameters.vsync = true;
   parameters.bloodSpread = true;
   parameters.fullscreen = false;
+  parameters.pauseOnFocusLost = true;
+  parameters.particlesBatching = true;
+  parameters.lowParticles = false;
   parameters.musicVolume = 80;
   parameters.soundVolume = 80;
   parameters.playerName = "";
@@ -6006,8 +6364,13 @@ void WitchBlastGame::configureFromFile()
   {
     joystickInput[i].isButton = true;
     joystickInput[i].axis = sf::Joystick::X;
-    joystickInput[i].value = i - 4;
+
+    if (i > KeyFireRight) joystickInput[i].value = i - 4;
   }
+  joystickInput[KeyFireUp].value = 3;
+  joystickInput[KeyFireDown].value = 0;
+  joystickInput[KeyFireLeft].value = 2;
+  joystickInput[KeyFireRight].value = 1;
 
   // from file
   addKey(KeyUp, "keyboard_move_up");
@@ -6061,6 +6424,12 @@ void WitchBlastGame::configureFromFile()
   if (i >= 0) parameters.bloodSpread = i;
   i = config.findInt("fullscreen");
   if (i >= 0) parameters.fullscreen = i;
+  i = config.findInt("pause_on_focus_lost");
+  if (i >= 0) parameters.pauseOnFocusLost = i;
+  i = config.findInt("particles_batching");
+  if (i >= 0) parameters.particlesBatching = i;
+  i = config.findInt("low_particles");
+  if (i >= 0) parameters.lowParticles = i;
   i = config.findInt("display_boss_portrait");
   if (i >= 0) parameters.displayBossPortrait = i;
 
@@ -6100,7 +6469,11 @@ void WitchBlastGame::buildMenu(bool rebuild)
   if (saveHeader.ok)
   {
     menuItemStuct itemStart;
-    itemStart.label = tools::getLabel("start_new_game");
+    std::ostringstream oss;
+    oss << tools::getLabel("start_new_game");
+    if (nbPlayers == 1) oss << " (1 " << tools::getLabel("player") << ")";
+    else oss << " (" << nbPlayers << " " << tools::getLabel("players") << ")";
+    itemStart.label = oss.str();
     itemStart.description = tools::getLabel("start_desc");
 
     itemStart.id = MenuStartNew;
@@ -6109,7 +6482,7 @@ void WitchBlastGame::buildMenu(bool rebuild)
     menuItemStuct itemLoad;
     itemStart.label = tools::getLabel("restore");
 
-    std::ostringstream oss;
+    oss.str("");
     oss << saveHeader.date << " " << tools::getLabel("at") << " " << saveHeader.time << " - " << tools::getLabel("level") << " " << saveHeader.level;
 
     itemStart.description = oss.str();
@@ -6121,7 +6494,11 @@ void WitchBlastGame::buildMenu(bool rebuild)
   else
   {
     menuItemStuct itemStart;
-    itemStart.label = tools::getLabel("start_new_game");
+    std::ostringstream oss;
+    oss << tools::getLabel("start_new_game");
+    if (nbPlayers == 1) oss << " (1 " << tools::getLabel("player") << ")";
+    else oss << " (" << nbPlayers << " " << tools::getLabel("players") << ")";
+    itemStart.label = oss.str();
     itemStart.description = tools::getLabel("begin_journey");
 
     itemStart.id = MenuStartNew;
@@ -6266,6 +6643,9 @@ void WitchBlastGame::addKilledEnemy(enemyTypeEnum enemyType, enumShotType hurtin
       killedEnemies[enemyType]++;
       globalData.killedMonster[enemyType]++;
       player->offerMonster(enemyType, hurtingType);
+      score += getMonsterScore(enemyType);
+
+      if (enemyType != EnemyTypeDestroyable) bodyCount++;
 
       // achievements
       if (enemyType == EnemyTypeButcher) registerAchievement(AchievementButcher);
@@ -6327,8 +6707,6 @@ void WitchBlastGame::registerLanguage()
   input[KeyFireSelect] = sf::Keyboard::Tab;
   input[KeyTimeControl] = sf::Keyboard::RShift;
   input[KeySpell]  = sf::Keyboard::Space;
-
-  saveConfigurationToFile();
 }
 
 int WitchBlastGame::getAchievementsPercents()
@@ -6358,8 +6736,6 @@ void WitchBlastGame::testAndAddMessageToQueue(EnumMessages type)
       else // (type == MsgInfoDivIntervention)
         ss << tools::getLabel("divinity_intervention_1");
       msg.message[1] = ss.str();
-
-      msg.icon = 2 + player->getDivinity().divinity;
     }
 
     messagesQueue.push(msg);
@@ -6384,7 +6760,6 @@ void WitchBlastGame::addDivLevelMessageToQueue(std::string label)
   ss << " ";
   ss << tools::getLabel(label);
   msg.message[1] = ss.str();
-  msg.icon = 2 + player->getDivinity().divinity;
   messagesQueue.push(msg);
 }
 
@@ -7102,43 +7477,53 @@ void WitchBlastGame::addPresentItem(int n)
   if (n >= 0 && n < NUMBER_EQUIP_ITEMS) presentItems[n] = true;
 }
 
-bool WitchBlastGame::isPressing(inputKeyEnum k, bool oneShot)
+bool WitchBlastGame::isPressing(int p, inputKeyEnum k, bool oneShot)
 {
-  return (actionKey[k].isPressed && (!oneShot || actionKey[k].isTriggered));
+  if (gameState != gameStatePlaying || nbPlayers == 0)
+    return ((actionKey[0][k].isPressed && (!oneShot || actionKey[0][k].isTriggered))
+            || (actionKey[1][k].isPressed && (!oneShot || actionKey[1][k].isTriggered)));
+  else
+    return (actionKey[p][k].isPressed && (!oneShot || actionKey[p][k].isTriggered));
 }
 
-bool WitchBlastGame::getPressingState(inputKeyEnum k)
+bool WitchBlastGame::getPressingState(int p, inputKeyEnum k)
 {
-  // arrows in menu
-  if (gameState != gameStatePlaying
-      || player->isDead()
-      || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+  if (p == 0 || gameState != gameStatePlaying)
   {
-    if (k == KeyLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) return true;
-    if (k == KeyRight && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) return true;
-    if (k == KeyUp && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) return true;
-    if (k == KeyDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) return true;
+    // arrows in menu
+    if (gameState != gameStatePlaying
+        || player->isDead()
+        || player->getPlayerStatus() == PlayerEntity::playerStatusVictorious)
+    {
+      if (k == KeyLeft && sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) return true;
+      if (k == KeyRight && sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) return true;
+      if (k == KeyUp && sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) return true;
+      if (k == KeyDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) return true;
 
-    if (k == KeyFireDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) return true;
+      if (k == KeyFireDown && sf::Keyboard::isKeyPressed(sf::Keyboard::Return)) return true;
+    }
+
+    // keyboard
+    if (sf::Keyboard::isKeyPressed(input[k])) return true;
   }
 
-  // keyboard
-  if (sf::Keyboard::isKeyPressed(input[k])) return true;
-
-  if (!sf::Joystick::isConnected(0)) return false;
-
-  // joystick
-  if (joystickInput[k].isButton)
+  if (p == 1 || gameState != gameStatePlaying || nbPlayers == 1)
   {
-    // button
-    if (joystickInput[k].value >= 0)
-      if (sf::Joystick::isButtonPressed(0, joystickInput[k].value)) return true;
-  }
-  else
-  {
-    // axis
-    if (joystickInput[k].value < 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) < -40) return true;
-    else if (joystickInput[k].value > 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) > 40) return true;
+    if (!sf::Joystick::isConnected(0)) return false;
+
+    // joystick
+    if (joystickInput[k].isButton)
+    {
+      // button
+      if (joystickInput[k].value >= 0)
+        if (sf::Joystick::isButtonPressed(0, joystickInput[k].value)) return true;
+    }
+    else
+    {
+      // axis
+      if (joystickInput[k].value < 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) < -40) return true;
+      else if (joystickInput[k].value > 0 && sf::Joystick::getAxisPosition(0, joystickInput[k].axis) > 40) return true;
+    }
   }
 
   return false;
@@ -7146,11 +7531,14 @@ bool WitchBlastGame::getPressingState(inputKeyEnum k)
 
 void WitchBlastGame::updateActionKeys()
 {
-  for (unsigned int i = 0; i < NumberKeys; i++)
+  for (int p = 0; p < NB_PLAYERS_MAX; p++)
   {
-    bool oldState = actionKey[i].isPressed;
-    actionKey[i].isPressed = getPressingState((inputKeyEnum)i);
-    actionKey[i].isTriggered = actionKey[i].isPressed && !oldState;
+    for (unsigned int i = 0; i < NumberKeys; i++)
+    {
+      bool oldState = actionKey[p][i].isPressed;
+      actionKey[p][i].isPressed = getPressingState(p, (inputKeyEnum)i);
+      actionKey[p][i].isTriggered = actionKey[p][i].isPressed && !oldState;
+    }
   }
 }
 
@@ -7172,6 +7560,7 @@ void WitchBlastGame::sendScoreToServerThread()
             lastScore.divinity,
             lastScore.killedBy,
             lastScore.time,
+            statsStr,
             SCORE_VERSION);
 #endif
 }
@@ -7331,6 +7720,7 @@ void WitchBlastGame::setPotionToKnown(enumItemType source)
   ss << tools::getLabel(items[getPotion(source)].name);
 
   msg.message[1] = ss.str();
+  msg.message[2] = tools::getLabel(items[getPotion(source)].description);
   messagesQueue.push(msg);
 }
 
@@ -7356,6 +7746,63 @@ void WitchBlastGame::forget()
   if (!player->isEquiped(EQUIP_BOOK_ALCHEMY))
   {
     forgetPotions();
+  }
+}
+
+void WitchBlastGame::gainMultiplayerPower()
+{
+  if (nbPlayers == 2)
+  {
+    auto fairy = player->getFairy(0);
+    if (fairy)
+    {
+      fairy->gainNewPower();
+    }
+  }
+}
+
+void WitchBlastGame::addBonusScore(EnumScoreBonus bonusType, int points)
+{
+  if (points <= 0) return;
+
+  score += points;
+
+  std::ostringstream oss;
+  std::ostringstream ossStats;
+  ossStats << ":";
+  switch (bonusType)
+  {
+    case BonusSecret:  oss << "Secret!"; ossStats << "S"; break;
+    case BonusPerfect:  oss << "Perfect!"; ossStats << "P"; break;
+    case BonusChallenge:  oss << "Challenge!"; ossStats << "C"; break;
+    case BonusPossession:  oss << "Stuff"; ossStats << "E=" << points; break;
+    case BonusTime:  oss << "Time bonus"; ossStats << "T=" << points; break;
+  }
+  statsStr += ossStats.str();
+  oss << " +" << points;
+  scoreBonus = oss.str();
+  scoreBonusTimer = BONUS_TIMER;
+  SoundManager::getInstance().playSound(SOUND_SCORE_BONUS);
+}
+
+void WitchBlastGame::tryToClick(int xMouse, int yMouse, int mouseButton)
+{
+  for (ButtonStruct but : buttons)
+  {
+    if (xMouse >= but.zone.left && xMouse <= but.zone.left + but.zone.width
+        && yMouse >= but.zone.top && yMouse <= but.zone.top + but.zone.height)
+    {
+      if (but.type == ButtonConsumable)
+      {
+        if (mouseButton == 0) player->tryToConsume(but.index);
+        else player->dropConsumables(but.index);
+      }
+      else if (but.type == ButtonShotType)
+      {
+        player->selectShotType(but.index);
+      }
+      return;
+    }
   }
 }
 

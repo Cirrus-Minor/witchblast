@@ -24,6 +24,8 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
   creatureSpeed = ZOMBIE_SPEED;
 
   direction = rand() % 4;
+  facingDirection = direction;
+  nextFacingDirection = direction;
   clockTurn = rand() % 2 == 0;
   compute(false);
   timer = 5 + rand() % 6;
@@ -82,6 +84,8 @@ void ZombieEntity::animate(float delay)
       }
     }
 
+    checkNextFacing(delay);
+
     frame = ((int)(age * 4.0f)) % 4;
     if (frame == 3) frame = 1;
     if (facingDirection == 4 || facingDirection == 6) frame += 3;
@@ -135,7 +139,12 @@ bool ZombieEntity::attack()
     attacking = true;
   }
 
-  if (attacking) SoundManager::getInstance().playSound(SOUND_ZOMBIE_ATTACKING);
+  if (attacking)
+  {
+    SoundManager::getInstance().playSound(SOUND_ZOMBIE_ATTACKING);
+    facingTimer = 0.2f;
+    nextFacingDirection = facingDirection;
+  }
 
   return attacking;
 }
@@ -161,25 +170,25 @@ void ZombieEntity::compute(bool turn)
   case 0:
     velocity.x = 0;
     velocity.y = -creatureSpeed;
-    facingDirection = 8;
+    nextFacingDirection = 8;
     break;
 
   case 1:
     velocity.x = creatureSpeed;
     velocity.y = 0;
-    facingDirection = 6;
+    nextFacingDirection = 6;
     break;
 
   case 2:
     velocity.x = 0;
     velocity.y = creatureSpeed;
-    facingDirection = 2;
+    nextFacingDirection = 2;
     break;
 
   case 3:
     velocity.x = -creatureSpeed;
     velocity.y = 0;
-    facingDirection = 4;
+    nextFacingDirection = 4;
     break;
   }
 }

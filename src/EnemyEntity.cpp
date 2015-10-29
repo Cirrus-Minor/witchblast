@@ -7,6 +7,8 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
+const float FACING_DELAY = 0.25f;
+
 EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   : BaseCreatureEntity (image, x, y, 64, 64)
 {
@@ -30,11 +32,24 @@ EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   canExplode = true;
 
   label_dy = 0;
+
+  nextFacingDirection = 0;
+  facingTimer = -1.0f;
 }
 
 enemyTypeEnum EnemyEntity::getEnemyType()
 {
   return enemyType;
+}
+
+void EnemyEntity::checkNextFacing(float dt)
+{
+  if (facingTimer > 0.0f) facingTimer -= dt;
+  if (facingDirection != nextFacingDirection && facingTimer <= 0.0f)
+  {
+    facingDirection = nextFacingDirection;
+    facingTimer = FACING_DELAY;
+  }
 }
 
 void EnemyEntity::setLabelDy(float label_dy)
