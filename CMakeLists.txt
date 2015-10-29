@@ -56,6 +56,16 @@ if(APPLE)
   set(EXTRA_LIBRARIES "-framework CoreFoundation")
 endif()
 
+if(UNIX)
+	find_package(Threads REQUIRED)
+	if(THREADS_HAVE_PTHREAD_ARG)
+	  target_compile_options(PUBLIC Witch_Blast "-pthread")
+	endif()
+	if(CMAKE_THREAD_LIBS_INIT)
+	  target_link_libraries(Witch_Blast "${CMAKE_THREAD_LIBS_INIT}")
+	endif()
+endif()
+
 # Detect and add SFML
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 if(ONLINE_MODE)
