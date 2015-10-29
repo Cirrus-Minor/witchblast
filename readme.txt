@@ -105,6 +105,8 @@ Next release
 - MOD Effect cooldown are now in the upper part of the interface
 - MOD Cooldown to pick up a potion we've dropped is now 5 seconds
 - MOD Explosive barrel is now red with an explosion symbol
+- MOD Some barrels are damaged at generation
+- MOD "Bomberman"-type rooms have always barrels at level 4 and above now
 - MOD Green blood and slime corpses have been desaturated for a better game visibility
 - MOD Level up divinity effect has been changed (was too close of the divinity intervention effect)
 - FIX Inputs are processed while the game window has no focus
@@ -112,6 +114,7 @@ Next release
 - FIX Spider webs slow down some spiders
 - FIX Grid on walls
 - FIX The player effects (poison, slow, damage up, etc...) are not saved
+- FIX Bag appears only when the player has boots
 - FIX No door to secret room on loaded game
 - FIX Item order in the inventory
 - FIX It's possible to let the player name blank
