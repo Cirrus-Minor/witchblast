@@ -2279,6 +2279,11 @@ dc_after_victory#Victoria después
 
 player#jugador
 players#jugadores
+ui_base_damage#Daño base
+ui_fire_rate#Velocidad de disparo
+ui_second#segundo
+ui_temple_donation#Donación al Templo
+
 [russian]
 start_new_game#Начать новую игру
 start_desc#Старая игра будет стёрта
