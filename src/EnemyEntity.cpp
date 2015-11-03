@@ -7,7 +7,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-const float FACING_DELAY = 0.25f;
+const float FACING_DELAY = 0.17f;
 
 EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   : BaseCreatureEntity (image, x, y, 64, 64)
