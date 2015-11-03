@@ -52,3 +52,12 @@ void EnemyBoltEntity::animate(float delay)
     }
   }
 }
+
+void EnemyBoltEntity::onDying()
+{
+  if (!isDying)
+  {
+    isDying = true;
+    // TO DO effect zone ?
+  }
+}

@@ -1,5 +1,6 @@
 #include "BoltEntity.h"
 #include "ExplosionEntity.h"
+#include "EffectZoneEntity.h"
 #include "Constants.h"
 #include "DungeonMap.h"
 #include "WitchBlastGame.h"
@@ -141,7 +142,7 @@ void BoltEntity::animate(float delay)
   testWallsCollision = true;
   if (isCollidingWithMap())
   {
-    isDying = true;
+    onDying();
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++) generateParticule(100.0f + rand() % 150);
   }
@@ -194,7 +195,7 @@ void BoltEntity::animate(float delay)
       sprite.setColor(sf::Color(255, 255, 255, (sf::Uint8)((lifetime - age) / 0.2f * 255)));
   }
 
-  if (((velocity.x)*(velocity.x) + (velocity.y)*(velocity.y)) < 1500.0f) isDying = true;
+  if (((velocity.x)*(velocity.x) + (velocity.y)*(velocity.y)) < 1500.0f) onDying();
 }
 
 void BoltEntity::render(sf::RenderTarget* app)
@@ -236,7 +237,7 @@ void BoltEntity::collide()
     }
   }
 
-  isDying = true;
+  onDying();
   if (boltType == ShotTypeBomb)
     explode();
   else
@@ -294,7 +295,14 @@ bool BoltEntity::collideWithMap(int direction)
 
 void BoltEntity::onDying()
 {
-  isDying = true;
+  if (!isDying)
+  {
+    isDying = true;
+
+    // special attacks
+    if (boltType == ShotTypeIce && level == 2)
+      new EffectZoneEntity(x, y, true, 5.0f, EffectZoneTypeIce);
+  }
 }
 
 void BoltEntity::stuck()
@@ -310,7 +318,6 @@ void BoltEntity::stuck()
       generateParticule(vel);
     }
   }
-
   onDying();
 }
 
@@ -325,7 +332,7 @@ void BoltEntity::collideMapRight()
   else
   {
     velocity.x = 0.0f;
-    isDying = true;
+    onDying();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
@@ -348,7 +355,7 @@ void BoltEntity::collideMapLeft()
   else
   {
     velocity.x = 0.0f;
-    isDying = true;
+    onDying();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
@@ -371,7 +378,7 @@ void BoltEntity::collideMapTop()
   else
   {
     velocity.y = 0.0f;
-    isDying = true;
+    onDying();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
@@ -394,7 +401,7 @@ void BoltEntity::collideMapBottom()
   else
   {
     velocity.y = 0.0f;
-    isDying = true;
+    onDying();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
@@ -408,7 +415,7 @@ void BoltEntity::collideMapBottom()
 
 void BoltEntity::explode()
 {
-  isDying = true;
+  onDying();
   new ExplosionEntity(x, y, ExplosionTypeStandard, 12, enemyType, true);
   game().makeShake(0.5f);
   SoundManager::getInstance().playSound(SOUND_BOOM_00);
