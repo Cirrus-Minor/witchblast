@@ -842,6 +842,8 @@ void BaseCreatureEntity::heal(int healPoints)
     text->setType(ENTITY_FLYING_TEXT);
     while (textTooClose(text, 15, 15)) text->setY(text->getY() - 5);
   }
+
+  if (type == ENTITY_PLAYER) game().addHealingStat(healedHp);
 }
 
 bool BaseCreatureEntity::isAttacking()
