@@ -178,6 +178,7 @@ enum enum_images {
   IMAGE_BAG,
   IMAGE_UI_PAUSE,
   IMAGE_SCORE_FONT,
+  IMAGE_EFFECT_ZONE,
 
   NB_IMAGES
 };
@@ -400,7 +401,7 @@ const int MAX_SHOT_LEVEL = 3;
 const float STATUS_FROZEN_DELAY[MAX_SHOT_LEVEL]   // how long the freeze occurs
     = { 4.0f, 5.0f, 6.0f };
 const float STATUS_FROZEN_BOLT_DELAY[MAX_SHOT_LEVEL]   // reload time
-    = { 3.0f, 2.6f, 2.0f };
+    = { 3.0f, 2.8f, 2.8f };
 const float STATUS_FROZEN_MULT[MAX_SHOT_LEVEL]   // speed multiplier (= 3 times slower)
     = { 0.38f, 0.33f, 0.28f };
 const float STONE_DECOIL_DELAY[MAX_SHOT_LEVEL]   // how long the stun occurs
@@ -459,6 +460,7 @@ const int ENTITY_CHEST = 18;
 const int ENTITY_ITEM = 19;
 const int ENTITY_EXPLOSION = 20;
 const int ENTITY_FAMILIAR_LOCAL = 21;
+const int ENTITY_EFFECT_ZONE = 22;
 const int ENTITY_ENEMY = 31;
 const int ENTITY_ENEMY_INVOCATED = 32;
 const int ENTITY_ENEMY_BOSS = 33;

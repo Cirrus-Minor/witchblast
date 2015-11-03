@@ -345,7 +345,7 @@ WitchBlastGame::WitchBlastGame()
     "media/lightning.png",
     "media/win_seal.png",         "media/hof_win_seal.png",
     "media/bag.png",              "media/ui_pause.png",
-    "media/score_font.png",
+    "media/score_font.png",       "media/effect_zone.png",
   };
 
   for (const char *const filename : images)
