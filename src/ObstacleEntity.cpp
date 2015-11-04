@@ -98,6 +98,7 @@ int ObstacleEntity::getObjectIndex()
 
 void ObstacleEntity::animate(float delay)
 {
+  age += delay;
   testSpriteCollisions();
 }
 
@@ -115,7 +116,7 @@ void ObstacleEntity::dying()
   for (int i = 0; i < 10; i++)
     game().generateBlood(x, y, obstacleBloodType);
 
-  if (explosive)
+  if (explosive && age > 2.0f)
   {
     new ExplosionEntity(x, y, ExplosionTypeStandard, 16, EnemyTypeNone, true);
     SoundManager::getInstance().playSound(SOUND_BOOM_00);
