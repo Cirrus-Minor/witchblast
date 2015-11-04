@@ -382,7 +382,7 @@ public:
    *  \brief Save the game
    *  Save the game to file : complete floor and maps, items and blood position, player current equipment and stats....
    */
-  void saveGame();
+  void saveGame(bool autosave);
 
   /*!
    *  \brief Load the game

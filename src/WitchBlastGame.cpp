@@ -1143,7 +1143,7 @@ void WitchBlastGame::updateRunningGame()
     // Close window : exit
     if (event.type == sf::Event::Closed)
     {
-      if ((gameState == gameStatePlaying && !player->isDead()) || gameState == gameStatePlayingPause) saveGame();
+      if ((gameState == gameStatePlaying && !player->isDead()) || gameState == gameStatePlayingPause) saveGame(false);
       saveGameData();
       app->close();
     }
@@ -1458,7 +1458,7 @@ void WitchBlastGame::updateRunningGame()
         break;
 
       case MenuSaveAndQuit:
-        if (currentMap->isCleared()) saveGame();
+        if (currentMap->isCleared()) saveGame(false);
         backToMenu = true;
         break;
       }
@@ -4505,7 +4505,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
 
     if (!currentMap->isCleared())
     {
-      saveGame();
+      saveGame(true);
     }
   }
 }
@@ -5618,9 +5618,10 @@ void WitchBlastGame::makeColorEffect(int color, float duration)
   xGame[xGameTypeFadeColor].duration = duration;
 }
 
-void WitchBlastGame::saveGame()
+void WitchBlastGame::saveGame(bool autosave)
 {
   if (nbPlayers > 1) return;
+  if (!currentMap->isCleared() && !autosave) return;
 
   if (player->getPlayerStatus() == PlayerEntity::playerStatusAcquire)
     player->acquireItemAfterStance();
@@ -6108,7 +6109,7 @@ bool WitchBlastGame::loadGame()
 
     player->computePlayer();
     file.close();
-    remove(SAVE_FILE.c_str());
+    if (!saveInFight.isFight) remove(SAVE_FILE.c_str());
   }
   else
   {
