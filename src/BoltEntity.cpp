@@ -233,7 +233,23 @@ void BoltEntity::collide()
 
     if (goThrough)
     {
-      if (damages > 0) return;
+      if (damages > 0)
+      {
+        if (damages > 1 && boltType == ShotTypeLightning && level == 2)
+        {
+          // bolt lvl3 effect
+          for (int i = 0; i < 3; i++)
+          {
+            BoltEntity* bolt = new BoltEntity(x, y, lifetime, ShotTypeLightning, 1);
+            bolt->setDamages(damages / 2);
+            float shotAngle = rand() % 360;
+            float fireVelocity = 400.0f;
+            bolt->setVelocity(Vector2D(fireVelocity * cos(shotAngle), fireVelocity * sin(shotAngle)));
+          }
+          damages /= 2;
+        }
+        return;
+      }
     }
   }
 
