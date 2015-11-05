@@ -208,9 +208,13 @@ std::vector<IntCoord> GameFloor::findSecretRoom()
       if (floor[i][j] == roomTypeNULL && neighboorCount(i, j) == 1)
       {
         IntCoord neighboor = getFirstNeighboor(i, j);
-        if (i >= 0 &&
-            (floor[neighboor.x][neighboor.y] == roomTypeStandard
-             || (floor[neighboor.x][neighboor.y] == roomTypeStarting && neighboor.y != j - 1)))
+
+        bool ok = true;
+
+        if (game().getLevel() > 1 && i == FLOOR_WIDTH / 2 && j == FLOOR_HEIGHT / 2 + 1) ok = false;
+
+        if (ok && (floor[neighboor.x][neighboor.y] == roomTypeStandard
+             || (floor[neighboor.x][neighboor.y] == roomTypeStarting)))
         {
           IntCoord result(i, j);
           results.push_back(result);
@@ -225,8 +229,7 @@ std::vector<IntCoord> GameFloor::findSecretRoom()
       if (floor[i][j] == roomTypeNULL && neighboorCount(i, j) == 1)
       {
         IntCoord neighboor = getFirstNeighboor(i, j);
-        if (i >= 0
-            && floor[neighboor.x][neighboor.y] != roomTypeMerchant
+        if (floor[neighboor.x][neighboor.y] != roomTypeMerchant
             && floor[neighboor.x][neighboor.y] != roomTypeExit)
         {
           IntCoord result(i, j);
