@@ -69,10 +69,17 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
 
   isPet = false;
   willExplode = false;
+  noCollisionTimer = -1.0f;
+}
+
+void SlimeEntity::setH(float h)
+{
+  this->h = h;
 }
 
 void SlimeEntity::animate(float delay)
 {
+  if (noCollisionTimer > 0.0f) noCollisionTimer -= delay;
   float slimeDelay = delay;
   if (specialState[SpecialStateIce].active) slimeDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -327,7 +334,13 @@ void SlimeEntity::prepareDying()
 
 bool SlimeEntity::canCollide()
 {
+  if (noCollisionTimer > 0.0f) return false;
   return h <= 70.0f && hp > 0;
+}
+
+void SlimeEntity::disableCollidingTemporary()
+{
+  noCollisionTimer = 0.8f;
 }
 
 BaseCreatureEntity::enumMovingStyle SlimeEntity::getMovingStyle()

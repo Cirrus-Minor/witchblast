@@ -15,6 +15,8 @@ class SlimeEntity : public EnemyEntity
     virtual void calculateBB();
 	  virtual bool canCollide();
 	  void makePet(int direction);
+	  void setH(float h);
+	  void disableCollidingTemporary();
 
   protected:
     virtual bool collideWithMap(int direction);
@@ -34,6 +36,7 @@ class SlimeEntity : public EnemyEntity
 
   private:
     float jumpingDelay;
+    float noCollisionTimer;
 
     bool isJumping;
     bool isPet;

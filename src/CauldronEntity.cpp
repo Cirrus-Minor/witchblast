@@ -74,13 +74,15 @@ void CauldronEntity::animate(float delay)
             case 1: slimeType = SlimeTypeRed; break;
             case 2: slimeType = SlimeTypeStandard; break;
           }
-          new SlimeEntity(x, y, slimeType, true);
+          SlimeEntity* slime = new SlimeEntity(x, y, slimeType, true);
+          slime->disableCollidingTemporary();
           invokeDelay = 3.75f + (float)(rand() % 3000) / 1000.0f;
         }
       }
       else
       {
-        new SlimeEntity(x, y, SlimeTypeViolet, true);
+        SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeViolet, true);
+        slime->disableCollidingTemporary();
         invokeDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
       }
     }
