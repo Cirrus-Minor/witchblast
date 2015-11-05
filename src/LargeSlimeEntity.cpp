@@ -320,13 +320,15 @@ void LargeSlimeEntity::dying()
     game().generateBlood(xSlime, ySlime, bloodColor);
     if (i % 2 == 0)
     {
+      SlimeEntity* slime;
       switch (slimeType)
       {
-        case SlimeTypeBlue: new SlimeEntity(x, y, SlimeTypeBlue, true); break;
-        case SlimeTypeRed: new SlimeEntity(x, y, SlimeTypeRed, true); break;
-        case SlimeTypeViolet: new SlimeEntity(x, y, SlimeTypeViolet, true); break;
-        default: new SlimeEntity(x, y, SlimeTypeStandard, true); break;
+        case SlimeTypeBlue: slime = new SlimeEntity(x, y, SlimeTypeBlue, true); break;
+        case SlimeTypeRed: slime = new SlimeEntity(x, y, SlimeTypeRed, true); break;
+        case SlimeTypeViolet: slime = new SlimeEntity(x, y, SlimeTypeViolet, true); break;
+        default: slime = new SlimeEntity(x, y, SlimeTypeStandard, true); break;
       }
+      slime->disableCollidingTemporary();
     }
   }
 

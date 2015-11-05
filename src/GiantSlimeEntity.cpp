@@ -378,7 +378,8 @@ void GiantSlimeEntity::dying()
   for (int i = 0; i < 9; i++)
   {
     game().generateBlood(xSlime, ySlime, bloodColor);
-    new SlimeEntity(x, y, SlimeTypeStandard, true);
+    SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeStandard, true);
+    slime->disableCollidingTemporary();
   }
 
   game().makeShake(1.0f);
