@@ -2871,6 +2871,25 @@ void PlayerEntity::donate(int n)
     bool divineGift = false;
     enumItemType itemType = ItemCopperCoin;
 
+    if (divinity.level >= 4 && game().getItemsCount() == 0 && donation >= 40)
+    {
+      if (divinity.divinity == DivinityIce && !equip[EQUIP_RING_ICE])
+      {
+        divineGift = true;
+        itemType = ItemRingIce;
+      }
+      else if (divinity.divinity == DivinityStone && !equip[EQUIP_RING_STONE])
+      {
+        divineGift = true;
+        itemType = ItemRingStone;
+      }
+      else if (divinity.divinity == DivinityAir && !equip[EQUIP_RING_LIGHTNING])
+      {
+        divineGift = true;
+        itemType = ItemRingLightning;
+      }
+    }
+
     if (divinity.level >= 3 && game().getItemsCount() == 0)
     {
       if (divinity.divinity == DivinityHealer && !equip[EQUIP_MANUAL_HEALTH])
