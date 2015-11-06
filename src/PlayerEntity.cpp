@@ -1976,7 +1976,8 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 
   shouldBeSavedFromDivinity = false;
   bool divinityInvoked = false;
-  if (hp - hurtParam.damage <= hpMax / 4 && divinity.divinity >= 0)
+  int thresholdDam = 5;
+  if (hp - hurtParam.damage <= thresholdDam && divinity.divinity >= 0 && game().getEnemyCount() > 2)
   {
     divinityInvoked = triggerDivinityBefore();
     if (divinityInvoked)
