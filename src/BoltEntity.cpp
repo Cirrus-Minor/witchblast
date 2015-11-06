@@ -247,6 +247,7 @@ void BoltEntity::collide()
             bolt->setVelocity(Vector2D(fireVelocity * cos(shotAngle), fireVelocity * sin(shotAngle)));
           }
           damages /= 2;
+          SoundManager::getInstance().playSound(SOUND_ELECTRIC_CHARGE);
         }
         return;
       }
