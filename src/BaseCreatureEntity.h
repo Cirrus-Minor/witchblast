@@ -142,7 +142,7 @@ enum enumResistances
   ResistanceIllusion,
   ResistancePoison,
 
-  ResistanceRecoil,
+  ResistanceRepulsion,
   ResistanceFrozen,
 
   NB_RESISTANCES
@@ -245,8 +245,8 @@ public:
   bool isSpecialStateActive(enumSpecialState state);
   specialStateStuct getSpecialState(enumSpecialState state);
 
-  virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
-  virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+  virtual void giveRepulsion(bool stun, Vector2D velocity, float timer);
+  virtual void inflictsRepulsionTo(BaseCreatureEntity* targetEntity);
   virtual void computeFacingDirection();
   virtual void dyingFromAge();
   virtual bool canCollide();
@@ -299,13 +299,14 @@ protected:
   enumBloodColor bloodColor;
   enumMovingStyle movingStyle;
 
-  struct  recoilStruct
+  struct  RepulseStruct
   {
     bool active;
     Vector2D velocity;
     bool stun;
+    bool propage;
     float timer;
-  } recoil;
+  } repulsion;
 
   void generateStar(sf::Color starColor);
   virtual void makeExplode();

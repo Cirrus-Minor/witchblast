@@ -107,7 +107,7 @@ void BatEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
   acceleration.x = -acceleration.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
   else computeFacingDirection();
 }
 
@@ -115,7 +115,7 @@ void BatEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
   acceleration.x = -acceleration.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
   else computeFacingDirection();
 }
 
@@ -123,7 +123,7 @@ void BatEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
   acceleration.y = -acceleration.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
   else computeFacingDirection();
 }
 
@@ -131,7 +131,7 @@ void BatEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
   acceleration.y = -acceleration.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
   else computeFacingDirection();
 }
 

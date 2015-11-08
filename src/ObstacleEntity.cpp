@@ -84,7 +84,7 @@ ObstacleEntity::ObstacleEntity(float x, float y, int objectFrame)
   }
 
   resistance[ResistanceFrozen] = ResistanceImmune;
-  resistance[ResistanceRecoil] = ResistanceImmune;
+  resistance[ResistanceRepulsion] = ResistanceImmune;
   resistance[ResistanceFire] = ResistanceVeryLow;
   resistance[ResistancePoison] = ResistanceImmune;
 

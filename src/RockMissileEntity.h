@@ -16,7 +16,7 @@ class RockMissileEntity : public EnemyEntity
     virtual void collideMapBottom();
 
     virtual void collideWithEnemy(EnemyEntity* entity) override;
-    virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+    virtual void inflictsRepulsionTo(BaseCreatureEntity* targetEntity) override;
 
 	  virtual void dying();
   private:

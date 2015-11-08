@@ -95,34 +95,34 @@ void SnakeEntity::calculateBB()
 void SnakeEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
   else computeFacingDirection();
 }
 
 void SnakeEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
   else computeFacingDirection();
 }
 
 void SnakeEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
   else computeFacingDirection();
 }
 
 void SnakeEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
   else computeFacingDirection();
 }
 
 void SnakeEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getMovingStyle() == movWalking )
   {
@@ -170,7 +170,7 @@ void SnakeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           star->setType(ENTITY_EFFECT);
           star->setSpin(400.0f);
         }
-        inflictsRecoilTo(playerEntity);
+        inflictsRepulsionTo(playerEntity);
       }
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)

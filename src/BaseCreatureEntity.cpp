@@ -34,7 +34,7 @@ BaseCreatureEntity::BaseCreatureEntity(sf::Texture* image, float x = 0.0f, float
   {
     resistance[i] = ResistanceStandard;
   }
-  recoil.active = false;
+  repulsion.active = false;
   facingDirection = 2;
   doesAccelerate = false;
 }
@@ -175,16 +175,16 @@ void BaseCreatureEntity::animateColors(float delay)
 
 void BaseCreatureEntity::animateRecoil(float delay)
 {
-  // recoil
-  if (recoil.active)
+  // repulsion
+  if (repulsion.active)
   {
-    recoil.velocity.x *= 0.97f;
-    recoil.velocity.y *= 0.97f;
+    repulsion.velocity.x *= 0.97f;
+    repulsion.velocity.y *= 0.97f;
 
-    recoil.timer -= delay;
-    if (recoil.timer <= 0.0f)
+    repulsion.timer -= delay;
+    if (repulsion.timer <= 0.0f)
     {
-      recoil.active = false;
+      repulsion.active = false;
       computeFacingDirection();
       // TODO ?
     }
@@ -225,15 +225,15 @@ void BaseCreatureEntity::animatePhysics(float delay)
     vely *= specialState[SpecialStateSpeed].param1;
   }
 
-	if (recoil.active)
+	if (repulsion.active)
   {
-    if (recoil.stun)
+    if (repulsion.stun)
     {
       velx = 0.0f;
       vely = 0.0f;
     }
-    velx += recoil.velocity.x;
-    vely += recoil.velocity.y;
+    velx += repulsion.velocity.x;
+    vely += repulsion.velocity.y;
   }
 
   spin *= viscosity;
@@ -656,39 +656,39 @@ void BaseCreatureEntity::computeFacingDirection()
   }
 }
 
-void BaseCreatureEntity::giveRecoil(bool stun, Vector2D velocity, float timer)
+void BaseCreatureEntity::giveRepulsion(bool stun, Vector2D velocity, float timer)
 {
-  if (resistance[ResistanceRecoil] == ResistanceHigh)
+  if (resistance[ResistanceRepulsion] == ResistanceHigh)
     {
       velocity.x *= 0.75f;
       velocity.y *= 0.75f;
       timer *= 0.75f;
     }
-    else if (resistance[ResistanceRecoil] == ResistanceVeryHigh)
+    else if (resistance[ResistanceRepulsion] == ResistanceVeryHigh)
     {
       velocity.x *= 0.5f;
       velocity.y *= 0.5f;
       timer *= 0.5f;
     }
 
-  if (!(recoil.active && recoil.stun))
+  if (!(repulsion.active && repulsion.stun))
   {
-    recoil.active = true;
-    recoil.stun = stun;
+    repulsion.active = true;
+    repulsion.stun = stun;
 
-    if (this->velocity.x > 1.0f && velocity.x > 1.0f) recoil.velocity.x = velocity.x + this->velocity.x;
-    else if (this->velocity.x < -1.0f && velocity.x < -1.0f) recoil.velocity.x = velocity.x + this->velocity.x;
-    else recoil.velocity.x = velocity.x;
+    if (this->velocity.x > 1.0f && velocity.x > 1.0f) repulsion.velocity.x = velocity.x + this->velocity.x;
+    else if (this->velocity.x < -1.0f && velocity.x < -1.0f) repulsion.velocity.x = velocity.x + this->velocity.x;
+    else repulsion.velocity.x = velocity.x;
 
-    if (this->velocity.y > 1.0f && velocity.y > 1.0f) recoil.velocity.y = velocity.y + this->velocity.y;
-    else if (this->velocity.y < -1.0f && velocity.y < -1.0f) recoil.velocity.y = velocity.y + this->velocity.y;
-    else recoil.velocity.y = velocity.y;
+    if (this->velocity.y > 1.0f && velocity.y > 1.0f) repulsion.velocity.y = velocity.y + this->velocity.y;
+    else if (this->velocity.y < -1.0f && velocity.y < -1.0f) repulsion.velocity.y = velocity.y + this->velocity.y;
+    else repulsion.velocity.y = velocity.y;
 
-    recoil.timer = timer;
+    repulsion.timer = timer;
   }
 }
 
-void BaseCreatureEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+void BaseCreatureEntity::inflictsRepulsionTo(BaseCreatureEntity* targetEntity)
 {
 }
 

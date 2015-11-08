@@ -141,10 +141,10 @@ void WitchEntity::calculateBB()
 void WitchEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.x = -repulsion.velocity.x * 0.3f;
+    else (repulsion.active = false);
   }
   else computeFacingDirection();
 }
@@ -152,10 +152,10 @@ void WitchEntity::collideMapRight()
 void WitchEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.x = -repulsion.velocity.x * 0.3f;
+    else (repulsion.active = false);
   }
   else computeFacingDirection();
 }
@@ -163,10 +163,10 @@ void WitchEntity::collideMapLeft()
 void WitchEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.y = -repulsion.velocity.y * 0.3f;
+    else (repulsion.active = false);
   }
   else computeFacingDirection();
 }
@@ -174,10 +174,10 @@ void WitchEntity::collideMapTop()
 void WitchEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.y = -repulsion.velocity.y * 0.3f;
+    else (repulsion.active = false);
   }
   else computeFacingDirection();
 }

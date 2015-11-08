@@ -127,13 +127,13 @@ void RockMissileEntity::dying()
   }
 }
 
-void RockMissileEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+void RockMissileEntity::inflictsRepulsionTo(BaseCreatureEntity* targetEntity)
 {
   PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(targetEntity);
 
   if (playerEntity != NULL && !playerEntity->isDead())
   {
-    Vector2D recoilVector = Vector2D(0, 0).vectorTo(getVelocity(), 600.0f );
-    targetEntity->giveRecoil(true, recoilVector, 0.5f);
+    Vector2D repulsionVector = Vector2D(0, 0).vectorTo(getVelocity(), 600.0f );
+    targetEntity->giveRepulsion(true, repulsionVector, 0.5f);
   }
 }

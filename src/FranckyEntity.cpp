@@ -41,7 +41,7 @@ FranckyEntity::FranckyEntity(float x, float y)
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceImmune;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistanceLightning] = ResistanceVeryHigh;
   canExplode = false;
 }
@@ -175,17 +175,17 @@ void FranckyEntity::render(sf::RenderTarget* app)
 void FranckyEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (entity->getMovingStyle() == movWalking)
-    inflictsRecoilTo(entity);
+    inflictsRepulsionTo(entity);
 }
 
-void FranckyEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+void FranckyEntity::inflictsRepulsionTo(BaseCreatureEntity* targetEntity)
 {
   PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(targetEntity);
 
   if (playerEntity != NULL && !playerEntity->isDead())
   {
-    Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 450.0f);
-    targetEntity->giveRecoil(true, recoilVector, 0.5f);
+    Vector2D repulsionVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 450.0f);
+    targetEntity->giveRepulsion(true, repulsionVector, 0.5f);
   }
 }
 
@@ -293,25 +293,25 @@ void FranckyEntityHand::calculateBB()
 void FranckyEntityHand::collideMapRight()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void FranckyEntityHand::collideMapLeft()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void FranckyEntityHand::collideMapTop()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void FranckyEntityHand::collideMapBottom()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void FranckyEntityHand::collideWithEnemy(EnemyEntity* entity)
@@ -484,7 +484,7 @@ void FranckyEntityHead::collideMapBottom()
 
 void FranckyEntityHead::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getMovingStyle() == movWalking)
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), velocity.norm() ));
@@ -651,7 +651,7 @@ void FranckyEntityFoot::collideMapBottom()
 
 void FranckyEntityFoot::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getMovingStyle() == movWalking)
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), velocity.norm() ));

@@ -40,7 +40,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   slimeTimer =5.0f;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceVeryHigh;
 
   sprite.setOrigin(64, 84);
@@ -440,7 +440,7 @@ void GiantSlimeEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
   if (state == 7)
   {
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), KING_RAT_RUNNING_RECOIL );
-    targetEntity->giveRecoil(true, recoilVector, 1.0f);
+    targetEntity->giveRepulsion(true, recoilVector, 1.0f);
   }
 }
 

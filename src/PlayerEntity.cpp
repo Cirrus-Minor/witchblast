@@ -547,17 +547,16 @@ void PlayerEntity::animate(float delay)
       hiccupDelay = 4.0f;
 
       // hiccup
-      recoil.active = true;
-      recoil.stun = true;
-      recoil.velocity = Vector2D(350.0f);
-      recoil.timer = 0.4f;
+      repulsion.active = true;
+      repulsion.stun = true;
+      repulsion.velocity = Vector2D(350.0f);
+      repulsion.timer = 0.4f;
 
       for (int i = 0; i < 4; i++)
       {
         BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypePoison, 0);
         bolt->setDamages(4);
         bolt->setFlying(isFairyTransmuted);
-        //bolt->setVelocity(recoil.velocity.vectorTo(Vector2D(0, 0), fireVelocity));
         bolt->setVelocity(Vector2D(fireVelocity));
       }
 
@@ -621,10 +620,10 @@ void PlayerEntity::animate(float delay)
 
     if (boundingBox.intersects(col1) || boundingBox.intersects(col2))
     {
-      recoil.active = true;
-      recoil.stun = true;
-      recoil.velocity = Vector2D(GAME_WIDTH / 2, GAME_HEIGHT /2).vectorTo(Vector2D(x, y), 650.0f);
-      recoil.timer = 0.4f;
+      repulsion.active = true;
+      repulsion.stun = true;
+      repulsion.velocity = Vector2D(GAME_WIDTH / 2, GAME_HEIGHT /2).vectorTo(Vector2D(x, y), 650.0f);
+      repulsion.timer = 0.4f;
 
       game().activateKeyRoomEffect(true);
     }
@@ -2489,7 +2488,7 @@ void PlayerEntity::computePlayer()
     }
   case (DivinityStone):
     {
-      if (divinity.level >= 5) resistance[ResistanceRecoil] = ResistanceVeryHigh;
+      if (divinity.level >= 5) resistance[ResistanceRepulsion] = ResistanceVeryHigh;
       if (divinity.level >= 3) resistance[ResistanceStone] = (enumStateResistance)(resistance[ResistanceStone] - 1);
       break;
     }
@@ -2625,25 +2624,25 @@ void PlayerEntity::acquireStance(enumItemType type)
 void PlayerEntity::collideMapRight()
 {
   collidingDirection = 6;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x * 0.7f;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x * 0.7f;
 }
 
 void PlayerEntity::collideMapLeft()
 {
   collidingDirection = 4;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x * 0.7f;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x * 0.7f;
 }
 
 void PlayerEntity::collideMapTop()
 {
   collidingDirection = 8;
-  if (recoil.active) recoil.velocity.y= -recoil.velocity.y * 0.7f;
+  if (repulsion.active) repulsion.velocity.y= -repulsion.velocity.y * 0.7f;
 }
 
 void PlayerEntity::collideMapBottom()
 {
   collidingDirection = 2;
-  if (recoil.active) recoil.velocity.y= -recoil.velocity.y * 0.7f;
+  if (repulsion.active) repulsion.velocity.y= -repulsion.velocity.y * 0.7f;
 }
 
 void PlayerEntity::useBossKey()
@@ -3095,7 +3094,7 @@ void PlayerEntity::divineRepulse()
                            SourceTypeBolt,
                            EnemyTypeNone,
                            false));
-      enemy->giveRecoil(true, Vector2D(x, y).vectorTo(Vector2D(enemy->getX(), enemy->getY()), 700.0f), 2.0f);
+      enemy->giveRepulsion(true, Vector2D(x, y).vectorTo(Vector2D(enemy->getX(), enemy->getY()), 700.0f), 2.0f);
     }
   }
 

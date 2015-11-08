@@ -133,25 +133,25 @@ void RatEntity::calculateBB()
 
 void RatEntity::collideMapRight()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   compute(true);
 }
 
 void RatEntity::collideMapLeft()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   compute(true);
 }
 
 void RatEntity::collideMapTop()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   compute(true);
 }
 
 void RatEntity::collideMapBottom()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   compute(true);
 }
 
@@ -160,7 +160,7 @@ void RatEntity::collideWithEnemy(EnemyEntity* entity)
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D recoilVector = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 50.0f);
-    giveRecoil(false, recoilVector, 0.2f);
+    giveRepulsion(false, recoilVector, 0.2f);
     compute(true);
   }
 }
@@ -211,7 +211,7 @@ void RatEntity::collideWithBolt(BoltEntity* boltEntity)
 
         Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
                                 recoilVelocity );
-        giveRecoil(true, recoilVector, recoilDelay);
+        giveRepulsion(true, recoilVector, recoilDelay);
       }
     }
   }

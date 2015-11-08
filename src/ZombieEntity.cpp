@@ -38,7 +38,7 @@ ZombieEntity::ZombieEntity(float x, float y, bool invocated)
   sprite.setOrigin(32.0f, 60.0f);
 
   resistance[ResistanceFrozen] = ResistanceHigh;
-  resistance[ResistanceRecoil] = ResistanceHigh;
+  resistance[ResistanceRepulsion] = ResistanceHigh;
   resistance[ResistancePoison] = ResistanceImmune;
 }
 
@@ -69,7 +69,7 @@ void ZombieEntity::animate(float delay)
     if (attackTimer <= 0.0f && attack())
     {
       attackTimer = 2.0f;
-      giveRecoil(false, Vector2D(velocity.x * 3.0f, velocity.y * 3.0f), 2.5f);
+      giveRepulsion(false, Vector2D(velocity.x * 3.0f, velocity.y * 3.0f), 2.5f);
     }
     else
     {
@@ -203,40 +203,40 @@ void ZombieEntity::calculateBB()
 
 void ZombieEntity::collideMapRight()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.x = -repulsion.velocity.x * 0.3f;
+    else (repulsion.active = false);
   }
   else compute(true);
 }
 
 void ZombieEntity::collideMapLeft()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.x = -repulsion.velocity.x * 0.3f;
+    else (repulsion.active = false);
   }
   else compute(true);
 }
 
 void ZombieEntity::collideMapTop()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.y = -repulsion.velocity.y * 0.3f;
+    else (repulsion.active = false);
   }
   else compute(true);
 }
 
 void ZombieEntity::collideMapBottom()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.y = -repulsion.velocity.y * 0.3f;
+    else (repulsion.active = false);
   }
   else compute(true);
 }
@@ -246,7 +246,7 @@ void ZombieEntity::collideWithEnemy(EnemyEntity* entity)
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D recoilVector = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 50.0f);
-    giveRecoil(false, recoilVector, 0.2f);
+    giveRepulsion(false, recoilVector, 0.2f);
     compute(true);
   }
 }

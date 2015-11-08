@@ -155,7 +155,7 @@ void BogeymanEntity::collideWithEnemy(EnemyEntity* entity)
   if (entity->getEnemyType() != EnemyTypeSpiderWeb && entity->getMovingStyle() == movFlying)
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 50.0f );
-    giveRecoil(false, vel, 0.3f);
+    giveRepulsion(false, vel, 0.3f);
   }
 }
 

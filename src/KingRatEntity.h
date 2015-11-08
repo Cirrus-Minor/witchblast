@@ -11,7 +11,7 @@ class KingRatEntity : public EnemyEntity
     virtual void animate(float delay);
     virtual void render(sf::RenderTarget* app);
     virtual void calculateBB();
-    virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+    virtual void inflictsrepulsionTo(BaseCreatureEntity* targetEntity);
   protected:
     virtual void collideMapRight();
     virtual void collideMapLeft();

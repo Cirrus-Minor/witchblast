@@ -80,25 +80,25 @@ void BlackRatEntity::calculateBB()
 
 void BlackRatEntity::collideMapRight()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   findNextGoal();
 }
 
 void BlackRatEntity::collideMapLeft()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   findNextGoal();
 }
 
 void BlackRatEntity::collideMapTop()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   findNextGoal();
 }
 
 void BlackRatEntity::collideMapBottom()
 {
-  if (recoil.active) recoil.active = false;
+  if (repulsion.active) repulsion.active = false;
   findNextGoal();
 }
 
@@ -302,7 +302,7 @@ void BlackRatEntity::collideWithBolt(BoltEntity* boltEntity)
 
         Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
                                 recoilVelocity );
-        giveRecoil(true, recoilVector, recoilDelay);
+        giveRepulsion(true, recoilVector, recoilDelay);
       }
     }
   }

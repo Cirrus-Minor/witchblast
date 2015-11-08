@@ -167,7 +167,7 @@ void PumpkinEntity::collideMapBottom()
 
 void PumpkinEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getMovingStyle() == movWalking)
     setVelocity(Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), velocity.norm() ));

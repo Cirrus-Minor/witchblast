@@ -39,7 +39,7 @@ LargeSlimeEntity::LargeSlimeEntity(float x, float y, slimeTypeEnum slimeType)
   {
   case SlimeTypeBlue:
     resistance[ResistanceFrozen] = ResistanceVeryHigh;
-    resistance[ResistanceRecoil] = ResistanceVeryHigh;
+    resistance[ResistanceRepulsion] = ResistanceVeryHigh;
     resistance[ResistancePoison] = ResistanceHigh;
     resistance[ResistanceIce] = ResistanceVeryHigh;
     resistance[ResistanceFire] = ResistanceVeryLow;
@@ -53,7 +53,7 @@ LargeSlimeEntity::LargeSlimeEntity(float x, float y, slimeTypeEnum slimeType)
 
   case SlimeTypeRed:
     resistance[ResistanceFrozen] = ResistanceHigh;
-    resistance[ResistanceRecoil] = ResistanceVeryHigh;
+    resistance[ResistanceRepulsion] = ResistanceVeryHigh;
     resistance[ResistancePoison] = ResistanceHigh;
     resistance[ResistanceIce] = ResistanceVeryLow;
     resistance[ResistanceFire] = ResistanceVeryHigh;
@@ -66,7 +66,7 @@ LargeSlimeEntity::LargeSlimeEntity(float x, float y, slimeTypeEnum slimeType)
 
   case SlimeTypeViolet:
     resistance[ResistanceFrozen] = ResistanceHigh;
-    resistance[ResistanceRecoil] = ResistanceVeryHigh;
+    resistance[ResistanceRepulsion] = ResistanceVeryHigh;
     resistance[ResistancePoison] = ResistanceHigh;
     enemyType = EnemyTypeSlimeLarge;
     fireSound = SOUND_BLAST_FLOWER;
@@ -77,7 +77,7 @@ LargeSlimeEntity::LargeSlimeEntity(float x, float y, slimeTypeEnum slimeType)
 
   case SlimeTypeStandard:
     resistance[ResistanceFrozen] = ResistanceHigh;
-    resistance[ResistanceRecoil] = ResistanceVeryHigh;
+    resistance[ResistanceRepulsion] = ResistanceVeryHigh;
     resistance[ResistancePoison] = ResistanceHigh;
     enemyType = EnemyTypeSlimeLarge;
     fireSound = SOUND_BLAST_FLOWER;
@@ -379,16 +379,16 @@ void LargeSlimeEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (entity->getMovingStyle() == movWalking)
   {
-    inflictsRecoilTo(entity);
+    inflictsRepulsionTo(entity);
   }
 }
 
-void LargeSlimeEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+void LargeSlimeEntity::inflictsRepulsionTo(BaseCreatureEntity* targetEntity)
 {
   if (state == 7)
   {
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), KING_RAT_RUNNING_RECOIL );
-    targetEntity->giveRecoil(true, recoilVector, 1.0f);
+    targetEntity->giveRepulsion(true, recoilVector, 1.0f);
   }
 }
 

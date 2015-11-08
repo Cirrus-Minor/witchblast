@@ -43,7 +43,7 @@ CyclopsEntity::CyclopsEntity(float x, float y)
   enemyType = EnemyTypeCyclops;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceImmune;
   canExplode = false;
 }
@@ -354,10 +354,10 @@ void CyclopsEntity::render(sf::RenderTarget* app)
 void CyclopsEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (entity->getMovingStyle() == movWalking)
-    inflictsRecoilTo(entity);
+    inflictsRepulsionTo(entity);
 }
 
-void CyclopsEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+void CyclopsEntity::inflictsRepulsionTo(BaseCreatureEntity* targetEntity)
 {
   PlayerEntity* playerEntity = dynamic_cast<PlayerEntity*>(targetEntity);
 
@@ -365,6 +365,6 @@ void CyclopsEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
   {
     //Vector2D recoilVector = Vector2D(targetEntity->getX(), targetEntity->getY()).vectorTo(Vector2D(x, y), 450.0f);
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 450.0f);
-    targetEntity->giveRecoil(true, recoilVector, 0.5f);
+    targetEntity->giveRepulsion(true, recoilVector, 0.5f);
   }
 }
