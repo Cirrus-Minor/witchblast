@@ -58,6 +58,7 @@ class BoltEntity : public CollidingSpriteEntity
     ParticleGenerator particleGenerator;
 
   private:
+    void split(int direction);
     bool testWallsCollision;
     bool flying;
     bool critical;

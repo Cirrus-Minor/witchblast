@@ -69,7 +69,7 @@
 #include <iomanip>
 #include <algorithm>
 
-//#define LEVEL_TEST_MODE
+#define LEVEL_TEST_MODE
 
 #ifdef ONLINE_MODE
 #include "OnlineScoring.h"
@@ -420,6 +420,7 @@ WitchBlastGame::WitchBlastGame()
     "media/sound/secret.ogg",         "media/sound/scroll.ogg",
     "media/sound/tic_tac.ogg",        "media/sound/bottle.ogg",
     "media/sound/thunder.ogg",        "media/sound/bonus_score.ogg",
+    "media/sound/stone_hit.ogg",
   };
 
   // AA in fullscreen

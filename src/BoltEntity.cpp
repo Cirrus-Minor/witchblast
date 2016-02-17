@@ -338,6 +338,41 @@ void BoltEntity::stuck()
   onDying();
 }
 
+void BoltEntity::split(int direction)
+{
+  switch (direction)
+  {
+    case 4: x += 8; break;
+    case 6: x -= 8; break;
+    case 2: y -= 8; break;
+    case 8: y += 8; break;
+  }
+  float currentVelocity = velocity.norm();
+  lifetime *= 1.25f;
+  BoltEntity* bolt2 = new BoltEntity(x, y, lifetime, ShotTypeStone, 1);
+  level = 1;
+  damages *= 0.75f;
+  bolt2->setDamages(damages);
+  bolt2->setX(x);
+  bolt2->setY(y);
+  bolt2->setAge(age);
+  if (direction == 2 || direction == 8)
+  {
+    velocity.x = -currentVelocity;
+    velocity.y = 0.0f;
+
+    bolt2->setVelocity(Vector2D(currentVelocity, 0.0f));
+  }
+  else
+  {
+    velocity.y = -currentVelocity;
+    velocity.x = 0.0f;
+
+    bolt2->setVelocity(Vector2D(0.0f, currentVelocity));
+  }
+  SoundManager::getInstance().playSound(SOUND_STONE_HIT);
+}
+
 void BoltEntity::collideMapRight()
 {
   if (boltType == ShotTypeLightning)
@@ -345,7 +380,13 @@ void BoltEntity::collideMapRight()
     velocity.x = -velocity.x;
   }
   else if (boltType == ShotTypeBomb)
+  {
     explode();
+  }
+  else if (boltType == ShotTypeStone && level == 2)
+  {
+    split(6);
+  }
   else
   {
     velocity.x = 0.0f;
@@ -368,7 +409,13 @@ void BoltEntity::collideMapLeft()
     velocity.x = -velocity.x;
   }
   else if (boltType == ShotTypeBomb)
+  {
     explode();
+  }
+  else if (boltType == ShotTypeStone && level == 2)
+  {
+    split(4);
+  }
   else
   {
     velocity.x = 0.0f;
@@ -391,7 +438,13 @@ void BoltEntity::collideMapTop()
     velocity.y = -velocity.y;
   }
   else if (boltType == ShotTypeBomb)
+  {
     explode();
+  }
+  else if (boltType == ShotTypeStone && level == 2)
+  {
+    split(8);
+  }
   else
   {
     velocity.y = 0.0f;
@@ -414,7 +467,13 @@ void BoltEntity::collideMapBottom()
     velocity.y = -velocity.y;
   }
   else if (boltType == ShotTypeBomb)
+  {
     explode();
+  }
+  else if (boltType == ShotTypeStone && level == 2)
+  {
+    split(2);
+  }
   else
   {
     velocity.y = 0.0f;

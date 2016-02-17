@@ -313,7 +313,8 @@ enum sound_resources {
   SOUND_CLOCK,
   SOUND_BOTTLE,
   SOUND_THUNDER,
-  SOUND_SCORE_BONUS
+  SOUND_SCORE_BONUS,
+  SOUND_STONE_HIT,
 };
 
 enum corpses_ressources{
