@@ -35,7 +35,7 @@ ArtefactDescriptionEntity::ArtefactDescriptionEntity(enumItemType itemType)
   else
   {
     artefactName = "Unknown";
-    artefactDescription = "Report to developper";
+    artefactDescription = "Report to developer";
   }
 }
 
