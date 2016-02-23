@@ -27,7 +27,7 @@ const std::string SAVE_FILE =       "game.sav";
 const std::string SAVE_DATA_FILE =  "data/data.sav";
 const std::string HISCORES_FILE =   "data/scores.dat";
 
-const std::string SAVE_VERSION =    "SAVE_0.7";
+const std::string SAVE_VERSION =    "SAVE_0.8";
 const std::string SCORE_VERSION =   "V075_DEV";
 
 const int NB_LANGUAGES = 5;

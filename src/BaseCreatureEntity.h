@@ -92,6 +92,91 @@ enum enemyTypeEnum
   NB_ENEMY // = no enemy
 };
 
+const std::vector<std::string> enemyString =
+{
+  // normal
+  "EnemyTypeBat",
+  "EnemyTypeBatSkeleton",
+  "EnemyTypeRat",
+  "EnemyTypeRatBlack",
+  "EnemyTypeRatHelmet",
+  "EnemyTypeRatBlackHelmet",
+  "EnemyTypeEvilFlower",
+  "EnemyTypeEvilFlowerIce",
+  "EnemyTypeEvilFlowerFire",
+  "EnemyTypeSnake",
+  "EnemyTypeSnakeBlood",
+  "EnemyTypeSlime",
+  "EnemyTypeSlimeRed",
+  "EnemyTypeSlimeBlue",
+  "EnemyTypeSlimeViolet",
+  "EnemyTypeImpBlue",
+  "EnemyTypeImpRed",
+  "EnemyTypePumpkin",
+  "EnemyTypeWitch",
+  "EnemyTypeWitchRed",
+  "EnemyTypeCauldron",
+  "EnemyTypeCauldronElemental",
+  "EnemyTypeSpiderEgg",
+  "EnemyTypeSpiderLittle",
+  "EnemyTypeSpiderTarantula",
+  "EnemyTypeGhost",
+  "EnemyTypeZombie",
+  "EnemyTypeZombieDark",
+  "EnemyTypeBogeyman",
+  "EnemyTypeSlimeLarge",
+  "EnemyTypeSlimeRedLarge",
+  "EnemyTypeSlimeBlueLarge",
+  "EnemyTypeSlimeVioletLarge",
+  "EnemyTypeSausage",
+
+  // mini boss
+  "EnemyTypeBubble",
+  "EnemyTypeBubbleIce",
+  "EnemyTypeBubbleGreater",
+
+  // boss
+  "EnemyTypeButcher",
+  "EnemyTypeSlimeBoss",
+  "EnemyTypeCyclops",
+  "EnemyTypeRatKing",
+  "EnemyTypeSpiderGiant",
+  "EnemyTypeFrancky",
+  "EnemyTypeVampire",
+
+  // invocated
+  "EnemyTypeBat_invocated",
+  "EnemyTypeBatSkeleton_invocated",
+  "EnemyTypeRat_invocated",
+  "EnemyTypeRatGreen",
+  "EnemyTypeRatHelmet_invocated",
+  "EnemyTypeSnake_invocated",
+  "EnemyTypeSnakeBlood_invocated",
+  "EnemyTypeSlime_invocated",
+  "EnemyTypeSlimeRed_invocated",
+  "EnemyTypeSlimeBlue_invocated",
+  "EnemyTypeSlimeViolet_invocated",
+  "EnemyTypePumpkin_invocated",
+  "EnemyTypeSpiderEgg_invocated",
+  "EnemyTypeSpiderLittle_invocated",
+  "EnemyTypeSpiderTarantula_invocated",
+  "EnemyTypeZombie_invocated",
+  "EnemyTypeSausage_invocated",
+
+  "EnemyTypeRockFalling",
+  "EnemyTypeRockMissile",
+  "EnemyTypeSpiderWeb",
+
+  "EnemyTypeFranckyHead",
+  "EnemyTypeFranckyHand",
+  "EnemyTypeFranckyFoot",
+
+  "EnemyTypeVampireDead",
+
+  "EnemyTypeNone",  // player of fairy
+  "EnemyTypeDestroyable",
+};
+
 enum sourceTypeEnum
 {
   SourceTypeMelee,

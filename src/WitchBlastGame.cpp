@@ -259,6 +259,62 @@ static sf::View getFullScreenLetterboxView(sf::View view, int clientWidth, int c
   return returnView;
 }
 
+static enemyTypeEnum enemyStringToEnum(std::string enemy)
+{
+  enemyTypeEnum result = NB_ENEMY;
+  for (int i = 0; i < NB_ENEMY; i++)
+  {
+    if (enemyString[i].compare(enemy) == 0)
+      result = (enemyTypeEnum)i;
+  }
+  return result;
+}
+
+static std::string enemyEnumToString(enemyTypeEnum enemy)
+{
+  if (enemy < NB_ENEMY) return enemyString[enemy];
+  else return "";
+}
+
+static enumAchievementType achievementStringToEnum(std::string achievString)
+{
+  enumAchievementType result = NB_ACHIEVEMENTS;
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+  {
+    if (achievements[i].label.compare(achievString) == 0)
+      result = achievements[i].id;
+  }
+  return result;
+}
+
+static std::string achievementEnumToString(enumAchievementType achiev)
+{
+  std::string result = "";
+  for (int i = 0; i < NB_ACHIEVEMENTS; i++)
+  {
+    if (achievements[i].id == achiev)
+      result = achievements[i].label;
+  }
+  return result;
+}
+
+static EnumMessages messageStringToEnum(std::string msgString)
+{
+  EnumMessages result = NB_MESSAGES;
+  for (int i = 0; i < NB_MESSAGES; i++)
+  {
+    if (msgMap[(EnumMessages)i].key.compare(msgString) == 0)
+      result = (EnumMessages)i;
+  }
+  return result;
+}
+
+static std::string messageEnumToString(EnumMessages msg)
+{
+  if (msg < NB_MESSAGES) return msgMap[msg].key;
+  else return "";
+}
+
 namespace
 {
 WitchBlastGame* gameptr;
@@ -6166,7 +6222,6 @@ WitchBlastGame::saveHeaderStruct WitchBlastGame::loadGameHeader()
 
 void WitchBlastGame::saveGameData()
 {
-  // TODO
   std::ofstream file(SAVE_DATA_FILE.c_str(), std::ios::out | std::ios::trunc);
 
   if (file)
@@ -6176,9 +6231,11 @@ void WitchBlastGame::saveGameData()
     int i;
 
     // tuto
+    file << NB_MESSAGES << std::endl;
     for (i = 0; i < NB_MESSAGES; i++)
     {
       messageStruct msg = getMessage((EnumMessages)i);
+      file << messageEnumToString((EnumMessages)i) << " ";
       if (msg.messageType == MessageTypeTutorial)
       {
         file << gameMessagesToSkip[i] << " ";
@@ -6188,17 +6245,20 @@ void WitchBlastGame::saveGameData()
     file << std::endl;
 
     // achievements
+    file << NB_ACHIEVEMENTS << std::endl;
     for (i = 0; i < NB_ACHIEVEMENTS; i++)
     {
+      file << achievementEnumToString((enumAchievementType)i) << " ";
       if (achievementState[i] == AchievementDone) file << "1 ";
       else file << "0 ";
     }
     file << std::endl;
 
     // monsters
+    file << NB_ENEMY << std::endl;
     for (i = 0; i < NB_ENEMY; i++)
     {
-      file << globalData.killedMonster[i] << " ";
+      file << enemyString[i] << " " << globalData.killedMonster[i] << " ";
     }
     file << std::endl;
 
@@ -6221,32 +6281,69 @@ void WitchBlastGame::loadGameData()
     std::string v;
     file >> v;
 
-    if (v != SAVE_VERSION)
+    if (v == "SAVE_0.7")
+    {
+      // tuto
+      for (i = 0; i < NB_MESSAGES; i++)
+      {
+        file >> gameMessagesToSkip[i];
+      }
+
+        // Achievements
+      for (i = 0; i < NB_ACHIEVEMENTS; i++)
+      {
+        int n;
+        file >> n;
+        if (n == 1) achievementState[i] = AchievementDone;
+        else achievementState[i] = AchievementUndone;
+      }
+
+      // Monsters
+      for (i = 0; i < NB_ENEMY; i++)
+        file >> globalData.killedMonster[i];
+    }
+    else if (v != SAVE_VERSION)
     {
       file.close();
       remove(SAVE_DATA_FILE.c_str());
       return;
     }
-
-    // tuto
-    for (i = 0; i < NB_MESSAGES; i++)
+    else
     {
-      file >> gameMessagesToSkip[i];
+      int index, value;
+      std::string key;
+
+      // tuto
+      file >> index;
+      for (i = 0; i < index; i++)
+      {
+        file >> key;
+        file >> value;
+        gameMessagesToSkip[messageStringToEnum(key)] = value;
+      }
+
+      // Achievements
+      file >> index;
+      for (i = 0; i < index; i++)
+      {
+        file >> key;
+        file >> value;
+
+        if (value == 1) achievementState[achievementStringToEnum(key)] = AchievementDone;
+        else achievementState[achievementStringToEnum(key)] = AchievementUndone;
+      }
+
+      // Monsters
+      file >> index;
+      for (i = 0; i < index; i++)
+      {
+        file >> key;
+        file >> value;
+        gameMessagesToSkip[messageStringToEnum(key)] = value;
+        globalData.killedMonster[enemyStringToEnum(key)] = value;
+      }
     }
   }
-
-  // Achievements
-  for (i = 0; i < NB_ACHIEVEMENTS; i++)
-  {
-    int n;
-    file >> n;
-    if (n == 1) achievementState[i] = AchievementDone;
-    else achievementState[i] = AchievementUndone;
-  }
-
-  // Monsters
-  for (i = 0; i < NB_ENEMY; i++)
-    file >> globalData.killedMonster[i];
 }
 
 void WitchBlastGame::addKey(int logicInput, std::string key)
@@ -7361,7 +7458,7 @@ void WitchBlastGame::loadHiScores()
     if (v != SAVE_VERSION)
     {
       file.close();
-      remove(SAVE_DATA_FILE.c_str());
+      remove(HISCORES_FILE.c_str());
       return;
     }
 
