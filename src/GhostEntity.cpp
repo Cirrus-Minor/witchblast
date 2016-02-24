@@ -64,6 +64,8 @@ void GhostEntity::calculateBB()
 
 int GhostEntity::getGhostFade()
 {
+  if (game().getPlayer()->seeInvisible()) return 100;
+
   float dist1 = 24000.f;
   float dist2 = 40000.f;
   float dist = Vector2D(x, y).distance2(game().getPlayerPosition());
