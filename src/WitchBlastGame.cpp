@@ -6286,6 +6286,10 @@ void WitchBlastGame::loadGameData()
       // tuto
       for (i = 0; i < NB_MESSAGES; i++)
       {
+        if (i == MsgInfoDivIllusion)
+        {
+          i += 3;
+        }
         file >> gameMessagesToSkip[i];
       }
 
