@@ -32,7 +32,7 @@ BoltEntity::BoltEntity(float x, float y, float boltLifeTime, enumShotType boltTy
     case ShotTypeIce:       frame = 2; break;
     case ShotTypeStone:     frame = 4; break;
     case ShotTypeLightning: frame = 5; goThrough = true; break;
-    case ShotTypeIllusion:  frame = 3; break;
+    case ShotTypeIllusion:  frame = 3; goThrough = level >= 2; break;
     case ShotTypeFire:      frame = 6; break;
     case ShotTypePoison:    frame = 7; break;
     case ShotTypeBomb:      frame = 8; damages = 0; sprite.setScale(1.0f, 1.0f); break;
