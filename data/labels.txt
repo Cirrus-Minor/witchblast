@@ -575,6 +575,7 @@ ui_temple_donation#Temple donation
 
 divinity_illusion_0#Moryo
 divinity_illusion_1#Lord of illusion.
+divinity_illusion_2#He likes secrets and illusions.
 div_illusion_lvl_3#makes the ghosts visible
 div_illusion_lvl_4#increases your illusion attack
 [french]

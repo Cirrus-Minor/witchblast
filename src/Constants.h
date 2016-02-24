@@ -658,6 +658,7 @@ enum EnumMessages
   MsgInfoDivIce,
   MsgInfoDivStone,
   MsgInfoDivAir,
+  MsgInfoDivIllusion,
   MsgInfoDivIntervention,
   MsgInfoDivGift,
   MsgInfoDivLevel,
