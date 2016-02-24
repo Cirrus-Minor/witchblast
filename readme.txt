@@ -89,6 +89,7 @@ AFS (for the Spanish translation)
 Changes
 -------
 Next release
+- ADD New divinity (Illusion)
 - ADD New effect for lvl 3 ice, lightning and stone attack
 - MOD New divinity presents
 - MOD Fireball spell damage increase
@@ -96,6 +97,7 @@ Next release
 - MOD Slime from a cauldron or a giant slime can't directly hurt the player while jumping the first time
 - MOD Divinity trigger more complex now
 - FIX Secret room misplacement
+- FIX Stone divinity appreciates ice attacks
 
 v0.7.5
 - ADD 2 players mode
