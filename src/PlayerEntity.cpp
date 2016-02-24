@@ -133,6 +133,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   isFairyTransmuted = false;
 
   itemToBuy = NULL;
+  lastTeleportSave = -15.0f;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -1334,25 +1335,30 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   {
     if (boltEntity != NULL && !boltEntity->getDying())
     {
-      boltEntity->collide();
       // TODO bolt source
-      hurt(getHurtParams(boltEntity->getDamages(),
+      int boltResult = hurt(getHurtParams(boltEntity->getDamages(),
                          boltEntity->getBoltType(),
                          boltEntity->getLevel(),
                          boltEntity->isCritical(),
                          SourceTypeBolt,
                          boltEntity->getEnemyType(),
                          false));
-      game().generateBlood(x, y, bloodColor);
 
-      float xs = (x + boltEntity->getX()) / 2;
-      float ys = (y + boltEntity->getY()) / 2;
-      SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
-      star->setFading(true);
-      star->setZ(y+ 100);
-      star->setLifetime(0.7f);
-      star->setType(ENTITY_EFFECT);
-      star->setSpin(400.0f);
+      if (boltResult > -1)
+      {
+        boltEntity->collide();
+
+        game().generateBlood(x, y, bloodColor);
+
+        float xs = (x + boltEntity->getX()) / 2;
+        float ys = (y + boltEntity->getY()) / 2;
+        SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
+        star->setFading(true);
+        star->setZ(y+ 100);
+        star->setLifetime(0.7f);
+        star->setType(ENTITY_EFFECT);
+        star->setSpin(400.0f);
+      }
     }
   }
 }
@@ -1976,13 +1982,24 @@ int PlayerEntity::hurt(StructHurt hurtParam)
   shouldBeSavedFromDivinity = false;
   bool divinityInvoked = false;
   int thresholdDam = 5;
-  if (hp - hurtParam.damage <= thresholdDam && divinity.divinity >= 0 && game().getEnemyCount() > 2)
+
+
+  if (invincibleDelay <= 0.0f && hp - hurtParam.damage <= thresholdDam && divinity.divinity >= 0)
   {
-    divinityInvoked = triggerDivinityBefore();
-    if (divinityInvoked)
+    if (triggerIllusionTeleport())
     {
-      game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
-      shouldBeSavedFromDivinity = true;
+      castTeleport();
+      lastTeleportSave = game().getGameTime();
+      return -999;
+    }
+    else if (game().getEnemyCount() > 2)
+    {
+      divinityInvoked = triggerDivinityBefore();
+      if (divinityInvoked)
+      {
+        game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
+        shouldBeSavedFromDivinity = true;
+      }
     }
   }
 
@@ -2530,6 +2547,7 @@ void PlayerEntity::computePlayer()
 
     case ShotTypeIllusion:
       if (equip[EQUIP_RING_ILLUSION]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityIllusion && divinity.level >= 4) specialShotLevel[i]++;
       break;
 
     case ShotTypeFire:
@@ -2873,20 +2891,25 @@ void PlayerEntity::donate(int n)
 
     if (divinity.level >= 4 && game().getItemsCount() == 0 && donation >= 40)
     {
-      if (divinity.divinity == DivinityIce && !equip[EQUIP_RING_ICE])
+      if (divinity.divinity == DivinityIce && equip[EQUIP_GEM_ICE] && !equip[EQUIP_RING_ICE])
       {
         divineGift = true;
         itemType = ItemRingIce;
       }
-      else if (divinity.divinity == DivinityStone && !equip[EQUIP_RING_STONE])
+      else if (divinity.divinity == DivinityStone && equip[EQUIP_GEM_STONE] && !equip[EQUIP_RING_STONE])
       {
         divineGift = true;
         itemType = ItemRingStone;
       }
-      else if (divinity.divinity == DivinityAir && !equip[EQUIP_RING_LIGHTNING])
+      else if (divinity.divinity == DivinityAir && equip[EQUIP_GEM_LIGHTNING] && !equip[EQUIP_RING_LIGHTNING])
       {
         divineGift = true;
         itemType = ItemRingLightning;
+      }
+      else if (divinity.divinity == DivinityIllusion && equip[EQUIP_GEM_ILLUSION] && !equip[EQUIP_RING_ILLUSION])
+      {
+        divineGift = true;
+        itemType = ItemRingIllusion;
       }
     }
 
@@ -2912,6 +2935,11 @@ void PlayerEntity::donate(int n)
       {
         divineGift = true;
         itemType = ItemGemLightning;
+      }
+      else if (divinity.divinity == DivinityIllusion && !equip[EQUIP_GEM_ILLUSION])
+      {
+        divineGift = true;
+        itemType = ItemGemIllusion;
       }
     }
 
@@ -3008,7 +3036,6 @@ void PlayerEntity::offerHealth(int lostHp)
   {
     addPiety(lostHp * 2.5f);
   }
-
 }
 
 void PlayerEntity::offerChallenge()
@@ -3133,6 +3160,16 @@ void PlayerEntity::divineHeal(int hpHealed)
   showCone = true;
   isRegeneration = false;
   game().addHealingStat(hp - oldHp);
+}
+
+bool PlayerEntity::triggerIllusionTeleport()
+{
+  if (divinity.divinity == DivinityIllusion)
+  {
+    // TODO timer
+    if (game().getGameTime() - lastTeleportSave > 15) return true;
+  }
+  return false;
 }
 
 bool PlayerEntity::triggerDivinityBefore()
@@ -3330,6 +3367,12 @@ void PlayerEntity::pietyLevelUp()
     if (divinity.level == 4) label = "div_air_lvl_4";
     else label = "div_air_lvl";
     break;
+
+  case DivinityIllusion:
+    if (divinity.level == 3) label = "div_illusion_lvl_3";
+    else if (divinity.level == 4) label = "div_illusion_lvl_4";
+    break;
+
   }
 
   if (label.compare("") != 0) game().addDivLevelMessageToQueue(label);
@@ -3782,4 +3825,9 @@ void PlayerEntity::castLightning()
   lightningSprite->setRenderAdd();
   lightningSprite->setZ(2000);
   SoundManager::getInstance().playSound(SOUND_THUNDER);
+}
+
+bool PlayerEntity::seeInvisible()
+{
+  return (divinity.divinity == DivinityIllusion && divinity.level >= 3);
 }

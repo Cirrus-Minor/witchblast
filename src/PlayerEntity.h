@@ -496,6 +496,7 @@ class PlayerEntity : public BaseCreatureEntity
     void addPiety(int n);
     void pietyLevelUp();
     void loadDivinity(int id, int piety, int level, int interventions);
+    bool triggerIllusionTeleport();
     bool triggerDivinityBefore();
     void triggerDivinityAfter();
     void divineFury();
@@ -528,6 +529,8 @@ class PlayerEntity : public BaseCreatureEntity
     void tryToConsume(int n);
     void consume(enumItemType item);
     int getDamage();
+
+    bool seeInvisible();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
@@ -642,6 +645,8 @@ class PlayerEntity : public BaseCreatureEntity
     int consumable[MAX_SLOT_CONSUMABLES];
     void acquireConsumable(enumItemType type);
     void reveal();
+
+    float lastTeleportSave;
 };
 
 #endif // PLAYERSPRITE_H

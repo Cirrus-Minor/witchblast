@@ -566,13 +566,17 @@ state_div_firerate#Firerate+ (div)
 state_div_damage#Damage+ (div)
 dc_victory#Victory certificate
 dc_after_victory#Victory after
-
 player#player
 players#players
 ui_base_damage#Base damage
 ui_fire_rate#Fire rate
 ui_second#second
 ui_temple_donation#Temple donation
+
+divinity_illusion_0#Moryo
+divinity_illusion_1#Lord of illusion.
+div_illusion_lvl_3#makes the ghosts visible
+div_illusion_lvl_4#increases your illusion attack
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue
