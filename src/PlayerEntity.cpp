@@ -1990,6 +1990,8 @@ int PlayerEntity::hurt(StructHurt hurtParam)
     {
       castTeleport();
       lastTeleportSave = game().getGameTime();
+      divineInterventionDelay = WORSHIP_DELAY * 1.0f;
+      showCone = false;
       return -999;
     }
     else if (game().getEnemyCount() > 2)
@@ -3006,7 +3008,19 @@ void PlayerEntity::offerMonster(enemyTypeEnum monster, enumShotType hurtingType)
       break;
 
     case DivinityStone:
-      if (hurtingType == ShotTypeCold || hurtingType == ShotTypeIce)
+      if (hurtingType == ShotTypeStone)
+      {
+        pietyProMonster = 3;
+        pietyProBoss    = 30;
+      }
+      else
+      {
+        pietyProBoss    = 25;
+      }
+      break;
+
+    case DivinityIllusion:
+      if (hurtingType == ShotTypeIllusion)
       {
         pietyProMonster = 3;
         pietyProBoss    = 30;
@@ -3017,7 +3031,6 @@ void PlayerEntity::offerMonster(enemyTypeEnum monster, enumShotType hurtingType)
       }
       break;
     }
-
 
     if (monster < EnemyTypeButcher) // normal or mini-boss
     {
@@ -3044,12 +3057,21 @@ void PlayerEntity::offerChallenge()
     addPiety(30);
 }
 
+void PlayerEntity::offerSecret()
+{
+  if (divinity.divinity == DivinityIllusion)
+    addPiety(35);
+  else
+    addPiety(10);
+}
+
 void PlayerEntity::divineFury()
 {
   enumShotType shotType = ShotTypeStandard;
   if (divinity.divinity == DivinityIce) shotType = ShotTypeIce;
   else if (divinity.divinity == DivinityStone) shotType = ShotTypeStone;
   else if (divinity.divinity == DivinityAir) shotType = ShotTypeLightning;
+  else if (divinity.divinity == DivinityIllusion) shotType = ShotTypeIllusion;
 
   int multBonus = 6;
   if (divinity.divinity == DivinityFighter) multBonus = 8;
@@ -3255,12 +3277,21 @@ bool PlayerEntity::triggerDivinityBefore()
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
       divineHeal(hpMax / 3);
-      /*if (r == 1)
       {
-        divineIce();
-        game().makeColorEffect(X_GAME_COLOR_BLUE, 7.5f);
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.5f);
       }
-      else*/
+      return true;
+      break;
+    }
+    case DivinityIllusion:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      incrementDivInterventions();
+      divineHeal(hpMax / 3);
       {
         divineFury();
         game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.5f);
@@ -3286,7 +3317,6 @@ void PlayerEntity::triggerDivinityAfter()
         divineHeal(hpMax);
         break;
       }
-    //case DivinityFighter:
     default:
       {
         SoundManager::getInstance().playSound(SOUND_OM);

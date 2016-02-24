@@ -493,6 +493,7 @@ class PlayerEntity : public BaseCreatureEntity
     void offerMonster(enemyTypeEnum monster, enumShotType hurtingType);
     void offerHealth(int lostHp);
     void offerChallenge();
+    void offerSecret();
     void addPiety(int n);
     void pietyLevelUp();
     void loadDivinity(int id, int piety, int level, int interventions);
