@@ -34,6 +34,9 @@
 // for tests
 //#define TEST_MODE
 
+// for crashing systems - true enable to continue a game after a crash and send score to DB
+const bool autosave = false;
+
 const int ALIGN_LEFT    = 0;  /*!< Text alignment left */
 const int ALIGN_RIGHT   = 1;  /*!< Text alignment right */
 const int ALIGN_CENTER  = 2;  /*!< Text alignment centered */

@@ -69,7 +69,7 @@
 #include <iomanip>
 #include <algorithm>
 
-#define LEVEL_TEST_MODE
+//#define LEVEL_TEST_MODE
 
 #ifdef ONLINE_MODE
 #include "OnlineScoring.h"
@@ -1018,6 +1018,8 @@ void WitchBlastGame::playLevel(bool isFight)
   statsData.hpHeal = 0;
   statsData.hurtCounter = 0;
   statsData.healCounter = 0;
+
+  if (autosave) saveGame(true);
 }
 
 void WitchBlastGame::prepareIntro()
@@ -1743,7 +1745,7 @@ void WitchBlastGame::updateRunningGame()
                         MAP_HEIGHT / 2 * TILE_HEIGHT + TILE_HEIGHT / 2);
       player->onClearRoom();
       openDoors();
-      remove(SAVE_FILE.c_str());
+      if (!autosave) remove(SAVE_FILE.c_str());
       if (currentMap->getRoomType() == roomTypeBoss)
       {
         playMusic(MusicDungeon);
@@ -3047,7 +3049,7 @@ void WitchBlastGame::calculateScore()
 
   // Online
 #ifdef ONLINE_MODE
-  if (!gameFromSaveFile)
+  if (autosave || !gameFromSaveFile)
   {
     sendScoreToServer();
   }
@@ -3408,8 +3410,8 @@ void WitchBlastGame::updateMenu()
       switch (menu->items[menu->index].id)
       {
       case MenuStartNew:
-        startNewGame(false, 1);
         remove(SAVE_FILE.c_str());
+        startNewGame(false, 1);
         break;
       case MenuStartOld:
         startNewGame(true, 1);
@@ -4560,7 +4562,7 @@ void WitchBlastGame::moveToOtherMap(int direction)
     saveInFight.direction = direction;
     saveMapItems();
 
-    if (!currentMap->isCleared())
+    if (autosave || !currentMap->isCleared())
     {
       saveGame(true);
     }
@@ -6166,7 +6168,7 @@ bool WitchBlastGame::loadGame()
 
     player->computePlayer();
     file.close();
-    if (!saveInFight.isFight) remove(SAVE_FILE.c_str());
+    if (!saveInFight.isFight && !autosave) remove(SAVE_FILE.c_str());
   }
   else
   {
