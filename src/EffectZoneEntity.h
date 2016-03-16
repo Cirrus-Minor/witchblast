@@ -4,7 +4,7 @@
 #include "sfml_game/SpriteEntity.h"
 #include "BaseCreatureEntity.h"
 
-enum EffectZoneTypeEnum { EffectZoneTypeIce };
+enum EffectZoneTypeEnum { EffectZoneTypeIce, EffectZoneTypePoison };
 
 class EffectZoneEntity : public SpriteEntity
 {
@@ -25,6 +25,9 @@ class EffectZoneEntity : public SpriteEntity
     enumShotType damageType;
     bool fromPlayer;
     float randomAngle;
+
+    void collideIce(BaseCreatureEntity* entity);
+    void collidePoison(BaseCreatureEntity* entity);
 };
 
 #endif // EFFECT_ZONE_ENTITY_H

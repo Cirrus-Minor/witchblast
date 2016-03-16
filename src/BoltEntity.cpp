@@ -319,6 +319,13 @@ void BoltEntity::onDying()
     // special attacks
     if (boltType == ShotTypeIce && level == 2)
       new EffectZoneEntity(x, y, true, 5.0f, EffectZoneTypeIce);
+
+    else if (boltType == ShotTypePoison && level == 2)
+    {
+      if (!game().existsEffectZone())
+        new EffectZoneEntity(x, y, true, 5.0f, EffectZoneTypePoison);
+    }
+
   }
 }
 

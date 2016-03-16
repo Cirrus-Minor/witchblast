@@ -310,6 +310,8 @@ public:
 
   int getUndeadCount();
 
+  bool existsEffectZone();
+
   void animateEffects();
 
   EnemyEntity* getBoss();

@@ -21,6 +21,7 @@ EffectZoneEntity::EffectZoneEntity(float x, float y, bool fromPlayer, float dura
   switch (effectZoneType)
   {
     case EffectZoneTypeIce: frame = 0; break;
+    case EffectZoneTypePoison: frame = 1; break;
   }
   z = 1500; // for flying zones
 
@@ -54,6 +55,19 @@ void EffectZoneEntity::dying()
   isDying = true;
 }
 
+void EffectZoneEntity::collideIce(BaseCreatureEntity* entity)
+{
+  entity->hurt(BaseCreatureEntity::getHurtParams(0, ShotTypeIce, 1, false, SourceTypeExplosion, EnemyTypeNone, false));
+}
+
+void EffectZoneEntity::collidePoison(BaseCreatureEntity* entity)
+{
+  if (!entity->getSpecialState(SpecialStatePoison).active)
+  {
+    entity->hurt(BaseCreatureEntity::getHurtParams(0, ShotTypePoison, 2, false, SourceTypeExplosion, EnemyTypeNone, false));
+  }
+}
+
 void EffectZoneEntity::testCollisions()
 {
   EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
@@ -84,9 +98,15 @@ void EffectZoneEntity::testCollisions()
 
         if (bb.intersects(entity->getBoundingBox()))
         {
-          entity->hurt(BaseCreatureEntity::getHurtParams(0, ShotTypeIce, 1, false, SourceTypeExplosion, EnemyTypeNone, false));
+          switch (effectZoneType)
+          {
+            case EffectZoneTypeIce: collideIce(entity); break;
+            case EffectZoneTypePoison: collidePoison(entity); break;
+          }
         }
       }
 		}
 	}
 }
+
+

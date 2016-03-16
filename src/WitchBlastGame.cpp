@@ -270,12 +270,6 @@ static enemyTypeEnum enemyStringToEnum(std::string enemy)
   return result;
 }
 
-static std::string enemyEnumToString(enemyTypeEnum enemy)
-{
-  if (enemy < NB_ENEMY) return enemyString[enemy];
-  else return "";
-}
-
 static enumAchievementType achievementStringToEnum(std::string achievString)
 {
   enumAchievementType result = NB_ACHIEVEMENTS;
@@ -4155,6 +4149,22 @@ int WitchBlastGame::getUndeadCount()
   }
 
   return n;
+}
+
+bool WitchBlastGame::existsEffectZone()
+{
+  EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
+  EntityManager::EntityList::iterator it;
+
+  for (it = entityList->begin (); it != entityList->end ();)
+  {
+    GameEntity *e = *it;
+    it++;
+
+    if (e->getType() == ENTITY_EFFECT_ZONE) return true;
+  }
+
+  return false;
 }
 
 void WitchBlastGame::killArtefactDescription()
