@@ -20,7 +20,7 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.7.5";
+const std::string APP_VERSION =   "0.7.6";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
@@ -431,6 +431,8 @@ enum enumDivinityType {
   DivinityStone,
   DivinityAir,
   DivinityIllusion,
+  DivinityFire,
+  DivinityDeath,
 
   NB_DIVINITY
 };
@@ -442,6 +444,8 @@ const std::string divinityLabel[NB_DIVINITY]
   "divinity_stone",
   "divinity_air",
   "divinity_illusion",
+  "divinity_fire",
+  "divinity_death",
 };
 const int MAX_DIVINITY_LEVEL = 5;
 const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =

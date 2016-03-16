@@ -1273,6 +1273,36 @@ void PlayerEntity::render(sf::RenderTarget* app)
           }
           break;
         }
+      case DivinityIllusion:
+        {
+          if (divinity.level > 1)
+          {
+            displayField = true;
+            fieldFrame = 20;
+            fieldFade = 40 * (divinity.level - 1);
+          }
+          break;
+        }
+      case DivinityFire:
+        {
+          if (divinity.level > 1)
+          {
+            displayField = true;
+            fieldFrame = 22;
+            fieldFade = 40 * (divinity.level - 1);
+          }
+          break;
+        }
+      case DivinityDeath:
+        {
+          if (divinity.level > 1)
+          {
+            displayField = true;
+            fieldFrame = 24;
+            fieldFade = 40 * (divinity.level - 1);
+          }
+          break;
+        }
       }
 
       if (displayField)
@@ -2505,6 +2535,17 @@ void PlayerEntity::computePlayer()
       if (divinity.level >= 3) resistance[ResistanceIce] = (enumStateResistance)(resistance[ResistanceIce] - 1);
       break;
     }
+  case (DivinityFire):
+    {
+      if (divinity.level >= 3) resistance[ResistanceFire] = (enumStateResistance)(resistance[ResistanceFire] - 1);
+      break;
+    }
+  case (DivinityDeath):
+    {
+      if (divinity.level >= 5) resistance[ResistancePoison] = ResistanceVeryHigh;
+      else if (divinity.level >= 3) resistance[ResistancePoison] = ResistanceHigh;
+      break;
+    }
   case (DivinityStone):
     {
       if (divinity.level >= 5) resistance[ResistanceRepulsion] = ResistanceVeryHigh;
@@ -2554,10 +2595,12 @@ void PlayerEntity::computePlayer()
 
     case ShotTypeFire:
       if (equip[EQUIP_RING_FIRE]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityFire && divinity.level >= 4) specialShotLevel[i]++;
       break;
 
     case ShotTypePoison:
       if (equip[EQUIP_RING_POISON]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityDeath && divinity.level >= 4) specialShotLevel[i]++;
       break;
 
     default:
@@ -2913,6 +2956,16 @@ void PlayerEntity::donate(int n)
         divineGift = true;
         itemType = ItemRingIllusion;
       }
+      else if (divinity.divinity == DivinityFire && equip[EQUIP_GEM_FIRE] && !equip[EQUIP_RING_FIRE])
+      {
+        divineGift = true;
+        itemType = ItemRingFire;
+      }
+      else if (divinity.divinity == DivinityDeath && equip[EQUIP_GEM_POISON] && !equip[EQUIP_RING_POISON])
+      {
+        divineGift = true;
+        itemType = ItemRingPoison;
+      }
     }
 
     if (divinity.level >= 3 && game().getItemsCount() == 0)
@@ -2942,6 +2995,16 @@ void PlayerEntity::donate(int n)
       {
         divineGift = true;
         itemType = ItemGemIllusion;
+      }
+      else if (divinity.divinity == DivinityFire && !equip[EQUIP_GEM_FIRE])
+      {
+        divineGift = true;
+        itemType = ItemGemFire;
+      }
+      else if (divinity.divinity == DivinityDeath && !equip[EQUIP_GEM_POISON])
+      {
+        divineGift = true;
+        itemType = ItemGemPoison;
       }
     }
 
@@ -3072,9 +3135,11 @@ void PlayerEntity::divineFury()
   else if (divinity.divinity == DivinityStone) shotType = ShotTypeStone;
   else if (divinity.divinity == DivinityAir) shotType = ShotTypeLightning;
   else if (divinity.divinity == DivinityIllusion) shotType = ShotTypeIllusion;
+  else if (divinity.divinity == DivinityFire) shotType = ShotTypeFire;
+  else if (divinity.divinity == DivinityDeath) shotType = ShotTypePoison;
 
   int multBonus = 6;
-  if (divinity.divinity == DivinityFighter) multBonus = 8;
+  if (divinity.divinity == DivinityFighter || divinity.divinity == DivinityFire) multBonus = 8;
 
   for (int i = 0; i < (divinity.divinity == DivinityAir ? 16 : 32); i ++)
   {
@@ -3295,6 +3360,36 @@ bool PlayerEntity::triggerDivinityBefore()
       {
         divineFury();
         game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.5f);
+      }
+      return true;
+      break;
+    }
+    case DivinityFire:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      incrementDivInterventions();
+      divineHeal(hpMax / 3);
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_RED, 0.5f);
+      }
+      return true;
+      break;
+    }
+    case DivinityDeath:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      incrementDivInterventions();
+      divineHeal(hpMax / 3);
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_GREEN, 0.5f);
       }
       return true;
       break;
