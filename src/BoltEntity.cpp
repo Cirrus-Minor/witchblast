@@ -238,6 +238,10 @@ void BoltEntity::collide()
         if (damages > 1 && boltType == ShotTypeLightning && level == 2)
         {
           // bolt lvl3 effect
+          if (damages <= 2) damages += 4;
+          else if (damages <= 5) damages += 3;
+          else damages += 2;
+
           for (int i = 0; i < 3; i++)
           {
             BoltEntity* bolt = new BoltEntity(x, y, lifetime, ShotTypeLightning, 1);
