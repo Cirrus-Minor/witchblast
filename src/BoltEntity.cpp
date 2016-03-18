@@ -325,7 +325,6 @@ void BoltEntity::onDying()
       if (!game().existsEffectZone())
         new EffectZoneEntity(x, y, true, 5.0f, EffectZoneTypePoison);
     }
-
   }
 }
 
@@ -380,6 +379,15 @@ void BoltEntity::split(int direction)
   SoundManager::getInstance().playSound(SOUND_STONE_HIT);
 }
 
+void BoltEntity::collideWall()
+{
+  if (boltType == ShotTypeFire && level == 2)
+  {
+    if (!game().existsEffectZone())
+      new EffectZoneEntity(x, y, true, 5.0f, EffectZoneTypeFire, game().getPlayer()->getDamage());
+  }
+}
+
 void BoltEntity::collideMapRight()
 {
   if (boltType == ShotTypeLightning)
@@ -398,6 +406,7 @@ void BoltEntity::collideMapRight()
   {
     velocity.x = 0.0f;
     onDying();
+    collideWall();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
@@ -427,6 +436,7 @@ void BoltEntity::collideMapLeft()
   {
     velocity.x = 0.0f;
     onDying();
+    collideWall();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
@@ -456,6 +466,7 @@ void BoltEntity::collideMapTop()
   {
     velocity.y = 0.0f;
     onDying();
+    collideWall();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)
@@ -485,6 +496,7 @@ void BoltEntity::collideMapBottom()
   {
     velocity.y = 0.0f;
     onDying();
+    collideWall();
 
     SoundManager::getInstance().playSound(SOUND_WALL_IMPACT);
     for (int i=0; i<5; i++)

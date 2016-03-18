@@ -1,5 +1,6 @@
 #include "EffectZoneEntity.h"
 #include "BaseCreatureEntity.h"
+#include "ExplosionEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include "sfml_game/SpriteEntity.h"
@@ -9,7 +10,7 @@
 #include <iostream>
 
 EffectZoneEntity::EffectZoneEntity(float x, float y, bool fromPlayer, float duration,
-                     EffectZoneTypeEnum effectZoneType)
+                     EffectZoneTypeEnum effectZoneType, int damage)
   : SpriteEntity(ImageManager::getInstance().getImage(IMAGE_EFFECT_ZONE), x, y, 64, 64)
 {
   type = ENTITY_EFFECT_ZONE;
@@ -17,11 +18,13 @@ EffectZoneEntity::EffectZoneEntity(float x, float y, bool fromPlayer, float dura
   imagesProLine = 6;
   lifetime = duration;
   this->fromPlayer = fromPlayer;
+  this->damage = damage;
 
   switch (effectZoneType)
   {
     case EffectZoneTypeIce: frame = 0; break;
     case EffectZoneTypePoison: frame = 1; break;
+    case EffectZoneTypeFire: frame = 2; break;
   }
   z = 1500; // for flying zones
 
@@ -68,6 +71,16 @@ void EffectZoneEntity::collidePoison(BaseCreatureEntity* entity)
   }
 }
 
+void EffectZoneEntity::explode()
+{
+  if (damage > 0)
+  {
+    new ExplosionEntity(x, y, ExplosionTypeStandard, damage, EnemyTypeNone, false);
+    damage = 0;
+    lifetime = age + 1.0f;
+  }
+}
+
 void EffectZoneEntity::testCollisions()
 {
   EntityManager::EntityList* entityList =EntityManager::getInstance().getList();
@@ -91,10 +104,10 @@ void EffectZoneEntity::testCollisions()
         entity->calculateBB();
 
         sf::IntRect bb;
-        bb.left = x - 22;
-        bb.width = 44;
-        bb.top = y - 22;
-        bb.height = 44;
+        bb.left = x - 26;
+        bb.width = 52;
+        bb.top = y - 26;
+        bb.height = 52;
 
         if (bb.intersects(entity->getBoundingBox()))
         {
@@ -102,6 +115,7 @@ void EffectZoneEntity::testCollisions()
           {
             case EffectZoneTypeIce: collideIce(entity); break;
             case EffectZoneTypePoison: collidePoison(entity); break;
+            case EffectZoneTypeFire: explode(); break;
           }
         }
       }
