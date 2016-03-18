@@ -2646,6 +2646,11 @@ void PlayerEntity::computePlayer()
     fireDamage *= specialState[SpecialStateWeakness].param1;
   if (specialState[SpecialStateStrength].active && !specialState[SpecialStateWeakness].active)
     fireDamage *= specialState[SpecialStateStrength].param1;
+
+  // Damage Pro Second
+  dps = fireDamage / fireDelay;
+  if (equip[EQUIP_BOOK_TRIPLE] || equip[EQUIP_BOOK_TRIPLE_QUICK]) dps *= 3;
+  else if (equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_DUAL_QUICK]) dps *= 2;
 }
 
 void PlayerEntity::acquireStance(enumItemType type)

@@ -548,6 +548,7 @@ class PlayerEntity : public BaseCreatureEntity
 
   private:
     int fireDamage;
+    int dps;
     float fireVelocity;
     float fireDelay;
     float fireAnimationDelay;
