@@ -249,7 +249,7 @@ void PlayerEntity::setLostHp(int level, int n)
 
 int PlayerEntity::getDamage()
 {
-  return fireDamages;
+  return fireDamage;
 }
 
 bool PlayerEntity::isPoisoned()
@@ -1725,7 +1725,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
 
   BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, boltType, shotLevel);
   bolt->setFlying(isFairyTransmuted);
-  int boltDamage = fireDamages;
+  int boltDamage = fireDamage;
   if (criticalChance > 0)
     if (rand()% 100 < criticalChance)
     {
@@ -1902,10 +1902,10 @@ void PlayerEntity::fire(int direction)
       float boltVelocity = fireVelocity * 0.75f;
 
       BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt1->setDamages(fireDamages / 2);
+      bolt1->setDamages(fireDamage / 2);
       bolt1->setFlying(isFairyTransmuted);
       BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt2->setDamages(fireDamages / 2);
+      bolt2->setDamages(fireDamage / 2);
       bolt2->setFlying(isFairyTransmuted);
 
       switch (direction)
@@ -1931,7 +1931,7 @@ void PlayerEntity::fire(int direction)
     else if (equip[EQUIP_REAR_SHOT])
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt->setDamages(fireDamages / 2);
+      bolt->setDamages(fireDamage / 2);
       bolt->setFlying(isFairyTransmuted);
       float velx = 0.0f;
       float vely = 0.0f;
@@ -1956,11 +1956,11 @@ void PlayerEntity::fire(int direction)
     if (equip[EQUIP_SIDE_SHOTS])
     {
       BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt1->setDamages(fireDamages / 2);
+      bolt1->setDamages(fireDamage / 2);
       bolt1->setFlying(isFairyTransmuted);
 
       BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt2->setDamages(fireDamages / 2);
+      bolt2->setDamages(fireDamage / 2);
       bolt2->setFlying(isFairyTransmuted);
 
       if (direction == 4 || direction == 6)
@@ -1978,7 +1978,7 @@ void PlayerEntity::fire(int direction)
     if (equip[EQUIP_BOOK_RANDOM] && randomFireDelay <= 0.0f)
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt->setDamages(fireDamages);
+      bolt->setDamages(fireDamage);
       bolt->setFlying(isFairyTransmuted);
       float shotAngle = rand() % 360;
       bolt->setVelocity(Vector2D(fireVelocity * 0.75f * cos(shotAngle), fireVelocity * 0.75f * sin(shotAngle)));
@@ -2466,7 +2466,7 @@ void PlayerEntity::computePlayer()
   float fireDelayBonus = 1.0f;
   float creatureSpeedBonus = 1.0f;
   float fireVelocityBonus = 1.0f;
-  float fireDamagesBonus = 1.0f;
+  float fireDamageBonus = 1.0f;
   armor = 0.0f;
   criticalChance = 0;
 
@@ -2503,9 +2503,9 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_MAHOGANY_STAFF])
   {
     fireVelocityBonus += 0.15f;
-    fireDamagesBonus += 0.5f;
+    fireDamageBonus += 0.5f;
   }
-  if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 0.5f;
+  if (equip[EQUIP_BLOOD_SNAKE]) fireDamageBonus += 0.5f;
 
   if (equip[EQUIP_ROBE_ADVANCED]) armor += 0.2f;
   else if (equip[EQUIP_MAGICIAN_ROBE]) armor += 0.15f;
@@ -2520,13 +2520,13 @@ void PlayerEntity::computePlayer()
   case (DivinityFighter):
     {
       if (divinity.level >= 5)
-        fireDamagesBonus += 0.5f;
+        fireDamageBonus += 0.5f;
       else if (divinity.level >= 4)
-        fireDamagesBonus += 0.375f;
+        fireDamageBonus += 0.375f;
       else if (divinity.level >= 3)
-        fireDamagesBonus += 0.25f;
+        fireDamageBonus += 0.25f;
       else if (divinity.level >= 2)
-        fireDamagesBonus += 0.125f;
+        fireDamageBonus += 0.125f;
       break;
     }
   case (DivinityIce):
@@ -2563,7 +2563,7 @@ void PlayerEntity::computePlayer()
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;
   fireVelocity = INITIAL_BOLT_VELOCITY * fireVelocityBonus;
-  fireDamages = INITIAL_BOLT_DAMAGES * fireDamagesBonus;
+  fireDamage = INITIAL_BOLT_DAMAGES * fireDamageBonus;
   boltLifeTime = INITIAL_BOLT_LIFE * boltLifeTimeBonus;
 
   // gems
@@ -2607,22 +2607,22 @@ void PlayerEntity::computePlayer()
       break;
     }
   }
-  if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
-  else if (getShotType() == ShotTypeFire) fireDamages *= FIRE_DAMAGE_INCREASE[getShotLevel()];
+  if (getShotType() == ShotTypeIllusion) fireDamage *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
+  else if (getShotType() == ShotTypeFire) fireDamage *= FIRE_DAMAGE_INCREASE[getShotLevel()];
 
   // divinity
   if (specialState[DivineStateProtection].active)
     armor += specialState[DivineStateProtection].param1;
 
   // post-computation
-  if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamages *= 0.65f;
-  else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamages *= 0.75f;
+  if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamage *= 0.65f;
+  else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamage *= 0.75f;
   else if (equip[EQUIP_RAPID_SHOT])
   {
     fireDelay *= 0.20f;
-    fireDamages *= 0.25f;
+    fireDamage *= 0.25f;
   }
-  if (equip[EQUIP_ALCOHOL]) fireDamages *= 1.25f;
+  if (equip[EQUIP_ALCOHOL]) fireDamage *= 1.25f;
 
   // spells
   if (protection.active) armor += protection.value;
@@ -2632,7 +2632,7 @@ void PlayerEntity::computePlayer()
   // fairy ?
   if (isFairyTransmuted)
   {
-    fireDamages *= 0.5f;
+    fireDamage *= 0.5f;
     creatureSpeed *= 1.5f;
     movingStyle = movFlying;
   }
@@ -2643,9 +2643,9 @@ void PlayerEntity::computePlayer()
 
   // potions
   if (specialState[SpecialStateWeakness].active && !specialState[SpecialStateStrength].active)
-    fireDamages *= specialState[SpecialStateWeakness].param1;
+    fireDamage *= specialState[SpecialStateWeakness].param1;
   if (specialState[SpecialStateStrength].active && !specialState[SpecialStateWeakness].active)
-    fireDamages *= specialState[SpecialStateStrength].param1;
+    fireDamage *= specialState[SpecialStateStrength].param1;
 }
 
 void PlayerEntity::acquireStance(enumItemType type)
@@ -3829,7 +3829,7 @@ void PlayerEntity::castFireball()
 
   BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime + 0.5f, boltType, shotLevel);
 
-  int boltDamage = fireDamages * (equip[EQUIP_BOOK_MAGIC_II] ? 6 : 4);
+  int boltDamage = fireDamage * (equip[EQUIP_BOOK_MAGIC_II] ? 6 : 4);
   if (equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 44) boltDamage = 44;
   else if (!equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 32) boltDamage = 32;
   bolt->setDamages(boltDamage);

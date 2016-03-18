@@ -547,7 +547,7 @@ class PlayerEntity : public BaseCreatureEntity
     virtual void stuck() override;
 
   private:
-    int fireDamages;
+    int fireDamage;
     float fireVelocity;
     float fireDelay;
     float fireAnimationDelay;
