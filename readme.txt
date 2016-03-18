@@ -89,13 +89,14 @@ AFS (for the Spanish translation)
 Changes
 -------
 Next release
-- ADD New divinity (Illusion)
-- ADD New effect for lvl 3 ice, lightning and stone attack
-- MOD New divinity presents
+- ADD 3 new divinities
+- ADD New effects for lvl 3 attacks
+- MOD New divinity presents (rings)
 - MOD Fireball spell damage increase
 - MOD Explosive barrel don't explode the first 2 seconds in a room
 - MOD Slime from a cauldron or a giant slime can't directly hurt the player while jumping the first time
 - MOD Divinity trigger more complex now
+- MOD New data save system (compatibility with future versions)
 - FIX Secret room misplacement
 - FIX Stone divinity appreciates ice attacks
 
