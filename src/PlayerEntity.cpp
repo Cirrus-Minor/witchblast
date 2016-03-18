@@ -8,6 +8,7 @@
 #include "EnemyBoltEntity.h"
 #include "ItemEntity.h"
 #include "FairyEntity.h"
+#include "ExplosionEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
@@ -2013,7 +2014,6 @@ int PlayerEntity::hurt(StructHurt hurtParam)
   bool divinityInvoked = false;
   int thresholdDam = 5;
 
-
   if (invincibleDelay <= 0.0f && hp - hurtParam.damage <= thresholdDam && divinity.divinity >= 0)
   {
     if (triggerIllusionTeleport())
@@ -2060,7 +2060,7 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 
       // divinity
       offerHealth(oldHp - hp);
-      if (!divinityInvoked && hp <= hpMax / 4 && divinity.divinity >= 0)
+      if (!divinityInvoked && hp <= thresholdDam && divinity.divinity >= 0)
       {
         triggerDivinityAfter();
       }
@@ -3188,6 +3188,20 @@ void PlayerEntity::divineIce()
   }
 }
 
+void PlayerEntity::divineFire()
+{
+  game().makeShake(1.0f);
+  SoundManager::getInstance().playSound(SOUND_BOOM_00);
+
+  for (int i = 0; i < 15; i++)
+  {
+    int xRand = 48 + rand() % (GAME_WIDTH - 96);
+    int yRand = 48 + rand() % (GAME_HEIGHT - 96);
+
+    new ExplosionEntity(xRand, yRand, ExplosionTypeStandard, 16, EnemyTypeNone, false);
+  }
+}
+
 void PlayerEntity::divineRepulse()
 {
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
@@ -3372,10 +3386,17 @@ bool PlayerEntity::triggerDivinityBefore()
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
       divineHeal(hpMax / 3);
+      if (r == 1)
+      {
+        divineFire();
+        game().makeColorEffect(X_GAME_COLOR_RED, 1.0f);
+      }
+      else
       {
         divineFury();
         game().makeColorEffect(X_GAME_COLOR_RED, 0.5f);
       }
+
       return true;
       break;
     }

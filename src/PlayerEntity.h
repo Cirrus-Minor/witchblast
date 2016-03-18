@@ -504,6 +504,7 @@ class PlayerEntity : public BaseCreatureEntity
     void divineDestroyUndead();
     void divineIce();
     void divineRepulse();
+    void divineFire();
     void divineProtection(float duration, float armorBonus);
     void divineHeal(int hpHealed);
 
