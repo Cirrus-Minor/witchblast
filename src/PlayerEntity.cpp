@@ -252,6 +252,11 @@ int PlayerEntity::getDamage()
   return fireDamage;
 }
 
+int PlayerEntity::getDps()
+{
+  return dps;
+}
+
 bool PlayerEntity::isPoisoned()
 {
   return (specialState[SpecialStatePoison].active);

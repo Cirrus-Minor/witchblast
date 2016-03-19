@@ -531,6 +531,7 @@ class PlayerEntity : public BaseCreatureEntity
     void tryToConsume(int n);
     void consume(enumItemType item);
     int getDamage();
+    int getDps();
 
     bool seeInvisible();
 

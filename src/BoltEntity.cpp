@@ -388,7 +388,7 @@ void BoltEntity::collideWall()
   if (boltType == ShotTypeFire && level == 2)
   {
     if (!game().existsEffectZone())
-      new EffectZoneEntity(x, y, true, 5.0f, EffectZoneTypeFire, game().getPlayer()->getDamage());
+      new EffectZoneEntity(x, y, true, 5.0f, EffectZoneTypeFire, game().getPlayer()->getDps());
   }
 }
 
