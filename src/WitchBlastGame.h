@@ -27,7 +27,6 @@
 #include "Entities/DoorEntity.h"
 #include "GameFloor.h"
 #include "Config.h"
-#include "WitchBlastMenu.h"
 #include "Achievements.h"
 
 #include "Enums.h"
@@ -544,7 +543,6 @@ protected:
   void killArtefactDescription();
 
 private:
-  WitchBlastMenu menu;
   Config config;
   float deltaTime;
   // game logic / data

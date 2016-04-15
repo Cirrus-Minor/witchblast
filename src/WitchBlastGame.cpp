@@ -269,7 +269,7 @@ namespace
 WitchBlastGame* gameptr;
 }
 
-WitchBlastGame::WitchBlastGame() : menu(this)
+WitchBlastGame::WitchBlastGame()
 {
   gameptr = this;
 
@@ -3916,9 +3916,6 @@ void WitchBlastGame::startGame()
 {
   lastTime = getAbsolutTime();
 
-  // FIXME: Remove old code
-  menu.prepareIntro();
-  gameTime = 0.f;
   prepareIntro();
 
   // Start game loop
@@ -3945,14 +3942,9 @@ void WitchBlastGame::startGame()
       case gameStateKeyConfig:
       case gameStateJoystickConfig:
       case gameStateMenu:
-        // FIXME: Remove old code
-        menu.updateMenu();
         updateMenu();
         break;
       case gameStateIntro:
-        // FIXME: Remove old code
-        gameTime += deltaTime;
-        menu.updateIntro();
         updateIntro();
         break;
       case gameStatePlaying:
