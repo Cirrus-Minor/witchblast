@@ -18,6 +18,8 @@
 #ifndef STANDARDROOMGENERATOR_H_INCLUDED
 #define STANDARDROOMGENERATOR_H_INCLUDED
 
+#include "Entities/ChestEntity.h"
+
 void generateStandardRoom01()
 {
   int random = rand() % 64;

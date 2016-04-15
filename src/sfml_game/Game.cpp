@@ -21,10 +21,6 @@
 
 #include <iostream>
 
-Game::Game()
-{
-}
-
 void Game::create(int screenWidth, int screenHeight, std::string windowsTitle, bool fullScreen, bool vsync)
 {
   this->screenWidth = screenWidth;
@@ -38,62 +34,13 @@ void Game::create(int screenWidth, int screenHeight, std::string windowsTitle, b
   else app->setFramerateLimit(60);
 }
 
-Game::~Game()
-{
-  printf("Deleting the game...\n");
-  delete(app);
-}
-
 float Game::getAbsolutTime()
 {
   static sf::Clock clock;
   return clock.getElapsedTime().asSeconds();
 }
 
-void Game::startGame()
-{
-  lastTime = getAbsolutTime();
-
-  // Start game loop
-  while (app->isOpen())
-  {
-    // Process events
-    sf::Event event;
-
-    while (app->pollEvent(event))
-    {
-      // Close window : exit
-      if (event.type == sf::Event::Closed)
-        app->close();
-
-    }
-
-    onUpdate();
-    onRender();
-  }
-
-  quitGame();
-}
-
 void Game::quitGame()
 {
-}
-
-void Game::onRender()
-{
-  // clear the view
-  app->clear(sf::Color(32, 32, 32));
-
-  // render the game objects
-  EntityManager::getInstance().render(app);
-
-  app->display();
-}
-
-void Game::onUpdate()
-{
-  float delta = getAbsolutTime() - lastTime;
-  lastTime = getAbsolutTime();
-  EntityManager::getInstance().animate(delta);
 }
 

@@ -19,14 +19,18 @@
 
 #include "sfml_game/Game.h"
 #include "sfml_game/TileMapEntity.h"
-#include "PlayerEntity.h"
-#include "DungeonMapEntity.h"
-#include "MiniMapEntity.h"
-#include "EnemyEntity.h"
-#include "DoorEntity.h"
+
+#include "Entities/PlayerEntity.h"
+#include "Entities/DungeonMapEntity.h"
+#include "Entities/MiniMapEntity.h"
+#include "Entities/EnemyEntity.h"
+#include "Entities/DoorEntity.h"
 #include "GameFloor.h"
 #include "Config.h"
+#include "WitchBlastMenu.h"
 #include "Achievements.h"
+
+#include "Enums.h"
 
 #include <queue>
 #include <thread>
@@ -145,28 +149,6 @@ struct structStats
   int hpHeal;
   int dam;
   int goldIni;
-};
-
-enum EnumScoreBonus
-{
-  BonusSecret,
-  BonusChallenge,
-  BonusPerfect,
-  BonusTime,
-  BonusPossession,
-};
-
-enum EnumButtonType
-{
-  ButtonConsumable,
-  ButtonShotType,
-};
-
-struct ButtonStruct
-{
-  sf::IntRect zone;
-  EnumButtonType type;
-  int index;
 };
 
 /*! \class WitchBlastGame
@@ -526,9 +508,6 @@ public:
    */
   bool isAdvancedLevel();
 
-  void pauseMusic();
-  void resumeMusic();
-
   void saveStats();
   void addHurtingStat(int hpLost);
   void addHealingStat(int hpHeal);
@@ -565,6 +544,7 @@ protected:
   void killArtefactDescription();
 
 private:
+  WitchBlastMenu menu;
   Config config;
   float deltaTime;
   // game logic / data
@@ -632,48 +612,9 @@ private:
 
   float xOffset, yOffset;     /*!< Main game client position in the GUI */
 
-  sf::Music music;            /*!< Current game music */
-
-  /** Music enum
-   *  Identify the various music tracks of the game.
-   */
-  enum musicEnum
-  {
-    MusicDungeon,   /**< Main game music - played when playing the game */
-    MusicEnding,    /**< Ending music - played when the player has died */
-    MusicBoss,      /**< Boss music - for epic fights ! */
-    MusicIntro,     /**< Main menu music */
-    MusicChallenge  /**< Challenge music - for epic fights ! */
-  };
-
-  /** Game states enum
-   *  Used for the different game states
-   */
-  enum gameStateEnum
-  {
-    gameStateInit,      /**< Game initialization */
-    gameStateIntro,     /** < Intro animation */
-    gameStateMenu,      /**< Menu */
-    gameStateKeyConfig,  /**< Key config */
-    gameStateJoystickConfig,  /**< Joystick config */
-    gameStatePlaying,   /**< Playing */
-    gameStatePlayingPause,   /**< Playing / Pause */
-    gameStatePlayingDisplayBoss,   /**< Playing / DisplayBoss */
-  };
   gameStateEnum gameState;  /*!< Store the game state */
   float bossDisplayTimer;
   int bossDisplayState;
-
-  /** Special game states enum
-   *  Used for effects such as fade in...
-   */
-  enum xGameTypeEnum
-  {
-    xGameTypeFade,        /**< Fade effect */
-    xGameTypeShake,       /**< Shake effect */
-    xGameTypeFadeColor,   /**< Color fade effect */
-    NB_X_GAME
-  };
 
   struct xGameStruct
   {
@@ -682,26 +623,6 @@ private:
     float timer;
     float duration;
   } xGame[NB_X_GAME];
-
-  /** Input Keys enum
-   *  Used for the input binding
-   */
-  enum inputKeyEnum
-  {
-    KeyUp,
-    KeyDown,
-    KeyLeft,
-    KeyRight,
-    KeyFireUp,
-    KeyFireDown,
-    KeyFireLeft,
-    KeyFireRight,
-    KeyFireSelect,
-    KeySpell,
-    KeyInteract,
-    KeyTimeControl,
-    KeyFire
-  };
 
   const std::string inputKeyStr[NumberKeys] =
   {
@@ -843,20 +764,6 @@ private:
   void checkInteraction();
 
   /*!
-   *  \brief Plays a music
-   *
-   * Plays a music.
-   *
-   *  \param musicChoice : music track ID
-   */
-  void playMusic(musicEnum musicChoice);
-
-  /*!
-   *  \brief Update the music volume (with parameters.volumeMusic)
-   */
-  void updateMusicVolume();
-
-  /*!
    *  \brief Add a key to the player input map from a string key (from file)
    *  \param logicInput : input function (move left, fire up, etc...)
    *  \param key : Key as string
@@ -934,47 +841,6 @@ private:
    *  \brief Render the scores screen
    */
   void renderScores(std::vector <StructScore> scoresToRender, std::string title, bool blinkingName);
-
-  /** Menu keys enum
-   *  Identify the various keys of the menu.
-   */
-  enum menuItemEnum
-  {
-    MenuStartNew,     /**< When starting the game */
-    MenuStartOld,     /**< When restoring the game */
-    MenuConfig,       /**< When configuring the game */
-    MenuKeys,         /**< When configuring keys */
-    MenuJoystick,     /**< When configuring joystick */
-    MenuConfigBack,   /**< Back to the main menu */
-    MenuTutoReset,    /**< Reset the tutorials */
-    MenuLanguage,     /**< When configuring the language */
-    MenuExit,         /**< When exiting the game */
-    MenuAchievements, /**< Display the Achievements */
-    MenuCredits,      /**< Display the credits screen */
-    MenuHiScores,     /**< Display the hi-scores screen */
-    MenuPlayerName,   /**< To enter/change the player name */
-    MenuVolumeSound,
-    MenuVolumeMusic,
-
-    MenuContinue,     /**< Continue the game */
-    MenuSaveAndQuit,  /**< Save and return to main */
-  };
-
-  /** Menu states enum
-   *  Identify the various states of the menu.
-   */
-  enum menuStateEnum
-  {
-    MenuStateMain,
-    MenuStateConfig,
-    MenuStateKeys,
-    MenuStateJoystick,
-    MenuStateHiScores,
-    MenuStateChangeName,
-    MenuStateCredits,
-    MenuStateAchievements,
-    MenuStateFirst    /**< First time, we choose language and keyboard */
-  };
   menuStateEnum menuState;
 
   /*!
@@ -1079,8 +945,6 @@ private:
   int introSoundState;
   int fairySpriteOffsetY;
 
-  int currentStandardMusic;
-
   std::vector <StructScore> scores;
   std::vector <StructScore> scoresOnline;
   std::vector <StructScore> scoresOnlineDay;
@@ -1104,8 +968,6 @@ private:
   } interaction;
 
   void enableAA(bool enable);
-
-  enum achievementStatus { AchievementDone, AchievementUndone, AchievementPending};
   achievementStatus achievementState[NB_ACHIEVEMENTS];
 
   bool isItemLocked(enumItemType item);

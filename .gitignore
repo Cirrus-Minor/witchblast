@@ -31,8 +31,17 @@ install_manifest.txt
 *.dmg
 *.app/
 
+# QtCreator
+*.user
+
 # Visual Studio
 *.vcxproj*
 *.opensdf
 *.sdf
 *.sln
+
+# Make
+Makefile
+
+# Binaries
+Witch_Blast

@@ -14,36 +14,31 @@
   *  along with Witch Blast.  If not, see <http://www.gnu.org/licenses/>.
   */
 
-#ifndef GAME_H_INCLUDED
-#define GAME_H_INCLUDED
+#ifndef WITCHBLASTMENU_H
+#define WITCHBLASTMENU_H
 
-#include <stdio.h>
+class SpriteEntity;
+class WitchBlastGame;
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
-
-//#include "Entity/EntityManager.h"
-
-class Game
+class WitchBlastMenu
 {
 public:
-  virtual void startGame() = 0;
-  virtual void quitGame();
+  WitchBlastMenu(WitchBlastGame *game);
+  ~WitchBlastMenu();
 
-  static float getAbsolutTime();
-  void create(int screenWidth, int screenHeight, std::string windowsTitle = "Generic sfmlGame", bool fullScreen = false, bool vsync = true);
+  void updateMenu();
+  void renderMenu();
 
-protected:
-  virtual void onRender() = 0;     // screen and game items rendering
-  virtual void onUpdate() = 0;
+  void prepareIntro();
+  void updateIntro();
 
-  int screenWidth;
-  int screenHeight;
+private:
+  WitchBlastGame *game;
 
-  float lastTime;
+  SpriteEntity* introSprites[8];
 
-  sf::RenderWindow* app;
+  int introState;
+  int introSoundState;
 };
 
-#endif // GAME_H_INCLUDED
+#endif // WITCHBLASTMENU_H

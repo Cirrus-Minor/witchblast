@@ -1,7 +1,7 @@
 #include "DungeonMap.h"
 #include "GameFloor.h"
-#include "ItemEntity.h"
-#include "ChestEntity.h"
+#include "Entities/ItemEntity.h"
+#include "Entities/ChestEntity.h"
 #include "sfml_game/ImageManager.h"
 #include <cstdlib>
 #include <stdio.h>

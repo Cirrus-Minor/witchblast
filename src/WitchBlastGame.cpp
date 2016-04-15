@@ -15,52 +15,57 @@
   */
 
 #include "WitchBlastGame.h"
+
 #include "sfml_game/SpriteEntity.h"
 #include "sfml_game/TileMapEntity.h"
-#include "DungeonMap.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include "sfml_game/EntityManager.h"
+
+#include "MusicPlayer.h"
+
+#include "DungeonMap.h"
 #include "Constants.h"
-#include "RatEntity.h"
-#include "BlackRatEntity.h"
-#include "GreenRatEntity.h"
-#include "KingRatEntity.h"
-#include "CyclopsEntity.h"
-#include "GiantSpiderEntity.h"
-#include "GiantSlimeEntity.h"
-#include "ButcherEntity.h"
-#include "BatEntity.h"
-#include "ImpEntity.h"
-#include "SlimeEntity.h"
-#include "LargeSlimeEntity.h"
-#include "PumpkinEntity.h"
-#include "ChestEntity.h"
-#include "EvilFlowerEntity.h"
-#include "BubbleEntity.h"
-#include "ItemEntity.h"
-#include "WitchEntity.h"
-#include "CauldronEntity.h"
-#include "SnakeEntity.h"
-#include "GhostEntity.h"
-#include "ZombieEntity.h"
-#include "ZombieDarkEntity.h"
-#include "BogeymanEntity.h"
-#include "LittleSpiderEntity.h"
-#include "SpiderEggEntity.h"
-#include "FranckyEntity.h"
-#include "VampireEntity.h"
-#include "ObstacleEntity.h"
-#include "ArtefactDescriptionEntity.h"
-#include "PnjEntity.h"
-#include "TextEntity.h"
 #include "StandardRoomGenerator.h"
 #include "Scoring.h"
 #include "MessageGenerator.h"
 #include "TextMapper.h"
-#include "SlimePetEntity.h"
-#include "SausageEntity.h"
-#include "FairyEntity.h"
+
+#include "Entities/RatEntity.h"
+#include "Entities/BlackRatEntity.h"
+#include "Entities/GreenRatEntity.h"
+#include "Entities/KingRatEntity.h"
+#include "Entities/CyclopsEntity.h"
+#include "Entities/GiantSpiderEntity.h"
+#include "Entities/GiantSlimeEntity.h"
+#include "Entities/ButcherEntity.h"
+#include "Entities/BatEntity.h"
+#include "Entities/ImpEntity.h"
+#include "Entities/SlimeEntity.h"
+#include "Entities/LargeSlimeEntity.h"
+#include "Entities/PumpkinEntity.h"
+#include "Entities/ChestEntity.h"
+#include "Entities/EvilFlowerEntity.h"
+#include "Entities/BubbleEntity.h"
+#include "Entities/ItemEntity.h"
+#include "Entities/WitchEntity.h"
+#include "Entities/CauldronEntity.h"
+#include "Entities/SnakeEntity.h"
+#include "Entities/GhostEntity.h"
+#include "Entities/ZombieEntity.h"
+#include "Entities/ZombieDarkEntity.h"
+#include "Entities/BogeymanEntity.h"
+#include "Entities/LittleSpiderEntity.h"
+#include "Entities/SpiderEggEntity.h"
+#include "Entities/FranckyEntity.h"
+#include "Entities/VampireEntity.h"
+#include "Entities/ObstacleEntity.h"
+#include "Entities/ArtefactDescriptionEntity.h"
+#include "Entities/PnjEntity.h"
+#include "Entities/TextEntity.h"
+#include "Entities/SlimePetEntity.h"
+#include "Entities/SausageEntity.h"
+#include "Entities/FairyEntity.h"
 
 #include <iostream>
 #include <sstream>
@@ -264,7 +269,7 @@ namespace
 WitchBlastGame* gameptr;
 }
 
-WitchBlastGame::WitchBlastGame()
+WitchBlastGame::WitchBlastGame() : menu(this)
 {
   gameptr = this;
 
@@ -289,9 +294,6 @@ WitchBlastGame::WitchBlastGame()
   {
     create(SCREEN_WIDTH, SCREEN_HEIGHT, APP_NAME + " V" + APP_VERSION, false, parameters.vsync);
   }
-
-  // init current music
-  currentStandardMusic = 0;
 
   // loading resources
   const char *const images[] =
@@ -688,7 +690,7 @@ void WitchBlastGame::onUpdate()
       if (player->getHp() <= 0)
       {
         isPlayerAlive = false;
-        playMusic(MusicEnding);
+        MusicPlayer::getInstance(this).playMusic(MusicEnding);
       }
     }
   }
@@ -925,12 +927,12 @@ void WitchBlastGame::playLevel(bool isFight)
     for (auto monster: monsters_save)
       addMonster(monster.id, monster.x, monster.y);
 
-    if (currentMap->getRoomType() == roomTypeBoss) playMusic(MusicBoss);
-    else if (currentMap->getRoomType() == roomTypeChallenge) playMusic(MusicChallenge);
-    else playMusic(MusicDungeon);
+    if (currentMap->getRoomType() == roomTypeBoss) MusicPlayer::getInstance(this).playMusic(MusicBoss);
+    else if (currentMap->getRoomType() == roomTypeChallenge) MusicPlayer::getInstance(this).playMusic(MusicChallenge);
+    else MusicPlayer::getInstance(this).playMusic(MusicDungeon);
   }
   else
-    playMusic(MusicDungeon);
+    MusicPlayer::getInstance(this).playMusic(MusicDungeon);
 
   // game time counter an state
   lastTime = getAbsolutTime();
@@ -965,22 +967,23 @@ void WitchBlastGame::playLevel(bool isFight)
 
 void WitchBlastGame::prepareIntro()
 {
-  EntityManager::getInstance().clean();
 
-  introSprites[0] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_FOG));
-  introSprites[0]->setX(SCREEN_WIDTH / 2);
-  introSprites[0]->setY(SCREEN_HEIGHT - 202);
+    EntityManager::getInstance().clean();
 
-  introSprites[1] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_FOG));
-  introSprites[1]->setX(SCREEN_WIDTH / 2 + 970);
-  introSprites[1]->setY(SCREEN_HEIGHT - 202);
+    introSprites[0] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_FOG));
+    introSprites[0]->setX(SCREEN_WIDTH / 2);
+    introSprites[0]->setY(SCREEN_HEIGHT - 202);
 
-  gameState = gameStateIntro;
-  gameTime = 0.0f;
-  introState = 0;
-  introSoundState = 0;
+    introSprites[1] = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_FOG));
+    introSprites[1]->setX(SCREEN_WIDTH / 2 + 970);
+    introSprites[1]->setY(SCREEN_HEIGHT - 202);
 
-  SoundManager::getInstance().playSound(SOUND_NIGHT);
+    gameState = gameStateIntro;
+    gameTime = 0.0f;
+    introState = 0;
+    introSoundState = 0;
+
+    SoundManager::getInstance().playSound(SOUND_NIGHT);
 }
 
 void WitchBlastGame::updateIntro()
@@ -1001,7 +1004,7 @@ void WitchBlastGame::updateIntro()
   }
   else if (gameTime > 7.0f && introSoundState == 1)
   {
-    playMusic(MusicIntro);
+    MusicPlayer::getInstance(this).playMusic(MusicIntro);
     introSoundState++;
   }
 
@@ -1118,7 +1121,7 @@ void WitchBlastGame::updateIntro()
 
   if (toMenu)
   {
-    if (introSoundState <= 1) playMusic(MusicIntro);
+    if (introSoundState <= 1) MusicPlayer::getInstance(this).playMusic(MusicIntro);
     switchToMenu();
   }
 }
@@ -1689,7 +1692,7 @@ void WitchBlastGame::updateRunningGame()
       remove(SAVE_FILE.c_str());
       if (currentMap->getRoomType() == roomTypeBoss)
       {
-        playMusic(MusicDungeon);
+        MusicPlayer::getInstance(this).playMusic(MusicDungeon);
       }
       else if (currentMap->getRoomType() == roomTypeChallenge && !player->isDead())
       {
@@ -1700,7 +1703,7 @@ void WitchBlastGame::updateRunningGame()
 
         // sound
         SoundManager::getInstance().playSound(SOUND_GONG);
-        playMusic(MusicDungeon);
+        MusicPlayer::getInstance(this).playMusic(MusicDungeon);
 
         // text
         float x0 = MAP_WIDTH * 0.5f * TILE_WIDTH;
@@ -3246,7 +3249,7 @@ void WitchBlastGame::updateMenu()
         {
           lastScore.level = 0;
           lastScore.score = 0;
-          playMusic(MusicIntro);
+          MusicPlayer::getInstance(this).playMusic(MusicIntro);
         }
       }
     }
@@ -3298,7 +3301,7 @@ void WitchBlastGame::updateMenu()
         parameters.musicVolume = (parameters.musicVolume / 10) * 10 + 10;
         if (parameters.musicVolume > 100) parameters.musicVolume = 100;
         saveConfigurationToFile();
-        updateMusicVolume();
+        MusicPlayer::getInstance(this).updateMusicVolume();
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
       else if (menu->items[menu->index].id == MenuStartNew)
@@ -3334,7 +3337,7 @@ void WitchBlastGame::updateMenu()
         parameters.musicVolume = (parameters.musicVolume / 10) * 10 - 10;
         if (parameters.musicVolume < 0) parameters.musicVolume = 0;
         saveConfigurationToFile();
-        updateMusicVolume();
+        MusicPlayer::getInstance(this).updateMusicVolume();
         SoundManager::getInstance().playSound(SOUND_SHOT_SELECT);
       }
       else if (menu->items[menu->index].id == MenuStartNew)
@@ -3913,6 +3916,9 @@ void WitchBlastGame::startGame()
 {
   lastTime = getAbsolutTime();
 
+  // FIXME: Remove old code
+  menu.prepareIntro();
+  gameTime = 0.f;
   prepareIntro();
 
   // Start game loop
@@ -3939,9 +3945,14 @@ void WitchBlastGame::startGame()
       case gameStateKeyConfig:
       case gameStateJoystickConfig:
       case gameStateMenu:
+        // FIXME: Remove old code
+        menu.updateMenu();
         updateMenu();
         break;
       case gameStateIntro:
+        // FIXME: Remove old code
+        gameTime += deltaTime;
+        menu.updateIntro();
         updateIntro();
         break;
       case gameStatePlaying:
@@ -4739,7 +4750,7 @@ void WitchBlastGame::generateMap()
                  (MAP_WIDTH / 2) * TILE_WIDTH + TILE_WIDTH / 2 + 80,
                  (MAP_HEIGHT / 2) * TILE_HEIGHT + TILE_HEIGHT / 2);
     }
-    playMusic(MusicChallenge);
+    MusicPlayer::getInstance(this).playMusic(MusicChallenge);
   }
   else if (currentMap->getRoomType() == roomTypeBoss)
   {
@@ -4836,7 +4847,7 @@ void WitchBlastGame::generateMap()
       findPlaceMonsters(EnemyTypeImpBlue, 4);
     }
 
-    playMusic(MusicBoss);
+    MusicPlayer::getInstance(this).playMusic(MusicBoss);
 
     // boss screen
     if (parameters.displayBossPortrait)
@@ -5521,85 +5532,6 @@ void WitchBlastGame::verifyDoorUnlocking()
       SoundManager::getInstance().playSound(SOUND_DOOR_OPENING);
       player->useBossKey();
       bossRoomOpened = true;
-    }
-  }
-}
-
-void WitchBlastGame::playMusic(musicEnum musicChoice)
-{
-  music.stop();
-
-  if (parameters.musicVolume <= 0) return;
-
-  music.setLoop(true);
-  music.setVolume(parameters.musicVolume * VolumeModifier / 100);
-  bool ok = false;
-
-  switch (musicChoice)
-  {
-  case MusicDungeon:
-    {
-      int r = currentStandardMusic;
-      while (r == currentStandardMusic) r = rand() % 3;
-
-      switch (r)
-      {
-        case 0: ok = music.openFromFile("media/sound/WitchBlastTheme.ogg"); break;
-        case 1: ok = music.openFromFile("media/sound/SavageLife.ogg"); break;
-        case 2: ok = music.openFromFile("media/sound/HauntedLighthouse.ogg"); break;
-      }
-
-      currentStandardMusic = r;
-    }
-    break;
-
-  case MusicEnding:
-    ok = music.openFromFile("media/sound/AmbiantMedieval.ogg");
-    break;
-
-  case MusicBoss:
-    ok = music.openFromFile("media/sound/ShowMeThePower.ogg");
-    break;
-
-  case MusicChallenge:
-    ok = music.openFromFile("media/sound/HellsFire.ogg");
-    break;
-
-  case MusicIntro:
-    ok = music.openFromFile("media/sound/WitchBlastTheme.ogg");
-    break;
-  }
-
-  if (ok)
-    music.play();
-}
-
-void WitchBlastGame::pauseMusic()
-{
-  music.pause();
-}
-
-void WitchBlastGame::resumeMusic()
-{
-  music.play();
-}
-
-void WitchBlastGame::updateMusicVolume()
-{
-  if (music.getStatus() == sf::Music::Playing)
-  {
-    if (parameters.musicVolume == 0)
-      music.stop();
-    else
-      music.setVolume(parameters.musicVolume * VolumeModifier / 100);
-  }
-  else
-  {
-    if (parameters.musicVolume > 0)
-    {
-      bool ok = music.openFromFile("media/sound/wb.ogg");
-      music.setVolume(parameters.musicVolume * VolumeModifier / 100);
-      if (ok) music.play();
     }
   }
 }

@@ -4,7 +4,7 @@
 #include "sfml_game/GameMap.h"
 #include "sfml_game/MyTools.h"
 #include "Constants.h"
-#include "DoorEntity.h"
+#include "Entities/DoorEntity.h"
 #include <list>
 
 const int MAPOBJ_NONE          =   0;
