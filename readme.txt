@@ -88,6 +88,18 @@ AFS (for the Spanish translation)
 
 Changes
 -------
+Next release
+- ADD 3 new divinities
+- ADD New effects for lvl 3 attacks
+- MOD New divinity presents (rings)
+- MOD Fireball spell damage increase
+- MOD Explosive barrel don't explode the first 2 seconds in a room
+- MOD Slime from a cauldron or a giant slime can't directly hurt the player while jumping the first time
+- MOD Divinity trigger more complex now
+- MOD New data save system (compatibility with future versions)
+- FIX Secret room misplacement
+- FIX Stone divinity appreciates ice attacks
+
 v0.7.5
 - ADD 2 players mode
 - ADD Score display in game

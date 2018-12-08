@@ -69,10 +69,17 @@ SlimeEntity::SlimeEntity(float x, float y, slimeTypeEnum slimeType, bool invocat
 
   isPet = false;
   willExplode = false;
+  noCollisionTimer = -1.0f;
+}
+
+void SlimeEntity::setH(float h)
+{
+  this->h = h;
 }
 
 void SlimeEntity::animate(float delay)
 {
+  if (noCollisionTimer > 0.0f) noCollisionTimer -= delay;
   float slimeDelay = delay;
   if (specialState[SpecialStateIce].active) slimeDelay = delay * specialState[SpecialStateIce].param1;
 
@@ -175,7 +182,7 @@ void SlimeEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           star->setType(ENTITY_EFFECT);
           star->setSpin(400.0f);
         }
-        inflictsRecoilTo(playerEntity);
+        inflictsRepulsionTo(playerEntity);
       }
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
@@ -261,12 +268,12 @@ void SlimeEntity::collideMapBottom()
 
 void SlimeEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );
-    giveRecoil(false, vel, 0.3f);
+    giveRepulsion(false, vel, 0.3f);
 
     computeFacingDirection();
   }
@@ -327,7 +334,13 @@ void SlimeEntity::prepareDying()
 
 bool SlimeEntity::canCollide()
 {
+  if (noCollisionTimer > 0.0f) return false;
   return h <= 70.0f && hp > 0;
+}
+
+void SlimeEntity::disableCollidingTemporary()
+{
+  noCollisionTimer = 0.8f;
 }
 
 BaseCreatureEntity::enumMovingStyle SlimeEntity::getMovingStyle()

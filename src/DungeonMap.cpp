@@ -1025,6 +1025,10 @@ void DungeonMap::generateTempleRoom()
   int x0 = MAP_WIDTH / 2;
   int y0 = 1 + MAP_HEIGHT / 2;
 
+  int playerDivinity = (game().getPlayer()->getDivinity().divinity > -1);
+  bool threeTemple = rand() % 2 == 0;
+  bool forcePlayerDivinity = playerDivinity >= 0 && rand() % 2 == 0;
+
   if (rand() % 3 == 0)
   {
     if (rand() % 2 == 0) initPattern(PatternSmallDisc);
@@ -1032,22 +1036,41 @@ void DungeonMap::generateTempleRoom()
   }
 
   int d0, d1, d2;
-  d0 = rand() % NB_DIVINITY;
-  d1 = d0;
-  while (d0 == d1) d1 = rand() % NB_DIVINITY;
 
-  if (rand() % 2 == 0)
+  if (threeTemple)
   {
-    // three temple
-    d2 = d0;
-    while (d0 == d2 || d1 == d2) d2 = rand() % NB_DIVINITY;
+    bool ok = false;
+    while (!ok)
+    {
+      d0 = rand() % NB_DIVINITY;
+      d1 = d0;
+      while (d0 == d1) d1 = rand() % NB_DIVINITY;
+      d2 = d0;
+      while (d0 == d2 || d1 == d2) d2 = rand() % NB_DIVINITY;
+
+      ok = true;
+      if (forcePlayerDivinity)
+        if (d0 != playerDivinity && d1 != playerDivinity && d2 != playerDivinity)
+          ok = false;
+    }
     generateTemple(x0 - 2, y0, (enumDivinityType)d0);
     generateTemple(x0 + 2, y0, (enumDivinityType)d1);
     generateTemple(x0, y0, (enumDivinityType)d2);
   }
   else
   {
-    // two temples
+    bool ok = false;
+    while (!ok)
+    {
+      d0 = rand() % NB_DIVINITY;
+      d1 = d0;
+      while (d0 == d1) d1 = rand() % NB_DIVINITY;
+
+      ok = true;
+      if (forcePlayerDivinity)
+        if (d0 != playerDivinity && d1 != playerDivinity)
+          ok = false;
+    }
     generateTemple(x0 - 1, y0, (enumDivinityType)d0);
     generateTemple(x0 + 1, y0, (enumDivinityType)d1);
   }

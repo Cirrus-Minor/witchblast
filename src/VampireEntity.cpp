@@ -54,7 +54,7 @@ VampireEntity::VampireEntity(float myx, float myy)
   formState = FORM_MAN;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceImmune;
   canExplode = false;
 
@@ -706,7 +706,7 @@ void VampireEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
   if (playerEntity != NULL && !playerEntity->isDead())
   {
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 450.0f);
-    targetEntity->giveRecoil(true, recoilVector, 0.5f);
+    targetEntity->giveRepulsion(true, recoilVector, 0.5f);
   }
 }
 
@@ -782,7 +782,7 @@ void VampireDeadEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
   if (playerEntity != NULL && !playerEntity->isDead())
   {
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 100.0f);
-    targetEntity->giveRecoil(false, recoilVector, 0.1f);
+    targetEntity->giveRepulsion(false, recoilVector, 0.1f);
   }
 }
 

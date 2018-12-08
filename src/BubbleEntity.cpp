@@ -139,25 +139,25 @@ void BubbleEntity::render(sf::RenderTarget* app)
 void BubbleEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void BubbleEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void BubbleEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void BubbleEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void BubbleEntity::collideWithEnemy(EnemyEntity* entity)

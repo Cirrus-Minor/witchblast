@@ -493,15 +493,18 @@ class PlayerEntity : public BaseCreatureEntity
     void offerMonster(enemyTypeEnum monster, enumShotType hurtingType);
     void offerHealth(int lostHp);
     void offerChallenge();
+    void offerSecret();
     void addPiety(int n);
     void pietyLevelUp();
     void loadDivinity(int id, int piety, int level, int interventions);
+    bool triggerIllusionTeleport();
     bool triggerDivinityBefore();
     void triggerDivinityAfter();
     void divineFury();
     void divineDestroyUndead();
     void divineIce();
     void divineRepulse();
+    void divineFire();
     void divineProtection(float duration, float armorBonus);
     void divineHeal(int hpHealed);
 
@@ -528,6 +531,9 @@ class PlayerEntity : public BaseCreatureEntity
     void tryToConsume(int n);
     void consume(enumItemType item);
     int getDamage();
+    int getDps();
+
+    bool seeInvisible();
 
   protected:
     virtual void readCollidingEntity(CollidingSpriteEntity* entity);
@@ -542,7 +548,8 @@ class PlayerEntity : public BaseCreatureEntity
     virtual void stuck() override;
 
   private:
-    int fireDamages;
+    int fireDamage;
+    int dps;
     float fireVelocity;
     float fireDelay;
     float fireAnimationDelay;
@@ -642,6 +649,8 @@ class PlayerEntity : public BaseCreatureEntity
     int consumable[MAX_SLOT_CONSUMABLES];
     void acquireConsumable(enumItemType type);
     void reveal();
+
+    float lastTeleportSave;
 };
 
 #endif // PLAYERSPRITE_H

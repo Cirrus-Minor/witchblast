@@ -35,7 +35,7 @@ ZombieDarkEntity::ZombieDarkEntity(float x, float y)
   attackTimer = 0.9f;
 
   resistance[ResistanceFrozen] = ResistanceHigh;
-  resistance[ResistanceRecoil] = ResistanceHigh;
+  resistance[ResistanceRepulsion] = ResistanceHigh;
   resistance[ResistancePoison] = ResistanceImmune;
 
   findNextGoal();
@@ -77,40 +77,40 @@ void ZombieDarkEntity::calculateBB()
 
 void ZombieDarkEntity::collideMapRight()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.x = -repulsion.velocity.x * 0.3f;
+    else (repulsion.active = false);
   }
   findNextRandomGoal();
 }
 
 void ZombieDarkEntity::collideMapLeft()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.x = -recoil.velocity.x * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.x = -repulsion.velocity.x * 0.3f;
+    else (repulsion.active = false);
   }
   findNextRandomGoal();
 }
 
 void ZombieDarkEntity::collideMapTop()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.y = -repulsion.velocity.y * 0.3f;
+    else (repulsion.active = false);
   }
   findNextRandomGoal();
 }
 
 void ZombieDarkEntity::collideMapBottom()
 {
-  if (recoil.active)
+  if (repulsion.active)
   {
-    if (recoil.stun) recoil.velocity.y = -recoil.velocity.y * 0.3f;
-    else (recoil.active = false);
+    if (repulsion.stun) repulsion.velocity.y = -repulsion.velocity.y * 0.3f;
+    else (repulsion.active = false);
   }
   findNextRandomGoal();
 }
@@ -244,7 +244,7 @@ void ZombieDarkEntity::findNextGoal()
 
   if (currentDirection == playerDirecion && attackTimer <= 0.0f)
   {
-    giveRecoil(false, Vector2D(velocity.x * 2.0f, velocity.y * 2.0f), 1.5f);
+    giveRepulsion(false, Vector2D(velocity.x * 2.0f, velocity.y * 2.0f), 1.5f);
     attackTimer = 2.0f;
     SoundManager::getInstance().playSound(SOUND_ZOMBIE_ATTACKING);
     facingTimer = -1.0f;

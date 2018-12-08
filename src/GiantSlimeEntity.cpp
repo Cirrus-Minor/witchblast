@@ -40,7 +40,7 @@ GiantSlimeEntity::GiantSlimeEntity(float x, float y)
   slimeTimer =5.0f;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceVeryHigh;
 
   sprite.setOrigin(64, 84);
@@ -378,7 +378,8 @@ void GiantSlimeEntity::dying()
   for (int i = 0; i < 9; i++)
   {
     game().generateBlood(xSlime, ySlime, bloodColor);
-    new SlimeEntity(x, y, SlimeTypeStandard, true);
+    SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeStandard, true);
+    slime->disableCollidingTemporary();
   }
 
   game().makeShake(1.0f);
@@ -439,7 +440,7 @@ void GiantSlimeEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
   if (state == 7)
   {
     Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), KING_RAT_RUNNING_RECOIL );
-    targetEntity->giveRecoil(true, recoilVector, 1.0f);
+    targetEntity->giveRepulsion(true, recoilVector, 1.0f);
   }
 }
 

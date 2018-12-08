@@ -93,8 +93,8 @@ void ExplosionEntity::testCollisions()
           // TODO explosion type
           if (damage > 0) entity->hurt(BaseCreatureEntity::getHurtParams(damage, ShotTypeFire, 0, false, SourceTypeExplosion, enemyType, false));
 
-          Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 800.0f );
-          entity->giveRecoil(true, recoilVector, 1.0f);
+          Vector2D repulsionVector = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 800.0f );
+          entity->giveRepulsion(true, repulsionVector, 1.0f);
         }
       }
 		}

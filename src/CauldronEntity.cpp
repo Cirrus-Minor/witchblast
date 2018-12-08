@@ -40,7 +40,7 @@ CauldronEntity::CauldronEntity(float x, float y, cauldronTypeEnum cauldronType)
   }
 
   enemyType = cauldronType == CauldronTypeStandard ? EnemyTypeCauldron : EnemyTypeCauldronElemental;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceImmune;
   canExplode = false;
 }
@@ -74,13 +74,15 @@ void CauldronEntity::animate(float delay)
             case 1: slimeType = SlimeTypeRed; break;
             case 2: slimeType = SlimeTypeStandard; break;
           }
-          new SlimeEntity(x, y, slimeType, true);
+          SlimeEntity* slime = new SlimeEntity(x, y, slimeType, true);
+          slime->disableCollidingTemporary();
           invokeDelay = 3.75f + (float)(rand() % 3000) / 1000.0f;
         }
       }
       else
       {
-        new SlimeEntity(x, y, SlimeTypeViolet, true);
+        SlimeEntity* slime = new SlimeEntity(x, y, SlimeTypeViolet, true);
+        slime->disableCollidingTemporary();
         invokeDelay = 1.5f + (float)(rand() % 2500) / 1000.0f;
       }
     }
@@ -191,25 +193,25 @@ void CauldronEntity::calculateBB()
 void CauldronEntity::collideMapRight()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void CauldronEntity::collideMapLeft()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void CauldronEntity::collideMapTop()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void CauldronEntity::collideMapBottom()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void CauldronEntity::collideWithEnemy(EnemyEntity* entity)
@@ -244,5 +246,5 @@ void CauldronEntity::drop()
 void CauldronEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
 {
   Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), 200.0f );
-  targetEntity->giveRecoil(false, recoilVector, 0.1f);
+  targetEntity->giveRepulsion(false, recoilVector, 0.1f);
 }

@@ -32,7 +32,7 @@ SpiderWebEntity::SpiderWebEntity(float x, float y, bool isFromPlayer)
   hpMax = 40;
 
   resistance[ResistanceFrozen] = ResistanceImmune;
-  resistance[ResistanceRecoil] = ResistanceImmune;
+  resistance[ResistanceRepulsion] = ResistanceImmune;
   resistance[ResistanceFire] = ResistanceVeryLow;
   resistance[ResistanceStone] = ResistanceVeryLow;
   resistance[ResistancePoison] = ResistanceImmune;

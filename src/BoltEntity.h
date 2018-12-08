@@ -44,6 +44,7 @@ class BoltEntity : public CollidingSpriteEntity
     virtual void collideMapTop();
     virtual void collideMapBottom();
     virtual bool collideWithMap(int direction);
+    virtual void collideWall();
 
     virtual void onDying();
     virtual void stuck();
@@ -58,6 +59,7 @@ class BoltEntity : public CollidingSpriteEntity
     ParticleGenerator particleGenerator;
 
   private:
+    void split(int direction);
     bool testWallsCollision;
     bool flying;
     bool critical;

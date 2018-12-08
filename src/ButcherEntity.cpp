@@ -39,7 +39,7 @@ ButcherEntity::ButcherEntity(float x, float y)
   frame = 1;
 
   resistance[ResistanceFrozen] = ResistanceHigh;
-  resistance[ResistanceRecoil] = ResistanceHigh;
+  resistance[ResistanceRepulsion] = ResistanceHigh;
   canExplode = false;
 }
 
@@ -83,35 +83,35 @@ void ButcherEntity::calculateBB()
 void ButcherEntity::collideMapRight()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void ButcherEntity::collideMapLeft()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void ButcherEntity::collideMapTop()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void ButcherEntity::collideMapBottom()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void ButcherEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getMovingStyle() == movWalking && entity->getEnemyType() != EnemyTypeSausage_invocated)
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );
-    giveRecoil(false, vel, 0.3f);
+    giveRepulsion(false, vel, 0.3f);
   }
 }
 

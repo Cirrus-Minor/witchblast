@@ -29,7 +29,7 @@ GhostEntity::GhostEntity(float x, float y)
   agonizingSound = SOUND_GHOST_DYING;
 
   resistance[ResistanceFrozen] = ResistanceHigh;
-  resistance[ResistanceRecoil] = ResistanceHigh;
+  resistance[ResistanceRepulsion] = ResistanceHigh;
   resistance[ResistancePoison] = ResistanceImmune;
 }
 
@@ -64,6 +64,8 @@ void GhostEntity::calculateBB()
 
 int GhostEntity::getGhostFade()
 {
+  if (game().getPlayer()->seeInvisible()) return 100;
+
   float dist1 = 24000.f;
   float dist2 = 40000.f;
   float dist = Vector2D(x, y).distance2(game().getPlayerPosition());
@@ -111,35 +113,35 @@ void GhostEntity::render(sf::RenderTarget* app)
 void GhostEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void GhostEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void GhostEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void GhostEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void GhostEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getEnemyType() == EnemyTypeGhost)
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 1.5f );
-    giveRecoil(false, vel, 0.3f);
+    giveRepulsion(false, vel, 0.3f);
   }
 }
 

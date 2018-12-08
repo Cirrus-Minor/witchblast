@@ -97,39 +97,39 @@ void LittleSpiderEntity::calculateBB()
 void LittleSpiderEntity::collideMapRight()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
     computeFacingDirection();
 }
 
 void LittleSpiderEntity::collideMapLeft()
 {
     velocity.x = -velocity.x;
-    if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+    if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
     computeFacingDirection();
 }
 
 void LittleSpiderEntity::collideMapTop()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
     computeFacingDirection();
 }
 
 void LittleSpiderEntity::collideMapBottom()
 {
     velocity.y = -velocity.y;
-    if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+    if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
     computeFacingDirection();
 }
 
 void LittleSpiderEntity::collideWithEnemy(EnemyEntity* entity)
 {
-  if (recoil.active && recoil.stun) return;
+  if (repulsion.active && repulsion.stun) return;
 
   if (entity->getMovingStyle() == movWalking )
   {
     Vector2D vel = Vector2D(entity->getX(), entity->getY()).vectorTo(Vector2D(x, y), 100.0f );
-    giveRecoil(false, vel, 0.3f);
+    giveRepulsion(false, vel, 0.3f);
 
     computeFacingDirection();
   }

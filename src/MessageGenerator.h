@@ -65,6 +65,9 @@ std::map<EnumMessages, messageBuilderStruct> msgMap =
   { MsgInfoDivIce,            { MessageTypeInfo, 0, "divinity_ice",               3} },
   { MsgInfoDivStone,          { MessageTypeInfo, 0, "divinity_stone",             3} },
   { MsgInfoDivAir,            { MessageTypeInfo, 0, "divinity_air",               3} },
+  { MsgInfoDivIllusion,       { MessageTypeInfo, 0, "divinity_illusion",          3} },
+  { MsgInfoDivFire,           { MessageTypeInfo, 0, "divinity_fire",              3} },
+  { MsgInfoDivPoison,         { MessageTypeInfo, 0, "divinity_poison",            3} },
 
   { MsgInfoDivIntervention,   { MessageTypeInfo, 0, "divinity_intervention",      2} },
   { MsgInfoDivGift,           { MessageTypeInfo, 0, "divinity_gift",              2} },

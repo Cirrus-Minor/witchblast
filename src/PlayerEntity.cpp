@@ -8,6 +8,7 @@
 #include "EnemyBoltEntity.h"
 #include "ItemEntity.h"
 #include "FairyEntity.h"
+#include "ExplosionEntity.h"
 #include "sfml_game/ImageManager.h"
 #include "sfml_game/SoundManager.h"
 #include "Constants.h"
@@ -133,6 +134,7 @@ PlayerEntity::PlayerEntity(float x, float y)
   isFairyTransmuted = false;
 
   itemToBuy = NULL;
+  lastTeleportSave = -15.0f;
 }
 
 void PlayerEntity::moveTo(float newX, float newY)
@@ -247,7 +249,12 @@ void PlayerEntity::setLostHp(int level, int n)
 
 int PlayerEntity::getDamage()
 {
-  return fireDamages;
+  return fireDamage;
+}
+
+int PlayerEntity::getDps()
+{
+  return dps;
 }
 
 bool PlayerEntity::isPoisoned()
@@ -547,17 +554,16 @@ void PlayerEntity::animate(float delay)
       hiccupDelay = 4.0f;
 
       // hiccup
-      recoil.active = true;
-      recoil.stun = true;
-      recoil.velocity = Vector2D(350.0f);
-      recoil.timer = 0.4f;
+      repulsion.active = true;
+      repulsion.stun = true;
+      repulsion.velocity = Vector2D(350.0f);
+      repulsion.timer = 0.4f;
 
       for (int i = 0; i < 4; i++)
       {
         BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypePoison, 0);
         bolt->setDamages(4);
         bolt->setFlying(isFairyTransmuted);
-        //bolt->setVelocity(recoil.velocity.vectorTo(Vector2D(0, 0), fireVelocity));
         bolt->setVelocity(Vector2D(fireVelocity));
       }
 
@@ -621,10 +627,10 @@ void PlayerEntity::animate(float delay)
 
     if (boundingBox.intersects(col1) || boundingBox.intersects(col2))
     {
-      recoil.active = true;
-      recoil.stun = true;
-      recoil.velocity = Vector2D(GAME_WIDTH / 2, GAME_HEIGHT /2).vectorTo(Vector2D(x, y), 650.0f);
-      recoil.timer = 0.4f;
+      repulsion.active = true;
+      repulsion.stun = true;
+      repulsion.velocity = Vector2D(GAME_WIDTH / 2, GAME_HEIGHT /2).vectorTo(Vector2D(x, y), 650.0f);
+      repulsion.timer = 0.4f;
 
       game().activateKeyRoomEffect(true);
     }
@@ -1273,6 +1279,36 @@ void PlayerEntity::render(sf::RenderTarget* app)
           }
           break;
         }
+      case DivinityIllusion:
+        {
+          if (divinity.level > 1)
+          {
+            displayField = true;
+            fieldFrame = 20;
+            fieldFade = 40 * (divinity.level - 1);
+          }
+          break;
+        }
+      case DivinityFire:
+        {
+          if (divinity.level > 1)
+          {
+            displayField = true;
+            fieldFrame = 22;
+            fieldFade = 40 * (divinity.level - 1);
+          }
+          break;
+        }
+      case DivinityDeath:
+        {
+          if (divinity.level > 1)
+          {
+            displayField = true;
+            fieldFrame = 24;
+            fieldFade = 40 * (divinity.level - 1);
+          }
+          break;
+        }
       }
 
       if (displayField)
@@ -1335,25 +1371,30 @@ void PlayerEntity::readCollidingEntity(CollidingSpriteEntity* entity)
   {
     if (boltEntity != NULL && !boltEntity->getDying())
     {
-      boltEntity->collide();
       // TODO bolt source
-      hurt(getHurtParams(boltEntity->getDamages(),
+      int boltResult = hurt(getHurtParams(boltEntity->getDamages(),
                          boltEntity->getBoltType(),
                          boltEntity->getLevel(),
                          boltEntity->isCritical(),
                          SourceTypeBolt,
                          boltEntity->getEnemyType(),
                          false));
-      game().generateBlood(x, y, bloodColor);
 
-      float xs = (x + boltEntity->getX()) / 2;
-      float ys = (y + boltEntity->getY()) / 2;
-      SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
-      star->setFading(true);
-      star->setZ(y+ 100);
-      star->setLifetime(0.7f);
-      star->setType(ENTITY_EFFECT);
-      star->setSpin(400.0f);
+      if (boltResult > -1)
+      {
+        boltEntity->collide();
+
+        game().generateBlood(x, y, bloodColor);
+
+        float xs = (x + boltEntity->getX()) / 2;
+        float ys = (y + boltEntity->getY()) / 2;
+        SpriteEntity* star = new SpriteEntity(ImageManager::getInstance().getImage(IMAGE_HURT_IMPACT), xs, ys);
+        star->setFading(true);
+        star->setZ(y+ 100);
+        star->setLifetime(0.7f);
+        star->setType(ENTITY_EFFECT);
+        star->setSpin(400.0f);
+      }
     }
   }
 }
@@ -1689,7 +1730,7 @@ void PlayerEntity::generateBolt(float velx, float vely)
 
   BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, boltType, shotLevel);
   bolt->setFlying(isFairyTransmuted);
-  int boltDamage = fireDamages;
+  int boltDamage = fireDamage;
   if (criticalChance > 0)
     if (rand()% 100 < criticalChance)
     {
@@ -1866,10 +1907,10 @@ void PlayerEntity::fire(int direction)
       float boltVelocity = fireVelocity * 0.75f;
 
       BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt1->setDamages(fireDamages / 2);
+      bolt1->setDamages(fireDamage / 2);
       bolt1->setFlying(isFairyTransmuted);
       BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt2->setDamages(fireDamages / 2);
+      bolt2->setDamages(fireDamage / 2);
       bolt2->setFlying(isFairyTransmuted);
 
       switch (direction)
@@ -1895,7 +1936,7 @@ void PlayerEntity::fire(int direction)
     else if (equip[EQUIP_REAR_SHOT])
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt->setDamages(fireDamages / 2);
+      bolt->setDamages(fireDamage / 2);
       bolt->setFlying(isFairyTransmuted);
       float velx = 0.0f;
       float vely = 0.0f;
@@ -1920,11 +1961,11 @@ void PlayerEntity::fire(int direction)
     if (equip[EQUIP_SIDE_SHOTS])
     {
       BoltEntity* bolt1 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt1->setDamages(fireDamages / 2);
+      bolt1->setDamages(fireDamage / 2);
       bolt1->setFlying(isFairyTransmuted);
 
       BoltEntity* bolt2 = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt2->setDamages(fireDamages / 2);
+      bolt2->setDamages(fireDamage / 2);
       bolt2->setFlying(isFairyTransmuted);
 
       if (direction == 4 || direction == 6)
@@ -1942,7 +1983,7 @@ void PlayerEntity::fire(int direction)
     if (equip[EQUIP_BOOK_RANDOM] && randomFireDelay <= 0.0f)
     {
       BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime, ShotTypeStandard, 0);
-      bolt->setDamages(fireDamages);
+      bolt->setDamages(fireDamage);
       bolt->setFlying(isFairyTransmuted);
       float shotAngle = rand() % 360;
       bolt->setVelocity(Vector2D(fireVelocity * 0.75f * cos(shotAngle), fireVelocity * 0.75f * sin(shotAngle)));
@@ -1976,13 +2017,26 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 
   shouldBeSavedFromDivinity = false;
   bool divinityInvoked = false;
-  if (hp - hurtParam.damage <= hpMax / 4 && divinity.divinity >= 0)
+  int thresholdDam = 5;
+
+  if (invincibleDelay <= 0.0f && hp - hurtParam.damage <= thresholdDam && divinity.divinity >= 0)
   {
-    divinityInvoked = triggerDivinityBefore();
-    if (divinityInvoked)
+    if (triggerIllusionTeleport())
     {
-      game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
-      shouldBeSavedFromDivinity = true;
+      castTeleport();
+      lastTeleportSave = game().getGameTime();
+      divineInterventionDelay = WORSHIP_DELAY * 1.0f;
+      showCone = false;
+      return -999;
+    }
+    else if (game().getEnemyCount() > 2)
+    {
+      divinityInvoked = triggerDivinityBefore();
+      if (divinityInvoked)
+      {
+        game().testAndAddMessageToQueue((EnumMessages)(MsgInfoDivIntervention));
+        shouldBeSavedFromDivinity = true;
+      }
     }
   }
 
@@ -2011,7 +2065,7 @@ int PlayerEntity::hurt(StructHurt hurtParam)
 
       // divinity
       offerHealth(oldHp - hp);
-      if (!divinityInvoked && hp <= hpMax / 4 && divinity.divinity >= 0)
+      if (!divinityInvoked && hp <= thresholdDam && divinity.divinity >= 0)
       {
         triggerDivinityAfter();
       }
@@ -2417,7 +2471,7 @@ void PlayerEntity::computePlayer()
   float fireDelayBonus = 1.0f;
   float creatureSpeedBonus = 1.0f;
   float fireVelocityBonus = 1.0f;
-  float fireDamagesBonus = 1.0f;
+  float fireDamageBonus = 1.0f;
   armor = 0.0f;
   criticalChance = 0;
 
@@ -2454,9 +2508,9 @@ void PlayerEntity::computePlayer()
   if (equip[EQUIP_MAHOGANY_STAFF])
   {
     fireVelocityBonus += 0.15f;
-    fireDamagesBonus += 0.5f;
+    fireDamageBonus += 0.5f;
   }
-  if (equip[EQUIP_BLOOD_SNAKE]) fireDamagesBonus += 0.5f;
+  if (equip[EQUIP_BLOOD_SNAKE]) fireDamageBonus += 0.5f;
 
   if (equip[EQUIP_ROBE_ADVANCED]) armor += 0.2f;
   else if (equip[EQUIP_MAGICIAN_ROBE]) armor += 0.15f;
@@ -2471,13 +2525,13 @@ void PlayerEntity::computePlayer()
   case (DivinityFighter):
     {
       if (divinity.level >= 5)
-        fireDamagesBonus += 0.5f;
+        fireDamageBonus += 0.5f;
       else if (divinity.level >= 4)
-        fireDamagesBonus += 0.375f;
+        fireDamageBonus += 0.375f;
       else if (divinity.level >= 3)
-        fireDamagesBonus += 0.25f;
+        fireDamageBonus += 0.25f;
       else if (divinity.level >= 2)
-        fireDamagesBonus += 0.125f;
+        fireDamageBonus += 0.125f;
       break;
     }
   case (DivinityIce):
@@ -2486,9 +2540,20 @@ void PlayerEntity::computePlayer()
       if (divinity.level >= 3) resistance[ResistanceIce] = (enumStateResistance)(resistance[ResistanceIce] - 1);
       break;
     }
+  case (DivinityFire):
+    {
+      if (divinity.level >= 3) resistance[ResistanceFire] = (enumStateResistance)(resistance[ResistanceFire] - 1);
+      break;
+    }
+  case (DivinityDeath):
+    {
+      if (divinity.level >= 5) resistance[ResistancePoison] = ResistanceVeryHigh;
+      else if (divinity.level >= 3) resistance[ResistancePoison] = ResistanceHigh;
+      break;
+    }
   case (DivinityStone):
     {
-      if (divinity.level >= 5) resistance[ResistanceRecoil] = ResistanceVeryHigh;
+      if (divinity.level >= 5) resistance[ResistanceRepulsion] = ResistanceVeryHigh;
       if (divinity.level >= 3) resistance[ResistanceStone] = (enumStateResistance)(resistance[ResistanceStone] - 1);
       break;
     }
@@ -2503,7 +2568,7 @@ void PlayerEntity::computePlayer()
   fireDelay = INITIAL_PLAYER_FIRE_DELAY * fireDelayBonus;
   creatureSpeed = INITIAL_PLAYER_SPEED * creatureSpeedBonus;
   fireVelocity = INITIAL_BOLT_VELOCITY * fireVelocityBonus;
-  fireDamages = INITIAL_BOLT_DAMAGES * fireDamagesBonus;
+  fireDamage = INITIAL_BOLT_DAMAGES * fireDamageBonus;
   boltLifeTime = INITIAL_BOLT_LIFE * boltLifeTimeBonus;
 
   // gems
@@ -2530,36 +2595,39 @@ void PlayerEntity::computePlayer()
 
     case ShotTypeIllusion:
       if (equip[EQUIP_RING_ILLUSION]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityIllusion && divinity.level >= 4) specialShotLevel[i]++;
       break;
 
     case ShotTypeFire:
       if (equip[EQUIP_RING_FIRE]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityFire && divinity.level >= 4) specialShotLevel[i]++;
       break;
 
     case ShotTypePoison:
       if (equip[EQUIP_RING_POISON]) specialShotLevel[i]++;
+      if (divinity.divinity == DivinityDeath && divinity.level >= 4) specialShotLevel[i]++;
       break;
 
     default:
       break;
     }
   }
-  if (getShotType() == ShotTypeIllusion) fireDamages *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
-  else if (getShotType() == ShotTypeFire) fireDamages *= FIRE_DAMAGE_INCREASE[getShotLevel()];
+  if (getShotType() == ShotTypeIllusion) fireDamage *= ILLUSION_DAMAGE_DECREASE[getShotLevel()];
+  else if (getShotType() == ShotTypeFire) fireDamage *= FIRE_DAMAGE_INCREASE[getShotLevel()];
 
   // divinity
   if (specialState[DivineStateProtection].active)
     armor += specialState[DivineStateProtection].param1;
 
   // post-computation
-  if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamages *= 0.65f;
-  else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamages *= 0.75f;
+  if (equip[EQUIP_BOOK_TRIPLE_QUICK]) fireDamage *= 0.65f;
+  else if (equip[EQUIP_BOOK_DUAL_QUICK]) fireDamage *= 0.75f;
   else if (equip[EQUIP_RAPID_SHOT])
   {
     fireDelay *= 0.20f;
-    fireDamages *= 0.25f;
+    fireDamage *= 0.25f;
   }
-  if (equip[EQUIP_ALCOHOL]) fireDamages *= 1.25f;
+  if (equip[EQUIP_ALCOHOL]) fireDamage *= 1.25f;
 
   // spells
   if (protection.active) armor += protection.value;
@@ -2569,7 +2637,7 @@ void PlayerEntity::computePlayer()
   // fairy ?
   if (isFairyTransmuted)
   {
-    fireDamages *= 0.5f;
+    fireDamage *= 0.5f;
     creatureSpeed *= 1.5f;
     movingStyle = movFlying;
   }
@@ -2580,9 +2648,14 @@ void PlayerEntity::computePlayer()
 
   // potions
   if (specialState[SpecialStateWeakness].active && !specialState[SpecialStateStrength].active)
-    fireDamages *= specialState[SpecialStateWeakness].param1;
+    fireDamage *= specialState[SpecialStateWeakness].param1;
   if (specialState[SpecialStateStrength].active && !specialState[SpecialStateWeakness].active)
-    fireDamages *= specialState[SpecialStateStrength].param1;
+    fireDamage *= specialState[SpecialStateStrength].param1;
+
+  // Damage Pro Second
+  dps = fireDamage / fireDelay;
+  if (equip[EQUIP_BOOK_TRIPLE] || equip[EQUIP_BOOK_TRIPLE_QUICK]) dps *= 3;
+  else if (equip[EQUIP_BOOK_DUAL] || equip[EQUIP_BOOK_DUAL_QUICK]) dps *= 2;
 }
 
 void PlayerEntity::acquireStance(enumItemType type)
@@ -2624,25 +2697,25 @@ void PlayerEntity::acquireStance(enumItemType type)
 void PlayerEntity::collideMapRight()
 {
   collidingDirection = 6;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x * 0.7f;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x * 0.7f;
 }
 
 void PlayerEntity::collideMapLeft()
 {
   collidingDirection = 4;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x * 0.7f;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x * 0.7f;
 }
 
 void PlayerEntity::collideMapTop()
 {
   collidingDirection = 8;
-  if (recoil.active) recoil.velocity.y= -recoil.velocity.y * 0.7f;
+  if (repulsion.active) repulsion.velocity.y= -repulsion.velocity.y * 0.7f;
 }
 
 void PlayerEntity::collideMapBottom()
 {
   collidingDirection = 2;
-  if (recoil.active) recoil.velocity.y= -recoil.velocity.y * 0.7f;
+  if (repulsion.active) repulsion.velocity.y= -repulsion.velocity.y * 0.7f;
 }
 
 void PlayerEntity::useBossKey()
@@ -2871,6 +2944,40 @@ void PlayerEntity::donate(int n)
     bool divineGift = false;
     enumItemType itemType = ItemCopperCoin;
 
+    if (divinity.level >= 4 && game().getItemsCount() == 0 && donation >= 40)
+    {
+      if (divinity.divinity == DivinityIce && equip[EQUIP_GEM_ICE] && !equip[EQUIP_RING_ICE])
+      {
+        divineGift = true;
+        itemType = ItemRingIce;
+      }
+      else if (divinity.divinity == DivinityStone && equip[EQUIP_GEM_STONE] && !equip[EQUIP_RING_STONE])
+      {
+        divineGift = true;
+        itemType = ItemRingStone;
+      }
+      else if (divinity.divinity == DivinityAir && equip[EQUIP_GEM_LIGHTNING] && !equip[EQUIP_RING_LIGHTNING])
+      {
+        divineGift = true;
+        itemType = ItemRingLightning;
+      }
+      else if (divinity.divinity == DivinityIllusion && equip[EQUIP_GEM_ILLUSION] && !equip[EQUIP_RING_ILLUSION])
+      {
+        divineGift = true;
+        itemType = ItemRingIllusion;
+      }
+      else if (divinity.divinity == DivinityFire && equip[EQUIP_GEM_FIRE] && !equip[EQUIP_RING_FIRE])
+      {
+        divineGift = true;
+        itemType = ItemRingFire;
+      }
+      else if (divinity.divinity == DivinityDeath && equip[EQUIP_GEM_POISON] && !equip[EQUIP_RING_POISON])
+      {
+        divineGift = true;
+        itemType = ItemRingPoison;
+      }
+    }
+
     if (divinity.level >= 3 && game().getItemsCount() == 0)
     {
       if (divinity.divinity == DivinityHealer && !equip[EQUIP_MANUAL_HEALTH])
@@ -2893,6 +3000,21 @@ void PlayerEntity::donate(int n)
       {
         divineGift = true;
         itemType = ItemGemLightning;
+      }
+      else if (divinity.divinity == DivinityIllusion && !equip[EQUIP_GEM_ILLUSION])
+      {
+        divineGift = true;
+        itemType = ItemGemIllusion;
+      }
+      else if (divinity.divinity == DivinityFire && !equip[EQUIP_GEM_FIRE])
+      {
+        divineGift = true;
+        itemType = ItemGemFire;
+      }
+      else if (divinity.divinity == DivinityDeath && !equip[EQUIP_GEM_POISON])
+      {
+        divineGift = true;
+        itemType = ItemGemPoison;
       }
     }
 
@@ -2959,7 +3081,19 @@ void PlayerEntity::offerMonster(enemyTypeEnum monster, enumShotType hurtingType)
       break;
 
     case DivinityStone:
-      if (hurtingType == ShotTypeCold || hurtingType == ShotTypeIce)
+      if (hurtingType == ShotTypeStone)
+      {
+        pietyProMonster = 3;
+        pietyProBoss    = 30;
+      }
+      else
+      {
+        pietyProBoss    = 25;
+      }
+      break;
+
+    case DivinityIllusion:
+      if (hurtingType == ShotTypeIllusion)
       {
         pietyProMonster = 3;
         pietyProBoss    = 30;
@@ -2970,7 +3104,6 @@ void PlayerEntity::offerMonster(enemyTypeEnum monster, enumShotType hurtingType)
       }
       break;
     }
-
 
     if (monster < EnemyTypeButcher) // normal or mini-boss
     {
@@ -2989,7 +3122,6 @@ void PlayerEntity::offerHealth(int lostHp)
   {
     addPiety(lostHp * 2.5f);
   }
-
 }
 
 void PlayerEntity::offerChallenge()
@@ -2998,15 +3130,26 @@ void PlayerEntity::offerChallenge()
     addPiety(30);
 }
 
+void PlayerEntity::offerSecret()
+{
+  if (divinity.divinity == DivinityIllusion)
+    addPiety(35);
+  else
+    addPiety(10);
+}
+
 void PlayerEntity::divineFury()
 {
   enumShotType shotType = ShotTypeStandard;
   if (divinity.divinity == DivinityIce) shotType = ShotTypeIce;
   else if (divinity.divinity == DivinityStone) shotType = ShotTypeStone;
   else if (divinity.divinity == DivinityAir) shotType = ShotTypeLightning;
+  else if (divinity.divinity == DivinityIllusion) shotType = ShotTypeIllusion;
+  else if (divinity.divinity == DivinityFire) shotType = ShotTypeFire;
+  else if (divinity.divinity == DivinityDeath) shotType = ShotTypePoison;
 
   int multBonus = 6;
-  if (divinity.divinity == DivinityFighter) multBonus = 8;
+  if (divinity.divinity == DivinityFighter || divinity.divinity == DivinityFire) multBonus = 8;
 
   for (int i = 0; i < (divinity.divinity == DivinityAir ? 16 : 32); i ++)
   {
@@ -3055,6 +3198,20 @@ void PlayerEntity::divineIce()
   }
 }
 
+void PlayerEntity::divineFire()
+{
+  game().makeShake(1.0f);
+  SoundManager::getInstance().playSound(SOUND_BOOM_00);
+
+  for (int i = 0; i < 15; i++)
+  {
+    int xRand = 48 + rand() % (GAME_WIDTH - 96);
+    int yRand = 48 + rand() % (GAME_HEIGHT - 96);
+
+    new ExplosionEntity(xRand, yRand, ExplosionTypeStandard, 16, EnemyTypeNone, false);
+  }
+}
+
 void PlayerEntity::divineRepulse()
 {
   EntityManager::EntityList* entityList = EntityManager::getInstance().getList();
@@ -3075,7 +3232,7 @@ void PlayerEntity::divineRepulse()
                            SourceTypeBolt,
                            EnemyTypeNone,
                            false));
-      enemy->giveRecoil(true, Vector2D(x, y).vectorTo(Vector2D(enemy->getX(), enemy->getY()), 700.0f), 2.0f);
+      enemy->giveRepulsion(true, Vector2D(x, y).vectorTo(Vector2D(enemy->getX(), enemy->getY()), 700.0f), 2.0f);
     }
   }
 
@@ -3114,6 +3271,16 @@ void PlayerEntity::divineHeal(int hpHealed)
   showCone = true;
   isRegeneration = false;
   game().addHealingStat(hp - oldHp);
+}
+
+bool PlayerEntity::triggerIllusionTeleport()
+{
+  if (divinity.divinity == DivinityIllusion)
+  {
+    // TODO timer
+    if (game().getGameTime() - lastTeleportSave > 15) return true;
+  }
+  return false;
 }
 
 bool PlayerEntity::triggerDivinityBefore()
@@ -3199,15 +3366,61 @@ bool PlayerEntity::triggerDivinityBefore()
       SoundManager::getInstance().playSound(SOUND_OM);
       incrementDivInterventions();
       divineHeal(hpMax / 3);
-      /*if (r == 1)
-      {
-        divineIce();
-        game().makeColorEffect(X_GAME_COLOR_BLUE, 7.5f);
-      }
-      else*/
       {
         divineFury();
         game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.5f);
+      }
+      return true;
+      break;
+    }
+    case DivinityIllusion:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      incrementDivInterventions();
+      divineHeal(hpMax / 3);
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.5f);
+      }
+      return true;
+      break;
+    }
+    case DivinityFire:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      incrementDivInterventions();
+      divineHeal(hpMax / 3);
+      if (r == 1)
+      {
+        divineFire();
+        game().makeColorEffect(X_GAME_COLOR_RED, 1.0f);
+      }
+      else
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_RED, 0.5f);
+      }
+
+      return true;
+      break;
+    }
+    case DivinityDeath:
+    {
+      int r = rand() % 3;
+      if (r == 0) return false;
+
+      SoundManager::getInstance().playSound(SOUND_OM);
+      incrementDivInterventions();
+      divineHeal(hpMax / 3);
+      {
+        divineFury();
+        game().makeColorEffect(X_GAME_COLOR_GREEN, 0.5f);
       }
       return true;
       break;
@@ -3230,7 +3443,6 @@ void PlayerEntity::triggerDivinityAfter()
         divineHeal(hpMax);
         break;
       }
-    //case DivinityFighter:
     default:
       {
         SoundManager::getInstance().playSound(SOUND_OM);
@@ -3311,6 +3523,12 @@ void PlayerEntity::pietyLevelUp()
     if (divinity.level == 4) label = "div_air_lvl_4";
     else label = "div_air_lvl";
     break;
+
+  case DivinityIllusion:
+    if (divinity.level == 3) label = "div_illusion_lvl_3";
+    else if (divinity.level == 4) label = "div_illusion_lvl_4";
+    break;
+
   }
 
   if (label.compare("") != 0) game().addDivLevelMessageToQueue(label);
@@ -3621,9 +3839,9 @@ void PlayerEntity::castFireball()
 
   BoltEntity* bolt = new BoltEntity(x, getBolPositionY(), boltLifeTime + 0.5f, boltType, shotLevel);
 
-  int boltDamage = fireDamages * (equip[EQUIP_BOOK_MAGIC_II] ? 4 : 3);
-  if (equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 32) boltDamage = 32;
-  else if (!equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 24) boltDamage = 24;
+  int boltDamage = fireDamage * (equip[EQUIP_BOOK_MAGIC_II] ? 6 : 4);
+  if (equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 44) boltDamage = 44;
+  else if (!equip[EQUIP_BOOK_MAGIC_II] && boltDamage < 32) boltDamage = 32;
   bolt->setDamages(boltDamage);
   bolt->setGoThrough(true);
 
@@ -3763,4 +3981,9 @@ void PlayerEntity::castLightning()
   lightningSprite->setRenderAdd();
   lightningSprite->setZ(2000);
   SoundManager::getInstance().playSound(SOUND_THUNDER);
+}
+
+bool PlayerEntity::seeInvisible()
+{
+  return (divinity.divinity == DivinityIllusion && divinity.level >= 3);
 }

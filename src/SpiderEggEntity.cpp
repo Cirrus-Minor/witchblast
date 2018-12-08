@@ -151,7 +151,7 @@ void SpiderEggEntity::readCollidingEntity(CollidingSpriteEntity* entity)
           star->setType(ENTITY_EFFECT);
           star->setSpin(400.0f);
         }
-        inflictsRecoilTo(playerEntity);
+        inflictsRepulsionTo(playerEntity);
       }
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)

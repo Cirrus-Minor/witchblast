@@ -92,6 +92,91 @@ enum enemyTypeEnum
   NB_ENEMY // = no enemy
 };
 
+const std::vector<std::string> enemyString =
+{
+  // normal
+  "EnemyTypeBat",
+  "EnemyTypeBatSkeleton",
+  "EnemyTypeRat",
+  "EnemyTypeRatBlack",
+  "EnemyTypeRatHelmet",
+  "EnemyTypeRatBlackHelmet",
+  "EnemyTypeEvilFlower",
+  "EnemyTypeEvilFlowerIce",
+  "EnemyTypeEvilFlowerFire",
+  "EnemyTypeSnake",
+  "EnemyTypeSnakeBlood",
+  "EnemyTypeSlime",
+  "EnemyTypeSlimeRed",
+  "EnemyTypeSlimeBlue",
+  "EnemyTypeSlimeViolet",
+  "EnemyTypeImpBlue",
+  "EnemyTypeImpRed",
+  "EnemyTypePumpkin",
+  "EnemyTypeWitch",
+  "EnemyTypeWitchRed",
+  "EnemyTypeCauldron",
+  "EnemyTypeCauldronElemental",
+  "EnemyTypeSpiderEgg",
+  "EnemyTypeSpiderLittle",
+  "EnemyTypeSpiderTarantula",
+  "EnemyTypeGhost",
+  "EnemyTypeZombie",
+  "EnemyTypeZombieDark",
+  "EnemyTypeBogeyman",
+  "EnemyTypeSlimeLarge",
+  "EnemyTypeSlimeRedLarge",
+  "EnemyTypeSlimeBlueLarge",
+  "EnemyTypeSlimeVioletLarge",
+  "EnemyTypeSausage",
+
+  // mini boss
+  "EnemyTypeBubble",
+  "EnemyTypeBubbleIce",
+  "EnemyTypeBubbleGreater",
+
+  // boss
+  "EnemyTypeButcher",
+  "EnemyTypeSlimeBoss",
+  "EnemyTypeCyclops",
+  "EnemyTypeRatKing",
+  "EnemyTypeSpiderGiant",
+  "EnemyTypeFrancky",
+  "EnemyTypeVampire",
+
+  // invocated
+  "EnemyTypeBat_invocated",
+  "EnemyTypeBatSkeleton_invocated",
+  "EnemyTypeRat_invocated",
+  "EnemyTypeRatGreen",
+  "EnemyTypeRatHelmet_invocated",
+  "EnemyTypeSnake_invocated",
+  "EnemyTypeSnakeBlood_invocated",
+  "EnemyTypeSlime_invocated",
+  "EnemyTypeSlimeRed_invocated",
+  "EnemyTypeSlimeBlue_invocated",
+  "EnemyTypeSlimeViolet_invocated",
+  "EnemyTypePumpkin_invocated",
+  "EnemyTypeSpiderEgg_invocated",
+  "EnemyTypeSpiderLittle_invocated",
+  "EnemyTypeSpiderTarantula_invocated",
+  "EnemyTypeZombie_invocated",
+  "EnemyTypeSausage_invocated",
+
+  "EnemyTypeRockFalling",
+  "EnemyTypeRockMissile",
+  "EnemyTypeSpiderWeb",
+
+  "EnemyTypeFranckyHead",
+  "EnemyTypeFranckyHand",
+  "EnemyTypeFranckyFoot",
+
+  "EnemyTypeVampireDead",
+
+  "EnemyTypeNone",  // player of fairy
+  "EnemyTypeDestroyable",
+};
+
 enum sourceTypeEnum
 {
   SourceTypeMelee,
@@ -142,7 +227,7 @@ enum enumResistances
   ResistanceIllusion,
   ResistancePoison,
 
-  ResistanceRecoil,
+  ResistanceRepulsion,
   ResistanceFrozen,
 
   NB_RESISTANCES
@@ -245,8 +330,8 @@ public:
   bool isSpecialStateActive(enumSpecialState state);
   specialStateStuct getSpecialState(enumSpecialState state);
 
-  virtual void giveRecoil(bool stun, Vector2D velocity, float timer);
-  virtual void inflictsRecoilTo(BaseCreatureEntity* targetEntity);
+  virtual void giveRepulsion(bool stun, Vector2D velocity, float timer);
+  virtual void inflictsRepulsionTo(BaseCreatureEntity* targetEntity);
   virtual void computeFacingDirection();
   virtual void dyingFromAge();
   virtual bool canCollide();
@@ -299,13 +384,14 @@ protected:
   enumBloodColor bloodColor;
   enumMovingStyle movingStyle;
 
-  struct  recoilStruct
+  struct  RepulseStruct
   {
     bool active;
     Vector2D velocity;
     bool stun;
+    bool propage;
     float timer;
-  } recoil;
+  } repulsion;
 
   void generateStar(sf::Color starColor);
   virtual void makeExplode();

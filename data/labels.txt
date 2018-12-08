@@ -566,13 +566,32 @@ state_div_firerate#Firerate+ (div)
 state_div_damage#Damage+ (div)
 dc_victory#Victory certificate
 dc_after_victory#Victory after
-
 player#player
 players#players
 ui_base_damage#Base damage
 ui_fire_rate#Fire rate
 ui_second#second
 ui_temple_donation#Temple donation
+
+divinity_illusion_0#Moryo
+divinity_illusion_1#Lord of illusion.
+divinity_illusion_2#He likes secrets and illusions.
+div_illusion_lvl_3#makes the ghosts visible
+div_illusion_lvl_4#increases your illusion attack
+
+divinity_fire_0#Magma
+divinity_fire_1#Divinity of the fire.
+divinity_fire_2#He likes the use of fire.
+div_fire_lvl_3#increases your fire resistance
+div_fire_lvl_4#increases your fire attack
+
+divinity_death_0#King Ssssrah
+divinity_death_1#Monarch of death.
+divinity_death_2#He likes death and poison.
+div_death_lvl_3#increases your poison resistance
+div_death_lvl_4#increases your poison attack
+div_death_lvl_5#increases your poison resistance
+
 [french]
 start_new_game#Nouvelle partie
 start_desc#L'ancienne partie sera perdue

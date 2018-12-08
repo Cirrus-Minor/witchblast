@@ -7,7 +7,7 @@
 #include "Constants.h"
 #include "WitchBlastGame.h"
 
-const float FACING_DELAY = 0.25f;
+const float FACING_DELAY = 0.17f;
 
 EnemyEntity::EnemyEntity(sf::Texture* image, float x, float y)
   : BaseCreatureEntity (image, x, y, 64, 64)
@@ -143,7 +143,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
 
           if (playerEntity->isEquiped(EQUIP_ROBE_ADVANCED))
           {
-            giveRecoil(true, Vector2D(playerEntity->getX(), playerEntity->getY()).vectorTo(Vector2D(x, y), 800), 0.8f);
+            giveRepulsion(true, Vector2D(playerEntity->getX(), playerEntity->getY()).vectorTo(Vector2D(x, y), 800), 0.8f);
             SoundManager::getInstance().playSound(SOUND_ELECTRIC_CHARGE);
 
             star->setScale(1.5f, 1.5f);
@@ -152,7 +152,7 @@ void EnemyEntity::readCollidingEntity(CollidingSpriteEntity* entity)
             game().makeColorEffect(X_GAME_COLOR_VIOLET, 0.2f);
           }
         }
-        inflictsRecoilTo(playerEntity);
+        inflictsRepulsionTo(playerEntity);
       }
 
       else if (boltEntity != NULL && !boltEntity->getDying() && boltEntity->getAge() > 0.05f)
@@ -214,7 +214,7 @@ void EnemyEntity::collideWithBolt(BoltEntity* boltEntity)
 
     Vector2D recoilVector = Vector2D(0, 0).vectorTo(boltEntity->getVelocity(),
                             recoilVelocity );
-    giveRecoil(true, recoilVector, recoilDelay);
+    giveRepulsion(true, recoilVector, recoilDelay);
   }
 
   boltEntity->collide();

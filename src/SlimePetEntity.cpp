@@ -149,7 +149,7 @@ void SlimePetEntity::readCollidingEntity(CollidingSpriteEntity* entity)
         if (enemyEntity->getMovingStyle() == movWalking)
         {
           Vector2D vel = Vector2D(enemyEntity->getX(), enemyEntity->getY()).vectorTo(Vector2D(x, y), 100.0f );
-          giveRecoil(false, vel, 0.3f);
+          giveRepulsion(false, vel, 0.3f);
         }
       }
     }

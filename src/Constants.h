@@ -20,15 +20,15 @@
 #include <string>
 
 const std::string APP_NAME =      "Witch Blast";
-const std::string APP_VERSION =   "0.7.5";
+const std::string APP_VERSION =   "0.7.6";
 
 const std::string CONFIG_FILE =     "config.dat";
 const std::string SAVE_FILE =       "game.sav";
 const std::string SAVE_DATA_FILE =  "data/data.sav";
 const std::string HISCORES_FILE =   "data/scores.dat";
 
-const std::string SAVE_VERSION =    "SAVE_0.7";
-const std::string SCORE_VERSION =   "V075";
+const std::string SAVE_VERSION =    "SAVE_0.8";
+const std::string SCORE_VERSION =   "V075_DEV";
 
 const int NB_LANGUAGES = 5;
 const std::string languageString[NB_LANGUAGES] = { "english", "french", "german", "spanish", "russian" };
@@ -178,6 +178,7 @@ enum enum_images {
   IMAGE_BAG,
   IMAGE_UI_PAUSE,
   IMAGE_SCORE_FONT,
+  IMAGE_EFFECT_ZONE,
 
   NB_IMAGES
 };
@@ -312,7 +313,8 @@ enum sound_resources {
   SOUND_CLOCK,
   SOUND_BOTTLE,
   SOUND_THUNDER,
-  SOUND_SCORE_BONUS
+  SOUND_SCORE_BONUS,
+  SOUND_STONE_HIT,
 };
 
 enum corpses_ressources{
@@ -400,7 +402,7 @@ const int MAX_SHOT_LEVEL = 3;
 const float STATUS_FROZEN_DELAY[MAX_SHOT_LEVEL]   // how long the freeze occurs
     = { 4.0f, 5.0f, 6.0f };
 const float STATUS_FROZEN_BOLT_DELAY[MAX_SHOT_LEVEL]   // reload time
-    = { 3.0f, 2.6f, 2.0f };
+    = { 3.0f, 2.8f, 2.8f };
 const float STATUS_FROZEN_MULT[MAX_SHOT_LEVEL]   // speed multiplier (= 3 times slower)
     = { 0.38f, 0.33f, 0.28f };
 const float STONE_DECOIL_DELAY[MAX_SHOT_LEVEL]   // how long the stun occurs
@@ -428,6 +430,9 @@ enum enumDivinityType {
   DivinityIce,
   DivinityStone,
   DivinityAir,
+  DivinityIllusion,
+  DivinityFire,
+  DivinityDeath,
 
   NB_DIVINITY
 };
@@ -438,6 +443,9 @@ const std::string divinityLabel[NB_DIVINITY]
   "divinity_ice",
   "divinity_stone",
   "divinity_air",
+  "divinity_illusion",
+  "divinity_fire",
+  "divinity_death",
 };
 const int MAX_DIVINITY_LEVEL = 5;
 const int DIVINITY_LEVEL_TRESHOLD[MAX_DIVINITY_LEVEL] =
@@ -459,6 +467,7 @@ const int ENTITY_CHEST = 18;
 const int ENTITY_ITEM = 19;
 const int ENTITY_EXPLOSION = 20;
 const int ENTITY_FAMILIAR_LOCAL = 21;
+const int ENTITY_EFFECT_ZONE = 22;
 const int ENTITY_ENEMY = 31;
 const int ENTITY_ENEMY_INVOCATED = 32;
 const int ENTITY_ENEMY_BOSS = 33;
@@ -653,6 +662,9 @@ enum EnumMessages
   MsgInfoDivIce,
   MsgInfoDivStone,
   MsgInfoDivAir,
+  MsgInfoDivIllusion,
+  MsgInfoDivFire,
+  MsgInfoDivPoison,
   MsgInfoDivIntervention,
   MsgInfoDivGift,
   MsgInfoDivLevel,

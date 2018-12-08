@@ -42,7 +42,7 @@ GiantSpiderEntity::GiantSpiderEntity(float x, float y)
   labelHasChanged = false;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceImmune;
   creatureName = "???";
   canExplode = false;
@@ -178,25 +178,25 @@ void GiantSpiderEntity::calculateBB()
 void GiantSpiderEntity::collideMapRight()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void GiantSpiderEntity::collideMapLeft()
 {
   velocity.x = -velocity.x;
-  if (recoil.active) recoil.velocity.x = -recoil.velocity.x;
+  if (repulsion.active) repulsion.velocity.x = -repulsion.velocity.x;
 }
 
 void GiantSpiderEntity::collideMapTop()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void GiantSpiderEntity::collideMapBottom()
 {
   velocity.y = -velocity.y;
-  if (recoil.active) recoil.velocity.y = -recoil.velocity.y;
+  if (repulsion.active) repulsion.velocity.y = -repulsion.velocity.y;
 }
 
 void GiantSpiderEntity::collideWithEnemy(EnemyEntity* entity)
@@ -204,7 +204,7 @@ void GiantSpiderEntity::collideWithEnemy(EnemyEntity* entity)
   if (entity->getMovingStyle() == movWalking)
   {
     Vector2D v = Vector2D(x, y).vectorTo(Vector2D(entity->getX(), entity->getY()), 150.0f);
-    entity->giveRecoil(false, v, 0.5f);
+    entity->giveRepulsion(false, v, 0.5f);
   }
 }
 

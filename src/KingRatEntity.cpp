@@ -44,7 +44,7 @@ KingRatEntity::KingRatEntity(float x, float y)
   hasBeenBerserk = false;
 
   resistance[ResistanceFrozen] = ResistanceVeryHigh;
-  resistance[ResistanceRecoil] = ResistanceVeryHigh;
+  resistance[ResistanceRepulsion] = ResistanceVeryHigh;
   resistance[ResistancePoison] = ResistanceVeryHigh;
   canExplode = false;
 }
@@ -348,16 +348,16 @@ void KingRatEntity::collideWithEnemy(EnemyEntity* entity)
 {
   if (entity->getMovingStyle() == movWalking)
   {
-    inflictsRecoilTo(entity);
+    inflictsrepulsionTo(entity);
   }
 }
 
-void KingRatEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
+void KingRatEntity::inflictsrepulsionTo(BaseCreatureEntity* targetEntity)
 {
   if (state == 4 || state == 6)
   {
-    Vector2D recoilVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), KING_RAT_RUNNING_RECOIL );
-    targetEntity->giveRecoil(true, recoilVector, 1.0f);
+    Vector2D repulsionVector = Vector2D(x, y).vectorTo(Vector2D(targetEntity->getX(), targetEntity->getY()), KING_RAT_RUNNING_RECOIL );
+    targetEntity->giveRepulsion(true, repulsionVector, 1.0f);
   }
 
   if (state == 6)
@@ -366,8 +366,8 @@ void KingRatEntity::inflictsRecoilTo(BaseCreatureEntity* targetEntity)
 
     if (playerEntity != NULL && !playerEntity->isDead())
     {
-      Vector2D recoilVector = Vector2D(targetEntity->getX(), targetEntity->getY()).vectorTo(Vector2D(x, y), KING_RAT_RUNNING_RECOIL);
-      giveRecoil(true, recoilVector, 1.0f);
+      Vector2D repulsionVector = Vector2D(targetEntity->getX(), targetEntity->getY()).vectorTo(Vector2D(x, y), KING_RAT_RUNNING_RECOIL);
+      giveRepulsion(true, repulsionVector, 1.0f);
     }
   }
 }
