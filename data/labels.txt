@@ -631,7 +631,7 @@ keys_move#déplacer
 keys_fire#tirer
 keys_select_1#sélecteur
 keys_select_2#de tir
-keys_time#accélerer
+keys_time#accélérer
 tuto_reset#RAZ des tutoriels
 tuto_reset_desc#Réinitialisation des tutoriels
 menu_continue#Continuer
@@ -640,12 +640,12 @@ menu_save_quit#Sauvegarder et quitter
 menu_save_quit_desc#Sauvegarder et retourner au menu principal
 menu_quit#Quitter sans sauvegarder
 menu_quit_desc#Retourner au menu principal sans sauvegarder
-inventory#Equipement
+inventory#Équipement
 
-play_again#Pressez [ENTRER] pour rejouer / [ESC] pour revenir au menu
+play_again#Pressez [ENTRÉE] pour rejouer / [ÉCHAP] pour revenir au menu
 items_found#Objets
 monsters_killed#Monstres
-congratulations_1#FELICITATIONS !
+congratulations_1#FÉLICITATIONS !
 congratulations_2#Vous êtes brillamment arrivé au terme de cette démo !
 congratulations_3#A bientôt pour de nouvelles aventures !
 by#par
@@ -653,7 +653,7 @@ critical#CRITIQUE
 poison#POISON
 merchant_speech_0#Les meilleures affaires du donjon !
 merchant_speech_1#Bienvenue à la boutique Pawn'n'Witches !
-merchant_speech_2#Jetez un oeil à nos produits !
+merchant_speech_2#Jetez un œil à nos produits !
 enemy_butcher#Boucher porcin
 enemy_giant_slime#Slime géant
 enemy_cyclops#Cyclope de pierre
@@ -702,11 +702,11 @@ item_blood_snake_desc#Augmente les dégâts
 item_gem_ice#Gemme de glace
 item_gem_ice_desc#Attaque de glace (gèle)
 item_gem_illusion#Gemme d'illusion
-item_gem_illusion_desc#Attaque d'illusion(ignore murs et armures)
+item_gem_illusion_desc#Attaque d'illusion (ignore murs et armures)
 item_gem_stone#Gemme de pierre
-item_gem_stone_desc#Attaque de pierre(repousse)
+item_gem_stone_desc#Attaque de pierre (repousse)
 item_gem_lightning#Gemme de foudre
-item_gem_lightning_desc#Attaque de foudre(rebondit)
+item_gem_lightning_desc#Attaque de foudre (rebondit)
 item_fairy_ice#La fée Natacha
 item_fairy_ice_desc#Vous aide dans le donjon
 item_ring_ice#Anneau de saphir
@@ -731,7 +731,7 @@ item_ring_fire#Anneau de rubis
 item_ring_fire_desc#Augmente le pouvoir de feu
 item_manual_staff#Manuel du bâton
 item_manual_staff_desc#Augmente la portée
-item_spell_teleport#Sort : Téléportation
+item_spell_teleport#Sort: Téléportation
 item_spell_teleport_desc#Permet de se téléporter dans la pièce
 item_spell_slime_explode#Sort: Invoquer Slime
 item_spell_slime_explode_desc#Invoque un slime explosif
@@ -781,7 +781,7 @@ msg_level3_1#"Vous l'ai-je déjà dit ?
 msg_level3_2#La fille de l'Archimage est la plus douce de l'Académie de Magie !"
 msg_level4_0#L'Archimage
 msg_level4_1#"L'Archimage est très sage, et est aussi mon mentor.
-msg_level4_2#Il m'a appris que nous vivons dans le meilleur des monde."
+msg_level4_2#Il m'a appris que nous vivons dans le meilleur des mondes."
 msg_level5_0#La fille de l'Archimage
 msg_level5_1#"Je me souviens d'elle et de moi, à l'Académie de Magie.
 msg_level5_2#Enfants, nous jouions au mage guérisseur, hi hi !"
@@ -790,9 +790,9 @@ msg_level6_1#"Mes parents sont décédés quand j'étais bébé.
 msg_level6_2#L'Archimage m'a élevé comme si j'étais des siens."
 msg_rats_bats_0#La vermine
 msg_rats_bats_1#"Hey! Pourquoi faut-il toujours exterminer des rats et chauve-souris
-msg_rats_bats_2#dans les Roguelikes ?"
+msg_rats_bats_2#dans les roguelikes ?"
 msg_snakes_0#Les serpents
-msg_snakes_1#"Je DETESTE les serpents!"
+msg_snakes_1#"Je DÉTESTE les serpents!"
 msg_witches_0#Les sorcières
 msg_witches_1#"S.. Sorcières !!!"
 msg_gold_0#Or
@@ -815,13 +815,13 @@ msg_wererat_1#"Il ressemble à ma vieille tante..."
 msg_giant_spider_before_0#Une pièce vide
 msg_giant_spider_before_1#"Y'a quelqu'un ? "
 msg_giant_spider_after_0#L'Araignée géante
-msg_giant_spider_after_1#"Je DETESTE les araignées"
+msg_giant_spider_after_1#"Je DÉTESTE les araignées"
 msg_tuto_intro_0#Tutoriel: Bases
-msg_tuto_intro_1#Utilisez ZQSD (standard) pour se déplacer dans le donjon.
+msg_tuto_intro_1#Utilisez ZQSD (standard) pour vous déplacer dans le donjon.
 msg_tuto_intro_2#Tirez avec les flèches (standard).
 msg_tuto_items_0#Tutoriel: Objets
 msg_tuto_items_1#Les objets améliorent le personnage ou lui octroient de nouveaux pouvoirs.
-msg_tuto_items_2#trouvez ou achetez-en autant que possible.
+msg_tuto_items_2#Trouvez ou achetez-en autant que possible.
 msg_tuto_heal_0#Tutoriel: Santé
 msg_tuto_heal_1#Vous avez perdu des points de vie.
 msg_tuto_heal_2#Trouvez des moyens de guérir avant de mourir.
@@ -832,7 +832,7 @@ msg_tuto_boss_door_0#Tutoriel: Porte du Boss
 msg_tuto_boss_door_1#D'ici, vous apercevez une porte dorée verrouillée.
 msg_tuto_boss_door_2#Elle protège le Boss, trouvez la clef adéquate pour l'ouvrir.
 msg_tuto_challenge_door_0#Tutoriel: Salle de Challenge
-msg_tuto_challenge_door_1#Regardez la porte décorée ? C'est une salle de challenge.
+msg_tuto_challenge_door_1#Regardez la porte décorée. C'est une salle de challenge.
 msg_tuto_challenge_door_2#Vous pouvez y gagner des objets de valeur mais attention !
 msg_tuto_shots_0#Tutoriel: Types de tir
 msg_tuto_shots_1#Vous avez trouvé un nouveau type de tir.
@@ -844,7 +844,7 @@ msg_francky_0#La... Chose
 msg_francky_1#Beurk... Il a l'air "fabriqué" à partir de morceaux de cadavres !
 msg_tuto_tips_0#Tutoriel: Astuces
 msg_tuto_tips_1#Le contrôle du temps (standard: Shift droit) permet de se déplacer plus vite.
-msg_tuto_tips_2#Appuyez sur [Enter] pour fermer les boites de message.
+msg_tuto_tips_2#Appuyez sur [ENTRÉE] pour fermer les boites de message.
 
 enemy_type_bat#une chauve-souris
 enemy_type_rat#un rat
@@ -874,7 +874,7 @@ enemy_type_boss_spider_giant#l'Araignée géante
 enemy_type_green_rat#un rat vert
 enemy_type_rock_falling#un rocher tombant
 enemy_type_rock_missile#un rocher lancé
-enemy_type_spider_egg#un oeuf d'araignée tombant
+enemy_type_spider_egg#un œuf d'araignée tombant
 enemy_type_spider_little#une araignée
 enemy_type_spider_web#une toile d'araignée
 enemy_type_ghost#un fantôme
@@ -899,9 +899,9 @@ player_name_desc#Modifier le nom du joueur
 hi_scores#Hall of fame
 hi_scores_desc#Meilleurs scores
 credits#Crédits
-credits_desc#Ecran des crédits
+credits_desc#Écran des crédits
 volume_sound#Volume du son
-volume_sound_desc#Utiliser les flèches gauche/droite pour modifier le volume
+volume_sound_desc#Utilisez les flèches gauche/droite pour modifier le volume
 volume_music#Volume de la musique
 certificate_capture#Appuyez sur [F1] pour faire une copie du certificat dans un PNG
 certificate_saved#Enregistré sous
@@ -961,7 +961,7 @@ achiev_butcher_desc#Tuer le Boucher porcin
 achiev_witches#Inquisiteur
 achiev_witches_desc#Tuer 50 sorcières
 achiev_eggs#Mauvaise omelette
-achiev_eggs_desc#Détruire 100 oeufs
+achiev_eggs_desc#Détruire 100 œufs
 achiev_vampire#Chasseur de vampires
 achiev_vampire_desc#Tuer le Vampire
 achiev_challenges#Gladiateur
@@ -969,7 +969,7 @@ achiev_challenges_desc#Relever 4 défis
 achiev_win#Vivre son rêve
 achiev_win_desc#Terminer la démo
 
-func_achiev_screen#Ecran des succès
+func_achiev_screen#Écran des succès
 func_achiev_all#Description des succès
 func_double_spell#Drop de deux sorts
 
@@ -1001,7 +1001,7 @@ item_gem_poison_desc#Attaque de poison
 item_book_prayer_i#Livre de prières - Tome I
 item_book_prayer_i_desc#Augmente la piété
 item_book_prayer_ii#Livre de prières - Tome II
-item_book_prayer_ii_desc#Reduit les coûts en piété
+item_book_prayer_ii_desc#Réduit les coûts en piété
 item_pet_slime#Slime de compagnie
 item_pet_slime_desc#Il vous suit et se bat à vos côtés
 item_hat_advanced#Chapeau de Warlock
@@ -1030,7 +1030,7 @@ div_stone_lvl_4#augmente le niveau d'attaque de pierre
 div_stone_lvl_5#augmente l'immunité de repoussement
 enemy_vampire#Vampire
 enemy_type_vampire#le Vampire
-msg_tuto_achiev_0#Tutorial: Succès
+msg_tuto_achiev_0#Tutoriel: Succès
 msg_tuto_achiev_1#Vous avez obtenu un succès.
 msg_tuto_achiev_2#Ils débloquent des objets ou fonctionnalités.
 msg_vampire_0#Le Vampire
@@ -1089,7 +1089,7 @@ msg_potion_id_0#Identification de potion
 msg_potion_id_1#Vous avez identifié:
 msg_tuto_consumables_0#Tutoriel: Consommables
 msg_tuto_consumables_1#[num1-num4] pour utiliser un objet consommable.
-msg_tuto_consumables_2#[left shift][num1-num4] pour le jeter.
+msg_tuto_consumables_2#[shift gauche][num1-num4] pour le jeter.
 msg_tuto_potions_0#Tutoriel: Potions
 msg_tuto_potions_1#Vous avez trouvé une potion.
 msg_tuto_potions_2#Vous devez la boire ou l'identifier pour connaitre son effet.
@@ -1110,7 +1110,7 @@ item_fairy_stone#Fairy Cassandre
 item_fairy_stone_desc#Vous aide dans le donjon
 item_merchant#Sceau des marchand
 item_merchant_desc#Meilleurs prix en magasin
-item_spell_time#Sort : Arrêter le temps
+item_spell_time#Sort: Arrêter le temps
 item_spell_time_desc#Réduit le temps
 item_side_shots#Manuel de tirs latéraux
 item_side_shots_desc#Tire sur les côtés
