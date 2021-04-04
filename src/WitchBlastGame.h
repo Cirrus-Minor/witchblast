@@ -579,6 +579,10 @@ private:
   bool showLogical;           /*!< True if showing bounding boxes, z and center */
   bool showGameTime;          /*!< True if showing the game time */
 
+#ifdef GAMERZILLA
+  int game_id;
+#endif
+
   // game play
   int level;                  /*!< Level (floor) */
   int score;                  /*!< score (calculated at the end of the game) */

@@ -1,0 +1,176 @@
+{
+	"shortname": "witchblast",
+	"name": "Witch Blast",
+	"image": "gamerzilla/witchblast.png",
+	"version": "1",
+	"trophy": [
+		{
+			"trophy_name": "True noob",
+			"trophy_desc": "Die in level 1",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/noob.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Tough guy",
+			"trophy_desc": "Complete 1 level without losing life",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/no_damage.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Very tough guy",
+			"trophy_desc": "Complete 2 level without losing life",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/no_damage2.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Very very tough guy",
+			"trophy_desc": "Complete 3 level without losing life",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/no_damage3.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Rodenticide",
+			"trophy_desc": "Kill 250 rats",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/rats.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Inquisitor",
+			"trophy_desc": "Kill 50 witches",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/witches.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Bad omelette",
+			"trophy_desc": "Destroy 100 eggs",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/eggs.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Ghostbuster",
+			"trophy_desc": "Kill 50 ghosts",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/ghost.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Stingy",
+			"trophy_desc": "Collect 100 gold coins",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/100.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Faithful",
+			"trophy_desc": "Reach the max piety level",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/piety_max.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Apostate",
+			"trophy_desc": "Rejest a level 4 divinity",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/apostate.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Fanatic",
+			"trophy_desc": "Give 100 gold to temple",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/fanatic.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Brochette",
+			"trophy_desc": "Hurt 4 monsters with the same shot",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/4_hits.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Dressed",
+			"trophy_desc": "Equip robe + hat + boots + gloves",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/complete_set.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Gladiator",
+			"trophy_desc": "Complete 4 challenges",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/challenges.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Charlie's Angels",
+			"trophy_desc": "Get 3 fairies",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/fairies.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Butcher Slayer",
+			"trophy_desc": "Kill the Butcher",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/butcher.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Giant Slime Slayer",
+			"trophy_desc": "Kill the Giant Slime",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/giant_slime.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Cyclops Slayer",
+			"trophy_desc": "Kill the Stone Cyclops",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/cyclops.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Wererat Slayer",
+			"trophy_desc": "Kill the Wererat king",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/rat_king.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Giant Spider Slayer",
+			"trophy_desc": "Kill the Giant Spider",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/giant_spider.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Thing Slayer",
+			"trophy_desc": "Kill the Thing",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/francky.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Vampire Hunter",
+			"trophy_desc": "Kill the Vampire",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/vampire.png",
+			"falseimage": "gamerzilla/locked.png"
+		},
+		{
+			"trophy_name": "Live a dream",
+			"trophy_desc": "Finish the demo",
+			"max_progress": "0",
+			"trueimage": "gamerzilla/win.png",
+			"falseimage": "gamerzilla/locked.png"
+		}
+	]
+}

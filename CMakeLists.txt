@@ -79,6 +79,19 @@ include_directories(${SFML_INCLUDE_DIR})
 
 Message(${SFML_LIBRARIES})
 
+# Find LibGamerzilla library or build it if missing
+if (NOT APPLE)
+    include(FindPkgConfig)
+    pkg_search_module(GAMERZILLA OPTIONAL gamerzilla)
+
+    if (GAMERZILLA_LIBRARIES)
+        message(STATUS "Gamerzilla found")
+        include_directories(${GAMERZILLA_INCLUDE_DIRS})
+        target_link_libraries(Witch_Blast ${GAMERZILLA_LIBRARIES})
+        add_definitions(-DGAMERZILLA)
+    endif()
+endif()
+
 if(APPLE)
 	install(
 		DIRECTORY Witch_Blast.app
