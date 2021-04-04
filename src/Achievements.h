@@ -74,6 +74,7 @@ struct achievementStuct
 {
   enumAchievementType id;       /**< The achievement's ID */
   std::string label;            /**< The achievement label */
+  std::string gamerzilla;       /**< The achievement name for Gamerzilla */
   enumUnlockType unlockType;    /**< What the achievement unlocks (type) */
   int unlock;                   /**< What the achievement unlocks */
 };
@@ -81,34 +82,34 @@ struct achievementStuct
 /** Array with all the achievement */
 const achievementStuct achievements[NB_ACHIEVEMENTS] =
 {
-  { AchievementRats,        "achiev_rats",          UnlockItem,           ItemSpellFairy },
-  { Achievement100,         "achiev_100",           UnlockItem,           ItemSpellFlower },
-  { AchievementPietyMax,    "achiev_piety_max",     UnlockItem,           ItemBookPrayerII },
-  { Achievement4Hits,       "achiev_4_hits",        UnlockItem,           ItemFairyTarget },
-  { AchievementCompleteSet, "achiev_complete_set",  UnlockItem,           ItemHatAdvanced},
+  { AchievementRats,        "achiev_rats",          "Rodenticide",          UnlockItem,           ItemSpellFairy },
+  { Achievement100,         "achiev_100",           "Stingy",               UnlockItem,           ItemSpellFlower },
+  { AchievementPietyMax,    "achiev_piety_max",     "Faithful",             UnlockItem,           ItemBookPrayerII },
+  { Achievement4Hits,       "achiev_4_hits",        "Brochette",            UnlockItem,           ItemFairyTarget },
+  { AchievementCompleteSet, "achiev_complete_set",  "Dressed",              UnlockItem,           ItemHatAdvanced},
 
-  { AchievementGiantSlime,  "achiev_giant_slime",   UnlockItem,           ItemPetSlime },
-  { AchievementCyclops,     "achiev_cyclops",       UnlockItem,           ItemSpellEarthquake },
-  { AchievementRatKing,     "achiev_rat_king",      UnlockItem,           ItemCriticalAdvanced },
-  { AchievementGiantSpider, "achiev_giant_spider",  UnlockItem,           ItemSpellWeb },
-  { AchievementFrancky,     "achiev_francky",       UnlockItem,           ItemRobeAdvanced },
+  { AchievementGiantSlime,  "achiev_giant_slime",   "Giant Slime Slayer",   UnlockItem,           ItemPetSlime },
+  { AchievementCyclops,     "achiev_cyclops",       "Cyclops Slayer",       UnlockItem,           ItemSpellEarthquake },
+  { AchievementRatKing,     "achiev_rat_king",      "Wererat Slayer",       UnlockItem,           ItemCriticalAdvanced },
+  { AchievementGiantSpider, "achiev_giant_spider",  "Giant Spider Slayer",  UnlockItem,           ItemSpellWeb },
+  { AchievementFrancky,     "achiev_francky",       "Thing Slayer",         UnlockItem,           ItemRobeAdvanced },
 
-  { AchievementButcher,     "achiev_butcher",       UnlockFunctionality,  FunctionalityAchievementsScreen },
-  { AchievementWitches,     "achiev_witches",       UnlockItem,           ItemBookMagicII },
-  { AchievementEggs,        "achiev_eggs",          UnlockItem,           ItemBootsAdvanced },
+  { AchievementButcher,     "achiev_butcher",       "Butcher Slayer",       UnlockFunctionality,  FunctionalityAchievementsScreen },
+  { AchievementWitches,     "achiev_witches",       "Inquisitor",           UnlockItem,           ItemBookMagicII },
+  { AchievementEggs,        "achiev_eggs",          "Bad omelette",         UnlockItem,           ItemBootsAdvanced },
 
-  { AchievementVampire,     "achiev_vampire",       UnlockItem,           ItemSpellTime },
-  { AchievementChallenges,  "achiev_challenges",    UnlockFunctionality,  FunctionalityDoubleSpellDrop },
-  { AchievementWin,         "achiev_win",           UnlockFunctionality,  FunctionalityAllAchievements },
+  { AchievementVampire,     "achiev_vampire",       "Vampire Hunter",       UnlockItem,           ItemSpellTime },
+  { AchievementChallenges,  "achiev_challenges",    "Gladiator",            UnlockFunctionality,  FunctionalityDoubleSpellDrop },
+  { AchievementWin,         "achiev_win",           "Live a dream",         UnlockFunctionality,  FunctionalityAllAchievements },
 
-  { AchievementFairies,     "achiev_fairies",       UnlockItem,           ItemRageAmulet },
-  { AchievementGhostbuster, "achiev_ghost",         UnlockItem,           ItemRearShotAdvanced },
-  { AchievementNoob,        "achiev_noob",          UnlockFunctionality,  FunctionalityNothing },
-  { AchievementNoDamage,    "achiev_no_damage",     UnlockItem,           ItemSideShots },
-  { AchievementNoDamage2,   "achiev_no_damage2",    UnlockItem,           ItemBag },
-  { AchievementNoDamage3,   "achiev_no_damage3",    UnlockItem,           ItemGlovesAdvanced },
-  { AchievementApostate,    "achiev_apostate",      UnlockItem,           ItemSpellLightning },
-  { AchievementFanatic,     "achiev_fanatic",       UnlockItem,           ItemBeltAdvanced },
+  { AchievementFairies,     "achiev_fairies",       "Charlie's Angels",     UnlockItem,           ItemRageAmulet },
+  { AchievementGhostbuster, "achiev_ghost",         "Ghostbuster",          UnlockItem,           ItemRearShotAdvanced },
+  { AchievementNoob,        "achiev_noob",          "True noob",            UnlockFunctionality,  FunctionalityNothing },
+  { AchievementNoDamage,    "achiev_no_damage",     "Tough guy",            UnlockItem,           ItemSideShots },
+  { AchievementNoDamage2,   "achiev_no_damage2",    "Very tough guy",       UnlockItem,           ItemBag },
+  { AchievementNoDamage3,   "achiev_no_damage3",    "Very very tough guy",  UnlockItem,           ItemGlovesAdvanced },
+  { AchievementApostate,    "achiev_apostate",      "Apostate",             UnlockItem,           ItemSpellLightning },
+  { AchievementFanatic,     "achiev_fanatic",       "Fanatic",              UnlockItem,           ItemBeltAdvanced },
 };
 
 const std::vector<enumAchievementType> sortedAchievements =

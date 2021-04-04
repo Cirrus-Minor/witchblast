@@ -75,6 +75,10 @@
 #include "OnlineScoring.h"
 #endif // ONLINE_MODE
 
+#ifdef GAMERZILLA
+#include <gamerzilla.h>
+#endif
+
 const float PORTRAIT_DIAPLAY_TIME = 5.0f;
 const float ENDING_TIMER = 8.0f;
 const float BONUS_TIMER = 4.0f;
@@ -317,6 +321,11 @@ WitchBlastGame* gameptr;
 WitchBlastGame::WitchBlastGame()
 {
   gameptr = this;
+
+#ifdef GAMERZILLA
+	GamerzillaStart(false, "data/");
+	game_id = GamerzillaSetGameFromFile("media/gamerzilla/witchblast.game", "media/");
+#endif
 
   gameFromSaveFile = false;
   configureFromFile();
@@ -585,6 +594,10 @@ WitchBlastGame::~WitchBlastGame()
 
   if (sendScoreThread.joinable()) sendScoreThread.join();
   if (receiveScoreThread.joinable()) receiveScoreThread.join();
+
+#ifdef GAMERZILLA
+	GamerzillaQuit();
+#endif
 }
 
 DungeonMap* WitchBlastGame::getCurrentMap()
@@ -7542,6 +7555,9 @@ void WitchBlastGame::registerAchievement(enumAchievementType achievement)
     ach.counter = 0;
     ach.hasStarted = false;
     achievementsQueue.push(ach);
+#ifdef GAMERZILLA
+    GamerzillaSetTrophy(game_id, achievements[achievement].gamerzilla.c_str());
+#endif
   }
 }
 
